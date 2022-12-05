@@ -17,5 +17,6 @@ image=$(cat build-base-container.txt)
 docker run --rm --name swoole-cli-build-dev  -d -v ${__DIR__}/tmp:/work -w /work  $image  tail -f /dev/null
 
 docker exec -i swoole-cli-build-dev  php prepare.php +inotify +mongodb
-
+docker exec -i swoole-cli-build-dev  ps -ef
+docker exec -i swoole-cli-build-dev  chmod a+x ./make.sh
 

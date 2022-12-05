@@ -18,7 +18,6 @@ jobs:
 
     - name: Build
       run: |
-        docker exec -i swoole-cli-build-dev  chmod +x ./make.sh
         docker exec -i swoole-cli-build-dev  ./make.sh config
         docker exec -i swoole-cli-build-dev  ./make.sh build
         docker exec -i swoole-cli-build-dev  ./bin/swoole-cli -v
