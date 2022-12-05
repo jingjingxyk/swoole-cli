@@ -14,14 +14,14 @@ jobs:
         git submodule update --init
         curl  https://get.docker.com | bash
         bash  build-prepare-base-container.sh
-        bash  build-prepare-depend.sh
-
+        bash  build-prepare-run-container.sh
     - name: Build
       run: |
-        docker exec -i swoole-cli-build-dev  ./make.sh config
-        docker exec -i swoole-cli-build-dev  ./make.sh build
-        docker exec -i swoole-cli-build-dev  ./bin/swoole-cli -v
-        docker exec -i swoole-cli-build-dev  ./make.sh archive
+        docker exec -i swoole-cli-build-dev php prepare.php +inotify +mongodb
+        docker exec -i swoole-cli-build-dev sh ./make.sh config
+        docker exec -i swoole-cli-build-dev sh ./make.sh build
+        docker exec -i swoole-cli-build-dev sh ./bin/swoole-cli -v
+        docker exec -i swoole-cli-build-dev sh ./make.sh archive
   cygwin:
     if: 0
     runs-on: windows-latest

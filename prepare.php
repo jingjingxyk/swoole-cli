@@ -136,7 +136,7 @@ function install_freetype(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('freetype', '/usr/freetype'))
-            ->withUrl('https://mirror.yongbok.net/nongnu/freetype/freetype-2.10.4.tar.gz')
+            ->withUrl('https://download-mirror.savannah.gnu.org/releases/freetype/freetype-2.10.4.tar.gz')
             ->withConfigure('./configure --prefix=/usr/freetype --enable-static --disable-shared')
             ->withHomePage('https://freetype.org/')
             ->withPkgName('freetype2')

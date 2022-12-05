@@ -3,7 +3,7 @@ FROM alpine:latest
 # setup source repo, install dependencies
 # RUN echo -ne 'https://mirrors.ustc.edu.cn/alpine/edge/main\nhttps://mirrors.ustc.edu.cn/alpine/edge/community\n' > /etc/apk/repositories && \
 RUN test -f /etc/apk/repositories.save || cp /etc/apk/repositories /etc/apk/repositories.save
-# RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories && \
+# RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
 RUN  \
 apk update && apk upgrade && \
 apk add --no-cache vim alpine-sdk xz autoconf automake linux-headers clang-dev clang lld libtool cmake && \
