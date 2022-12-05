@@ -6,15 +6,10 @@ __DIR__=$(
   pwd
 )
 cd ${__DIR__}
+cd ${__DIR__}/../
 
-PROXY_URL=${2:+'http://127.0.0.1:8015'}
-
-if test -n $PROXY_URL
-then
-  export http_proxy=http://192.168.3.26:8015
-  export https_proxy=http://192.168.3.26:8015
-fi
-
+export http_proxy=http://192.168.3.26:8015
+export https_proxy=http://192.168.3.26:8015
 
 pear config-set http_proxy $http_proxy
 

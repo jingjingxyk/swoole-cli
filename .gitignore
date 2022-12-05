@@ -313,7 +313,7 @@ tmp-php.ini
 /ext/ds
 
 
-/build-base-container.txt
-/tmp
-/php-versions
-!/php-versions/.gitkeep
+/build-tools/base-container-image.txt
+/build-tools/dist
+/build-tools/php-versions
+!/build-tools/php-versions/.gitkeep
