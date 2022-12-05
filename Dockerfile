@@ -8,7 +8,7 @@ RUN  \
 apk update && apk upgrade && \
 apk add --no-cache vim alpine-sdk xz autoconf automake linux-headers clang-dev clang lld libtool cmake && \
 apk add --no-cache  ca-certificates openssl openssl-dev tini
-RUN apk add --no-cache   gnu-libiconv-dev libsodium-dev  libpq-dev
+RUN apk add --no-cache   gnu-libiconv-dev libsodium-dev  libpq-dev freetype-dev
 RUN apk add --no-cache php81-dev php81-cli php81-pear php81-curl php81-openssl &&  \
 pecl channel-update https://pecl.php.net/channel.xml
 #  postgresql-dev

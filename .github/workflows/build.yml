@@ -15,13 +15,14 @@ jobs:
         curl  https://get.docker.com | bash
         bash  build-prepare-base-container.sh
         bash  build-prepare-depend.sh
-        docker exec -i swoole-cli-build-dev  SKIP_LIBRARY_DOWNLOAD=1 php prepare.php +mongodb +inotify
+
+    - name: Build
+      run: |
         docker exec -i swoole-cli-build-dev  chmod +x ./make.sh
         docker exec -i swoole-cli-build-dev  ./make.sh config
         docker exec -i swoole-cli-build-dev  ./make.sh build
         docker exec -i swoole-cli-build-dev  ./bin/swoole-cli -v
         docker exec -i swoole-cli-build-dev  ./make.sh archive
-
   cygwin:
     if: 0
     runs-on: windows-latest
