@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -exu
+
 export DOCKER_BUILDKIT=1
 TIME=`date -u '+%Y%m%dT%H%M%SZ'`
 VERSION="alpine-edge-"${TIME}

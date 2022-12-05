@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 set -exu
@@ -15,7 +14,7 @@ rsync -avr --delete-before --stats --progress ${__DIR__}/ ${__DIR__}/tmp/ \
 
 # docker run --rm --name swoole-cli-build-dev -v ${__DIR__}/tmp:/work -w /work -ti --init  docker.io/jingjingxyk/build-swoole-cli:alpine-edge-20221205T144525Z
 image=$(cat build-base-container.txt)
-docker run --rm --name swoole-cli-build-dev -v ${__DIR__}/tmp:/work -w /work  docker.io/jingjingxyk/build-swoole-cli:alpine-edge-20221205T144525Z
+docker run --rm --name swoole-cli-build-dev  -d -v ${__DIR__}/tmp:/work -w /work  docker.io/jingjingxyk/build-swoole-cli:alpine-edge-20221205T144525Z
 
 docker exec -i swoole-cli-build-dev  php prepare.php +inotify +mongodb
 
