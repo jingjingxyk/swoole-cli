@@ -20,7 +20,7 @@ jobs:
         # docker exec -i swoole-cli-build-dev php prepare.php +inotify +mongodb
         # docker exec -i swoole-cli-build-dev sh -c "SKIP_LIBRARY_DOWNLOAD=1 php prepare.php +mongodb +inotify"
         docker exec -i swoole-cli-build-dev sh -c "php prepare.php  +inotify"
-        # docker exec -i swoole-cli-build-dev sh ./make.sh all-library
+        docker exec -i swoole-cli-build-dev sh ./make.sh all-library
         docker exec -i swoole-cli-build-dev sh ./make.sh config
         docker exec -i swoole-cli-build-dev sh ./make.sh build
         docker exec -i swoole-cli-build-dev sh ./bin/swoole-cli -v
