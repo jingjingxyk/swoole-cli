@@ -19,18 +19,9 @@ jobs:
         docker exec -i swoole-cli-build-dev  chmod +x ./make.sh
         docker exec -i swoole-cli-build-dev  ./make.sh config
         docker exec -i swoole-cli-build-dev  ./make.sh build
+        docker exec -i swoole-cli-build-dev  ./bin/swoole-cli -v
         docker exec -i swoole-cli-build-dev  ./make.sh archive
-    - name: Build
-      uses: addnab/docker-run-action@v3
-      with:
-        image: phpswoole/swoole_cli_os:1.4
-        options: -v ${{ github.workspace }}:/work
-        run: |
-          exit 0
-          cd /work
-          ./make.sh config
-          ./make.sh build
-          ./bin/swoole-cli -v
+
   cygwin:
     if: 0
     runs-on: windows-latest
