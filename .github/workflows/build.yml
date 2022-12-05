@@ -10,9 +10,16 @@ jobs:
     - uses: actions/checkout@v3
     - name: Configure
       run: |
+        apt install -y rsync git curl wget
         git submodule update --init
-        SKIP_LIBRARY_DOWNLOAD=1 php prepare.php +mongodb +inotify
-        chmod +x ./make.sh
+        curl  https://get.docker.com | bash
+        bash  build-prepare-base-container.sh
+        bash  build-prepare-depend.sh
+        docker exec -i swoole-cli-build-dev  SKIP_LIBRARY_DOWNLOAD=1 php prepare.php +mongodb +inotify
+        docker exec -i swoole-cli-build-dev  chmod +x ./make.sh
+        docker exec -i swoole-cli-build-dev  ./make.sh config
+        docker exec -i swoole-cli-build-dev  ./make.sh build
+        docker exec -i swoole-cli-build-dev  ./make.sh archive
     - name: Build
       uses: addnab/docker-run-action@v3
       with:

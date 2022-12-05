@@ -203,6 +203,7 @@ class Preprocessor
         'intl',
         'fileinfo',
         'pdo_mysql',
+        'pdo_pgsql',
         'pdo_sqlite',
         'soap',
         'xsl',
@@ -311,7 +312,7 @@ class Preprocessor
         $skip_library_download = getenv('SKIP_LIBRARY_DOWNLOAD');
         if (empty($skip_library_download)) {
             if (!is_file($this->libraryDir . '/' . $lib->file)) {
-                echo `wget {$lib->url} -O {$this->libraryDir}/{$lib->file}`;
+                echo `curl --connect-timeout 15 --retry 3 --retry-delay 3  -Lo {$this->libraryDir}/{$lib->file} {$lib->url}`;
                 echo $lib->file;
             } else {
                 echo "[Library] file cached: " . $lib->file . PHP_EOL;

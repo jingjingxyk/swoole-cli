@@ -311,3 +311,7 @@ tmp-php.ini
 /ext/swoole_tracker_agent
 /ext/loader8
 /ext/ds
+
+
+/build-base-container.txt
+/tmp

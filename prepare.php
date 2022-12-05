@@ -5,7 +5,11 @@ require __DIR__ . '/sapi/Preprocessor.php';
 use SwooleCli\Preprocessor;
 use SwooleCli\Library;
 
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+
 $p = new Preprocessor(__DIR__);
+
 $p->setPhpSrcDir(getenv('HOME') . '/.phpbrew/build/php-8.1.12');
 $p->setDockerVersion('1.4');
 if (!empty($argv[1])) {
@@ -355,6 +359,7 @@ install_gmp($p);
 install_zlib($p);
 install_bzip2($p);
 install_giflib($p);
+
 install_libpng($p);
 install_libjpeg($p);
 install_freetype($p);
