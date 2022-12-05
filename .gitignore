@@ -315,3 +315,5 @@ tmp-php.ini
 
 /build-base-container.txt
 /tmp
+/php-versions
+!/php-versions/.gitkeep

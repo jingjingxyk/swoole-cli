@@ -25,7 +25,7 @@ RUN apk add --no-cache freetype \
       glib \
       glib-dev \
       libzip-dev
-
+RUN apk add --no-cache   imagemagick
 RUN apk add --no-cache php81-dev php81-cli php81-pear php81-curl php81-openssl &&  \
 pecl channel-update https://pecl.php.net/channel.xml
 #  postgresql-dev
