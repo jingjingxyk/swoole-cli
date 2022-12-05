@@ -7,8 +7,25 @@ RUN test -f /etc/apk/repositories.save || cp /etc/apk/repositories /etc/apk/repo
 RUN  \
 apk update && apk upgrade && \
 apk add --no-cache vim alpine-sdk xz autoconf automake linux-headers clang-dev clang lld libtool cmake && \
-apk add --no-cache  ca-certificates openssl openssl-dev tini
-RUN apk add --no-cache   gnu-libiconv-dev libsodium-dev  libpq-dev freetype-dev
+apk add --no-cache  ca-certificates openssl openssl-dev curl tini
+RUN apk add --no-cache   gnu-libiconv-dev libsodium-dev  libpq-dev bison libxml2-dev  sqlite-dev curl-dev
+RUN apk add --no-cache freetype \
+      freetype-dev \
+      jpeg \
+      libpng \
+      libwebp \
+      libpng \
+      libpng-dev \
+      libjpeg-turbo \
+      libjpeg-turbo-dev \
+      gd-dev \
+      zlib-dev \
+      gmp \
+      gmp-dev \
+      glib \
+      glib-dev \
+      libzip-dev
+
 RUN apk add --no-cache php81-dev php81-cli php81-pear php81-curl php81-openssl &&  \
 pecl channel-update https://pecl.php.net/channel.xml
 #  postgresql-dev
