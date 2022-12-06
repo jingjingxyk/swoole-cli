@@ -279,7 +279,7 @@ function install_libsodium(Preprocessor $p)
     $p->addLibrary(
         (new Library('libsodium'))
             ->withUrl('https://download.libsodium.org/libsodium/releases/libsodium-1.0.18.tar.gz')
-            ->withConfigure('./configure --prefix=/usr --enable-static --disable-shared')
+            ->withConfigure('./autogen.sh && ./configure --prefix=/usr --enable-static --disable-shared')
             // ISC License, like BSD
             ->withLicense('https://en.wikipedia.org/wiki/ISC_license', Library::LICENSE_SPEC)
             ->withHomePage('https://doc.libsodium.org/')
