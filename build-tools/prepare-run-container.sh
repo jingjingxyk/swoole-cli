@@ -12,6 +12,21 @@ __ROOT__=$(
   pwd
 )
 
+{
+  docker stop swoole-cli-build-dev
+  docker rm swoole-cli-build-dev
+} || {
+  echo $?
+}
+
+sudo chown -R 1000:1000 ${__ROOT__}
+image=$(cat base-container-image.txt)
+docker run --rm --name swoole-cli-build-dev -d -v ${__ROOT__}:/work -w /work $image tail -f /dev/null
+
+
+exit 0
+
+
 test -d ${__ROOT__}/build-tools/dist/ && sudo rm -rf ${__ROOT__}/build-tools/dist/
 mkdir -p ${__ROOT__}/build-tools/dist/
 
