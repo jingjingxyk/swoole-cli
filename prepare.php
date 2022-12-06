@@ -57,7 +57,7 @@ function install_libxml2(Preprocessor $p)
     $p->addLibrary(
         (new Library('libxml2'))
             ->withUrl('https://gitlab.gnome.org/GNOME/libxml2/-/archive/v2.9.10/libxml2-v2.9.10.tar.gz')
-            ->withConfigure('./autogen.sh && ./configure --prefix=/usr/libxml2 --with-iconv=/usr/libiconv --enable-static=yes --enable-shared=no')
+            ->withConfigure('./autogen.sh && ./configure --prefix=/usr --with-iconv=/usr/libiconv --enable-static=yes --enable-shared=no')
             ->withPkgName('libxml-2.0')
             ->withLicense('http://www.opensource.org/licenses/mit-license.html', Library::LICENSE_MIT)
     );
@@ -70,7 +70,7 @@ function install_libxslt(Preprocessor $p)
     $p->addLibrary(
         (new Library('libxslt'))
             ->withUrl('https://gitlab.gnome.org/GNOME/libxslt/-/archive/v1.1.34/libxslt-v1.1.34.tar.gz')
-            ->withConfigure('./autogen.sh && ./configure --prefix=/usr/libxslt --with-libxml-prefix=/usr/libxml2  --enable-static=yes --enable-shared=no')
+            ->withConfigure('./autogen.sh && ./configure --prefix=/usr/libxslt   --enable-static=yes --enable-shared=no')
             ->withLicense('http://www.opensource.org/licenses/mit-license.html', Library::LICENSE_MIT)
     );
 }
