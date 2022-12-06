@@ -373,7 +373,7 @@ install_cares($p);
 install_readline($p);
 install_ncurses($p);
 //install_libedit($p);
-install_imagemagick($p);
+//install_imagemagick($p);
 install_curl($p);
 install_libsodium($p);
 install_libyaml($p);

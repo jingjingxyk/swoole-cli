@@ -216,7 +216,7 @@ class Preprocessor
         'redis',
         'swoole',
         'yaml',
-        'imagick',
+        //'imagick',
         'mongodb',
     ];
 
