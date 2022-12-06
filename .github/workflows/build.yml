@@ -17,7 +17,7 @@ jobs:
         bash  build-tools/prepare-run-container.sh
     - name: Build
       run: |
-        docker exec -i swoole-cli-build-dev sh -c "php prepare.php  +inotify"
+        docker exec -i swoole-cli-build-dev sh  ./build-tools/init-depend.sh
         docker exec -i swoole-cli-build-dev sh ./make.sh all-library
         docker exec -i swoole-cli-build-dev sh ./make.sh config
         docker exec -i swoole-cli-build-dev sh ./make.sh build
