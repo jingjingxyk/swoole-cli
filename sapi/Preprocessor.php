@@ -228,7 +228,7 @@ class Preprocessor
         $this->rootDir = $rootPath;
         $this->libraryDir = $rootPath . '/pool/lib';
         $this->extensionDir = $rootPath . '/pool/ext';
-        $this->maxJob=`nproc`; //获取CPU核数，用于 make -j $(nproc)
+        $this->setMaxJob(`nproc`); //获取CPU核数，用于 make -j $(nproc)
 
         // 此目录用于存放源代码包
         if (!is_dir($rootPath . '/pool')) {

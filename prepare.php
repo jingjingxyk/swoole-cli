@@ -351,6 +351,31 @@ function install_mimalloc(Preprocessor $p)
     );
 }
 
+
+function install_liblzma(Preprocessor $p)
+{
+    $p->addLibrary(
+        (new Library('liblzma'))
+            ->withUrl('https://tukaani.org/xz/xz-5.2.9.tar.gz')
+            ->withConfigure('./configure --prefix=/usr --enable-static --disable-shared')
+            ->withLicense('https://tukaani.org/xz/', Library::LICENSE_SPEC)
+            ->withHomePage('https://doc.libsodium.org/')
+    );
+}
+
+function install_libpg(Preprocessor $p)
+{
+    $p->addLibrary(
+        (new Library('libpg'))
+            ->withUrl('https://ftp.postgresql.org/pub/source/v15.1/postgresql-15.1.tar.gz')
+            ->withConfigure('./configure --prefix=/usr/pgsql LDFLAGS="-static" --with-openssl --with-icu --with-readline --disable-rpath  --with-includes=/usr/openssl/include/openssl/:/usr/include:/usr/readline/include  --with-libraries=/usr/openssl/lib:/usr/lib:/usr/readline/lib')
+            ->withMakeInstallOptions('-C src/interfaces') //make -C src/interfaces install
+             ->withPkgConfig('/usr/pgsql/lib/pkgconfig')
+            ->withLicense('https://www.postgresql.org/about/licence/', Library::LICENSE_SPEC)
+            ->withHomePage('https://www.postgresql.org/')
+    );
+}
+
 install_libiconv($p);
 install_openssl($p);
 install_libxml2($p);
@@ -378,7 +403,13 @@ install_curl($p);
 install_libsodium($p);
 install_libyaml($p);
 install_mimalloc($p);
+install_liblzma($p);
+install_libpg($p);
 
 $p->parseArguments($argc, $argv);
 $p->gen();
 $p->info();
+
+
+
+

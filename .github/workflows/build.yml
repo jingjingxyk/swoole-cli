@@ -25,9 +25,9 @@ jobs:
         sudo apt install -y rsync git curl wget
         git submodule update --init
 #        curl  https://get.docker.com | bash
-#        bash  build-tools-script/prepare-base-container.sh
-#        bash  build-tools-script/run-base-container.sh
-#        docker exec -i swoole-cli-build-dev sh  ./build-tools-script/init-depend.sh
+#        bash  build-tools-scripts/prepare-base-container.sh
+#        bash  build-tools-scripts/run-base-container.sh
+#        docker exec -i swoole-cli-build-dev sh  ./build-tools-scripts/init-depend.sh
     - name: Build-with-docker-1
       uses: addnab/docker-run-action@v3
       with:
@@ -35,7 +35,7 @@ jobs:
         options: -v ${{ github.workspace }}:/work
         run: |
           cd /work
-          sh ./build-tools-script/init-depend.sh
+          sh ./build-tools-scripts/init-depend.sh
           sh ./make.sh all-library
 
     - name: Build-with-docker-2
