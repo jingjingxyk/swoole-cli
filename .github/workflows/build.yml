@@ -8,6 +8,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - name: Cache
+      id:  cache-pool
+      uses: actions/cache@v3
+      with:
+        path: pool
+        key: pool
     - name: Configure
       run: |
         sudo apt install -y rsync git curl wget
@@ -15,9 +21,10 @@ jobs:
         curl  https://get.docker.com | bash
         bash  build-tools-script/prepare-base-container.sh
         bash  build-tools-script/prepare-run-container.sh
+        docker exec -i swoole-cli-build-dev sh  ./build-tools-script/init-depend.sh
     - name: Build
       run: |
-        docker exec -i swoole-cli-build-dev sh  ./build-tools-script/init-depend.sh
+
         docker exec -i swoole-cli-build-dev sh ./make.sh all-library
         docker exec -i swoole-cli-build-dev sh ./make.sh config
         docker exec -i swoole-cli-build-dev sh ./make.sh build
