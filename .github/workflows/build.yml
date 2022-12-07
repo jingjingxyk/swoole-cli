@@ -22,14 +22,24 @@ jobs:
         bash  build-tools-script/prepare-base-container.sh
         bash  build-tools-script/prepare-run-container.sh
         docker exec -i swoole-cli-build-dev sh  ./build-tools-script/init-depend.sh
-    - name: Build
-      run: |
-
-        docker exec -i swoole-cli-build-dev sh ./make.sh all-library
-        docker exec -i swoole-cli-build-dev sh ./make.sh config
-        docker exec -i swoole-cli-build-dev sh ./make.sh build
-        docker exec -i swoole-cli-build-dev sh ./bin/swoole-cli -v
-        docker exec -i swoole-cli-build-dev sh ./make.sh archive
+    - name: Build-with-docker
+      uses: addnab/docker-run-action@v3
+      with:
+        image: docker.io/jingjingxyk/build-swoole-cli:alpine-edge-20221207T123628Z
+        options: -v ${{ github.workspace }}:/work
+        run: |
+          cd /work
+          ./make.sh all-library
+          ./make.sh config
+          ./make.sh build
+          ./bin/swoole-cli -v
+#    - name: Build
+#      run: |
+#        docker exec -i swoole-cli-build-dev sh ./make.sh all-library
+#        docker exec -i swoole-cli-build-dev sh ./make.sh config
+#        docker exec -i swoole-cli-build-dev sh ./make.sh build
+#        docker exec -i swoole-cli-build-dev sh ./bin/swoole-cli -v
+#        docker exec -i swoole-cli-build-dev sh ./make.sh archive
   cygwin:
     if: 0
     runs-on: windows-latest
