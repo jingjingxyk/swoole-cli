@@ -11,6 +11,7 @@ export DOCKER_BUILDKIT=1
 TIME=`date -u '+%Y%m%dT%H%M%SZ'`
 VERSION="alpine-edge-"${TIME}
 IMAGE="jingjingxyk/build-swoole-cli:${VERSION}"
+# IMAGE="phpswoole/swoole_cli_os:build-swoole-cli-${VERSION}"
 
 cd ${__DIR__}/../
 

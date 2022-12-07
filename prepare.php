@@ -368,9 +368,10 @@ function install_libpg(Preprocessor $p)
     $p->addLibrary(
         (new Library('libpg'))
             ->withUrl('https://ftp.postgresql.org/pub/source/v15.1/postgresql-15.1.tar.gz')
-            ->withConfigure('./configure --prefix=/usr/pgsql LDFLAGS="-static" --with-openssl --with-icu --with-readline --disable-rpath  --with-includes=/usr/openssl/include/openssl/:/usr/include:/usr/readline/include  --with-libraries=/usr/openssl/lib:/usr/lib:/usr/readline/lib')
+            ->withConfigure('./configure --prefix=/usr/pgsql LDFLAGS="-static" --with-openssl  --with-readline --disable-rpath  --with-includes=/usr/openssl/include/openssl/:/usr/include:/usr/readline/include  --with-libraries=/usr/openssl/lib:/usr/lib:/usr/readline/lib')
+            ->withMakeOptions('-C src/interfaces')
             ->withMakeInstallOptions('-C src/interfaces') //make -C src/interfaces install
-             ->withPkgConfig('/usr/pgsql/lib/pkgconfig')
+            ->withPkgConfig('/usr/pgsql/lib/pkgconfig')
             ->withLicense('https://www.postgresql.org/about/licence/', Library::LICENSE_SPEC)
             ->withHomePage('https://www.postgresql.org/')
     );

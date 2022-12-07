@@ -214,6 +214,7 @@ class Preprocessor
         'xml',
         //'gd',
         'redis',
+        'pgsql',
         'swoole',
         'yaml',
         //'imagick',

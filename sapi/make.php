@@ -3,6 +3,8 @@
  * @var $this SwooleCli\Preprocessor
  */
 ?>
+set -uex
+${PKG_CONFIG_PATH:=''}
 SRC=<?= $this->phpSrcDir . PHP_EOL ?>
 ROOT=$(pwd)
 export CC=clang
