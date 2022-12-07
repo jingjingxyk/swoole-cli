@@ -20,7 +20,7 @@ jobs:
         git submodule update --init
         curl  https://get.docker.com | bash
         bash  build-tools-script/prepare-base-container.sh
-        bash  build-tools-script/prepare-run-base-container.sh
+        bash  build-tools-script/run-base-container.sh
         docker exec -i swoole-cli-build-dev sh  ./build-tools-script/init-depend.sh
     - name: Build-with-docker-1
       uses: addnab/docker-run-action@v3
