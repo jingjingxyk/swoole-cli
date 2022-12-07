@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Cache
+    - name: Cache-Pool
       id:  cache-pool
       uses: actions/cache@v3
       with:
@@ -22,7 +22,7 @@ jobs:
         bash  build-tools-script/prepare-base-container.sh
         bash  build-tools-script/prepare-run-container.sh
         docker exec -i swoole-cli-build-dev sh  ./build-tools-script/init-depend.sh
-    - name: Build-with-docker
+    - name: Build-with-docker-1
       uses: addnab/docker-run-action@v3
       with:
         image: docker.io/jingjingxyk/build-swoole-cli:alpine-edge-20221207T123628Z
@@ -30,6 +30,18 @@ jobs:
         run: |
           cd /work
           ./make.sh all-library
+    - name: Cache-Thirdparty
+      id:  cache-thirdparty
+      uses: actions/cache@v3
+      with:
+        path: thirdparty
+        key: thirdparty
+    - name: Build-with-docker-2
+      uses: addnab/docker-run-action@v3
+      with:
+        image: docker.io/jingjingxyk/build-swoole-cli:alpine-edge-20221207T123628Z
+        options: -v ${{ github.workspace }}:/work
+        run: |
           ./make.sh config
           ./make.sh build
           ./bin/swoole-cli -v
