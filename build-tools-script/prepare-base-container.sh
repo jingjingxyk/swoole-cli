@@ -21,6 +21,6 @@ cd ${__DIR__}
 
 echo ${IMAGE} > base-container-image.txt
 
-docker push ${IMAGE}
+# docker push ${IMAGE}
 
 exit 0
