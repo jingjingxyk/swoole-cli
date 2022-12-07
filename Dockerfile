@@ -20,3 +20,4 @@ ENV LD=ld.lld
 WORKDIR /work
 
 RUN rm -rf /var/cache/apk/* /tmp
+RUN cp -f /etc/apk/repositories.save /etc/apk/repositories
