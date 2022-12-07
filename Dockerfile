@@ -19,5 +19,5 @@ ENV LD=ld.lld
 #RUN mv /usr/bin/ld /usr/bin/ld.old && ln -s /usr/bin/ld.lld /usr/bin/ld
 WORKDIR /work
 
-RUN rm -rf /var/cache/apk/* /tmp
+RUN rm -rf /var/cache/apk/* /tmp/*
 RUN cp -f /etc/apk/repositories.save /etc/apk/repositories
