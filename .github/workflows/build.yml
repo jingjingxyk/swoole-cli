@@ -13,11 +13,11 @@ jobs:
         sudo apt install -y rsync git curl wget
         git submodule update --init
         curl  https://get.docker.com | bash
-        bash  build-tools/prepare-base-container.sh
-        bash  build-tools/prepare-run-container.sh
+        bash  build-tools-script/prepare-base-container.sh
+        bash  build-tools-script/prepare-run-container.sh
     - name: Build
       run: |
-        docker exec -i swoole-cli-build-dev sh  ./build-tools/init-depend.sh
+        docker exec -i swoole-cli-build-dev sh  ./build-tools-script/init-depend.sh
         docker exec -i swoole-cli-build-dev sh ./make.sh all-library
         docker exec -i swoole-cli-build-dev sh ./make.sh config
         docker exec -i swoole-cli-build-dev sh ./make.sh build
