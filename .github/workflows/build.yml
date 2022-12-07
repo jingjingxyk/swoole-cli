@@ -42,6 +42,7 @@ jobs:
         image: docker.io/jingjingxyk/build-swoole-cli:alpine-edge-20221207T123628Z
         options: -v ${{ github.workspace }}:/work
         run: |
+          cd /work
           ./make.sh config
           ./make.sh build
           ./bin/swoole-cli -v
