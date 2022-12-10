@@ -182,7 +182,7 @@ class Preprocessor
      */
     protected array $extEnabled = [
         'curl',
-        'iconv',
+        //'iconv',
         'bz2',
         'bcmath',
         'pcntl',
@@ -203,7 +203,7 @@ class Preprocessor
         'intl',
         'fileinfo',
         'pdo_mysql',
-        'pdo_pgsql',
+        //'pdo_pgsql',
         'pdo_sqlite',
         //'soap',
         'xsl',
@@ -214,7 +214,7 @@ class Preprocessor
         'xml',
         'gd',
         'redis',
-        'pgsql',
+        //'pgsql',
         'swoole',
         'yaml',
         //'imagick',
