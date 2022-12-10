@@ -32,7 +32,7 @@ if ($p->osType == 'macos') {
 function install_openssl(Preprocessor $p)
 {
     $p->addLibrary((new Library('openssl', '/usr/openssl'))
-            ->withUrl('https://www.openssl.org/source/openssl-1.1.1p.tar.gz')
+            ->withUrl('https://www.openssl.org/source/openssl-3.0.7.tar.gz')
             ->withConfigure('./config' . ($p->osType === 'macos' ? '' : ' -static --static') . ' no-shared --prefix=/usr/openssl')
             ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
             ->withHomePage('https://www.openssl.org/')
@@ -368,7 +368,9 @@ function install_libpg(Preprocessor $p)
     $p->addLibrary(
         (new Library('libpg'))
             ->withUrl('https://ftp.postgresql.org/pub/source/v15.1/postgresql-15.1.tar.gz')
-            ->withConfigure('./configure --prefix=/usr/pgsql LDFLAGS="-static" --with-ssl=openssl  --with-readline --disable-rpath --with-icu ICU_CFLAGS="-I/usr/include" ICU_LIBS="-L/usr/lib -licui18n -licuuc -licudata" --with-includes=/usr/openssl/include/openssl/:/usr/readline/include:/usr/include  --with-libraries=/usr/openssl/lib:/usr/readline/lib:/usr/lib')
+            //->withUrl('https://ftp.postgresql.org/pub/source/v14.6/postgresql-14.6.tar.gz')
+            //->withConfigure('./configure --prefix=/usr/pgsql LDFLAGS="-static" --with-ssl=openssl  --with-readline --disable-rpath --with-icu ICU_CFLAGS="-I/usr/include" ICU_LIBS="-L/usr/lib -licui18n -licuuc -licudata" --with-includes=/usr/openssl/include/openssl/:/usr/readline/include:/usr/include  --with-libraries=/usr/openssl/lib:/usr/readline/lib:/usr/lib')
+            ->withConfigure('./configure --prefix=/usr/pgsql --with-ssl=openssl  --with-readline --disable-rpath  --with-includes=/usr/openssl/include/openssl/:/usr/include  --with-libraries=/usr/openssl/lib64:/usr/lib')
             //->withMakeOptions('-C src/interfaces')
             //->withMakeInstallOptions('-C src/interfaces') //make -C src/interfaces install
             ->withPkgConfig('/usr/pgsql/lib/pkgconfig')

@@ -12,3 +12,6 @@ cd ${__DIR__}/../
 php prepare.php  +inotify
 
 chmod a+x ./make.sh
+
+
+test -d thirdparty && rm -rf thirdparty/*

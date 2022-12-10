@@ -17,3 +17,5 @@ pear config-set http_proxy $http_proxy
 php prepare.php  +inotify
 
 chmod a+x ./make.sh
+
+test -d thirdparty && rm -rf thirdparty/*

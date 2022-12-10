@@ -1,1 +1,1 @@
-docker exec -it swoole-cli-build-dev sh
+docker exec -it swoole-cli-build-dev bash

@@ -1,6 +1,6 @@
 # swoole-cli
 
-## 准备环境
+## 准备环境下载源码包环境
 ```shell
 
 wget https://www.php.net/distributions/php-8.1.12.tar.gz
@@ -27,6 +27,54 @@ docker exec -it swoole-cli-build-dev sh
 
 ```
 
+## 配置需要下载的库
+```shell
+
+export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib64/pkgconfig/
+
+
+ pkg-config --cflags openssl
+
+pkg-config --libs openssl
+
+
+./configure --prefix=/usr/pgsql -lssl  -lcrypto  LDFLAGS="-static"
+./configure --prefix=/usr/pgsql   LDFLAGS="-static"
+
+
+./configure --prefix=/usr/pgsql LDFLAGS="-static" --with-ssl=openssl --with-includes=/usr/openssl/include/openssl:/usr/include  --with-libraries=/usr/openssl/lib64:/usr/lib
+./configure --prefix=/usr/pgsql  --with-ssl=openssl --with-includes=/usr/openssl/include/openssl:/usr/include  --with-libraries=/usr/openssl/lib64:/usr/lib
+
+
+https://wiki.postgresql.org/wiki/Compile_and_Install_from_source_code
+
+libreadline-dev zlib1g-dev flex bison libxml2-dev libxslt-dev libssl-dev libxml2-utils xsltproc ccache
+
+
+
+
+apt install -y  libcrypto++-dev
+
+
+-lcrypto -lssl
+
+https://zhuanlan.zhihu.com/p/380937946
+
+gcc -I -L -l区别
+
+-I 寻找头文件的目录
+-L 指定库的路径
+-l 指定需连接的库名  -lpthread
+
+-fPIC -shared
+
+cmake -DCMAKE_CXX_FLAGS=-fPIC -DWITH_STDTHREADS=ON  -DCMAKE_BUILD_TYPE=Release ..
+
+
+
+
+
+```
 ## 生成构建脚本
 
 ```shell
