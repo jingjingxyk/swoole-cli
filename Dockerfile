@@ -18,7 +18,7 @@ RUN apt update -y && apt install -y curl sudo tini libssl-dev ca-certificates
 RUN apt install -y  autoconf automake  libclang-dev clang lld libtool cmake python3-pip python3 python3-dev
 RUN apt install -y  libcrypto++-dev libzip-dev zip xz-utils liblzma-dev lz4 liblz4-dev
 
-RUN apt install -y libreadline-dev lzip libbz2-dev libgmp-dev
+RUN apt install -y libreadline-dev lzip libbz2-dev libgmp-dev libticonv-dev
 
 RUN apt install -y  libreadline-dev zlib1g-dev flex bison libxml2-dev libxslt-dev libssl-dev libxml2-utils xsltproc ccache
 

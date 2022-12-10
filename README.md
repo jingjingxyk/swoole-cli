@@ -22,6 +22,9 @@ pear config-set http_proxy $http_proxy
 pear config-set http_proxy ""
 docker exec -it swoole-cli-build-dev sh
 
+ini_set('display_errors', '1');
+error_reporting(-1);
+
 # docker exec -i swoole-cli-build-dev php prepare.php +inotify +mongodb
 # docker exec -i swoole-cli-build-dev sh -c "SKIP_LIBRARY_DOWNLOAD=1 php prepare.php +mongodb +inotify"
 
