@@ -35,6 +35,11 @@ $server->set(['enable_server_token' => true]);
 ## 配置需要下载的库
 ```shell
 
+apt-get install -y libpq-dev
+apt-get install -y postgresql-server-dev-14
+
+postgresql-client-common postgresql-common
+
 export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib64/pkgconfig/
 
 
@@ -105,6 +110,8 @@ php prepare.php +inotify +mongodb
 ./make.sh all-library
 
 ./make.sh config
+
+
 ```
 
 ## 构建

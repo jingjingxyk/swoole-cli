@@ -62,7 +62,7 @@ config_php() {
     mv main/php_config.h.in /tmp/cnt
     echo  '#ifndef __PHP_CONFIG_H\n#define __PHP_CONFIG_H\n' > main/php_config.h.in
     cat /tmp/cnt >> main/php_config.h.in
-    echo  '\n#endif\n' >> main/php_config.h.in
+    echo '\n#endif\n' >> main/php_config.h.in
 <?php endif; ?>
     echo $OPTIONS
     echo $PKG_CONFIG_PATH
