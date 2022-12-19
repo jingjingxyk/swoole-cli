@@ -32,6 +32,13 @@ $server->set(['enable_server_token' => true]);
 
 ```
 
+```shell
+alpine  php postgresql
+
+https://github.com/docker-library/php/issues/221
+
+
+```
 ## 配置需要下载的库
 ```shell
 
