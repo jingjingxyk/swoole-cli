@@ -8,7 +8,7 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositorie
 
 RUN apk update && apk upgrade
 RUN apk add --no-cache alpine-sdk xz autoconf automake linux-headers clang-dev clang lld libtool  cmake  tini
-RUN apk add --no-cache flex bison
+RUN apk add --no-cache flex bison re2c
 
 ENV CC=clang
 ENV CXX=clang++
