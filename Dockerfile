@@ -7,7 +7,7 @@ RUN test -f /etc/apk/repositories.save || cp /etc/apk/repositories /etc/apk/repo
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
 
 RUN apk update && apk upgrade
-RUN apk add --no-cache vim alpine-sdk xz autoconf automake linux-headers clang-dev clang lld libtool cmake py3-pip python3 python3-dev tini
+RUN apk add --no-cache alpine-sdk xz autoconf automake linux-headers clang-dev clang lld libtool  cmake  tini
 
 
 ENV CC=clang
