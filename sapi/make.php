@@ -56,7 +56,7 @@ make_all_library() {
 }
 
 config_php() {
-     rm ./configure
+     test -f ./configure && rm ./configure
     ./buildconf --force
 <?php if ($this->osType !== 'macos') : ?>
     mv main/php_config.h.in /tmp/cnt
