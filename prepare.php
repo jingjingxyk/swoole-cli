@@ -363,17 +363,21 @@ function install_liblzma(Preprocessor $p)
     );
 }
 
-function install_libpg(Preprocessor $p)
+function install_postgresql(Preprocessor $p)
 {
     $p->addLibrary(
-        (new Library('libpg'))
+        (new Library('postgresql'))
             ->withUrl('https://ftp.postgresql.org/pub/source/v15.1/postgresql-15.1.tar.gz')
             //->withUrl('https://ftp.postgresql.org/pub/source/v14.6/postgresql-14.6.tar.gz')
             //->withConfigure('./configure --prefix=/usr/pgsql LDFLAGS="-static" --with-ssl=openssl  --with-readline --disable-rpath --with-icu ICU_CFLAGS="-I/usr/include" ICU_LIBS="-L/usr/lib -licui18n -licuuc -licudata" --with-includes=/usr/openssl/include/openssl/:/usr/readline/include:/usr/include  --with-libraries=/usr/openssl/lib:/usr/readline/lib:/usr/lib')
-            ->withConfigure('./configure --prefix=/usr/pgsql --with-ssl=openssl  --with-readline   --with-includes=/usr/openssl/include/openssl/:/usr/include  --with-libraries=/usr/openssl/lib64:/usr/lib')
+            ->withConfigure('./configure --prefix=/usr/pgsql \
+            --with-ssl=openssl   \
+            --with-icu ICU_CFLAGS="-I/usr/include" ICU_LIBS="-L/usr/lib/icu -licui18n -licuuc -licudata" \
+            --with-readline \
+            --with-includes=/usr/openssl/include/openssl/:/usr/readline/include/readline:/usr/include \
+            --with-libraries=/usr/openssl/lib64:/usr/readline/lib:/usr/lib')
             //->withMakeOptions('-C src/interfaces')
             //->withMakeInstallOptions('-C src/interfaces') //make -C src/interfaces install
-            ->withPkgConfig('/usr/pgsql/lib/pkgconfig')
             ->withLicense('https://www.postgresql.org/about/licence/', Library::LICENSE_SPEC)
             ->withHomePage('https://www.postgresql.org/')
     );
@@ -407,7 +411,7 @@ install_libsodium($p);
 install_libyaml($p);
 install_mimalloc($p);
 //install_liblzma($p);
-install_libpg($p);
+//install_postgresql($p);
 
 $p->parseArguments($argc, $argv);
 $p->gen();
