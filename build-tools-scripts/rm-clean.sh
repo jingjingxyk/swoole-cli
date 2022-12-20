@@ -24,6 +24,10 @@ test -f  configure &&  rm -rf configure
 test -f  config.status &&  rm -rf config.status
 test -f  config.nice &&  rm -rf config.nice
 test -f  config.log &&  rm -rf config.log
+test -d  include &&  rm -rf include
+test -d  libs &&  rm -rf libs
+test -d  modules &&  rm -rf modules
+
 
 cd ${__DIR__}/Zend
 rm -rf *.dep
@@ -44,7 +48,7 @@ rm -rf *.lo
 rm -rf *.o
 
 cd ${__DIR__}/thirdparty
-find ${__DIR__}/thirdparty/ -type d -exec rm -rf  \;
+find . -type d -exec rm -rf {} \;
 
 cd ${__DIR__}/scripts
 rm -rf php-config
