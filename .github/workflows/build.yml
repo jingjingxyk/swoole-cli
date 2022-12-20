@@ -26,9 +26,9 @@ jobs:
         git submodule update --init
         curl  https://get.docker.com | bash
         bash  build-tools-scripts/run-download-lib-ext-container.sh
+        docker exec -i swoole-cli-build-dev-download-ext-libs sh  ./build-tools-scripts/init-depend.sh
         bash  build-tools-scripts/prepare-build-container.sh
         bash  build-tools-scripts/run-build-container.sh
-        docker exec -i swoole-cli-build-dev-download-ext-libs sh  ./build-tools-scripts/init-depend.sh
         docker exec -i swoole-cli-build-dev sh ./make.sh all-library
         docker exec -i swoole-cli-build-dev sh ./make.sh config
         docker exec -i swoole-cli-build-dev sh ./make.sh build
