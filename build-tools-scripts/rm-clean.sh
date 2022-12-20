@@ -100,3 +100,9 @@ do
 done
 
 cd ${__DIR__}/
+rm -rf ext/*
+rm -rf Zend/*
+rm -rf main/*
+rm -rf build/*
+
+cd ${__DIR__}/
