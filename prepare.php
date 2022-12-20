@@ -33,6 +33,7 @@ function install_openssl(Preprocessor $p)
 {
     $p->addLibrary((new Library('openssl', '/usr/openssl'))
             ->withUrl('https://www.openssl.org/source/openssl-3.0.7.tar.gz')
+            ->withPkgConfig('/usr/openssl/lib64/pkgconfig')
             ->withConfigure('./config' . ($p->osType === 'macos' ? '' : ' -static --static') . ' no-shared --prefix=/usr/openssl')
             ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
             ->withHomePage('https://www.openssl.org/')

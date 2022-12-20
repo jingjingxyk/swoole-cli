@@ -4,7 +4,9 @@
  */
 ?>
 set -uex
-${PKG_CONFIG_PATH:=''}
+test -d /usr/lib64/pkgconfig || mkdir -p /usr/lib64/pkgconfig
+test -d /usr/lib/pkgconfig || mkdir -p /usr/lib/pkgconfig
+PKG_CONFIG_PATH='/usr/lib/pkgconfig:/usr/lib64/pkgconfig'
 SRC=<?= $this->phpSrcDir . PHP_EOL ?>
 ROOT=$(pwd)
 export CC=clang
@@ -60,9 +62,9 @@ config_php() {
     ./buildconf --force
 <?php if ($this->osType !== 'macos') : ?>
     mv main/php_config.h.in /tmp/cnt
-    echo  '#ifndef __PHP_CONFIG_H\n#define __PHP_CONFIG_H\n' > main/php_config.h.in
+    echo -ne '#ifndef __PHP_CONFIG_H\n#define __PHP_CONFIG_H\n' > main/php_config.h.in
     cat /tmp/cnt >> main/php_config.h.in
-    echo '\n#endif\n' >> main/php_config.h.in
+    echo -ne '\n#endif\n' >> main/php_config.h.in
 <?php endif; ?>
     echo $OPTIONS
     echo $PKG_CONFIG_PATH
