@@ -9,9 +9,7 @@ cd ${__DIR__}
 cd ${__DIR__}/../
 
 # SKIP_LIBRARY_DOWNLOAD=1 php prepare.php +mongodb +inotify
-php prepare.php  +inotify
+php prepare.php  +mongodb +inotify
 
 chmod a+x ./make.sh
 
-
-# test -d thirdparty && rm -rf thirdparty/*

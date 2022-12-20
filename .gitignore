@@ -316,5 +316,6 @@ tmp-php.ini
 
 
 /build-tools-scripts/base-container-image.txt
+/build-tools-scripts/backup
 /build-tools-scripts/php-versions
 !/build-tools-scripts/php-versions/.gitkeep

@@ -6,13 +6,13 @@ __DIR__=$(
   pwd
 )
 
-# root
-__DIR__=$(
+__ROOT__=$(
   cd "$(dirname "$0")"
   cd ..
   pwd
 )
 
+__DIR__=${__ROOT__}
 cd ${__DIR__}
 
 test -f  Makefile.objects &&  rm -rf Makefile.objects

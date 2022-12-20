@@ -3,32 +3,13 @@
 ## 准备环境下载源码包环境
 ```shell
 
-wget https://www.php.net/distributions/php-8.1.12.tar.gz
-tar -zxvf php-8.1.12.tar.gz
-
 git submodule update --init --recursive
 
-test -d tmp && rm -rf tmp
-mkdir -p tmp
-rsync -avr --delete-before --stats --progress $(pwd)/ tmp/ \
-  --exclude tmp/
+sh build-tools-scripts/run-download-lib-ext-container.sh
 
-docker run --rm --name swoole-cli-build-dev -v $(pwd)/tmp:/work -w /work -ti --init  docker.io/jingjingxyk/build-swoole-cli:alpine-edge-20221205T144525Z
 
-export http_proxy=http://192.168.3.26:8015
-export https_proxy=http://192.168.3.26:8015
-
-pear config-set http_proxy $http_proxy
-pear config-set http_proxy ""
-docker exec -it swoole-cli-build-dev sh
-
-ini_set('display_errors', '1');
-error_reporting(-1);
-
-$server->set(['enable_server_token' => true]);
-
-# docker exec -i swoole-cli-build-dev php prepare.php +inotify +mongodb
-# docker exec -i swoole-cli-build-dev sh -c "SKIP_LIBRARY_DOWNLOAD=1 php prepare.php +mongodb +inotify"
+docker exec -i swoole-cli-build-dev php prepare.php +inotify +mongodb
+docker exec -i swoole-cli-build-dev sh -c "SKIP_LIBRARY_DOWNLOAD=1 php prepare.php +mongodb +inotify"
 
 ```
 
@@ -50,7 +31,7 @@ postgresql-client-common postgresql-common
 export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib64/pkgconfig/
 
 
- pkg-config --cflags openssl
+pkg-config --cflags openssl
 
 pkg-config --libs openssl
 

@@ -14,8 +14,6 @@ export https_proxy=http://192.168.3.26:8015
 pear config-set http_proxy $http_proxy
 
 # SKIP_LIBRARY_DOWNLOAD=1 php prepare.php +mongodb +inotify
-php prepare.php  +inotify
+php prepare.php  +mongodb +inotify
 
 chmod a+x ./make.sh
-
-# test -d thirdparty && rm -rf thirdparty/*
