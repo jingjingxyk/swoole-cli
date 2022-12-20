@@ -10,7 +10,7 @@ ini_set("display_errors", 1);
 
 $p = new Preprocessor(__DIR__);
 #$p->setPhpSrcDir(getenv('HOME') . '/.phpbrew/build/php-8.1.12');
-$p->setPhpSrcDir(__DIR__ . '/php-versions/php-8.1.12');
+$p->setPhpSrcDir(__DIR__ . '/build-tools-scripts/php-versions/php-8.1.12');
 $p->setDockerVersion('1.4');
 if (!empty($argv[1])) {
     $p->setOsType(trim($argv[1]));

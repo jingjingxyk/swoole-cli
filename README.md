@@ -1,6 +1,6 @@
 # swoole-cli
 
-## 准备环境下载源码包环境
+## 准备环境下载扩展和依赖库
 ```shell
 
 git submodule update --init --recursive
@@ -8,76 +8,14 @@ git submodule update --init --recursive
 sh build-tools-scripts/run-download-lib-ext-container.sh
 
 
-docker exec -i swoole-cli-build-dev php prepare.php +inotify +mongodb
-docker exec -i swoole-cli-build-dev sh -c "SKIP_LIBRARY_DOWNLOAD=1 php prepare.php +mongodb +inotify"
 
 ```
 
-```shell
-alpine  php postgresql
-
-https://github.com/docker-library/php/issues/221
-
-
-```
-## 配置需要下载的库
-```shell
-
-apt-get install -y libpq-dev
-apt-get install -y postgresql-server-dev-14
-
-postgresql-client-common postgresql-common
-
-export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib64/pkgconfig/
-
-
-pkg-config --cflags openssl
-
-pkg-config --libs openssl
-
-
-./configure --prefix=/usr/pgsql -lssl  -lcrypto  LDFLAGS="-static"
-./configure --prefix=/usr/pgsql   LDFLAGS="-static"
-
-
-./configure --prefix=/usr/pgsql LDFLAGS="-static" --with-ssl=openssl --with-includes=/usr/openssl/include/openssl:/usr/include  --with-libraries=/usr/openssl/lib64:/usr/lib
-./configure --prefix=/usr/pgsql  --with-ssl=openssl --with-includes=/usr/openssl/include/openssl:/usr/include  --with-libraries=/usr/openssl/lib64:/usr/lib
-
-
-https://wiki.postgresql.org/wiki/Compile_and_Install_from_source_code
-
-libreadline-dev zlib1g-dev flex bison libxml2-dev libxslt-dev libssl-dev libxml2-utils xsltproc ccache
-
-
-
-
-apt install -y  libcrypto++-dev
-
-
--lcrypto -lssl
-
-https://zhuanlan.zhihu.com/p/380937946
-
-gcc -I -L -l区别
-
--I 寻找头文件的目录
--L 指定库的路径
--l 指定需连接的库名  -lpthread
-
--fPIC -shared
-
-cmake -DCMAKE_CXX_FLAGS=-fPIC -DWITH_STDTHREADS=ON  -DCMAKE_BUILD_TYPE=Release ..
-
-
-
-
-
-```
 ## 生成构建脚本
 
 ```shell
-php prepare.php
-php prepare.php +inotify +mongodb
+docker exec -i swoole-cli-build-dev sh build-tools-scripts/init-depend.sh
+
 ```
 
 * 脚本会自动下载相关的`C/C++`库以及`PECL`扩展
@@ -86,7 +24,9 @@ php prepare.php +inotify +mongodb
 ## 进入 Docker Bash
 
 ```shell
-./make.sh docker-bash
+sh build-tools-scripts/prepare-build-container.sh
+sh build-tools-scripts/run-build-container.sh
+
 ```
 
 > 需要将 `swoole-cli` 的目录映射到容器的 `/work` 目录
@@ -94,8 +34,11 @@ php prepare.php +inotify +mongodb
 ## 编译配置
 
 ```shell
+# 编译依赖，使用静态编译
 
 ./make.sh all-library
+
+# 编译静态PHP
 
 ./make.sh config
 
