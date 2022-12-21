@@ -260,19 +260,7 @@ function install_cares(Preprocessor $p)
     );
 }
 
-function install_readline(Preprocessor $p)
-{
-    $p->addLibrary(
-        (new Library('readline', '/usr/readline'))
-            ->withUrl('ftp://ftp.cwru.edu/pub/bash/readline-8.2.tar.gz')
-            ->withConfigure('./configure --prefix=/usr/readline --enable-static --disable-shared')
-            ->withPkgName('readline')
-            ->withPkgConfig('/usr/readline/lib/pkgconfig')
-            ->withLdflags('-L/usr/readline/lib')
-            ->withLicense('http://www.gnu.org/licenses/gpl.html', Library::LICENSE_GPL)
-            ->withHomePage('https://tiswww.case.edu/php/chet/readline/rltop.html')
-    );
-}
+
 
 function install_libedit(Preprocessor $p)
 {
@@ -286,15 +274,30 @@ function install_libedit(Preprocessor $p)
     );
 }
 
+
 function install_ncurses(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('ncurses'))
             ->withUrl('https://ftp.gnu.org/pub/gnu/ncurses/ncurses-6.3.tar.gz')
-            ->withConfigure('./configure --prefix=/usr/ncurses --enable-static --disable-shared')
+            ->withConfigure('./configure --prefix=/usr/ncurses --enable-static --disable-shared ')
             ->withLdflags('-L/usr/ncurses/lib')
             ->withLicense('https://github.com/projectceladon/libncurses/blob/master/README', Library::LICENSE_MIT)
             ->withHomePage('https://github.com/projectceladon/libncurses')
+    );
+}
+
+function install_readline(Preprocessor $p)
+{
+    $p->addLibrary(
+        (new Library('readline', '/usr/readline'))
+            ->withUrl('ftp://ftp.cwru.edu/pub/bash/readline-8.2.tar.gz')
+            ->withConfigure('./configure --prefix=/usr/readline --enable-static --disable-shared --with-curses')
+            ->withPkgName('libreadline')
+            ->withPkgConfig('/usr/readline/lib/pkgconfig')
+            ->withLdflags('-L/usr/readline/lib')
+            ->withLicense('http://www.gnu.org/licenses/gpl.html', Library::LICENSE_GPL)
+            ->withHomePage('https://tiswww.case.edu/php/chet/readline/rltop.html')
     );
 }
 
@@ -334,7 +337,7 @@ function install_brotli(Preprocessor $p)
             ->withFile('brotli-1.0.9.tar.gz')
             ->withConfigure("cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX=/usr/brotli .")
             ->withPkgConfig('/usr/brotli/lib/pkgconfig')
-            ->withLdflags('-L/usr/brotli//lib')
+            ->withLdflags('-L/usr/brotli/lib')
             ->withScriptAfterInstall(
                 implode(PHP_EOL, [
                 'rm -rf /usr/brotli/lib/*.so.*',
@@ -427,8 +430,8 @@ install_oniguruma($p);
 install_zip($p);
 install_brotli($p);
 install_cares($p);
-install_readline($p);
 install_ncurses($p);
+install_readline($p);
 //install_libedit($p);
 //install_imagemagick($p);
 install_curl($p);

@@ -81,10 +81,9 @@ apk add libzip-dev
 
 PKG_CONFIG_PATH='/usr/lib/pkgconfig:/usr/lib64/pkgconfig'
 
-export PKG_CONFIG_PATH=/usr/openssl/lib64/pkgconfig:/usr/libxml2/lib/pkgconfig:/usr/libxslt/lib/pkgconfig:/usr/gmp/lib/pkgconfig:/usr/zlib/lib/pkgconfig:/usr/bzip2/lib/pkgconfig:/usr/sqlite3/lib/pkgconfig:/usr/icu/lib/pkgconfig:/usr/oniguruma/lib/pkgconfig:/usr/libzip/lib/pkgconfig:/usr/brotli/lib/pkgconfig:/usr/cares/lib/pkgconfig:/usr/readline/lib/pkgconfig:/usr/lib/pkgconfig:/usr/curl/lib/pkgconfig:/usr/libsodium/lib/pkgconfig:/usr/libyaml/lib/pkgconfig:/usr/mimalloc/lib/pkgconfig:$PKG_CONFIG_PATH
+export PKG_CONFIG_PATH=/usr/openssl/lib64/pkgconfig:/usr/libxml2/lib/pkgconfig:/usr/libxslt/lib/pkgconfig:/usr/gmp/lib/pkgconfig:/usr/zlib/lib/pkgconfig:/usr/bzip2/lib/pkgconfig:/usr/sqlite3/lib/pkgconfig:/usr/icu/lib/pkgconfig:/usr/oniguruma/lib/pkgconfig:/usr/libzip/lib/pkgconfig:/usr/brotli/lib/pkgconfig:/usr/cares/lib/pkgconfig:/usr/lib/pkgconfig:/usr/readline/lib/pkgconfig:/usr/curl/lib/pkgconfig:/usr/libsodium/lib/pkgconfig:/usr/libyaml/lib/pkgconfig:/usr/mimalloc/lib/pkgconfig:$PKG_CONFIG_PATH
 
-
-./configure --prefix=/tmp/php-static \
+./configure \
 --with-curl=/usr/curl \
 --with-iconv=/usr/libiconv \
 --with-bz2=/usr/bzip2 \
@@ -113,10 +112,11 @@ export PKG_CONFIG_PATH=/usr/openssl/lib64/pkgconfig:/usr/libxml2/lib/pkgconfig:/
 --with-readline=/usr/readline \
 --enable-xml --enable-simplexml --enable-xmlreader --enable-xmlwriter --enable-dom --with-libxml=/usr/libxml2 \
 --enable-mongodb \
---enable-inotify \
+--enable-inotify
+
 
     make EXTRA_CFLAGS='-fno-ident -Xcompiler -march=nehalem -Xcompiler -mtune=haswell -Os' \
-    EXTRA_LDFLAGS_PROGRAM='-all-static -fno-ident  -L/usr/libiconv/lib -L/usr/openssl/lib   -L/usr/gmp/lib  -L/usr/bzip2/lib  -L/usr/brotli/lib -L/usr/readline/lib  -L/usr/curl/lib -L/usr/mimalloc/lib -L/usr/lib -L/usr/lib64 '  -j $(nproc)
+    EXTRA_LDFLAGS_PROGRAM='-all-static -fno-ident  -L/usr/libiconv/lib -L/usr/openssl/lib64 -L/usr/libxml2/lib -L/usr/libxslt/lib -L/usr/gmp/lib -L/usr/zlib/lib -L/usr/bzip2/lib -L/usr/sqlite3/lib -L/usr/icu/lib -L/usr/oniguruma/lib -L/usr/libzip/lib -L/usr/brotli//lib -L/usr/cares/lib -L/usr/readline/lib -L/usr/ncurses/lib -L/usr/curl/lib -L/usr/libsodium/lib -L/usr/libyaml/lib -L/usr/mimalloc/lib '  -j  $(nproc)
 
 ```
 
@@ -141,8 +141,23 @@ LDFLAGS="-L/usr/lib64/readline5" \
 
 ```shell
 
-pkg-config --cflags readline
+export PKG_CONFIG_PATH="/usr/readline/lib/pkgconfig:$PKG_CONFIG_PATH"
+pkg-config --cflags --libs readline
+# readline-dev
 
+pkg-config --cflags readline
+pkg-config --cflags --libs readline
+pkg-config --cflags --libs sqlite3
+pkg-config --cflags --libs openssl
+pkg-config --cflags --libs libssl
+pkg-config --cflags --libs libcrypto
+pkg-config --cflags --libs icu-i18n
+pkg-config --cflags --libs icu-io
+pkg-config --cflags --libs icu-uc
+
+find / -name pkgconfig
+
+locate readline.pc
 
 ./configure --prefix=/usr/postgresql \
             --with-ssl=openssl  \

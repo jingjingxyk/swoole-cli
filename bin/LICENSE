@@ -14,8 +14,8 @@ oniguruma: https://github.com/kkos/oniguruma/blob/master/COPYING
 zip: https://libzip.org/license/
 brotli: https://github.com/google/brotli/blob/master/LICENSE
 cares: https://c-ares.org/license.html
-readline: http://www.gnu.org/licenses/gpl.html
 ncurses: https://github.com/projectceladon/libncurses/blob/master/README
+readline: http://www.gnu.org/licenses/gpl.html
 curl: https://github.com/curl/curl/blob/master/COPYING
 libsodium: https://en.wikipedia.org/wiki/ISC_license
 libyaml: https://pyyaml.org/wiki/LibYAML
