@@ -210,17 +210,17 @@ class Preprocessor
         'xsl',
         'gmp',
         //'exif',
-        'sodium',
+        //'sodium',
         'openssl',
         'readline',
         'xml',
-        'gd',
-        'redis',
+        //'gd',
+        //'redis',
         //'pgsql',
-        'swoole',
-        'yaml',
+        //'swoole',
+        //'yaml',
         //'imagick',
-        'mongodb',
+        //'mongodb',
     ];
 
     protected array $endCallbacks = [];

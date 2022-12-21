@@ -60,6 +60,7 @@ function install_libxml2(Preprocessor $p)
             ->withUrl('https://gitlab.gnome.org/GNOME/libxml2/-/archive/v2.9.10/libxml2-v2.9.10.tar.gz')
             ->withConfigure('./autogen.sh && ./configure --prefix=/usr/libxml2 --with-iconv=/usr/libiconv --enable-static=yes --enable-shared=no')
             ->withPkgName('libxml-2.0')
+            ->withPkgConfig('/usr/libxml2/lib/pkgconfig')
             ->withLicense('http://www.opensource.org/licenses/mit-license.html', Library::LICENSE_MIT)
     );
 }
@@ -72,6 +73,7 @@ function install_libxslt(Preprocessor $p)
         (new Library('libxslt'))
             ->withUrl('https://gitlab.gnome.org/GNOME/libxslt/-/archive/v1.1.34/libxslt-v1.1.34.tar.gz')
             ->withConfigure('./autogen.sh && ./configure --prefix=/usr/libxslt   --enable-static=yes --enable-shared=no')
+            ->withPkgConfig('/usr/libxslt/lib/pkgconfig')
             ->withLicense('http://www.opensource.org/licenses/mit-license.html', Library::LICENSE_MIT)
     );
 }
@@ -93,6 +95,7 @@ function install_gmp(Preprocessor $p)
         (new Library('gmp', '/usr/gmp'))
             ->withUrl('https://gmplib.org/download/gmp/gmp-6.2.1.tar.lz')
             ->withConfigure('./configure --prefix=/usr/gmp --enable-static --disable-shared')
+            ->withPkgConfig('/usr/gmp/lib/pkgconfig')
             ->withLicense('https://www.gnu.org/licenses/old-licenses/gpl-2.0.html', Library::LICENSE_GPL)
     );
 }
@@ -163,6 +166,7 @@ function install_sqlite3(Preprocessor $p)
         (new Library('sqlite3'))
             ->withUrl('https://www.sqlite.org/2021/sqlite-autoconf-3370000.tar.gz')
             ->withConfigure('./configure --prefix=/usr/sqlite3 --enable-static --disable-shared')
+            ->withPkgConfig('/usr/sqlite3/lib/pkgconfig')
             ->withHomePage('https://www.sqlite.org/index.html')
             ->withLicense('https://www.sqlite.org/copyright.html', Library::LICENSE_SPEC)
     );
@@ -198,6 +202,7 @@ function install_icu(Preprocessor $p)
             ->withUrl('https://github.com/unicode-org/icu/releases/download/release-60-3/icu4c-60_3-src.tgz')
             ->withConfigure('source/runConfigureICU Linux --prefix=/usr/icu --enable-static --disable-shared')
             ->withPkgName('icu-i18n')
+            ->withPkgConfig('/usr/icu/lib/pkgconfig')
             ->withHomePage('https://icu.unicode.org/')
             ->withLicense('https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE', Library::LICENSE_SPEC)
     );
@@ -209,6 +214,7 @@ function install_oniguruma(Preprocessor $p)
         (new Library('oniguruma'))
             ->withUrl('https://codeload.github.com/kkos/oniguruma/tar.gz/refs/tags/v6.9.7')
             ->withConfigure('./autogen.sh && ./configure --prefix=/usr/oniguruma --enable-static --disable-shared')
+            ->withPkgConfig('/usr/oniguruma/lib/pkgconfig')
             ->withFile('oniguruma-6.9.7.tar.gz')
             ->withLicense('https://github.com/kkos/oniguruma/blob/master/COPYING', Library::LICENSE_SPEC)
     );
@@ -234,6 +240,7 @@ function install_cares(Preprocessor $p)
             ->withUrl('https://c-ares.org/download/c-ares-1.18.1.tar.gz')
             ->withConfigure('./configure --prefix=/usr/cares --enable-static --disable-shared')
             ->withPkgName('libcares')
+            ->withPkgConfig('/usr/cares/lib/pkgconfig')
             ->withLicense('https://c-ares.org/license.html', Library::LICENSE_MIT)
             ->withHomePage('https://c-ares.org/')
     );
@@ -246,6 +253,7 @@ function install_readline(Preprocessor $p)
             ->withUrl('ftp://ftp.cwru.edu/pub/bash/readline-8.2.tar.gz')
             ->withConfigure('./configure --prefix=/usr/readline --enable-static --disable-shared')
             ->withPkgName('readline')
+            ->withPkgConfig('/usr/readline/lib/pkgconfig')
             ->withLdflags('-L/usr/readline/lib')
             ->withLicense('http://www.gnu.org/licenses/gpl.html', Library::LICENSE_GPL)
             ->withHomePage('https://tiswww.case.edu/php/chet/readline/rltop.html')
@@ -281,6 +289,7 @@ function install_libsodium(Preprocessor $p)
         (new Library('libsodium'))
             ->withUrl('https://download.libsodium.org/libsodium/releases/libsodium-1.0.18.tar.gz')
             ->withConfigure('./autogen.sh && ./configure --prefix=/usr/libsodium --enable-static --disable-shared')
+            ->withPkgConfig('/usr/libsodium/lib/pkgconfig')
             // ISC License, like BSD
             ->withLicense('https://en.wikipedia.org/wiki/ISC_license', Library::LICENSE_SPEC)
             ->withHomePage('https://doc.libsodium.org/')
@@ -293,6 +302,7 @@ function install_libyaml(Preprocessor $p)
         (new Library('libyaml', '/usr/libyaml'))
             ->withUrl('http://pyyaml.org/download/libyaml/yaml-0.2.5.tar.gz')
             ->withConfigure('./configure --prefix=/usr/libyaml --enable-static --disable-shared')
+            ->withPkgConfig('/usr/libyaml/lib/pkgconfig')
             ->withPkgName('yaml-0.1')
             ->withLicense('https://pyyaml.org/wiki/LibYAML', Library::LICENSE_MIT)
             ->withHomePage('https://pyyaml.org/wiki/LibYAML')
@@ -306,6 +316,7 @@ function install_brotli(Preprocessor $p)
             ->withUrl('https://github.com/google/brotli/archive/refs/tags/v1.0.9.tar.gz')
             ->withFile('brotli-1.0.9.tar.gz')
             ->withConfigure("cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX=/usr/brotli .")
+            ->withPkgConfig('/usr/brotli/lib/pkgconfig')
             ->withScriptAfterInstall(
                 implode(PHP_EOL, [
                 'rm -rf /usr/brotli/lib/*.so.*',
@@ -330,6 +341,7 @@ function install_curl(Preprocessor $p)
                     "--without-librtmp --without-brotli --without-libidn2 --disable-ldap --disable-rtsp --without-zstd --without-nghttp2 --without-nghttp3"
             )
             ->withPkgName('libcurl')
+            ->withPkgConfig('/usr/curl/lib/pkgconfig')
             ->withLicense('https://github.com/curl/curl/blob/master/COPYING', Library::LICENSE_SPEC)
             ->withHomePage('https://curl.se/')
     );
@@ -343,6 +355,7 @@ function install_mimalloc(Preprocessor $p)
             ->withFile('mimalloc-2.0.7.tar.gz')
             ->withConfigure("cmake . -DMI_BUILD_SHARED=OFF -DCMAKE_INSTALL_PREFIX=/usr/mimalloc -DMI_INSTALL_TOPLEVEL=ON -DMI_PADDING=OFF -DMI_SKIP_COLLECT_ON_EXIT=ON -DMI_BUILD_TESTS=OFF")
             ->withPkgName('libmimalloc')
+            ->withPkgConfig('/usr/mimalloc/lib/pkgconfig')
             ->withLicense('https://github.com/microsoft/mimalloc/blob/master/LICENSE', Library::LICENSE_MIT)
             ->withHomePage('https://microsoft.github.io/mimalloc/')
             ->withScriptAfterInstall(implode(PHP_EOL, [
@@ -367,6 +380,7 @@ function install_postgresql(Preprocessor $p)
             --with-readline=yes \
             --with-includes=/usr/openssl/include/:/usr/readline/include/:/usr/icu/include:/usr/include \
             --with-libraries=/usr/openssl/lib64:/usr/readline/lib:/usr/icu/lib:/usr/lib:/usr/lib64')
+            ->withPkgConfig('/usr/postgresql/lib/pkgconfig')
             //->withMakeOptions('-C src/interfaces')
             //->withMakeInstallOptions('-C src/interfaces') //make -C src/interfaces install
             ->withLicense('https://www.postgresql.org/about/licence/', Library::LICENSE_SPEC)
@@ -381,12 +395,11 @@ install_libxslt($p);
 install_gmp($p);
 install_zlib($p);
 install_bzip2($p);
-install_giflib($p);
-
-install_libpng($p);
-install_libjpeg($p);
-install_freetype($p);
-install_libwebp($p);
+//install_giflib($p);
+//install_libpng($p);
+//install_libjpeg($p);
+//install_freetype($p);
+//install_libwebp($p);
 install_sqlite3($p);
 install_icu($p);
 install_oniguruma($p);
@@ -398,8 +411,8 @@ install_ncurses($p);
 //install_libedit($p);
 //install_imagemagick($p);
 install_curl($p);
-install_libsodium($p);
-install_libyaml($p);
+//install_libsodium($p);
+//install_libyaml($p);
 install_mimalloc($p);
 install_postgresql($p);
 
