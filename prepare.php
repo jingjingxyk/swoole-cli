@@ -279,11 +279,15 @@ function install_ncurses(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('ncurses'))
-            ->withUrl('https://ftp.gnu.org/pub/gnu/ncurses/ncurses-6.3.tar.gz')
+            //->withUrl('https://ftp.gnu.org/pub/gnu/ncurses/ncurses-6.3.tar.gz')
+            ->withUrl('https://invisible-island.net/datafiles/release/ncurses.tar.gz')
+            ->withFile('ncurses.tar.gz')
             ->withConfigure('./configure --prefix=/usr/ncurses --enable-static --disable-shared ')
             ->withLdflags('-L/usr/ncurses/lib')
-            ->withLicense('https://github.com/projectceladon/libncurses/blob/master/README', Library::LICENSE_MIT)
-            ->withHomePage('https://github.com/projectceladon/libncurses')
+            //->withLicense('https://github.com/projectceladon/libncurses/blob/master/README', Library::LICENSE_MIT)
+            ->withLicense('https://invisible-island.net/ncurses/ncurses-license.html', Library::LICENSE_GPL)
+            //->withHomePage('https://github.com/projectceladon/libncurses')
+            ->withHomePage('https://invisible-island.net/ncurses/#download_ncurses')
     );
 }
 
@@ -298,6 +302,7 @@ function install_readline(Preprocessor $p)
             ->withLdflags('-L/usr/readline/lib')
             ->withLicense('http://www.gnu.org/licenses/gpl.html', Library::LICENSE_GPL)
             ->withHomePage('https://tiswww.case.edu/php/chet/readline/rltop.html')
+
     );
 }
 
