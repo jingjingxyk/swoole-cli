@@ -194,9 +194,9 @@ function install_zlib(Preprocessor $p)
     $p->addLibrary(
         (new Library('zlib'))
             ->withUrl('https://udomain.dl.sourceforge.net/project/libpng/zlib/1.2.11/zlib-1.2.11.tar.gz')
-            ->withConfigure('./configure --prefix=/usr/zlib --static')
-            ->withPkgConfig('/usr/zlib/lib/pkgconfig')
-            ->withLdflags('-L/usr/zlib/lib')
+            ->withConfigure('./configure --prefix=/usr/ --static')
+            ->withPkgConfig('/usr/lib/pkgconfig')
+            ->withLdflags('-L/usr/lib')
             ->withHomePage('https://zlib.net/')
             ->withLicense('https://zlib.net/zlib_license.html', Library::LICENSE_SPEC)
     );
@@ -222,13 +222,14 @@ function install_zip(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('zip'))
-            ->withUrl('https://libzip.org/download/libzip-1.9.2.tar.gz')
-            //->withUrl('https://libzip.org/download/libzip-1.8.0.tar.gz')
-            ->withFile('libzip-1.9.2.tar.gz')
-            ->withConfigure('cmake . -DENABLE_ZSTD=OFF -DENABLE_LZMA=OFF -DBUILD_SHARED_LIBS=OFF -DOPENSSL_USE_STATIC_LIBS=TRUE -DLIBZIP_DO_INSTALL=OFF -DZLIB_INCLUDE_DIR=/usr/zlib/include  -DZLIB_LIBRARY=/usr/zlib/lib -DBZIP2_LIBRARIES=/usr/bzip2/lib -DBZIP2_INCLUDE_DIR=/usr/bzip2/include  -DCMAKE_INSTALL_PREFIX=/usr/libzip ')
+            //->withUrl('https://libzip.org/download/libzip-1.9.2.tar.gz')
+            ->withUrl('https://libzip.org/download/libzip-1.8.0.tar.gz')
+            ->withFile('libzip-1.8.0.tar.gz')
+            //-DZLIB_INCLUDE_DIR=/usr/zlib/include  -DZLIB_LIBRARY=/usr/zlib/lib -DBZIP2_LIBRARIES=/usr/bzip2/lib -DBZIP2_INCLUDE_DIR=/usr/bzip2/include
+            ->withConfigure('cmake . -DENABLE_ZSTD=OFF -DENABLE_LZMA=OFF -DBUILD_SHARED_LIBS=OFF -DOPENSSL_USE_STATIC_LIBS=TRUE -DLIBZIP_DO_INSTALL=OFF   -DCMAKE_INSTALL_PREFIX=/usr/ ')
             ->withPkgName('libzip')
-            ->withPkgConfig('/usr/libzip/lib/pkgconfig')
-            ->withLdflags('-L/usr/libzip/lib')
+            ->withPkgConfig('/usr/lib/pkgconfig')
+            ->withLdflags('-L/usr/lib')
             ->withHomePage('https://libzip.org/')
             ->withLicense('https://libzip.org/license/', Library::LICENSE_BSD)
     );

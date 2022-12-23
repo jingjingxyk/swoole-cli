@@ -161,7 +161,8 @@ cd ${__DIR__}
 
 cd ${__PROJECT__}/
 
-git config --global --add safe.directory ${__PROJECT__}/
+chown -R 1000:1000 .
+git config --global --add safe.directory '*'
 git submodule update --init --recursive
 
 cd ${__DIR__}
@@ -170,7 +171,25 @@ sh init-depend-use-proxy.sh
 cd ${__PROJECT__}/
 sh make.sh sync
 
+sed -i 's/int main(int/int fpm_main(int/' ${__PROJECT__}/sapi/cli/fpm/fpm_main.c
+
 chown -R 1000:1000 .
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 exit 0
 

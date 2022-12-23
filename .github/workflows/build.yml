@@ -32,7 +32,7 @@ jobs:
         docker exec -i swoole-cli-build-dev sh ./make.sh all-library
         docker exec -i swoole-cli-build-dev sh ./make.sh config
         docker exec -i swoole-cli-build-dev sh ./make.sh build
-        docker exec -i swoole-cli-build-dev sh ./bin/swoole-cli -v
+        docker exec -i swoole-cli-build-dev chmod a+x /work/bin/swoole-cli &&  /work/bin/swoole-cli -v
         docker exec -i swoole-cli-build-dev sh ./make.sh archive
 #    - name: Build-with-docker-1
 #      uses: addnab/docker-run-action@v3
