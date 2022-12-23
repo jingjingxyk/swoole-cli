@@ -20,9 +20,8 @@ cd ${__DIR__}
 
 cd ${__PROJECT__}
 
+test -d ${__PROJECT__}/thirdparty && rm -rf ${__PROJECT__}/thirdparty/*
 
-cd ${__PROJECT__}/thirdparty
-rm -rf ${__PROJECT__}/thirdparty/*
 
 test -f  Makefile.objects &&  rm -rf Makefile.objects
 test -f  Makefile.fragments &&  rm -rf Makefile.fragments
@@ -155,10 +154,9 @@ cd ${__PROJECT__}/
 
 
 
-cd ${__DIR__}/php-versions
+cd ${__DIR__}
+sh download-php.sh
 
-test -d php-8.1.12 && rm -rf php-8.1.12
-tar -zxvf php-8.1.12.tar.gz
 cd ${__DIR__}
 
 cd ${__PROJECT__}/
