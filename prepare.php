@@ -316,10 +316,10 @@ function install_readline(Preprocessor $p)
     $p->addLibrary(
         (new Library('readline', '/usr/readline'))
             ->withUrl('ftp://ftp.cwru.edu/pub/bash/readline-8.2.tar.gz')
-            ->withConfigure('LDFLAGS=-L/usr/ncurses/lib && ./configure --prefix=/usr/readline --enable-static --disable-shared --with-curses')
+            ->withConfigure('./configure --prefix=/usr/ --enable-static --disable-shared --with-curses')
             ->withPkgName('libreadline')
-            ->withPkgConfig('/usr/readline/lib/pkgconfig')
-            ->withLdflags('-L/usr/readline/lib')
+            ->withPkgConfig('/usr/lib/pkgconfig')
+            ->withLdflags('-L/usr/lib')
             ->withLicense('http://www.gnu.org/licenses/gpl.html', Library::LICENSE_GPL)
             ->withHomePage('https://tiswww.case.edu/php/chet/readline/rltop.html')
 

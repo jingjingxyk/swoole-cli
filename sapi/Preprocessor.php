@@ -231,7 +231,7 @@ class Preprocessor
         //'exif',
         'sodium',
         'openssl',
-        // 'readline',
+        'readline',
         //'gd',
         'redis',
         //'pgsql',
