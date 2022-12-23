@@ -313,7 +313,6 @@ tmp-php.ini
 /ext/swoole_tracker_agent
 /ext/loader8
 /ext/ds
-.clang-format
 
 /build-tools-scripts/base-container-image.txt
 /build-tools-scripts/backup
