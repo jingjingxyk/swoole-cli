@@ -20,7 +20,7 @@ __ROOT__=$(
 }
 
 
-image=docker.io/jingjingxyk/build-swoole-cli:download-ext-libs-alpine-edge-20221219T070353Z
+image=docker.io/jingjingxyk/build-swoole-cli:download-ext-libs-alpine-edge-20221223T062602Z
 
 docker run --rm --name swoole-cli-build-dev-download-ext-libs -d -v ${__ROOT__}:/work -w /work $image tail -f /dev/null
 

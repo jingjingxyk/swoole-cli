@@ -45,10 +45,21 @@ function install_libiconv(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('libiconv', '/usr/libiconv'))
-            ->withUrl('https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.16.tar.gz')
+            ->withUrl('https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.17.tar.gz')
             ->withPkgConfig('')
             ->withLdflags('-L/usr/libiconv/lib')
             ->withConfigure('./configure --prefix=/usr/libiconv enable_static=yes enable_shared=no')
+            ->withLicense('https://www.gnu.org/licenses/old-licenses/gpl-2.0.html', Library::LICENSE_GPL)
+    );
+}
+function install_gettext(Preprocessor $p)
+{
+    $p->addLibrary(
+        (new Library('gettext', '/usr/gettext'))
+            ->withUrl('https://ftp.gnu.org/pub/gnu/gettext/gettext-0.21.1.tar.gz')
+            ->withPkgConfig('')
+            ->withLdflags('-L/usr/gettext/lib')
+            ->withConfigure('./configure --prefix=/usr/gettext enable_static=yes enable_shared=no --with-libiconv-prefix=/usr/libiconv/')
             ->withLicense('https://www.gnu.org/licenses/old-licenses/gpl-2.0.html', Library::LICENSE_GPL)
     );
 }
@@ -191,6 +202,8 @@ function install_zlib(Preprocessor $p)
     );
 }
 
+
+
 function install_bzip2(Preprocessor $p)
 {
     $p->addLibrary(
@@ -201,6 +214,23 @@ function install_bzip2(Preprocessor $p)
             ->withMakeInstallOptions('PREFIX=/usr/bzip2')
             ->withHomePage('https://www.sourceware.org/bzip2/')
             ->withLicense('https://www.sourceware.org/bzip2/', Library::LICENSE_BSD)
+    );
+}
+
+// MUST be in the /usr directory
+function install_zip(Preprocessor $p)
+{
+    $p->addLibrary(
+        (new Library('zip'))
+            ->withUrl('https://libzip.org/download/libzip-1.9.2.tar.gz')
+            //->withUrl('https://libzip.org/download/libzip-1.8.0.tar.gz')
+            ->withFile('libzip-1.9.2.tar.gz')
+            ->withConfigure('cmake . -DENABLE_ZSTD=OFF -DENABLE_LZMA=OFF -DBUILD_SHARED_LIBS=OFF -DOPENSSL_USE_STATIC_LIBS=TRUE -DLIBZIP_DO_INSTALL=OFF -DZLIB_INCLUDE_DIR=/usr/zlib/include  -DZLIB_LIBRARY=/usr/zlib/lib -DBZIP2_LIBRARIES=/usr/bzip2/lib -DBZIP2_INCLUDE_DIR=/usr/bzip2/include  -DCMAKE_INSTALL_PREFIX=/usr/libzip ')
+            ->withPkgName('libzip')
+            ->withPkgConfig('/usr/libzip/lib/pkgconfig')
+            ->withLdflags('-L/usr/libzip/lib')
+            ->withHomePage('https://libzip.org/')
+            ->withLicense('https://libzip.org/license/', Library::LICENSE_BSD)
     );
 }
 
@@ -231,20 +261,7 @@ function install_oniguruma(Preprocessor $p)
     );
 }
 
-// MUST be in the /usr directory
-function install_zip(Preprocessor $p)
-{
-    $p->addLibrary(
-        (new Library('zip'))
-            ->withUrl('https://libzip.org/download/libzip-1.8.0.tar.gz')
-            ->withConfigure('cmake . -DENABLE_ZSTD=OFF -DENABLE_LZMA=OFF -DBUILD_SHARED_LIBS=OFF -DOPENSSL_USE_STATIC_LIBS=TRUE -DCMAKE_INSTALL_PREFIX=/usr/libzip')
-            ->withPkgName('libzip')
-            ->withPkgConfig('/usr/libzip/lib/pkgconfig')
-            ->withLdflags('-L/usr/libzip/lib')
-            ->withHomePage('https://libzip.org/')
-            ->withLicense('https://libzip.org/license/', Library::LICENSE_BSD)
-    );
-}
+
 
 function install_cares(Preprocessor $p)
 {
@@ -279,10 +296,12 @@ function install_ncurses(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('ncurses'))
-            //->withUrl('https://ftp.gnu.org/pub/gnu/ncurses/ncurses-6.3.tar.gz')
-            ->withUrl('https://invisible-island.net/datafiles/release/ncurses.tar.gz')
-            ->withFile('ncurses.tar.gz')
-            ->withConfigure('./configure --prefix=/usr/ncurses --enable-static --disable-shared ')
+            ->withUrl('https://ftp.gnu.org/pub/gnu/ncurses/ncurses-6.3.tar.gz')
+            //->withUrl('https://invisible-island.net/datafiles/release/ncurses.tar.gz')
+            //->withFile('ncurses.tar.gz')
+            ->withFile('ncurses-6.3.tar.gz')
+            ->withConfigure('mkdir -p /usr/ncurses/lib/pkgconfig && ./configure --prefix=/usr/ncurses --enable-static --disable-shared --enable-widec --enable-pc-files --with-pkg-config=/usr/ncurses/lib/pkgconfig --with-pkg-config-libdir=/usr/ncurses/lib/pkgconfig')
+            ->withPkgConfig('/usr/ncurses/lib/pkgconfig')
             ->withLdflags('-L/usr/ncurses/lib')
             //->withLicense('https://github.com/projectceladon/libncurses/blob/master/README', Library::LICENSE_MIT)
             ->withLicense('https://invisible-island.net/ncurses/ncurses-license.html', Library::LICENSE_GPL)
@@ -296,7 +315,7 @@ function install_readline(Preprocessor $p)
     $p->addLibrary(
         (new Library('readline', '/usr/readline'))
             ->withUrl('ftp://ftp.cwru.edu/pub/bash/readline-8.2.tar.gz')
-            ->withConfigure('./configure --prefix=/usr/readline --enable-static --disable-shared --with-curses')
+            ->withConfigure('LDFLAGS=-L/usr/ncurses/lib && ./configure --prefix=/usr/readline --enable-static --disable-shared --with-curses')
             ->withPkgName('libreadline')
             ->withPkgConfig('/usr/readline/lib/pkgconfig')
             ->withLdflags('-L/usr/readline/lib')
@@ -417,6 +436,7 @@ function install_postgresql(Preprocessor $p)
     );
 }
 
+//install_gettext($p);
 install_libiconv($p);
 install_openssl($p);
 install_libxml2($p);
@@ -424,6 +444,7 @@ install_libxslt($p);
 install_gmp($p);
 install_zlib($p);
 install_bzip2($p);
+install_zip($p);
 //install_giflib($p);
 //install_libpng($p);
 //install_libjpeg($p);
@@ -432,7 +453,7 @@ install_bzip2($p);
 install_sqlite3($p);
 install_icu($p);
 install_oniguruma($p);
-install_zip($p);
+
 install_brotli($p);
 install_cares($p);
 install_ncurses($p);
