@@ -181,43 +181,62 @@ class Preprocessor
      * @var array|string[]
      */
     protected array $extEnabled = [
-        'opcache',
+       // "Core",
+        "ctype",
+       // "date",
+        //"dom",
+        "fileinfo",
+        "filter",
+        //"hash",
+        "iconv",
+       // "json",
+        //"libxml",
+       // "pcre",
+        // "PDO",
+        "pdo",
+        "pdo_sqlite",
+        //"Phar",
+        "phar",
+        "posix",
+        //"Reflection",
+        //"reflection",
+        "session",
+        //"SimpleXML",
+        //"SPL",
+        "sqlite3",
+        //"standard",
+        "tokenizer",
+        "xml",
+        //"xmlreader",
+        //"xmlwriter",
+        //'opcache',
         'curl',
-        'iconv',
         'bz2',
         'bcmath',
         'pcntl',
-        'filter',
-        'session',
         'tokenizer',
         'mbstring',
-        'ctype',
         'zlib',
-        'zip',
-        'posix',
+        //'zip',
         'sockets',
-        'pdo',
-        'sqlite3',
-        'phar',
         'mysqlnd',
-        'mysqli',
-        'intl',
-        'fileinfo',
+        //'mysqli',
+        //'intl',
         'pdo_mysql',
-        'pdo_sqlite',
-        'soap',
+        //'pdo_pgsql',
+        //'soap',
         'xsl',
         'gmp',
-        'exif',
+        //'exif',
         'sodium',
         'openssl',
-        'readline',
-        'xml',
-        'gd',
+        // 'readline',
+        //'gd',
         'redis',
+        //'pgsql',
         'swoole',
         'yaml',
-        'imagick',
+        //'imagick',
         'mongodb',
     ];
 
@@ -229,6 +248,7 @@ class Preprocessor
         $this->rootDir = $rootPath;
         $this->libraryDir = $rootPath . '/pool/lib';
         $this->extensionDir = $rootPath . '/pool/ext';
+        $this->setMaxJob(`nproc`); //获取CPU核数，用于 make -j $(nproc)
 
         // 此目录用于存放源代码包
         if (!is_dir($rootPath . '/pool')) {
@@ -313,7 +333,8 @@ class Preprocessor
         $skip_library_download = getenv('SKIP_LIBRARY_DOWNLOAD');
         if (empty($skip_library_download)) {
             if (!is_file($this->libraryDir . '/' . $lib->file)) {
-                echo `wget {$lib->url} -O {$this->libraryDir}/{$lib->file}`;
+                // echo `wget {$lib->url} -O {$this->libraryDir}/{$lib->file}`;
+                echo `curl --connect-timeout 15 --retry 5 --retry-delay 5  -Lo {$this->libraryDir}/{$lib->file} {$lib->url}`;
                 echo $lib->file;
             } else {
                 echo "[Library] file cached: " . $lib->file . PHP_EOL;

@@ -5,8 +5,12 @@ require __DIR__ . '/sapi/Preprocessor.php';
 use SwooleCli\Preprocessor;
 use SwooleCli\Library;
 
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+
 $p = new Preprocessor(__DIR__);
-$p->setPhpSrcDir(getenv('HOME') . '/.phpbrew/build/php-8.1.12');
+#$p->setPhpSrcDir(getenv('HOME') . '/.phpbrew/build/php-8.1.12');
+$p->setPhpSrcDir(__DIR__ . '//build-tools-scripts-2/php-versions/php-8.1.12');
 $p->setDockerVersion('1.4');
 if (!empty($argv[1])) {
     $p->setOsType(trim($argv[1]));
@@ -28,10 +32,12 @@ if ($p->osType == 'macos') {
 function install_openssl(Preprocessor $p)
 {
     $p->addLibrary((new Library('openssl', '/usr/openssl'))
-            ->withUrl('https://www.openssl.org/source/openssl-1.1.1p.tar.gz')
-            ->withConfigure('./config' . ($p->osType === 'macos' ? '' : ' -static --static') . ' no-shared --prefix=/usr/openssl')
-            ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
-            ->withHomePage('https://www.openssl.org/')
+        ->withUrl('https://www.openssl.org/source/openssl-3.0.7.tar.gz')
+        ->withPkgConfig('/usr/openssl/lib64/pkgconfig')
+        ->withLdflags('-L/usr/openssl/lib64')
+        ->withConfigure('./config' . ($p->osType === 'macos' ? '' : ' -static --static') . ' no-shared --prefix=/usr/openssl')
+        ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
+        ->withHomePage('https://www.openssl.org/')
     );
 }
 
@@ -39,9 +45,21 @@ function install_libiconv(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('libiconv', '/usr/libiconv'))
-            ->withUrl('https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.16.tar.gz')
+            ->withUrl('https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.17.tar.gz')
             ->withPkgConfig('')
+            ->withLdflags('-L/usr/libiconv/lib')
             ->withConfigure('./configure --prefix=/usr/libiconv enable_static=yes enable_shared=no')
+            ->withLicense('https://www.gnu.org/licenses/old-licenses/gpl-2.0.html', Library::LICENSE_GPL)
+    );
+}
+function install_gettext(Preprocessor $p)
+{
+    $p->addLibrary(
+        (new Library('gettext', '/usr/gettext'))
+            ->withUrl('https://ftp.gnu.org/pub/gnu/gettext/gettext-0.21.1.tar.gz')
+            ->withPkgConfig('')
+            ->withLdflags('-L/usr/gettext/lib')
+            ->withConfigure('./configure --prefix=/usr/gettext enable_static=yes enable_shared=no --with-libiconv-prefix=/usr/libiconv/')
             ->withLicense('https://www.gnu.org/licenses/old-licenses/gpl-2.0.html', Library::LICENSE_GPL)
     );
 }
@@ -53,8 +71,10 @@ function install_libxml2(Preprocessor $p)
     $p->addLibrary(
         (new Library('libxml2'))
             ->withUrl('https://gitlab.gnome.org/GNOME/libxml2/-/archive/v2.9.10/libxml2-v2.9.10.tar.gz')
-            ->withConfigure('./autogen.sh && ./configure --prefix=/usr --with-iconv=/usr/libiconv --enable-static=yes --enable-shared=no')
+            ->withConfigure('./autogen.sh && ./configure --prefix=/usr/libxml2 --with-iconv=/usr/libiconv --enable-static=yes --enable-shared=no')
             ->withPkgName('libxml-2.0')
+            ->withPkgConfig('/usr/libxml2/lib/pkgconfig')
+            ->withLdflags('-L/usr/libxml2/lib')
             ->withLicense('http://www.opensource.org/licenses/mit-license.html', Library::LICENSE_MIT)
     );
 }
@@ -66,7 +86,9 @@ function install_libxslt(Preprocessor $p)
     $p->addLibrary(
         (new Library('libxslt'))
             ->withUrl('https://gitlab.gnome.org/GNOME/libxslt/-/archive/v1.1.34/libxslt-v1.1.34.tar.gz')
-            ->withConfigure('./autogen.sh && ./configure --prefix=/usr --enable-static=yes --enable-shared=no')
+            ->withConfigure('./autogen.sh && ./configure --prefix=/usr/libxslt   --enable-static=yes --enable-shared=no')
+            ->withPkgConfig('/usr/libxslt/lib/pkgconfig')
+            ->withLdflags('-L/usr/libxslt/lib')
             ->withLicense('http://www.opensource.org/licenses/mit-license.html', Library::LICENSE_MIT)
     );
 }
@@ -75,7 +97,7 @@ function install_imagemagick(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('imagemagick', '/usr/imagemagick'))
-            ->withUrl('https://github.com/ImageMagick/ImageMagick/archive/refs/tags/7.1.0-19.tar.gz')
+            ->withUrl('https://github.com/ImageMagick/ImageMagick/archive/refs/tags/7.1.0-53.tar.gz')
             ->withConfigure('./configure --prefix=/usr/imagemagick --enable-static --disable-shared --with-zip=no --with-fontconfig=no --with-heic=no --with-lcms=no --with-lqr=no --with-openexr=no --with-openjp2=no --with-pango=no --with-raw=no --with-tiff=no')
             ->withPkgName('ImageMagick')
             ->withLicense('https://imagemagick.org/script/license.php', Library::LICENSE_APACHE2)
@@ -88,6 +110,8 @@ function install_gmp(Preprocessor $p)
         (new Library('gmp', '/usr/gmp'))
             ->withUrl('https://gmplib.org/download/gmp/gmp-6.2.1.tar.lz')
             ->withConfigure('./configure --prefix=/usr/gmp --enable-static --disable-shared')
+            ->withPkgConfig('/usr/gmp/lib/pkgconfig')
+            ->withLdflags('-L/usr/gmp/lib')
             ->withLicense('https://www.gnu.org/licenses/old-licenses/gpl-2.0.html', Library::LICENSE_GPL)
     );
 }
@@ -118,7 +142,7 @@ function install_libjpeg(Preprocessor $p)
     $lib->withUrl('https://codeload.github.com/libjpeg-turbo/libjpeg-turbo/tar.gz/refs/tags/2.1.2')
         ->withConfigure('cmake -G"Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr .')
         ->withLdflags('-L/usr/lib64')
-        ->withPkgConfig('/usr/lib64/pkgconfig')
+        //->withPkgConfig('/usr/lib64/pkgconfig')
         ->withFile('libjpeg-turbo-2.1.2.tar.gz')
         ->withHomePage('https://libjpeg-turbo.org/')
         ->withLicense('https://github.com/libjpeg-turbo/libjpeg-turbo/blob/main/LICENSE.md', Library::LICENSE_BSD);
@@ -132,7 +156,7 @@ function install_freetype(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('freetype', '/usr/freetype'))
-            ->withUrl('https://mirror.yongbok.net/nongnu/freetype/freetype-2.10.4.tar.gz')
+            ->withUrl('https://download-mirror.savannah.gnu.org/releases/freetype/freetype-2.10.4.tar.gz')
             ->withConfigure('./configure --prefix=/usr/freetype --enable-static --disable-shared')
             ->withHomePage('https://freetype.org/')
             ->withPkgName('freetype2')
@@ -157,7 +181,9 @@ function install_sqlite3(Preprocessor $p)
     $p->addLibrary(
         (new Library('sqlite3'))
             ->withUrl('https://www.sqlite.org/2021/sqlite-autoconf-3370000.tar.gz')
-            ->withConfigure('./configure --prefix=/usr --enable-static --disable-shared')
+            ->withConfigure('./configure --prefix=/usr/sqlite3 --enable-static --disable-shared')
+            ->withPkgConfig('/usr/sqlite3/lib/pkgconfig')
+            ->withLdflags('-L/usr/sqlite3/lib')
             ->withHomePage('https://www.sqlite.org/index.html')
             ->withLicense('https://www.sqlite.org/copyright.html', Library::LICENSE_SPEC)
     );
@@ -168,21 +194,43 @@ function install_zlib(Preprocessor $p)
     $p->addLibrary(
         (new Library('zlib'))
             ->withUrl('https://udomain.dl.sourceforge.net/project/libpng/zlib/1.2.11/zlib-1.2.11.tar.gz')
-            ->withConfigure('./configure --prefix=/usr --static')
+            ->withConfigure('./configure --prefix=/usr/zlib --static')
+            ->withPkgConfig('/usr/zlib/lib/pkgconfig')
+            ->withLdflags('-L/usr/zlib/lib')
             ->withHomePage('https://zlib.net/')
             ->withLicense('https://zlib.net/zlib_license.html', Library::LICENSE_SPEC)
     );
 }
+
+
 
 function install_bzip2(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('bzip2', '/usr/bzip2'))
             ->withUrl('https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz')
+            ->withLdflags('-L/usr/bzip2/lib')
             ->withMakeOptions('PREFIX=/usr/bzip2')
             ->withMakeInstallOptions('PREFIX=/usr/bzip2')
             ->withHomePage('https://www.sourceware.org/bzip2/')
             ->withLicense('https://www.sourceware.org/bzip2/', Library::LICENSE_BSD)
+    );
+}
+
+// MUST be in the /usr directory
+function install_zip(Preprocessor $p)
+{
+    $p->addLibrary(
+        (new Library('zip'))
+            ->withUrl('https://libzip.org/download/libzip-1.9.2.tar.gz')
+            //->withUrl('https://libzip.org/download/libzip-1.8.0.tar.gz')
+            ->withFile('libzip-1.9.2.tar.gz')
+            ->withConfigure('cmake . -DENABLE_ZSTD=OFF -DENABLE_LZMA=OFF -DBUILD_SHARED_LIBS=OFF -DOPENSSL_USE_STATIC_LIBS=TRUE -DLIBZIP_DO_INSTALL=OFF -DZLIB_INCLUDE_DIR=/usr/zlib/include  -DZLIB_LIBRARY=/usr/zlib/lib -DBZIP2_LIBRARIES=/usr/bzip2/lib -DBZIP2_INCLUDE_DIR=/usr/bzip2/include  -DCMAKE_INSTALL_PREFIX=/usr/libzip ')
+            ->withPkgName('libzip')
+            ->withPkgConfig('/usr/libzip/lib/pkgconfig')
+            ->withLdflags('-L/usr/libzip/lib')
+            ->withHomePage('https://libzip.org/')
+            ->withLicense('https://libzip.org/license/', Library::LICENSE_BSD)
     );
 }
 
@@ -191,8 +239,10 @@ function install_icu(Preprocessor $p)
     $p->addLibrary(
         (new Library('icu'))
             ->withUrl('https://github.com/unicode-org/icu/releases/download/release-60-3/icu4c-60_3-src.tgz')
-            ->withConfigure('source/runConfigureICU Linux --prefix=/usr --enable-static --disable-shared')
+            ->withConfigure('source/runConfigureICU Linux --prefix=/usr/icu --enable-static --disable-shared')
             ->withPkgName('icu-i18n')
+            ->withPkgConfig('/usr/icu/lib/pkgconfig')
+            ->withLdflags('-L/usr/icu/lib')
             ->withHomePage('https://icu.unicode.org/')
             ->withLicense('https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE', Library::LICENSE_SPEC)
     );
@@ -203,49 +253,31 @@ function install_oniguruma(Preprocessor $p)
     $p->addLibrary(
         (new Library('oniguruma'))
             ->withUrl('https://codeload.github.com/kkos/oniguruma/tar.gz/refs/tags/v6.9.7')
-            ->withConfigure('./autogen.sh && ./configure --prefix=/usr --enable-static --disable-shared')
+            ->withConfigure('./autogen.sh && ./configure --prefix=/usr/oniguruma --enable-static --disable-shared')
+            ->withPkgConfig('/usr/oniguruma/lib/pkgconfig')
+            ->withLdflags('-L/usr/oniguruma/lib')
             ->withFile('oniguruma-6.9.7.tar.gz')
             ->withLicense('https://github.com/kkos/oniguruma/blob/master/COPYING', Library::LICENSE_SPEC)
     );
 }
 
-// MUST be in the /usr directory
-function install_zip(Preprocessor $p)
-{
-    $p->addLibrary(
-        (new Library('zip'))
-            ->withUrl('https://libzip.org/download/libzip-1.8.0.tar.gz')
-            ->withConfigure('cmake . -DENABLE_ZSTD=OFF -DENABLE_LZMA=OFF -DBUILD_SHARED_LIBS=OFF -DOPENSSL_USE_STATIC_LIBS=TRUE -DCMAKE_INSTALL_PREFIX=/usr')
-            ->withPkgName('libzip')
-            ->withHomePage('https://libzip.org/')
-            ->withLicense('https://libzip.org/license/', Library::LICENSE_BSD)
-    );
-}
+
 
 function install_cares(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('cares'))
             ->withUrl('https://c-ares.org/download/c-ares-1.18.1.tar.gz')
-            ->withConfigure('./configure --prefix=/usr --enable-static --disable-shared')
+            ->withConfigure('./configure --prefix=/usr/cares --enable-static --disable-shared')
             ->withPkgName('libcares')
+            ->withPkgConfig('/usr/cares/lib/pkgconfig')
+            ->withLdflags('-L/usr/cares/lib')
             ->withLicense('https://c-ares.org/license.html', Library::LICENSE_MIT)
             ->withHomePage('https://c-ares.org/')
     );
 }
 
-function install_readline(Preprocessor $p)
-{
-    $p->addLibrary(
-        (new Library('readline', '/usr/readline'))
-            ->withUrl('ftp://ftp.cwru.edu/pub/bash/readline-8.2.tar.gz')
-            ->withConfigure('./configure --prefix=/usr/readline --enable-static --disable-shared')
-            ->withPkgName('readline')
-            ->withLdflags('-L/usr/readline/lib')
-            ->withLicense('http://www.gnu.org/licenses/gpl.html', Library::LICENSE_GPL)
-            ->withHomePage('https://tiswww.case.edu/php/chet/readline/rltop.html')
-    );
-}
+
 
 function install_libedit(Preprocessor $p)
 {
@@ -259,14 +291,37 @@ function install_libedit(Preprocessor $p)
     );
 }
 
+
 function install_ncurses(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('ncurses'))
             ->withUrl('https://ftp.gnu.org/pub/gnu/ncurses/ncurses-6.3.tar.gz')
-            ->withConfigure('./configure --prefix=/usr --enable-static --disable-shared')
-            ->withLicense('https://github.com/projectceladon/libncurses/blob/master/README', Library::LICENSE_MIT)
-            ->withHomePage('https://github.com/projectceladon/libncurses')
+            //->withUrl('https://invisible-island.net/datafiles/release/ncurses.tar.gz')
+            //->withFile('ncurses.tar.gz')
+            ->withFile('ncurses-6.3.tar.gz')
+            ->withConfigure('mkdir -p /usr/ncurses/lib/pkgconfig && ./configure --prefix=/usr/ncurses --enable-static --disable-shared --enable-widec --enable-pc-files --with-pkg-config=/usr/ncurses/lib/pkgconfig --with-pkg-config-libdir=/usr/ncurses/lib/pkgconfig')
+            ->withPkgConfig('/usr/ncurses/lib/pkgconfig')
+            ->withLdflags('-L/usr/ncurses/lib')
+            //->withLicense('https://github.com/projectceladon/libncurses/blob/master/README', Library::LICENSE_MIT)
+            ->withLicense('https://invisible-island.net/ncurses/ncurses-license.html', Library::LICENSE_GPL)
+            //->withHomePage('https://github.com/projectceladon/libncurses')
+            ->withHomePage('https://invisible-island.net/ncurses/#download_ncurses')
+    );
+}
+
+function install_readline(Preprocessor $p)
+{
+    $p->addLibrary(
+        (new Library('readline', '/usr/readline'))
+            ->withUrl('ftp://ftp.cwru.edu/pub/bash/readline-8.2.tar.gz')
+            ->withConfigure('LDFLAGS=-L/usr/ncurses/lib && ./configure --prefix=/usr/readline --enable-static --disable-shared --with-curses')
+            ->withPkgName('libreadline')
+            ->withPkgConfig('/usr/readline/lib/pkgconfig')
+            ->withLdflags('-L/usr/readline/lib')
+            ->withLicense('http://www.gnu.org/licenses/gpl.html', Library::LICENSE_GPL)
+            ->withHomePage('https://tiswww.case.edu/php/chet/readline/rltop.html')
+
     );
 }
 
@@ -275,7 +330,9 @@ function install_libsodium(Preprocessor $p)
     $p->addLibrary(
         (new Library('libsodium'))
             ->withUrl('https://download.libsodium.org/libsodium/releases/libsodium-1.0.18.tar.gz')
-            ->withConfigure('./configure --prefix=/usr --enable-static --disable-shared')
+            ->withConfigure('./autogen.sh && ./configure --prefix=/usr/libsodium --enable-static --disable-shared')
+            ->withPkgConfig('/usr/libsodium/lib/pkgconfig')
+            ->withLdflags('-L/usr/libsodium/lib')
             // ISC License, like BSD
             ->withLicense('https://en.wikipedia.org/wiki/ISC_license', Library::LICENSE_SPEC)
             ->withHomePage('https://doc.libsodium.org/')
@@ -288,6 +345,8 @@ function install_libyaml(Preprocessor $p)
         (new Library('libyaml', '/usr/libyaml'))
             ->withUrl('http://pyyaml.org/download/libyaml/yaml-0.2.5.tar.gz')
             ->withConfigure('./configure --prefix=/usr/libyaml --enable-static --disable-shared')
+            ->withPkgConfig('/usr/libyaml/lib/pkgconfig')
+            ->withLdflags('-L/usr/libyaml/lib')
             ->withPkgName('yaml-0.1')
             ->withLicense('https://pyyaml.org/wiki/LibYAML', Library::LICENSE_MIT)
             ->withHomePage('https://pyyaml.org/wiki/LibYAML')
@@ -301,14 +360,16 @@ function install_brotli(Preprocessor $p)
             ->withUrl('https://github.com/google/brotli/archive/refs/tags/v1.0.9.tar.gz')
             ->withFile('brotli-1.0.9.tar.gz')
             ->withConfigure("cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX=/usr/brotli .")
+            ->withPkgConfig('/usr/brotli/lib/pkgconfig')
+            ->withLdflags('-L/usr/brotli/lib')
             ->withScriptAfterInstall(
                 implode(PHP_EOL, [
-                'rm -rf /usr/brotli/lib/*.so.*',
-                'rm -rf /usr/brotli/lib/*.so',
-                'mv /usr/brotli/lib/libbrotlicommon-static.a /usr/brotli/lib/libbrotli.a',
-                'mv /usr/brotli/lib/libbrotlienc-static.a /usr/brotli/lib/libbrotlienc.a',
-                'mv /usr/brotli/lib/libbrotlidec-static.a /usr/brotli/lib/libbrotlidec.a',
-            ]))
+                    'rm -rf /usr/brotli/lib/*.so.*',
+                    'rm -rf /usr/brotli/lib/*.so',
+                    'mv /usr/brotli/lib/libbrotlicommon-static.a /usr/brotli/lib/libbrotli.a',
+                    'mv /usr/brotli/lib/libbrotlienc-static.a /usr/brotli/lib/libbrotlienc.a',
+                    'mv /usr/brotli/lib/libbrotlidec-static.a /usr/brotli/lib/libbrotlidec.a',
+                ]))
             ->withPkgName('libbrotlicommon libbrotlidec libbrotlienc')
             ->withLicense('https://github.com/google/brotli/blob/master/LICENSE', Library::LICENSE_MIT)
             ->withHomePage('https://github.com/google/brotli')
@@ -322,9 +383,11 @@ function install_curl(Preprocessor $p)
             ->withUrl('https://curl.se/download/curl-7.80.0.tar.gz')
             ->withConfigure(
                 "autoreconf -fi && ./configure --prefix=/usr/curl --enable-static --disable-shared --with-openssl=/usr/openssl " .
-                    "--without-librtmp --without-brotli --without-libidn2 --disable-ldap --disable-rtsp --without-zstd --without-nghttp2 --without-nghttp3"
+                "--without-librtmp --without-brotli --without-libidn2 --disable-ldap --disable-rtsp --without-zstd --without-nghttp2 --without-nghttp3"
             )
             ->withPkgName('libcurl')
+            ->withPkgConfig('/usr/curl/lib/pkgconfig')
+            ->withLdflags('-L/usr/curl/lib')
             ->withLicense('https://github.com/curl/curl/blob/master/COPYING', Library::LICENSE_SPEC)
             ->withHomePage('https://curl.se/')
     );
@@ -338,6 +401,8 @@ function install_mimalloc(Preprocessor $p)
             ->withFile('mimalloc-2.0.7.tar.gz')
             ->withConfigure("cmake . -DMI_BUILD_SHARED=OFF -DCMAKE_INSTALL_PREFIX=/usr/mimalloc -DMI_INSTALL_TOPLEVEL=ON -DMI_PADDING=OFF -DMI_SKIP_COLLECT_ON_EXIT=ON -DMI_BUILD_TESTS=OFF")
             ->withPkgName('libmimalloc')
+            ->withPkgConfig('/usr/mimalloc/lib/pkgconfig')
+            ->withLdflags('-L/usr/mimalloc/lib')
             ->withLicense('https://github.com/microsoft/mimalloc/blob/master/LICENSE', Library::LICENSE_MIT)
             ->withHomePage('https://microsoft.github.io/mimalloc/')
             ->withScriptAfterInstall(implode(PHP_EOL, [
@@ -347,6 +412,31 @@ function install_mimalloc(Preprocessor $p)
     );
 }
 
+
+
+
+function install_postgresql(Preprocessor $p)
+{
+    $p->addLibrary(
+        (new Library('postgresql'))
+            ->withUrl('https://ftp.postgresql.org/pub/source/v15.1/postgresql-15.1.tar.gz')
+            //->withConfigure('./configure --prefix=/usr/pgsql LDFLAGS="-static" --with-ssl=openssl  --with-readline --disable-rpath --with-icu ICU_CFLAGS="-I/usr/include" ICU_LIBS="-L/usr/lib -licui18n -licuuc -licudata" --with-includes=/usr/openssl/include/openssl/:/usr/readline/include:/usr/include  --with-libraries=/usr/openssl/lib:/usr/readline/lib:/usr/lib')
+            ->withConfigure('./configure --prefix=/usr/postgresql \
+            --with-ssl=openssl  \
+            --with-readline \
+            --with-icu ICU_CFLAGS=\'-I/usr/icu/include\' ICU_LIBS=\'-L/usr/icu/lib -licui18n -licuuc -licudata\' \
+            --with-includes=\'/usr/openssl/include/:/usr/readline/include\' \
+            --with-libraries=\'/usr/openssl/lib64:/usr/readline/lib\'')
+            ->withPkgConfig('/usr/postgresql/lib/pkgconfig')
+            ->withLdflags('-L/usr/postgresql/lib/')
+            //->withMakeOptions('-C src/interfaces')
+            //->withMakeInstallOptions('-C src/interfaces') //make -C src/interfaces install
+            ->withLicense('https://www.postgresql.org/about/licence/', Library::LICENSE_SPEC)
+            ->withHomePage('https://www.postgresql.org/')
+    );
+}
+
+//install_gettext($p);
 install_libiconv($p);
 install_openssl($p);
 install_libxml2($p);
@@ -354,26 +444,32 @@ install_libxslt($p);
 install_gmp($p);
 install_zlib($p);
 install_bzip2($p);
-install_giflib($p);
-install_libpng($p);
-install_libjpeg($p);
-install_freetype($p);
-install_libwebp($p);
+install_zip($p);
+//install_giflib($p);
+//install_libpng($p);
+//install_libjpeg($p);
+//install_freetype($p);
+//install_libwebp($p);
 install_sqlite3($p);
 install_icu($p);
 install_oniguruma($p);
-install_zip($p);
+
 install_brotli($p);
 install_cares($p);
-install_readline($p);
 install_ncurses($p);
+install_readline($p);
 //install_libedit($p);
-install_imagemagick($p);
+//install_imagemagick($p);
 install_curl($p);
 install_libsodium($p);
 install_libyaml($p);
 install_mimalloc($p);
+//install_postgresql($p);
 
 $p->parseArguments($argc, $argv);
 $p->gen();
 $p->info();
+
+
+
+
