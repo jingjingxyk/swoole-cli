@@ -170,6 +170,7 @@ sh init-depend-use-proxy.sh
 cd ${__PROJECT__}/
 sh make.sh sync
 
+chown -R 1000:1000 .
 
 exit 0
 
