@@ -1508,7 +1508,7 @@ static zend_module_entry cgi_module_entry = {
 };
 
 /* {{{ main */
-int fpm_main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 	int exit_status = FPM_EXIT_OK;
 	int cgi = 0, c, use_extended_info = 0;

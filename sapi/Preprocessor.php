@@ -234,7 +234,7 @@ class Preprocessor
         //'gd',
         'redis',
         //'pgsql',
-        //'swoole',
+        'swoole',
         'yaml',
         //'imagick',
         'mongodb',
