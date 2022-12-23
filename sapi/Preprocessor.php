@@ -218,7 +218,7 @@ class Preprocessor
         'tokenizer',
         'mbstring',
         'zlib',
-        'zip',
+        //'zip',
         'sockets',
         'mysqlnd',
         //'mysqli',
