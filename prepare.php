@@ -364,12 +364,12 @@ function install_brotli(Preprocessor $p)
             ->withLdflags('-L/usr/brotli/lib')
             ->withScriptAfterInstall(
                 implode(PHP_EOL, [
-                'rm -rf /usr/brotli/lib/*.so.*',
-                'rm -rf /usr/brotli/lib/*.so',
-                'mv /usr/brotli/lib/libbrotlicommon-static.a /usr/brotli/lib/libbrotli.a',
-                'mv /usr/brotli/lib/libbrotlienc-static.a /usr/brotli/lib/libbrotlienc.a',
-                'mv /usr/brotli/lib/libbrotlidec-static.a /usr/brotli/lib/libbrotlidec.a',
-            ]))
+                    'rm -rf /usr/brotli/lib/*.so.*',
+                    'rm -rf /usr/brotli/lib/*.so',
+                    'mv /usr/brotli/lib/libbrotlicommon-static.a /usr/brotli/lib/libbrotli.a',
+                    'mv /usr/brotli/lib/libbrotlienc-static.a /usr/brotli/lib/libbrotlienc.a',
+                    'mv /usr/brotli/lib/libbrotlidec-static.a /usr/brotli/lib/libbrotlidec.a',
+                ]))
             ->withPkgName('libbrotlicommon libbrotlidec libbrotlienc')
             ->withLicense('https://github.com/google/brotli/blob/master/LICENSE', Library::LICENSE_MIT)
             ->withHomePage('https://github.com/google/brotli')
@@ -383,7 +383,7 @@ function install_curl(Preprocessor $p)
             ->withUrl('https://curl.se/download/curl-7.80.0.tar.gz')
             ->withConfigure(
                 "autoreconf -fi && ./configure --prefix=/usr/curl --enable-static --disable-shared --with-openssl=/usr/openssl " .
-                    "--without-librtmp --without-brotli --without-libidn2 --disable-ldap --disable-rtsp --without-zstd --without-nghttp2 --without-nghttp3"
+                "--without-librtmp --without-brotli --without-libidn2 --disable-ldap --disable-rtsp --without-zstd --without-nghttp2 --without-nghttp3"
             )
             ->withPkgName('libcurl')
             ->withPkgConfig('/usr/curl/lib/pkgconfig')
