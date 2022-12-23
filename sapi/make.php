@@ -36,7 +36,7 @@ OPTIONS=" \
         <?php if ($item->beforeInstallScript): ?>
             <?=$item->beforeInstallScript?> && \
         <?php endif; ?>
-        make install <?=$item->makeInstallOptions?> && \
+        make <?=$item->makeInstallDefaultOptions?> <?=$item->makeInstallOptions?> && \
         <?php if ($item->afterInstallScript): ?>
             <?=$item->afterInstallScript?> && \
         <?php endif; ?>

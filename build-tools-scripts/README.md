@@ -132,6 +132,7 @@ make EXTRA_CFLAGS=' -march=nehalem -Xcompiler -mtune=haswell -Os' \
 
 ```shell
 
+CFLAGS=-Wno-dev
 CXXFLAGS="-ggdb -pipe -Wall -pedantic -I/usr/include/readline5" \
 CPPFLAGS="-I/usr/include/readline5" \
 LDFLAGS="-L/usr/lib64/readline5" \
@@ -146,6 +147,8 @@ LDFLAGS="-L/usr/lib64/readline5" \
 # readline-dev
 
  pkg-config --list-all
+pkg-config --cflags --libs libzip
+pkg-config --cflags --libs zlib liblzma liblzma
 
 pkg-config --cflags --libs ncurses readline
 pkg-config --libs  ncurses readline
@@ -164,12 +167,14 @@ pkg-config --cflags --libs icu-uc
 pkg-config --cflags --libs iconv
 pkg-config --cflags --libs libzip
 pkg-config --cflags --libs zlib
+pkg-config --cflags --libs liblzma
 
 find / -name pkgconfig
 
 locate readline.pc
 
 -DNCURSES_WIDECHA
+
 
 LDFLAGS=-L/usr/local/opt/libiconv/lib CPPFLAGS=-L/usr/local/opt/libiconv/include
 CFLAGS=-I/usr/icu/include LDFLAGS=-L/usr/icu/lib

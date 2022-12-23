@@ -45,6 +45,7 @@ class Library extends Project
     public string $ldflags = '';
     public string $makeOptions = '';
     public string $makeInstallOptions = '';
+    public string $makeInstallDefaultOptions = 'install';
     public string $beforeInstallScript = '';
     public string $afterInstallScript = '';
     public string $pkgConfig = '';
@@ -109,6 +110,7 @@ class Library extends Project
 
     function withMakeInstallOptions(string $makeInstallOptions): static
     {
+        $this->makeInstallDefaultOptions='';
         $this->makeInstallOptions = $makeInstallOptions;
         return $this;
     }

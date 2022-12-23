@@ -29,15 +29,17 @@ if ($p->osType == 'macos') {
 // Library
 // ================================================================================================
 
-function install_openssl(Preprocessor $p)
+
+
+function install_gettext(Preprocessor $p)
 {
-    $p->addLibrary((new Library('openssl', '/usr/openssl'))
-            ->withUrl('https://www.openssl.org/source/openssl-3.0.7.tar.gz')
-            ->withPkgConfig('/usr/openssl/lib64/pkgconfig')
-            ->withLdflags('-L/usr/openssl/lib64')
-            ->withConfigure('./config' . ($p->osType === 'macos' ? '' : ' -static --static') . ' no-shared --prefix=/usr/openssl')
-            ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
-            ->withHomePage('https://www.openssl.org/')
+    $p->addLibrary(
+        (new Library('gettext', '/usr/gettext'))
+            ->withUrl('https://ftp.gnu.org/pub/gnu/gettext/gettext-0.21.1.tar.gz')
+            ->withPkgConfig('')
+            ->withLdflags('-L/usr/gettext/lib')
+            ->withConfigure('./configure --prefix=/usr/gettext enable_static=yes enable_shared=no --with-libiconv-prefix=/usr/libiconv/')
+            ->withLicense('https://www.gnu.org/licenses/old-licenses/gpl-2.0.html', Library::LICENSE_GPL)
     );
 }
 
@@ -52,15 +54,18 @@ function install_libiconv(Preprocessor $p)
             ->withLicense('https://www.gnu.org/licenses/old-licenses/gpl-2.0.html', Library::LICENSE_GPL)
     );
 }
-function install_gettext(Preprocessor $p)
+
+function install_openssl(Preprocessor $p)
 {
-    $p->addLibrary(
-        (new Library('gettext', '/usr/gettext'))
-            ->withUrl('https://ftp.gnu.org/pub/gnu/gettext/gettext-0.21.1.tar.gz')
-            ->withPkgConfig('')
-            ->withLdflags('-L/usr/gettext/lib')
-            ->withConfigure('./configure --prefix=/usr/gettext enable_static=yes enable_shared=no --with-libiconv-prefix=/usr/libiconv/')
-            ->withLicense('https://www.gnu.org/licenses/old-licenses/gpl-2.0.html', Library::LICENSE_GPL)
+    $p->addLibrary((new Library('openssl', '/usr/openssl'))
+        ->withUrl('https://www.openssl.org/source/openssl-3.0.7.tar.gz')
+        ->withFile('openssl-3.0.7.tar.gz')
+        ->withConfigure('./config' . ($p->osType === 'macos' ? '' : ' -static --static') . ' no-shared --release --prefix=/usr/openssl')
+        ->withMakeInstallOptions('install_sw')
+        ->withPkgConfig('/usr/openssl/lib64/pkgconfig')
+        ->withLdflags('-L/usr/openssl/lib64')
+        ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
+        ->withHomePage('https://www.openssl.org/')
     );
 }
 
@@ -210,10 +215,41 @@ function install_bzip2(Preprocessor $p)
         (new Library('bzip2', '/usr/bzip2'))
             ->withUrl('https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz')
             ->withLdflags('-L/usr/bzip2/lib')
-            ->withMakeOptions('PREFIX=/usr/bzip2')
-            ->withMakeInstallOptions('PREFIX=/usr/bzip2')
+            ->withMakeOptions('PREFIX=/usr/bzip2 CFLAGS=-static')
+            ->withMakeInstallOptions('all PREFIX=/usr/bzip2 ')
             ->withHomePage('https://www.sourceware.org/bzip2/')
             ->withLicense('https://www.sourceware.org/bzip2/', Library::LICENSE_BSD)
+    );
+}
+
+
+function install_lzma(Preprocessor $p)
+{
+    $p->addLibrary(
+        (new Library('lzma'))
+            ->withUrl('https://tukaani.org/xz/xz-5.2.9.tar.gz')
+            ->withFile('xz-5.2.9.tar.gz')
+            ->withConfigure('./configure --prefix=/usr/liblzma/ --enable-static --disable-shared --disable-doc')
+            ->withPkgName('liblzma')
+            ->withPkgConfig('/usr/liblzma/lib/pkgconfig')
+            ->withLdflags('-L/usr/liblzma/lib')
+            ->withHomePage('https://tukaani.org/xz/')
+            ->withLicense('https://git.tukaani.org/?p=xz.git;a=blob;f=COPYING', Library::LICENSE_LGPL)
+    );
+}
+function install_zstd(Preprocessor $p)
+{
+    $p->addLibrary(
+        (new Library('zstd'))
+            ->withUrl('https://github.com/facebook/zstd/releases/download/v1.5.2/zstd-1.5.2.tar.gz')
+            ->withFile('zstd-1.5.2.tar.gz')
+            ->withMakeOptions('lib')
+            ->withMakeInstallOptions('install PREFIX=/usr/zstd/')
+            ->withPkgName('libzstd.pc')
+            ->withPkgConfig('/usr/zstd/lib/pkgconfig')
+            ->withLdflags('-L/usr/zstd/lib')
+            ->withHomePage('https://github.com/facebook/zstd')
+            ->withLicense('https://github.com/facebook/zstd/blob/dev/COPYING', Library::LICENSE_GPL)
     );
 }
 
@@ -222,14 +258,14 @@ function install_zip(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('zip'))
-            //->withUrl('https://libzip.org/download/libzip-1.9.2.tar.gz')
-            ->withUrl('https://libzip.org/download/libzip-1.8.0.tar.gz')
-            ->withFile('libzip-1.8.0.tar.gz')
-            //-DZLIB_INCLUDE_DIR=/usr/zlib/include  -DZLIB_LIBRARY=/usr/zlib/lib -DBZIP2_LIBRARIES=/usr/bzip2/lib -DBZIP2_INCLUDE_DIR=/usr/bzip2/include
-            ->withConfigure('cmake . -DENABLE_ZSTD=OFF -DENABLE_LZMA=OFF -DBUILD_SHARED_LIBS=OFF -DOPENSSL_USE_STATIC_LIBS=TRUE -DLIBZIP_DO_INSTALL=OFF   -DCMAKE_INSTALL_PREFIX=/usr/ ')
+            ->withUrl('https://libzip.org/download/libzip-1.9.2.tar.gz')
+            //->withUrl('https://libzip.org/download/libzip-1.8.0.tar.gz')
+            ->withFile('libzip-1.9.2.tar.gz')
+            ->withConfigure('CPPFLAGS=-I/usr/bzip2/include LDFLAGS=-L/usr/bzip2/lib cmake . -DENABLE_ZSTD=ON -DENABLE_LZMA=ON -DBUILD_SHARED_LIBS=OFF -DOPENSSL_USE_STATIC_LIBS=TRUE  -DENABLE_MBEDTLS=OFF -DENABLE_OPENSSL=ON -DCMAKE_INSTALL_PREFIX=/usr/zip -DBZIP2_LIBRARIES=/usr/bzip2/lib -DBZIP2_INCLUDE_DIR=/usr/bzip2/include -DLIBLZMA_LIBRARIES=/usr/liblzma/lib  -DLIBLZMA_INCLUDE_DIR=/usr/liblzma/include' )
+            ->withMakeOptions('VERBOSE=1')
             ->withPkgName('libzip')
-            ->withPkgConfig('/usr/lib/pkgconfig')
-            ->withLdflags('-L/usr/lib')
+            ->withPkgConfig('/usr/zip/lib/pkgconfig')
+            ->withLdflags('-L/usr/zip/lib')
             ->withHomePage('https://libzip.org/')
             ->withLicense('https://libzip.org/license/', Library::LICENSE_BSD)
     );
@@ -445,6 +481,8 @@ install_libxslt($p);
 install_gmp($p);
 install_zlib($p);
 install_bzip2($p);
+install_lzma($p);
+install_zstd($p);
 install_zip($p);
 //install_giflib($p);
 //install_libpng($p);

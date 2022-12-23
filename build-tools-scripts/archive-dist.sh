@@ -17,4 +17,5 @@ ls -lh  ${__ROOT__}/bin/
 
 cd ${__ROOT__}/bin/
 test -f ./swoole-cli && chmod a+x ./swoole-cli && ./swoole-cli  -r 'phpinfo();'
+test -f ./swoole-cli && chmod a+x ./swoole-cli && ./swoole-cli  -v
 
