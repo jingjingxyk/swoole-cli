@@ -214,9 +214,9 @@ class Preprocessor
 
         //'opcache',
         'curl',
-        //'bz2',
+        'bz2',
         'bcmath',
-        //'pcntl',
+        'pcntl',
         'tokenizer',
         'mbstring',
         'zlib',

@@ -198,10 +198,11 @@ function install_zlib(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('zlib'))
-            ->withUrl('https://udomain.dl.sourceforge.net/project/libpng/zlib/1.2.11/zlib-1.2.11.tar.gz')
-            ->withConfigure('./configure --prefix=/usr/ --static')
-            ->withPkgConfig('/usr/lib/pkgconfig')
-            ->withLdflags('-L/usr/lib')
+            ->withUrl('https://zlib.net/zlib-1.2.13.tar.gz')
+            //->withUrl('https://udomain.dl.sourceforge.net/project/libpng/zlib/1.2.11/zlib-1.2.11.tar.gz')
+            ->withConfigure('./configure --prefix=/usr/zlib --static')
+            ->withPkgConfig('/usr/zlib/lib/pkgconfig')
+            ->withLdflags('-L/usr/zlib/lib')
             ->withHomePage('https://zlib.net/')
             ->withLicense('https://zlib.net/zlib_license.html', Library::LICENSE_SPEC)
     );
@@ -215,7 +216,7 @@ function install_bzip2(Preprocessor $p)
         (new Library('bzip2', '/usr/bzip2'))
             ->withUrl('https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz')
             ->withMakeOptions('PREFIX=/usr/bzip2')
-            ->withMakeInstallOptions('PREFIX=/usr/bzip2')
+            ->withMakeInstallOptions('install PREFIX=/usr/bzip2')
             ->withLdflags('-L/usr/bzip2/lib')
             ->withHomePage('https://www.sourceware.org/bzip2/')
             ->withLicense('https://www.sourceware.org/bzip2/', Library::LICENSE_BSD)
@@ -305,10 +306,10 @@ function install_cares(Preprocessor $p)
     $p->addLibrary(
         (new Library('cares'))
             ->withUrl('https://c-ares.org/download/c-ares-1.18.1.tar.gz')
-            ->withConfigure('./configure --prefix=/usr --enable-static --disable-shared')
+            ->withConfigure('./configure --prefix=/usr/cares --enable-static --disable-shared')
             ->withPkgName('libcares')
-            ->withPkgConfig('/usr/lib/pkgconfig')
-            ->withLdflags('-L/usr/lib')
+            ->withPkgConfig('/usr/cares/lib/pkgconfig')
+            ->withLdflags('-L/usr/cares/lib')
             ->withLicense('https://c-ares.org/license.html', Library::LICENSE_MIT)
             ->withHomePage('https://c-ares.org/')
     );
@@ -481,7 +482,7 @@ install_libxml2($p);
 install_libxslt($p);
 install_gmp($p);
 install_zlib($p);
-//install_bzip2($p);
+install_bzip2($p);
 install_lzma($p);
 install_zstd($p);
 //install_zip($p);
