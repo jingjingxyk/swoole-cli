@@ -96,54 +96,7 @@ sh make.sh readline
 
 ```
 
-```shell
 
-PKG_CONFIG_PATH='/usr/lib/pkgconfig:/usr/lib64/pkgconfig'
-export PKG_CONFIG_PATH="/usr/libxml2/lib/pkgconfig:/usr/sqlite3/lib/pkgconfig:/usr/openssl/lib64/pkgconfig:/usr/zlib/lib/pkgconfig:/usr/curl/lib/pkgconfig:$PKG_CONFIG_PATH"
-
-./configure \
---enable-ctype \
---enable-fileinfo \
---enable-filter \
---with-iconv=/usr/libiconv \
---with-pdo-sqlite \
---enable-posix \
---enable-session \
---with-sqlite3=/usr/sqlite3 \
---enable-tokenizer \
---enable-xml --enable-simplexml --enable-xmlreader --enable-xmlwriter --enable-dom --with-libxml=/usr/libxml2 \
---with-curl=/usr/curl \
---with-bz2=/usr/bzip2 \
---enable-bcmath \
---enable-pcntl \
---enable-tokenizer \
---enable-mbstring \
---with-zlib=/usr/zlib/ \
---enable-sockets \
---enable-phar \
---enable-mysqlnd \
---enable-intl \
---with-pdo-mysql=mysqlnd \
---with-xsl=/usr/libxslt \
---with-gmp=/usr/gmp \
---with-openssl=/usr/openssl --with-openssl-dir=/usr/openssl \
---enable-xml --enable-simplexml --enable-xmlreader --enable-xmlwriter --enable-dom --with-libxml=/usr/libxml2
-
-
- make EXTRA_CFLAGS='-fno-ident -Xcompiler -march=nehalem -Xcompiler -mtune=haswell -Os' \
-    EXTRA_LDFLAGS_PROGRAM='-all-static -fno-ident  -L/usr/libiconv/lib -L/usr/openssl/lib64 -L/usr/libxml2/lib -L/usr/libxslt/lib -L/usr/gmp/lib -L/usr/zlib/lib -L/usr/bzip2/lib -L/usr/libzip/lib -L/usr/sqlite3/lib -L/usr/icu/lib -L/usr/oniguruma/lib -L/usr/brotli/lib -L/usr/cares/lib -L/usr/ncurses/lib -L/usr/readline/lib -L/usr/curl/lib -L/usr/libsodium/lib -L/usr/libyaml/lib -L/usr/mimalloc/lib '  -j 8
-```
-
-```shell
-
-make EXTRA_LDFLAGS_PROGRAM='-all-static' -j $(nproc)
-
-
-make EXTRA_CFLAGS=' -march=nehalem -Xcompiler -mtune=haswell -Os' \
-     EXTRA_LDFLAGS_PROGRAM='-all-static' -j  $(nproc)
-
-
-```
 
 ```shell
 
@@ -156,13 +109,14 @@ LDFLAGS="-L/usr/lib64/readline5" \
 
 ```shell
 
-
-
 PKG_CONFIG_PATH='/usr/lib/pkgconfig:/usr/lib64/pkgconfig'
+
 export PKG_CONFIG_PATH="/usr/readline/lib/pkgconfig:/usr/ncurses/lib/pkgconfig:$PKG_CONFIG_PATH"
+
+export PKG_CONFIG_PATH="/usr/cares/lib/pkgconfig:$PKG_CONFIG_PATH"
 # readline-dev
 
- pkg-config --list-all
+pkg-config --list-all
 pkg-config --cflags --libs libzip
 pkg-config --cflags --libs zlib liblzma liblzma
 
@@ -184,6 +138,7 @@ pkg-config --cflags --libs iconv
 pkg-config --cflags --libs libzip
 pkg-config --cflags --libs zlib
 pkg-config --cflags --libs liblzma
+pkg-config --cflags --libs libcares
 
 find / -name pkgconfig
 
@@ -206,16 +161,11 @@ CFLAGS=-I/usr/icu/include LDFLAGS=-L/usr/icu/lib
 
 ```
 
-```shell
-export PKG_CONFIG_PATH="/usr/libxml2/lib/pkgconfig:/usr/sqlite3/lib/pkgconfig:$PKG_CONFIG_PATH"
-./configure --prefix=/tmp/php --with-iconv=/usr/libiconv
 
-make     EXTRA_LDFLAGS_PROGRAM='-all-static -L/usr/libiconv/lib -L/usr/libxml2/lib -L/usr/sqlite3/lib' -j  $(nproc)
-
-
-
-```
 
 ```shell
+
+pecl install -D 'enable-sockets="no" enable-openssl="yes" enable-http2="yes" enable-mysqlnd="yes" enable-swoole-json="no" enable-swoole-curl="yes" enable-cares="yes"' https://pecl.php.net/get/swoole-4.4.26.tgz
+
 
 ```

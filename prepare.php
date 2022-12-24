@@ -306,10 +306,16 @@ function install_cares(Preprocessor $p)
     $p->addLibrary(
         (new Library('cares'))
             ->withUrl('https://c-ares.org/download/c-ares-1.18.1.tar.gz')
+            /*
             ->withConfigure('./configure --prefix=/usr/cares --enable-static --disable-shared')
             ->withPkgName('libcares')
             ->withPkgConfig('/usr/cares/lib/pkgconfig')
             ->withLdflags('-L/usr/cares/lib')
+            */
+            ->withConfigure('./configure --prefix=/usr/ --enable-static --disable-shared')
+            ->withPkgName('libcares')
+            ->withPkgConfig('/usr/lib/pkgconfig')
+            ->withLdflags('-L/usr/lib')
             ->withLicense('https://c-ares.org/license.html', Library::LICENSE_MIT)
             ->withHomePage('https://c-ares.org/')
     );

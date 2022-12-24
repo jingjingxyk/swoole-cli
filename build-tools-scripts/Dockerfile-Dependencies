@@ -27,6 +27,7 @@ ENV http_proxy=''
 ENV https_proxy=''
 # pear config-set http_proxy $PROXY_URL
 # RUN pear config-set http_proxy ""
+# RUN pecl config-show
 
 FROM alpine:edge
 
@@ -79,6 +80,7 @@ COPY --from=1 /usr/libxml2/ /usr/libxml2/
 COPY --from=1 /usr/libxslt/ /usr/libxslt/
 COPY --from=1  /usr/gmp/ /usr/gmp/
 COPY --from=1  /usr/bzip2 /usr/bzip2
+COPY --from=1  /usr/zlib /usr/zlib
 
 COPY --from=1  /usr/liblzma/ /usr/liblzma/
 COPY --from=1  /usr/zstd/ /usr/zstd/
@@ -86,9 +88,12 @@ COPY --from=1  /usr/sqlite3/ /usr/sqlite3/
 COPY --from=1  /usr/oniguruma/ /usr/oniguruma/
 COPY --from=1  /usr/brotli/ /usr/brotli/
 COPY --from=1  /usr/curl/ /usr/curl/
+
 COPY --from=1  /usr/libsodium/ /usr/libsodium/
 COPY --from=1  /usr/libyaml /usr/libyaml
 COPY --from=1  /usr/mimalloc/ /usr/mimalloc/
+
+# COPY --from=1  /usr/cares/ /usr/cares/
 # COPY --from=1  /usr/icu/ /usr/icu/
 # COPY --from=1  /usr/ /usr/
 # COPY --from=1  /usr/zip /usr/zip
