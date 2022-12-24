@@ -11,12 +11,20 @@ __ROOT__=$(
 )
 
 cd ${__DIR__}
-cd /work/build-tools-scripts/php-versions/php-8.1.12
+cd ${__DIR__}/php-versions/
 
+test -d php-8-source-code && rm -rf php-8-source-code
+mkdir -p php-8-source-code
+tar -zxvf php-8.1.12.tar.gz  --strip-components 1 -C php-8-source-code
+
+cd php-8-source-code
+
+:<<EOF
 cp -rf ${__ROOT__}/ext/redis ext
 cp -rf ${__ROOT__}/ext/mongodb ext
 cp -rf ${__ROOT__}/ext/yaml ext
 cp -rf ${__ROOT__}/ext/swoole ext
+EOF
 
 PKG_CONFIG_PATH='/usr/lib/pkgconfig:/usr/lib64/pkgconfig'
 export PKG_CONFIG_PATH="/usr/libxml2/lib/pkgconfig:/usr/sqlite3/lib/pkgconfig:/usr/openssl/lib64/pkgconfig:/usr/zlib/lib/pkgconfig:/usr/curl/lib/pkgconfig:/usr/oniguruma/lib/pkgconfig:/usr/libxslt/lib/pkgconfig:/usr/libsodium/lib/pkgconfig:$PKG_CONFIG_PATH"

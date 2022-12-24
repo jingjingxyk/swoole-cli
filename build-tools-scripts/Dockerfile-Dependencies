@@ -1,0 +1,102 @@
+FROM alpine:edge
+
+
+ENV TZ=Etc/UTC
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN test -f /etc/apk/repositories.save || cp /etc/apk/repositories /etc/apk/repositories.save
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
+
+RUN apk update  && apk add curl wget git   tini ca-certificates openssl openssl-dev
+
+RUN apk add --no-cache php81-dev php81-cli php81-pear php81-curl php81-openssl &&  \
+pecl channel-update https://pecl.php.net/channel.xml && pear update-channels
+
+WORKDIR /
+ARG PROXY_URL=''
+
+ENV http_proxy=$PROXY_URL
+ENV https_proxy=$PROXY_URL
+
+RUN git clone -b dev --depth=1 --progress  https://github.com/jingjingxyk/swoole-cli.git
+
+
+WORKDIR /swoole-cli
+RUN git config --global --add safe.directory '*'
+RUN git submodule update --init --recursive
+RUN sh build-tools-scripts/init-depend.sh
+
+ENV http_proxy=''
+ENV https_proxy=''
+# pear config-set http_proxy $PROXY_URL
+# RUN pear config-set http_proxy ""
+# RUN pecl config-show
+
+FROM alpine:edge
+
+ENV TZ=Etc/UTC
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN test -f /etc/apk/repositories.save || cp /etc/apk/repositories /etc/apk/repositories.save
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
+
+RUN apk update && apk upgrade
+RUN apk add --no-cache alpine-sdk xz autoconf automake linux-headers clang-dev clang lld libtool  cmake  tini
+RUN apk add --no-cache flex bison re2c pkgconf ca-certificates gnutls-dev
+
+ENV CC=clang
+ENV CXX=clang++
+ENV LD=ld.lld
+#RUN mv /usr/bin/ld /usr/bin/ld.old && ln -s /usr/bin/ld.lld /usr/bin/ld
+
+
+COPY --from=0 /swoole-cli /work
+WORKDIR /work
+RUN sh make.sh all-library
+
+
+FROM alpine:edge
+
+ENV TZ=Etc/UTC
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN test -f /etc/apk/repositories.save || cp /etc/apk/repositories /etc/apk/repositories.save
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
+
+RUN apk update && apk upgrade
+RUN apk add --no-cache alpine-sdk xz autoconf automake linux-headers clang-dev clang lld libtool  cmake  tini
+RUN apk add --no-cache flex bison re2c pkgconf ca-certificates gnutls-dev
+
+ENV CC=clang
+ENV CXX=clang++
+ENV LD=ld.lld
+#RUN mv /usr/bin/ld /usr/bin/ld.old && ln -s /usr/bin/ld.lld /usr/bin/ld
+
+WORKDIR /work
+
+RUN rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
+RUN cp -f /etc/apk/repositories.save /etc/apk/repositories
+
+COPY --from=1 /usr/libiconv /usr/libiconv
+COPY --from=1 /usr/openssl/ /usr/openssl/
+COPY --from=1 /usr/libxml2/ /usr/libxml2/
+COPY --from=1 /usr/libxslt/ /usr/libxslt/
+COPY --from=1  /usr/gmp/ /usr/gmp/
+COPY --from=1  /usr/bzip2 /usr/bzip2
+COPY --from=1  /usr/zlib /usr/zlib
+
+COPY --from=1  /usr/liblzma/ /usr/liblzma/
+COPY --from=1  /usr/zstd/ /usr/zstd/
+COPY --from=1  /usr/sqlite3/ /usr/sqlite3/
+COPY --from=1  /usr/oniguruma/ /usr/oniguruma/
+COPY --from=1  /usr/brotli/ /usr/brotli/
+COPY --from=1  /usr/curl/ /usr/curl/
+
+COPY --from=1  /usr/libsodium/ /usr/libsodium/
+COPY --from=1  /usr/libyaml /usr/libyaml
+COPY --from=1  /usr/mimalloc/ /usr/mimalloc/
+
+# COPY --from=1  /usr/cares/ /usr/cares/
+# COPY --from=1  /usr/icu/ /usr/icu/
+# COPY --from=1  /usr/ /usr/
+# COPY --from=1  /usr/zip /usr/zip

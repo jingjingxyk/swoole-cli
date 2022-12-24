@@ -19,7 +19,6 @@ __ROOT__=$(
   echo $?
 }
 
-sudo chown -R 1000:1000 ${__ROOT__}
 image=$(cat base-container-image.txt)
 docker run --rm --name swoole-cli-build-dev -d -v ${__ROOT__}:/work -w /work $image tail -f /dev/null
 
