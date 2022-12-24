@@ -214,9 +214,9 @@ function install_bzip2(Preprocessor $p)
     $p->addLibrary(
         (new Library('bzip2', '/usr/bzip2'))
             ->withUrl('https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz')
+            ->withMakeOptions('PREFIX=/usr/bzip2')
+            ->withMakeInstallOptions('PREFIX=/usr/bzip2')
             ->withLdflags('-L/usr/bzip2/lib')
-            ->withMakeOptions('PREFIX=/usr/bzip2 CFLAGS=-static')
-            ->withMakeInstallOptions('all PREFIX=/usr/bzip2 ')
             ->withHomePage('https://www.sourceware.org/bzip2/')
             ->withLicense('https://www.sourceware.org/bzip2/', Library::LICENSE_BSD)
     );
@@ -417,7 +417,8 @@ function install_curl(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('curl', '/usr/curl'))
-            ->withUrl('https://curl.se/download/curl-7.80.0.tar.gz')
+            //->withUrl('https://curl.se/download/curl-7.80.0.tar.gz')
+            ->withUrl('https://curl.se/download/curl-7.87.0.tar.gz')
             ->withConfigure(
                 "autoreconf -fi && ./configure --prefix=/usr/curl --enable-static --disable-shared --with-openssl=/usr/openssl " .
                 "--without-librtmp --without-brotli --without-libidn2 --disable-ldap --disable-rtsp --without-zstd --without-nghttp2 --without-nghttp3"
@@ -480,7 +481,7 @@ install_libxml2($p);
 install_libxslt($p);
 install_gmp($p);
 install_zlib($p);
-install_bzip2($p);
+//install_bzip2($p);
 install_lzma($p);
 install_zstd($p);
 //install_zip($p);
@@ -490,7 +491,7 @@ install_zstd($p);
 //install_freetype($p);
 //install_libwebp($p);
 install_sqlite3($p);
-install_icu($p);
+//install_icu($p);
 install_oniguruma($p);
 
 install_brotli($p);

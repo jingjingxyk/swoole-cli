@@ -79,6 +79,21 @@ apk add readline-dev readline-static
 apk add libxslt-dev
 apk add libzip-dev
 
+sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
+apk update
+apk add libbson libbson-dev libbson-static bzip2 bzip2-dev bzip2-static icu-dev
+
+apk add icu icu-dev icu-libs icu-data-full icu-static
+apk add bzip2 bzip2-dev bzip2-static
+apk add readline readline-dev readline-static
+apk add postgresql15 postgresql15-dev postgresql15-client
+apk add c-ares c-ares-dev
+
+sh make.sh icu
+sh make.sh bzip2
+sh make.sh cares
+sh make.sh readline
+
 ```
 
 ```shell
@@ -176,7 +191,9 @@ locate readline.pc
 
 -DNCURSES_WIDECHA
 
+--with-openssl-includes=/usr/local/include and --with-openssl-libraries=/usr/local/li
 
+CFLAGS=-static
 LDFLAGS=-L/usr/local/opt/libiconv/lib CPPFLAGS=-L/usr/local/opt/libiconv/include
 CFLAGS=-I/usr/icu/include LDFLAGS=-L/usr/icu/lib
 ./configure --prefix=/usr/postgresql \
@@ -196,5 +213,9 @@ export PKG_CONFIG_PATH="/usr/libxml2/lib/pkgconfig:/usr/sqlite3/lib/pkgconfig:$P
 make     EXTRA_LDFLAGS_PROGRAM='-all-static -L/usr/libiconv/lib -L/usr/libxml2/lib -L/usr/sqlite3/lib' -j  $(nproc)
 
 
+
+```
+
+```shell
 
 ```

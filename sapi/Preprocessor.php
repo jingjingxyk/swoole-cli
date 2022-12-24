@@ -216,7 +216,7 @@ class Preprocessor
         'curl',
         //'bz2',
         'bcmath',
-        'pcntl',
+        //'pcntl',
         'tokenizer',
         'mbstring',
         'zlib',
@@ -240,7 +240,7 @@ class Preprocessor
         'swoole',
         'yaml',
         //'imagick',
-        'mongodb',
+        //'mongodb',
     ];
 
     protected array $endCallbacks = [];

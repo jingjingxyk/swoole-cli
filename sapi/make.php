@@ -13,8 +13,7 @@ export CC=clang
 export CXX=clang++
 export LD=ld.lld
 export PKG_CONFIG_PATH=<?= implode(':', $this->pkgConfigPaths) . PHP_EOL ?>
-# OPTIONS="--disable-all \
-OPTIONS=" \
+OPTIONS="--disable-all \
 <?php foreach ($this->extensionList as $item) : ?>
     <?=$item->options?> \
 <?php endforeach; ?>
