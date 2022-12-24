@@ -143,7 +143,8 @@ LDFLAGS="-L/usr/lib64/readline5" \
 
 
 
-
+PKG_CONFIG_PATH='/usr/lib/pkgconfig:/usr/lib64/pkgconfig'
+export PKG_CONFIG_PATH="/usr/readline/lib/pkgconfig:/usr/ncurses/lib/pkgconfig:$PKG_CONFIG_PATH"
 # readline-dev
 
  pkg-config --list-all

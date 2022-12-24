@@ -337,7 +337,7 @@ function install_ncurses(Preprocessor $p)
             //->withUrl('https://invisible-island.net/datafiles/release/ncurses.tar.gz')
             //->withFile('ncurses.tar.gz')
             ->withFile('ncurses-6.3.tar.gz')
-            ->withConfigure('mkdir -p /usr/ncurses/lib/pkgconfig && ./configure --prefix=/usr/ncurses --enable-static --disable-shared --enable-widec --enable-pc-files --with-pkg-config=/usr/ncurses/lib/pkgconfig --with-pkg-config-libdir=/usr/ncurses/lib/pkgconfig')
+            ->withConfigure('mkdir -p /usr/ncurses/lib/pkgconfig && ./configure --prefix=/usr/ncurses  --enable-widec --enable-static --disable-shared  --enable-pc-files --with-pkg-config=/usr/ncurses/lib/pkgconfig --with-pkg-config-libdir=/usr/ncurses/lib/pkgconfig') //
             ->withPkgConfig('/usr/ncurses/lib/pkgconfig')
             ->withLdflags('-L/usr/ncurses/lib')
             //->withLicense('https://github.com/projectceladon/libncurses/blob/master/README', Library::LICENSE_MIT)
@@ -352,10 +352,10 @@ function install_readline(Preprocessor $p)
     $p->addLibrary(
         (new Library('readline', '/usr/readline'))
             ->withUrl('ftp://ftp.cwru.edu/pub/bash/readline-8.2.tar.gz')
-            ->withConfigure('./configure --prefix=/usr/ --enable-static --disable-shared --with-curses')
+            ->withConfigure('env CPPFLAGS=-I/usr/ncurses/include LDFLAGS=-L/usr/ncurses/lib ./configure --prefix=/usr/readline --enable-static --disable-shared --with-curses')
             ->withPkgName('libreadline')
-            ->withPkgConfig('/usr/lib/pkgconfig')
-            ->withLdflags('-L/usr/lib')
+            ->withPkgConfig('/usr/readline/lib/pkgconfig')
+            ->withLdflags('-L/usr/readline/lib')
             ->withLicense('http://www.gnu.org/licenses/gpl.html', Library::LICENSE_GPL)
             ->withHomePage('https://tiswww.case.edu/php/chet/readline/rltop.html')
 
@@ -483,7 +483,7 @@ install_zlib($p);
 install_bzip2($p);
 install_lzma($p);
 install_zstd($p);
-install_zip($p);
+//install_zip($p);
 //install_giflib($p);
 //install_libpng($p);
 //install_libjpeg($p);
@@ -495,8 +495,8 @@ install_oniguruma($p);
 
 install_brotli($p);
 install_cares($p);
-install_ncurses($p);
-install_readline($p);
+//install_ncurses($p);
+//install_readline($p);
 //install_libedit($p);
 //install_imagemagick($p);
 install_curl($p);
