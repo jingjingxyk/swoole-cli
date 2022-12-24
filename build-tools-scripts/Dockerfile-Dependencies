@@ -20,7 +20,10 @@ ENV https_proxy=$PROXY_URL
 
 RUN git clone -b dev --depth=1 --progress  https://github.com/jingjingxyk/swoole-cli.git
 
+
 WORKDIR /swoole-cli
+RUN git config --global --add safe.directory '*'
+RUN git submodule update --init --recursive
 RUN sh build-tools-scripts/init-depend.sh
 
 ENV http_proxy=''
