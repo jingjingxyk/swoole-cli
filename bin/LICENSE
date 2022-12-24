@@ -8,12 +8,9 @@ libxslt: http://www.opensource.org/licenses/mit-license.html
 gmp: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 zlib: https://zlib.net/zlib_license.html
 bzip2: https://www.sourceware.org/bzip2/
-lzma: https://git.tukaani.org/?p=xz.git;a=blob;f=COPYING
-zstd: https://github.com/facebook/zstd/blob/dev/COPYING
 sqlite3: https://www.sqlite.org/copyright.html
 oniguruma: https://github.com/kkos/oniguruma/blob/master/COPYING
 brotli: https://github.com/google/brotli/blob/master/LICENSE
-cares: https://c-ares.org/license.html
 curl: https://github.com/curl/curl/blob/master/COPYING
 libsodium: https://en.wikipedia.org/wiki/ISC_license
 libyaml: https://pyyaml.org/wiki/LibYAML

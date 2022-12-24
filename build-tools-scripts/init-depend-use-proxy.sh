@@ -16,7 +16,7 @@ pecl config-show
 
 # SKIP_LIBRARY_DOWNLOAD=1 php prepare.php +mongodb +inotify
 # php prepare.php  +mongodb +inotify
-php prepare.php  +mongodb +inotify
+php prepare.php
 
 pear config-set http_proxy ''
 

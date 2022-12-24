@@ -83,11 +83,16 @@ sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
 apk update
 apk add libbson libbson-dev libbson-static bzip2 bzip2-dev bzip2-static icu-dev
 
+apk add bzip2 bzip2-dev bzip2-staticapk
+add postgresql15 postgresql15-dev postgresql15-client
+
+
 apk add icu icu-dev icu-libs icu-data-full icu-static
-apk add bzip2 bzip2-dev bzip2-static
+apk add ncurses-dev ncurses-libs ncurses-static
 apk add readline readline-dev readline-static
-apk add postgresql15 postgresql15-dev postgresql15-client
 apk add c-ares c-ares-dev
+apk add lzip libzip libzip-dev libzip-tools
+
 
 sh make.sh icu
 sh make.sh bzip2
@@ -139,6 +144,7 @@ pkg-config --cflags --libs libzip
 pkg-config --cflags --libs zlib
 pkg-config --cflags --libs liblzma
 pkg-config --cflags --libs libcares
+pkg-config --cflags --libs zip
 
 find / -name pkgconfig
 
