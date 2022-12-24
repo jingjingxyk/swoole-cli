@@ -14,7 +14,7 @@ PROXY_URL=${2:+'http://192.168.3.26:8015'}
 
 
 #docker build -t ${IMAGE} -f ./Dockerfile  .  --force-rm=true --no-cache=true --pull=true
-docker build -t ${IMAGE} -f ./Dockerfile-Dependencies  . --progress=plain --build-arg PROXY_URL=$PROXY_URL
+docker build -t ${IMAGE} -f ./Dockerfile-Dependencies  . --progress=plain --build-arg PROXY_URL=$PROXY_URL --no-cache=true
 # docker push ${IMAGE}
 echo ${IMAGE} > base-container-image.txt
 exit
