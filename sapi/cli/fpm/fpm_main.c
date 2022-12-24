@@ -1671,8 +1671,10 @@ int fpm_main(int argc, char *argv[])
 			case 'O': /* force stderr even on non tty */
 				force_stderr = 1;
 				break;
+
 			case 'P':
 			    break;
+
 			default:
 			case 'h':
 			case '?':
