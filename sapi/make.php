@@ -165,6 +165,7 @@ elif [ "$1" = "sync" ] ;then
   cp -r $SRC/ext/pdo/ ./ext
   cp -r $SRC/ext/pdo_mysql/ ./ext
   cp -r $SRC/ext/pdo_sqlite/ ./ext
+  cp -r $SRC/ext/pdo_pgsql/ ./ext
   cp -r $SRC/ext/phar/ ./ext
   cp -r $SRC/ext/posix/ ./ext
   cp -r $SRC/ext/readline/ ./ext

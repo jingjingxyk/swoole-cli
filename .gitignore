@@ -319,3 +319,4 @@ tmp-php.ini
 /build-tools-scripts/php-versions
 !/build-tools-scripts/php-versions/.gitkeep
 build-tools-scripts/dist/
+ext/pdo_pgsql/tests/bug36727.phpt

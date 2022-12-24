@@ -171,11 +171,24 @@ sh init-depend-use-proxy.sh
 cd ${__PROJECT__}/
 sh make.sh sync
 
+rm -rf ext/pdo_pgsql/tests/
+rm -rf ext/date/tests/
+rm -rf ext/exif/tests/
+rm -rf ext/fileinfo/tests/
+rm -rf ext/intl/tests/
+rm -rf ext/mbstring/tests/
+rm -rf ext/mysqli/tests/
+rm -rf ext/pdo/tests/
+rm -rf ext/openssl/tests/
+rm -rf ext/pcre/tests/
+rm -rf ext/soap/tests/
+rm -rf ext/standard/tests/
+rm -rf ext/xmlreader/tests/
 cp -f ${__PROJECT__}/build-tools-scripts/fpm_main_backup.c  ${__PROJECT__}/sapi/cli/fpm/fpm_main.c
 sh ${__PROJECT__}/build-tools-scripts/init-depend-use-proxy.sh
 chown -R 1000:1000 .
 
-
+rm -rf ${__PROJECT__}/build-tools-scripts/php-versions/php-8.1.12
 
 
 
