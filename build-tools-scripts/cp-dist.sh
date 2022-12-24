@@ -25,4 +25,4 @@ cat >dist/index.php<<EOF
 phpinfo();
 EOF
 
-pecl config-show
+

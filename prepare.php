@@ -513,6 +513,7 @@ install_libyaml($p);
 install_mimalloc($p);
 //install_postgresql($p);
 
+$p->setDisableZendOpcache(true);
 $p->parseArguments($argc, $argv);
 $p->gen();
 $p->info();

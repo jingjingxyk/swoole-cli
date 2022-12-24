@@ -303,7 +303,7 @@ tmp-php.ini
 /work/
 /thirdparty
 !/thirdparty/.gitkeep
-/usr
+
 /ext/redis
 /ext/memcached
 /ext/imagick

@@ -176,7 +176,7 @@ sh ${__PROJECT__}/build-tools-scripts/init-depend-use-proxy.sh
 chown -R 1000:1000 .
 
 
-rm -rf ${__PROJECT__}/build-tools-scripts/php-versions/php-8.1.12
+# rm -rf ${__PROJECT__}/build-tools-scripts/php-versions/php-8.1.12
 
 
 

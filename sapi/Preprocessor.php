@@ -158,6 +158,7 @@ class Extension extends Project
 class Preprocessor
 {
     public string $osType = 'linux';
+    public bool $disableZendOpcache = false;
     protected array $libraryList = [];
     protected array $extensionList = [];
     protected string $rootDir;
@@ -177,6 +178,7 @@ class Preprocessor
     protected string $extraOptions = '';
     protected int $maxJob = 8;
     protected bool $installLibrary = true;
+
 
     /**
      * Extensions enabled by default
@@ -212,7 +214,7 @@ class Preprocessor
         //"xmlreader",
         //"xmlwriter",
 
-        //'opcache',
+        'opcache',
         'curl',
         'bz2',
         'bcmath',
@@ -288,6 +290,10 @@ class Preprocessor
         return $this->osType;
     }
 
+    function setDisableZendOpcache(bool $flag)
+    {
+        $this->disableZendOpcache=$flag;
+    }
     function setPhpSrcDir(string $phpSrcDir)
     {
         $this->phpSrcDir = $phpSrcDir;

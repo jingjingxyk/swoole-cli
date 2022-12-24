@@ -58,6 +58,13 @@ make_all_library() {
 }
 
 config_php() {
+<?php if ( $this->disableZendOpcache == true ) : ?>
+
+    sed -i 's/extern zend_extension zend_extension_entry;//g' main/main.c
+    sed -i 's/zend_register_extension(&zend_extension_entry, NULL);//g' main/main.c
+<?php else : ?>
+    cp -f $SRC/main/main.c main/main.c
+<?php endif; ?>
 
      test -f ./configure && rm ./configure
     ./buildconf --force
