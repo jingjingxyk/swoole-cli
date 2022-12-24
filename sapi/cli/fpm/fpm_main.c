@@ -1667,12 +1667,12 @@ int fpm_main(int argc, char *argv[])
 			case 'F': /* nodaemonize */
 				force_daemon = 0;
 				break;
-			case 'P':
-			    break;
+
 			case 'O': /* force stderr even on non tty */
 				force_stderr = 1;
 				break;
-
+			case 'P':
+			    break;
 			default:
 			case 'h':
 			case '?':
@@ -1697,7 +1697,6 @@ int fpm_main(int argc, char *argv[])
 				SG(headers_sent) = 1;
 				SG(request_info).no_headers = 1;
 				show_swoole_version();
-
 				php_request_shutdown((void *) 0);
 				fcgi_shutdown();
 				exit_status = FPM_EXIT_OK;
