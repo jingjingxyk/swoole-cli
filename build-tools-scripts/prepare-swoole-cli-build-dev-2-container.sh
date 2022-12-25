@@ -10,6 +10,7 @@ __PROJECT__=$(
   pwd
 )
 
+
 cd ${__PROJECT__}
 
 export DOCKER_BUILDKIT=1
@@ -21,6 +22,8 @@ EOF
 
 VERSION="build-dev-2-alpine-edge-"${TIME}
 IMAGE="docker.io/jingjingxyk/build-swoole-cli:${VERSION}"
+
+
 
 cd ${__PROJECT__}
 docker build -t ${IMAGE} -f ./Dockerfile  . --progress=plain
