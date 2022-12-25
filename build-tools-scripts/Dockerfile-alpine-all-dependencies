@@ -18,7 +18,7 @@ ARG PROXY_URL=''
 ENV http_proxy=$PROXY_URL
 ENV https_proxy=$PROXY_URL
 
-RUN git clone -b dev --depth=1 --progress  https://github.com/jingjingxyk/swoole-cli.git
+RUN git clone -b dev-ok --depth=1 --progress  https://github.com/jingjingxyk/swoole-cli.git
 
 
 WORKDIR /swoole-cli
