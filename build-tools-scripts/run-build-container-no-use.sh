@@ -5,22 +5,11 @@ __DIR__=$(
   cd "$(dirname "$0")"
   pwd
 )
-cd ${__DIR__}
-
-__ROOT__=$(
+__PROJECT__=$(
   cd ${__DIR__}/../
   pwd
 )
-
-{
-  docker stop swoole-cli-build-dev
-  docker rm swoole-cli-build-dev
-} || {
-  echo $?
-}
-
-image=$(cat base-container-image.txt)
-docker run --rm --name swoole-cli-build-dev -d -v ${__ROOT__}:/work -w /work $image tail -f /dev/null
+cd ${__DIR__}
 
 
 exit 0
