@@ -8,6 +8,8 @@ libxslt: http://www.opensource.org/licenses/mit-license.html
 gmp: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 zlib: https://zlib.net/zlib_license.html
 bzip2: https://www.sourceware.org/bzip2/
+lzma: https://git.tukaani.org/?p=xz.git;a=blob;f=COPYING
+zstd: https://github.com/facebook/zstd/blob/dev/COPYING
 giflib: http://giflib.sourceforge.net/intro.html
 libpng: http://www.libpng.org/pub/png/src/libpng-LICENSE.txt
 libjpeg: https://github.com/libjpeg-turbo/libjpeg-turbo/blob/main/LICENSE.md
