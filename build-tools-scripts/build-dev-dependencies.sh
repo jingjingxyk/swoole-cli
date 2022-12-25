@@ -15,8 +15,9 @@ __PROJECT__=$(
 export DOCKER_BUILDKIT=1
 
 TIME=`date -u '+%Y%m%dT%H%M%SZ'`
-VERSION="alpine-edge-"${TIME}
-IMAGE="jingjingxyk/build-swoole-cli-dev-dependencies:${VERSION}"
+VERSION="build-dev-all-dependencies-alpine-edge-"${TIME}
+IMAGE="docker.io/jingjingxyk/build-swoole-cli:${VERSION}"
+
 
 
 

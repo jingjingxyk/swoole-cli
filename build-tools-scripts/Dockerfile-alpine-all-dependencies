@@ -24,7 +24,7 @@ RUN git clone -b dev --depth=1 --progress  https://github.com/jingjingxyk/swoole
 WORKDIR /swoole-cli
 RUN git config --global --add safe.directory '*'
 RUN git submodule update --init --recursive
-RUN sh build-tools-scripts/init-depend.sh
+RUN sh build-tools-scripts/download-init-depend.sh
 
 ENV http_proxy=''
 ENV https_proxy=''
