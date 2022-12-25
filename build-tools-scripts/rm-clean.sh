@@ -20,6 +20,11 @@ cd ${__DIR__}
 
 cd ${__PROJECT__}
 
+test -f ${__PROJECT__}/build-tools-scripts/fpm_main_backup.c || cp -f ${__PROJECT__}/sapi/cli/fpm/fpm_main.c ${__PROJECT__}/build-tools-scripts/fpm_main_backup.c
+test -f ${__PROJECT__}/build-tools-scripts/main.backup.c  || cp -f ${__PROJECT__}/main/main.c ${__PROJECT__}/build-tools-scripts/main.backup.c
+
+cd ${__PROJECT__}
+
 test -d ${__PROJECT__}/thirdparty && rm -rf ${__PROJECT__}/thirdparty/*
 
 
