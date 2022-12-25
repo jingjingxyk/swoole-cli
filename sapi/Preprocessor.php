@@ -253,7 +253,6 @@ class Preprocessor
         $this->rootDir = $rootPath;
         $this->libraryDir = $rootPath . '/pool/lib';
         $this->extensionDir = $rootPath . '/pool/ext';
-        $this->setMaxJob(`nproc`); //获取CPU核数，用于 make -j $(nproc)
 
         // 此目录用于存放源代码包
         if (!is_dir($rootPath . '/pool')) {
@@ -290,14 +289,15 @@ class Preprocessor
         return $this->osType;
     }
 
-    function setDisableZendOpcache(bool $flag)
+    function setDisableZendOpcache()
     {
         $key=array_search('opcache',$this->extEnabled);
         if($key !== false) {
             unset($this->extEnabled[$key]);
         }
-        $this->disableZendOpcache=$flag;
+        $this->disableZendOpcache= true;
     }
+
     function setPhpSrcDir(string $phpSrcDir)
     {
         $this->phpSrcDir = $phpSrcDir;
@@ -346,7 +346,7 @@ class Preprocessor
         $skip_library_download = getenv('SKIP_LIBRARY_DOWNLOAD');
         if (empty($skip_library_download)) {
             if (!is_file($this->libraryDir . '/' . $lib->file)) {
-                // echo `wget {$lib->url} -O {$this->libraryDir}/{$lib->file}`;
+                //echo `wget {$lib->url} -O {$this->libraryDir}/{$lib->file}`;
                 echo `curl --connect-timeout 15 --retry 5 --retry-delay 5  -Lo {$this->libraryDir}/{$lib->file} {$lib->url}`;
                 echo $lib->file;
             } else {
@@ -436,6 +436,11 @@ class Preprocessor
                     unset($this->extEnabled[$key]);
                 }
             }
+        }
+
+        $key=array_search('opcache',$this->extEnabled);
+        if(!$key) {
+            $this->disableZendOpcache= true ;
         }
 
         foreach ($this->extEnabled as $ext) {

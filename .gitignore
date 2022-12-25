@@ -303,7 +303,7 @@ tmp-php.ini
 /work/
 /thirdparty
 !/thirdparty/.gitkeep
-
+/usr
 /ext/redis
 /ext/memcached
 /ext/imagick
@@ -314,8 +314,8 @@ tmp-php.ini
 /ext/loader8
 /ext/ds
 
+/build-tools-scripts/php-versions
 /build-tools-scripts/base-container-image.txt
 /build-tools-scripts/backup
-/build-tools-scripts/php-versions
-!/build-tools-scripts/php-versions/.gitkeep
 build-tools-scripts/dist/
+

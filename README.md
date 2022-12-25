@@ -1,25 +1,30 @@
 # swoole-cli
 
-## 准备环境下载扩展和依赖库
-```shell
 
-git submodule update --init --recursive
+> 说明：需要准备2个构建环境
 
-sh build-tools-scripts/run-download-lib-ext-container.sh
+1. 第1个构建环境用于生成构建脚本
+1. 第2个构建环境用于静态编译本项目
 
-
-
-```
 
 ## 生成构建脚本
 
 ```shell
-docker exec -i swoole-cli-build-dev sh build-tools-scripts/init-depend.sh
+# 初始化子模块，检出 swoole 扩展
+git submodule update --init --recursive
+
+php prepare.php
+php prepare.php +inotify +mongodb
+
 
 ```
 
 * 脚本会自动下载相关的`C/C++`库以及`PECL`扩展
 * 可使用`+{ext}`或者`-{ext}`增减扩展
+* 准备生成构建脚本环境[`prepare-swoole-cli-build-dev-1-container`](build-tools-scripts/prepare-swoole-cli-build-dev-1-container.sh)
+* 运行生成构建脚本环境[`run-swoole-cli-build-dev-1-container`](build-tools-scripts/run-swoole-cli-build-dev-1-container)
+* 生成构建脚本例子[`build-tools-scripts/download-init-depend.sh`](build-tools-scripts/download-init-depend.sh)
+* 生成构建脚本例子使用代理[`build-tools-scripts/download-init-depend-use-proxy.sh`](build-tools-scripts/download-init-depend-use-proxy.sh)
 
 ## 进入 Docker Bash
 
@@ -30,6 +35,16 @@ sh build-tools-scripts/run-build-container.sh
 ```
 
 > 需要将 `swoole-cli` 的目录映射到容器的 `/work` 目录
+
+## 准备依赖库
+
+> 静态编译 依赖库
+
+```shell
+
+./make.sh all-library
+
+```
 
 ## 编译配置
 

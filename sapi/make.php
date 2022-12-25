@@ -5,10 +5,10 @@
 ?>
 set -uex
 PKG_CONFIG_PATH=''
-test -d /usr/lib/pkgconfig || PKG_CONFIG_PATH="/usr/lib/pkgconfig:$PKG_CONFIG_PATH"
-test -d /usr/lib64/pkgconfig || PKG_CONFIG_PATH="/usr/lib64/pkgconfig:$PKG_CONFIG_PATH"
-test -d /usr/local/lib/pkgconfig || PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
-test -d /usr/local/lib64/pkgconfig || PKG_CONFIG_PATH="/usr/local/lib64/pkgconfig:$PKG_CONFIG_PATH"
+test -d /usr/lib/pkgconfig && PKG_CONFIG_PATH="/usr/lib/pkgconfig:$PKG_CONFIG_PATH"
+test -d /usr/lib64/pkgconfig && PKG_CONFIG_PATH="/usr/lib64/pkgconfig:$PKG_CONFIG_PATH"
+test -d /usr/local/lib/pkgconfig && PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
+test -d /usr/local/lib64/pkgconfig && PKG_CONFIG_PATH="/usr/local/lib64/pkgconfig:$PKG_CONFIG_PATH"
 
 SRC=<?= $this->phpSrcDir . PHP_EOL ?>
 ROOT=$(pwd)
@@ -24,26 +24,28 @@ OPTIONS="--disable-all \
 "
 
 <?php foreach ($this->libraryList as $item) : ?>
-    make_<?=$item->name?>() {
-        cd <?=$this->workDir?>/thirdparty
-        echo "build <?=$item->name?>"
-        mkdir -p <?=$this->workDir?>/thirdparty/<?=$item->name?> && \
-        tar --strip-components=1 -C <?=$this->workDir?>/thirdparty/<?=$item->name?> -xf <?=$this->workDir?>/pool/lib/<?=$item->file?>  && \
-        cd <?=$item->name?> && \
-        echo  "<?=$item->configure?>"
-        <?php if (!empty($item->configure)): ?>
-            <?=$item->configure?> && \
-        <?php endif; ?>
-        make -j <?=$this->maxJob?>  <?=$item->makeOptions?> && \
-        <?php if ($item->beforeInstallScript): ?>
-            <?=$item->beforeInstallScript?> && \
-        <?php endif; ?>
-        make <?=$item->makeInstallDefaultOptions?> <?=$item->makeInstallOptions?> && \
-        <?php if ($item->afterInstallScript): ?>
-            <?=$item->afterInstallScript?> && \
-        <?php endif; ?>
-        cd -
-    }
+
+make_<?=$item->name?>() {
+    cd <?=$this->workDir?>/thirdparty
+    echo "build <?=$item->name?>"
+    mkdir -p <?=$this->workDir?>/thirdparty/<?=$item->name?> && \
+    tar --strip-components=1 -C <?=$this->workDir?>/thirdparty/<?=$item->name?> -xf <?=$this->workDir?>/pool/lib/<?=$item->file?>  && \
+    cd <?=$item->name?> && \
+    echo  "<?=$item->configure?>"
+    <?php if (!empty($item->configure)): ?>
+    <?=$item->configure?> && \
+    <?php endif; ?>
+    make -j <?=$this->maxJob?>  <?=$item->makeOptions?> && \
+    <?php if ($item->beforeInstallScript): ?>
+    <?=$item->beforeInstallScript?> && \
+    <?php endif; ?>
+    make <?=$item->makeInstallDefaultOptions?> <?=$item->makeInstallOptions?> && \
+    <?php if ($item->afterInstallScript): ?>
+    <?=$item->afterInstallScript?> && \
+    <?php endif; ?>
+    cd -
+}
+
 
     clean_<?=$item->name?>() {
         cd <?=$this->workDir?>/thirdparty
@@ -68,7 +70,6 @@ config_php() {
 <?php else : ?>
     test -f main/main.c.save ||  cp -f main/main.c.save main/main.c
 <?php endif; ?>
-
      test -f ./configure && rm ./configure
     ./buildconf --force
 
