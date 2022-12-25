@@ -176,7 +176,7 @@ sh init-depend-use-proxy.sh
 cd ${__PROJECT__}/
 sh make.sh sync
 
-cp -f ${__PROJECT__}/build-tools-scripts/fpm_main_backup.c  ${__PROJECT__}/sapi/cli/fpm/fpm_main.c
+test -f ${__PROJECT__}/build-tools-scripts/fpm_main_backup.c &&  cp -f ${__PROJECT__}/build-tools-scripts/fpm_main_backup.c  ${__PROJECT__}/sapi/cli/fpm/fpm_main.c
 sh ${__PROJECT__}/build-tools-scripts/init-depend-use-proxy.sh
 chown -R 1000:1000 .
 
