@@ -19,10 +19,5 @@ make    EXTRA_LDFLAGS_PROGRAM='-all-static   -L/usr/libiconv/lib -L/usr/openssl/
 
 make install
 
-cd ${__DIR__}
+/tmp/php/bin/php -v
 
-mkdir -p ${__DIR__}/dist/
-
-test -f /tmp/php/bin/php && cp -f /tmp/php/bin/php   ${__DIR__}/dist/
-test -f /tmp/php/bin/php-config && cp -f /tmp/php/bin/php-config   ${__DIR__}/dist/
-chown -R 1000:1000 ${__DIR__}/dist/
