@@ -130,12 +130,12 @@ function install_giflib(Preprocessor $p)
         (new Library('giflib'))
             ->withUrl('https://nchc.dl.sourceforge.net/project/giflib/giflib-5.2.1.tar.gz')
             //->withMakeOptions('libgif.a')
-            ->setConfigureBeforeCleanPackage()
+            ->withConfigureBeforeCleanPackage()
             ->withConfigureBeforeScript('sed -i "s@PREFIX = /usr/local@PREFIX = /usr/giflib@" Makefile')
             ->withMakeOptions('all')
             ->withMakeInstallOptions("install")
             ->withLdflags('-L/usr/giflib/lib')
-            ->setDisablePkgConfig()
+            ->disableDefaultLdflags()
             //->withPkgConfig('/usr/giflib/lib/pkgconfig') //此目录不存在
             ->withLicense('http://giflib.sourceforge.net/intro.html', Library::LICENSE_SPEC)
     );
@@ -335,9 +335,9 @@ function install_cares(Preprocessor $p)
             */
             ->withConfigure('./configure --prefix=/usr/ --enable-static --disable-shared')
             ->withPkgName('libcares')
-            ->setDisablePkgConfig()
+            ->disableDefaultPkgConfig()
             //->withPkgConfig('/usr/lib/pkgconfig')
-            ->setDisableLdflags()
+            ->disableDefaultLdflags()
             //->withLdflags('-L/usr/lib')
             ->withLicense('https://c-ares.org/license.html', Library::LICENSE_MIT)
             ->withHomePage('https://c-ares.org/')
@@ -557,7 +557,7 @@ install_mimalloc($p);
 
 
 # 禁用zendOpcache
-$p->setDisableZendOpcache();
+$p->disableZendOpcache();
 
 $p->parseArguments($argc, $argv);
 $p->gen();
