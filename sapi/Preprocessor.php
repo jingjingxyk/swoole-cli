@@ -40,7 +40,7 @@ abstract class Project
 class Library extends Project
 {
     public string $url;
-    public bool $configureBeforeCleanPackageFlag = false ;
+    public bool   $configureBeforeCleanPackageFlag = false;
     public string $configure = '';
     public string $configureBeforeScript = '';
     public string $file = '';
@@ -80,7 +80,8 @@ class Library extends Project
         return $this;
     }
 
-    function setConfigureBeforeCleanPackage(): static
+
+    function withConfigureBeforeCleanPackage(): static
     {
         $this->configureBeforeCleanPackageFlag = true ;
         return $this;
@@ -104,12 +105,11 @@ class Library extends Project
         return $this;
     }
 
-    function setDisableLdflags(): static
+    function disableDefaultLdflags(): static
     {
         $this->ldflags = '';
         return $this;
     }
-
 
     function withMakeOptions(string $makeOptions): static
     {
@@ -142,7 +142,7 @@ class Library extends Project
         return $this;
     }
 
-    function setDisablePkgConfig(): static
+    function disableDefaultPkgConfig(): static
     {
         $this->pkgConfig = '';
         return $this;
@@ -185,7 +185,7 @@ class Extension extends Project
 class Preprocessor
 {
     public string $osType = 'linux';
-    public bool $disableZendOpcache = false;
+    public bool $disableZendOpcacheFlag = false;
     protected array $libraryList = [];
     protected array $extensionList = [];
     protected string $rootDir;
@@ -316,13 +316,13 @@ class Preprocessor
         return $this->osType;
     }
 
-    function setDisableZendOpcache()
+    function disableZendOpcache()
     {
         $key=array_search('opcache',$this->extEnabled);
         if($key !== false) {
             unset($this->extEnabled[$key]);
         }
-        $this->disableZendOpcache= true;
+        $this->disableZendOpcacheFlag = true;
     }
 
     function setPhpSrcDir(string $phpSrcDir)
@@ -467,7 +467,7 @@ class Preprocessor
 
         $key=array_search('opcache',$this->extEnabled);
         if(!$key) {
-            $this->disableZendOpcache= true ;
+            $this->disableZendOpcacheFlag = true ;
         }
 
         foreach ($this->extEnabled as $ext) {

@@ -32,10 +32,10 @@ make_<?=$item->name?>() {
     test -d <?=$this->workDir?>/thirdparty/<?=$item->name?> && rm -rf <?=$this->workDir?>/thirdparty/<?=$item->name?> ;
     <?php endif;?>
     mkdir -p <?=$this->workDir?>/thirdparty/<?=$item->name?> ;
-    tar --strip-components=1 -C <?=$this->workDir?>/thirdparty/<?=$item->name?> -xf <?=$this->workDir?>/pool/lib/<?=$item->file?>  ;
-    cd <?=$item->name?>  ;
+    tar --strip-components=1 -C <?=$this->workDir?>/thirdparty/<?=$item->name?> -xf <?=$this->workDir?>/pool/lib/<?=$item->file?> ;
+    cd <?=$item->name?> ;
     <?php if (!empty($item->configureBeforeScript)):?>
-    <?= $item->configureBeforeScript ?> ;
+        <?= $item->configureBeforeScript ?> ;
     <?php endif ;?>
     echo  "<?=$item->configure?>" ;
     <?php if (!empty($item->configure)): ?>
@@ -70,7 +70,7 @@ make_all_library() {
 }
 
 config_php() {
-<?php if ( $this->disableZendOpcache == true ) : ?>
+<?php if ( $this->disableZendOpcacheFlag == true ) : ?>
     test -f main/main.c.save ||  cp -f main/main.c main/main.c.save ;
     sed -i 's/extern zend_extension zend_extension_entry;//g' main/main.c ;
     sed -i 's/zend_register_extension(&zend_extension_entry, NULL);//g' main/main.c ;
