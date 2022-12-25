@@ -102,6 +102,8 @@ COPY --from=1  /usr/libsodium/ /usr/libsodium/
 COPY --from=1  /usr/libyaml /usr/libyaml
 COPY --from=1  /usr/mimalloc/ /usr/mimalloc/
 
+COPY --from=1  /usr/imagemagick /usr/imagemagick
+
 # COPY --from=1  /usr/cares/ /usr/cares/
 # COPY --from=1  /usr/icu/ /usr/icu/
 # COPY --from=1  /usr/ /usr/

@@ -136,6 +136,7 @@ function install_giflib(Preprocessor $p)
             ->withMakeInstallOptions("install")
             ->withLdflags('-L/usr/giflib/lib')
             ->disableDefaultLdflags()
+            ->disableDefaultPkgConfig()
             //->withPkgConfig('/usr/giflib/lib/pkgconfig') //此目录不存在
             ->withLicense('http://giflib.sourceforge.net/intro.html', Library::LICENSE_SPEC)
     );

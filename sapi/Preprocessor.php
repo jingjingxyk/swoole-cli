@@ -258,7 +258,7 @@ class Preprocessor
         //'pdo_pgsql',
         //'soap',
         'xsl',
-        'gmp',
+        //'gmp',
         'exif',
         'sodium',
         'openssl',

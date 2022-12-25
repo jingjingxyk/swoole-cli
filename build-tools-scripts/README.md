@@ -177,6 +177,10 @@ pkg-config --cflags --libs libxslt
 pkg-config --cflags --libs icu-i18n icu-io icu-io
 pkg-config --cflags --libs icu-i18n icu-io icu-io libxml-2.0 libxslt
 pkg-config  --libs icu-i18n icu-io icu-io libxml-2.0 libxslt
+
+pkg-config  --libs oniguruma
+pkg-config  --cflags oniguruma
+
 find / -name pkgconfig
 
 locate readline.pc
