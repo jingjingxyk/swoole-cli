@@ -4,9 +4,12 @@
  */
 ?>
 set -uex
-test -d /usr/lib64/pkgconfig || mkdir -p /usr/lib64/pkgconfig
-test -d /usr/lib/pkgconfig || mkdir -p /usr/lib/pkgconfig
-PKG_CONFIG_PATH='/usr/lib/pkgconfig:/usr/lib64/pkgconfig'
+PKG_CONFIG_PATH=''
+test -d /usr/lib/pkgconfig || PKG_CONFIG_PATH="/usr/lib/pkgconfig:$PKG_CONFIG_PATH"
+test -d /usr/lib64/pkgconfig || PKG_CONFIG_PATH="/usr/lib64/pkgconfig:$PKG_CONFIG_PATH"
+test -d /usr/local/lib/pkgconfig || PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
+test -d /usr/local/lib64/pkgconfig || PKG_CONFIG_PATH="/usr/local/lib64/pkgconfig:$PKG_CONFIG_PATH"
+
 SRC=<?= $this->phpSrcDir . PHP_EOL ?>
 ROOT=$(pwd)
 export CC=clang
@@ -59,11 +62,11 @@ make_all_library() {
 
 config_php() {
 <?php if ( $this->disableZendOpcache == true ) : ?>
-
+    test -f main/main.c.save ||  cp -f main/main.c main/main.c.save
     sed -i 's/extern zend_extension zend_extension_entry;//g' main/main.c
     sed -i 's/zend_register_extension(&zend_extension_entry, NULL);//g' main/main.c
 <?php else : ?>
-    cp -f $SRC/main/main.c main/main.c
+    test -f main/main.c.save ||  cp -f main/main.c.save main/main.c
 <?php endif; ?>
 
      test -f ./configure && rm ./configure

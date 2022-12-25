@@ -6,6 +6,7 @@ __DIR__=$(
   pwd
 )
 cd ${__DIR__}
+mkdir -p ${__DIR__}/php-versions
 cd ${__DIR__}/php-versions
 
 # 下载重试
@@ -16,6 +17,8 @@ cd ${__DIR__}/php-versions
 test -d php-8.1.12 && rm -rf php-8.1.12
 test -f php-8.1.12.tar.gz || curl -Lo php-8.1.12.tar.gz https://www.php.net/distributions/php-8.1.12.tar.gz
 tar -zxvf php-8.1.12.tar.gz
+
+
 
 exit 0
 

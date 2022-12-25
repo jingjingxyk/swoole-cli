@@ -68,7 +68,7 @@ cmake -DCMAKE_CXX_FLAGS=-fPIC -DWITH_STDTHREADS=ON  -DCMAKE_BUILD_TYPE=Release .
 # use source php code
 ```shell
 
-apk add  libxml2-dev
+apk add libxml2-dev
 apk add sqlite-dev
 apk add openssl-dev
 apk add bzip2-dev
@@ -79,24 +79,38 @@ apk add readline-dev readline-static
 apk add libxslt-dev
 apk add libzip-dev
 
+
+
 sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
 apk update
 apk add libbson libbson-dev libbson-static bzip2 bzip2-dev bzip2-static icu-dev
 
-apk add bzip2 bzip2-dev bzip2-staticapk
+apk add bzip2 bzip2-dev bzip2-static
 add postgresql15 postgresql15-dev postgresql15-client
+
+add pcre2-dev re2c libbz2
+apk add c-ares c-ares-dev
+apk add lzip libzip libzip-dev libzip-tools
+
 
 
 apk add icu icu-dev icu-libs icu-data-full icu-static
 apk add ncurses-dev ncurses-libs ncurses-static
 apk add readline readline-dev readline-static
-apk add c-ares c-ares-dev
-apk add lzip libzip libzip-dev libzip-tools
+
+apk --no-cache add postgresql-libs libpq-dev postgresql
+
+
+
+
+
+
+sh make.sh cares
 
 
 sh make.sh icu
 sh make.sh bzip2
-sh make.sh cares
+
 sh make.sh readline
 
 ```
@@ -138,14 +152,18 @@ pkg-config --cflags --libs libssl
 pkg-config --cflags --libs libcrypto
 pkg-config --cflags --libs icu-i18n
 pkg-config --cflags --libs icu-io
-pkg-config --cflags --libs icu-uc
+pkg-config --cflags --libs icu-io
 pkg-config --cflags --libs iconv
 pkg-config --cflags --libs libzip
 pkg-config --cflags --libs zlib
 pkg-config --cflags --libs liblzma
 pkg-config --cflags --libs libcares
 pkg-config --cflags --libs zip
-
+pkg-config --cflags --libs libxml-2.0
+pkg-config --cflags --libs libxslt
+pkg-config --cflags --libs icu-i18n icu-io icu-io
+pkg-config --cflags --libs icu-i18n icu-io icu-io libxml-2.0 libxslt
+pkg-config  --libs icu-i18n icu-io icu-io libxml-2.0 libxslt
 find / -name pkgconfig
 
 locate readline.pc
@@ -173,5 +191,41 @@ CFLAGS=-I/usr/icu/include LDFLAGS=-L/usr/icu/lib
 
 pecl install -D 'enable-sockets="no" enable-openssl="yes" enable-http2="yes" enable-mysqlnd="yes" enable-swoole-json="no" enable-swoole-curl="yes" enable-cares="yes"' https://pecl.php.net/get/swoole-4.4.26.tgz
 
+
+```
+
+```shell
+# statically compiling libpq on Alpine.
+# https://bugfactory.io/blog/portability-via-static-linking-of-libpq/
+
+
+
+apk --no-cache add postgresql-libs libpq-dev postgresql
+
+apk --no-cache add postgresql-dev build-base
+
+ldd /usr/lib/libpq.so
+
+
+
+export PKG_CONFIG_PATH="/usr/openssl/lib64/pkgconfig:/usr/lib/pkgconfig"
+pkg-config --cflags --libs libpq
+pkg-config --libs libpq
+
+
+gcc -static -o test-libpg test-libpg.c -lpq
+gcc -static -o test-libpg test-libpg.c -lpq -lssl -lcrypto
+
+gcc -static -o test-libpg test-libpg.c `pkg-config --cflags --libs libpq`
+gcc  -o test-libpg test-libpg.c `pkg-config --cflags --libs libpq`
+ldd  test-libpg
+
+ldd test-libpg
+
+
+
+-lpq -lpgport -lpgcommon
+
+ibpgcommon 和 libpqport
 
 ```

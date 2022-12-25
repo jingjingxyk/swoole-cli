@@ -74,8 +74,7 @@ ENV LD=ld.lld
 
 WORKDIR /work
 
-RUN rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
-RUN cp -f /etc/apk/repositories.save /etc/apk/repositories
+
 
 COPY --from=1 /usr/libiconv /usr/libiconv
 COPY --from=1 /usr/openssl/ /usr/openssl/
@@ -87,6 +86,7 @@ COPY --from=1  /usr/zlib /usr/zlib
 
 # COPY --from=1  /usr/liblzma/ /usr/liblzma/
 # COPY --from=1  /usr/zstd/ /usr/zstd/
+
 COPY --from=1  /usr/sqlite3/ /usr/sqlite3/
 COPY --from=1  /usr/oniguruma/ /usr/oniguruma/
 COPY --from=1  /usr/brotli/ /usr/brotli/
@@ -100,3 +100,16 @@ COPY --from=1  /usr/mimalloc/ /usr/mimalloc/
 # COPY --from=1  /usr/icu/ /usr/icu/
 # COPY --from=1  /usr/ /usr/
 # COPY --from=1  /usr/zip /usr/zip
+
+
+RUN apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
+RUN apk add --no-cache  ncurses-dev ncurses-libs ncurses-static
+RUN apk add --no-cache  readline readline-dev readline-static
+RUN apk --no-cache add postgresql-libs libpq-dev
+
+
+RUN cp -f /etc/apk/repositories.save /etc/apk/repositories
+
+RUN rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
+
+RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*

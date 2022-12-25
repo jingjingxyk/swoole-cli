@@ -466,14 +466,21 @@ function install_postgresql(Preprocessor $p)
         (new Library('postgresql'))
             ->withUrl('https://ftp.postgresql.org/pub/source/v15.1/postgresql-15.1.tar.gz')
             //->withConfigure('./configure --prefix=/usr/pgsql LDFLAGS="-static" --with-ssl=openssl  --with-readline --disable-rpath --with-icu ICU_CFLAGS="-I/usr/include" ICU_LIBS="-L/usr/lib -licui18n -licuuc -licudata" --with-includes=/usr/openssl/include/openssl/:/usr/readline/include:/usr/include  --with-libraries=/usr/openssl/lib:/usr/readline/lib:/usr/lib')
-            ->withConfigure('./configure --prefix=/usr/postgresql \
+            //--with-libxml XML2_CFLAGS='/usr/libxml2/include/' XML2_LIBS='/usr/libxml2/lib' \
+            ->withConfigure("./configure --prefix=/usr/pgsql \
             --with-ssl=openssl  \
             --with-readline \
-            --with-icu ICU_CFLAGS=\'-I/usr/icu/include\' ICU_LIBS=\'-L/usr/icu/lib -licui18n -licuuc -licudata\' \
-            --with-includes=\'/usr/openssl/include/:/usr/readline/include\' \
-            --with-libraries=\'/usr/openssl/lib64:/usr/readline/lib\'')
-            ->withPkgConfig('/usr/postgresql/lib/pkgconfig')
-            ->withLdflags('-L/usr/postgresql/lib/')
+             --with-icu ICU_CFLAGS='-I/usr/lib/include' ICU_LIBS='-L/usr/lib -licuuc -licudata -licui18n -licuio' \
+            --without-ldap \
+            --with-libxml XML2_CFLAGS='-I/usr/libxml2/include/libxml2 -I/usr/libiconv/include' XML2_LIBS='-L/usr/libxml2/lib -lxml2' \
+            --with-libxslt \
+            --with-includes='/usr/openssl/include/:/usr/zlib/include:/usr/libxml2/include/libxml2:/usr/libxslt/include:/usr/libiconv/include:/usr/include' \
+            --with-libraries='/usr/openssl/lib64:/usr/zlib/lib:/usr/libxml2/lib:/usr/libxslt/lib:L/usr/libiconv/lib:/usr/lib:/lib' \
+            LDFLAGS='-static -lxslt -lz -liconv -lm -lxml2 ' "
+            )
+            ->withPkgConfig('/usr/pgsql/lib/pkgconfig')
+            ->withLdflags('-L/usr/pgsql/lib/')
+
             //->withMakeOptions('-C src/interfaces')
             //->withMakeInstallOptions('-C src/interfaces') //make -C src/interfaces install
             ->withLicense('https://www.postgresql.org/about/licence/', Library::LICENSE_SPEC)
@@ -489,6 +496,7 @@ install_libxslt($p);
 install_gmp($p);
 install_zlib($p);
 install_bzip2($p);
+
 //install_lzma($p);
 //install_zstd($p);
 
@@ -507,7 +515,7 @@ install_oniguruma($p);
 
 install_brotli($p);
 
-//install_cares($p);
+install_cares($p);
 //install_ncurses($p);
 //install_readline($p);
 
@@ -519,7 +527,8 @@ install_libsodium($p);
 install_libyaml($p);
 install_mimalloc($p);
 
-//install_postgresql($p);
+//参考 https://github.com/docker-library/php/issues/221
+install_postgresql($p);
 
 $p->setDisableZendOpcache(true);
 $p->parseArguments($argc, $argv);

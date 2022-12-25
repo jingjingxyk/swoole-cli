@@ -228,7 +228,7 @@ class Preprocessor
         //'mysqli',
         'intl',
         'pdo_mysql',
-        //'pdo_pgsql',
+        'pdo_pgsql',
         //'soap',
         'xsl',
         'gmp',
@@ -242,7 +242,7 @@ class Preprocessor
         'swoole',
         'yaml',
         //'imagick',
-        //'mongodb',
+        'mongodb',
     ];
 
     protected array $endCallbacks = [];
@@ -292,6 +292,10 @@ class Preprocessor
 
     function setDisableZendOpcache(bool $flag)
     {
+        $key=array_search('opcache',$this->extEnabled);
+        if($key !== false) {
+            unset($this->extEnabled[$key]);
+        }
         $this->disableZendOpcache=$flag;
     }
     function setPhpSrcDir(string $phpSrcDir)
