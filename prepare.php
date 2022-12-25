@@ -129,7 +129,14 @@ function install_giflib(Preprocessor $p)
     $p->addLibrary(
         (new Library('giflib'))
             ->withUrl('https://nchc.dl.sourceforge.net/project/giflib/giflib-5.2.1.tar.gz')
-            ->withMakeOptions('libgif.a')
+            //->withMakeOptions('libgif.a')
+            ->setConfigureBeforeCleanPackage()
+            ->withConfigureBeforeScript('sed -i "s@PREFIX = /usr/local@PREFIX = /usr/giflib@" Makefile')
+            ->withMakeOptions('all')
+            ->withMakeInstallOptions("install")
+            ->withLdflags('-L/usr/giflib/lib')
+            ->setDisablePkgConfig()
+            //->withPkgConfig('/usr/giflib/lib/pkgconfig') //此目录不存在
             ->withLicense('http://giflib.sourceforge.net/intro.html', Library::LICENSE_SPEC)
     );
 }
@@ -150,7 +157,7 @@ function install_libjpeg(Preprocessor $p)
     $lib->withUrl('https://codeload.github.com/libjpeg-turbo/libjpeg-turbo/tar.gz/refs/tags/2.1.2')
         ->withConfigure('cmake -G"Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr .')
         ->withLdflags('-L/usr/lib64')
-        //->withPkgConfig('/usr/lib64/pkgconfig')
+        ->withPkgConfig('/usr/lib64/pkgconfig')
         ->withFile('libjpeg-turbo-2.1.2.tar.gz')
         ->withHomePage('https://libjpeg-turbo.org/')
         ->withLicense('https://github.com/libjpeg-turbo/libjpeg-turbo/blob/main/LICENSE.md', Library::LICENSE_BSD);
@@ -168,6 +175,8 @@ function install_freetype(Preprocessor $p)
             //->withUrl('https://mirror.yongbok.net/nongnu/freetype/freetype-2.10.4.tar.gz')
             ->withUrl('https://download.savannah.gnu.org/releases/freetype/freetype-2.10.4.tar.gz')
             ->withConfigure('./configure --prefix=/usr/freetype --enable-static --disable-shared')
+            ->withLdflags('-L/usr/freetype/lib/')
+            ->withPkgConfig('/usr/freetype/lib/pkgconfig')
             ->withHomePage('https://freetype.org/')
             ->withPkgName('freetype2')
             ->withLicense('https://gitlab.freedesktop.org/freetype/freetype/-/blob/master/docs/FTL.TXT', Library::LICENSE_SPEC)
@@ -326,8 +335,10 @@ function install_cares(Preprocessor $p)
             */
             ->withConfigure('./configure --prefix=/usr/ --enable-static --disable-shared')
             ->withPkgName('libcares')
-            ->withPkgConfig('/usr/lib/pkgconfig')
-            ->withLdflags('-L/usr/lib')
+            ->setDisablePkgConfig()
+            //->withPkgConfig('/usr/lib/pkgconfig')
+            ->setDisableLdflags()
+            //->withLdflags('-L/usr/lib')
             ->withLicense('https://c-ares.org/license.html', Library::LICENSE_MIT)
             ->withHomePage('https://c-ares.org/')
     );
@@ -512,13 +523,13 @@ install_bzip2($p);
 //install_lzma($p);
 //install_zstd($p);
 
-install_zip($p);
+//install_zip($p);
 
-//install_giflib($p);
-//install_libpng($p);
-//install_libjpeg($p);
-//install_freetype($p);
-//install_libwebp($p);
+install_giflib($p);
+install_libpng($p);
+install_libjpeg($p);
+install_freetype($p);
+install_libwebp($p);
 install_sqlite3($p);
 
 //install_icu($p);
@@ -533,7 +544,7 @@ install_cares($p);
 
 
 //install_libedit($p);
-//install_imagemagick($p);
+install_imagemagick($p);
 install_curl($p);
 install_libsodium($p);
 install_libyaml($p);

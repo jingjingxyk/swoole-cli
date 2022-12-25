@@ -104,6 +104,12 @@ class Library extends Project
         return $this;
     }
 
+    function setDisableLdflags(): static
+    {
+        $this->ldflags = '';
+        return $this;
+    }
+
 
     function withMakeOptions(string $makeOptions): static
     {
@@ -133,6 +139,12 @@ class Library extends Project
     function withPkgConfig(string $pkgConfig): static
     {
         $this->pkgConfig = $pkgConfig;
+        return $this;
+    }
+
+    function setDisablePkgConfig(): static
+    {
+        $this->pkgConfig = '';
         return $this;
     }
 
@@ -232,32 +244,32 @@ class Preprocessor
         'opcache',
         'curl',
         'bz2',
-        //'bcmath',
-        //'pcntl',
-        //'tokenizer',
+        'bcmath',
+        'pcntl',
+        'tokenizer',
         'mbstring',
-        //'zlib',
-        'zip',
-        //'sockets',
+        'zlib',
+        //'zip',
+        'sockets',
         'mysqlnd',
         //'mysqli',
         'intl',
-        //'pdo_mysql',
+        'pdo_mysql',
         //'pdo_pgsql',
         //'soap',
         'xsl',
-        //'gmp',
-        //'exif',
-        //'sodium',
+        'gmp',
+        'exif',
+        'sodium',
         'openssl',
         'readline',
-        //'gd',
-        //'redis',
+        'gd',
+        'redis',
         //'pgsql',
-        //'swoole',
-        //'yaml',
-        //'imagick',
-        //'mongodb',
+        'swoole',
+        'yaml',
+        'imagick',
+        'mongodb',
     ];
 
     protected array $endCallbacks = [];
