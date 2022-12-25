@@ -536,7 +536,7 @@ install_mimalloc($p);
 $p->setMaxJob(`nproc`); //获取CPU核数，用于 make -j $(nproc)
 
 # 禁用zendOpcache
-//$p->setDisableZendOpcache();
+$p->setDisableZendOpcache();
 
 $p->parseArguments($argc, $argv);
 $p->gen();
