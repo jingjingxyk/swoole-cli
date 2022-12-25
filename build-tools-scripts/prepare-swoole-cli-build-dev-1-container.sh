@@ -1,13 +1,19 @@
-#!/bin/sh
+#!/bin/bash
 
 set -exu
 __DIR__=$(
   cd "$(dirname "$0")"
   pwd
 )
+__PROJECT__=$(
+  cd ${__DIR__}/../
+  pwd
+)
 cd ${__DIR__}
 
+
 export DOCKER_BUILDKIT=1
+TIME=`date -u '+%Y%m%dT%H%M%SZ'`
 
 :<<'EOF'
 TIME=`date -u '+%Y%m%dT%H%M%SZ'`
@@ -15,11 +21,12 @@ VERSION="build-dev-1-alpine-edge-"${TIME}
 IMAGE="docker.io/phpswoole/swoole_cli_os:${VERSION}"
 EOF
 
-IMAGE="docker.io/phpswoole/swoole_cli_os:build-dev-1-alpine-edge"
+VERSION="build-dev-1-alpine-edge-"${TIME}
+IMAGE="docker.io/jingjingxyk/build-swoole-cli:${VERSION}"
 
 
 docker build -t ${IMAGE} -f ./Dockerfile-alpine-dev-1  . --progress=plain
-
-# docker push ${IMAGE}
+echo ${IMAGE} > swoole-cli-build-dev-1-container.txt
+docker push ${IMAGE}
 
 

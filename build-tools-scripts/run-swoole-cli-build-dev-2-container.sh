@@ -19,6 +19,9 @@ cd ${__PROJECT__}
   echo $?
 }
 
-image=phpswoole/swoole_cli_os:1.4
+test -f swoole-cli-build-dev-2-container.txt && image=$(cat swoole-cli-build-dev-1-container.txt)
+test -f swoole-cli-build-dev-2-container.txt || image=phpswoole/swoole_cli_os:1.4
+
+# image=phpswoole/swoole_cli_os:1.4
 
 docker run --rm --name swoole-cli-build-dev-2 -d -v ${__PROJECT__}:/work -w /work $image tail -f /dev/null
