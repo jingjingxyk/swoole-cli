@@ -81,16 +81,19 @@ apk add libzip-dev
 
 
 
-sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
+sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories && \
 apk update
-apk add libbson libbson-dev libbson-static bzip2 bzip2-dev bzip2-static icu-dev
+
+apk add libbson libbson-dev libbson-static
+
 
 apk add bzip2 bzip2-dev bzip2-static
 add postgresql15 postgresql15-dev postgresql15-client
 
 add pcre2-dev re2c libbz2
 apk add c-ares c-ares-dev
-apk add lzip libzip libzip-dev libzip-tools
+
+apk add libzip libzip-dev libzip-tools
 
 
 
@@ -105,7 +108,7 @@ apk --no-cache add postgresql-libs libpq-dev postgresql
 
 
 
-sh make.sh cares
+
 
 
 sh make.sh icu
@@ -128,6 +131,8 @@ LDFLAGS="-L/usr/lib64/readline5" \
 
 ```shell
 
+https://people.freedesktop.org/~dbn/pkg-config-guide.html
+
 PKG_CONFIG_PATH='/usr/lib/pkgconfig:/usr/lib64/pkgconfig'
 
 export PKG_CONFIG_PATH="/usr/readline/lib/pkgconfig:/usr/ncurses/lib/pkgconfig:$PKG_CONFIG_PATH"
@@ -135,12 +140,19 @@ export PKG_CONFIG_PATH="/usr/readline/lib/pkgconfig:/usr/ncurses/lib/pkgconfig:$
 export PKG_CONFIG_PATH="/usr/cares/lib/pkgconfig:$PKG_CONFIG_PATH"
 # readline-dev
 
+pkg-config --libs --static pkg-config --libs --static
 pkg-config --list-all
+
 pkg-config --cflags --libs libzip
+pkg-config --libs --cflags libzip
+pkg-config --libs  libzip
+
 pkg-config --cflags --libs zlib liblzma liblzma
 
 pkg-config --cflags --libs ncurses readline
 pkg-config --libs  ncurses readline
+
+
 
 pkg-config --cflags ncurses
 pkg-config --cflags readline
@@ -158,7 +170,8 @@ pkg-config --cflags --libs libzip
 pkg-config --cflags --libs zlib
 pkg-config --cflags --libs liblzma
 pkg-config --cflags --libs libcares
-pkg-config --cflags --libs zip
+
+pkg-config --cflags --libs libzip
 pkg-config --cflags --libs libxml-2.0
 pkg-config --cflags --libs libxslt
 pkg-config --cflags --libs icu-i18n icu-io icu-io

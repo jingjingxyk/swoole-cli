@@ -40,7 +40,9 @@ abstract class Project
 class Library extends Project
 {
     public string $url;
+    public bool $configureBeforeCleanPackageFlag = false ;
     public string $configure = '';
+    public string $configureBeforeScript = '';
     public string $file = '';
     public string $ldflags = '';
     public string $makeOptions = '';
@@ -78,6 +80,18 @@ class Library extends Project
         return $this;
     }
 
+    function setConfigureBeforeCleanPackage(): static
+    {
+        $this->configureBeforeCleanPackageFlag = true ;
+        return $this;
+    }
+
+    function withConfigureBeforeScript(string $script): static
+    {
+        $this->configureBeforeScript = $script;
+        return $this;
+    }
+
     function withConfigure(string $configure): static
     {
         $this->configure = $configure;
@@ -89,6 +103,7 @@ class Library extends Project
         $this->ldflags = $ldflags;
         return $this;
     }
+
 
     function withMakeOptions(string $makeOptions): static
     {
@@ -217,32 +232,32 @@ class Preprocessor
         'opcache',
         'curl',
         'bz2',
-        'bcmath',
-        'pcntl',
-        'tokenizer',
+        //'bcmath',
+        //'pcntl',
+        //'tokenizer',
         'mbstring',
-        'zlib',
-        //'zip',
-        'sockets',
+        //'zlib',
+        'zip',
+        //'sockets',
         'mysqlnd',
         //'mysqli',
         'intl',
-        'pdo_mysql',
+        //'pdo_mysql',
         //'pdo_pgsql',
         //'soap',
         'xsl',
-        'gmp',
+        //'gmp',
         //'exif',
-        'sodium',
+        //'sodium',
         'openssl',
         'readline',
         //'gd',
-        'redis',
+        //'redis',
         //'pgsql',
-        'swoole',
-        'yaml',
+        //'swoole',
+        //'yaml',
         //'imagick',
-        'mongodb',
+        //'mongodb',
     ];
 
     protected array $endCallbacks = [];

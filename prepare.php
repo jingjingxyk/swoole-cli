@@ -264,8 +264,15 @@ function install_zip(Preprocessor $p)
             ->withUrl('https://libzip.org/download/libzip-1.9.2.tar.gz')
             //->withUrl('https://libzip.org/download/libzip-1.8.0.tar.gz')
             ->withFile('libzip-1.9.2.tar.gz')
-            ->withConfigure('CPPFLAGS=-I/usr/bzip2/include LDFLAGS=-L/usr/bzip2/lib cmake . -DENABLE_ZSTD=ON -DENABLE_LZMA=ON -DBUILD_SHARED_LIBS=OFF -DOPENSSL_USE_STATIC_LIBS=TRUE  -DENABLE_MBEDTLS=OFF -DENABLE_OPENSSL=ON -DCMAKE_INSTALL_PREFIX=/usr/zip -DBZIP2_LIBRARIES=/usr/bzip2/lib -DBZIP2_INCLUDE_DIR=/usr/bzip2/include -DLIBLZMA_LIBRARIES=/usr/liblzma/lib  -DLIBLZMA_INCLUDE_DIR=/usr/liblzma/include' )
-            ->withMakeOptions('VERBOSE=1')
+            //参考 https://stackoverflow.com/questions/15759373/static-libzip-with-visual-studio-2012
+            -> setConfigureBeforeCleanPackage()
+            ->withConfigureBeforeScript('echo  \'ADD_LIBRARY(zipstatic STATIC ${LIBZIP_SOURCES} ${LIBZIP_EXTRA_FILES} ${LIBZIP_OPTIONAL_FILES} ${LIBZIP_OPSYS_FILES})\'  >> lib/CMakeLists.txt ')
+            ->withConfigure('cmake . -DCMAKE_INSTALL_PREFIX=/usr/zip -DLIBZIP_DO_INSTALL=OFF \
+            -DENABLE_GNUTLS=OFF -DBUILD_SHARED_LIBS=OFF -DOPENSSL_USE_STATIC_LIBS=TRUE  -DENABLE_OPENSSL=ON \
+            -DENABLE_ZSTD=ON -DENABLE_LZMA=ON    -DENABLE_MBEDTLS=OFF \
+            -DBZIP2_LIBRARIES=/usr/bzip2/lib -DBZIP2_INCLUDE_DIR=/usr/bzip2/include ' )
+            //-DLIBLZMA_LIBRARIES=/usr/liblzma/lib  -DLIBLZMA_INCLUDE_DIR=/usr/liblzma/include' )
+            ->withMakeOptions('VERBOSE=1 DESTDIR=/usr/zip/ ')
             ->withPkgName('libzip')
             ->withPkgConfig('/usr/zip/lib/pkgconfig')
             ->withLdflags('-L/usr/zip/lib')
@@ -502,7 +509,7 @@ install_bzip2($p);
 //install_lzma($p);
 //install_zstd($p);
 
-//install_zip($p);
+install_zip($p);
 
 //install_giflib($p);
 //install_libpng($p);
@@ -533,7 +540,8 @@ install_mimalloc($p);
 //参考 https://github.com/docker-library/php/issues/221
 //install_postgresql($p);
 
-$p->setMaxJob(`nproc`); //获取CPU核数，用于 make -j $(nproc)
+//$p->setMaxJob(`nproc`); //获取CPU核数，用于 make -j $(nproc)
+$p->setMaxJob(`nproc 2> /dev/null || sysctl -n hw.ncpu`); // nproc on macos
 
 # 禁用zendOpcache
 $p->setDisableZendOpcache();
