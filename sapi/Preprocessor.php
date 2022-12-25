@@ -228,7 +228,7 @@ class Preprocessor
         //'mysqli',
         'intl',
         'pdo_mysql',
-        'pdo_pgsql',
+        //'pdo_pgsql',
         //'soap',
         'xsl',
         'gmp',

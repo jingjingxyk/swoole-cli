@@ -30,6 +30,7 @@ cd ${__DIR__}
 
 #docker build -t ${IMAGE} -f ./Dockerfile  .  --force-rm=true --no-cache=true --pull=true
 docker build -t ${IMAGE} -f ./Dockerfile-alpine-all-dependencies  . --progress=plain --build-arg PROXY_URL=$PROXY_URL
-# docker push ${IMAGE}
+ docker push ${IMAGE}
+echo ${IMAGE} > build-dev-dependencies-container.txt
 echo ${IMAGE} > swoole-cli-build-dev-2-container.txt
 exit
