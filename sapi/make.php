@@ -39,7 +39,7 @@ make_<?=$item->name?>() {
     <?php endif ;?>
     echo  "<?=$item->configure?>" ;
     <?php if (!empty($item->configure)): ?>
-    <?=$item->configure?> && \
+    <?=$item->configure?> ;
     <?php endif; ?>
     make -j <?=$this->maxJob?>  <?=$item->makeOptions?> && \
     <?php if ($item->beforeInstallScript): ?>
