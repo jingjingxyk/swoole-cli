@@ -25,6 +25,9 @@ if ($p->osType == 'macos') {
     });
 }
 
+# 设置CPU核数 ; 获取CPU核数，用于 make -j $(nproc)
+$p->setMaxJob(`nproc 2> /dev/null || sysctl -n hw.ncpu`); // nproc on macos ；
+
 // ================================================================================================
 // Library
 // ================================================================================================
@@ -530,10 +533,10 @@ install_libyaml($p);
 install_mimalloc($p);
 
 
+
 //参考 https://github.com/docker-library/php/issues/221
 //install_postgresql($p);
 
-$p->setMaxJob(`nproc`); //获取CPU核数，用于 make -j $(nproc)
 
 # 禁用zendOpcache
 $p->setDisableZendOpcache();
