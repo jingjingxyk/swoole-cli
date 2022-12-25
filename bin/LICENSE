@@ -16,7 +16,6 @@ curl: https://github.com/curl/curl/blob/master/COPYING
 libsodium: https://en.wikipedia.org/wiki/ISC_license
 libyaml: https://pyyaml.org/wiki/LibYAML
 mimalloc: https://github.com/microsoft/mimalloc/blob/master/LICENSE
-postgresql: https://www.postgresql.org/about/licence/
 php: https://github.com/php/php-src/blob/master/LICENSE
 php-ext-redis: https://github.com/phpredis/phpredis/blob/develop/COPYING
 php-ext-swoole: https://github.com/swoole/swoole-src/blob/master/LICENSE

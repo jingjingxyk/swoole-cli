@@ -5,16 +5,16 @@ __DIR__=$(
   cd "$(dirname "$0")"
   pwd
 )
-__ROOT__=$(
-  cd ${__DIR__}/../
+__PROJECT__=$(
+  cd ${__DIR__}/../../
   pwd
 )
 
 cd ${__DIR__}
-cd ${__DIR__}/php-versions/php-8-source-code
+cd ${__PROJECT__}/build-tools-scripts/php-versions/php-8-source-code
 
 
-make     EXTRA_LDFLAGS_PROGRAM='-all-static -L/usr/libiconv/lib -L/usr/libxml2/lib -L/usr/sqlite3/lib -L/usr/gmp/lib -L/usr/bzip2/lib -L/usr/openssl/lib64 -L/usr/curl/lib  -L/usr/libxslt/lib -L/usr/oniguruma/lib -L/usr/libsodium/lib' -j  $(nproc)
+make    EXTRA_LDFLAGS_PROGRAM='-all-static   -L/usr/libiconv/lib -L/usr/openssl/lib64 -L/usr/libxml2/lib -L/usr/libxslt/lib -L/usr/gmp/lib -L/usr/zlib/lib -L/usr/bzip2/lib -L/usr/sqlite3/lib -L/usr/oniguruma/lib -L/usr/brotli/lib -L/usr/lib -L/usr/curl/lib -L/usr/libsodium/lib  -L/usr/mimalloc/lib '  -j  $(nproc)
 
 
 make install
