@@ -268,8 +268,8 @@ class Preprocessor
         //'pgsql',
         'swoole',
         'yaml',
-        'imagick',
-        'mongodb',
+        //'imagick',
+        //'mongodb',
     ];
 
     protected array $endCallbacks = [];
