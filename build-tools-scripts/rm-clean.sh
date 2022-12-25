@@ -160,7 +160,7 @@ cd ${__PROJECT__}/
 
 
 cd ${__DIR__}
-sh download-php.sh
+sh download-php-sourcecode.sh
 
 cd ${__DIR__}
 
@@ -171,13 +171,16 @@ git config --global --add safe.directory '*'
 git submodule update --init --recursive
 
 cd ${__DIR__}
-sh init-depend-use-proxy.sh
+sh download-init-depend-use-proxy.sh
 
 cd ${__PROJECT__}/
 sh make.sh sync
 
 test -f ${__PROJECT__}/build-tools-scripts/fpm_main_backup.c &&  cp -f ${__PROJECT__}/build-tools-scripts/fpm_main_backup.c  ${__PROJECT__}/sapi/cli/fpm/fpm_main.c
-sh ${__PROJECT__}/build-tools-scripts/init-depend-use-proxy.sh
+
+cd ${__DIR__}
+sh download-init-depend-use-proxy.sh
+
 chown -R 1000:1000 .
 
 
