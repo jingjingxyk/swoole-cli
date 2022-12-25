@@ -24,7 +24,7 @@ EOF
 VERSION="build-dev-1-alpine-edge-"${TIME}
 IMAGE="docker.io/jingjingxyk/build-swoole-cli:${VERSION}"
 
-
+cd ${__DIR__}
 docker build -t ${IMAGE} -f ./Dockerfile-alpine-dev-1  . --progress=plain
 echo ${IMAGE} > swoole-cli-build-dev-1-container.txt
 # docker push ${IMAGE}

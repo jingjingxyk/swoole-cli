@@ -10,7 +10,6 @@ __PROJECT__=$(
   pwd
 )
 cd ${__DIR__}
-cd ${__PROJECT__}
 
 {
   docker stop swoole-cli-build-dev-1
