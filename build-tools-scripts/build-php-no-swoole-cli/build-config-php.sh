@@ -51,7 +51,6 @@ export PKG_CONFIG_PATH=/usr/openssl/lib64/pkgconfig:/usr/libxml2/lib/pkgconfig:/
     --with-zlib=/usr/zlib/ \
     --enable-sockets \
     --enable-mysqlnd \
-    --enable-intl \
     --with-pdo-mysql=mysqlnd \
     --with-xsl=/usr/libxslt \
     --with-gmp=/usr/gmp \
