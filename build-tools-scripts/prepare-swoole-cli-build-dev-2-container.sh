@@ -14,10 +14,13 @@ cd ${__PROJECT__}
 
 export DOCKER_BUILDKIT=1
 TIME=`date -u '+%Y%m%dT%H%M%SZ'`
+:<<'EOF'
 VERSION="build-dev-2-alpine-edge-"${TIME}
 IMAGE="docker.io/phpswoole/swoole_cli_os:${VERSION}"
+EOF
 
-
+VERSION="build-dev-2-alpine-edge-"${TIME}
+IMAGE="docker.io/jingjingxyk/build-swoole-cli:${VERSION}"
 
 
 docker build -t ${IMAGE} -f ./Dockerfile  . --progress=plain

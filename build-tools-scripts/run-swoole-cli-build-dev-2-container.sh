@@ -20,7 +20,7 @@ cd ${__PROJECT__}
 }
 
 test -f swoole-cli-build-dev-2-container.txt && image=$(cat swoole-cli-build-dev-1-container.txt)
-test -f swoole-cli-build-dev-2-container.txt || image=phpswoole/swoole_cli_os:1.4
+test -f swoole-cli-build-dev-2-container.txt || image=docker.io/jingjingxyk/build-swoole-cli:build-dev-2-alpine-edge-20221225T054827Z
 
 # image=phpswoole/swoole_cli_os:1.4
 

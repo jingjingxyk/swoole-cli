@@ -27,6 +27,6 @@ IMAGE="docker.io/jingjingxyk/build-swoole-cli:${VERSION}"
 
 docker build -t ${IMAGE} -f ./Dockerfile-alpine-dev-1  . --progress=plain
 echo ${IMAGE} > swoole-cli-build-dev-1-container.txt
-docker push ${IMAGE}
+# docker push ${IMAGE}
 
 
