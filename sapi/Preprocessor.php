@@ -268,7 +268,7 @@ class Preprocessor
         //'pgsql',
         'swoole',
         'yaml',
-        //'imagick',
+        'imagick',
         'mongodb',
     ];
 
