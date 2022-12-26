@@ -135,7 +135,7 @@ function install_giflib(Preprocessor $p)
             ->withMakeOptions('all')
             ->withMakeInstallOptions("install")
             ->withLdflags('-L/usr/giflib/lib')
-            ->disableDefaultLdflags()
+            //->disableDefaultLdflags()
             ->disableDefaultPkgConfig()
             //->withPkgConfig('/usr/giflib/lib/pkgconfig') //此目录不存在
             ->withLicense('http://giflib.sourceforge.net/intro.html', Library::LICENSE_SPEC)
@@ -278,7 +278,7 @@ function install_zip(Preprocessor $p)
             //->withUrl('https://libzip.org/download/libzip-1.8.0.tar.gz')
             ->withFile('libzip-1.9.2.tar.gz')
             //参考 https://stackoverflow.com/questions/15759373/static-libzip-with-visual-studio-2012
-            -> setConfigureBeforeCleanPackage()
+            ->withConfigureBeforeCleanPackage()
             ->withConfigureBeforeScript('echo  \'ADD_LIBRARY(zipstatic STATIC ${LIBZIP_SOURCES} ${LIBZIP_EXTRA_FILES} ${LIBZIP_OPTIONAL_FILES} ${LIBZIP_OPSYS_FILES})\'  >> lib/CMakeLists.txt ')
             ->withConfigure('cmake . -DCMAKE_INSTALL_PREFIX=/usr/zip -DLIBZIP_DO_INSTALL=OFF \
             -DENABLE_GNUTLS=OFF -DBUILD_SHARED_LIBS=OFF -DOPENSSL_USE_STATIC_LIBS=TRUE  -DENABLE_OPENSSL=ON \
