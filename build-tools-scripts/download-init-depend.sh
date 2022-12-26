@@ -18,7 +18,7 @@ git submodule update --init --recursive
 
 # SKIP_LIBRARY_DOWNLOAD=1 php prepare.php +mongodb +inotify
 # php prepare.php  +mongodb +inotify
-php prepare.php
+php prepare.php +inotify
 
 chmod a+x ./make.sh
 

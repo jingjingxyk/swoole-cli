@@ -269,7 +269,7 @@ class Preprocessor
         'swoole',
         'yaml',
         //'imagick',
-        //'mongodb',
+        'mongodb',
     ];
 
     protected array $endCallbacks = [];
