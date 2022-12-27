@@ -17,6 +17,6 @@ cd ${__DIR__}/dist/
 
 chown -R 1000:1000 .
 
-test -f ./swoole-cli && chmod a+x ./swoole-cli && ./swoole-cli ./serve.php
+#test -f ./swoole-cli && chmod a+x ./swoole-cli && ./swoole-cli ./serve.php
 test -f ./swoole-cli && chmod a+x ./swoole-cli && ./swoole-cli -S 0.0.0.0:7010 -t .
 

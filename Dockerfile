@@ -13,7 +13,8 @@ RUN apk add --no-cache flex bison re2c pkgconf ca-certificates gnutls-dev
 RUN apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
 RUN apk add --no-cache ncurses-dev ncurses-libs ncurses-static
 RUN apk add --no-cache readline readline-dev readline-static
-
+RUN apk add --no-cache libidn2 libidn2-dev  libidn2-static
+RUN apk add --no-cache nghttp2-dev nghttp2-libs nghttp2-static
 
 ENV CC=clang
 ENV CXX=clang++

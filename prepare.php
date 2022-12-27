@@ -230,9 +230,11 @@ function install_bzip2(Preprocessor $p)
     $p->addLibrary(
         (new Library('bzip2', '/usr/bzip2'))
             ->withUrl('https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz')
-            ->withMakeOptions('PREFIX=/usr/bzip2')
-            ->withMakeInstallOptions('install PREFIX=/usr/bzip2')
+            ->withConfigureBeforeCleanPackage()
+            ->withConfigureBeforeScript('sed -i "s@PREFIX=/usr/local@PREFIX=/usr/bzip2@" Makefile')
+            ->withMakeOptions('all')
             ->withLdflags('-L/usr/bzip2/lib')
+            ->disableDefaultPkgConfig()
             ->withHomePage('https://www.sourceware.org/bzip2/')
             ->withLicense('https://www.sourceware.org/bzip2/', Library::LICENSE_BSD)
     );
@@ -278,14 +280,30 @@ function install_zip(Preprocessor $p)
             //->withUrl('https://libzip.org/download/libzip-1.8.0.tar.gz')
             ->withFile('libzip-1.9.2.tar.gz')
             //参考 https://stackoverflow.com/questions/15759373/static-libzip-with-visual-studio-2012
+
             ->withConfigureBeforeCleanPackage()
-            ->withConfigureBeforeScript('echo  \'ADD_LIBRARY(zipstatic STATIC ${LIBZIP_SOURCES} ${LIBZIP_EXTRA_FILES} ${LIBZIP_OPTIONAL_FILES} ${LIBZIP_OPSYS_FILES})\'  >> lib/CMakeLists.txt ')
-            ->withConfigure('cmake . -DCMAKE_INSTALL_PREFIX=/usr/zip -DLIBZIP_DO_INSTALL=OFF \
-            -DENABLE_GNUTLS=OFF -DBUILD_SHARED_LIBS=OFF -DOPENSSL_USE_STATIC_LIBS=TRUE  -DENABLE_OPENSSL=ON \
-            -DENABLE_ZSTD=ON -DENABLE_LZMA=ON    -DENABLE_MBEDTLS=OFF \
-            -DBZIP2_LIBRARIES=/usr/bzip2/lib -DBZIP2_INCLUDE_DIR=/usr/bzip2/include ' )
+
+            //->withConfigureBeforeScript('echo  \'ADD_LIBRARY(zipstatic STATIC ${LIBZIP_SOURCES} ${LIBZIP_EXTRA_FILES} ${LIBZIP_OPTIONAL_FILES} ${LIBZIP_OPSYS_FILES})\'  >> lib/CMakeLists.txt ')
+            ->withConfigure('cmake . -DCMAKE_INSTALL_PREFIX=/usr/zip  \
+            -DLIBZIP_DO_INSTALL=TRUE \
+            -DBUILD_SHARED_LIBS=FALSE \
+            -DENABLE_GNUTLS=OFF  \
+            -DENABLE_MBEDTLS=OFF \
+            -DENABLE_OPENSSL=ON \
+            -DOPENSSL_USE_STATIC_LIBS=TRUE \
+            -DOPENSSL_LIBRARIES=/usr/openssl/lib64 -DOPENSSL_INCLUDE_DIR=/usr/openssl/include \
+            -DZLIB_LIBRARIES=/usr/zlib/lib -DZLIB_INCLUDE_DIR=/usr/zlib/include \
+            -DENABLE_BZIP2=ON \
+            -DBZIP2_LIBRARIES=/usr/bzip2/lib -DBZIP2_INCLUDE_DIR=/usr/bzip2/include \
+            -DENABLE_LZMA=ON  \
+            -DLIBLZMA_LIBRARY=/usr/liblzma/lib -DLIBLZMA_INCLUDE_DIR=/usr/liblzma//include \
+            -DLIBLZMA_HAS_AUTO_DECODER=TRUE -DLIBLZMA_HAS_EASY_ENCODER=TRUE  -DLIBLZMA_HAS_LZMA_PRESET=TRUE \
+            -DENABLE_ZSTD=ON \
+            -DZstd_LIBRARY=/usr/zstd/lib -DZstd_INCLUDE_DIR=/usr/zstd/include \
+            ' )
             //-DLIBLZMA_LIBRARIES=/usr/liblzma/lib  -DLIBLZMA_INCLUDE_DIR=/usr/liblzma/include' )
-            ->withMakeOptions('VERBOSE=1 DESTDIR=/usr/zip/ ')
+            ->withMakeOptions('VERBOSE=1 all ')
+            ->withMakeInstallOptions("install PREFIX=/usr/zip")
             ->withPkgName('libzip')
             ->withPkgConfig('/usr/zip/lib/pkgconfig')
             ->withLdflags('-L/usr/zip/lib')
@@ -315,7 +333,9 @@ function install_oniguruma(Preprocessor $p)
             ->withUrl('https://codeload.github.com/kkos/oniguruma/tar.gz/refs/tags/v6.9.7')
             ->withConfigure('./autogen.sh && ./configure --prefix=/usr/oniguruma --enable-static --disable-shared')
             ->withPkgConfig('/usr/oniguruma/lib/pkgconfig')
+            //->disableDefaultPkgConfig()
             ->withLdflags('-L/usr/oniguruma/lib')
+            //->disableDefaultLdflags()
             ->withFile('oniguruma-6.9.7.tar.gz')
             ->withLicense('https://github.com/kkos/oniguruma/blob/master/COPYING', Library::LICENSE_SPEC)
     );
@@ -427,6 +447,7 @@ function install_brotli(Preprocessor $p)
         (new Library('brotli', '/usr/brotli'))
             ->withUrl('https://github.com/google/brotli/archive/refs/tags/v1.0.9.tar.gz')
             ->withFile('brotli-1.0.9.tar.gz')
+            ->withConfigureBeforeCleanPackage()
             ->withConfigure("cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX=/usr/brotli .")
             ->withPkgConfig('/usr/brotli/lib/pkgconfig')
             ->withLdflags('-L/usr/brotli/lib')
@@ -434,9 +455,9 @@ function install_brotli(Preprocessor $p)
                 implode(PHP_EOL, [
                     'rm -rf /usr/brotli/lib/*.so.*',
                     'rm -rf /usr/brotli/lib/*.so',
-                    'mv /usr/brotli/lib/libbrotlicommon-static.a /usr/brotli/lib/libbrotli.a',
-                    'mv /usr/brotli/lib/libbrotlienc-static.a /usr/brotli/lib/libbrotlienc.a',
-                    'mv /usr/brotli/lib/libbrotlidec-static.a /usr/brotli/lib/libbrotlidec.a',
+                    'cp -f /usr/brotli/lib/libbrotlicommon-static.a /usr/brotli/lib/libbrotli.a',
+                    'cp -f /usr/brotli/lib/libbrotlienc-static.a /usr/brotli/lib/libbrotlienc.a',
+                    'cp -f /usr/brotli/lib/libbrotlidec-static.a /usr/brotli/lib/libbrotlidec.a',
                 ]))
             ->withPkgName('libbrotlicommon libbrotlidec libbrotlienc')
             ->withLicense('https://github.com/google/brotli/blob/master/LICENSE', Library::LICENSE_MIT)
@@ -450,6 +471,7 @@ function install_curl(Preprocessor $p)
         (new Library('curl', '/usr/curl'))
             //->withUrl('https://curl.se/download/curl-7.80.0.tar.gz')
             ->withUrl('https://curl.se/download/curl-7.87.0.tar.gz')
+            ->withConfigureBeforeCleanPackage()
             ->withConfigure(
                 "autoreconf -fi && ./configure --prefix=/usr/curl --enable-static --disable-shared --with-openssl=/usr/openssl " .
                 "--without-librtmp --without-brotli --without-libidn2 --disable-ldap --disable-rtsp --without-zstd --without-nghttp2 --without-nghttp3"

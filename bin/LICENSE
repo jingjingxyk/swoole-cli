@@ -10,6 +10,7 @@ zlib: https://zlib.net/zlib_license.html
 bzip2: https://www.sourceware.org/bzip2/
 lzma: https://git.tukaani.org/?p=xz.git;a=blob;f=COPYING
 zstd: https://github.com/facebook/zstd/blob/dev/COPYING
+zip: https://libzip.org/license/
 giflib: http://giflib.sourceforge.net/intro.html
 libpng: http://www.libpng.org/pub/png/src/libpng-LICENSE.txt
 libjpeg: https://github.com/libjpeg-turbo/libjpeg-turbo/blob/main/LICENSE.md
@@ -28,3 +29,4 @@ php: https://github.com/php/php-src/blob/master/LICENSE
 php-ext-redis: https://github.com/phpredis/phpredis/blob/develop/COPYING
 php-ext-swoole: https://github.com/swoole/swoole-src/blob/master/LICENSE
 php-ext-yaml: https://github.com/php/pecl-file_formats-yaml/blob/php7/LICENSE
+php-ext-imagick: https://github.com/Imagick/imagick/blob/master/LICENSE

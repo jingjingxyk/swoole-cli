@@ -77,6 +77,19 @@ config_php() {
     test -f main/main.c.save &&  cp -f main/main.c.save main/main.c ;
 <?php endif; ?>
      test -f ./configure && rm ./configure ;
+
+     export FREETYPE2_CFLAGS=$(pkg-config --cflags freetype2) ;
+     export FREETYPE2_LIBS=$(pkg-config --libs freetype2) ;
+
+     export LIBSODIUM_CFLAGS=$(pkg-config --cflags libsodium) ;
+     export LIBSODIUM_LIBS=$(pkg-config --libs libsodium) ;
+
+     export XSL_CFLAGS=$(pkg-config --cflags libxslt) ;
+     export XSL_LIBS=$(pkg-config --libs libxslt) ;
+
+     export ONIG_CFLAGS=$(pkg-config --cflags oniguruma) ;
+     export ONIG_LIBS=$(pkg-config --libs oniguruma) ;
+
     ./buildconf --force
 
 <?php if ($this->osType !== 'macos') : ?>

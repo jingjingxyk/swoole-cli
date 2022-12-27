@@ -1,4 +1,45 @@
 
+```shell
+
+sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories && \
+apk update
+
+apk add icu icu-dev icu-libs icu-data-full icu-static
+apk add ncurses-dev ncurses-libs ncurses-static
+apk add readline readline-dev readline-static
+
+apk add libidn2 libidn2-dev  libidn2-static
+apk add nghttp2-dev nghttp2-libs nghttp2-static
+apk add brotli-dev brotli-libs brotli-static
+
+apk add oniguruma oniguruma-dev
+
+
+
+sh make.sh cares
+
+
+
+```
+
+```shell
+
+pkg-config --list-all
+pkg-config --list-all --static
+pkg-config --libs libsodium --static
+
+pkg-config --define-prefix --static --libs libcurl
+
+pkg-config --cflags --libs libzip
+pkg-config --cflags --libs libsodium
+
+pkg-config --cflags  libzip
+pkg-config --libs  libzip
+
+
+
+```
+
 
 ```shell
 alpine  php postgresql
@@ -15,7 +56,7 @@ https://www.gnu.org/software/
 ```shell
 
 apt-get install -y libpq-dev
-apt-get install -y postgresql-server-dev-14
+
 
 postgresql-client-common postgresql-common
 
@@ -81,28 +122,19 @@ apk add libzip-dev
 
 
 
-sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories && \
-apk update
-
-apk add libbson libbson-dev libbson-static
 
 
-apk add bzip2 bzip2-dev bzip2-static
-add postgresql15 postgresql15-dev postgresql15-client
+
+
 
 add pcre2-dev re2c libbz2
 apk add c-ares c-ares-dev
 
 apk add libzip libzip-dev libzip-tools
-
-
-
-apk add icu icu-dev icu-libs icu-data-full icu-static
-apk add ncurses-dev ncurses-libs ncurses-static
-apk add readline readline-dev readline-static
+apk add bzip2 bzip2-dev bzip2-static
 
 apk --no-cache add postgresql-libs libpq-dev postgresql
-
+apk add libbson libbson-dev libbson-static
 
 
 
@@ -151,6 +183,10 @@ pkg-config --cflags --libs zlib liblzma liblzma
 
 pkg-config --cflags --libs ncurses readline
 pkg-config --libs  ncurses readline
+pkg-config --cflags --libs  freetype2
+pkg-config --cflags --libs  libbrotlidec
+pkg-config --cflags --libs  oniguruma
+pkg-config --cflags --libs  libsodium
 
 
 

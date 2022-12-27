@@ -247,13 +247,13 @@ class Preprocessor
         'bcmath',
         'pcntl',
         'tokenizer',
-        'mbstring',
+        'mbstring',  //需要 oniguruma
         'zlib',
         //'zip',
         'sockets',
         'mysqlnd',
         //'mysqli',
-        'intl',
+        'intl',  //需要 ICU
         'pdo_mysql',
         //'pdo_pgsql',
         //'soap',
@@ -263,13 +263,13 @@ class Preprocessor
         'sodium',
         'openssl',
         'readline',
-        'gd',
+        'gd', //需要freetype,  freetype 需要 libbrotlidec
         'redis',
         //'pgsql',
         'swoole',
         'yaml',
         'imagick',
-        'mongodb',
+        'mongodb', //需要openssl zlib
     ];
 
     protected array $endCallbacks = [];
