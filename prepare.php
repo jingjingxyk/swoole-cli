@@ -401,8 +401,8 @@ function install_readline(Preprocessor $p)
             ->disableDefaultLdflags()
             ->withScriptAfterInstall('
                 export PKG_CONFIG_PATH=$ORIGIN_PKG_CONFIG_PATH ;
-                unset $CFLAGS ;
-                unset $LDFLAGS ;
+                unset CFLAGS ;
+                unset LDFLAGS ;
             ')
             ->withLicense('http://www.gnu.org/licenses/gpl.html', Library::LICENSE_GPL)
             ->withHomePage('https://tiswww.case.edu/php/chet/readline/rltop.html')
@@ -502,7 +502,7 @@ function install_mimalloc(Preprocessor $p)
             ->withScriptAfterInstall('
                 export PKG_CONFIG_PATH=/usr/mimalloc/lib/pkgconfig ;
                 export EXTRA_LIBS=$(pkg-config --libs mimalloc) ;
-                unset $EXTRA_LIBS ;
+                unset  EXTRA_LIBS ;
                 export PKG_CONFIG_PATH=$ORIGIN_PKG_CONFIG_PATH ;
             ')
     );
