@@ -4,11 +4,14 @@
 sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories && \
 apk update
 
-apk add icu icu-dev icu-libs icu-data-full icu-static
-apk add ncurses-dev ncurses-libs ncurses-static
-apk add readline readline-dev readline-static
-# zip 依赖 bizp2
-apk add bzip2 bzip2-dev bzip2-static
+apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
+apk add --no-cache  ncurses-dev ncurses-libs ncurses-static
+apk add --no-cache  readline readline-dev readline-static
+apk add --no-cache  bzip2 bzip2-dev bzip2-static
+apk add --no-cache  zstd zstd-dev zstd-libs
+apk add --no-cache  xz xz-dev xz-libs
+apk add libidn2 libidn2-dev  libidn2-static
+apk add nghttp2-dev nghttp2-libs nghttp2-static
 
 sh make.sh zip
 sh make.sh cares
