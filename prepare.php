@@ -316,12 +316,6 @@ function install_cares(Preprocessor $p)
     $p->addLibrary(
         (new Library('cares'))
             ->withUrl('https://c-ares.org/download/c-ares-1.18.1.tar.gz')
-            /*
-            ->withConfigure('./configure --prefix=/usr/cares --enable-static --disable-shared')
-            ->withPkgName('libcares')
-            ->withPkgConfig('/usr/cares/lib/pkgconfig')
-            ->withLdflags('-L/usr/cares/lib')
-            */
             ->withConfigure('./configure --prefix=/usr/ --enable-static --disable-shared')
             ->withPkgName('libcares')
             ->disableDefaultPkgConfig()
@@ -405,6 +399,11 @@ function install_readline(Preprocessor $p)
             ->disableDefaultPkgConfig()
             //->withLdflags('-L/usr/readline/lib')
             ->disableDefaultLdflags()
+            ->withScriptAfterInstall('
+                export PKG_CONFIG_PATH=$ORIGIN_PKG_CONFIG_PATH ;
+                unset $CFLAGS；
+                unset $LDFLAGS
+            ')
             ->withLicense('http://www.gnu.org/licenses/gpl.html', Library::LICENSE_GPL)
             ->withHomePage('https://tiswww.case.edu/php/chet/readline/rltop.html')
 
@@ -470,9 +469,15 @@ function install_curl(Preprocessor $p)
             //->withUrl('https://curl.se/download/curl-7.80.0.tar.gz')
             ->withUrl('https://curl.se/download/curl-7.87.0.tar.gz')
             ->withConfigureBeforeCleanPackage()
+            ->withConfigureBeforeScript('
+                export PKG_CONFIG_PATH=/usr/lib/pkgconfig:$PKG_CONFIG_PATH ;
+            ')
             ->withConfigure(
                 "autoreconf -fi && ./configure --prefix=/usr/curl --enable-static --disable-shared --with-openssl=/usr/openssl " .
-                "--without-librtmp --without-brotli --without-libidn2 --disable-ldap --disable-rtsp --without-zstd --without-nghttp2 --without-nghttp3"
+                "--without-librtmp --with-brotli --with-libidn2  --with-zstd --disable-ldap --disable-rtsp  --with-nghttp2 --without-nghttp3"
+            )
+            ->withScriptAfterInstall(
+                'export PKG_CONFIG_PATH=$ORIGIN_PKG_CONFIG_PATH ;'
             )
             ->withPkgName('libcurl')
             ->withPkgConfig('/usr/curl/lib/pkgconfig')
@@ -494,10 +499,12 @@ function install_mimalloc(Preprocessor $p)
             ->withLdflags('-L/usr/mimalloc/lib')
             ->withLicense('https://github.com/microsoft/mimalloc/blob/master/LICENSE', Library::LICENSE_MIT)
             ->withHomePage('https://microsoft.github.io/mimalloc/')
-            ->withScriptAfterInstall(implode(PHP_EOL, [
-                'export PKG_CONFIG_PATH=/usr/mimalloc/lib/pkgconfig',
-                'export EXTRA_LIBS=$(pkg-config --libs mimalloc)'
-            ]))
+            ->withScriptAfterInstall('
+                export PKG_CONFIG_PATH=/usr/mimalloc/lib/pkgconfig ;
+                export EXTRA_LIBS=$(pkg-config --libs mimalloc) ;
+                unset $EXTRA_LIBS ;
+                export PKG_CONFIG_PATH=$ORIGIN_PKG_CONFIG_PATH ;
+            ')
     );
 }
 
@@ -541,7 +548,7 @@ install_gmp($p);
 install_zlib($p);
 install_bzip2($p);
 
-install_zip($p); //以来系统提供的bzip2
+install_zip($p); //上一步虽然安装里bizp2，但是仍然需要系统提供的bzip2
 
 install_giflib($p);
 install_libpng($p);

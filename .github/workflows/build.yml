@@ -33,6 +33,7 @@ jobs:
           docker exec -i swoole-cli-build-dev-1 sh  ./build-tools-scripts/download-init-depend.sh
           bash  build-tools-scripts/run-swoole-cli-build-dev-2-container.sh
           docker exec -i swoole-cli-build-dev-2 sh ./make.sh cares
+          docker exec -i swoole-cli-build-dev-2 sh ./make.sh zip
           docker exec -i swoole-cli-build-dev-2 sh ./make.sh config
           docker exec -i swoole-cli-build-dev-2 sh ./make.sh build
           docker exec -i swoole-cli-build-dev-2 sh ./build-tools-scripts/archive-dist.sh

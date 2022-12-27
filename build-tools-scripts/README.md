@@ -12,14 +12,12 @@ apk add --no-cache  zstd zstd-dev zstd-libs
 apk add --no-cache  xz xz-dev xz-libs
 apk add libidn2 libidn2-dev  libidn2-static
 apk add nghttp2-dev nghttp2-libs nghttp2-static
-
+apk add brotli-dev brotli-libs brotli-static
 sh make.sh zip
 sh make.sh cares
 
 
 
-apk add libidn2 libidn2-dev  libidn2-static
-apk add nghttp2-dev nghttp2-libs nghttp2-static
 
 
 
