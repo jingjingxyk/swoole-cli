@@ -146,7 +146,8 @@ apk add bzip2 bzip2-dev bzip2-static
 
 apk --no-cache add postgresql-libs libpq-dev postgresql
 apk add libbson libbson-dev libbson-static
-
+apk add zstd zstd-dev zstd-libs
+apk add xz xz-dev xz-libs
 
 
 apk add brotli-dev brotli-libs brotli-static

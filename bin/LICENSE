@@ -7,6 +7,7 @@ libxml2: http://www.opensource.org/licenses/mit-license.html
 libxslt: http://www.opensource.org/licenses/mit-license.html
 gmp: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 zlib: https://zlib.net/zlib_license.html
+bzip2: https://www.sourceware.org/bzip2/
 zip: https://libzip.org/license/
 giflib: http://giflib.sourceforge.net/intro.html
 libpng: http://www.libpng.org/pub/png/src/libpng-LICENSE.txt
