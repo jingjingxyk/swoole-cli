@@ -16,8 +16,8 @@ apk add brotli-dev brotli-libs brotli-static
 sh make.sh zip
 sh make.sh cares
 
-
-
+# 为 postgresql 准备
+apk add libxml2-dev libxml2-static
 
 
 

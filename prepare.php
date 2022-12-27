@@ -516,22 +516,29 @@ function install_postgresql(Preprocessor $p)
     $p->addLibrary(
         (new Library('postgresql'))
             ->withUrl('https://ftp.postgresql.org/pub/source/v15.1/postgresql-15.1.tar.gz')
-            //->withConfigure('./configure --prefix=/usr/pgsql LDFLAGS="-static" --with-ssl=openssl  --with-readline --disable-rpath --with-icu ICU_CFLAGS="-I/usr/include" ICU_LIBS="-L/usr/lib -licui18n -licuuc -licudata" --with-includes=/usr/openssl/include/openssl/:/usr/readline/include:/usr/include  --with-libraries=/usr/openssl/lib:/usr/readline/lib:/usr/lib')
-            //--with-libxml XML2_CFLAGS='/usr/libxml2/include/' XML2_LIBS='/usr/libxml2/lib' \
+            ->withConfigureBeforeScript('
+                export PKG_CONFIG_PATH="/usr/lib/pkgconfig:$PKG_CONFIG_PATH"
+            ')
+            //ICU_CFLAGS=\"$(pkg-config --cflags  icu-uc icu-io icu-i18n)\" ICU_LIBS=\"$(pkg-config --libs  icu-uc icu-io icu-i18n)\" \
+            // XML2_CFLAGS=\"$(pkg-config --cflags  libxml-2.0 )\" XML2_LIBS=\"$(pkg-config -libs  libxml-2.0 )\" \
             ->withConfigure("./configure --prefix=/usr/pgsql \
             --with-ssl=openssl  \
             --with-readline \
-             --with-icu ICU_CFLAGS='-I/usr/lib/include' ICU_LIBS='-L/usr/lib -licuuc -licudata -licui18n -licuio' \
+            --with-icu \
             --without-ldap \
-            --with-libxml XML2_CFLAGS='-I/usr/libxml2/include/libxml2 -I/usr/libiconv/include' XML2_LIBS='-L/usr/libxml2/lib -lxml2' \
+            --with-libxml  \
             --with-libxslt \
-            --with-includes='/usr/openssl/include/:/usr/zlib/include:/usr/libxml2/include/libxml2:/usr/libxslt/include:/usr/libiconv/include:/usr/include' \
-            --with-libraries='/usr/openssl/lib64:/usr/zlib/lib:/usr/libxml2/lib:/usr/libxslt/lib:L/usr/libiconv/lib:/usr/lib:/lib' \
-            LDFLAGS='-static -lxslt -lz -liconv -lm -lxml2 ' "
+            --with-includes='/usr/openssl/include/:/usr/libxslt/include:/usr/include' \
+            --with-libraries='/usr/openssl/lib64:/usr/libxslt/lib/:/usr/lib' \
+            "
             )
-            ->withPkgConfig('/usr/pgsql/lib/pkgconfig')
-            ->withLdflags('-L/usr/pgsql/lib/')
-
+            //->withPkgConfig('/usr/pgsql/lib/pkgconfig')
+            ->disableDefaultPkgConfig()
+            //->withLdflags('-L/usr/pgsql/lib/')
+            ->disableDefaultLdflags()
+            ->withScriptAfterInstall('
+                export PKG_CONFIG_PATH=$ORIGIN_PKG_CONFIG_PATH ;
+            ')
             //->withMakeOptions('-C src/interfaces')
             //->withMakeInstallOptions('-C src/interfaces') //make -C src/interfaces install
             ->withLicense('https://www.postgresql.org/about/licence/', Library::LICENSE_SPEC)
