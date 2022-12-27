@@ -7,16 +7,27 @@ apk update
 apk add icu icu-dev icu-libs icu-data-full icu-static
 apk add ncurses-dev ncurses-libs ncurses-static
 apk add readline readline-dev readline-static
+# zip 依赖 bizp2
+apk add bzip2 bzip2-dev bzip2-static
+
+sh make.sh zip
+sh make.sh cares
+
+
 
 apk add libidn2 libidn2-dev  libidn2-static
 apk add nghttp2-dev nghttp2-libs nghttp2-static
-apk add brotli-dev brotli-libs brotli-static
-
-apk add oniguruma oniguruma-dev
 
 
 
-sh make.sh cares
+pkg-config --cflags ncursesw ncurses
+pkg-config  --libs ncursesw ncurses
+
+pkg-config --cflags  readline
+pkg-config  --libs readline
+
+
+
 
 
 
@@ -138,7 +149,8 @@ apk add libbson libbson-dev libbson-static
 
 
 
-
+apk add brotli-dev brotli-libs brotli-static
+apk add oniguruma oniguruma-dev
 
 
 

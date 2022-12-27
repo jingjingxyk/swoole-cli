@@ -241,35 +241,6 @@ function install_bzip2(Preprocessor $p)
 }
 
 
-function install_lzma(Preprocessor $p)
-{
-    $p->addLibrary(
-        (new Library('lzma'))
-            ->withUrl('https://tukaani.org/xz/xz-5.2.9.tar.gz')
-            ->withFile('xz-5.2.9.tar.gz')
-            ->withConfigure('./configure --prefix=/usr/liblzma/ --enable-static --disable-shared --disable-doc')
-            ->withPkgName('liblzma')
-            ->withPkgConfig('/usr/liblzma/lib/pkgconfig')
-            ->withLdflags('-L/usr/liblzma/lib')
-            ->withHomePage('https://tukaani.org/xz/')
-            ->withLicense('https://git.tukaani.org/?p=xz.git;a=blob;f=COPYING', Library::LICENSE_LGPL)
-    );
-}
-function install_zstd(Preprocessor $p)
-{
-    $p->addLibrary(
-        (new Library('zstd'))
-            ->withUrl('https://github.com/facebook/zstd/releases/download/v1.5.2/zstd-1.5.2.tar.gz')
-            ->withFile('zstd-1.5.2.tar.gz')
-            ->withMakeOptions('lib')
-            ->withMakeInstallOptions('install PREFIX=/usr/zstd/')
-            ->withPkgName('libzstd.pc')
-            ->withPkgConfig('/usr/zstd/lib/pkgconfig')
-            ->withLdflags('-L/usr/zstd/lib')
-            ->withHomePage('https://github.com/facebook/zstd')
-            ->withLicense('https://github.com/facebook/zstd/blob/dev/COPYING', Library::LICENSE_GPL)
-    );
-}
 
 // MUST be in the /usr directory
 function install_zip(Preprocessor $p)
@@ -280,28 +251,22 @@ function install_zip(Preprocessor $p)
             //->withUrl('https://libzip.org/download/libzip-1.8.0.tar.gz')
             ->withFile('libzip-1.9.2.tar.gz')
             //参考 https://stackoverflow.com/questions/15759373/static-libzip-with-visual-studio-2012
-
+            //->withConfigureBeforeScript('echo  \'ADD_LIBRARY(zipstatic STATIC ${LIBZIP_SOURCES} ${LIBZIP_EXTRA_FILES} ${LIBZIP_OPTIONAL_FILES} ${LIBZIP_OPSYS_FILES})\'  >> lib/CMakeLists.txt ')
             ->withConfigureBeforeCleanPackage()
 
-            //->withConfigureBeforeScript('echo  \'ADD_LIBRARY(zipstatic STATIC ${LIBZIP_SOURCES} ${LIBZIP_EXTRA_FILES} ${LIBZIP_OPTIONAL_FILES} ${LIBZIP_OPSYS_FILES})\'  >> lib/CMakeLists.txt ')
             ->withConfigure('cmake . -DCMAKE_INSTALL_PREFIX=/usr/zip  \
-            -DLIBZIP_DO_INSTALL=TRUE \
-            -DBUILD_SHARED_LIBS=FALSE \
-            -DENABLE_GNUTLS=OFF  \
-            -DENABLE_MBEDTLS=OFF \
-            -DENABLE_OPENSSL=ON \
-            -DOPENSSL_USE_STATIC_LIBS=TRUE \
-            -DOPENSSL_LIBRARIES=/usr/openssl/lib64 -DOPENSSL_INCLUDE_DIR=/usr/openssl/include \
-            -DZLIB_LIBRARIES=/usr/zlib/lib -DZLIB_INCLUDE_DIR=/usr/zlib/include \
-            -DENABLE_BZIP2=ON \
-            -DBZIP2_LIBRARIES=/usr/bzip2/lib -DBZIP2_INCLUDE_DIR=/usr/bzip2/include \
-            -DENABLE_LZMA=ON  \
-            -DLIBLZMA_LIBRARY=/usr/liblzma/lib -DLIBLZMA_INCLUDE_DIR=/usr/liblzma//include \
-            -DLIBLZMA_HAS_AUTO_DECODER=TRUE -DLIBLZMA_HAS_EASY_ENCODER=TRUE  -DLIBLZMA_HAS_LZMA_PRESET=TRUE \
-            -DENABLE_ZSTD=ON \
-            -DZstd_LIBRARY=/usr/zstd/lib -DZstd_INCLUDE_DIR=/usr/zstd/include \
-            ' )
-            //-DLIBLZMA_LIBRARIES=/usr/liblzma/lib  -DLIBLZMA_INCLUDE_DIR=/usr/liblzma/include' )
+                -DLIBZIP_DO_INSTALL=TRUE \
+                -DBUILD_SHARED_LIBS=FALSE \
+                -DENABLE_GNUTLS=OFF  \
+                -DENABLE_MBEDTLS=OFF \
+                -DENABLE_OPENSSL=ON \
+                -DOPENSSL_USE_STATIC_LIBS=TRUE \
+                -DOPENSSL_LIBRARIES=/usr/openssl/lib64 -DOPENSSL_INCLUDE_DIR=/usr/openssl/include \
+                -DZLIB_LIBRARIES=/usr/zlib/lib -DZLIB_INCLUDE_DIR=/usr/zlib/include \
+                -DENABLE_LZMA=ON  \
+                -DENABLE_ZSTD=ON \
+                -DENABLE_BZIP2=ON \
+                ' )
             ->withMakeOptions('VERBOSE=1 all ')
             ->withMakeInstallOptions("install PREFIX=/usr/zip")
             ->withPkgName('libzip')
@@ -316,11 +281,14 @@ function install_icu(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('icu'))
-            ->withUrl('https://github.com/unicode-org/icu/releases/download/release-60-3/icu4c-60_3-src.tgz')
+            //->withUrl('https://github.com/unicode-org/icu/releases/download/release-60-3/icu4c-60_3-src.tgz')
+            ->withUrl('https://github.com/unicode-org/icu/releases/download/release-72-1/icu4c-72_1-src.tgz')
             ->withConfigure('source/runConfigureICU Linux --prefix=/usr/icu --enable-static --disable-shared')
             ->withPkgName('icu-i18n')
-            ->withPkgConfig('/usr/icu/lib/pkgconfig')
-            ->withLdflags('-L/usr/icu/lib')
+            //->withPkgConfig('/usr/icu/lib/pkgconfig')
+            ->disableDefaultPkgConfig()
+            //->withLdflags('-L/usr/icu/lib')
+            ->disableDefaultLdflags()
             ->withHomePage('https://icu.unicode.org/')
             ->withLicense('https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE', Library::LICENSE_SPEC)
     );
@@ -388,9 +356,30 @@ function install_ncurses(Preprocessor $p)
             //->withUrl('https://invisible-island.net/datafiles/release/ncurses.tar.gz')
             //->withFile('ncurses.tar.gz')
             ->withFile('ncurses-6.3.tar.gz')
-            ->withConfigure('mkdir -p /usr/ncurses/lib/pkgconfig && ./configure --prefix=/usr/ncurses  --enable-widec --enable-static --disable-shared  --enable-pc-files --with-pkg-config=/usr/ncurses/lib/pkgconfig --with-pkg-config-libdir=/usr/ncurses/lib/pkgconfig') //
-            ->withPkgConfig('/usr/ncurses/lib/pkgconfig')
-            ->withLdflags('-L/usr/ncurses/lib')
+            ->withConfigureBeforeScript('
+                test -d /usr/ncurses && rm -rf /usr/ncurses ;
+                test -d /usr/ncurses/ && rm -rf /usr/ncurses/ ;
+                mkdir -p /usr/ncurses/lib/pkgconfig ;
+            ')
+            ->withConfigure('./configure --prefix=/usr/ncurses  --enable-static --disable-shared --enable-widec --enable-pc-files --with-pkg-config=/usr/ncurses/lib/pkgconfig --with-pkg-config-libdir=/usr/ncurses/lib/pkgconfig  ')
+            ->withScriptAfterInstall("
+                ln -s /usr/ncurses/lib/pkgconfig/formw.pc /usr/ncurses/lib/pkgconfig/form.pc ;
+                ln -s /usr/ncurses/lib/pkgconfig/menuw.pc /usr/ncurses/lib/pkgconfig/menu.pc ;
+                ln -s /usr/ncurses/lib/pkgconfig/ncurses++w.pc /usr/ncurses/lib/pkgconfig/ncurses++.pc ;
+                ln -s /usr/ncurses/lib/pkgconfig/ncursesw.pc /usr/ncurses/lib/pkgconfig/ncurses.pc ;
+                ln -s /usr/ncurses/lib/pkgconfig/panelw.pc /usr/ncurses/lib/pkgconfig/panel.pc ;
+
+                ln -s /usr/ncurses/lib/libformw.a /usr/ncurses/lib/libform.a ;
+                ln -s /usr/ncurses/lib/libmenuw.a /usr/ncurses/lib/libmenu.a ;
+                ln -s /usr/ncurses/lib/libncurses++w.a /usr/ncurses/lib/libncurses++.a ;
+                ln -s /usr/ncurses/lib/libncursesw.a /usr/ncurses/lib/libncurses.a ;
+                ln -s /usr/ncurses/lib/libpanelw.a /usr/ncurses/lib/libpanel.a ;
+
+                ")
+            //->withPkgConfig('/usr/ncurses/lib/pkgconfig')
+            ->disableDefaultPkgConfig()
+            //->withLdflags('-L/usr/ncurses/lib')
+            ->disableDefaultLdflags()
             //->withLicense('https://github.com/projectceladon/libncurses/blob/master/README', Library::LICENSE_MIT)
             ->withLicense('https://invisible-island.net/ncurses/ncurses-license.html', Library::LICENSE_GPL)
             //->withHomePage('https://github.com/projectceladon/libncurses')
@@ -402,11 +391,20 @@ function install_readline(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('readline', '/usr/readline'))
-            ->withUrl('ftp://ftp.cwru.edu/pub/bash/readline-8.2.tar.gz')
-            ->withConfigure('env CPPFLAGS=-I/usr/ncurses/include LDFLAGS=-L/usr/ncurses/lib ./configure --prefix=/usr/readline --enable-static --disable-shared --with-curses')
+            ->withUrl('https://ftp.gnu.org/gnu/readline/readline-8.2.tar.gz')
+            ->withConfigureBeforeCleanPackage()
+            ->withConfigureBeforeScript('
+                 export PKG_CONFIG_PATH="/usr/ncurses/lib/pkgconfig:/usr/readline/lib/pkgconfig:$PKG_CONFIG_PATH"
+                 export CFLAGS=$(pkg-config --cflags  ncursesw) ;
+                 export LDFLAGS=$(pkg-config --libs ncursesw) ;
+                 test -d /usr/readline && rm -rf /usr/readline ;
+            ')
+            ->withConfigure('./configure --prefix=/usr/readline --enable-static --disable-shared --with-curses')
             ->withPkgName('libreadline')
-            ->withPkgConfig('/usr/readline/lib/pkgconfig')
-            ->withLdflags('-L/usr/readline/lib')
+            //->withPkgConfig('/usr/readline/lib/pkgconfig')
+            ->disableDefaultPkgConfig()
+            //->withLdflags('-L/usr/readline/lib')
+            ->disableDefaultLdflags()
             ->withLicense('http://www.gnu.org/licenses/gpl.html', Library::LICENSE_GPL)
             ->withHomePage('https://tiswww.case.edu/php/chet/readline/rltop.html')
 
@@ -543,10 +541,7 @@ install_gmp($p);
 install_zlib($p);
 install_bzip2($p);
 
-install_lzma($p);
-install_zstd($p);
-
-//install_zip($p);
+install_zip($p); //以来系统提供的bzip2
 
 install_giflib($p);
 install_libpng($p);
@@ -555,15 +550,16 @@ install_freetype($p);
 install_libwebp($p);
 install_sqlite3($p);
 
-//install_icu($p);
+install_icu($p); //虽然自定义安装，但是不使用，默认使用静态系统库
 
 install_oniguruma($p);
 
 install_brotli($p);
 
-install_cares($p);
-//install_ncurses($p);
-//install_readline($p);
+install_cares($p); //目录必须是 /usr ；如果使用自定义系统库，预处理时识别不了
+
+install_ncurses($p); //虽然自定义安装，但是不使用，默认使用静态系统库
+install_readline($p); //虽然自定义安装，但是不使用，默认使用静态系统库
 
 
 //install_libedit($p);
@@ -580,7 +576,7 @@ install_mimalloc($p);
 
 
 # 禁用zendOpcache
-$p->disableZendOpcache();
+//$p->disableZendOpcache();
 
 $p->parseArguments($argc, $argv);
 $p->gen();

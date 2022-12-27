@@ -6,15 +6,12 @@ __DIR__=$(
   pwd
 )
 
-__ROOT__=$(
+__PROJECT__=$(
   cd ${__DIR__}/../
   pwd
 )
 
-
-__PROJECT__=${__ROOT__}
 cd ${__DIR__}
-
 
 
 

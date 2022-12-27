@@ -321,5 +321,5 @@ tmp-php.ini
 build-tools-scripts/build-dev-dependencies-container.txt
 /build-tools-scripts/backup
 build-tools-scripts/dist/
-
-
+build-tools-scripts/build-php-no-swoole-cli/dist/
+build-tools-scripts/local-deploy.sh

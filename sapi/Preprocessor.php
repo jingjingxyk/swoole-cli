@@ -249,7 +249,7 @@ class Preprocessor
         'tokenizer',
         'mbstring',  //需要 oniguruma
         'zlib',
-        //'zip',
+        'zip',
         'sockets',
         'mysqlnd',
         //'mysqli',
@@ -373,9 +373,12 @@ class Preprocessor
         $skip_library_download = getenv('SKIP_LIBRARY_DOWNLOAD');
         if (empty($skip_library_download)) {
             if (!is_file($this->libraryDir . '/' . $lib->file)) {
+                echo '[Library] file downloading: '. $lib->file . PHP_EOL .'download url: '. $lib->url . PHP_EOL;
                 //echo `wget {$lib->url} -O {$this->libraryDir}/{$lib->file}`;
                 echo `curl --connect-timeout 15 --retry 5 --retry-delay 5  -Lo {$this->libraryDir}/{$lib->file} {$lib->url}`;
-                echo $lib->file;
+                echo PHP_EOL;
+                echo 'download ' .$lib->file . ' OK '.PHP_EOL.PHP_EOL;
+                // PGP  验证
             } else {
                 echo "[Library] file cached: " . $lib->file . PHP_EOL;
             }
@@ -411,7 +414,7 @@ class Preprocessor
             if (!is_file($ext->path)) {
                 _download:
                 $download_name = $ext->peclVersion == 'latest' ? $ext->name : $ext->name . '-' . $ext->peclVersion;
-                echo "pecl download $download_name\n";
+                echo "pecl download $download_name ".PHP_EOL;
                 echo `cd {$this->extensionDir} && pecl download $download_name && cd -`;
             } else {
                 echo "[Extension] file cached: " . $ext->file . PHP_EOL;

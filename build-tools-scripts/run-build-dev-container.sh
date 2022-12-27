@@ -22,7 +22,7 @@ cd ${__DIR__}
 
 cd ${__DIR__}
 test -f build-dev-dependencies-container.txt && image=$(cat build-dev-dependencies-container.txt)
-test -f build-dev-dependencies-container.txt || image=docker.io/jingjingxyk/build-swoole-cli:build-dev-all-dependencies-alpine-edge-20221226T091008Z
+test -f build-dev-dependencies-container.txt || image=docker.io/jingjingxyk/build-swoole-cli:build-dev-all-dependencies-alpine-edge-20221227T044427Z
 cd ${__DIR__}
 
 

@@ -34,20 +34,25 @@ make_<?=$item->name?>() {
     tar --strip-components=1 -C <?=$this->workDir?>/thirdparty/<?=$item->name?> -xf <?=$this->workDir?>/pool/lib/<?=$item->file?> ;
     cd <?=$item->name?> ;
     <?php if (!empty($item->configureBeforeScript)):?>
-        <?= $item->configureBeforeScript ?> ;
+        <?= $item->configureBeforeScript ?>
     <?php endif ;?>
+    :;
     echo  "<?=$item->configure?>" ;
     <?php if (!empty($item->configure)): ?>
-    <?=$item->configure?> ;
+    <?= $item->configure ?> && \
     <?php endif; ?>
+    :;
     make -j <?=$this->maxJob?>  <?=$item->makeOptions?> && \
     <?php if ($item->beforeInstallScript): ?>
-    <?=$item->beforeInstallScript?> && \
+    <?=$item->beforeInstallScript?>
     <?php endif; ?>
-    make <?=$item->makeInstallDefaultOptions?> <?=$item->makeInstallOptions?> && \
+    :;
+    make <?=$item->makeInstallDefaultOptions?> <?= $item->makeInstallOptions ?> && \
+    :;
     <?php if ($item->afterInstallScript): ?>
-    <?=$item->afterInstallScript?> && \
+    <?= $item->afterInstallScript?>
     <?php endif; ?>
+    :;
     cd -
 }
 
@@ -90,7 +95,27 @@ config_php() {
      export ONIG_CFLAGS=$(pkg-config --cflags oniguruma) ;
      export ONIG_LIBS=$(pkg-config --libs oniguruma) ;
 
-    ./buildconf --force
+     export LIBZIP_CFLAGS=$(pkg-config --cflags libzip) ;
+     export LIBZIP_LIBS=$(pkg-config --libs libzip) ;
+
+:<<'EOF'
+
+     export PKG_CONFIG_PATH="/usr/icu/lib/pkgconfig:$PKG_CONFIG_PATH"
+     export ICU_CFLAGS=$(pkg-config --cflags  icu-uc icu-io icu-i18n)  ;
+     export ICU_LIBS=$(pkg-config  --libs icu-uc icu-io icu-i18n)  ;
+
+     export PKG_CONFIG_PATH="/usr/ncurses/lib/pkgconfig:/usr/readline/lib/pkgconfig:$PKG_CONFIG_PATH"
+
+     export NCURSES_CFLAGS=$(pkg-config --cflags ncursesw ncurses);
+     export NCURSES_LIBS=$(pkg-config  --libs ncursesw ncurses);
+
+     export READLINE_CFLAGS=$(pkg-config --cflags  readline)  ;
+     export READLINE_LIBS=$(pkg-config  --libs readline)  ;
+
+EOF
+
+
+    ./buildconf --force ;
 
 <?php if ($this->osType !== 'macos') : ?>
     mv main/php_config.h.in /tmp/cnt
@@ -98,9 +123,9 @@ config_php() {
     cat /tmp/cnt >> main/php_config.h.in
     echo -ne '\n#endif\n' >> main/php_config.h.in
 <?php endif; ?>
-    echo $OPTIONS
-    echo $PKG_CONFIG_PATH
-    ./configure $OPTIONS
+    echo $OPTIONS ;
+    echo $PKG_CONFIG_PATH ;
+    ./configure $OPTIONS ;
 }
 
 make_php() {

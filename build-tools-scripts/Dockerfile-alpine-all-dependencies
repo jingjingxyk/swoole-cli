@@ -24,6 +24,7 @@ RUN git clone -b dev-ok --depth=1 --progress  https://github.com/jingjingxyk/swo
 WORKDIR /swoole-cli
 RUN git config --global --add safe.directory '*'
 RUN git submodule update --init --recursive
+RUN git -C ext/swoole pull --progress
 RUN sh build-tools-scripts/download-init-depend.sh
 
 ENV http_proxy=''
@@ -84,8 +85,6 @@ COPY --from=1  /usr/gmp/ /usr/gmp/
 COPY --from=1  /usr/zlib /usr/zlib
 COPY --from=1  /usr/bzip2 /usr/bzip2
 
-COPY --from=1  /usr/liblzma/ /usr/liblzma/
-COPY --from=1  /usr/zstd/ /usr/zstd/
 
 COPY --from=1  /usr/giflib /usr/giflib
 COPY --from=1  /usr/libpng /usr/libpng
@@ -110,10 +109,12 @@ COPY --from=1  /usr/imagemagick /usr/imagemagick
 # COPY --from=1  /usr/zip /usr/zip
 
 
-# RUN apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
-# RUN apk add --no-cache  ncurses-dev ncurses-libs ncurses-static
-# RUN apk add --no-cache  readline readline-dev readline-static
-# RUN apk --no-cache add postgresql-libs libpq-dev
+# 提供必要依赖，解决自定义安装，解决不了的问题
+
+RUN apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
+RUN apk add --no-cache  ncurses-dev ncurses-libs ncurses-static
+RUN apk add --no-cache  readline readline-dev readline-static
+RUN apk add --no-cache  apk add bzip2 bzip2-dev bzip2-static
 
 
 RUN cp -f /etc/apk/repositories.save /etc/apk/repositories
