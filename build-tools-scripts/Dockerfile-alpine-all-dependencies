@@ -54,7 +54,8 @@ RUN apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
 RUN apk add --no-cache  ncurses-dev ncurses-libs ncurses-static
 RUN apk add --no-cache  readline readline-dev readline-static
 RUN apk add --no-cache  apk add bzip2 bzip2-dev bzip2-static
-
+RUN apk add --no-cache  apk add zstd zstd-dev zstd-libs
+RUN apk add --no-cache  apk add xz xz-dev xz-libs
 
 COPY --from=0 /swoole-cli /work
 WORKDIR /work
@@ -120,6 +121,8 @@ RUN apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
 RUN apk add --no-cache  ncurses-dev ncurses-libs ncurses-static
 RUN apk add --no-cache  readline readline-dev readline-static
 RUN apk add --no-cache  apk add bzip2 bzip2-dev bzip2-static
+RUN apk add --no-cache  apk add zstd zstd-dev zstd-libs
+RUN apk add --no-cache  apk add xz xz-dev xz-libs
 
 
 RUN cp -f /etc/apk/repositories.save /etc/apk/repositories
