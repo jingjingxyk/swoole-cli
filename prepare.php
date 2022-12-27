@@ -401,8 +401,8 @@ function install_readline(Preprocessor $p)
             ->disableDefaultLdflags()
             ->withScriptAfterInstall('
                 export PKG_CONFIG_PATH=$ORIGIN_PKG_CONFIG_PATH ;
-                unset $CFLAGS；
-                unset $LDFLAGS
+                unset $CFLAGS ;
+                unset $LDFLAGS ;
             ')
             ->withLicense('http://www.gnu.org/licenses/gpl.html', Library::LICENSE_GPL)
             ->withHomePage('https://tiswww.case.edu/php/chet/readline/rltop.html')
