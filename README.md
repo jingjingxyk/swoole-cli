@@ -1,5 +1,25 @@
 # swoole-cli
 
+> 说明：需要准备二个构建环境
+
+1. 第一阶段构建环境用于生成构建脚本
+1. 第二阶段构建环境用于静态编译本项目
+
+
+## 生成构建脚本
+
+> 第一阶段
+
+```shell
+# 初始化子模块，检出 swoole 扩展
+git submodule update --init --recursive
+
+php prepare.php
+php prepare.php +inotify
+
+
+```
+
 ## 生成构建脚本
 
 ```shell
