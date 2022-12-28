@@ -133,4 +133,4 @@ RUN cp -f /etc/apk/repositories.save /etc/apk/repositories
 
 RUN rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
 
-RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
+# RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
