@@ -533,8 +533,8 @@ function install_curl(Preprocessor $p)
             //->withUrl('https://curl.se/download/curl-7.80.0.tar.gz')
             ->withUrl('https://curl.se/download/curl-7.87.0.tar.gz')
             ->withCleanInstallPackageBeforeConfigure()
-            ->withConfigure(
-                "autoreconf -fi && ./configure --prefix=/usr/curl --enable-static --disable-shared \
+            ->withConfigure('
+                  autoreconf -fi && ./configure --prefix=/usr/curl --enable-static --disable-shared \
                  --with-openssl=/usr/openssl \
                  --without-librtmp \
                  --without-brotli \
@@ -543,8 +543,8 @@ function install_curl(Preprocessor $p)
                  --disable-ldap \
                  --disable-rtsp  \
                  --without-nghttp2 \
-                 --without-nghttp3"
-            )
+                 --without-nghttp3
+            ')
             ->withPkgName('libcurl')
             ->withPkgConfig('/usr/curl/lib/pkgconfig')
             ->withLdflags('-L/usr/curl/lib')
@@ -587,17 +587,16 @@ function install_postgresql(Preprocessor $p)
             ')
             //ICU_CFLAGS=\"$(pkg-config --cflags  icu-uc icu-io icu-i18n)\" ICU_LIBS=\"$(pkg-config --libs  icu-uc icu-io icu-i18n)\" \
             // XML2_CFLAGS=\"$(pkg-config --cflags  libxml-2.0 )\" XML2_LIBS=\"$(pkg-config -libs  libxml-2.0 )\" \
-            ->withConfigure("./configure --prefix=/usr/pgsql \
+            ->withConfigure('./configure --prefix=/usr/pgsql \
             --with-ssl=openssl  \
             --with-readline \
             --with-icu \
             --without-ldap \
             --with-libxml  \
             --with-libxslt \
-            --with-includes='/usr/openssl/include/:/usr/libxslt/include:/usr/include' \
-            --with-libraries='/usr/openssl/lib64:/usr/libxslt/lib/:/usr/lib' \
-            "
-            )
+            --with-includes=\'/usr/openssl/include/:/usr/libxslt/include:/usr/include\' \
+            --with-libraries=\'/usr/openssl/lib64:/usr/libxslt/lib/:/usr/lib\' \
+            ')
             //->withPkgConfig('/usr/pgsql/lib/pkgconfig')
             ->disableDefaultPkgConfig()
             //->withLdflags('-L/usr/pgsql/lib/')
@@ -623,7 +622,9 @@ install_bzip2($p);
 install_liblzma($p);
 install_libzstd($p);
 
+
 install_zip($p); //上一步虽然安装里了bizp2，但是仍然需要系统提供的bzip2 ，因为需要解决BZ2_bzCompressInit 找不到的问题
+
 
 install_giflib($p);
 install_libpng($p);
@@ -632,7 +633,9 @@ install_freetype($p); //需要brotli
 install_libwebp($p);
 install_sqlite3($p);
 
+
 install_icu($p); //虽然自定义安装目录，并且静态编译。但是不使用，默认仍然还是使用静态系统库
+
 
 install_oniguruma($p);
 

@@ -13,16 +13,12 @@ RUN apk add --no-cache flex bison re2c pkgconf ca-certificates gnutls-dev
 RUN apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
 RUN apk add --no-cache ncurses-dev ncurses-libs ncurses-static
 RUN apk add --no-cache readline readline-dev readline-static
-# 为了zip 静态库能顺利安装
-RUN apk add --no-cache bzip2 bzip2-dev bzip2-static
-RUN apk add --no-cache zstd zstd-dev zstd-libs
-RUN apk add --no-cache xz xz-dev xz-libs
-
 
 # chown -R 1000:1000 /work 允许容器外用户修改文件
 
 # 解决容器内用户是root，容器容器外用户非root,预处理时屏蔽警告
 # RUN  git config --global --add safe.directory '*'
+
 
 
 ENV CC=clang
