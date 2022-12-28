@@ -47,6 +47,15 @@ function install_libiconv(Preprocessor $p)
     );
 }
 
+function install_openssl_old(Preprocessor $p)
+{
+    $p->addLibrary((new Library('openssl', '/usr/openssl'))
+        ->withUrl('https://www.openssl.org/source/openssl-1.1.1p.tar.gz')
+        ->withConfigure('./config' . ($p->osType === 'macos' ? '' : ' -static --static') . ' no-shared --prefix=/usr/openssl')
+        ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
+        ->withHomePage('https://www.openssl.org/')
+    );
+}
 function install_openssl(Preprocessor $p)
 {
     $p->addLibrary((new Library('openssl', '/usr/openssl'))
