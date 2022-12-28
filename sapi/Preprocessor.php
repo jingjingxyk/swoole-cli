@@ -40,7 +40,7 @@ abstract class Project
 class Library extends Project
 {
     public string $url;
-    public bool   $beforeConfigureCleanPackageFlag = false;
+    public bool   $beforeConfigureCleanInstallPackageFlag = false;
     public string $configure = '';
     public string $beforeConfigureScript = '';
     public string $file = '';
@@ -82,7 +82,7 @@ class Library extends Project
 
     function withCleanInstallPackageBeforeConfigure(): static
     {
-        $this->beforeConfigureCleanPackageFlag = true ;
+        $this->beforeConfigureCleanInstallPackageFlag = true ;
         return $this;
     }
 

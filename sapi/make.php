@@ -28,7 +28,7 @@ OPTIONS="--disable-all \
 make_<?=$item->name?>() {
     cd <?=$this->workDir?>/thirdparty ;
     echo "build <?=$item->name?>" ;
-    <?php if ($item->beforeConfigureCleanPackageFlag == true ): ?>
+    <?php if ($item->beforeConfigureCleanInstallPackageFlag == true ): ?>
     test -d <?=$this->workDir?>/thirdparty/<?=$item->name?> && rm -rf <?=$this->workDir?>/thirdparty/<?=$item->name?> ;
     <?php endif;?>
     mkdir -p <?=$this->workDir?>/thirdparty/<?=$item->name?> ;
