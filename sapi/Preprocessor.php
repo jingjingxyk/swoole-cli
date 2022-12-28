@@ -40,11 +40,14 @@ abstract class Project
 class Library extends Project
 {
     public string $url;
+    public bool   $beforeConfigureCleanPackageFlag = false;
     public string $configure = '';
+    public string $beforeConfigureScript = '';
     public string $file = '';
     public string $ldflags = '';
     public string $makeOptions = '';
     public string $makeInstallOptions = '';
+    public string $makeInstallDefaultOptions = 'install';
     public string $beforeInstallScript = '';
     public string $afterInstallScript = '';
     public string $pkgConfig = '';
@@ -77,6 +80,18 @@ class Library extends Project
         return $this;
     }
 
+    function withCleanPackageBeforeConfigure(): static
+    {
+        $this->beforeConfigureCleanPackageFlag = true ;
+        return $this;
+    }
+
+    function withScriptBeforeConfigure(string $script): static
+    {
+        $this->beforeConfigureScript = true ;
+        return $this;
+    }
+
     function withConfigure(string $configure): static
     {
         $this->configure = $configure;
@@ -86,6 +101,12 @@ class Library extends Project
     function withLdflags(string $ldflags): static
     {
         $this->ldflags = $ldflags;
+        return $this;
+    }
+
+    function disableDefaultLdflags(): static
+    {
+        $this->ldflags = '';
         return $this;
     }
 
@@ -109,6 +130,7 @@ class Library extends Project
 
     function withMakeInstallOptions(string $makeInstallOptions): static
     {
+        $this->makeInstallDefaultOptions='';
         $this->makeInstallOptions = $makeInstallOptions;
         return $this;
     }
@@ -116,6 +138,12 @@ class Library extends Project
     function withPkgConfig(string $pkgConfig): static
     {
         $this->pkgConfig = $pkgConfig;
+        return $this;
+    }
+
+    function disableDefaultPkgConfig(): static
+    {
+        $this->pkgConfig = '';
         return $this;
     }
 
@@ -156,6 +184,7 @@ class Extension extends Project
 class Preprocessor
 {
     public string $osType = 'linux';
+    public bool $disableZendOpcacheFlag = false;
     protected array $libraryList = [];
     protected array $extensionList = [];
     protected string $rootDir;
@@ -176,49 +205,70 @@ class Preprocessor
     protected int $maxJob = 8;
     protected bool $installLibrary = true;
 
+
     /**
      * Extensions enabled by default
      * @var array|string[]
      */
     protected array $extEnabled = [
+       // "Core",
+        "ctype",
+       // "date",
+        //"dom",
+        "fileinfo",
+        "filter",
+        //"hash",
+        "iconv",
+       // "json",
+        //"libxml",
+       // "pcre",
+        // "PDO",
+        "pdo",
+        "pdo_sqlite",
+        //"Phar",
+        "phar",
+        "posix",
+        //"Reflection",
+        //"reflection",
+        "session",
+        //"SimpleXML",
+        //"SPL",
+        "sqlite3",
+        //"standard",
+        "tokenizer",
+        "xml",
+        //"xmlreader",
+        //"xmlwriter",
+
         'opcache',
         'curl',
-        'iconv',
         'bz2',
         'bcmath',
         'pcntl',
-        'filter',
-        'session',
         'tokenizer',
-        'mbstring',
-        'ctype',
+        'mbstring',  //需要 oniguruma
         'zlib',
         'zip',
-        'posix',
         'sockets',
-        'pdo',
-        'sqlite3',
-        'phar',
         'mysqlnd',
-        'mysqli',
-        'intl',
-        'fileinfo',
+        //'mysqli',
+        'intl',  //需要 ICU
         'pdo_mysql',
-        'pdo_sqlite',
-        'soap',
+        //'pdo_pgsql',
+        //'soap',
         'xsl',
         'gmp',
         'exif',
         'sodium',
         'openssl',
         'readline',
-        'xml',
-        'gd',
+        'gd', //需要freetype,  freetype 需要 libbrotlidec
         'redis',
+        //'pgsql',
         'swoole',
         'yaml',
         'imagick',
-        'mongodb',
+        'mongodb', //需要openssl zlib
     ];
 
     protected array $endCallbacks = [];
@@ -263,6 +313,15 @@ class Preprocessor
     function getOsType()
     {
         return $this->osType;
+    }
+
+    function disableZendOpcache()
+    {
+        $key=array_search('opcache',$this->extEnabled);
+        if($key !== false) {
+            unset($this->extEnabled[$key]);
+        }
+        $this->disableZendOpcacheFlag = true;
     }
 
     function setPhpSrcDir(string $phpSrcDir)
@@ -313,8 +372,12 @@ class Preprocessor
         $skip_library_download = getenv('SKIP_LIBRARY_DOWNLOAD');
         if (empty($skip_library_download)) {
             if (!is_file($this->libraryDir . '/' . $lib->file)) {
-                echo `wget {$lib->url} -O {$this->libraryDir}/{$lib->file}`;
-                echo $lib->file;
+                echo '[Library] file downloading: '. $lib->file . PHP_EOL .'download url: '. $lib->url . PHP_EOL;
+                //echo `wget {$lib->url} -O {$this->libraryDir}/{$lib->file}`;
+                echo `curl --connect-timeout 15 --retry 5 --retry-delay 5  -Lo {$this->libraryDir}/{$lib->file} {$lib->url}`;
+                echo PHP_EOL;
+                echo 'download ' .$lib->file . ' OK '.PHP_EOL.PHP_EOL;
+                // PGP  验证
             } else {
                 echo "[Library] file cached: " . $lib->file . PHP_EOL;
             }
@@ -350,7 +413,7 @@ class Preprocessor
             if (!is_file($ext->path)) {
                 _download:
                 $download_name = $ext->peclVersion == 'latest' ? $ext->name : $ext->name . '-' . $ext->peclVersion;
-                echo "pecl download $download_name\n";
+                echo "pecl download $download_name ".PHP_EOL;
                 echo `cd {$this->extensionDir} && pecl download $download_name && cd -`;
             } else {
                 echo "[Extension] file cached: " . $ext->file . PHP_EOL;
@@ -402,6 +465,11 @@ class Preprocessor
                     unset($this->extEnabled[$key]);
                 }
             }
+        }
+
+        $key=array_search('opcache',$this->extEnabled);
+        if(!$key) {
+            $this->disableZendOpcacheFlag = true ;
         }
 
         foreach ($this->extEnabled as $ext) {
