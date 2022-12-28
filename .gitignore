@@ -315,11 +315,4 @@ tmp-php.ini
 /ext/ds
 
 
-/build-tools-scripts/php-versions
-/build-tools-scripts/swoole-cli-build-dev-1-container.txt
-/build-tools-scripts/swoole-cli-build-dev-2-container.txt
-build-tools-scripts/build-dev-dependencies-container.txt
-/build-tools-scripts/backup
-build-tools-scripts/dist/
-build-tools-scripts/build-php-no-swoole-cli/dist/
-build-tools-scripts/local-deploy.sh
+xin

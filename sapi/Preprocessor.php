@@ -40,9 +40,9 @@ abstract class Project
 class Library extends Project
 {
     public string $url;
-    public bool   $configureBeforeCleanPackageFlag = false;
+    public bool   $beforeConfigureCleanPackageFlag = false;
     public string $configure = '';
-    public string $configureBeforeScript = '';
+    public string $beforeConfigureScript = '';
     public string $file = '';
     public string $ldflags = '';
     public string $makeOptions = '';
@@ -80,16 +80,15 @@ class Library extends Project
         return $this;
     }
 
-
-    function withConfigureBeforeCleanPackage(): static
+    function withCleanPackageBeforeConfigure(): static
     {
-        $this->configureBeforeCleanPackageFlag = true ;
+        $this->beforeConfigureCleanPackageFlag = true ;
         return $this;
     }
 
-    function withConfigureBeforeScript(string $script): static
+    function withScriptBeforeConfigure(string $script): static
     {
-        $this->configureBeforeScript = $script;
+        $this->beforeConfigureScript = true ;
         return $this;
     }
 

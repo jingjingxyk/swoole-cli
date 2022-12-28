@@ -34,17 +34,6 @@ $p->setMaxJob(`nproc 2> /dev/null || sysctl -n hw.ncpu`); // nproc on macos ；
 
 
 
-function install_gettext(Preprocessor $p)
-{
-    $p->addLibrary(
-        (new Library('gettext', '/usr/gettext'))
-            ->withUrl('https://ftp.gnu.org/pub/gnu/gettext/gettext-0.21.1.tar.gz')
-            ->withPkgConfig('')
-            ->withLdflags('-L/usr/gettext/lib')
-            ->withConfigure('./configure --prefix=/usr/gettext enable_static=yes enable_shared=no --with-libiconv-prefix=/usr/libiconv/')
-            ->withLicense('https://www.gnu.org/licenses/old-licenses/gpl-2.0.html', Library::LICENSE_GPL)
-    );
-}
 
 function install_libiconv(Preprocessor $p)
 {
@@ -130,8 +119,8 @@ function install_giflib(Preprocessor $p)
         (new Library('giflib'))
             ->withUrl('https://nchc.dl.sourceforge.net/project/giflib/giflib-5.2.1.tar.gz')
             //->withMakeOptions('libgif.a')
-            ->withConfigureBeforeCleanPackage()
-            ->withConfigureBeforeScript('sed -i "s@PREFIX = /usr/local@PREFIX = /usr/giflib@" Makefile')
+            ->withCleanPackageBeforeConfigure()
+            ->withScriptBeforeConfigure('sed -i "s@PREFIX = /usr/local@PREFIX = /usr/giflib@" Makefile')
             ->withMakeOptions('all')
             ->withMakeInstallOptions("install")
             ->withLdflags('-L/usr/giflib/lib')
@@ -172,7 +161,7 @@ function install_freetype(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('freetype', '/usr/freetype'))
-            // DNS 无解析 dig mirror.yongbok.net
+            // dig mirror.yongbok.net DNS 无解析
             //->withUrl('https://mirror.yongbok.net/nongnu/freetype/freetype-2.10.4.tar.gz')
             ->withUrl('https://download.savannah.gnu.org/releases/freetype/freetype-2.10.4.tar.gz')
             ->withConfigure('./configure --prefix=/usr/freetype --enable-static --disable-shared')
@@ -230,8 +219,8 @@ function install_bzip2(Preprocessor $p)
     $p->addLibrary(
         (new Library('bzip2', '/usr/bzip2'))
             ->withUrl('https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz')
-            ->withConfigureBeforeCleanPackage()
-            ->withConfigureBeforeScript('sed -i "s@PREFIX=/usr/local@PREFIX=/usr/bzip2@" Makefile')
+            ->withCleanPackageBeforeConfigure()
+            ->withScriptBeforeConfigure('sed -i "s@PREFIX=/usr/local@PREFIX=/usr/bzip2@" Makefile')
             ->withMakeOptions('all')
             ->withLdflags('-L/usr/bzip2/lib')
             ->disableDefaultPkgConfig()
@@ -240,6 +229,36 @@ function install_bzip2(Preprocessor $p)
     );
 }
 
+function install_liblzma(Preprocessor $p)
+{
+    $p->addLibrary(
+        (new Library('lzma'))
+            ->withUrl('https://tukaani.org/xz/xz-5.2.9.tar.gz')
+            ->withFile('xz-5.2.9.tar.gz')
+            ->withConfigure('./configure --prefix=/usr/liblzma/ --enable-static --disable-shared --disable-doc')
+            ->withPkgName('liblzma')
+            ->withPkgConfig('/usr/liblzma/lib/pkgconfig')
+            ->withLdflags('-L/usr/liblzma/lib')
+            ->withHomePage('https://tukaani.org/xz/')
+            ->withLicense('https://git.tukaani.org/?p=xz.git;a=blob;f=COPYING', Library::LICENSE_LGPL)
+    );
+}
+
+function install_libzstd(Preprocessor $p)
+{
+    $p->addLibrary(
+        (new Library('zstd'))
+            ->withUrl('https://github.com/facebook/zstd/releases/download/v1.5.2/zstd-1.5.2.tar.gz')
+            ->withFile('zstd-1.5.2.tar.gz')
+            ->withMakeOptions('lib')
+            ->withMakeInstallOptions('install PREFIX=/usr/zstd/')
+            ->withPkgName('libzstd.pc')
+            ->withPkgConfig('/usr/zstd/lib/pkgconfig')
+            ->withLdflags('-L/usr/zstd/lib')
+            ->withHomePage('https://github.com/facebook/zstd')
+            ->withLicense('https://github.com/facebook/zstd/blob/dev/COPYING', Library::LICENSE_GPL)
+    );
+}
 
 
 // MUST be in the /usr directory
@@ -251,8 +270,8 @@ function install_zip(Preprocessor $p)
             //->withUrl('https://libzip.org/download/libzip-1.8.0.tar.gz')
             ->withFile('libzip-1.9.2.tar.gz')
             //参考 https://stackoverflow.com/questions/15759373/static-libzip-with-visual-studio-2012
-            //->withConfigureBeforeScript('echo  \'ADD_LIBRARY(zipstatic STATIC ${LIBZIP_SOURCES} ${LIBZIP_EXTRA_FILES} ${LIBZIP_OPTIONAL_FILES} ${LIBZIP_OPSYS_FILES})\'  >> lib/CMakeLists.txt ')
-            ->withConfigureBeforeCleanPackage()
+            //->withScriptBeforeConfigure('echo  \'ADD_LIBRARY(zipstatic STATIC ${LIBZIP_SOURCES} ${LIBZIP_EXTRA_FILES} ${LIBZIP_OPTIONAL_FILES} ${LIBZIP_OPSYS_FILES})\'  >> lib/CMakeLists.txt ')
+            ->withCleanPackageBeforeConfigure()
 
             ->withConfigure('cmake . -DCMAKE_INSTALL_PREFIX=/usr/zip  \
                 -DLIBZIP_DO_INSTALL=TRUE \
@@ -350,7 +369,7 @@ function install_ncurses(Preprocessor $p)
             //->withUrl('https://invisible-island.net/datafiles/release/ncurses.tar.gz')
             //->withFile('ncurses.tar.gz')
             ->withFile('ncurses-6.3.tar.gz')
-            ->withConfigureBeforeScript('
+            ->withScriptBeforeConfigure('
                 test -d /usr/ncurses && rm -rf /usr/ncurses ;
                 test -d /usr/ncurses/ && rm -rf /usr/ncurses/ ;
                 mkdir -p /usr/ncurses/lib/pkgconfig ;
@@ -386,8 +405,8 @@ function install_readline(Preprocessor $p)
     $p->addLibrary(
         (new Library('readline', '/usr/readline'))
             ->withUrl('https://ftp.gnu.org/gnu/readline/readline-8.2.tar.gz')
-            ->withConfigureBeforeCleanPackage()
-            ->withConfigureBeforeScript('
+            ->withCleanPackageBeforeConfigure()
+            ->withScriptBeforeConfigure('
                  export PKG_CONFIG_PATH="/usr/ncurses/lib/pkgconfig:/usr/readline/lib/pkgconfig:$PKG_CONFIG_PATH"
                  export CFLAGS=$(pkg-config --cflags  ncursesw) ;
                  export LDFLAGS=$(pkg-config --libs ncursesw) ;
@@ -444,7 +463,7 @@ function install_brotli(Preprocessor $p)
         (new Library('brotli', '/usr/brotli'))
             ->withUrl('https://github.com/google/brotli/archive/refs/tags/v1.0.9.tar.gz')
             ->withFile('brotli-1.0.9.tar.gz')
-            ->withConfigureBeforeCleanPackage()
+            ->withCleanPackageBeforeConfigure()
             ->withConfigure("cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX=/usr/brotli .")
             ->withPkgConfig('/usr/brotli/lib/pkgconfig')
             ->withLdflags('-L/usr/brotli/lib')
@@ -462,22 +481,46 @@ function install_brotli(Preprocessor $p)
     );
 }
 
+function install_libidn2(Preprocessor $p)
+{
+    $p->addLibrary(
+        (new Library('libidn2', '/usr/libidn2'))
+            ->withUrl('https://ftp.gnu.org/gnu/libidn/libidn2-2.3.4.tar.gz')
+            ->withPkgConfig('')
+            ->withLdflags('-L/usr/libiconv/lib')
+            ->withConfigure('./configure --prefix=/usr/libidn2 enable_static=yes enable_shared=no')
+            ->withLicense('https://www.gnu.org/licenses/old-licenses/gpl-2.0.html', Library::LICENSE_GPL)
+    );
+}
+function install_nghttp2(Preprocessor $p)
+{
+    $p->addLibrary(
+        (new Library('nghttp2', '/usr/nghttp2'))
+            ->withUrl('https://github.com/nghttp2/nghttp2/releases/download/v1.51.0/nghttp2-1.51.0.tar.gz')
+            ->withPkgConfig('')
+            ->withLdflags('-L/usr/nghttp2/lib')
+            ->withConfigure('./configure --prefix=/usr/nghttp2 enable_static=yes enable_shared=no')
+            ->withLicense('https://www.gnu.org/licenses/old-licenses/gpl-2.0.html', Library::LICENSE_GPL)
+    );
+}
 function install_curl(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('curl', '/usr/curl'))
             //->withUrl('https://curl.se/download/curl-7.80.0.tar.gz')
             ->withUrl('https://curl.se/download/curl-7.87.0.tar.gz')
-            ->withConfigureBeforeCleanPackage()
-            ->withConfigureBeforeScript('
-                export PKG_CONFIG_PATH=/usr/lib/pkgconfig:$PKG_CONFIG_PATH ;
-            ')
+            ->withCleanPackageBeforeConfigure()
             ->withConfigure(
-                "autoreconf -fi && ./configure --prefix=/usr/curl --enable-static --disable-shared --with-openssl=/usr/openssl " .
-                "--without-librtmp --with-brotli --with-libidn2  --with-zstd --disable-ldap --disable-rtsp  --with-nghttp2 --without-nghttp3"
-            )
-            ->withScriptAfterInstall(
-                'export PKG_CONFIG_PATH=$ORIGIN_PKG_CONFIG_PATH ;'
+                "autoreconf -fi && ./configure --prefix=/usr/curl --enable-static --disable-shared \
+                 --with-openssl=/usr/openssl \
+                 --without-librtmp \
+                 --without-brotli \
+                 --without-libidn2  \
+                 --without-zstd \
+                 --disable-ldap \
+                 --disable-rtsp  \
+                 --without-nghttp2 \
+                 --without-nghttp3"
             )
             ->withPkgName('libcurl')
             ->withPkgConfig('/usr/curl/lib/pkgconfig')
@@ -516,7 +559,7 @@ function install_postgresql(Preprocessor $p)
     $p->addLibrary(
         (new Library('postgresql'))
             ->withUrl('https://ftp.postgresql.org/pub/source/v15.1/postgresql-15.1.tar.gz')
-            ->withConfigureBeforeScript('
+            ->withScriptBeforeConfigure('
                 export PKG_CONFIG_PATH="/usr/lib/pkgconfig:$PKG_CONFIG_PATH"
             ')
             //ICU_CFLAGS=\"$(pkg-config --cflags  icu-uc icu-io icu-i18n)\" ICU_LIBS=\"$(pkg-config --libs  icu-uc icu-io icu-i18n)\" \
@@ -554,8 +597,10 @@ install_libxslt($p);
 install_gmp($p);
 install_zlib($p);
 install_bzip2($p);
+install_liblzma($p);
+install_libzstd($p);
 
-install_zip($p); //上一步虽然安装里bizp2，但是仍然需要系统提供的bzip2
+install_zip($p); //上一步虽然安装里bizp2，但是仍然需要系统提供的bzip2 需要解决BZ2_bzCompressInit
 
 install_giflib($p);
 install_libpng($p);
@@ -578,7 +623,11 @@ install_readline($p); //虽然自定义安装，但是不使用，默认使用�
 
 //install_libedit($p);
 install_imagemagick($p);
+
+//install_libidn2($p);
+//install_nghttp2($p);
 install_curl($p);
+
 install_libsodium($p);
 install_libyaml($p);
 install_mimalloc($p);
