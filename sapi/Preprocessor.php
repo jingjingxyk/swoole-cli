@@ -80,7 +80,7 @@ class Library extends Project
         return $this;
     }
 
-    function withCleanPackageBeforeConfigure(): static
+    function withCleanInstallPackageBeforeConfigure(): static
     {
         $this->beforeConfigureCleanPackageFlag = true ;
         return $this;
@@ -88,7 +88,7 @@ class Library extends Project
 
     function withScriptBeforeConfigure(string $script): static
     {
-        $this->beforeConfigureScript = true ;
+        $this->beforeConfigureScript = $script ;
         return $this;
     }
 

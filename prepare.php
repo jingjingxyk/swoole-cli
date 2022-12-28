@@ -105,10 +105,16 @@ function install_gmp(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('gmp', '/usr/gmp'))
-            ->withUrl('https://gmplib.org/download/gmp/gmp-6.2.1.tar.lz')
+            //站点SSL证书过期
+            //->withUrl('https://gmplib.org/download/gmp/gmp-6.2.1.tar.lz')
+            //https://mirrors.aliyun.com/gnu/
+            //->withUrl('https://mirrors.aliyun.com/gnu/gmp//gmp-6.2.1.tar.lz')
+            ->withUrl('https://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.lz')
             ->withConfigure('./configure --prefix=/usr/gmp --enable-static --disable-shared')
             ->withPkgConfig('/usr/gmp/lib/pkgconfig')
             ->withLdflags('-L/usr/gmp/lib')
+            ->withHomePage('https://www.gnu.org/software/software.html')
+            //->withHomePage('https://gmplib.org/') //站点SSL证书过期
             ->withLicense('https://www.gnu.org/licenses/old-licenses/gpl-2.0.html', Library::LICENSE_GPL)
     );
 }
@@ -119,7 +125,7 @@ function install_giflib(Preprocessor $p)
         (new Library('giflib'))
             ->withUrl('https://nchc.dl.sourceforge.net/project/giflib/giflib-5.2.1.tar.gz')
             //->withMakeOptions('libgif.a')
-            ->withCleanPackageBeforeConfigure()
+            ->withCleanInstallPackageBeforeConfigure()
             ->withScriptBeforeConfigure('sed -i "s@PREFIX = /usr/local@PREFIX = /usr/giflib@" Makefile')
             ->withMakeOptions('all')
             ->withMakeInstallOptions("install")
@@ -219,9 +225,13 @@ function install_bzip2(Preprocessor $p)
     $p->addLibrary(
         (new Library('bzip2', '/usr/bzip2'))
             ->withUrl('https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz')
-            ->withCleanPackageBeforeConfigure()
-            ->withScriptBeforeConfigure('sed -i "s@PREFIX=/usr/local@PREFIX=/usr/bzip2@" Makefile')
+            ->withCleanInstallPackageBeforeConfigure()
+            ->withScriptBeforeConfigure('
+            test -d /usr/bzip2 && rm -rf /usr/bzip2
+            sed -i "s@PREFIX=/usr/local@PREFIX=/usr/bzip2@" Makefile
+            ')
             ->withMakeOptions('all')
+            ->withMakeInstallOptions('install PREFIX=/usr/bzip2')
             ->withLdflags('-L/usr/bzip2/lib')
             ->disableDefaultPkgConfig()
             ->withHomePage('https://www.sourceware.org/bzip2/')
@@ -232,10 +242,10 @@ function install_bzip2(Preprocessor $p)
 function install_liblzma(Preprocessor $p)
 {
     $p->addLibrary(
-        (new Library('lzma'))
+        (new Library('liblzma'))
             ->withUrl('https://tukaani.org/xz/xz-5.2.9.tar.gz')
             ->withFile('xz-5.2.9.tar.gz')
-            ->withConfigure('./configure --prefix=/usr/liblzma/ --enable-static --disable-shared --disable-doc')
+            ->withConfigure('./configure --prefix=/usr/liblzma/  --disable-shared --disable-doc')
             ->withPkgName('liblzma')
             ->withPkgConfig('/usr/liblzma/lib/pkgconfig')
             ->withLdflags('-L/usr/liblzma/lib')
@@ -247,14 +257,15 @@ function install_liblzma(Preprocessor $p)
 function install_libzstd(Preprocessor $p)
 {
     $p->addLibrary(
-        (new Library('zstd'))
+        (new Library('libzstd'))
             ->withUrl('https://github.com/facebook/zstd/releases/download/v1.5.2/zstd-1.5.2.tar.gz')
             ->withFile('zstd-1.5.2.tar.gz')
-            ->withMakeOptions('lib')
-            ->withMakeInstallOptions('install PREFIX=/usr/zstd/')
+            ->withCleanInstallPackageBeforeConfigure()
+            ->withScriptBeforeConfigure('test -d /usr/libzstd/ && rm -rf /usr/libzstd/')
+            ->withMakeInstallOptions('install PREFIX=/usr/libzstd/')
             ->withPkgName('libzstd.pc')
-            ->withPkgConfig('/usr/zstd/lib/pkgconfig')
-            ->withLdflags('-L/usr/zstd/lib')
+            ->withPkgConfig('/usr/libzstd/lib/pkgconfig')
+            ->withLdflags('-L/usr/libzstd/lib')
             ->withHomePage('https://github.com/facebook/zstd')
             ->withLicense('https://github.com/facebook/zstd/blob/dev/COPYING', Library::LICENSE_GPL)
     );
@@ -269,22 +280,36 @@ function install_zip(Preprocessor $p)
             ->withUrl('https://libzip.org/download/libzip-1.9.2.tar.gz')
             //->withUrl('https://libzip.org/download/libzip-1.8.0.tar.gz')
             ->withFile('libzip-1.9.2.tar.gz')
-            //参考 https://stackoverflow.com/questions/15759373/static-libzip-with-visual-studio-2012
-            //->withScriptBeforeConfigure('echo  \'ADD_LIBRARY(zipstatic STATIC ${LIBZIP_SOURCES} ${LIBZIP_EXTRA_FILES} ${LIBZIP_OPTIONAL_FILES} ${LIBZIP_OPSYS_FILES})\'  >> lib/CMakeLists.txt ')
-            ->withCleanPackageBeforeConfigure()
-
-            ->withConfigure('cmake . -DCMAKE_INSTALL_PREFIX=/usr/zip  \
-                -DLIBZIP_DO_INSTALL=TRUE \
-                -DBUILD_SHARED_LIBS=FALSE \
+            ->withCleanInstallPackageBeforeConfigure()
+            ->withScriptBeforeConfigure('test -d /usr/zip && rm -rf /usr/zip')
+            ->withConfigure('
+                 cmake . \
+                -DCMAKE_INSTALL_PREFIX=/usr/zip  \
+                -DBUILD_TOOLS=ON \
+                -DBUILD_EXAMPLES=OFF \
+                -DBUILD_DOC=OFF \
+                -DLIBZIP_DO_INSTALL=ON \
+                -DBUILD_SHARED_LIBS=OFF \
                 -DENABLE_GNUTLS=OFF  \
                 -DENABLE_MBEDTLS=OFF \
                 -DENABLE_OPENSSL=ON \
                 -DOPENSSL_USE_STATIC_LIBS=TRUE \
-                -DOPENSSL_LIBRARIES=/usr/openssl/lib64 -DOPENSSL_INCLUDE_DIR=/usr/openssl/include \
-                -DZLIB_LIBRARIES=/usr/zlib/lib -DZLIB_INCLUDE_DIR=/usr/zlib/include \
-                -DENABLE_LZMA=ON  \
-                -DENABLE_ZSTD=ON \
+                -DOPENSSL_LIBRARIES=/usr/openssl/lib64 \
+                -DOPENSSL_INCLUDE_DIR=/usr/openssl/include \
+                -DZLIB_LIBRARY=/usr/zlib/lib \
+                -DZLIB_INCLUDE_DIR=/usr/zlib/include \
                 -DENABLE_BZIP2=ON \
+                -DBZIP2_LIBRARIES=/usr/bzip2/lib \
+                -DBZIP2_INCLUDE_DIR=/usr/bzip2/include \
+                -DENABLE_LZMA=ON  \
+                -DLIBLZMA_LIBRARY=/usr/liblzma/lib \
+                -DLIBLZMA_INCLUDE_DIR=/usr/liblzma/include \
+                -DLIBLZMA_HAS_AUTO_DECODER=ON  \
+                -DLIBLZMA_HAS_EASY_ENCODER=ON  \
+                -DLIBLZMA_HAS_LZMA_PRESET=ON  \
+                -DENABLE_ZSTD=ON \
+                -DZstd_LIBRARY=/usr/libzstd/lib \
+                -DZstd_INCLUDE_DIR=/usr/libzstd/include \
                 ' )
             ->withMakeOptions('VERBOSE=1 all ')
             ->withMakeInstallOptions("install PREFIX=/usr/zip")
@@ -405,7 +430,7 @@ function install_readline(Preprocessor $p)
     $p->addLibrary(
         (new Library('readline', '/usr/readline'))
             ->withUrl('https://ftp.gnu.org/gnu/readline/readline-8.2.tar.gz')
-            ->withCleanPackageBeforeConfigure()
+            ->withCleanInstallPackageBeforeConfigure()
             ->withScriptBeforeConfigure('
                  export PKG_CONFIG_PATH="/usr/ncurses/lib/pkgconfig:/usr/readline/lib/pkgconfig:$PKG_CONFIG_PATH"
                  export CFLAGS=$(pkg-config --cflags  ncursesw) ;
@@ -463,18 +488,16 @@ function install_brotli(Preprocessor $p)
         (new Library('brotli', '/usr/brotli'))
             ->withUrl('https://github.com/google/brotli/archive/refs/tags/v1.0.9.tar.gz')
             ->withFile('brotli-1.0.9.tar.gz')
-            ->withCleanPackageBeforeConfigure()
+            ->withCleanInstallPackageBeforeConfigure()
+            ->withScriptBeforeConfigure('test -d /usr/brotli/ && rm -rf /usr/brotli/ ')
             ->withConfigure("cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX=/usr/brotli .")
             ->withPkgConfig('/usr/brotli/lib/pkgconfig')
             ->withLdflags('-L/usr/brotli/lib')
-            ->withScriptAfterInstall(
-                implode(PHP_EOL, [
-                    'rm -rf /usr/brotli/lib/*.so.*',
-                    'rm -rf /usr/brotli/lib/*.so',
-                    'cp -f /usr/brotli/lib/libbrotlicommon-static.a /usr/brotli/lib/libbrotli.a',
-                    'cp -f /usr/brotli/lib/libbrotlienc-static.a /usr/brotli/lib/libbrotlienc.a',
-                    'cp -f /usr/brotli/lib/libbrotlidec-static.a /usr/brotli/lib/libbrotlidec.a',
-                ]))
+            ->withScriptAfterInstall('
+                    cp -f  /usr/brotli/lib/libbrotlicommon-static.a /usr/brotli/lib/libbrotli.a
+                    cp -f /usr/brotli/lib/libbrotlienc-static.a /usr/brotli/lib/libbrotlienc.a
+                    cp -f /usr/brotli/lib/libbrotlidec-static.a /usr/brotli/lib/libbrotlidec.a
+                ')
             ->withPkgName('libbrotlicommon libbrotlidec libbrotlienc')
             ->withLicense('https://github.com/google/brotli/blob/master/LICENSE', Library::LICENSE_MIT)
             ->withHomePage('https://github.com/google/brotli')
@@ -509,7 +532,7 @@ function install_curl(Preprocessor $p)
         (new Library('curl', '/usr/curl'))
             //->withUrl('https://curl.se/download/curl-7.80.0.tar.gz')
             ->withUrl('https://curl.se/download/curl-7.87.0.tar.gz')
-            ->withCleanPackageBeforeConfigure()
+            ->withCleanInstallPackageBeforeConfigure()
             ->withConfigure(
                 "autoreconf -fi && ./configure --prefix=/usr/curl --enable-static --disable-shared \
                  --with-openssl=/usr/openssl \
@@ -600,16 +623,16 @@ install_bzip2($p);
 install_liblzma($p);
 install_libzstd($p);
 
-install_zip($p); //上一步虽然安装里bizp2，但是仍然需要系统提供的bzip2 需要解决BZ2_bzCompressInit
+install_zip($p); //上一步虽然安装里了bizp2，但是仍然需要系统提供的bzip2 ，因为需要解决BZ2_bzCompressInit 找不到的问题
 
 install_giflib($p);
 install_libpng($p);
 install_libjpeg($p);
-install_freetype($p);
+install_freetype($p); //需要brotli
 install_libwebp($p);
 install_sqlite3($p);
 
-install_icu($p); //虽然自定义安装，但是不使用，默认使用静态系统库
+install_icu($p); //虽然自定义安装目录，并且静态编译。但是不使用，默认仍然还是使用静态系统库
 
 install_oniguruma($p);
 

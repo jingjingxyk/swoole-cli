@@ -10,16 +10,19 @@ apk add --no-cache  readline readline-dev readline-static
 apk add --no-cache  bzip2 bzip2-dev bzip2-static
 apk add --no-cache  zstd zstd-dev zstd-libs
 apk add --no-cache  xz xz-dev xz-libs
+
 apk add libidn2 libidn2-dev  libidn2-static
 apk add nghttp2-dev nghttp2-libs nghttp2-static
 apk add brotli-dev brotli-libs brotli-static
+
 sh make.sh zip
 sh make.sh cares
 
 # 为 postgresql 准备
 apk add libxml2-dev libxml2-static
 
-
+apk add brotli-dev brotli-libs brotli-static
+apk add oniguruma oniguruma-dev
 
 pkg-config --cflags ncursesw ncurses
 pkg-config  --libs ncursesw ncurses
@@ -150,8 +153,7 @@ apk add libbson libbson-dev libbson-static
 
 
 
-apk add brotli-dev brotli-libs brotli-static
-apk add oniguruma oniguruma-dev
+
 
 
 
