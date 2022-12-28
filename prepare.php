@@ -218,22 +218,50 @@ function install_zlib(Preprocessor $p)
     );
 }
 
-
-
 function install_bzip2(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('bzip2', '/usr/bzip2'))
-            ->withUrl('https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz')
+            ->withUrl('https://gitlab.com/bzip2/bzip2/-/archive/master/bzip2-master.tar.gz')
             ->withCleanInstallPackageBeforeConfigure()
             ->withScriptBeforeConfigure('
-            test -d /usr/bzip2 && rm -rf /usr/bzip2
-            sed -i "s@PREFIX=/usr/local@PREFIX=/usr/bzip2@" Makefile
+              test -d /usr/bzip2 && rm -rf /usr/bzip2 ;
+              mkdir build && cd build ;
+            ')
+            ->withConfigure('
+                    cmake .. -DCMAKE_BUILD_TYPE="Release" \
+                    -DCMAKE_INSTALL_PREFIX=/usr/bzip2  \
+                    -DENABLE_STATIC_LIB=ON ;
+                    cmake --build . --target install   ;
+                    cd - ;
+                    :; #  shell空语句
+                    pwd
+                    return 0 ; # 返回本函数调用处，本函数后续代码不在执行
+            ')
+            ->withLdflags('-L/usr/bzip2/lib')
+            ->withHomePage('https://www.sourceware.org/bzip2/')
+            ->withLicense('https://www.sourceware.org/bzip2/', Library::LICENSE_BSD)
+    );
+}
+
+function install_bzip_old(Preprocessor $p)
+{
+    $p->addLibrary(
+        (new Library('bzip2', '/usr/bzip2'))
+            //->withUrl('https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz')
+            ->withUrl('https://gitlab.com/bzip2/bzip2/-/archive/master/bzip2-master.tar.gz')
+            //git clone https://android.googlesource.com/platform/external/bzip2 -b master
+            //git clone https://chromium.googlesource.com/external/github.com/nmoinvaz/minizip
+            //https://chromium.googlesource.com/?format=HTML ;search "external/github.com/"
+            ->withCleanInstallPackageBeforeConfigure()
+            ->withScriptBeforeConfigure('
+            test -d /usr/bzip2 && rm -rf /usr/bzip2 ;
+            # sed -i "s@BIGFILES=-D_FILE_OFFSET_BITS=64@BIGFILES=-D_LARGE_FILES@" Makefile ;
             ')
             ->withMakeOptions('all')
-            ->withMakeInstallOptions('install PREFIX=/usr/bzip2')
+            ->withMakeInstallOptions(' install PREFIX=/usr/bzip2')
             ->withLdflags('-L/usr/bzip2/lib')
-            ->disableDefaultPkgConfig()
+
             ->withHomePage('https://www.sourceware.org/bzip2/')
             ->withLicense('https://www.sourceware.org/bzip2/', Library::LICENSE_BSD)
     );
@@ -309,13 +337,15 @@ function install_zip(Preprocessor $p)
                 -DLIBLZMA_HAS_LZMA_PRESET=ON  \
                 -DENABLE_ZSTD=ON \
                 -DZstd_LIBRARY=/usr/libzstd/lib \
-                -DZstd_INCLUDE_DIR=/usr/libzstd/include \
+                -DZstd_INCLUDE_DIR=/usr/libzstd/include
                 ' )
             ->withMakeOptions('VERBOSE=1 all ')
             ->withMakeInstallOptions("install PREFIX=/usr/zip")
             ->withPkgName('libzip')
             ->withPkgConfig('/usr/zip/lib/pkgconfig')
             ->withLdflags('-L/usr/zip/lib')
+            ->disableDefaultLdflags()
+            ->disableDefaultPkgConfig()
             ->withHomePage('https://libzip.org/')
             ->withLicense('https://libzip.org/license/', Library::LICENSE_BSD)
     );
@@ -397,7 +427,7 @@ function install_ncurses(Preprocessor $p)
             ->withScriptBeforeConfigure('
                 test -d /usr/ncurses && rm -rf /usr/ncurses ;
                 test -d /usr/ncurses/ && rm -rf /usr/ncurses/ ;
-                mkdir -p /usr/ncurses/lib/pkgconfig ;
+                mkdir -p /usr/ncurses/lib/pkgconfig
             ')
             ->withConfigure('./configure --prefix=/usr/ncurses  --enable-static --disable-shared --enable-widec --enable-pc-files --with-pkg-config=/usr/ncurses/lib/pkgconfig --with-pkg-config-libdir=/usr/ncurses/lib/pkgconfig  ')
             ->withScriptAfterInstall("

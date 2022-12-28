@@ -7,10 +7,12 @@ apk update
 apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
 apk add --no-cache  ncurses-dev ncurses-libs ncurses-static
 apk add --no-cache  readline readline-dev readline-static
+
+
 apk add --no-cache  bzip2 bzip2-dev bzip2-static
+apk add libzip libzip-dev libzip-tools
 apk add --no-cache  zstd zstd-dev zstd-libs
 apk add --no-cache  xz xz-dev xz-libs
-
 apk add libidn2 libidn2-dev  libidn2-static
 apk add nghttp2-dev nghttp2-libs nghttp2-static
 apk add brotli-dev brotli-libs brotli-static
@@ -50,6 +52,8 @@ pkg-config --cflags --libs libsodium
 
 pkg-config --cflags  libzip
 pkg-config --libs  libzip
+pkg-config --libs  bzip2
+pkg-config --libs  bz2
 
 
 

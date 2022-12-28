@@ -88,7 +88,7 @@ class Library extends Project
 
     function withScriptBeforeConfigure(string $script): static
     {
-        $this->beforeConfigureScript = $script ;
+        $this->beforeConfigureScript = $script;
         return $this;
     }
 
