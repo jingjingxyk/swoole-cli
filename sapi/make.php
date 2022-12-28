@@ -34,24 +34,24 @@ make_<?=$item->name?>() {
     mkdir -p <?=$this->workDir?>/thirdparty/<?=$item->name?> ;
     tar --strip-components=1 -C <?=$this->workDir?>/thirdparty/<?=$item->name?> -xf <?=$this->workDir?>/pool/lib/<?=$item->file?> ;
     cd <?=$item->name?> ;
-    <?php if (!empty($item->beforeConfigureScript)):?>
-        <?= $item->beforeConfigureScript ?>
-    <?php endif ;?>
+    <?php if (!empty($item->beforeConfigureScript)): ?>
+        <?= $item->beforeConfigureScript  . PHP_EOL  ?>
+    <?php endif; ?>
     :;
     echo  "<?=$item->configure?>" ;
     <?php if (!empty($item->configure)): ?>
-    <?= $item->configure ?> && \
+        <?= $item->configure  . PHP_EOL  ?>
     <?php endif; ?>
     :;
-    make -j <?=$this->maxJob?>  <?=$item->makeOptions?> && \
-    <?php if ($item->beforeInstallScript): ?>
-    <?=$item->beforeInstallScript?>
-    <?php endif; ?>
+    make -j <?=$this->maxJob?> <?= $item->makeOptions  . PHP_EOL  ?>
     :;
-    make <?=$item->makeInstallDefaultOptions?> <?= $item->makeInstallOptions ?> && \
+    <?php if (!empty($item->beforeInstallScript)): ?>
+        <?=$item->beforeInstallScript  . PHP_EOL  ?>
+    <?php endif; ?>
+    make <?=$item->makeInstallDefaultOptions?> <?= $item->makeInstallOptions  . PHP_EOL  ?>
     :;
     <?php if ($item->afterInstallScript): ?>
-    <?= $item->afterInstallScript?>
+        <?= $item->afterInstallScript  . PHP_EOL  ?>
     <?php endif; ?>
     :;
     cd -
@@ -96,10 +96,14 @@ config_php() {
      export ONIG_CFLAGS=$(pkg-config --cflags oniguruma) ;
      export ONIG_LIBS=$(pkg-config --libs oniguruma) ;
 
-     export LIBZIP_CFLAGS=$(pkg-config --cflags libzip) ;
-     export LIBZIP_LIBS=$(pkg-config --libs libzip) ;
+
 
 :<<'EOF'
+
+libbz2_LIBS="-lbz2"
+libbz2_CFLAGS=""
+export LIBZIP_CFLAGS=$(pkg-config --cflags libzip) ;
+export LIBZIP_LIBS=$(pkg-config --libs libzip) ;
 
      export PKG_CONFIG_PATH="/usr/icu/lib/pkgconfig:$PKG_CONFIG_PATH"
      export ICU_CFLAGS=$(pkg-config --cflags  icu-uc icu-io icu-i18n)  ;
