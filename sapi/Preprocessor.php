@@ -40,7 +40,7 @@ abstract class Project
 class Library extends Project
 {
     public string $url;
-    public bool   $beforeConfigureCleanInstallPackageFlag = false;
+    public bool $beforeConfigureCleanInstallPackageFlag = false;
     public string $configure = '';
     public string $beforeConfigureScript = '';
     public string $file = '';
@@ -82,7 +82,7 @@ class Library extends Project
 
     function withCleanInstallPackageBeforeConfigure(): static
     {
-        $this->beforeConfigureCleanInstallPackageFlag = true ;
+        $this->beforeConfigureCleanInstallPackageFlag = true;
         return $this;
     }
 
@@ -130,7 +130,7 @@ class Library extends Project
 
     function withMakeInstallOptions(string $makeInstallOptions): static
     {
-        $this->makeInstallDefaultOptions='';
+        $this->makeInstallDefaultOptions = '';
         $this->makeInstallOptions = $makeInstallOptions;
         return $this;
     }
@@ -211,17 +211,17 @@ class Preprocessor
      * @var array|string[]
      */
     protected array $extEnabled = [
-       // "Core",
+        // "Core",
         "ctype",
-       // "date",
+        // "date",
         //"dom",
         "fileinfo",
         "filter",
         //"hash",
         "iconv",
-       // "json",
+        // "json",
         //"libxml",
-       // "pcre",
+        // "pcre",
         // "PDO",
         "pdo",
         "pdo_sqlite",
@@ -317,8 +317,8 @@ class Preprocessor
 
     function disableZendOpcache()
     {
-        $key=array_search('opcache',$this->extEnabled);
-        if($key !== false) {
+        $key = array_search('opcache', $this->extEnabled);
+        if ($key !== false) {
             unset($this->extEnabled[$key]);
         }
         $this->disableZendOpcacheFlag = true;
@@ -372,11 +372,11 @@ class Preprocessor
         $skip_library_download = getenv('SKIP_LIBRARY_DOWNLOAD');
         if (empty($skip_library_download)) {
             if (!is_file($this->libraryDir . '/' . $lib->file)) {
-                echo '[Library] file downloading: '. $lib->file . PHP_EOL .'download url: '. $lib->url . PHP_EOL;
+                echo '[Library] file downloading: ' . $lib->file . PHP_EOL . 'download url: ' . $lib->url . PHP_EOL;
                 //echo `wget {$lib->url} -O {$this->libraryDir}/{$lib->file}`;
                 echo `curl --connect-timeout 15 --retry 5 --retry-delay 5  -Lo {$this->libraryDir}/{$lib->file} {$lib->url}`;
                 echo PHP_EOL;
-                echo 'download ' .$lib->file . ' OK '.PHP_EOL.PHP_EOL;
+                echo 'download ' . $lib->file . ' OK ' . PHP_EOL . PHP_EOL;
                 // PGP  验证
             } else {
                 echo "[Library] file cached: " . $lib->file . PHP_EOL;
@@ -413,7 +413,7 @@ class Preprocessor
             if (!is_file($ext->path)) {
                 _download:
                 $download_name = $ext->peclVersion == 'latest' ? $ext->name : $ext->name . '-' . $ext->peclVersion;
-                echo "pecl download $download_name ".PHP_EOL;
+                echo "pecl download $download_name " . PHP_EOL;
                 echo `cd {$this->extensionDir} && pecl download $download_name && cd -`;
             } else {
                 echo "[Extension] file cached: " . $ext->file . PHP_EOL;
@@ -467,9 +467,9 @@ class Preprocessor
             }
         }
 
-        $key=array_search('opcache',$this->extEnabled);
-        if(!$key) {
-            $this->disableZendOpcacheFlag = true ;
+        $key = array_search('opcache', $this->extEnabled);
+        if (!$key) {
+            $this->disableZendOpcacheFlag = true;
         }
 
         foreach ($this->extEnabled as $ext) {

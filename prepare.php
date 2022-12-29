@@ -21,7 +21,8 @@ if ($p->osType == 'macos') {
     $p->setExtraLdflags('-framework CoreFoundation -framework SystemConfiguration -undefined dynamic_lookup -lwebp -licudata -licui18n -licuio');
     //$p->setExtraOptions('--with-config-file-path=/usr/local/etc');
     $p->addEndCallback(function () use ($p) {
-        file_put_contents(__DIR__ . '/make.sh', str_replace('/usr', $p->getWorkDir() . '/usr', file_get_contents(__DIR__ . '/make.sh')));
+        file_put_contents(__DIR__ . '/make.sh',
+            str_replace('/usr', $p->getWorkDir() . '/usr', file_get_contents(__DIR__ . '/make.sh')));
     });
 }
 
@@ -31,8 +32,6 @@ $p->setMaxJob(`nproc 2> /dev/null || sysctl -n hw.ncpu`); // nproc on macos ；
 // ================================================================================================
 // Library
 // ================================================================================================
-
-
 
 
 function install_libiconv(Preprocessor $p)
@@ -175,7 +174,8 @@ function install_freetype(Preprocessor $p)
             ->withPkgConfig('/usr/freetype/lib/pkgconfig')
             ->withHomePage('https://freetype.org/')
             ->withPkgName('freetype2')
-            ->withLicense('https://gitlab.freedesktop.org/freetype/freetype/-/blob/master/docs/FTL.TXT', Library::LICENSE_SPEC)
+            ->withLicense('https://gitlab.freedesktop.org/freetype/freetype/-/blob/master/docs/FTL.TXT',
+                Library::LICENSE_SPEC)
     );
 }
 
@@ -261,7 +261,6 @@ function install_bzip_old(Preprocessor $p)
             ->withMakeOptions('all')
             ->withMakeInstallOptions(' install PREFIX=/usr/bzip2')
             ->withLdflags('-L/usr/bzip2/lib')
-
             ->withHomePage('https://www.sourceware.org/bzip2/')
             ->withLicense('https://www.sourceware.org/bzip2/', Library::LICENSE_BSD)
     );
@@ -338,7 +337,7 @@ function install_zip(Preprocessor $p)
                 -DENABLE_ZSTD=ON \
                 -DZstd_LIBRARY=/usr/libzstd/lib \
                 -DZstd_INCLUDE_DIR=/usr/libzstd/include
-                ' )
+                ')
             ->withMakeOptions('VERBOSE=1 all ')
             ->withMakeInstallOptions("install PREFIX=/usr/zip")
             ->withPkgName('libzip')
@@ -384,7 +383,6 @@ function install_oniguruma(Preprocessor $p)
 }
 
 
-
 function install_cares(Preprocessor $p)
 {
     $p->addLibrary(
@@ -400,7 +398,6 @@ function install_cares(Preprocessor $p)
             ->withHomePage('https://c-ares.org/')
     );
 }
-
 
 
 function install_libedit(Preprocessor $p)
@@ -545,6 +542,7 @@ function install_libidn2(Preprocessor $p)
             ->withLicense('https://www.gnu.org/licenses/old-licenses/gpl-2.0.html', Library::LICENSE_GPL)
     );
 }
+
 function install_nghttp2(Preprocessor $p)
 {
     $p->addLibrary(
@@ -556,6 +554,7 @@ function install_nghttp2(Preprocessor $p)
             ->withLicense('https://www.gnu.org/licenses/old-licenses/gpl-2.0.html', Library::LICENSE_GPL)
     );
 }
+
 function install_curl(Preprocessor $p)
 {
     $p->addLibrary(
@@ -603,8 +602,6 @@ function install_mimalloc(Preprocessor $p)
             ')
     );
 }
-
-
 
 
 function install_postgresql(Preprocessor $p)
@@ -687,7 +684,6 @@ install_curl($p);
 install_libsodium($p);
 install_libyaml($p);
 install_mimalloc($p);
-
 
 
 //参考 https://github.com/docker-library/php/issues/221

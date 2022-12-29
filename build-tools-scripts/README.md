@@ -8,6 +8,7 @@ apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
 apk add --no-cache  ncurses-dev ncurses-libs ncurses-static
 apk add --no-cache  readline readline-dev readline-static
 
+apk add python3 python3-dev
 
 apk add --no-cache  bzip2 bzip2-dev bzip2-static
 apk add libzip libzip-dev libzip-tools
