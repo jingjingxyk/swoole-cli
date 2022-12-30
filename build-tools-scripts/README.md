@@ -40,6 +40,22 @@ pkg-config  --libs readline
 
 ```
 
+
+```text
+
+##  linux编译参数CPPFLAGS、CFLAGS、LDFLAGS参数的理解
+https://blog.csdn.net/lailaiquququ11/article/details/126691913
+
+CPPFLAGS : 预处理器需要的选项 如：-I (大写i指定头文件路径)
+CFLAGS：编译的时候使用的参数 –Wall –g -c
+LDFLAGS ：链接库使用的选项 –L -l (大写L指定动态库的路径，小写L指定动态库的名称)
+
+
+# gcc常用的编译选项介绍
+  https://blog.csdn.net/u011069498/article/details/105344865
+
+```
+
 ```shell
 
 pkg-config --list-all

@@ -96,13 +96,14 @@ export XSL_LIBS=$(pkg-config --libs libxslt) ;
 export ONIG_CFLAGS=$(pkg-config --cflags oniguruma) ;
 export ONIG_LIBS=$(pkg-config --libs oniguruma) ;
 
+export LIBZIP_CFLAGS=$(pkg-config --cflags libzip) ;
+export LIBZIP_LIBS=$(pkg-config --libs libzip) ;
 
 :<<'EOF'
 
 libbz2_LIBS="-lbz2"
 libbz2_CFLAGS=""
-export LIBZIP_CFLAGS=$(pkg-config --cflags libzip) ;
-export LIBZIP_LIBS=$(pkg-config --libs libzip) ;
+
 
 export PKG_CONFIG_PATH="/usr/icu/lib/pkgconfig:$PKG_CONFIG_PATH"
 export ICU_CFLAGS=$(pkg-config --cflags  icu-uc icu-io icu-i18n)  ;

@@ -218,14 +218,18 @@ function install_zlib(Preprocessor $p)
     );
 }
 
-function install_bzip2(Preprocessor $p)
+function install_bzip2_latest_dev(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('bzip2', '/usr/bzip2'))
             ->withUrl('https://gitlab.com/bzip2/bzip2/-/archive/master/bzip2-master.tar.gz')
+            //git clone https://android.googlesource.com/platform/external/bzip2 -b master
+            //git clone https://chromium.googlesource.com/external/github.com/nmoinvaz/minizip
+            //https://chromium.googlesource.com/?format=HTML ;search "external/github.com/"
             ->withCleanInstallPackageBeforeConfigure()
             ->withScriptBeforeConfigure('
               test -d /usr/bzip2 && rm -rf /usr/bzip2 ;
+              apk add python3 py3-pip && python3 -m pip install pytest ;
               mkdir build && cd build ;
             ')
             ->withConfigure('
@@ -244,20 +248,20 @@ function install_bzip2(Preprocessor $p)
     );
 }
 
-function install_bzip_old(Preprocessor $p)
+function install_bzip2(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('bzip2', '/usr/bzip2'))
-            //->withUrl('https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz')
-            ->withUrl('https://gitlab.com/bzip2/bzip2/-/archive/master/bzip2-master.tar.gz')
-            //git clone https://android.googlesource.com/platform/external/bzip2 -b master
-            //git clone https://chromium.googlesource.com/external/github.com/nmoinvaz/minizip
-            //https://chromium.googlesource.com/?format=HTML ;search "external/github.com/"
+            ->withUrl('https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz')
             ->withCleanInstallPackageBeforeConfigure()
             ->withScriptBeforeConfigure('
             test -d /usr/bzip2 && rm -rf /usr/bzip2 ;
-            # sed -i "s@BIGFILES=-D_FILE_OFFSET_BITS=64@BIGFILES=-D_LARGE_FILES@" Makefile ;
+            # sed -i "s@BIGFILES=-D_FILE_OFFSET_BITS=64@BIGFILES=-D_LARGE_FILES -D_FILE_OFFSET_BITS=64@" Makefile ;
+            # sed -i "s@CFLAGS=-Wall -Winline -O2 -g@CFLAGS=-Wall -Winline -O3 -g@" Makefile ;
+            # CFLAGS = -Wall -Werror -g -O0 https://blog.csdn.net/tianya_lu/article/details/109050198
+
             ')
+            //->withConfigure('return 0 ')
             ->withMakeOptions('all')
             ->withMakeInstallOptions(' install PREFIX=/usr/bzip2')
             ->withLdflags('-L/usr/bzip2/lib')
@@ -309,10 +313,10 @@ function install_zip(Preprocessor $p)
             ->withFile('libzip-1.9.2.tar.gz')
             ->withCleanInstallPackageBeforeConfigure()
             ->withScriptBeforeConfigure('test -d /usr/zip && rm -rf /usr/zip')
-            ->withConfigure('
-                 cmake . \
+            ->withConfigure(<<<'EOF'
+                 cmake .  \
                 -DCMAKE_INSTALL_PREFIX=/usr/zip  \
-                -DBUILD_TOOLS=ON \
+                -DBUILD_TOOLS=OFF \
                 -DBUILD_EXAMPLES=OFF \
                 -DBUILD_DOC=OFF \
                 -DLIBZIP_DO_INSTALL=ON \
@@ -327,7 +331,9 @@ function install_zip(Preprocessor $p)
                 -DZLIB_INCLUDE_DIR=/usr/zlib/include \
                 -DENABLE_BZIP2=ON \
                 -DBZIP2_LIBRARIES=/usr/bzip2/lib \
+                -DBZIP2_LIBRARY=/usr/bzip2/lib \
                 -DBZIP2_INCLUDE_DIR=/usr/bzip2/include \
+                -DBZIP2_NEED_PREFIX=ON \
                 -DENABLE_LZMA=ON  \
                 -DLIBLZMA_LIBRARY=/usr/liblzma/lib \
                 -DLIBLZMA_INCLUDE_DIR=/usr/liblzma/include \
@@ -336,15 +342,15 @@ function install_zip(Preprocessor $p)
                 -DLIBLZMA_HAS_LZMA_PRESET=ON  \
                 -DENABLE_ZSTD=ON \
                 -DZstd_LIBRARY=/usr/libzstd/lib \
-                -DZstd_INCLUDE_DIR=/usr/libzstd/include
-                ')
-            ->withMakeOptions('VERBOSE=1 all ')
+                -DZstd_INCLUDE_DIR=/usr/libzstd/include \
+                -DIMPORTED_LOCATION=/usr/bzip2/lib
+EOF
+)
+            ->withMakeOptions(' all ; ') //VERBOSE=1
             ->withMakeInstallOptions("install PREFIX=/usr/zip")
             ->withPkgName('libzip')
             ->withPkgConfig('/usr/zip/lib/pkgconfig')
             ->withLdflags('-L/usr/zip/lib')
-            ->disableDefaultLdflags()
-            ->disableDefaultPkgConfig()
             ->withHomePage('https://libzip.org/')
             ->withLicense('https://libzip.org/license/', Library::LICENSE_BSD)
     );
