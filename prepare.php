@@ -666,6 +666,9 @@ function install_postgresql(Preprocessor $p)
 install_libiconv($p);
 install_openssl($p);
 //install_pcre2($p);
+install_ncurses($p); //虽然自定义安装，但是不使用，默认使用静态系统库
+install_readline($p); //虽然自定义安装，但是不使用，默认使用静态系统库
+
 install_libxml2($p);
 install_libxslt($p);
 install_gmp($p);
@@ -695,8 +698,7 @@ install_brotli($p);
 
 install_cares($p); //目录必须是 /usr ；如果使用自定义系统库，预处理时识别不了
 
-install_ncurses($p); //虽然自定义安装，但是不使用，默认使用静态系统库
-install_readline($p); //虽然自定义安装，但是不使用，默认使用静态系统库
+
 
 
 //install_libedit($p);
