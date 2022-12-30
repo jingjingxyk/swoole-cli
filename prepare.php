@@ -60,6 +60,21 @@ function install_openssl(Preprocessor $p)
     );
 }
 
+function install_pcre2(Preprocessor $p)
+{
+    $p->addLibrary((new Library('pcre2', '/usr/pcre2'))
+        ->withUrl('https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.42/pcre2-10.42.tar.gz')
+        ->withFile('pcre2-10.42.tar.gz')
+        ->withConfigure("CFLAGS='-O2 -Wall' ./configure --prefix=/usr/pcre2 --disable-shared --enable-jit")
+        ->withMakeInstallOptions('install ')
+        ->withPkgConfig('/usr/pcre2/lib/pkgconfig')
+        ->withLdflags('-L/usr/pcre2/lib')
+        ->withLicense('https://github.com/PCRE2Project/pcre2/blob/master/COPYING', Library::LICENSE_PCRE2) //PCRE2 LICENCE
+        ->withHomePage('https://github.com/PCRE2Project/pcre2.git')
+    );
+}
+
+
 // MUST be in the /usr directory
 // Dependent libiconv
 function install_libxml2(Preprocessor $p)
@@ -293,6 +308,7 @@ function install_libzstd(Preprocessor $p)
             ->withFile('zstd-1.5.2.tar.gz')
             ->withCleanInstallPackageBeforeConfigure()
             ->withScriptBeforeConfigure('test -d /usr/libzstd/ && rm -rf /usr/libzstd/')
+            ->withMakeOptions('all')
             ->withMakeInstallOptions('install PREFIX=/usr/libzstd/')
             ->withPkgName('libzstd.pc')
             ->withPkgConfig('/usr/libzstd/lib/pkgconfig')
@@ -337,15 +353,10 @@ function install_zip(Preprocessor $p)
                 -DENABLE_LZMA=ON  \
                 -DLIBLZMA_LIBRARY=/usr/liblzma/lib \
                 -DLIBLZMA_INCLUDE_DIR=/usr/liblzma/include \
-                -DLIBLZMA_HAS_AUTO_DECODER=ON  \
-                -DLIBLZMA_HAS_EASY_ENCODER=ON  \
-                -DLIBLZMA_HAS_LZMA_PRESET=ON  \
-                -DENABLE_ZSTD=ON \
-                -DZstd_LIBRARY=/usr/libzstd/lib \
-                -DZstd_INCLUDE_DIR=/usr/libzstd/include \
-                -DIMPORTED_LOCATION=/usr/bzip2/lib
+                -DENABLE_ZSTD=OFF
 EOF
 )
+
             ->withMakeOptions(' all ; ') //VERBOSE=1
             ->withMakeInstallOptions("install PREFIX=/usr/zip")
             ->withPkgName('libzip')
@@ -355,7 +366,14 @@ EOF
             ->withLicense('https://libzip.org/license/', Library::LICENSE_BSD)
     );
 }
-
+<<<'EOF'
+                -DENABLE_ZSTD=OFF \
+                -DZstd_LIBRARY=/usr/libzstd/lib \
+                -DZstd_INCLUDE_DIR=/usr/libzstd/include \
+                -DLIBLZMA_HAS_AUTO_DECODER=ON  \
+                -DLIBLZMA_HAS_EASY_ENCODER=ON  \
+                -DLIBLZMA_HAS_LZMA_PRESET=ON
+EOF;
 function install_icu(Preprocessor $p)
 {
     $p->addLibrary(
@@ -647,6 +665,7 @@ function install_postgresql(Preprocessor $p)
 //install_gettext($p);
 install_libiconv($p);
 install_openssl($p);
+//install_pcre2($p);
 install_libxml2($p);
 install_libxslt($p);
 install_gmp($p);

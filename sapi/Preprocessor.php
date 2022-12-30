@@ -17,6 +17,7 @@ abstract class Project
     const LICENSE_LGPL = 4;
     const LICENSE_MIT = 5;
     const LICENSE_PHP = 6;
+    const LICENSE_PCRE2 = 7 ;
 
     function __construct(string $name)
     {
@@ -221,7 +222,7 @@ class Preprocessor
         "iconv",
         // "json",
         //"libxml",
-        // "pcre",
+        //"pcre",
         // "PDO",
         "pdo",
         "pdo_sqlite",
