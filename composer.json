@@ -15,7 +15,21 @@
     "friendsofphp/php-cs-fixer": "^3.13"
   },
   "require-dev": {
-    "phpstan/phpstan": "^1.9"
+    "phpstan/phpstan": "^1.9",
+    "squizlabs/php_codesniffer": "*"
   },
-  "minimum-stability": "dev"
+  "minimum-stability": "dev",
+  "repositories": {
+    "packagist": {
+      "type": "composer",
+      "url": "https://mirrors.aliyun.com/composer/"
+    }
+  },
+  "scripts": {
+    "php-cs-fixer-help": "php vendor/bin/php-cs-fixer -h",
+    "php-cs-fixer": "php vendor/bin/php-cs-fixer  fix conf.d,sapi --rules=@PSR12 --show-progress",
+    "phpcs": "php vendor/bin/phpcs --standard=PSR12 sapi/make.php",
+    "phpcbf": "php vendor/bin/phpcbf --standard=PSR12 sapi/make.php",
+    "fmt": "sh build-tools-scripts/format-code.sh"
+  }
 }

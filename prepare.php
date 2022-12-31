@@ -305,7 +305,7 @@ function install_bzip2(Preprocessor $p)
             ->withUrl('https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz')
             ->withCleanInstallPackageBeforeConfigure()
             ->withScriptBeforeConfigure('
-            test -d /usr/bzip2 && rm -rf /usr/bzip2 ;
+                test -d /usr/bzip2 && rm -rf /usr/bzip2 ;
             ')
             //->withConfigure('return 0 ')
             ->withMakeOptions('all')
@@ -728,7 +728,7 @@ function install_postgresql(Preprocessor $p)
 }
 
 //install_gettext($p);
-install_libiconv($p);
+install_libiconv($p); //没有 libiconv.pc 文件 不能使用 pkg-config 命令
 install_openssl($p);
 //install_pcre2($p);
 
@@ -739,7 +739,7 @@ install_libxml2($p);
 install_libxslt($p);
 install_gmp($p);
 install_zlib($p);
-install_bzip2($p);
+install_bzip2($p); //没有 libbz2.pc 文件，不能使用 pkg-config 命令
 install_liblzma($p);
 install_libzstd($p);
 

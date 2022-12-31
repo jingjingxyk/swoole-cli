@@ -4,7 +4,8 @@ use SwooleCli\Preprocessor;
 use SwooleCli\Extension;
 
 return function (Preprocessor $p) {
-    $p->addExtension((new Extension('swoole'))
+    $p->addExtension(
+        (new Extension('swoole'))
        // ->withOptions('--enable-swoole --enable-sockets --enable-mysqlnd --enable-swoole-curl --enable-cares  --enable-swoole-pgsql  --with-brotli-dir=/usr/brotli ')
         ->withOptions('--enable-swoole --enable-sockets --enable-mysqlnd --enable-swoole-curl --enable-cares   --with-brotli-dir=/usr/brotli ')
 

@@ -333,6 +333,7 @@ ibpgcommon 和 libpqport
 - [composer.phar](https://developer.aliyun.com/composer)
 - [composer](https://getcomposer.org/doc/)
 - [EditorConfig](https://editorconfig.org/)
+- [PSR](https://www.php-fig.org/psr/)
 
 > PHP_CodeSniffer 是一个代码风格检测工具。它包含两类脚本，phpcs 和 phpcbf(
 > GitHub地址)。
@@ -344,6 +345,7 @@ pear install PHP_CodeSniffer-3.7.1
 # wget pear.php.net/PHP_CodeSniffer-3.7.1
 
 composer global require "squizlabs/php_codesniffer=*"
+composer  require "squizlabs/php_codesniffer=*"
 
 pear list
 ```
