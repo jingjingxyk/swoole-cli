@@ -141,7 +141,7 @@ static const opt_struct OPTIONS[] = {
 	{'D', 0, "daemonize"},
 	{'F', 0, "nodaemonize"},
 	{'O', 0, "force-stderr"},
-	{'P', 0, "fpm"},
+    {'P', 0, "fpm"},
 	{'-', 0, NULL} /* end of args */
 };
 
@@ -1564,7 +1564,7 @@ int fpm_main(int argc, char *argv[])
 	sapi_startup(&cgi_sapi_module);
 	cgi_sapi_module.php_ini_path_override = NULL;
 	cgi_sapi_module.php_ini_ignore_cwd = 1;
-	cgi_sapi_module.php_ini_ignore = 1;
+    cgi_sapi_module.php_ini_ignore = 1;
 
 #ifndef HAVE_ATTRIBUTE_WEAK
 	fcgi_set_logger(fpm_fcgi_log);
