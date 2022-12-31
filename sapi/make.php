@@ -108,7 +108,7 @@ export ZLIB_CFLAGS=$(pkg-config --cflags  zlib) ;
 export ZLIB_LIBS=$(pkg-config --libs  zlib) ;
 
 export CURL_CFLAGS=$(pkg-config --cflags libcurl) ;
-export CURL_LIBS=$(pkg-config --libslibcurl) ;
+export CURL_LIBS=$(pkg-config --libs libcurl) ;
 
 export PNG_CFLAGS=$(pkg-config --cflags  libpng) ;
 export PNG_LIBS=$(pkg-config --libs  libpng) ;
@@ -120,8 +120,8 @@ export FREETYPE2_CFLAGS=$(pkg-config --cflags freetype2) ;
 export FREETYPE2_LIBS=$(pkg-config --libs freetype2) ;
 
 :<<'EOF'
-export GDLIB_CFLAGS=$(pkg-config --cflags oniguruma) ;
-export GDLIB_LIBS=$(pkg-config --libs oniguruma) ;
+export GDLIB_CFLAGS=$(pkg-config --cflags "no install") ;
+export GDLIB_LIBS=$(pkg-config --libs "no install") ;
 EOF
 
 export ICU_CFLAGS=$(pkg-config --cflags  icu-uc icu-io icu-i18n)  ;
@@ -131,8 +131,8 @@ export ONIG_CFLAGS=$(pkg-config --cflags oniguruma) ;
 export ONIG_LIBS=$(pkg-config --libs oniguruma) ;
 
 :<<'EOF'
-export PHP_MONGODB_SNAPPY_CFLAGS=$(pkg-config --cflags snappy) ;
-export PHP_MONGODB_SNAPPY_LIBS=$(pkg-config --libs snappy) ;
+export PHP_MONGODB_SNAPPY_CFLAGS=$(pkg-config --cflags "no install") ;
+export PHP_MONGODB_SNAPPY_LIBS=$(pkg-config --libs "no install") ;
 EOF
 :<<'EOF'
 export PHP_MONGODB_ZLIB_CFLAGS=$(pkg-config --cflags zlib) ;
@@ -150,8 +150,8 @@ export PHP_MONGODB_ICU_CFLAGS=$(pkg-config --cflags icu-uc icu-io icu-i18n) ;
 export PHP_MONGODB_ICU_LIBS=$(pkg-config --libs icu-uc icu-io icu-i18n) ;
 EOF
 :<<'EOF'
-export EDIT_CFLAGS=$(pkg-config --cflags oniguruma) ;
-export EDIT_LIBS=$(pkg-config --libs oniguruma) ;
+export EDIT_CFLAGS=$(pkg-config --cflags "no install") ;
+export EDIT_LIBS=$(pkg-config --libs "no install") ;
 EOF
 
 
@@ -165,7 +165,6 @@ export EXSLT_CFLAGS=$(pkg-config --cflags libexslt) ;
 export EXSLT_LIBS=$(pkg-config --libs libexslt) ;
 
 
-
 export LIBZIP_CFLAGS=$(pkg-config --cflags libzip) ;
 export LIBZIP_LIBS=$(pkg-config --libs libzip) ;
 
@@ -175,13 +174,26 @@ export NCURSES_LIBS=$(pkg-config  --libs ncursesw ncurses);
 export READLINE_CFLAGS=$(pkg-config --cflags  readline)  ;
 export READLINE_LIBS=$(pkg-config  --libs readline)  ;
 
+
 :<<'EOF'
 
-export NCURSES_CFLAGS=$(pkg-config --cflags ncursesw ncurses);
-export NCURSES_LIBS=$(pkg-config  --libs ncursesw ncurses);
+export SWOOLE_CFLAGS=$(pkg-config  --cflags libcares)
+LIBPQ_CFLAGS=$(pkg-config  --cflags "no install")
+LIBPQ_LIBS=$(pkg-config  --libs "no install")
 
-export READLINE_CFLAGS=$(pkg-config --cflags  readline)  ;
-export READLINE_LIBS=$(pkg-config  --libs readline)  ;
+EOF
+:<<'EOF'
+swoole 配置
+$SWOOLE_CFLAGS $LIBPQ_CFLAGS
+
+LIBPQ_CFLAGS and LIBPQ_LIBS
+
+SWOOLE_PGSQL_CFLAGS
+
+dnl FIXME: this should be SWOOLE_CFLAGS="$SWOOLE_CFLAGS $LIBPQ_CFLAGS"
+dnl or SWOOLE_PGSQL_CFLAGS="$SWOOLE_CFLAGS $LIBPQ_CFLAGS" and SWOOLE_PGSQL_CFLAGS only applies to ext-src/swoole_postgresql_coro.cc
+EXTRA_CFLAGS="$EXTRA_CFLAGS $LIBPQ_CFLAGS"
+PHP_EVAL_LIBLINE($LIBPQ_LIBS, SWOOLE_SHARED_LIBADD)
 
 EOF
 
@@ -251,11 +263,17 @@ elif [ "$1" = "clean-all-library" ] ;then
 elif [ "$1" = "diff-configure" ] ;then
 meld $SRC/configure.ac ./configure.ac
 elif [ "$1" = "pkg-check" ] ;then
+set +x
 <?php foreach ($this->libraryList as $item) : ?>
-    echo "[<?= $item->name ?>]"
-    pkg-config --libs <?= ($item->pkgName ?: $item->name) . PHP_EOL ?>
-    echo "==========================================================="
+    <?php if (!empty($item->pkgName)) : ?>
+        echo "[<?= $item->name ?>]"
+        # pkg-config --libs <?= ($item->pkgName ?: $item->name) . PHP_EOL; ?>
+        pkg-config --cflags <?= $item->pkgName . PHP_EOL ?>
+        pkg-config --libs <?= $item->pkgName . PHP_EOL ?>
+        echo "==========================================================="
+    <?php endif; ?>
 <?php endforeach; ?>
+set -x
 elif [ "$1" = "sync" ] ;then
 echo "sync"
 # ZendVM

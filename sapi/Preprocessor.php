@@ -153,6 +153,11 @@ class Library extends Project
         $this->pkgName = $pkgName;
         return $this;
     }
+    function disablePkgName():static
+    {
+        $this->pkgName='';
+        return $this;
+    }
 }
 
 class Extension extends Project

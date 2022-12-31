@@ -54,5 +54,6 @@ EOF
 xdg-open http://127.0.0.1:8032
 
 #test -f ./swoole-cli && chmod a+x ./swoole-cli && ./swoole-cli ./serve.php
-test -f ./swoole-cli && chmod a+x ./swoole-cli && ./swoole-cli -S 0.0.0.0:8032 -t .
+test -f ./swoole-cli && test -x ./swoole-cli || chmod a+x ./swoole-cli  ;
+test -f ./swoole-cli &&  ./swoole-cli -S 0.0.0.0:8032 -t .
 

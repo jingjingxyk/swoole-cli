@@ -14,15 +14,13 @@ zip: https://libzip.org/license/
 giflib: http://giflib.sourceforge.net/intro.html
 libpng: http://www.libpng.org/pub/png/src/libpng-LICENSE.txt
 libjpeg: https://github.com/libjpeg-turbo/libjpeg-turbo/blob/main/LICENSE.md
+brotli: https://github.com/google/brotli/blob/master/LICENSE
 freetype: https://gitlab.freedesktop.org/freetype/freetype/-/blob/master/docs/FTL.TXT
 libwebp: https://github.com/webmproject/libwebp/blob/main/COPYING
 sqlite3: https://www.sqlite.org/copyright.html
 icu: https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE
 oniguruma: https://github.com/kkos/oniguruma/blob/master/COPYING
-brotli: https://github.com/google/brotli/blob/master/LICENSE
 cares: https://c-ares.org/license.html
-ncurses: https://invisible-island.net/ncurses/ncurses-license.html
-readline: http://www.gnu.org/licenses/gpl.html
 imagemagick: https://imagemagick.org/script/license.php
 curl: https://github.com/curl/curl/blob/master/COPYING
 libsodium: https://en.wikipedia.org/wiki/ISC_license

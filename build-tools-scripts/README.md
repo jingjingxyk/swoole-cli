@@ -1,15 +1,20 @@
-
 ```shell
 
 sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories && \
 apk update
 
-apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
+
 apk add --no-cache  ncurses-dev ncurses-libs ncurses-static
 apk add --no-cache  readline readline-dev readline-static
+apk add --no-cache  c-ares c-ares-dev c-ares-utils
+
+
 
 apk add python3 python3-dev
 
+apk add meld
+
+apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
 apk add --no-cache  bzip2 bzip2-dev bzip2-static
 apk add libzip libzip-dev libzip-tools
 apk add --no-cache  zstd zstd-dev zstd-libs
@@ -17,6 +22,7 @@ apk add --no-cache  xz xz-dev xz-libs
 apk add libidn2 libidn2-dev  libidn2-static
 apk add nghttp2-dev nghttp2-libs nghttp2-static
 apk add brotli-dev brotli-libs brotli-static
+
 
 sh make.sh zip
 sh make.sh cares
@@ -39,7 +45,6 @@ pkg-config  --libs readline
 
 
 ```
-
 
 ```text
 
@@ -76,7 +81,6 @@ pkg-config --libs  bz2
 
 ```
 
-
 ```shell
 alpine  php postgresql
 
@@ -88,7 +92,9 @@ https://www.gnu.org/software/
 
 
 ```
+
 ## 配置需要下载的库
+
 ```shell
 
 apt-get install -y libpq-dev
@@ -141,8 +147,8 @@ cmake -DCMAKE_CXX_FLAGS=-fPIC -DWITH_STDTHREADS=ON  -DCMAKE_BUILD_TYPE=Release .
 
 ```
 
-
 # use source php code
+
 ```shell
 
 apk add libxml2-dev
@@ -185,8 +191,6 @@ sh make.sh bzip2
 sh make.sh readline
 
 ```
-
-
 
 ```shell
 
@@ -274,8 +278,6 @@ CFLAGS=-I/usr/icu/include LDFLAGS=-L/usr/icu/lib
 
 ```
 
-
-
 ```shell
 
 pecl install -D 'enable-sockets="no" enable-openssl="yes" enable-http2="yes" enable-mysqlnd="yes" enable-swoole-json="no" enable-swoole-curl="yes" enable-cares="yes"' https://pecl.php.net/get/swoole-4.4.26.tgz
@@ -317,4 +319,31 @@ ldd test-libpg
 
 ibpgcommon 和 libpqport
 
+```
+
+## php 代码工具
+
+- [php-code-sniffer](https://www.jetbrains.com/help/phpstorm/using-php-code-sniffer.html)
+- [friendsofphp/php-cs-fixer](https://github.com/PHP-CS-Fixer/PHP-CS-Fixer)
+  [phpstan](https://phpstan.org/user-guide/getting-started)
+  [psalm](https://github.com/vimeo/psalm.git)
+- [PHP_CodeSniffer](https://pear.php.net/package/PHP_CodeSniffer/docs)
+- [php codesniffer,PHP 系列：代码规范之 Code Sniffer](https://blog.csdn.net/weixin_36433730/article/details/115228916)
+- [symfony](https://github.com/symfony/symfony)
+- [composer.phar](https://developer.aliyun.com/composer)
+- [composer](https://getcomposer.org/doc/)
+- [EditorConfig](https://editorconfig.org/)
+
+> PHP_CodeSniffer 是一个代码风格检测工具。它包含两类脚本，phpcs 和 phpcbf(
+> GitHub地址)。
+>
+
+```shell
+
+pear install PHP_CodeSniffer-3.7.1
+# wget pear.php.net/PHP_CodeSniffer-3.7.1
+
+composer global require "squizlabs/php_codesniffer=*"
+
+pear list
 ```
