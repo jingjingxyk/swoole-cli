@@ -59,7 +59,7 @@ sh build-tools-scripts/run-build-container.sh
 
 ```shell
 
-./make.sh all-library
+./make.sh
 
 ```
 

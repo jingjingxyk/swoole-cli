@@ -200,7 +200,8 @@ function install_freetype(Preprocessor $p)
                 # export HARFBUZZ_LIBS=$(pkg-config --libs "no install") ;
 EOF
                 export BZIP2_CFLAGS=-I/usr/bzip2/include
-                export BZIP2_LIBS=-L/usr/bzip2/lib
+                export BZIP2_LIBS="-L/usr/bzip2/lib -lbz2"
+
                 export BROTLI_CFLAGS=$(pkg-config --cflags libbrotlicommon libbrotlidec libbrotlienc) ;
                 export BROTLI_LIBS=$(pkg-config --libs libbrotlicommon libbrotlidec libbrotlienc) ;
 
@@ -384,7 +385,12 @@ function install_zip(Preprocessor $p)
                 -DENABLE_LZMA=ON  \
                 -DLIBLZMA_LIBRARY=/usr/liblzma/lib \
                 -DLIBLZMA_INCLUDE_DIR=/usr/liblzma/include \
-                -DENABLE_ZSTD=OFF
+                -DLIBLZMA_HAS_AUTO_DECODER=ON  \
+                -DLIBLZMA_HAS_EASY_ENCODER=ON  \
+                -DLIBLZMA_HAS_LZMA_PRESET=ON \
+                -DENABLE_ZSTD=ON \
+                -DZstd_LIBRARY=/usr/libzstd/lib \
+                -DZstd_INCLUDE_DIR=/usr/libzstd/include
 EOF
 )
 
@@ -401,9 +407,6 @@ EOF
                 -DENABLE_ZSTD=OFF \
                 -DZstd_LIBRARY=/usr/libzstd/lib \
                 -DZstd_INCLUDE_DIR=/usr/libzstd/include \
-                -DLIBLZMA_HAS_AUTO_DECODER=ON  \
-                -DLIBLZMA_HAS_EASY_ENCODER=ON  \
-                -DLIBLZMA_HAS_LZMA_PRESET=ON
 EOF;
 function install_icu(Preprocessor $p)
 {
