@@ -1,0 +1,21 @@
+{
+  "name": "swoole/swoole-cli",
+  "type": "project",
+  "autoload": {
+    "psr-4": {
+      "Swoole\\SwooleCli\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "jingjingxyk"
+    }
+  ],
+  "require": {
+    "friendsofphp/php-cs-fixer": "^3.13"
+  },
+  "require-dev": {
+    "phpstan/phpstan": "^1.9"
+  },
+  "minimum-stability": "dev"
+}
