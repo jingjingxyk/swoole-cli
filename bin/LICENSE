@@ -28,6 +28,4 @@ libyaml: https://pyyaml.org/wiki/LibYAML
 mimalloc: https://github.com/microsoft/mimalloc/blob/master/LICENSE
 php: https://github.com/php/php-src/blob/master/LICENSE
 php-ext-redis: https://github.com/phpredis/phpredis/blob/develop/COPYING
-php-ext-swoole: https://github.com/swoole/swoole-src/blob/master/LICENSE
 php-ext-yaml: https://github.com/php/pecl-file_formats-yaml/blob/php7/LICENSE
-php-ext-imagick: https://github.com/Imagick/imagick/blob/master/LICENSE

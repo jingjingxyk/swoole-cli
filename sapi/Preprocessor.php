@@ -268,13 +268,13 @@ class Preprocessor
         'sodium',
         'openssl',
         'readline',
-        'gd', //需要freetype,  freetype 需要 libbrotlidec
+        //'gd', //需要freetype,  freetype 需要 libbrotlidec
         'redis',
         //'pgsql',
-        'swoole',
+       // 'swoole',
         'yaml',
-        'imagick',
-        'mongodb', //需要openssl zlib
+        //'imagick',
+       // 'mongodb', //需要openssl zlib
     ];
 
     protected array $endCallbacks = [];

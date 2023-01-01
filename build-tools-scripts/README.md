@@ -3,7 +3,7 @@
 sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories && \
 apk update
 
-
+apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
 apk add --no-cache  ncurses-dev ncurses-libs ncurses-static
 apk add --no-cache  readline readline-dev readline-static
 apk add --no-cache  c-ares c-ares-dev c-ares-utils
@@ -334,6 +334,7 @@ ibpgcommon 和 libpqport
 - [composer](https://getcomposer.org/doc/)
 - [EditorConfig](https://editorconfig.org/)
 - [PSR](https://www.php-fig.org/psr/)
+- [phpunit](https://github.com/sebastianbergmann/phpunit.git)
 
 > PHP_CodeSniffer 是一个代码风格检测工具。它包含两类脚本，phpcs 和 phpcbf(
 > GitHub地址)。
@@ -349,3 +350,5 @@ composer  require "squizlabs/php_codesniffer=*"
 
 pear list
 ```
+
+- [gnu mirro](https://mirrors.aliyun.com/gnu/)

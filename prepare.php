@@ -18,11 +18,16 @@ if (!empty($argv[1])) {
 
 if ($p->osType == 'macos') {
     $p->setWorkDir(__DIR__);
-    $p->setExtraLdflags('-framework CoreFoundation -framework SystemConfiguration -undefined dynamic_lookup -lwebp -licudata -licui18n -licuio');
+    $p->setExtraLdflags('-framework CoreFoundation \
+     -framework SystemConfiguration \
+     -undefined dynamic_lookup \
+     -lwebp -licudata -licui18n -licuio
+     ');
     //$p->setExtraOptions('--with-config-file-path=/usr/local/etc');
     $p->addEndCallback(function () use ($p) {
         file_put_contents(__DIR__ . '/make.sh',
-            str_replace('/usr', $p->getWorkDir() . '/usr', file_get_contents(__DIR__ . '/make.sh')));
+            str_replace('/usr', $p->getWorkDir() . '/usr', file_get_contents(__DIR__ . '/make.sh'))
+        );
     });
 }
 
@@ -50,7 +55,9 @@ function install_openssl(Preprocessor $p)
     $p->addLibrary((new Library('openssl', '/usr/openssl'))
         ->withUrl('https://www.openssl.org/source/openssl-3.0.7.tar.gz')
         ->withFile('openssl-3.0.7.tar.gz')
-        ->withConfigure('./config' . ($p->osType === 'macos' ? '' : ' -static --static') . ' no-shared --release --prefix=/usr/openssl')
+        ->withConfigure('./config' . ($p->osType === 'macos' ? '' : ' -static --static') .
+            ' no-shared --release --prefix=/usr/openssl'
+        )
         ->withMakeInstallOptions('install_sw')
         ->withPkgConfig('/usr/openssl/lib64/pkgconfig')
         ->withPkgName('libcrypto libssl openssl')
@@ -69,7 +76,9 @@ function install_pcre2(Preprocessor $p)
         ->withMakeInstallOptions('install ')
         ->withPkgConfig('/usr/pcre2/lib/pkgconfig')
         ->withLdflags('-L/usr/pcre2/lib')
-        ->withLicense('https://github.com/PCRE2Project/pcre2/blob/master/COPYING', Library::LICENSE_PCRE2) //PCRE2 LICENCE
+        ->withLicense('https://github.com/PCRE2Project/pcre2/blob/master/COPYING',
+            Library::LICENSE_PCRE2
+        ) //PCRE2 LICENCE
         ->withHomePage('https://github.com/PCRE2Project/pcre2.git')
     );
 }
@@ -82,7 +91,13 @@ function install_libxml2(Preprocessor $p)
     $p->addLibrary(
         (new Library('libxml2'))
             ->withUrl('https://gitlab.gnome.org/GNOME/libxml2/-/archive/v2.9.10/libxml2-v2.9.10.tar.gz')
-            ->withConfigure('./autogen.sh && ./configure --prefix=/usr/libxml2 --with-iconv=/usr/libiconv --enable-static=yes --enable-shared=no')
+            ->withConfigure('
+            ./autogen.sh && ./configure \
+            --prefix=/usr/libxml2 \
+            --with-iconv=/usr/libiconv \
+            --enable-static=yes \
+            --enable-shared=no
+            ')
             ->withPkgName('libxml-2.0')
             ->withPkgConfig('/usr/libxml2/lib/pkgconfig')
             ->withLdflags('-L/usr/libxml2/lib')
@@ -97,7 +112,9 @@ function install_libxslt(Preprocessor $p)
     $p->addLibrary(
         (new Library('libxslt'))
             ->withUrl('https://gitlab.gnome.org/GNOME/libxslt/-/archive/v1.1.34/libxslt-v1.1.34.tar.gz')
-            ->withConfigure('./autogen.sh && ./configure --prefix=/usr/libxslt   --enable-static=yes --enable-shared=no')
+            ->withConfigure('
+            ./autogen.sh && ./configure \
+            --prefix=/usr/libxslt   --enable-static=yes --enable-shared=no')
             ->withPkgConfig('/usr/libxslt/lib/pkgconfig')
             ->withPkgName('libexslt libxslt')
             ->withLdflags('-L/usr/libxslt/lib')
@@ -110,7 +127,19 @@ function install_imagemagick(Preprocessor $p)
     $p->addLibrary(
         (new Library('imagemagick', '/usr/imagemagick'))
             ->withUrl('https://github.com/ImageMagick/ImageMagick/archive/refs/tags/7.1.0-53.tar.gz')
-            ->withConfigure('./configure --prefix=/usr/imagemagick --enable-static --disable-shared --with-zip=no --with-fontconfig=no --with-heic=no --with-lcms=no --with-lqr=no --with-openexr=no --with-openjp2=no --with-pango=no --with-raw=no --with-tiff=no')
+            ->withConfigure('
+            ./configure --prefix=/usr/imagemagick --enable-static --disable-shared \
+            --with-zip=no \
+            --with-fontconfig=no \
+            --with-heic=no \
+            --with-lcms=no \
+            --with-lqr=no \
+            --with-openexr=no -\
+            -with-openjp2=no \
+            --with-pango=no \
+            --with-raw=no \
+            --with-tiff=no
+            ')
             ->withPkgName('ImageMagick MagickWand MagickCore')
             ->withLicense('https://imagemagick.org/script/license.php', Library::LICENSE_APACHE2)
     );
@@ -122,7 +151,6 @@ function install_gmp(Preprocessor $p)
         (new Library('gmp', '/usr/gmp'))
             //站点SSL证书过期
             //->withUrl('https://gmplib.org/download/gmp/gmp-6.2.1.tar.lz')
-            //https://mirrors.aliyun.com/gnu/
             //->withUrl('https://mirrors.aliyun.com/gnu/gmp//gmp-6.2.1.tar.lz')
             ->withUrl('https://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.lz')
             ->withConfigure('./configure --prefix=/usr/gmp --enable-static --disable-shared')
@@ -183,39 +211,42 @@ function install_libjpeg(Preprocessor $p)
 
 function install_freetype(Preprocessor $p)
 {
-    $p->addLibrary(
-        (new Library('freetype', '/usr/freetype'))
-            // dig mirror.yongbok.net DNS 无解析
-            //->withUrl('https://mirror.yongbok.net/nongnu/freetype/freetype-2.10.4.tar.gz')
-            ->withUrl('https://download.savannah.gnu.org/releases/freetype/freetype-2.10.4.tar.gz')
-            ->withConfigure('
-:<<\'EOF\'
+    $a=<<<'_EOF_'
+:<<'EOF'
                 export ZLIB_CFLAGS=$(pkg-config --cflags zlib) ;
                 export ZLIB_LIBS=$(pkg-config --libs zlib) ;
 
                 export LIBPNG_LIBS=$(pkg-config --cflags libpng libpng16) ;
                 export LIBPNG_LIBS=$(pkg-config --libs libpng libpng16) ;
 
-                # export HARFBUZZ_CFLAGS=$(pkg-config --cflags "no install") ;
-                # export HARFBUZZ_LIBS=$(pkg-config --libs "no install") ;
+                # export HARFBUZZ_CFLAGS=$(pkg-config --cflags 'no install') ;
+                # export HARFBUZZ_LIBS=$(pkg-config --libs 'no install') ;
 EOF
-                export BZIP2_CFLAGS=-I/usr/bzip2/include
-                export BZIP2_LIBS="-L/usr/bzip2/lib -lbz2"
+_EOF_;
 
-                export BROTLI_CFLAGS=$(pkg-config --cflags libbrotlicommon libbrotlidec libbrotlienc) ;
-                export BROTLI_LIBS=$(pkg-config --libs libbrotlicommon libbrotlidec libbrotlienc) ;
+    $p->addLibrary(
+        (new Library('freetype', '/usr/freetype'))
+            // dig mirror.yongbok.net DNS 无解析
+            //->withUrl('https://mirror.yongbok.net/nongnu/freetype/freetype-2.10.4.tar.gz')
+            ->withUrl('https://download.savannah.gnu.org/releases/freetype/freetype-2.10.4.tar.gz')
+
+            ->withConfigure("
+
+                export BZIP2_CFLAGS='-I/usr/bzip2/include'
+                export BZIP2_LIBS='-L/usr/bzip2/lib -lbz2'
+                # libbrotlicommon libbrotlidec libbrotlien
+                export BROTLI_CFLAGS=$(pkg-config --cflags  libbrotlidec libbrotlienc) ;
+                export BROTLI_LIBS=$(pkg-config --libs  libbrotlidec libbrotlienc) ;
 
                ./configure --prefix=/usr/freetype --enable-static --disable-shared ;
 
-            ')
+            ")
             ->withScriptAfterInstall('
                 # 用完释放变量
                 unset BZIP2_CFLAGS
                 unset BZIP2_LIBS
                 unset BROTLI_LIBS
                 unset BROTLI_CFLAGS
-                env
-                return 0
             ')
             ->withLdflags('-L/usr/freetype/lib/')
             ->withPkgConfig('/usr/freetype/lib/pkgconfig')
@@ -403,11 +434,13 @@ EOF
             ->withLicense('https://libzip.org/license/', Library::LICENSE_BSD)
     );
 }
+/*
 <<<'EOF'
                 -DENABLE_ZSTD=OFF \
                 -DZstd_LIBRARY=/usr/libzstd/lib \
                 -DZstd_INCLUDE_DIR=/usr/libzstd/include \
 EOF;
+*/
 function install_icu(Preprocessor $p)
 {
     $p->addLibrary(
@@ -417,9 +450,9 @@ function install_icu(Preprocessor $p)
             ->withConfigure('source/runConfigureICU Linux --prefix=/usr/icu --enable-static --disable-shared')
             ->withPkgName('icu-uc icu-io icu-i18n')
             ->withPkgConfig('/usr/icu/lib/pkgconfig')
-            //->disableDefaultPkgConfig()
+            ->disableDefaultPkgConfig()
             ->withLdflags('-L/usr/icu/lib')
-            //->disableDefaultLdflags()
+            ->disableDefaultLdflags()
             ->withHomePage('https://icu.unicode.org/')
             ->withLicense('https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE', Library::LICENSE_SPEC)
     );
@@ -430,7 +463,9 @@ function install_oniguruma(Preprocessor $p)
     $p->addLibrary(
         (new Library('oniguruma'))
             ->withUrl('https://codeload.github.com/kkos/oniguruma/tar.gz/refs/tags/v6.9.7')
-            ->withConfigure('./autogen.sh && ./configure --prefix=/usr/oniguruma --enable-static --disable-shared')
+            ->withConfigure('./autogen.sh && ./configure \
+            --prefix=/usr/oniguruma --enable-static --disable-shared'
+            )
             ->withPkgConfig('/usr/oniguruma/lib/pkgconfig')
             ->withPkgName('oniguruma')
             //->disableDefaultPkgConfig()
@@ -604,7 +639,11 @@ function install_brotli(Preprocessor $p)
             ->withFile('brotli-1.0.9.tar.gz')
             ->withCleanInstallPackageBeforeConfigure()
             ->withScriptBeforeConfigure('test -d /usr/brotli/ && rm -rf /usr/brotli/ ')
-            ->withConfigure("cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX=/usr/brotli .")
+            ->withConfigure("
+                 cmake . -DCMAKE_BUILD_TYPE=Release \
+                -DBUILD_SHARED_LIBS=OFF \
+                -DCMAKE_INSTALL_PREFIX=/usr/brotli
+            ")
             ->withPkgConfig('/usr/brotli/lib/pkgconfig')
             ->withPkgName('libbrotlicommon libbrotlidec libbrotlienc')
             ->withLdflags('-L/usr/brotli/lib')

@@ -199,6 +199,8 @@ EOF
 
 
     ./buildconf --force ;
+    ./configure --help
+
 
 <?php if ($this->osType !== 'macos') : ?>
     mv main/php_config.h.in /tmp/cnt
