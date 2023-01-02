@@ -20,8 +20,6 @@ abstract class Project
 
     public const LICENSE_PHP = 6;
 
-    public const LICENSE_PCRE2 = 7;
-
     public string $name;
 
     public string $homePage = '';
@@ -54,8 +52,6 @@ abstract class Project
 class Library extends Project
 {
     public string $url;
-
-    public bool $cleanInstallPackage = false;
 
     public bool $cleanBuildDirectory = false;
 
@@ -106,12 +102,6 @@ class Library extends Project
     public function withFile(string $file): static
     {
         $this->file = $file;
-        return $this;
-    }
-
-    public function withCleanInstallPackage(): static
-    {
-        $this->cleanInstallPackage = true;
         return $this;
     }
 
