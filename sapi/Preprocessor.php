@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace SwooleCli;
 
 abstract class Project
@@ -55,9 +53,9 @@ class Library extends Project
 
     public bool $cleanBuildDirectory = false;
 
-    public string $configure = '';
-
     public string $beforeConfigureScript = '';
+
+    public string $configure = '';
 
     public string $file = '';
 
@@ -141,13 +139,13 @@ class Library extends Project
         return $this;
     }
 
-    public function withScriptBeforeInstall(string $script)
+    public function withScriptBeforeInstall(string $script): static
     {
         $this->beforeInstallScript = $script;
         return $this;
     }
 
-    public function withScriptAfterInstall(string $script)
+    public function withScriptAfterInstall(string $script): static
     {
         $this->afterInstallScript = $script;
         return $this;

@@ -39,10 +39,10 @@ EOF
     <?=$item->configure?> && \
     <?php endif; ?>
     make -j <?=$this->maxJob?>  <?=$item->makeOptions?> && \
-    <?php if ($item->beforeInstallScript): ?>
+    <?php if (!empty($item->beforeInstallScript)): ?>
     <?=$item->beforeInstallScript?> && \
     <?php endif; ?>
-    make install <?=$item->makeInstallOptions?> && \
+    make <?=$item->makeInstallDefaultOptions?> <?=$item->makeInstallOptions?> && \
     <?php if ($item->afterInstallScript): ?>
     <?=$item->afterInstallScript?> && \
     <?php endif; ?>
