@@ -154,7 +154,10 @@ rm -rf .libs
 
 cd ${__PROJECT__}/
 
-
+git restore Zend/*
+git restore build/*
+git restore ext/*
+git restore main/*
 
 cd ${__DIR__}
 sh download-php-sourcecode.sh
@@ -169,6 +172,8 @@ git submodule update --init --recursive
 
 cd ${__DIR__}
 sh download-init-depend-use-proxy.sh
+
+exit 0
 
 cd ${__PROJECT__}/
 sh make.sh sync

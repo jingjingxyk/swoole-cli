@@ -27,7 +27,7 @@ OPTIONS="--disable-all \
     make_<?= $item->name ?>() {
         cd <?= $this->workDir ?>/thirdparty ;
         echo "build <?= $item->name ?>" ;
-        <?php if ($item->beforeConfigureCleanInstallPackageFlag == true) : ?>
+        <?php if ($item->cleanBuildDirectory == true) : ?>
             test -d <?= $this->workDir ?>/thirdparty/<?= $item->name ?> && rm -rf <?= $this->workDir ?>/thirdparty/<?= $item->name ?> ;
         <?php endif; ?>
         mkdir -p <?= $this->workDir ?>/thirdparty/<?= $item->name ?> ;
@@ -37,7 +37,11 @@ OPTIONS="--disable-all \
             <?= $item->beforeConfigureScript . PHP_EOL ?>
         <?php endif; ?>
         :;
-        echo  "<?= $item->configure ?>" ;
+
+         echo <<'_EOF_'
+         <?= $item->configure . PHP_EOL ?>
+_EOF_
+        :;
         <?php if (!empty($item->configure)) : ?>
             <?= $item->configure . PHP_EOL ?>
         <?php endif; ?>
@@ -88,95 +92,95 @@ config_php() {
     test -f ./configure && rm ./configure ;
 
 
-    export LIBXML_CFLAGS=$(pkg-config --cflags libxml-2.0) ;
-    export LIBXML_LIBS=$(pkg-config --libs libxml-2.0) ;
+    LIBXML_CFLAGS=$(pkg-config --cflags libxml-2.0) ;
+    LIBXML_LIBS=$(pkg-config --libs libxml-2.0) ;
 
 
-    export OPENSSL_CFLAGS=$(pkg-config --cflags openssl libcrypto libssl) ;
-    export OPENSSL_LIBS=$(pkg-config --libs openssl libcrypto libssl) ;
+    OPENSSL_CFLAGS=$(pkg-config --cflags openssl libcrypto libssl) ;
+    OPENSSL_LIBS=$(pkg-config --libs openssl libcrypto libssl) ;
 
 :<<'EOF'
-    export PCRE2_CFLAGS=$(pkg-config --cflags libpcre2-8 libpcre2-posix) ;
-    export PCRE2_LIBS=$(pkg-config --libs libpcre2-8 libpcre2-posix) ;
+    PCRE2_CFLAGS=$(pkg-config --cflags libpcre2-8 libpcre2-posix) ;
+    PCRE2_LIBS=$(pkg-config --libs libpcre2-8 libpcre2-posix) ;
 EOF
 
-    export SQLITE_CFLAGS=$(pkg-config --cflags sqlite3) ;
-    export SQLITE_LIBS=$(pkg-config --libs sqlite3) ;
+    SQLITE_CFLAGS=$(pkg-config --cflags sqlite3) ;
+    SQLITE_LIBS=$(pkg-config --libs sqlite3) ;
 
-    export ZLIB_CFLAGS=$(pkg-config --cflags  zlib) ;
-    export ZLIB_LIBS=$(pkg-config --libs  zlib) ;
+    ZLIB_CFLAGS=$(pkg-config --cflags  zlib) ;
+    ZLIB_LIBS=$(pkg-config --libs  zlib) ;
 
-    export CURL_CFLAGS=$(pkg-config --cflags libcurl) ;
-    export CURL_LIBS=$(pkg-config --libs libcurl) ;
+    CURL_CFLAGS=$(pkg-config --cflags libcurl) ;
+    CURL_LIBS=$(pkg-config --libs libcurl) ;
 
-    export PNG_CFLAGS=$(pkg-config --cflags  libpng) ;
-    export PNG_LIBS=$(pkg-config --libs  libpng) ;
+    PNG_CFLAGS=$(pkg-config --cflags  libpng) ;
+    PNG_LIBS=$(pkg-config --libs  libpng) ;
 
-    export WEBP_CFLAGS=$(pkg-config --cflags libwebp) ;
-    export WEBP_LIBS=$(pkg-config --libs libwebp) ;
+    WEBP_CFLAGS=$(pkg-config --cflags libwebp) ;
+    WEBP_LIBS=$(pkg-config --libs libwebp) ;
 
-    export FREETYPE2_CFLAGS=$(pkg-config --cflags freetype2) ;
-    export FREETYPE2_LIBS=$(pkg-config --libs freetype2) ;
+    FREETYPE2_CFLAGS=$(pkg-config --cflags freetype2) ;
+    FREETYPE2_LIBS=$(pkg-config --libs freetype2) ;
 
 :<<'EOF'
-    export GDLIB_CFLAGS=$(pkg-config --cflags "no install") ;
-    export GDLIB_LIBS=$(pkg-config --libs "no install") ;
+    GDLIB_CFLAGS=$(pkg-config --cflags "no install") ;
+    GDLIB_LIBS=$(pkg-config --libs "no install") ;
 EOF
 
-    export ICU_CFLAGS=$(pkg-config --cflags  icu-uc icu-io icu-i18n)  ;
-    export ICU_LIBS=$(pkg-config  --libs icu-uc icu-io icu-i18n)  ;
+    ICU_CFLAGS=$(pkg-config --cflags  icu-uc icu-io icu-i18n)  ;
+    ICU_LIBS=$(pkg-config  --libs icu-uc icu-io icu-i18n)  ;
 
-    export ONIG_CFLAGS=$(pkg-config --cflags oniguruma) ;
-    export ONIG_LIBS=$(pkg-config --libs oniguruma) ;
+export   ONIG_CFLAGS=$(pkg-config --cflags oniguruma) ;
+export   ONIG_LIBS=$(pkg-config --libs oniguruma) ;
 
 :<<'EOF'
-    export PHP_MONGODB_SNAPPY_CFLAGS=$(pkg-config --cflags "no install") ;
-    export PHP_MONGODB_SNAPPY_LIBS=$(pkg-config --libs "no install") ;
+    PHP_MONGODB_SNAPPY_CFLAGS=$(pkg-config --cflags "no install") ;
+    PHP_MONGODB_SNAPPY_LIBS=$(pkg-config --libs "no install") ;
 EOF
 :<<'EOF'
-    export PHP_MONGODB_ZLIB_CFLAGS=$(pkg-config --cflags zlib) ;
-    export PHP_MONGODB_ZLIB_LIBS=$(pkg-config --libs zlib) ;
-    export PHP_MONGODB_ZSTD_CFLAGS=$(pkg-config --cflags libzstd) ;
-    export PHP_MONGODB_ZSTD_LIBS=$(pkg-config --libs libzstd) ;
+    PHP_MONGODB_ZLIB_CFLAGS=$(pkg-config --cflags zlib) ;
+    PHP_MONGODB_ZLIB_LIBS=$(pkg-config --libs zlib) ;
+    PHP_MONGODB_ZSTD_CFLAGS=$(pkg-config --cflags libzstd) ;
+    PHP_MONGODB_ZSTD_LIBS=$(pkg-config --libs libzstd) ;
 EOF
 :<<'EOF'
-    export PHP_MONGODB_SASL_CFLAGS=$(pkg-config --cflags sasl) ;
+    PHP_MONGODB_SASL_CFLAGS=$(pkg-config --cflags sasl) ;
 EOF
 :<<'EOF'
-    export PHP_MONGODB_SSL_CFLAGS=$(pkg-config --cflags openssl libcrypto libssl) ;
-    export PHP_MONGODB_SSL_LIBS=$(pkg-config --libs openssl libcrypto libssl) ;
-    export PHP_MONGODB_ICU_CFLAGS=$(pkg-config --cflags icu-uc icu-io icu-i18n) ;
-    export PHP_MONGODB_ICU_LIBS=$(pkg-config --libs icu-uc icu-io icu-i18n) ;
+    PHP_MONGODB_SSL_CFLAGS=$(pkg-config --cflags openssl libcrypto libssl) ;
+    PHP_MONGODB_SSL_LIBS=$(pkg-config --libs openssl libcrypto libssl) ;
+    PHP_MONGODB_ICU_CFLAGS=$(pkg-config --cflags icu-uc icu-io icu-i18n) ;
+    PHP_MONGODB_ICU_LIBS=$(pkg-config --libs icu-uc icu-io icu-i18n) ;
 EOF
 :<<'EOF'
-    export EDIT_CFLAGS=$(pkg-config --cflags "no install") ;
-    export EDIT_LIBS=$(pkg-config --libs "no install") ;
+    EDIT_CFLAGS=$(pkg-config --cflags "no install") ;
+    EDIT_LIBS=$(pkg-config --libs "no install") ;
 EOF
 
 
-    export LIBSODIUM_CFLAGS=$(pkg-config --cflags libsodium) ;
-    export LIBSODIUM_LIBS=$(pkg-config --libs libsodium) ;
+export   LIBSODIUM_CFLAGS=$(pkg-config --cflags libsodium) ;
+export   LIBSODIUM_LIBS=$(pkg-config --libs libsodium) ;
 
-    export XSL_CFLAGS=$(pkg-config --cflags libxslt) ;
-    export XSL_LIBS=$(pkg-config --libs libxslt) ;
+export       XSL_CFLAGS=$(pkg-config --cflags libxslt) ;
+export       XSL_LIBS=$(pkg-config --libs libxslt) ;
 
-    export EXSLT_CFLAGS=$(pkg-config --cflags libexslt) ;
-    export EXSLT_LIBS=$(pkg-config --libs libexslt) ;
+    EXSLT_CFLAGS=$(pkg-config --cflags libexslt) ;
+    EXSLT_LIBS=$(pkg-config --libs libexslt) ;
 
 
-    export LIBZIP_CFLAGS=$(pkg-config --cflags libzip) ;
-    export LIBZIP_LIBS=$(pkg-config --libs libzip) ;
+export    LIBZIP_CFLAGS=$(pkg-config --cflags libzip) ;
+export   LIBZIP_LIBS=$(pkg-config --libs libzip) ;
 
-    export NCURSES_CFLAGS=$(pkg-config --cflags ncursesw ncurses);
-    export NCURSES_LIBS=$(pkg-config  --libs ncursesw ncurses);
+    NCURSES_CFLAGS=$(pkg-config --cflags formw  menuw  ncursesw panelw);
+    NCURSES_LIBS=$(pkg-config  --libs formw  menuw  ncursesw panelw);
 
-    export READLINE_CFLAGS=$(pkg-config --cflags  readline)  ;
-    export READLINE_LIBS=$(pkg-config  --libs readline)  ;
+    READLINE_CFLAGS=$(pkg-config --cflags  readline)  ;
+    READLINE_LIBS=$(pkg-config  --libs readline)  ;
 
 
 :<<'EOF'
 
-    export SWOOLE_CFLAGS=$(pkg-config  --cflags libcares)
+    SWOOLE_CFLAGS=$(pkg-config  --cflags libcares)
     LIBPQ_CFLAGS=$(pkg-config  --cflags "no install")
     LIBPQ_LIBS=$(pkg-config  --libs "no install")
 

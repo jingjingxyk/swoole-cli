@@ -3,14 +3,18 @@
 sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories && \
 apk update
 
-apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
+
 apk add --no-cache  ncurses-dev ncurses-libs ncurses-static
 apk add --no-cache  readline readline-dev readline-static
+
+
+apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
 apk add --no-cache  c-ares c-ares-dev c-ares-utils
 
 
 
-apk add python3 python3-dev
+apk add python3 python3-dev py3-pip ninja
+pip3 install meson  -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 apk add meld
 
@@ -352,3 +356,14 @@ pear list
 ```
 
 - [gnu mirro](https://mirrors.aliyun.com/gnu/)
+  //git clone https://android.googlesource.com/platform/external/bzip2 -b master
+  //git clone https://chromium.googlesource.com/external/github.com/nmoinvaz/minizip
+  //https://chromium.googlesource.com/?format=HTML ;search "external/github.com/"
+
+命令 nm
+
+连接选项： 链接选项 -rdynamic与动态符号表
+
+显示可执行程序文件内的动态符号（注意，仅仅是动态符号）：
+
+readelf -Ds a.out

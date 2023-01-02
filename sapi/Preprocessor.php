@@ -1,23 +1,36 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SwooleCli;
 
 abstract class Project
 {
-    public string $name;
-    public string $homePage = '';
-    public string $license = '';
-    public string $prefix = '';
-    public int $licenseType = self::LICENSE_SPEC;
-
     public const LICENSE_SPEC = 0;
+
     public const LICENSE_APACHE2 = 1;
+
     public const LICENSE_BSD = 2;
+
     public const LICENSE_GPL = 3;
+
     public const LICENSE_LGPL = 4;
+
     public const LICENSE_MIT = 5;
+
     public const LICENSE_PHP = 6;
-    public const LICENSE_PCRE2 = 7 ;
+
+    public const LICENSE_PCRE2 = 7;
+
+    public string $name;
+
+    public string $homePage = '';
+
+    public string $license = '';
+
+    public string $prefix = '';
+
+    public int $licenseType = self::LICENSE_SPEC;
 
     public function __construct(string $name)
     {
@@ -41,18 +54,33 @@ abstract class Project
 class Library extends Project
 {
     public string $url;
-    public bool $beforeConfigureCleanInstallPackageFlag = false;
+
+    public bool $cleanInstallPackage = false;
+
+    public bool $cleanBuildDirectory = false;
+
     public string $configure = '';
+
     public string $beforeConfigureScript = '';
+
     public string $file = '';
+
     public string $ldflags = '';
+
     public string $makeOptions = '';
+
     public string $makeInstallOptions = '';
+
     public string $makeInstallDefaultOptions = 'install';
+
     public string $beforeInstallScript = '';
+
     public string $afterInstallScript = '';
+
     public string $pkgConfig = '';
+
     public string $pkgName = '';
+
     public string $prefix = '/usr';
 
     public function __construct(string $name, string $prefix = '/usr')
@@ -81,9 +109,15 @@ class Library extends Project
         return $this;
     }
 
-    public function withCleanInstallPackageBeforeConfigure(): static
+    public function withCleanInstallPackage(): static
     {
-        $this->beforeConfigureCleanInstallPackageFlag = true;
+        $this->cleanInstallPackage = true;
+        return $this;
+    }
+
+    public function withCleanBuildDirectory(): static
+    {
+        $this->cleanBuildDirectory = true;
         return $this;
     }
 
@@ -153,9 +187,10 @@ class Library extends Project
         $this->pkgName = $pkgName;
         return $this;
     }
+
     public function disablePkgName(): static
     {
-        $this->pkgName='';
+        $this->pkgName = '';
         return $this;
     }
 }
@@ -163,9 +198,13 @@ class Library extends Project
 class Extension extends Project
 {
     public string $url;
+
     public string $options = '';
+
     public string $peclVersion = '';
+
     public string $file = '';
+
     public string $path = '';
 
     public function withOptions(string $options): static
@@ -190,15 +229,27 @@ class Extension extends Project
 class Preprocessor
 {
     public string $osType = 'linux';
+
     public bool $disableZendOpcacheFlag = false;
+
+    public bool $disableZendOpcache = false;
+
     protected array $libraryList = [];
+
     protected array $extensionList = [];
+
     protected string $rootDir;
+
     protected string $libraryDir;
+
     protected string $extensionDir;
+
     protected array $pkgConfigPaths = [];
+
     protected string $phpSrcDir;
+
     protected string $dockerVersion = 'latest';
+
     /**
      * 指向 swoole-cli 所在的目录
      * $workDir/ext 存放扩展
@@ -206,11 +257,14 @@ class Preprocessor
      * 在 macOS 系统上，/usr 目录将会被替换为 $workDir/usr
      */
     protected string $workDir = '/work';
-    protected string $extraLdflags = '';
-    protected string $extraOptions = '';
-    protected int $maxJob = 8;
-    protected bool $installLibrary = true;
 
+    protected string $extraLdflags = '';
+
+    protected string $extraOptions = '';
+
+    protected int $maxJob = 8;
+
+    protected bool $installLibrary = true;
 
     /**
      * Extensions enabled by default
@@ -218,66 +272,68 @@ class Preprocessor
      */
     protected array $extEnabled = [
         // "Core",
-        "ctype",
+        'ctype',
         // "date",
-        //"dom",
-        "fileinfo",
-        "filter",
-        //"hash",
-        "iconv",
+        // "dom",
+        'fileinfo',
+        'filter',
+        // "hash",
+        'iconv',
         // "json",
-        //"libxml",
-        //"pcre",
+        // "libxml",
+        // "pcre",
         // "PDO",
-        "pdo",
-        "pdo_sqlite",
-        //"Phar",
-        "phar",
-        "posix",
-        //"Reflection",
-        //"reflection",
-        "session",
-        //"SimpleXML",
-        //"SPL",
-        "sqlite3",
-        //"standard",
-        "tokenizer",
-        "xml",
-        //"xmlreader",
-        //"xmlwriter",
+        'pdo',
+        'pdo_sqlite',
+        // "Phar",
+        'phar',
+        'posix',
+        // "Reflection",
+        // "reflection",
+        'session',
+        // "SimpleXML",
+        // "SPL",
+        'sqlite3',
+        // "standard",
+        'tokenizer',
+        'xml',
+        // "xmlreader",
+        // "xmlwriter",
 
         'opcache',
         'curl',
         'bz2',
         'bcmath',
         'pcntl',
-        'tokenizer',
-        'mbstring',  //需要 oniguruma
+        'tokenizer', // composer 要求
+        'mbstring',  // 依赖 oniguruma
         'zlib',
         'zip',
         'sockets',
         'mysqlnd',
-        //'mysqli',
-        'intl',  //需要 ICU
+        'mysqli',
+        'intl',  // 依赖 ICU
         'pdo_mysql',
-        //'pdo_pgsql',
-        //'soap',
+        // 'pdo_pgsql',
+        'soap',
         'xsl',
         'gmp',
         'exif',
         'sodium',
         'openssl',
         'readline',
-        //'gd', //需要freetype,  freetype 需要 libbrotlidec
+        'gd', //freetype 依赖 libbrotlidec
         'redis',
-        //'pgsql',
-       // 'swoole',
+        // 'pgsql',
+        'swoole',
         'yaml',
-        //'imagick',
-       // 'mongodb', //需要openssl zlib
+        'imagick',
+        'mongodb', //依赖 openssl zlib
+        'ds'
     ];
 
     protected array $endCallbacks = [];
+
     protected array $extCallbacks = [];
 
     public function __construct(string $rootPath)
@@ -321,13 +377,13 @@ class Preprocessor
         return $this->osType;
     }
 
-    public function disableZendOpcache()
+    public function withDisableZendOpcache()
     {
         $key = array_search('opcache', $this->extEnabled);
         if ($key !== false) {
             unset($this->extEnabled[$key]);
         }
-        $this->disableZendOpcacheFlag = true;
+        $this->disableZendOpcache = true;
     }
 
     public function setPhpSrcDir(string $phpSrcDir)
@@ -379,13 +435,13 @@ class Preprocessor
         if (empty($skip_library_download)) {
             if (!is_file($this->libraryDir . '/' . $lib->file)) {
                 echo '[Library] file downloading: ' . $lib->file . PHP_EOL . 'download url: ' . $lib->url . PHP_EOL;
-                //echo `wget {$lib->url} -O {$this->libraryDir}/{$lib->file}`;
-                echo `curl --connect-timeout 15 --retry 5 --retry-delay 5  -Lo {$this->libraryDir}/{$lib->file} {$lib->url}`;
+                // echo `wget {$lib->url} -O {$this->libraryDir}/{$lib->file}`;
+                echo shell_exec("curl --connect-timeout 15 --retry 5 --retry-delay 5  -Lo {$this->libraryDir}/{$lib->file} {$lib->url}");
                 echo PHP_EOL;
                 echo 'download ' . $lib->file . ' OK ' . PHP_EOL . PHP_EOL;
-            // PGP  验证
+            // TODO PGP  验证
             } else {
-                echo "[Library] file cached: " . $lib->file . PHP_EOL;
+                echo '[Library] file cached: ' . $lib->file . PHP_EOL;
             }
         }
 
@@ -394,7 +450,7 @@ class Preprocessor
         }
 
         if (empty($lib->license)) {
-            throw new \RuntimeException("require license");
+            throw new \RuntimeException('require license');
         }
 
         $this->libraryList[] = $lib;
@@ -419,16 +475,16 @@ class Preprocessor
             if (!is_file($ext->path)) {
                 _download:
                 $download_name = $ext->peclVersion == 'latest' ? $ext->name : $ext->name . '-' . $ext->peclVersion;
-                echo "pecl download $download_name " . PHP_EOL;
-                echo `cd {$this->extensionDir} && pecl download $download_name && cd -`;
+                echo "pecl download {$download_name} " . PHP_EOL;
+                echo shell_exec("cd {$this->extensionDir} && pecl download {$download_name} && cd -");
             } else {
-                echo "[Extension] file cached: " . $ext->file . PHP_EOL;
+                echo '[Extension] file cached: ' . $ext->file . PHP_EOL;
             }
 
             $dst_dir = "{$this->rootDir}/ext/{$ext->name}";
             if (!is_dir($dst_dir)) {
-                echo `mkdir -p $dst_dir`;
-                echo `tar --strip-components=1 -C $dst_dir -xf {$ext->path}`;
+                echo shell_exec("mkdir -p {$dst_dir}");
+                echo shell_exec("tar --strip-components=1 -C {$dst_dir} -xf {$ext->path}");
             }
         }
 
@@ -475,12 +531,12 @@ class Preprocessor
 
         $key = array_search('opcache', $this->extEnabled);
         if (!$key) {
-            $this->disableZendOpcacheFlag = true;
+            $this->disableZendOpcache = true;
         }
 
         foreach ($this->extEnabled as $ext) {
             if (!isset($extAvailabled[$ext])) {
-                echo "unsupported extension[$ext]\n";
+                echo "unsupported extension[{$ext}]\n";
                 continue;
             }
             ($extAvailabled[$ext])($this);
@@ -510,7 +566,6 @@ class Preprocessor
 
     /**
      * make -j {$n}
-     * @param int $n
      */
     public function setMaxJob(int $n)
     {
@@ -520,14 +575,14 @@ class Preprocessor
     public function info()
     {
         echo '==========================================================' . PHP_EOL;
-        echo "Extension count: " . count($this->extensionList) . PHP_EOL;
+        echo 'Extension count: ' . count($this->extensionList) . PHP_EOL;
         echo '==========================================================' . PHP_EOL;
         foreach ($this->extensionList as $item) {
             echo $item->name . PHP_EOL;
         }
 
         echo '==========================================================' . PHP_EOL;
-        echo "Library count: " . count($this->libraryList) . PHP_EOL;
+        echo 'Library count: ' . count($this->libraryList) . PHP_EOL;
         echo '==========================================================' . PHP_EOL;
         foreach ($this->libraryList as $item) {
             echo "{$item->name}\n";
