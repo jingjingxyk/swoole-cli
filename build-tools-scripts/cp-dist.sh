@@ -14,6 +14,7 @@ cd ${__DIR__}
 mkdir -p ${__DIR__}/dist/
 
 test -f ${__PROJECT__}/bin/swoole-cli && cp -f ${__PROJECT__}/bin/swoole-cli ${__DIR__}/dist/
+test -f ${__PROJECT__}/bin/swoole-cli && cp -f ${__PROJECT__}/bin/swoole-cli ${__PROJECT__}/php-cli/
 
 cd ${__DIR__}
 chown -R 1000:1000 ${__DIR__}/

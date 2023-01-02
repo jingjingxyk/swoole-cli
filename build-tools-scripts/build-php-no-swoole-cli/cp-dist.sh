@@ -9,7 +9,10 @@ __PROJECT__=$(
   cd ${__DIR__}/../../
   pwd
 )
-
+__PHP_CLI_BIN_DIR__=$(
+                      cd ${__DIR__}/../php-cli/
+                      pwd
+                    )
 cd ${__DIR__}
 
 
@@ -17,7 +20,11 @@ cd ${__DIR__}
 mkdir -p ${__DIR__}/dist/
 
 test -f /tmp/php/bin/php && cp -f /tmp/php/bin/php   ${__DIR__}/dist/
+test -f /tmp/php/bin/php && cp -f /tmp/php/bin/php   ${__PHP_CLI_BIN_DIR__}/
 test -f /tmp/php/bin/php-config && cp -f /tmp/php/bin/php-config   ${__DIR__}/dist/
+test -f /tmp/php/bin/php-config && cp -f /tmp/php/bin/php-config   ${__PHP_CLI_BIN_DIR__}/
+
+chown -R 1000:1000 ${__DIR__}
 
 cd ${__DIR__}
 chown -R 1000:1000 ${__DIR__}/dist/

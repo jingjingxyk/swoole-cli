@@ -17,6 +17,11 @@ test -d php-8-source-code && rm -rf php-8-source-code
 mkdir -p php-8-source-code
 tar -zxvf php-8.1.12.tar.gz  --strip-components 1 -C php-8-source-code
 
+mkdir -p swoole
+tar -zxvf swoole-v5.0.1.tar.gz  --strip-components 1 -C swoole
+test -d php-8-source-code/ext/swoole && rm -rf php-8-source-code/ext/swoole
+cp -rf swoole php-8-source-code/ext/
+
 cd php-8-source-code
 
 
@@ -27,7 +32,8 @@ test -d /usr/local/lib/pkgconfig && PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$P
 test -d /usr/local/lib64/pkgconfig && PKG_CONFIG_PATH="/usr/local/lib64/pkgconfig:$PKG_CONFIG_PATH"
 
 
-export PKG_CONFIG_PATH=/usr/openssl/lib64/pkgconfig:/usr/libxml2/lib/pkgconfig:/usr/libxslt/lib/pkgconfig:/usr/gmp/lib/pkgconfig:/usr/zlib/lib/pkgconfig:/usr/bzip2/lib/pkgconfig:/usr/sqlite3/lib/pkgconfig:/usr/oniguruma/lib/pkgconfig:/usr/brotli/lib/pkgconfig:/usr/lib/pkgconfig:/usr/curl/lib/pkgconfig:/usr/libsodium/lib/pkgconfig:/usr/libyaml/lib/pkgconfig:/usr/mimalloc/lib/pkgconfig:$PKG_CONFIG_PATH
+export PKG_CONFIG_PATH=/usr/libiconv/lib/pkgconfig:/usr/openssl/lib64/pkgconfig:/usr/libxml2/lib/pkgconfig:/usr/libxslt/lib/pkgconfig:/usr/gmp/lib/pkgconfig:/usr/zlib/lib/pkgconfig:/usr/liblz4/lib/pkgconfig:/usr/liblzma/lib/pkgconfig:/usr/libzstd/lib/pkgconfig:/usr/zip/lib/pkgconfig:/usr/libpng/lib/pkgconfig:/usr/libjpeg/lib64/pkgconfig:/usr/brotli/lib/pkgconfig:/usr/freetype/lib/pkgconfig:/usr/libwebp/lib/pkgconfig:/usr/sqlite3/lib/pkgconfig:/usr/oniguruma/lib/pkgconfig:/usr/imagemagick/lib/pkgconfig:/usr/curl/lib/pkgconfig:/usr/libsodium/lib/pkgconfig:/usr/libyaml/lib/pkgconfig:/usr/mimalloc/lib/pkgconfig:$PKG_CONFIG_PATH
+
 ./configure --prefix=/tmp/php/ \
     --disable-all \
     --enable-ctype \
@@ -56,8 +62,7 @@ export PKG_CONFIG_PATH=/usr/openssl/lib64/pkgconfig:/usr/libxml2/lib/pkgconfig:/
     --with-gmp=/usr/gmp \
     --with-sodium=/usr/libsodium \
     --with-openssl=/usr/openssl --with-openssl-dir=/usr/openssl \
-    --with-readline=/usr/readline
-
+    --with-readline
 
 # --enable-intl  # use icu
 
