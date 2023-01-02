@@ -230,10 +230,6 @@ class Preprocessor
 {
     public string $osType = 'linux';
 
-    public bool $disableZendOpcacheFlag = false;
-
-    public bool $disableZendOpcache = false;
-
     protected array $libraryList = [];
 
     protected array $extensionList = [];
@@ -354,15 +350,6 @@ class Preprocessor
     public function getOsType()
     {
         return $this->osType;
-    }
-
-    public function withDisableZendOpcache()
-    {
-        $key = array_search('opcache', $this->extEnabled);
-        if ($key !== false) {
-            unset($this->extEnabled[$key]);
-        }
-        $this->disableZendOpcache = true;
     }
 
     public function setPhpSrcDir(string $phpSrcDir)
@@ -508,11 +495,6 @@ class Preprocessor
                     unset($this->extEnabled[$key]);
                 }
             }
-        }
-
-        $key = array_search('opcache', $this->extEnabled);
-        if (!$key) {
-            $this->disableZendOpcache = true;
         }
 
         foreach ($this->extEnabled as $ext) {
