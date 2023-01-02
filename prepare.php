@@ -25,7 +25,8 @@ if ($p->osType == 'macos') {
      ');
     //$p->setExtraOptions('--with-config-file-path=/usr/local/etc');
     $p->addEndCallback(function () use ($p) {
-        file_put_contents(__DIR__ . '/make.sh',
+        file_put_contents(
+            __DIR__ . '/make.sh',
             str_replace('/usr', $p->getWorkDir() . '/usr', file_get_contents(__DIR__ . '/make.sh'))
         );
     });
@@ -52,10 +53,12 @@ function install_libiconv(Preprocessor $p)
 
 function install_openssl(Preprocessor $p)
 {
-    $p->addLibrary((new Library('openssl', '/usr/openssl'))
+    $p->addLibrary(
+        (new Library('openssl', '/usr/openssl'))
         ->withUrl('https://www.openssl.org/source/openssl-3.0.7.tar.gz')
         ->withFile('openssl-3.0.7.tar.gz')
-        ->withConfigure('./config' . ($p->osType === 'macos' ? '' : ' -static --static') .
+        ->withConfigure(
+            './config' . ($p->osType === 'macos' ? '' : ' -static --static') .
             ' no-shared --release --prefix=/usr/openssl'
         )
         ->withMakeInstallOptions('install_sw')
@@ -80,7 +83,7 @@ function install_libxml2(Preprocessor $p)
             --prefix=/usr/libxml2 \
             --with-iconv=/usr/libiconv \
             --enable-static=yes \
-            --enable-shared=no
+            --enable-shared=no \
             ')
             ->withPkgName('libxml-2.0')
             ->withPkgConfig('/usr/libxml2/lib/pkgconfig')
@@ -144,11 +147,13 @@ function install_icu(Preprocessor $p)
 
 function install_pcre2(Preprocessor $p)
 {
-    $p->addLibrary((new Library('pcre2', '/usr/pcre2'))
+    $p->addLibrary(
+        (new Library('pcre2', '/usr/pcre2'))
         ->withUrl('https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.42/pcre2-10.42.tar.gz')
         ->withFile('pcre2-10.42.tar.gz')
         //  CFLAGS='-static -O2 -Wall'
-        ->withConfigure("
+        ->withConfigure(
+            "
             ./configure --help| grep static
             ./configure --help| grep shared
             ./configure --help
@@ -163,12 +168,13 @@ function install_pcre2(Preprocessor $p)
          --enable-unicode
 
          "
-         )
+        )
         ->withMakeInstallOptions('install ')
         ->withPkgConfig('/usr/pcre2/lib/pkgconfig')
         ->withPkgName("libpcre2-16     libpcre2-32    libpcre2-8      libpcre2-posix")
         ->withLdflags('-L/usr/pcre2/lib')
-        ->withLicense('https://github.com/PCRE2Project/pcre2/blob/master/COPYING',
+        ->withLicense(
+            'https://github.com/PCRE2Project/pcre2/blob/master/COPYING',
             Library::LICENSE_PCRE2
         ) //PCRE2 LICENCE
         ->withHomePage('https://github.com/PCRE2Project/pcre2.git')
@@ -192,7 +198,8 @@ function install_ncurses(Preprocessor $p)
             // CFLAGS="-static -O2 -Wall" \
             //   LDFLAGS="-Wl,R-lncurses"
             // LDFLAGS="-lncurses" \
-            ->withConfigure('
+            ->withConfigure(
+                '
             ./configure --help
 
             CFLAGS=$(pkg-config --cflags libpcre2-16     libpcre2-32    libpcre2-8 libpcre2-posix)
@@ -285,7 +292,6 @@ _EOF_
             ')
             ->withLicense('http://www.gnu.org/licenses/gpl.html', Library::LICENSE_GPL)
             ->withHomePage('https://tiswww.case.edu/php/chet/readline/rltop.html')
-
     );
 }
 
@@ -420,7 +426,7 @@ function install_libzstd(Preprocessor $p)
             -DLIBLZMA_INCLUDE_DIR=/usr/liblzma/include \
             -DLIBLZMA_HAS_AUTO_DECODER=ON\
             -DLIBLZMA_HAS_EASY_ENCODER=ON \
-            -DLIBLZMA_HAS_LZMA_PRESET=ON
+            -DLIBLZMA_HAS_LZMA_PRESET=ON \
             ')
             ->withMakeOptions('lib')
             ->withMakeInstallOptions('install PREFIX=/usr/libzstd/')
@@ -470,7 +476,7 @@ function install_zip(Preprocessor $p)
                 -DBZIP2_INCLUDE_DIR=/usr/bzip2/include \
                 -DBZIP2_NEED_PREFIX=ON \
                 -DENABLE_LZMA=OFF  \
-                -DENABLE_ZSTD=OFF
+                -DENABLE_ZSTD=OFF \
             ')
 /*
                  -DENABLE_LZMA=OFF  \
@@ -483,7 +489,7 @@ function install_zip(Preprocessor $p)
                 -DZstd_LIBRARY=/usr/libzstd/lib \
                 -DZstd_INCLUDE_DIR=/usr/libzstd/include
  */
-            ->withMakeOptions('VERBOSE=1 all ; ') //VERBOSE=1
+            ->withMakeOptions('VERBOSE=1 all  ') //VERBOSE=1
             ->withMakeInstallOptions("VERBOSE=1 install PREFIX=/usr/zip")
             ->withPkgName('libzip')
             ->withPkgConfig('/usr/zip/lib/pkgconfig')
@@ -500,7 +506,7 @@ function install_giflib(Preprocessor $p)
         (new Library('giflib'))
             ->withUrl('https://nchc.dl.sourceforge.net/project/giflib/giflib-5.2.1.tar.gz')
             //->withMakeOptions('libgif.a')
-            ->withCleanInstallPackage()
+            ->withCleanBuildDirectory()
             ->withScriptBeforeConfigure('sed -i "s@PREFIX = /usr/local@PREFIX = /usr/giflib@" Makefile')
             ->withMakeOptions('all')
             ->withMakeInstallOptions("install")
@@ -547,12 +553,12 @@ function install_brotli(Preprocessor $p)
         (new Library('brotli', '/usr/brotli'))
             ->withUrl('https://github.com/google/brotli/archive/refs/tags/v1.0.9.tar.gz')
             ->withFile('brotli-1.0.9.tar.gz')
-            ->withCleanInstallPackage()
+            ->withCleanBuildDirectory()
             ->withScriptBeforeConfigure('test -d /usr/brotli/ && rm -rf /usr/brotli/ ')
             ->withConfigure("
                  cmake . -DCMAKE_BUILD_TYPE=Release \
                 -DBUILD_SHARED_LIBS=OFF \
-                -DCMAKE_INSTALL_PREFIX=/usr/brotli
+                -DCMAKE_INSTALL_PREFIX=/usr/brotli \
             ")
             ->withPkgConfig('/usr/brotli/lib/pkgconfig')
             ->withPkgName('libbrotlicommon libbrotlidec libbrotlienc')
@@ -575,7 +581,7 @@ function install_harfbuzz(Preprocessor $p)
         (new Library('harfbuzz', '/usr/brotli'))
             ->withUrl('https://github.com/harfbuzz/harfbuzz/archive/refs/tags/6.0.0.tar.gz')
             ->withFile('harfbuzz-6.0.0.tar.gz')
-            ->withCleanInstallPackage()
+            ->withCleanBuildDirectory()
             ->withScriptBeforeConfigure('test -d /usr/harfbuzz/ && rm -rf /usr/harfbuzz/ ')
             ->withConfigure("
                 ls -lh
@@ -625,7 +631,7 @@ _EOF_;
 
     $p->addLibrary(
         (new Library('freetype', '/usr/freetype'))
-            // dig mirror.yongbok.net DNS 无解析
+            // 域名 mirror.yongbok.net 无 DNS 解析
             //->withUrl('https://mirror.yongbok.net/nongnu/freetype/freetype-2.10.4.tar.gz')
             ->withUrl('https://download.savannah.gnu.org/releases/freetype/freetype-2.10.4.tar.gz')
 
@@ -637,10 +643,7 @@ _EOF_;
                 BROTLI_CFLAGS=$(pkg-config --cflags  libbrotlidec libbrotlienc) ;
                 BROTLI_LIBS=$(pkg-config --libs  libbrotlidec libbrotlienc) ;
                 ./configure --help
-
-               ./configure --prefix=/usr/freetype --enable-static --disable-shared ;
-
-            ")
+               ./configure --prefix=/usr/freetype --enable-static --disable-shared")
             ->withScriptAfterInstall('
                 # 用完释放变量
             ')
@@ -648,8 +651,10 @@ _EOF_;
             ->withPkgConfig('/usr/freetype/lib/pkgconfig')
             ->withHomePage('https://freetype.org/')
             ->withPkgName('freetype2')
-            ->withLicense('https://gitlab.freedesktop.org/freetype/freetype/-/blob/master/docs/FTL.TXT',
-                Library::LICENSE_SPEC)
+            ->withLicense(
+                'https://gitlab.freedesktop.org/freetype/freetype/-/blob/master/docs/FTL.TXT',
+                Library::LICENSE_SPEC
+            )
     );
 }
 
@@ -690,7 +695,8 @@ function install_oniguruma(Preprocessor $p)
             //->withUrl('https://codeload.github.com/kkos/oniguruma/tar.gz/refs/tags/v6.9.7')
             ->withUrl('https://github.com/kkos/oniguruma/releases/download/v6.9.8/onig-6.9.8.tar.gz')
             ->withFile('oniguruma-v6.9.7.tar.gz')
-            ->withConfigure('./autogen.sh && ./configure \
+            ->withConfigure(
+                './autogen.sh && ./configure \
             --prefix=/usr/oniguruma --enable-static --disable-shared'
             )
             ->withPkgConfig('/usr/oniguruma/lib/pkgconfig')
@@ -760,7 +766,7 @@ function install_imagemagick(Preprocessor $p)
             -with-openjp2=no \
             --with-pango=no \
             --with-raw=no \
-            --with-tiff=no
+            --with-tiff=no \
             ')
             ->withPkgName('ImageMagick MagickWand MagickCore')
             ->withLicense('https://imagemagick.org/script/license.php', Library::LICENSE_APACHE2)
@@ -797,7 +803,7 @@ function install_curl(Preprocessor $p)
         (new Library('curl', '/usr/curl'))
             //->withUrl('https://curl.se/download/curl-7.80.0.tar.gz')
             ->withUrl('https://curl.se/download/curl-7.87.0.tar.gz')
-            ->withCleanInstallPackage()
+            ->withCleanBuildDirectory()
             ->withConfigure('
                   autoreconf -fi && ./configure --prefix=/usr/curl --enable-static --disable-shared \
                  --with-openssl=/usr/openssl \
@@ -931,7 +937,7 @@ pkg-config  --libs readline
             --enable-readline \
             --enable-openssl-base=/usr/openssl
             ')
-        ->withLicense('http://www.dest-unreach.org/socat/doc/README',Library::LICENSE_GPL)
+        ->withLicense('http://www.dest-unreach.org/socat/doc/README', Library::LICENSE_GPL)
     );
 }
 //install_gettext($p);
@@ -956,7 +962,7 @@ install_libzstd($p);
 
 
 install_zip($p); // zip 依赖 openssl zlib bzip2  liblzma zstd
-                 // 上一步虽然安装里了bizp2，但是仍然需要系统提供的bzip2 ，因为需要解决BZ2_bzCompressInit 找不到的问题
+// 上一步虽然安装里了bizp2，但是仍然需要系统提供的bzip2 ，因为需要解决BZ2_bzCompressInit 找不到的问题
 
 
 install_giflib($p);
@@ -999,12 +1005,8 @@ install_mimalloc($p);
 
 
 # 禁用zendOpcache
-//$p->disableZendOpcache();
+//$p->withDisableZendOpcache();
 
 $p->parseArguments($argc, $argv);
 $p->gen();
 $p->info();
-
-
-
-

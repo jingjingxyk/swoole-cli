@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace SwooleCli;
 
 abstract class Project
@@ -19,8 +17,6 @@ abstract class Project
     public const LICENSE_MIT = 5;
 
     public const LICENSE_PHP = 6;
-
-    public const LICENSE_PCRE2 = 7;
 
     public string $name;
 
@@ -55,13 +51,11 @@ class Library extends Project
 {
     public string $url;
 
-    public bool $cleanInstallPackage = false;
-
     public bool $cleanBuildDirectory = false;
 
-    public string $configure = '';
-
     public string $beforeConfigureScript = '';
+
+    public string $configure = '';
 
     public string $file = '';
 
@@ -109,12 +103,6 @@ class Library extends Project
         return $this;
     }
 
-    public function withCleanInstallPackage(): static
-    {
-        $this->cleanInstallPackage = true;
-        return $this;
-    }
-
     public function withCleanBuildDirectory(): static
     {
         $this->cleanBuildDirectory = true;
@@ -151,13 +139,13 @@ class Library extends Project
         return $this;
     }
 
-    public function withScriptBeforeInstall(string $script)
+    public function withScriptBeforeInstall(string $script): static
     {
         $this->beforeInstallScript = $script;
         return $this;
     }
 
-    public function withScriptAfterInstall(string $script)
+    public function withScriptAfterInstall(string $script): static
     {
         $this->afterInstallScript = $script;
         return $this;
@@ -230,10 +218,6 @@ class Preprocessor
 {
     public string $osType = 'linux';
 
-    public bool $disableZendOpcacheFlag = false;
-
-    public bool $disableZendOpcache = false;
-
     protected array $libraryList = [];
 
     protected array $extensionList = [];
@@ -271,50 +255,30 @@ class Preprocessor
      * @var array|string[]
      */
     protected array $extEnabled = [
-        // "Core",
-        'ctype',
-        // "date",
-        // "dom",
-        'fileinfo',
-        'filter',
-        // "hash",
-        'iconv',
-        // "json",
-        // "libxml",
-        // "pcre",
-        // "PDO",
-        'pdo',
-        'pdo_sqlite',
-        // "Phar",
-        'phar',
-        'posix',
-        // "Reflection",
-        // "reflection",
-        'session',
-        // "SimpleXML",
-        // "SPL",
-        'sqlite3',
-        // "standard",
-        'tokenizer',
-        'xml',
-        // "xmlreader",
-        // "xmlwriter",
-
         'opcache',
         'curl',
+        'iconv',
         'bz2',
         'bcmath',
         'pcntl',
-        'tokenizer', // composer 要求
-        'mbstring',  // 依赖 oniguruma
+        'filter',
+        'session',
+        'tokenizer',
+        'mbstring',
+        'ctype',
         'zlib',
         'zip',
+        'posix',
         'sockets',
+        'pdo',
+        'sqlite3',
+        'phar',
         'mysqlnd',
         'mysqli',
-        'intl',  // 依赖 ICU
+        'intl',
+        'fileinfo',
         'pdo_mysql',
-        // 'pdo_pgsql',
+        'pdo_sqlite',
         'soap',
         'xsl',
         'gmp',
@@ -322,14 +286,13 @@ class Preprocessor
         'sodium',
         'openssl',
         'readline',
-        'gd', //freetype 依赖 libbrotlidec
+        'xml',
+        'gd',
         'redis',
-        // 'pgsql',
         'swoole',
         'yaml',
         'imagick',
-        'mongodb', //依赖 openssl zlib
-        'ds'
+        'mongodb',
     ];
 
     protected array $endCallbacks = [];
@@ -375,15 +338,6 @@ class Preprocessor
     public function getOsType()
     {
         return $this->osType;
-    }
-
-    public function withDisableZendOpcache()
-    {
-        $key = array_search('opcache', $this->extEnabled);
-        if ($key !== false) {
-            unset($this->extEnabled[$key]);
-        }
-        $this->disableZendOpcache = true;
     }
 
     public function setPhpSrcDir(string $phpSrcDir)
@@ -436,10 +390,12 @@ class Preprocessor
             if (!is_file($this->libraryDir . '/' . $lib->file)) {
                 echo '[Library] file downloading: ' . $lib->file . PHP_EOL . 'download url: ' . $lib->url . PHP_EOL;
                 // echo `wget {$lib->url} -O {$this->libraryDir}/{$lib->file}`;
-                echo shell_exec("curl --connect-timeout 15 --retry 5 --retry-delay 5  -Lo {$this->libraryDir}/{$lib->file} {$lib->url}");
+                echo shell_exec(
+                    "curl --connect-timeout 15 --retry 5 --retry-delay 5  -Lo {$this->libraryDir}/{$lib->file} {$lib->url}"
+                );
                 echo PHP_EOL;
                 echo 'download ' . $lib->file . ' OK ' . PHP_EOL . PHP_EOL;
-            // TODO PGP  验证
+                // TODO PGP  验证
             } else {
                 echo '[Library] file cached: ' . $lib->file . PHP_EOL;
             }
@@ -527,11 +483,6 @@ class Preprocessor
                     unset($this->extEnabled[$key]);
                 }
             }
-        }
-
-        $key = array_search('opcache', $this->extEnabled);
-        if (!$key) {
-            $this->disableZendOpcache = true;
         }
 
         foreach ($this->extEnabled as $ext) {

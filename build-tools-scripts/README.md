@@ -3,19 +3,20 @@
 sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories && \
 apk update
 
-
+# 编译 ncurses 和 readline 非标准目录，木有没成功
 apk add --no-cache  ncurses-dev ncurses-libs ncurses-static
 apk add --no-cache  readline readline-dev readline-static
 
-
 apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
+# swoole 需要
 apk add --no-cache  c-ares c-ares-dev c-ares-utils
 
 
-
+# meson 和ninja 构建
 apk add python3 python3-dev py3-pip ninja
 pip3 install meson  -i https://pypi.tuna.tsinghua.edu.cn/simple
-
+#
+# 代码比较
 apk add meld
 
 apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
@@ -367,3 +368,67 @@ pear list
 显示可执行程序文件内的动态符号（注意，仅仅是动态符号）：
 
 readelf -Ds a.out
+
+
+
+```text
+    // "Core",
+        'ctype',
+        // "date",
+        // "dom",
+        'fileinfo',
+        'filter',
+        // "hash",
+        'iconv',
+        // "json",
+        // "libxml",
+        // "pcre",
+        // "PDO",
+        'pdo',
+        'pdo_sqlite',
+        // "Phar",
+        'phar',
+        'posix',
+        // "Reflection",
+        // "reflection",
+        'session',
+        // "SimpleXML",
+        // "SPL",
+        'sqlite3',
+        // "standard",
+        'tokenizer',
+        'xml',
+        // "xmlreader",
+        // "xmlwriter",
+
+        'opcache',
+        'curl',
+        'bz2',
+        'bcmath',
+        'pcntl',
+        'tokenizer', // composer 要求
+        'mbstring',  // 依赖 oniguruma
+        'zlib',
+        'zip',
+        'sockets',
+        'mysqlnd',
+        'mysqli',
+        'intl',  // 依赖 ICU
+        'pdo_mysql',
+        // 'pdo_pgsql',
+        'soap',
+        'xsl',
+        'gmp',
+        'exif',
+        'sodium',
+        'openssl',
+        'readline',
+        'gd', //freetype 依赖 libbrotlidec
+        'redis',
+        // 'pgsql',
+        'swoole',
+        'yaml',
+        'imagick',
+        'mongodb', //依赖 openssl zlib
+        'ds'
+```

@@ -24,42 +24,35 @@ OPTIONS="--disable-all \
 "
 
 <?php foreach ($this->libraryList as $item) : ?>
-    make_<?= $item->name ?>() {
-        cd <?= $this->workDir ?>/thirdparty ;
-        echo "build <?= $item->name ?>" ;
-        <?php if ($item->cleanBuildDirectory == true) : ?>
-            test -d <?= $this->workDir ?>/thirdparty/<?= $item->name ?> && rm -rf <?= $this->workDir ?>/thirdparty/<?= $item->name ?> ;
-        <?php endif; ?>
-        mkdir -p <?= $this->workDir ?>/thirdparty/<?= $item->name ?> ;
-        tar --strip-components=1 -C <?= $this->workDir ?>/thirdparty/<?= $item->name ?> -xf <?= $this->workDir ?>/pool/lib/<?= $item->file ?> ;
-        cd <?= $item->name ?> ;
-        <?php if (!empty($item->beforeConfigureScript)) : ?>
-            <?= $item->beforeConfigureScript . PHP_EOL ?>
-        <?php endif; ?>
-        :;
-
-         echo <<'_EOF_'
-         <?= $item->configure . PHP_EOL ?>
-_EOF_
-        :;
-        <?php if (!empty($item->configure)) : ?>
-            <?= $item->configure . PHP_EOL ?>
-        <?php endif; ?>
-        :;
-        make -j <?= $this->maxJob ?> <?= $item->makeOptions . PHP_EOL ?>
-        :;
-        <?php if (!empty($item->beforeInstallScript)) : ?>
-            <?= $item->beforeInstallScript . PHP_EOL ?>
-        <?php endif; ?>
-        make <?= $item->makeInstallDefaultOptions ?> <?= $item->makeInstallOptions . PHP_EOL ?>
-        :;
-        <?php if ($item->afterInstallScript) : ?>
-            <?= $item->afterInstallScript . PHP_EOL ?>
-        <?php endif; ?>
-        :;
-        cd -
+    make_<?=$item->name?>() {
+    cd <?=$this->workDir?>/thirdparty
+    echo "build <?=$item->name?>"
+    <?php if ($item->cleanBuildDirectory) : ?>
+        test -d <?= $this->workDir ?>/thirdparty/<?= $item->name ?> && rm -rf <?= $this->workDir ?>/thirdparty/<?= $item->name ?> ;
+    <?php endif; ?>
+    mkdir -p <?=$this->workDir?>/thirdparty/<?=$item->name?> && \
+    tar --strip-components=1 -C <?=$this->workDir?>/thirdparty/<?=$item->name?> -xf <?=$this->workDir?>/pool/lib/<?=$item->file?>  && \
+    cd <?=$item->name?> ;
+    <?php if (!empty($item->beforeConfigureScript)) : ?>
+        <?= $item->beforeConfigureScript . PHP_EOL ?>
+    <?php endif; ?>
+    :;
+    echo <<'EOF'
+    <?= $item->configure . PHP_EOL ?>
+EOF
+    <?php if (!empty($item->configure)): ?>
+        <?=$item->configure?> && \
+    <?php endif; ?>
+    make -j <?=$this->maxJob?>  <?=$item->makeOptions?> && \
+    <?php if (!empty($item->beforeInstallScript)): ?>
+        <?=$item->beforeInstallScript?> && \
+    <?php endif; ?>
+    make <?=$item->makeInstallDefaultOptions?> <?=$item->makeInstallOptions?> && \
+    <?php if ($item->afterInstallScript): ?>
+        <?=$item->afterInstallScript?>
+    <?php endif; ?>
+    cd -
     }
-
 
     clean_<?= $item->name ?>() {
         cd <?= $this->workDir ?>/thirdparty
@@ -82,7 +75,7 @@ config_php() {
     git config --global --add safe.directory "*"
 
 
-<?php if ($this->disableZendOpcacheFlag == true) : ?>
+<?php if (0 == true) : ?>
     test -f main/main.c.save ||  cp -f main/main.c main/main.c.save ;
     sed -i 's/extern zend_extension zend_extension_entry;//g' main/main.c ;
     sed -i 's/zend_register_extension(&zend_extension_entry, NULL);//g' main/main.c ;
