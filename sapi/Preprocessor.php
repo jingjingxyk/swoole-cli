@@ -271,50 +271,30 @@ class Preprocessor
      * @var array|string[]
      */
     protected array $extEnabled = [
-        // "Core",
-        'ctype',
-        // "date",
-        // "dom",
-        'fileinfo',
-        'filter',
-        // "hash",
-        'iconv',
-        // "json",
-        // "libxml",
-        // "pcre",
-        // "PDO",
-        'pdo',
-        'pdo_sqlite',
-        // "Phar",
-        'phar',
-        'posix',
-        // "Reflection",
-        // "reflection",
-        'session',
-        // "SimpleXML",
-        // "SPL",
-        'sqlite3',
-        // "standard",
-        'tokenizer',
-        'xml',
-        // "xmlreader",
-        // "xmlwriter",
-
         'opcache',
         'curl',
+        'iconv',
         'bz2',
         'bcmath',
         'pcntl',
-        'tokenizer', // composer 要求
-        'mbstring',  // 依赖 oniguruma
+        'filter',
+        'session',
+        'tokenizer',
+        'mbstring',
+        'ctype',
         'zlib',
         'zip',
+        'posix',
         'sockets',
+        'pdo',
+        'sqlite3',
+        'phar',
         'mysqlnd',
         'mysqli',
-        'intl',  // 依赖 ICU
+        'intl',
+        'fileinfo',
         'pdo_mysql',
-        // 'pdo_pgsql',
+        'pdo_sqlite',
         'soap',
         'xsl',
         'gmp',
@@ -322,14 +302,13 @@ class Preprocessor
         'sodium',
         'openssl',
         'readline',
-        'gd', //freetype 依赖 libbrotlidec
+        'xml',
+        'gd',
         'redis',
-        // 'pgsql',
         'swoole',
         'yaml',
         'imagick',
-        'mongodb', //依赖 openssl zlib
-        'ds'
+        'mongodb',
     ];
 
     protected array $endCallbacks = [];
@@ -436,7 +415,9 @@ class Preprocessor
             if (!is_file($this->libraryDir . '/' . $lib->file)) {
                 echo '[Library] file downloading: ' . $lib->file . PHP_EOL . 'download url: ' . $lib->url . PHP_EOL;
                 // echo `wget {$lib->url} -O {$this->libraryDir}/{$lib->file}`;
-                echo shell_exec("curl --connect-timeout 15 --retry 5 --retry-delay 5  -Lo {$this->libraryDir}/{$lib->file} {$lib->url}");
+                echo shell_exec(
+                    "curl --connect-timeout 15 --retry 5 --retry-delay 5  -Lo {$this->libraryDir}/{$lib->file} {$lib->url}"
+                );
                 echo PHP_EOL;
                 echo 'download ' . $lib->file . ' OK ' . PHP_EOL . PHP_EOL;
                 // TODO PGP  验证
