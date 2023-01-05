@@ -89,9 +89,13 @@ function install_libxml2(Preprocessor $p)
         (new Library('libxml2'))
             ->withUrl('https://gitlab.gnome.org/GNOME/libxml2/-/archive/v2.9.10/libxml2-v2.9.10.tar.gz')
             ->withConfigure('
-            ./autogen.sh && ./configure \
+
+            ./autogen.sh && ./configure --help
+           ./configure
+             ./configure \
             --prefix=/usr/libxml2 \
             --with-iconv=/usr/libiconv \
+            --without-python \
             --enable-static=yes \
             --enable-shared=no \
             ')

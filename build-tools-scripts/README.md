@@ -149,7 +149,7 @@ gcc -I -L -l区别
 cmake -DCMAKE_CXX_FLAGS=-fPIC -DWITH_STDTHREADS=ON  -DCMAKE_BUILD_TYPE=Release ..
 
 
-
+-fPIC -DPIC
 
 
 ```
