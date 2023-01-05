@@ -845,7 +845,7 @@ export  ZIP_LIBS=$(pkg-config --libs libzip) ;
 //
             ./configure --prefix=/usr/imagemagick --enable-static --disable-shared \
             --with-zip=no \
-            --with-jpeg=yes \
+            --with-jpeg=no \
             --with-fontconfig=no \
             --with-heic=no \
             --with-lcms=no \
