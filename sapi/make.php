@@ -4,7 +4,7 @@
  */
 ?>
 set -uex
-PKG_CONFIG_PATH='/usr/lib/pkgconfig'
+PKG_CONFIG_PATH='/usr/lib/pkgconfig:/lib'
 test -d /usr/lib64/pkgconfig && PKG_CONFIG_PATH="/usr/lib64/pkgconfig:$PKG_CONFIG_PATH" ;
 test -d /usr/local/lib/pkgconfig && PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH" ;
 test -d /usr/local/lib64/pkgconfig && PKG_CONFIG_PATH="/usr/local/lib64/pkgconfig:$PKG_CONFIG_PATH" ;
@@ -24,7 +24,8 @@ OPTIONS="--disable-all \
 "
 
 <?php foreach ($this->libraryList as $item) : ?>
-    make_<?=$item->name?>() {
+make_<?=$item->name?>() {
+    set -eux
     cd <?=$this->workDir?>/thirdparty
     echo "build <?=$item->name?>"
     <?php if ($item->cleanBuildDirectory) : ?>
@@ -35,24 +36,43 @@ OPTIONS="--disable-all \
     cd <?=$item->name?> ;
     <?php if (!empty($item->beforeConfigureScript)) : ?>
         <?= $item->beforeConfigureScript . PHP_EOL ?>
+        :;
+        result=$?
+        [ $result -ne 0 ] &&  echo "[before configure script failure]" && return $result ;
     <?php endif; ?>
-    :;
-    echo <<'EOF'
+
+    echo <<'___EOF___'
     <?= $item->configure . PHP_EOL ?>
-EOF
+___EOF___
+    :;
     <?php if (!empty($item->configure)): ?>
-        <?=$item->configure?> && \
+        <?=$item->configure . PHP_EOL ?>
+        :;
+        result=$?
+        [ $result -ne 0 ] &&  echo "[configure failure]" && return $result ;
     <?php endif; ?>
-    make -j <?=$this->maxJob?>  <?=$item->makeOptions?> && \
+
+    make -j <?=$this->maxJob?>  <?=$item->makeOptions . PHP_EOL ?>
+    result=$?
+    [ $result -ne 0 ] && echo "[make failure]" && return $result ;
     <?php if (!empty($item->beforeInstallScript)): ?>
-        <?=$item->beforeInstallScript?> && \
+        <?=$item->beforeInstallScript . PHP_EOL ?>
+        :;
+        result=$?
+        [ $result -ne 0 ] &&  echo "[before install script  failure]" && return $result ;
     <?php endif; ?>
-    make <?=$item->makeInstallDefaultOptions?> <?=$item->makeInstallOptions?> && \
+    make <?=$item->makeInstallDefaultOptions?> <?=$item->makeInstallOptions . PHP_EOL?>
+    result=$?
+    [ $result -ne 0 ] &&  echo "[make install failure]" &&  return $result;
     <?php if ($item->afterInstallScript): ?>
-        <?=$item->afterInstallScript?>
+        <?=$item->afterInstallScript . PHP_EOL ?>
+        :;
+        result=$?
+        [ $result -ne 0 ] &&  echo "[after install script  failure]" && return $result;
     <?php endif; ?>
     cd -
-    }
+    set +exu
+}
 
     clean_<?= $item->name ?>() {
         cd <?= $this->workDir ?>/thirdparty
@@ -120,8 +140,9 @@ EOF
     GDLIB_LIBS=$(pkg-config --libs "no install") ;
 EOF
 
-    ICU_CFLAGS=$(pkg-config --cflags  icu-uc icu-io icu-i18n)  ;
-    ICU_LIBS=$(pkg-config  --libs icu-uc icu-io icu-i18n)  ;
+export  ICU_CFLAGS=$(pkg-config --cflags  icu-uc icu-io icu-i18n)  ;
+export  ICU_LIBS=$(pkg-config  --libs icu-uc icu-io icu-i18n)  ;
+
 
 export   ONIG_CFLAGS=$(pkg-config --cflags oniguruma) ;
 export   ONIG_LIBS=$(pkg-config --libs oniguruma) ;
@@ -161,14 +182,14 @@ export       XSL_LIBS=$(pkg-config --libs libxslt) ;
     EXSLT_LIBS=$(pkg-config --libs libexslt) ;
 
 
-export    LIBZIP_CFLAGS=$(pkg-config --cflags libzip) ;
+export   LIBZIP_CFLAGS=$(pkg-config --cflags libzip) ;
 export   LIBZIP_LIBS=$(pkg-config --libs libzip) ;
 
-    NCURSES_CFLAGS=$(pkg-config --cflags formw  menuw  ncursesw panelw);
-    NCURSES_LIBS=$(pkg-config  --libs formw  menuw  ncursesw panelw);
+# export   NCURSES_CFLAGS=$(pkg-config --cflags formw  menuw  ncursesw panelw);
+# export   NCURSES_LIBS=$(pkg-config  --libs formw  menuw  ncursesw panelw);
 
-    READLINE_CFLAGS=$(pkg-config --cflags  readline)  ;
-    READLINE_LIBS=$(pkg-config  --libs readline)  ;
+# export   READLINE_CFLAGS=$(pkg-config --cflags  readline)  ;
+# export    READLINE_LIBS=$(pkg-config  --libs readline)  ;
 
 
 :<<'EOF'
@@ -240,9 +261,9 @@ elif [ "$1" = "all-library" ] ;then
     make_all_library
 <?php foreach ($this->libraryList as $item) : ?>
 elif [ "$1" = "<?= $item->name ?>" ] ;then
-    make_<?= $item->name ?> && echo "[SUCCESS] make <?= $item->name ?>"
+    make_<?= $item->name ?> && [ $? -eq 0 ] && echo "[SUCCESS] make <?= $item->name ?>"
 elif [ "$1" = "clean-<?= $item->name ?>" ] ;then
-    clean_<?= $item->name ?> && echo "[SUCCESS] make clean <?= $item->name ?>"
+    clean_<?= $item->name ?> && [ $? -eq 0 ] && echo "[SUCCESS] make clean <?= $item->name ?>"
 <?php endforeach; ?>
 elif [ "$1" = "config" ] ;then
     config_php

@@ -6,6 +6,7 @@ openssl: https://github.com/openssl/openssl/blob/master/LICENSE.txt
 libxml2: http://www.opensource.org/licenses/mit-license.html
 libxslt: http://www.opensource.org/licenses/mit-license.html
 gmp: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+icu: https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE
 zlib: https://zlib.net/zlib_license.html
 bzip2: https://www.sourceware.org/bzip2/
 liblz4: https://github-com.proxy.dengxiaci.com/lz4/lz4/blob/dev/LICENSE

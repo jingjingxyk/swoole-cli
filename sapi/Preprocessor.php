@@ -18,6 +18,8 @@ abstract class Project
 
     public const LICENSE_PHP = 6;
 
+    public const LICENSE_PCRE2 = 7;
+
     public string $name;
 
     public string $homePage = '';

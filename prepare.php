@@ -46,6 +46,10 @@ function install_libiconv(Preprocessor $p)
         (new Library('libiconv', '/usr/libiconv'))
             ->withUrl('https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.17.tar.gz')
             ->withLdflags('-L/usr/libiconv/lib')
+            ->withCleanBuildDirectory()
+            ->withScriptBeforeConfigure('
+                test -d /usr/libiconv/ && rm -rf /usr/libiconv/
+            ')
             ->withConfigure('./configure --prefix=/usr/libiconv enable_static=yes enable_shared=no')
             ->withLicense('https://www.gnu.org/licenses/old-licenses/gpl-2.0.html', Library::LICENSE_GPL)
     );
@@ -53,15 +57,20 @@ function install_libiconv(Preprocessor $p)
 
 function install_openssl(Preprocessor $p)
 {
+    $static= $p->osType === 'macos' ? '' : ' -static --static' ;
     $p->addLibrary(
         (new Library('openssl', '/usr/openssl'))
         ->withUrl('https://www.openssl.org/source/openssl-3.0.7.tar.gz')
         ->withFile('openssl-3.0.7.tar.gz')
+            ->withCleanBuildDirectory()
         ->withConfigure(
-            './config' . ($p->osType === 'macos' ? '' : ' -static --static') .
-            ' no-shared --release --prefix=/usr/openssl'
+            <<<EOF
+            # ./config $static \
+            ./Configure   $static  \
+            no-shared --release --prefix=/usr/openssl
+EOF
         )
-        ->withMakeInstallOptions('install_sw')
+        ->withMakeInstallOptions('install all')
         ->withPkgConfig('/usr/openssl/lib64/pkgconfig')
         ->withPkgName('libcrypto libssl openssl')
         ->withLdflags('-L/usr/openssl/lib64')
@@ -134,7 +143,16 @@ function install_icu(Preprocessor $p)
         (new Library('icu'))
             //->withUrl('https://github.com/unicode-org/icu/releases/download/release-60-3/icu4c-60_3-src.tgz')
             ->withUrl('https://github.com/unicode-org/icu/releases/download/release-72-1/icu4c-72_1-src.tgz')
-            ->withConfigure('source/runConfigureICU Linux --prefix=/usr/icu --enable-static --disable-shared')
+            //https://unicode-org.github.io/icu/userguide/icu4c/build.html
+            ->withCleanBuildDirectory()
+            ->withScriptBeforeConfigure('
+            source/runConfigureICU Linux --help
+            test -d /usr/icu/ && rm -rf /usr/icu/
+            ')
+            ->withConfigure('
+            # CPPFLAGS="-DPIC -fPIC -DICU_DATA_DIR=/usr/icu/"
+            source/runConfigureICU Linux --prefix=/usr/icu --enable-static --disable-shared')
+            ->withMakeOptions('all VERBOSE=1')
             ->withPkgName('icu-uc icu-io icu-i18n')
             ->withPkgConfig('/usr/icu/lib/pkgconfig')
             //->disableDefaultPkgConfig()
@@ -189,6 +207,7 @@ function install_ncurses(Preprocessor $p)
             //->withUrl('https://invisible-island.net/datafiles/release/ncurses.tar.gz')
             //->withFile('ncurses.tar.gz')
             ->withFile('ncurses-6.3.tar.gz')
+            ->withCleanBuildDirectory()
             ->withScriptBeforeConfigure('
                 test -d /usr/ncurses && rm -rf /usr/ncurses ;
                 test -d /usr/ncurses/ && rm -rf /usr/ncurses/ ;
@@ -202,43 +221,56 @@ function install_ncurses(Preprocessor $p)
                 '
             ./configure --help
 
-            CFLAGS=$(pkg-config --cflags libpcre2-16     libpcre2-32    libpcre2-8 libpcre2-posix)
-            LDFLAGS=$(pkg-config  --libs libpcre2-16     libpcre2-32    libpcre2-8  libpcre2-posix)
+            # CFLAGS=$(pkg-config --cflags libpcre2-16     libpcre2-32    libpcre2-8 libpcre2-posix)
+            # LDFLAGS=$(pkg-config  --libs libpcre2-16     libpcre2-32    libpcre2-8  libpcre2-posix)
 
-            #   --with-pcre2 \ --with-curses-h \
+            #   --with-pcre2 \ --with-curses-h
+
+            #   --enable-widec \
+            # --enable-overwrite \
             ./configure \
             --prefix=/usr/ncurses \
             --enable-static \
             --disable-shared \
-            --enable-widec \
             --enable-pc-files \
+            --enable-echo \
+            --with-normal \
             --with-pkg-config=/usr/ncurses/lib/pkgconfig \
             --with-pkg-config-libdir=/usr/ncurses/lib/pkgconfig \
-            --without-tests
+            --with-ticlib \
+            --without-tests \
+            --without-dlsym \
+            --without-debug \
+            --disable-relink
+
             '
             )
             /*
-
-            --enable-overwrite \
+                --enable-overwrite\
             -with-form-libname=form \
               --with-menu-libname=menu \
               --with-panel-libname=panel \
               --with-cxx-libname=ncurses
              */
             ->withScriptAfterInstall("
-            ln -s /usr/ncurses/include/ncursesw /usr/ncurses/include/ncurses ;
-
+            tic -x
+            # ln -s /usr/ncurses/include/ncursesw /usr/ncurses/include/ncurses ;
+:<<'EOF'
             ln -s /usr/ncurses/lib/pkgconfig/formw.pc /usr/ncurses/lib/pkgconfig/form.pc ;
             ln -s /usr/ncurses/lib/pkgconfig/menuw.pc /usr/ncurses/lib/pkgconfig/menu.pc ;
             ln -s /usr/ncurses/lib/pkgconfig/ncursesw.pc /usr/ncurses/lib/pkgconfig/ncurses.pc ;
             ln -s /usr/ncurses/lib/pkgconfig/panelw.pc /usr/ncurses/lib/pkgconfig/panel.pc ;
+            ln -s /usr/ncurses/lib/pkgconfig/ncurses++w.pc /usr/ncurses/lib/pkgconfig/ncurses++.pc ;
+            ln -s /usr/ncurses/lib/pkgconfig/tinfow.pc /usr/ncurses/lib/pkgconfig/tinfow.pc ;
 
             ln -s /usr/ncurses/lib/libformw.a /usr/ncurses/lib/libform.a ;
             ln -s /usr/ncurses/lib/libmenuw.a /usr/ncurses/lib/libmenu.a ;
             ln -s /usr/ncurses/lib/libncursesw.a /usr/ncurses/lib/libncurses.a ;
             ln -s /usr/ncurses/lib/libpanelw.a /usr/ncurses/lib/libpanel.a ;
-
+            ln -s /usr/ncurses/lib/libtinfow.a /usr/ncurses/lib/libtinfo.a ;
+EOF
                 ")
+            ->withMakeOptions('all')
             ->withPkgName('ncursesw ncurses')
             ->disablePkgName()
             ->withPkgConfig('/usr/ncurses/lib/pkgconfig')
@@ -268,16 +300,20 @@ _EOF_
              # -lncurses
              # -I/usr/include/ncursesw
                ./configure --help
-
-                # CFLAGS=$(pkg-config --cflags  ncursesw )
-                # CFLAGS=$(pkg-config --cflags  formw menuw ncursesw  panelw libpcre2-8 )
-                # LDFLAGS=$(pkg-config --libs formw menuw ncursesw  panelw libpcre2-8 )
-                # CPPFLAGS=$CFLAGS
-                # LDFLAGS="-Wl,R-lncurses -s -O2 -Wall $LDFLAGS"
-                # LIBS="-lncursesw"
-
+:<<\'EOF\'
+                CFLAGS=$(pkg-config --cflags  formw menuw ncursesw  panelw )
+                CFLAGS=$(pkg-config --cflags  form menu ncurses  panel )
+                CFLAGS="-I/usr/ncurses/include"
+                export CFLAGS="${CFLAGS} -DNCURSES_WIDECHAR"
+                LDFLAGS=$(pkg-config --libs formw menuw ncursesw  panelw )
+                LDFLAGS=$(pkg-config --libs form menu ncurses  panel )
+                LDFLAGS="-L/usr/ncurses/lib -lformw -lmenuw -lncursesw -lpanelw -ltinfow"
+                 export LDFLAGS="${LDFLAGS} -Wl,--as-needed,-O1,--sort-common "
+                # -lformw -lmenuw -lncursesw  -lpanelw -Wl,--as-needed,-O1,--sort-common
+               # return 0
+EOF
             ./configure --prefix=/usr/readline \
-            --enable-static --disable-shared --with-curses --disable-install-examples
+            --enable-static --disable-shared --with-curses --enable-multibyte
 
             ')
             ->withMakeInstallOptions("install-static")
@@ -347,6 +383,7 @@ function install_bzip2(Preprocessor $p)
             ->withCleanBuildDirectory()
             ->withScriptBeforeConfigure('
                 test -d /usr/bzip2 && rm -rf /usr/bzip2 ;
+                echo $?
             ')
             //->withConfigure('return 0 ')
             ->withMakeOptions('all')
@@ -426,7 +463,7 @@ function install_libzstd(Preprocessor $p)
             -DLIBLZMA_INCLUDE_DIR=/usr/liblzma/include \
             -DLIBLZMA_HAS_AUTO_DECODER=ON\
             -DLIBLZMA_HAS_EASY_ENCODER=ON \
-            -DLIBLZMA_HAS_LZMA_PRESET=ON \
+            -DLIBLZMA_HAS_LZMA_PRESET=ON
             ')
             ->withMakeOptions('lib')
             ->withMakeInstallOptions('install PREFIX=/usr/libzstd/')
@@ -476,7 +513,7 @@ function install_zip(Preprocessor $p)
                 -DBZIP2_INCLUDE_DIR=/usr/bzip2/include \
                 -DBZIP2_NEED_PREFIX=ON \
                 -DENABLE_LZMA=OFF  \
-                -DENABLE_ZSTD=OFF \
+                -DENABLE_ZSTD=OFF
             ')
 /*
                  -DENABLE_LZMA=OFF  \
@@ -558,7 +595,7 @@ function install_brotli(Preprocessor $p)
             ->withConfigure("
                  cmake . -DCMAKE_BUILD_TYPE=Release \
                 -DBUILD_SHARED_LIBS=OFF \
-                -DCMAKE_INSTALL_PREFIX=/usr/brotli \
+                -DCMAKE_INSTALL_PREFIX=/usr/brotli
             ")
             ->withPkgConfig('/usr/brotli/lib/pkgconfig')
             ->withPkgName('libbrotlicommon libbrotlidec libbrotlienc')
@@ -618,11 +655,9 @@ function install_freetype(Preprocessor $p)
 {
     $a=<<<'_EOF_'
 :<<'EOF'
-                export ZLIB_CFLAGS=$(pkg-config --cflags zlib) ;
-                export ZLIB_LIBS=$(pkg-config --libs zlib) ;
 
-                export LIBPNG_LIBS=$(pkg-config --cflags libpng libpng16) ;
-                export LIBPNG_LIBS=$(pkg-config --libs libpng libpng16) ;
+
+
 
                 # export HARFBUZZ_CFLAGS=$(pkg-config --cflags 'no install') ;
                 # export HARFBUZZ_LIBS=$(pkg-config --libs 'no install') ;
@@ -637,12 +672,19 @@ _EOF_;
 
             ->withConfigure("
 
-                BZIP2_CFLAGS='-I/usr/bzip2/include'
-                BZIP2_LIBS='-L/usr/bzip2/lib -lbz2'
+                export ZLIB_CFLAGS=$(pkg-config --cflags zlib) ;
+                export ZLIB_LIBS=$(pkg-config --libs zlib) ;
 
-                BROTLI_CFLAGS=$(pkg-config --cflags  libbrotlidec libbrotlienc) ;
-                BROTLI_LIBS=$(pkg-config --libs  libbrotlidec libbrotlienc) ;
-                ./configure --help
+                export BZIP2_CFLAGS='-I/usr/bzip2/include'
+                export BZIP2_LIBS='-L/usr/bzip2/lib -lbz2'
+
+                export LIBPNG_LIBS=$(pkg-config --cflags libpng libpng16) ;
+                export LIBPNG_LIBS=$(pkg-config --libs libpng libpng16) ;
+
+                export BROTLI_CFLAGS=$(pkg-config --cflags  libbrotlidec libbrotlienc) ;
+                export BROTLI_LIBS=$(pkg-config --libs  libbrotlidec libbrotlienc) ;
+
+                # ./configure --help
                ./configure --prefix=/usr/freetype --enable-static --disable-shared")
             ->withScriptAfterInstall('
                 # 用完释放变量
@@ -722,8 +764,8 @@ function install_cares(Preprocessor $p)
         (new Library('cares'))
             ->withUrl('https://c-ares.org/download/c-ares-1.18.1.tar.gz')
             ->withScriptBeforeConfigure('pwd')
-            //->withConfigure('./configure --prefix=/usr/cares --enable-static --disable-shared ')
-            ->withConfigure('./configure --prefix=/usr/ --enable-static --disable-shared ')
+            ->withConfigure('./configure --prefix=/usr/cares --enable-static --disable-shared ')
+            //->withConfigure('./configure --prefix=/usr/ --enable-static --disable-shared ')
             ->withPkgName('libcares')
             //->withPkgConfig('/usr/cares/lib/pkgconfig')
             ->disableDefaultPkgConfig()
@@ -756,17 +798,56 @@ function install_imagemagick(Preprocessor $p)
             ->withUrl('https://github.com/ImageMagick/ImageMagick/archive/refs/tags/7.1.0-53.tar.gz')
             ->withFile('ImageMagick-7.1.0-53.tar.gz')
             ->withConfigure('
+            test -d /usr/imagemagick && rm -rf /usr/imagemagick
+            ./configure --help
+
+
+export ZIP_CFLAGS=$(pkg-config --cflags libzip) ;
+export  ZIP_LIBS=$(pkg-config --libs libzip) ;
+
+  ZLIB_CFLAGS=$(pkg-config --cflags zlib) ;
+  ZLIB_LIBS=$(pkg-config --libs zlib) ;
+
+  LIBZSTD_CFLAGS=$(pkg-config --cflags libzstd) ;
+  LIBZSTD_LIBS=$(pkg-config --libs libzstd) ;
+
+
+  FREETYPE_CFLAGS=$(pkg-config --cflags freetype2) ;
+  FREETYPE_LIBS=$(pkg-config --libs freetype2) ;
+
+
+  LZMA_CFLAGS=$(pkg-config --cflags liblzma) ;
+  LZMA_LIBS=$(pkg-config --libs liblzma) ;
+
+
+  PNG_CFLAGS=$(pkg-config --cflags libpng  libpng16) ;
+  PNG_LIBS=$(pkg-config --libs libpng  libpng16) ;
+
+
+  WEBP_CFLAGS=$(pkg-config --cflags libwebp ) ;
+  WEBP_LIBS=$(pkg-config --libs libwebp ) ;
+
+  WEBPMUX_CFLAGS=$(pkg-config --cflags libwebpmux) ;
+  WEBPMUX_LIBS=$(pkg-config --libs libwebpmux) ;
+
+  XML_CFLAGS=$(pkg-config --cflags libxml-2.0) ;
+  XML_LIBS=$(pkg-config --libs libxml-2.0) ;
+
+    LIBOPENJP2_CFLAGS=$(pkg-config --cflags libjpeg libturbojpeg) ;
+    LIBOPENJP2_LIBS=$(pkg-config --libs libjpeg libturbojpeg) ;
+//
             ./configure --prefix=/usr/imagemagick --enable-static --disable-shared \
             --with-zip=no \
+            --with-jpeg=yes \
             --with-fontconfig=no \
             --with-heic=no \
             --with-lcms=no \
             --with-lqr=no \
-            --with-openexr=no -\
+            --with-openexr=no \
             -with-openjp2=no \
             --with-pango=no \
             --with-raw=no \
-            --with-tiff=no \
+            --with-tiff=no
             ')
             ->withPkgName('ImageMagick MagickWand MagickCore')
             ->withLicense('https://imagemagick.org/script/license.php', Library::LICENSE_APACHE2)
@@ -779,7 +860,7 @@ function install_libidn2(Preprocessor $p)
         (new Library('libidn2', '/usr/libidn2'))
             ->withUrl('https://ftp.gnu.org/gnu/libidn/libidn2-2.3.4.tar.gz')
             ->withPkgConfig('')
-            ->withLdflags('-L/usr/libiconv/lib')
+            ->withLdflags('-L/usr/libidn2/lib')
             ->withConfigure('./configure --prefix=/usr/libidn2 enable_static=yes enable_shared=no')
             ->withLicense('https://www.gnu.org/licenses/old-licenses/gpl-2.0.html', Library::LICENSE_GPL)
     );
@@ -898,7 +979,7 @@ function install_postgresql(Preprocessor $p)
             --with-libxml  \
             --with-libxslt \
             --with-includes=\'/usr/openssl/include/:/usr/libxslt/include:/usr/include\' \
-            --with-libraries=\'/usr/openssl/lib64:/usr/libxslt/lib/:/usr/lib\' \
+            --with-libraries=\'/usr/openssl/lib64:/usr/libxslt/lib/:/usr/lib\'
             ')
             //->withPkgConfig('/usr/pgsql/lib/pkgconfig')
             ->disableDefaultPkgConfig()
@@ -923,7 +1004,7 @@ function install_socat($p)
         ->withHomePage('http://www.dest-unreach.org/socat/')
             ->withConfigure('
             pkg-config --cflags  readline
-pkg-config  --libs readline
+            pkg-config  --libs readline
 
 
             ./configure --help ;
@@ -936,6 +1017,7 @@ pkg-config  --libs readline
             --prefix=/usr/socat \
             --enable-readline \
             --enable-openssl-base=/usr/openssl
+            return 0
             ')
         ->withLicense('http://www.dest-unreach.org/socat/doc/README', Library::LICENSE_GPL)
     );
@@ -948,11 +1030,11 @@ install_libxml2($p);
 install_libxslt($p);
 install_gmp($p);
 
-//install_icu($p); //虽然自定义安装目录，并且静态编译。但是不使用，默认仍然还是使用静态系统库
+install_icu($p); //虽然自定义安装目录，并且静态编译。但是不使用，默认仍然还是使用静态系统库
 
 //install_pcre2($p);
-# install_ncurses($p); //虽然自定义安装，但是不使用，默认使用静态系统库
-# install_readline($p); //虽然自定义安装，但是不使用，默认使用静态系统库
+//install_ncurses($p); //虽然自定义安装，但是不使用，默认使用静态系统库
+//install_readline($p); //虽然自定义安装，但是不使用，默认使用静态系统库
 
 install_zlib($p);
 install_bzip2($p); //没有 libbz2.pc 文件，不能使用 pkg-config 命令
@@ -1001,11 +1083,8 @@ install_mimalloc($p);
 
 //参考 https://github.com/docker-library/php/issues/221
 //install_postgresql($p);
-#install_socat($p);
+//install_socat($p);
 
-
-# 禁用zendOpcache
-//$p->withDisableZendOpcache();
 
 $p->parseArguments($argc, $argv);
 $p->gen();

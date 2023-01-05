@@ -159,6 +159,7 @@ git restore build/*
 git restore ext/*
 git restore main/*
 
+exit 0
 cd ${__DIR__}
 sh download-php-sourcecode.sh
 

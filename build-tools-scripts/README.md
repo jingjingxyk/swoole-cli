@@ -281,8 +281,17 @@ CFLAGS=-I/usr/icu/include LDFLAGS=-L/usr/icu/lib
             --with-libraries='/usr/openssl/lib64:/usr/readline/lib'
 
 
+
+您可以选择哪些库:
+被静态链接: -Wl,-static
+被动态链接: -Wl,-Bdynamic
 ```
 
+```text
+扩展模块  pecl  PECL(PHP Extension Community Library)：php的标准扩展库。
+PEAR(PHP Extension and Application Repository)：php的扩展以及应用资源库。
+https://zhuanlan.zhihu.com/p/434787317
+```
 ```shell
 
 pecl install -D 'enable-sockets="no" enable-openssl="yes" enable-http2="yes" enable-mysqlnd="yes" enable-swoole-json="no" enable-swoole-curl="yes" enable-cares="yes"' https://pecl.php.net/get/swoole-4.4.26.tgz
@@ -341,9 +350,8 @@ ibpgcommon 和 libpqport
 - [PSR](https://www.php-fig.org/psr/)
 - [phpunit](https://github.com/sebastianbergmann/phpunit.git)
 
-> PHP_CodeSniffer 是一个代码风格检测工具。它包含两类脚本，phpcs 和 phpcbf(
-> GitHub地址)。
->
+> PHP_CodeSniffer 是一个代码风格检测工具。它包含两类脚本，phpcs 和 phpcbf(GitHub地址)。
+
 
 ```shell
 
@@ -413,7 +421,7 @@ readelf -Ds a.out
         'sockets',
         'mysqlnd',
         'mysqli',
-        'intl',  // 依赖 ICU
+        'intl',  // 依赖 ICU, 安装ICU 需要python3
         'pdo_mysql',
         // 'pdo_pgsql',
         'soap',
@@ -432,3 +440,29 @@ readelf -Ds a.out
         'mongodb', //依赖 openssl zlib
         'ds'
 ```
+
+词法（Lexical structure ）
+语法（Syntactic structure）
+语义（Semantics）
+
+语言是有一定的语法规则的（grammar）。而grammar是一组有限的规则的集合
+
+
+```makefile
+override CFLAGS += $(shell pkg-config --cflags ncursesw) \
+                   -std=gnu11 \
+                   -Wall \
+                   -Wextra \
+                   -Wmissing-declarations \
+                   -Wno-sign-compare \
+                   -Wno-unused-parameter \
+                   -Wredundant-decls \
+                   -Wstrict-prototypes
+
+override LDLIBS += -lreadline \
+                   $(shell pkg-config --libs-only-l ncursesw)
+
+override LDFLAGS += $(shell pkg-config --libs-only-L --libs-only-other ncursesw)
+
+```
+
