@@ -108,7 +108,6 @@ config_php() {
     LIBXML_CFLAGS=$(pkg-config --cflags libxml-2.0) ;
     LIBXML_LIBS=$(pkg-config --libs libxml-2.0) ;
 
-
     OPENSSL_CFLAGS=$(pkg-config --cflags openssl libcrypto libssl) ;
     OPENSSL_LIBS=$(pkg-config --libs openssl libcrypto libssl) ;
 
@@ -143,9 +142,8 @@ EOF
 export  ICU_CFLAGS=$(pkg-config --cflags  icu-uc icu-io icu-i18n)  ;
 export  ICU_LIBS=$(pkg-config  --libs icu-uc icu-io icu-i18n)  ;
 
-
-export   ONIG_CFLAGS=$(pkg-config --cflags oniguruma) ;
-export   ONIG_LIBS=$(pkg-config --libs oniguruma) ;
+export  ONIG_CFLAGS=$(pkg-config --cflags oniguruma) ;
+export  ONIG_LIBS=$(pkg-config --libs oniguruma) ;
 
 :<<'EOF'
     PHP_MONGODB_SNAPPY_CFLAGS=$(pkg-config --cflags "no install") ;
@@ -175,24 +173,29 @@ EOF
 export   LIBSODIUM_CFLAGS=$(pkg-config --cflags libsodium) ;
 export   LIBSODIUM_LIBS=$(pkg-config --libs libsodium) ;
 
-export       XSL_CFLAGS=$(pkg-config --cflags libxslt) ;
-export       XSL_LIBS=$(pkg-config --libs libxslt) ;
+export   XSL_CFLAGS=$(pkg-config --cflags libxslt) ;
+export   XSL_LIBS=$(pkg-config --libs libxslt) ;
 
-    EXSLT_CFLAGS=$(pkg-config --cflags libexslt) ;
-    EXSLT_LIBS=$(pkg-config --libs libexslt) ;
+export   EXSLT_CFLAGS=$(pkg-config --cflags libexslt) ;
+export   EXSLT_LIBS=$(pkg-config --libs libexslt) ;
 
 
 export   LIBZIP_CFLAGS=$(pkg-config --cflags libzip) ;
 export   LIBZIP_LIBS=$(pkg-config --libs libzip) ;
 
+:<<'EOF'
 # export   NCURSES_CFLAGS=$(pkg-config --cflags formw  menuw  ncursesw panelw);
 # export   NCURSES_LIBS=$(pkg-config  --libs formw  menuw  ncursesw panelw);
 
 # export   READLINE_CFLAGS=$(pkg-config --cflags  readline)  ;
-# export    READLINE_LIBS=$(pkg-config  --libs readline)  ;
+# export   READLINE_LIBS=$(pkg-config  --libs readline)  ;
+EOF
 
 
 :<<'EOF'
+export SWOOLE_CFLAGS=$(pkg-config  --cflags libcares)
+export SWOOLE_CFLAGS=$(pkg-config  --libs libcares)
+export SWOOLE_CFLAGS=$(pkg-config --libs  --cflags libcares)
 
     SWOOLE_CFLAGS=$(pkg-config  --cflags libcares)
     LIBPQ_CFLAGS=$(pkg-config  --cflags "no install")
@@ -208,6 +211,10 @@ EOF
 
     SWOOLE_PGSQL_CFLAGS
 
+export LIBPQ_CFLAGS="-I/usr/local/libpq/15.1/include" &&
+export LIBPQ_LIBS="-L/usr/local/libpq/15.1/lib" &&
+
+
     dnl FIXME: this should be SWOOLE_CFLAGS="$SWOOLE_CFLAGS $LIBPQ_CFLAGS"
     dnl or SWOOLE_PGSQL_CFLAGS="$SWOOLE_CFLAGS $LIBPQ_CFLAGS" and SWOOLE_PGSQL_CFLAGS only applies to ext-src/swoole_postgresql_coro.cc
     EXTRA_CFLAGS="$EXTRA_CFLAGS $LIBPQ_CFLAGS"
@@ -218,6 +225,7 @@ EOF
 
     ./buildconf --force ;
     ./configure --help
+
 
 
 <?php if ($this->osType !== 'macos') : ?>

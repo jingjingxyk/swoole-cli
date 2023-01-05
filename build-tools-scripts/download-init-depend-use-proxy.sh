@@ -41,7 +41,7 @@ then
   git submodule update --init --recursive
   # SKIP_LIBRARY_DOWNLOAD=1 php prepare.php +mongodb +inotify
   # php prepare.php  +mongodb +inotify
-  php prepare.php   +inotify
+  php prepare.php   -inotify -imagick -gd -intl -posix -mysqli -soap -exif  -opcache -pcntl
 
   pear config-set http_proxy ''
 

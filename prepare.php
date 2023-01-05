@@ -70,7 +70,8 @@ function install_openssl(Preprocessor $p)
             no-shared --release --prefix=/usr/openssl
 EOF
         )
-        ->withMakeInstallOptions('install all')
+            ->withMakeOptions('build_sw')
+        ->withMakeInstallOptions('install_sw')
         ->withPkgConfig('/usr/openssl/lib64/pkgconfig')
         ->withPkgName('libcrypto libssl openssl')
         ->withLdflags('-L/usr/openssl/lib64')
@@ -80,7 +81,7 @@ EOF
 }
 
 
-// MUST be in the /usr directory
+
 // Dependent libiconv
 function install_libxml2(Preprocessor $p)
 {
@@ -154,10 +155,10 @@ function install_icu(Preprocessor $p)
             source/runConfigureICU Linux --prefix=/usr/icu --enable-static --disable-shared')
             ->withMakeOptions('all VERBOSE=1')
             ->withPkgName('icu-uc icu-io icu-i18n')
-            ->withPkgConfig('/usr/icu/lib/pkgconfig')
-            //->disableDefaultPkgConfig()
-            ->withLdflags('-L/usr/icu/lib')
-            //->disableDefaultLdflags()
+            //->withPkgConfig('/usr/icu/lib/pkgconfig')
+            ->disableDefaultPkgConfig()
+            //->withLdflags('-L/usr/icu/lib')
+            ->disableDefaultLdflags()
             ->withHomePage('https://icu.unicode.org/')
             ->withLicense('https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE', Library::LICENSE_SPEC)
     );
@@ -516,7 +517,7 @@ function install_zip(Preprocessor $p)
                 -DENABLE_ZSTD=OFF
             ')
 /*
-                 -DENABLE_LZMA=OFF  \
+                -DENABLE_LZMA=OFF  \
                 -DLIBLZMA_LIBRARY=/usr/liblzma/lib \
                 -DLIBLZMA_INCLUDE_DIR=/usr/liblzma/include \
                 -DLIBLZMA_HAS_AUTO_DECODER=ON  \
@@ -601,6 +602,8 @@ function install_brotli(Preprocessor $p)
             ->withPkgName('libbrotlicommon libbrotlidec libbrotlienc')
             ->withLdflags('-L/usr/brotli/lib')
             ->withScriptAfterInstall('
+                    rm -rf /usr/brotli/lib/*.so.*
+                    rm -rf /usr/brotli/lib/*.so
                     cp -f  /usr/brotli/lib/libbrotlicommon-static.a /usr/brotli/lib/libbrotli.a
                     cp -f /usr/brotli/lib/libbrotlienc-static.a /usr/brotli/lib/libbrotlienc.a
                     cp -f /usr/brotli/lib/libbrotlidec-static.a /usr/brotli/lib/libbrotlidec.a
@@ -764,12 +767,12 @@ function install_cares(Preprocessor $p)
         (new Library('cares'))
             ->withUrl('https://c-ares.org/download/c-ares-1.18.1.tar.gz')
             ->withScriptBeforeConfigure('pwd')
-            ->withConfigure('./configure --prefix=/usr/cares --enable-static --disable-shared ')
-            //->withConfigure('./configure --prefix=/usr/ --enable-static --disable-shared ')
+            //->withConfigure('./configure --prefix=/usr/cares --enable-static --disable-shared ')
+            ->withConfigure('./configure --prefix=/usr/ --enable-static --disable-shared ')
             ->withPkgName('libcares')
             //->withPkgConfig('/usr/cares/lib/pkgconfig')
             ->disableDefaultPkgConfig()
-            //->withLdflags('-L/usr/cares/lib')
+           // ->withLdflags('-L/usr/cares/lib')
             ->disableDefaultLdflags()
             ->withLicense('https://c-ares.org/license.html', Library::LICENSE_MIT)
             ->withHomePage('https://c-ares.org/')
@@ -1009,15 +1012,16 @@ function install_socat($p)
 
             ./configure --help ;
 
-            CFLAGS=$(pkg-config --cflags libcrypto  libssl    openssl readline)
-            LDFLAGS=$(pkg-config --libs libcrypto  libssl    openssl readline)
-            CFLAGS="-static -O2 -Wall -fPIC $CFLAGS"
+            # export CFLAGS=$(pkg-config --cflags libcrypto  libssl    openssl readline)
+            # export LDFLAGS=$(pkg-config --libs libcrypto  libssl    openssl readline)
+            # export CFLAGS="-static -O2 -Wall -fPIC $CFLAGS -L/usr/lib"
 
+            LIBS="-static -Wall -O2 -fPIC  -lcrypt  -lssl   -lreadline"
+            CFLAGS="-static -Wall -O2 -fPIC"
             ./configure \
             --prefix=/usr/socat \
             --enable-readline \
             --enable-openssl-base=/usr/openssl
-            return 0
             ')
         ->withLicense('http://www.dest-unreach.org/socat/doc/README', Library::LICENSE_GPL)
     );
@@ -1030,11 +1034,15 @@ install_libxml2($p);
 install_libxslt($p);
 install_gmp($p);
 
-install_icu($p); //虽然自定义安装目录，并且静态编译。但是不使用，默认仍然还是使用静态系统库
+# 使用系统库
+// install_icu($p); //虽然自定义安装目录，并且静态编译。但是不使用，默认仍然还是使用静态系统库
 
 //install_pcre2($p);
-//install_ncurses($p); //虽然自定义安装，但是不使用，默认使用静态系统库
-//install_readline($p); //虽然自定义安装，但是不使用，默认使用静态系统库
+
+# 使用系统库
+//install_ncurses($p); //虽然自定义安装，但是readline 用不了
+# 使用系统库
+//install_readline($p); //虽然自定义安装，但是一直出现链接错误
 
 install_zlib($p);
 install_bzip2($p); //没有 libbz2.pc 文件，不能使用 pkg-config 命令
@@ -1053,8 +1061,8 @@ install_libjpeg($p);
 
 install_brotli($p);
 //install_harfbuzz($p);
-install_freetype($p); //需要 zlib bzip2 libpng  brotli  HarfBuzz(不打算安装）
 install_libwebp($p);
+install_freetype($p); //需要 zlib bzip2 libpng  brotli  HarfBuzz(不打算安装）
 install_sqlite3($p);
 
 
@@ -1064,7 +1072,7 @@ install_oniguruma($p);
 
 
 
-install_cares($p); //目录必须是 /usr ；如果使用自定义系统库，预处理时识别不了;安装暂时不使用
+install_cares($p); //目录必须是 /usr ；swoole  的参数 SWOOLE_CFLAGS 等待支持
 
 
 

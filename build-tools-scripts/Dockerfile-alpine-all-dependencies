@@ -54,11 +54,14 @@ ENV LD=ld.lld
 #RUN mv /usr/bin/ld /usr/bin/ld.old && ln -s /usr/bin/ld.lld /usr/bin/ld
 
 
-# 提供必要依赖，解决自定义安装解决不了的问题
-# RUN apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
-# RUN apk add --no-cache  ncurses-dev ncurses-libs ncurses-static
-# RUN apk add --no-cache  readline readline-dev readline-static
-# RUN apk add --no-cache  c-ares c-ares-dev c-ares-utils
+RUN apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
+RUN apk add --no-cache  ncurses-dev ncurses-libs ncurses-static
+RUN apk add --no-cache  readline readline-dev readline-static
+RUN apk add --no-cache  c-ares c-ares-dev c-ares-utils
+
+# meson 和ninja 构建
+RUN apk add python3 python3-dev py3-pip ninja
+RUN pip3 install meson  -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 COPY --from=0 /swoole-cli /work
 WORKDIR /work
@@ -123,16 +126,18 @@ COPY --from=1  /usr/imagemagick /usr/imagemagick
 
 # COPY --from=1  /usr/cares/ /usr/cares/
 
-COPY --from=1  /usr/icu/ /usr/icu/
+# COPY --from=1  /usr/icu/ /usr/icu/
 # COPY --from=1  /usr/ /usr/
 
 
+RUN apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
+RUN apk add --no-cache  ncurses-dev ncurses-libs ncurses-static
+RUN apk add --no-cache  readline readline-dev readline-static
+RUN apk add --no-cache  c-ares c-ares-dev c-ares-utils
 
-# 提供必要依赖，解决自定义安装解决不了的问题
-# RUN apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
-# RUN apk add --no-cache  ncurses-dev ncurses-libs ncurses-static
-# RUN apk add --no-cache  readline readline-dev readline-static
-# RUN apk add --no-cache  c-ares c-ares-dev c-ares-utils
+# meson 和ninja 构建
+RUN apk add python3 python3-dev py3-pip ninja
+RUN pip3 install meson  -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 
 RUN cp -f /etc/apk/repositories.save /etc/apk/repositories

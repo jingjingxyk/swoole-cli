@@ -5,11 +5,13 @@ apk update
 
 # 编译 ncurses 和 readline 非标准目录，木有没成功
 apk add --no-cache  ncurses-dev ncurses-libs ncurses-static
-apk add --no-cache  readline readline-dev readline-static
+apk add --no-cache  readline-dev readline-static
+# apk add --no-cache  readline readline-dev readline-static
 
 apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
 # swoole 需要
 apk add --no-cache  c-ares c-ares-dev c-ares-utils
+#apk add --no-cache  c-ares c-ares-dev c-ares-utils
 
 
 # meson 和ninja 构建
@@ -466,3 +468,18 @@ override LDFLAGS += $(shell pkg-config --libs-only-L --libs-only-other ncursesw)
 
 ```
 
+
+```shell
+phpize &&
+export LIBPQ_CFLAGS="-I/usr/local/libpq/15.1/include" &&
+export LIBPQ_LIBS="-L/usr/local/libpq/15.1/lib" &&
+./configure --with-openssl-dir=/usr/openssl --enable-swoole-pgsql &&
+make && make install
+```
+
+```text
+
+brotli-libs
+nghttp2-libs
+
+```

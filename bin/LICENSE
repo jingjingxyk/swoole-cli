@@ -6,7 +6,6 @@ openssl: https://github.com/openssl/openssl/blob/master/LICENSE.txt
 libxml2: http://www.opensource.org/licenses/mit-license.html
 libxslt: http://www.opensource.org/licenses/mit-license.html
 gmp: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-icu: https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE
 zlib: https://zlib.net/zlib_license.html
 bzip2: https://www.sourceware.org/bzip2/
 liblz4: https://github-com.proxy.dengxiaci.com/lz4/lz4/blob/dev/LICENSE
@@ -17,8 +16,8 @@ giflib: http://giflib.sourceforge.net/intro.html
 libpng: http://www.libpng.org/pub/png/src/libpng-LICENSE.txt
 libjpeg: https://github.com/libjpeg-turbo/libjpeg-turbo/blob/main/LICENSE.md
 brotli: https://github.com/google/brotli/blob/master/LICENSE
-freetype: https://gitlab.freedesktop.org/freetype/freetype/-/blob/master/docs/FTL.TXT
 libwebp: https://github.com/webmproject/libwebp/blob/main/COPYING
+freetype: https://gitlab.freedesktop.org/freetype/freetype/-/blob/master/docs/FTL.TXT
 sqlite3: https://www.sqlite.org/copyright.html
 oniguruma: https://github.com/kkos/oniguruma/blob/master/COPYING
 cares: https://c-ares.org/license.html
@@ -31,4 +30,3 @@ php: https://github.com/php/php-src/blob/master/LICENSE
 php-ext-redis: https://github.com/phpredis/phpredis/blob/develop/COPYING
 php-ext-swoole: https://github.com/swoole/swoole-src/blob/master/LICENSE
 php-ext-yaml: https://github.com/php/pecl-file_formats-yaml/blob/php7/LICENSE
-php-ext-imagick: https://github.com/Imagick/imagick/blob/master/LICENSE

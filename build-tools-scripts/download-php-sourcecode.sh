@@ -12,8 +12,11 @@ cd ${__DIR__}/php-versions
 export http_proxy=http://192.168.3.26:8015
 export https_proxy=http://192.168.3.26:8015
 
-test -d php-src || git clone -b PHP-7.4.33 --depth=1 https://github.com/php/php-src.git
+test -f swoole-cli-v5.0.1-linux-x64.tar.xz || curl -Lo swoole-cli-v5.0.1-linux-x64.tar.xz  https://github.com/swoole/swoole-src/releases/download/v5.0.1/swoole-cli-v5.0.1-linux-x64.tar.xz
+test -f swoole-cli-v5.0.1-linux-x64.tar.xz && xz -d swoole-cli-v5.0.1-linux-x64.tar.xz
 exit 0
+test -d php-src || git clone -b PHP-7.4.33 --depth=1 https://github.com/php/php-src.git
+
 # 下载重试
 curl --connect-timeout 15 --retry 5 --retry-delay 5 -Lo php-8.1.12.tar.gz https://www.php.net/distributions/php-8.1.12.tar.gz
 
