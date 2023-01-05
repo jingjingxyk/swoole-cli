@@ -9,8 +9,11 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositorie
 
 RUN apk update  && apk add curl wget git   tini ca-certificates openssl openssl-dev
 
-RUN apk add --no-cache php81-dev php81-cli php81-pear php81-curl php81-openssl php81-phar php81-mbstring php81-xmlwriter php81-xml php81-simplexml php81-dom php81-intl &&  \
+RUN apk add --no-cache php81-dev php81-cli php81-pear php81-curl php81-openssl php81-phar php81-mbstring php81-xmlwriter php81-xml php81-simplexml php81-dom php81-intl php81-tokenizer && apk add --no-cache  icu icu-dev icu-libs icu-data-full icu-static && \
 pecl channel-update https://pecl.php.net/channel.xml && pear update-channels && pecl config-show
+
+RUN curl -Lo /usr/local/composer.phar https://mirrors.aliyun.com/composer/composer.phar && chmod a+x /usr/local/composer.phar
+RUN ln -s /usr/local/composer.phar /usr/bin/composer
 
 WORKDIR /
 ARG PROXY_URL=''
@@ -18,7 +21,7 @@ ARG PROXY_URL=''
 ENV http_proxy=$PROXY_URL
 ENV https_proxy=$PROXY_URL
 
-RUN git clone -b dev-ok --depth=1 --progress  https://github.com/jingjingxyk/swoole-cli.git
+RUN git clone -b dev-all-dependency --depth=1 --progress  https://github.com/jingjingxyk/swoole-cli.git
 
 
 WORKDIR /swoole-cli
@@ -51,9 +54,11 @@ ENV LD=ld.lld
 #RUN mv /usr/bin/ld /usr/bin/ld.old && ln -s /usr/bin/ld.lld /usr/bin/ld
 
 
-RUN apk add --no-cache  ncurses-dev ncurses-libs ncurses-static
-RUN apk add --no-cache  readline readline-dev readline-static
-RUN apk add --no-cache   c-ares c-ares-dev
+# 提供必要依赖，解决自定义安装解决不了的问题
+# RUN apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
+# RUN apk add --no-cache  ncurses-dev ncurses-libs ncurses-static
+# RUN apk add --no-cache  readline readline-dev readline-static
+# RUN apk add --no-cache  c-ares c-ares-dev c-ares-utils
 
 COPY --from=0 /swoole-cli /work
 WORKDIR /work
@@ -123,11 +128,11 @@ COPY --from=1  /usr/icu/ /usr/icu/
 
 
 
-# 提供必要依赖，解决自定义安装，解决不了的问题
-RUN apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
-RUN apk add --no-cache  ncurses-dev ncurses-libs ncurses-static
-RUN apk add --no-cache  readline readline-dev readline-static
-RUN apk add --no-cache  c-ares c-ares-dev c-ares-utils
+# 提供必要依赖，解决自定义安装解决不了的问题
+# RUN apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
+# RUN apk add --no-cache  ncurses-dev ncurses-libs ncurses-static
+# RUN apk add --no-cache  readline readline-dev readline-static
+# RUN apk add --no-cache  c-ares c-ares-dev c-ares-utils
 
 
 RUN cp -f /etc/apk/repositories.save /etc/apk/repositories
