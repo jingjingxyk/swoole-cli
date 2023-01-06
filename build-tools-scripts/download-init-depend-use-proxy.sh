@@ -61,3 +61,16 @@ fi
 chmod a+x ./make.sh
 
 chown -R 1000:1000 .
+
+:<<'EOF'
+cho -e "Enter numbers 1-4" \c"
+read NUM
+case $NUM in
+    1) echo "one";;
+    2) echo "two";;
+    3) echo "three";;
+    4) echo "four";;
+    *) echo "invalid answer"
+       exit 1;;
+esac
+EOF

@@ -12,7 +12,7 @@ __PROJECT__=$(
   pwd
 )
 
-export DOCKER_BUILDKIT=1
+# export DOCKER_BUILDKIT=1
 
 TIME=`date -u '+%Y%m%dT%H%M%SZ'`
 VERSION="build-dev-all-dependencies-alpine-edge-"${TIME}
@@ -29,9 +29,9 @@ PROXY_URL=${2:+'http://192.168.3.26:8015'}
 cd ${__DIR__}
 
 #docker build -t ${IMAGE} -f ./Dockerfile  .  --force-rm=true --no-cache=true --pull=true
-docker build -t ${IMAGE} -f ./Dockerfile-alpine-all-dependencies  . --progress=plain --build-arg PROXY_URL=$PROXY_URL --no-cache=true
- docker push ${IMAGE}
-echo ${IMAGE} > build-dev-dependencies-container.txt
+docker build -t ${IMAGE} -f ./Dockerfile-alpine-all-dependencies  . --progress=plain --build-arg PROXY_URL=$PROXY_URL
 
+echo ${IMAGE} > build-dev-dependencies-container.txt
+docker push ${IMAGE}
 
 exit

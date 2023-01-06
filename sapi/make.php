@@ -36,18 +36,14 @@ make_<?=$item->name?>() {
     cd <?=$item->name?> ;
     <?php if (!empty($item->beforeConfigureScript)) : ?>
         <?= $item->beforeConfigureScript . PHP_EOL ?>
-        :;
         result=$?
-        [ $result -ne 0 ] &&  echo "[before configure script failure]" && return $result ;
+        [ $result -gt 1 ] &&  echo "[before configure script failure]" && return $result ;
     <?php endif; ?>
-
-    echo <<'___EOF___'
+    cat <<'__EOF__'
     <?= $item->configure . PHP_EOL ?>
-___EOF___
-    :;
+__EOF__
     <?php if (!empty($item->configure)): ?>
         <?=$item->configure . PHP_EOL ?>
-        :;
         result=$?
         [ $result -ne 0 ] &&  echo "[configure failure]" && return $result ;
     <?php endif; ?>
@@ -57,7 +53,6 @@ ___EOF___
     [ $result -ne 0 ] && echo "[make failure]" && return $result ;
     <?php if (!empty($item->beforeInstallScript)): ?>
         <?=$item->beforeInstallScript . PHP_EOL ?>
-        :;
         result=$?
         [ $result -ne 0 ] &&  echo "[before install script  failure]" && return $result ;
     <?php endif; ?>
@@ -66,7 +61,6 @@ ___EOF___
     [ $result -ne 0 ] &&  echo "[make install failure]" &&  return $result;
     <?php if ($item->afterInstallScript): ?>
         <?=$item->afterInstallScript . PHP_EOL ?>
-        :;
         result=$?
         [ $result -ne 0 ] &&  echo "[after install script  failure]" && return $result;
     <?php endif; ?>
@@ -74,13 +68,13 @@ ___EOF___
     set +exu
 }
 
-    clean_<?= $item->name ?>() {
-        cd <?= $this->workDir ?>/thirdparty
-        echo "clean <?= $item->name ?>"
-        cd <?= $this->workDir ?>/thirdparty/<?= $item->name ?> && make clean
-        cd -
-    }
-    <?php echo str_repeat(PHP_EOL, 1); ?>
+clean_<?= $item->name ?>() {
+    cd <?= $this->workDir ?>/thirdparty
+    echo "clean <?= $item->name ?>"
+    cd <?= $this->workDir ?>/thirdparty/<?= $item->name ?> && make clean
+    cd -
+}
+<?php echo str_repeat(PHP_EOL, 1); ?>
 
 <?php endforeach; ?>
 

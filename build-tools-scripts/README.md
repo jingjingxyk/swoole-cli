@@ -109,7 +109,7 @@ apt-get install -y libpq-dev
 
 postgresql-client-common postgresql-common
 
-
+LIBS="L/usr/lib/llvm14/lib -lpgcommon -lpgport -lm"
 
 pkg-config --cflags openssl
 
@@ -483,3 +483,6 @@ brotli-libs
 nghttp2-libs
 
 ```
+
+
+

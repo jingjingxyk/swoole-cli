@@ -91,6 +91,7 @@ function install_libxml2(Preprocessor $p)
             ->withConfigure('
 
             ./autogen.sh && ./configure --help
+
            ./configure
              ./configure \
             --prefix=/usr/libxml2 \
@@ -745,7 +746,7 @@ function install_oniguruma(Preprocessor $p)
             ->withUrl('https://github.com/kkos/oniguruma/releases/download/v6.9.8/onig-6.9.8.tar.gz')
             ->withFile('oniguruma-v6.9.7.tar.gz')
             ->withConfigure(
-                './autogen.sh && ./configure \
+                'return 0 ; ./autogen.sh && ./configure \
             --prefix=/usr/oniguruma --enable-static --disable-shared'
             )
             ->withPkgConfig('/usr/oniguruma/lib/pkgconfig')
@@ -834,18 +835,18 @@ export  ZIP_LIBS=$(pkg-config --libs libzip) ;
   WEBP_CFLAGS=$(pkg-config --cflags libwebp ) ;
   WEBP_LIBS=$(pkg-config --libs libwebp ) ;
 
-  WEBPMUX_CFLAGS=$(pkg-config --cflags libwebpmux) ;
-  WEBPMUX_LIBS=$(pkg-config --libs libwebpmux) ;
+  WEBPMUX_CFLAGS=$(pkg-config --cflags libwebp libwebpdemux  libwebpmux) ;
+  WEBPMUX_LIBS=$(pkg-config --libs libwebp libwebpdemux  libwebpmux) ;
 
   XML_CFLAGS=$(pkg-config --cflags libxml-2.0) ;
   XML_LIBS=$(pkg-config --libs libxml-2.0) ;
 
-    LIBOPENJP2_CFLAGS=$(pkg-config --cflags libjpeg libturbojpeg) ;
-    LIBOPENJP2_LIBS=$(pkg-config --libs libjpeg libturbojpeg) ;
-//
+    # LIBOPENJP2_CFLAGS=$(pkg-config --cflags libjpeg libturbojpeg) ;
+    # LIBOPENJP2_LIBS=$(pkg-config --libs libjpeg libturbojpeg) ;
+
             ./configure --prefix=/usr/imagemagick --enable-static --disable-shared \
-            --with-zip=no \
-            --with-jpeg=no \
+            --with-zip=yes \
+            --with-jpeg=yes \
             --with-fontconfig=no \
             --with-heic=no \
             --with-lcms=no \
@@ -974,19 +975,30 @@ function install_postgresql(Preprocessor $p)
         (new Library('postgresql'))
             ->withUrl('https://ftp.postgresql.org/pub/source/v15.1/postgresql-15.1.tar.gz')
             ->withScriptBeforeConfigure('
-                export PKG_CONFIG_PATH="/usr/lib/pkgconfig:$PKG_CONFIG_PATH"
+                # export PKG_CONFIG_PATH="/usr/lib/pkgconfig:$PKG_CONFIG_PATH"
             ')
-            //ICU_CFLAGS=\"$(pkg-config --cflags  icu-uc icu-io icu-i18n)\" ICU_LIBS=\"$(pkg-config --libs  icu-uc icu-io icu-i18n)\" \
-            // XML2_CFLAGS=\"$(pkg-config --cflags  libxml-2.0 )\" XML2_LIBS=\"$(pkg-config -libs  libxml-2.0 )\" \
-            ->withConfigure('./configure --prefix=/usr/pgsql \
-            --with-ssl=openssl  \
-            --with-readline \
-            --with-icu \
-            --without-ldap \
-            --with-libxml  \
-            --with-libxslt \
-            --with-includes=\'/usr/openssl/include/:/usr/libxslt/include:/usr/include\' \
-            --with-libraries=\'/usr/openssl/lib64:/usr/libxslt/lib/:/usr/lib\'
+
+            ->withConfigure('
+
+                export ICU_CFLAGS="$(pkg-config --cflags  icu-uc icu-io icu-i18n)"
+                export ICU_LIBS="$(pkg-config --libs  icu-uc icu-io icu-i18n)"
+                export XML2_CFLAGS="$(pkg-config --cflags  libxml-2.0 )"
+                export XML2_LIBS="$(pkg-config --libs  libxml-2.0 )"
+ ./configure --help
+ # return  0
+
+            CFLAGS="-Wall -O2 -static -I/usr/zlib/include -I/usr/libxml2/include"
+            LDFLAGS="-L/usr/zlib/lib -lz"
+            LIBS="-L/usr/libxml2/lib -lxml2"
+               ./configure --prefix=/usr/pgsql \
+                --with-ssl=openssl  \
+                --with-readline \
+                --with-icu \
+                --without-ldap \
+                --with-libxml  \
+                --with-libxslt \
+                --with-includes="/usr/openssl/include/:/usr/libxslt/include:/usr/libxml2/include/:/usr/zlib/lib:/usr/include" \
+                --with-libraries="/usr/openssl/lib64:/usr/libxslt/lib/:/usr/libxml2/lib/:/usr/zlib/lib:/usr/lib"
             ')
             //->withPkgConfig('/usr/pgsql/lib/pkgconfig')
             ->disableDefaultPkgConfig()
@@ -1030,6 +1042,7 @@ function install_socat($p)
         ->withLicense('http://www.dest-unreach.org/socat/doc/README', Library::LICENSE_GPL)
     );
 }
+
 //install_gettext($p);
 install_libiconv($p); //没有 libiconv.pc 文件 不能使用 pkg-config 命令
 install_openssl($p);
