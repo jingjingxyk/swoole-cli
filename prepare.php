@@ -845,8 +845,8 @@ export  ZIP_LIBS=$(pkg-config --libs libzip) ;
     # LIBOPENJP2_LIBS=$(pkg-config --libs libjpeg libturbojpeg) ;
 
             ./configure --prefix=/usr/imagemagick --enable-static --disable-shared \
-            --with-zip=yes \
-            --with-jpeg=yes \
+            --with-zip=no \
+            --with-jpeg=no \
             --with-fontconfig=no \
             --with-heic=no \
             --with-lcms=no \
@@ -855,7 +855,9 @@ export  ZIP_LIBS=$(pkg-config --libs libzip) ;
             -with-openjp2=no \
             --with-pango=no \
             --with-raw=no \
-            --with-tiff=no
+            --with-tiff=no \
+            --with-zstd=no \
+            --with-freetype=no
             ')
             ->withPkgName('ImageMagick MagickWand MagickCore')
             ->withLicense('https://imagemagick.org/script/license.php', Library::LICENSE_APACHE2)
