@@ -745,10 +745,12 @@ function install_oniguruma(Preprocessor $p)
             //->withUrl('https://codeload.github.com/kkos/oniguruma/tar.gz/refs/tags/v6.9.7')
             ->withUrl('https://github.com/kkos/oniguruma/releases/download/v6.9.8/onig-6.9.8.tar.gz')
             ->withFile('oniguruma-v6.9.7.tar.gz')
-            ->withConfigure(
-                'return 0 ; ./autogen.sh && ./configure \
-            --prefix=/usr/oniguruma --enable-static --disable-shared'
-            )
+            ->withConfigure('
+
+            ./autogen.sh && ./configure \
+            --prefix=/usr/oniguruma --enable-static --disable-shared
+
+            ')
             ->withPkgConfig('/usr/oniguruma/lib/pkgconfig')
             ->withPkgName('oniguruma')
             //->disableDefaultPkgConfig()
