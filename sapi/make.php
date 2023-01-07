@@ -25,7 +25,6 @@ OPTIONS="--disable-all \
 
 <?php foreach ($this->libraryList as $item) : ?>
 make_<?=$item->name?>() {
-    set -eux
     cd <?=$this->workDir?>/thirdparty
     echo "build <?=$item->name?>"
     <?php if ($item->cleanBuildDirectory) : ?>
@@ -65,7 +64,6 @@ __EOF__
     [ $result -gt 1 ] &&  echo "[after install script  failure]" && exit 0 &&  return $result;
     <?php endif; ?>
     cd -
-    set +exu
 }
 
 clean_<?= $item->name ?>() {
