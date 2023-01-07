@@ -1,43 +1,5 @@
 FROM alpine:edge
 
-
-ENV TZ=Etc/UTC
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
-RUN test -f /etc/apk/repositories.save || cp /etc/apk/repositories /etc/apk/repositories.save
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
-
-RUN apk update  && apk add curl wget git   tini ca-certificates openssl openssl-dev
-
-RUN apk add --no-cache php81-dev php81-cli php81-pear php81-curl php81-openssl php81-phar php81-mbstring php81-xmlwriter php81-xml php81-simplexml php81-dom php81-intl php81-tokenizer && apk add --no-cache  icu icu-dev icu-libs icu-data-full icu-static && \
-pecl channel-update https://pecl.php.net/channel.xml && pear update-channels && pecl config-show
-
-RUN curl -Lo /usr/local/composer.phar https://mirrors.aliyun.com/composer/composer.phar && chmod a+x /usr/local/composer.phar
-RUN ln -s /usr/local/composer.phar /usr/bin/composer
-
-WORKDIR /
-ARG PROXY_URL=''
-
-ENV http_proxy=$PROXY_URL
-ENV https_proxy=$PROXY_URL
-
-RUN git clone -b dev-all-dependency --depth=1 --progress  https://github.com/jingjingxyk/swoole-cli.git
-
-
-WORKDIR /swoole-cli
-RUN git config --global --add safe.directory '*'
-RUN git submodule update --init --recursive
-# RUN git -C ext/swoole pull --progress
-RUN sh build-tools-scripts/download-init-depend.sh
-
-ENV http_proxy=''
-ENV https_proxy=''
-# pear config-set http_proxy $PROXY_URL
-# RUN pear config-set http_proxy ""
-# RUN pecl config-show
-
-FROM alpine:edge
-
 ENV TZ=Etc/UTC
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
@@ -63,7 +25,8 @@ RUN apk add --no-cache  readline readline-dev readline-static
 RUN apk add python3 python3-dev py3-pip ninja
 RUN pip3 install meson  -i https://pypi.tuna.tsinghua.edu.cn/simple
 
-COPY --from=0 /swoole-cli /work
+COPY --from=docker.io/jingjingxyk/build-swoole-cli:build-dev-download-library-and-extension-alpine-edge-20230107T034754Z /swoole-cli/ /swoole-cli/
+RUN cp -rf /swoole-cli/ /work
 WORKDIR /work
 RUN sh make.sh all-library
 
@@ -89,45 +52,45 @@ WORKDIR /work
 
 
 
-COPY --from=1 /usr/libiconv /usr/libiconv
-COPY --from=1 /usr/openssl/ /usr/openssl/
-COPY --from=1  /usr/brotli/ /usr/brotli/
-COPY --from=1 /usr/libxml2/ /usr/libxml2/
-COPY --from=1 /usr/libxslt/ /usr/libxslt/
+COPY --from=0 /usr/libiconv /usr/libiconv
+COPY --from=0 /usr/openssl/ /usr/openssl/
+COPY --from=0  /usr/brotli/ /usr/brotli/
+COPY --from=0 /usr/libxml2/ /usr/libxml2/
+COPY --from=0 /usr/libxslt/ /usr/libxslt/
 
-COPY --from=1  /usr/gmp/ /usr/gmp/
+COPY --from=0  /usr/gmp/ /usr/gmp/
 
-COPY --from=1  /usr/zlib /usr/zlib
-COPY --from=1  /usr/bzip2 /usr/bzip2
-COPY --from=1  /usr/liblzma /usr/liblzma
-COPY --from=1  /usr/libzstd /usr/libzstd
+COPY --from=0  /usr/zlib /usr/zlib
+COPY --from=0  /usr/bzip2 /usr/bzip2
+COPY --from=0  /usr/liblzma /usr/liblzma
+COPY --from=0  /usr/libzstd /usr/libzstd
 
-COPY --from=1  /usr/zip /usr/zip
+COPY --from=0  /usr/zip /usr/zip
 
-COPY --from=1  /usr/giflib /usr/giflib
-COPY --from=1  /usr/libpng /usr/libpng
-COPY --from=1  /usr/libjpeg /usr/libjpeg
-COPY --from=1  /usr/freetype /usr/freetype
-COPY --from=1  /usr/libwebp /usr/libwebp
+COPY --from=0  /usr/giflib /usr/giflib
+COPY --from=0  /usr/libpng /usr/libpng
+COPY --from=0  /usr/libjpeg /usr/libjpeg
+COPY --from=0  /usr/freetype /usr/freetype
+COPY --from=0  /usr/libwebp /usr/libwebp
 
-COPY --from=1  /usr/sqlite3/ /usr/sqlite3/
-COPY --from=1  /usr/oniguruma/ /usr/oniguruma/
+COPY --from=0  /usr/sqlite3/ /usr/sqlite3/
+COPY --from=0  /usr/oniguruma/ /usr/oniguruma/
 
-COPY --from=1  /usr/curl/ /usr/curl/
+COPY --from=0  /usr/curl/ /usr/curl/
 
-COPY --from=1  /usr/libsodium/ /usr/libsodium/
-COPY --from=1  /usr/libyaml /usr/libyaml
-COPY --from=1  /usr/mimalloc/ /usr/mimalloc/
+COPY --from=0  /usr/libsodium/ /usr/libsodium/
+COPY --from=0  /usr/libyaml /usr/libyaml
+COPY --from=0  /usr/mimalloc/ /usr/mimalloc/
 
-COPY --from=1  /usr/imagemagick /usr/imagemagick
+COPY --from=0  /usr/imagemagick /usr/imagemagick
 
-# COPY --from=1  /usr/ncurses /usr/ncurses
-# COPY --from=1  /usr/readline /usr/readline
+# COPY --from=0  /usr/ncurses /usr/ncurses
+# COPY --from=0  /usr/readline /usr/readline
 
-# COPY --from=1  /usr/cares/ /usr/cares/
+# COPY --from=0  /usr/cares/ /usr/cares/
 
-# COPY --from=1  /usr/icu/ /usr/icu/
-# COPY --from=1  /usr/ /usr/
+# COPY --from=0  /usr/icu/ /usr/icu/
+# COPY --from=0  /usr/ /usr/
 
 
 RUN apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static

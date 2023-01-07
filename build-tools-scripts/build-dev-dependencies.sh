@@ -29,7 +29,7 @@ PROXY_URL=${2:+'http://192.168.3.26:8015'}
 cd ${__DIR__}
 
 #docker build -t ${IMAGE} -f ./Dockerfile  .  --force-rm=true --no-cache=true --pull=true
-docker build -t ${IMAGE} -f ./Dockerfile-alpine-all-dependencies  . --progress=plain --build-arg PROXY_URL=$PROXY_URL --no-cache=true
+docker build -t ${IMAGE} -f ./Dockerfile-alpine-all-dependencies  . --progress=plain --build-arg PROXY_URL=$PROXY_URL
 
 echo ${IMAGE} > build-dev-dependencies-container.txt
 docker push ${IMAGE}

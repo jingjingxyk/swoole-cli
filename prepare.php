@@ -747,8 +747,11 @@ function install_oniguruma(Preprocessor $p)
             ->withFile('oniguruma-v6.9.7.tar.gz')
             ->withConfigure('
 
-            ./autogen.sh && ./configure \
-            --prefix=/usr/oniguruma --enable-static --disable-shared
+            ./autogen.sh
+            ./configure \
+            --prefix=/usr/oniguruma \
+            --enable-static \
+            --disable-shared
 
             ')
             ->withPkgConfig('/usr/oniguruma/lib/pkgconfig')
