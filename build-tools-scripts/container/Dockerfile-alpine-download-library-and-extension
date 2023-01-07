@@ -12,14 +12,15 @@ RUN apk update  && apk add curl wget git   tini ca-certificates openssl openssl-
 RUN apk add --no-cache php81-dev php81-cli php81-pear php81-curl php81-openssl php81-phar php81-mbstring php81-xmlwriter php81-xml php81-simplexml php81-dom php81-intl php81-tokenizer && apk add --no-cache  icu icu-dev icu-libs icu-data-full icu-static && \
 pecl channel-update https://pecl.php.net/channel.xml && pear update-channels && pecl config-show
 
-RUN curl -Lo /usr/local/composer.phar https://mirrors.aliyun.com/composer/composer.phar && chmod a+x /usr/local/composer.phar
-RUN ln -s /usr/local/composer.phar /usr/bin/composer
+
 
 WORKDIR /
-ARG PROXY_URL=''
+ARG PROXY_URL=""
 
 ENV http_proxy=$PROXY_URL
 ENV https_proxy=$PROXY_URL
+RUN pear config-set http_proxy $PROXY_URL
+
 
 RUN git clone -b dev-all-dependency --depth=1 --progress  https://github.com/jingjingxyk/swoole-cli.git
 
@@ -28,12 +29,12 @@ WORKDIR /swoole-cli
 RUN git config --global --add safe.directory '*'
 RUN git submodule update --init --recursive
 # RUN git -C ext/swoole pull --progress
-RUN sh build-tools-scripts/download-init-depend.sh
-
+# RUN sh build-tools-scripts/download-init-depend.sh
+RUN php prepare.php +inotify
 ENV http_proxy=''
 ENV https_proxy=''
-# pear config-set http_proxy $PROXY_URL
-# RUN pear config-set http_proxy ""
+
+RUN pear config-set http_proxy ""
 # RUN pecl config-show
 
 FROM alpine:edge

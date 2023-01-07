@@ -25,13 +25,16 @@ RUN apk add --no-cache  readline readline-dev readline-static
 RUN apk add python3 python3-dev py3-pip ninja
 RUN pip3 install meson  -i https://pypi.tuna.tsinghua.edu.cn/simple
 
-COPY --from=docker.io/jingjingxyk/build-swoole-cli:build-dev-download-library-and-extension-alpine-edge-20230107T042227Z /swoole-cli/pool /pool
-
-# 使用已经编译好的swoole-cli
+# 使用已经编译好的swoole-cli 作为PHP解析器
 COPY --from=docker.io/jingjingxyk/php:static-cli-alpine3.16-20230105T105237Z /usr/bin/swoole-cli /usr/bin/swoole-cli
 RUN ln -s /usr/bin/swoole-cli /usr/bin/php
 
-COPY --from=docker.io/jingjingxyk/build-swoole-cli:build-dev-download-sourcecode-alpine-edge-20230107T043209Z /swoole-cli/ /work
+# 获得扩展和依赖库
+COPY --from=docker.io/jingjingxyk/build-swoole-cli:build-dev-download-library-and-extension-alpine-edge-20230107T090322Z /swoole-cli/pool /pool
+
+# 获得源代码
+COPY --from=docker.io/jingjingxyk/build-swoole-cli:build-dev-download-sourcecode-alpine-edge-20230107T083217Z /swoole-cli/ /work
+
 RUN cp -rf /pool/* /work/pool/
 
 WORKDIR /work
@@ -59,7 +62,7 @@ ENV LD=ld.lld
 
 WORKDIR /work
 
-
+COPY --from=0 /work/pool/ /pool/
 
 COPY --from=0 /usr/libiconv /usr/libiconv
 COPY --from=0 /usr/openssl/ /usr/openssl/

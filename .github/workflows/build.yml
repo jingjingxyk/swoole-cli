@@ -31,14 +31,11 @@ jobs:
           curl  https://get.docker.com | bash
           bash  build-tools-scripts/run-swoole-cli-build-dev-1-container.sh
           docker exec -i swoole-cli-build-dev-1 sh  ./build-tools-scripts/download-init-depend.sh
-          bash  build-tools-scripts/run-swoole-cli-build-dev-2-container.sh
-          docker exec -i swoole-cli-build-dev-2 sh ./make.sh cares
-          docker exec -i swoole-cli-build-dev-2 sh ./make.sh zip
-          docker exec -i swoole-cli-build-dev-2 sh ./make.sh config
-          docker exec -i swoole-cli-build-dev-2 sh ./make.sh build
-          docker exec -i swoole-cli-build-dev-2 sh ./build-tools-scripts/archive-dist.sh
-          docker exec -i swoole-cli-build-dev-2 sh ./build-tools-scripts/download-php-sourcecode.sh
-          docker exec -i swoole-cli-build-dev-2 sh ./build-tools-scripts/build-php-no-swoole-cli/build-config-php.sh
+          bash  build-tools-scripts/run-build-dev-container.sh
+          docker exec -i build-dev-dependencies sh ./make.sh cares
+          docker exec -i build-dev-dependencies sh ./make.sh config
+          docker exec -i build-dev-dependencies sh ./make.sh build
+          docker exec -i build-dev-dependencies sh ./build-tools-scripts/archive-dist.sh
   #        docker exec -i swoole-cli-build-dev chmod a+x /work/bin/swoole-cli &&  /work/bin/swoole-cli -v
   #        docker exec -i swoole-cli-build-dev sh ./make.sh archive
   #    - name: Build-with-docker-1
