@@ -73,11 +73,38 @@ function install_openssl(Preprocessor $p)
             ./Configure   $static  \
             no-shared --release --prefix=/usr/openssl
 EOF
-            )->withMakeOptions('build_sw')
+            )
+            ->withMakeOptions('build_sw')
             ->withMakeInstallOptions('install_sw')
             ->withPkgConfig('/usr/openssl/lib64/pkgconfig')
             ->withPkgName('libcrypto libssl openssl')
             ->withLdflags('-L/usr/openssl/lib64')
+            ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
+            ->withHomePage('https://www.openssl.org/')
+    );
+}
+
+function install_openssl_1(Preprocessor $p)
+{
+    $static = $p->osType === 'macos' ? '' : ' -static --static';
+    $p->addLibrary(
+        (new Library('openssl_1'))
+            ->withUrl('https://www.openssl.org/source/openssl-1.1.1p.tar.gz')
+            ->withFile('openssl-1.1.1p.tar.gz')
+            ->withCleanBuildDirectory()
+            ->withScriptBeforeConfigure('
+                test -d /usr/openssl && rm -rf /usr/openssl
+            ')
+            ->withConfigure(
+                <<<EOF
+            ./config $static \
+            no-shared --release --prefix=/usr/openssl
+EOF
+            )
+            ->withMakeInstallOptions('install_sw')
+            ->withPkgConfig('/usr/openssl/lib/pkgconfig')
+            ->withPkgName('libcrypto libssl openssl')
+            ->withLdflags('-L/usr/openssl/lib')
             ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
             ->withHomePage('https://www.openssl.org/')
     );
@@ -1094,7 +1121,8 @@ function install_socat($p)
 
 //install_gettext($p);
 install_libiconv($p); //没有 libiconv.pc 文件 不能使用 pkg-config 命令
-install_openssl($p);
+//install_openssl($p);
+install_openssl_1($p);
 
 install_libxml2($p);
 install_libxslt($p);

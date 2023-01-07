@@ -170,12 +170,6 @@ apk add libxslt-dev
 apk add libzip-dev
 
 
-
-
-
-
-
-
 add pcre2-dev re2c libbz2
 apk add c-ares c-ares-dev
 
@@ -184,11 +178,6 @@ apk add bzip2 bzip2-dev bzip2-static
 
 apk --no-cache add postgresql-libs libpq-dev postgresql
 apk add libbson libbson-dev libbson-static
-
-
-
-
-
 
 
 
@@ -202,9 +191,9 @@ sh make.sh readline
 ```shell
 
 CFLAGS=-Wno-dev
-CXXFLAGS="-ggdb -pipe -Wall -pedantic -I/usr/include/readline5" \
-CPPFLAGS="-I/usr/include/readline5" \
-LDFLAGS="-L/usr/lib64/readline5" \
+CXXFLAGS="-ggdb -pipe -Wall -pedantic -I/usr/include/readline5"
+CPPFLAGS="-I/usr/include/readline5"
+LDFLAGS="-L/usr/lib64/readline5"
 
 ```
 
@@ -450,6 +439,8 @@ readelf -Ds a.out
     扩展 intl 依赖库 ICU
     扩展 gd 依赖库 freetype , freetype 依赖 zlib bzip2 libpng  brotli
     扩展'mongodb', 依赖库 openssl, zlib等
+    扩展curl 依赖 openssl
+    扩展zip 依赖 openssl
 
 ```
 
