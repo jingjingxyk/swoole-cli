@@ -38,6 +38,6 @@ ENV https_proxy=''
 
 FROM alpine:edge
 
-COPY --from=0  /swoole-cli/  /swoole-cli/
+COPY --from=0  /swoole-cli/pool  /swoole-cli/pool
 
 

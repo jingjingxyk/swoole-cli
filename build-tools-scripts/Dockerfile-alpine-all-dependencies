@@ -25,8 +25,12 @@ RUN apk add --no-cache  readline readline-dev readline-static
 RUN apk add python3 python3-dev py3-pip ninja
 RUN pip3 install meson  -i https://pypi.tuna.tsinghua.edu.cn/simple
 
-COPY --from=docker.io/jingjingxyk/build-swoole-cli:build-dev-download-library-and-extension-alpine-edge-20230107T034754Z /swoole-cli/ /swoole-cli/
-RUN cp -rf /swoole-cli/ /work
+COPY --from=docker.io/jingjingxyk/build-swoole-cli:build-dev-download-library-and-extension-alpine-edge-20230107T042227Z /swoole-cli/pool /pool
+
+# 源码
+COPY --from=docker.io/jingjingxyk/build-swoole-cli:build-dev-download-sourcecode-alpine-edge-20230107T042919Z /swoole-cli/ /work
+
+RUN cp -rf /pool/* /work/pool/
 WORKDIR /work
 RUN sh make.sh all-library
 
