@@ -35,34 +35,34 @@ make_<?=$item->name?>() {
     tar --strip-components=1 -C <?=$this->workDir?>/thirdparty/<?=$item->name?> -xf <?=$this->workDir?>/pool/lib/<?=$item->file?>  && \
     cd <?=$item->name?> ;
     <?php if (!empty($item->beforeConfigureScript)) : ?>
-        <?= $item->beforeConfigureScript . PHP_EOL ?>
-        result=$?
-        [ $result -gt 1 ] &&  echo "[before configure script failure]" && exit 0 && return $result ;
+    <?= $item->beforeConfigureScript . PHP_EOL ?>
+    result=$?
+    [ $result -gt 1 ] &&  echo "[before configure script failure]" && exit 0 && return $result ;
     <?php endif; ?>
     cat <<'__EOF__'
     <?= $item->configure . PHP_EOL ?>
 __EOF__
     <?php if (!empty($item->configure)): ?>
-        <?=$item->configure . PHP_EOL ?>
-        result=$?
-        [ $result -ne 0 ] &&  echo "[configure failure]" && exit 0 &&  return $result ;
+    <?=$item->configure . PHP_EOL ?>
+    result=$?
+    [ $result -ne 0 ] &&  echo "[configure failure]" && exit 0 &&  return $result ;
     <?php endif; ?>
 
     make -j <?=$this->maxJob?>  <?=$item->makeOptions . PHP_EOL ?>
     result=$?
     [ $result -ne 0 ] && echo "[make failure]" && exit 0 &&  return $result ;
     <?php if (!empty($item->beforeInstallScript)): ?>
-        <?=$item->beforeInstallScript . PHP_EOL ?>
-        result=$?
-        [ $result -ne 0 ] &&  echo "[before install script  failure]" && exit 0 &&  return $result ;
+    <?=$item->beforeInstallScript . PHP_EOL ?>
+    result=$?
+    [ $result -ne 0 ] &&  echo "[before install script  failure]" && exit 0 &&  return $result ;
     <?php endif; ?>
     make <?=$item->makeInstallDefaultOptions?> <?=$item->makeInstallOptions . PHP_EOL?>
     result=$?
     [ $result -ne 0 ] &&  echo "[make install failure]" && exit 0 &&   return $result;
     <?php if ($item->afterInstallScript): ?>
-        <?=$item->afterInstallScript . PHP_EOL ?>
-        result=$?
-        [ $result -gt 1 ] &&  echo "[after install script  failure]" && exit 0 &&  return $result;
+    <?=$item->afterInstallScript . PHP_EOL ?>
+    result=$?
+    [ $result -gt 1 ] &&  echo "[after install script  failure]" && exit 0 &&  return $result;
     <?php endif; ?>
     cd -
     set +exu
