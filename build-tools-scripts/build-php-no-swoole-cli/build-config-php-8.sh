@@ -143,10 +143,8 @@ test -f ./configure && rm ./configure ;
     --with-openssl --with-openssl-dir=/usr/openssl \
     --enable-gd \
     --with-yaml=/usr/libyaml \
-    --enable-swoole  --enable-swoole-curl --enable-cares   --with-brotli-dir=/usr/brotli \
-    --enable-intl \
-    --enable-mongodb \
-    --enable-redis
+    --enable-swoole  --enable-swoole-curl --enable-cares   --with-brotli-dir=/usr/brotli
+
 
 # --enable-intl \ # use icu
 # --enable-mongodb \
