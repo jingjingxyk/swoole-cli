@@ -439,8 +439,8 @@ readelf -Ds a.out
     扩展 intl 依赖库 ICU
     扩展 gd 依赖库 freetype , freetype 依赖 zlib bzip2 libpng  brotli
     扩展'mongodb', 依赖库 openssl, zlib等
-    扩展curl 依赖 openssl
-    扩展zip 依赖 openssl
+    扩展 curl 依赖 openssl
+    扩展 zip 依赖 openssl
 
 ```
 

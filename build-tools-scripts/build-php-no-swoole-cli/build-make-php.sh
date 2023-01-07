@@ -13,11 +13,18 @@ __PROJECT__=$(
 cd ${__DIR__}
 cd ${__DIR__}/php-src/
 
+make clean
+make     EXTRA_LDFLAGS_PROGRAM='-all-static -fno-ident -L/usr/libiconv/lib -L/usr/openssl/lib -L/usr/libxml2/lib -L/usr/libxslt/lib -L/usr/gmp/lib -L/usr/zlib/lib -L/usr/bzip2/lib -L/usr/liblz4/lib -L/usr/liblzma/lib -L/usr/libzstd/lib -L/usr/zip/lib -L/usr/giflib/lib -L/usr/libpng/lib -L/usr/libjpeg/lib64 -L/usr/brotli/lib -L/usr/libwebp/lib -L/usr/freetype/lib/ -L/usr/sqlite3/lib -L/usr/oniguruma/lib -L/usr/imagemagick/lib -L/usr/curl/lib -L/usr/libsodium/lib -L/usr/libyaml/lib -L/usr/mimalloc/lib '   -j  $(nproc)
 
-make    EXTRA_LDFLAGS_PROGRAM='-all-static   -L/usr/libiconv/lib -L/usr/openssl/lib -L/usr/libxml2/lib -L/usr/libxslt/lib -L/usr/gmp/lib -L/usr/zlib/lib -L/usr/bzip2/lib -L/usr/sqlite3/lib -L/usr/oniguruma/lib -L/usr/brotli/lib -L/usr/lib -L/usr/curl/lib -L/usr/libsodium/lib  -L/usr/mimalloc/lib '  -j  $(nproc)
+
+
 
 
 make install
 
 /tmp/php/bin/php -v
+
+ls -lh /tmp/php/bin/php
+strip /tmp/php/bin/php
+ls -lh /tmp/php/bin/php
 
