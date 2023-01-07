@@ -27,11 +27,16 @@ RUN pip3 install meson  -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 COPY --from=docker.io/jingjingxyk/build-swoole-cli:build-dev-download-library-and-extension-alpine-edge-20230107T042227Z /swoole-cli/pool /pool
 
-# 源码
-COPY --from=docker.io/jingjingxyk/build-swoole-cli:build-dev-download-sourcecode-alpine-edge-20230107T042919Z /swoole-cli/ /work
+# 使用已经编译好的swoole-cli
+COPY --from=docker.io/jingjingxyk/php:static-cli-alpine3.16-20230105T105237Z /usr/bin/swoole-cli /usr/bin/swoole-cli
+RUN ln -s /usr/bin/swoole-cli /usr/bin/php
 
+COPY --from=docker.io/jingjingxyk/build-swoole-cli:build-dev-download-sourcecode-alpine-edge-20230107T043209Z /swoole-cli/ /work
 RUN cp -rf /pool/* /work/pool/
+
 WORKDIR /work
+
+RUN php prepare.php +inotify
 RUN sh make.sh all-library
 
 
