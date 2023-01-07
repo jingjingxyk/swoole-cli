@@ -21,4 +21,5 @@ ls -lh ${__PROJECT__}/bin/swoole-cli
 
 ${__PROJECT__}/bin/swoole-cli -v
 
+mkdir -p ${__DIR__}/dist/
 cp -rf ${__PROJECT__}/bin/swoole-cli ${__DIR__}/dist/

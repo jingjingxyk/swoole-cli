@@ -1141,7 +1141,7 @@ function install_socat($p)
     );
 }
 
-//install_gettext($p);
+
 install_libiconv($p); //没有 libiconv.pc 文件 不能使用 pkg-config 命令
 install_openssl($p);  //openssl 3 版本
 install_openssl_1($p); //openssl 1 版本

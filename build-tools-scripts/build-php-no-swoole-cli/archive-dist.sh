@@ -15,11 +15,12 @@ cd ${__DIR__}
 version=$(cat version.txt)
 
 
-install_prefix_dir="/tmp/${version}/php"
+install_prefix_dir="/tmp/${version}"
 ${install_prefix_dir}/bin/php -v
 
 ls -lh ${install_prefix_dir}/bin/php
 strip ${install_prefix_dir}/bin/php
 ls -lh ${install_prefix_dir}/bin/php
 
+mkdir -p dist/
 cp -rf ${install_prefix_dir}/bin/php dist/
