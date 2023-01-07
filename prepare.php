@@ -851,6 +851,24 @@ function install_cares(Preprocessor $p)
     );
 }
 
+function install_cares_2(Preprocessor $p)
+{
+    $p->addLibrary(
+        (new Library('cares_2'))
+            ->withUrl('https://c-ares.org/download/c-ares-1.18.1.tar.gz')
+            ->withScriptBeforeConfigure('pwd')
+            ->withConfigure('./configure --prefix=/usr/cares --enable-static --disable-shared ')
+            //->withPkgName('libcares')
+            ->disablePkgName()
+            //->withPkgConfig('/usr/cares/lib/pkgconfig')
+            ->disableDefaultPkgConfig()
+            // ->withLdflags('-L/usr/cares/lib')
+            ->disableDefaultLdflags()
+            ->withLicense('https://c-ares.org/license.html', Library::LICENSE_MIT)
+            ->withHomePage('https://c-ares.org/')
+    );
+}
+
 
 function install_libedit(Preprocessor $p)
 {
@@ -1167,7 +1185,8 @@ install_sqlite3($p);
 install_oniguruma($p);
 
 
-install_cares($p); //目录必须是 /usr ；swoole  的参数 SWOOLE_CFLAGS 等待支持
+install_cares($p); //目录必须是 /usr ；swoole 使用 SWOOLE_CFLAGS 实现，目前不完全支持
+install_cares_2($p); //目录必须是 /usr ；swoole 使用 SWOOLE_CFLAGS 实现，目前不完全支持
 
 
 //install_libedit($p);

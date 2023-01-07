@@ -30,7 +30,7 @@ RUN git config --global --add safe.directory '*'
 RUN git submodule update --init --recursive
 # RUN git -C ext/swoole pull --progress
 # RUN sh build-tools-scripts/download-init-depend.sh
-RUN php prepare.php +inotify
+RUN php prepare.php +inotify +ds
 ENV http_proxy=''
 ENV https_proxy=''
 
