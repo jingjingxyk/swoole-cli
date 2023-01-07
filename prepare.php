@@ -92,9 +92,11 @@ function install_openssl_1(Preprocessor $p)
             ->withUrl('https://www.openssl.org/source/openssl-1.1.1p.tar.gz')
             ->withFile('openssl-1.1.1p.tar.gz')
             ->withCleanBuildDirectory()
-            ->withScriptBeforeConfigure('
+            ->withScriptBeforeConfigure(
+                '
                 test -d /usr/openssl && rm -rf /usr/openssl
-            ')
+            '
+            )
             ->withConfigure(
                 <<<EOF
             ./config $static \
@@ -178,8 +180,8 @@ function install_icu(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('icu'))
-            //->withUrl('https://github.com/unicode-org/icu/releases/download/release-60-3/icu4c-60_3-src.tgz')
-            ->withUrl('https://github.com/unicode-org/icu/releases/download/release-72-1/icu4c-72_1-src.tgz')
+            ->withUrl('https://github.com/unicode-org/icu/releases/download/release-60-3/icu4c-60_3-src.tgz')
+            //->withUrl('https://github.com/unicode-org/icu/releases/download/release-72-1/icu4c-72_1-src.tgz')
             //https://unicode-org.github.io/icu/userguide/icu4c/build.html
             ->withCleanBuildDirectory()
             ->withScriptBeforeConfigure(
@@ -191,7 +193,10 @@ function install_icu(Preprocessor $p)
                 '
             source/runConfigureICU Linux --help
             # CPPFLAGS="-DPIC -fPIC -DICU_DATA_DIR=/usr/icu/"
-            source/runConfigureICU Linux --prefix=/usr/icu --enable-static --disable-shared'
+            source/runConfigureICU Linux --prefix=/usr/icu --enable-static --disable-shared \
+            --disable-tests --disable-samples --with-data-packaging=static
+
+            '
             )
             ->withMakeOptions('all VERBOSE=1')
             ->withPkgName('icu-uc icu-io icu-i18n')
@@ -316,10 +321,10 @@ EOF
             ->withMakeOptions('all')
             ->withPkgName('ncursesw ncurses')
             ->disablePkgName()
-            ->withPkgConfig('/usr/ncurses/lib/pkgconfig')
-            //->disableDefaultPkgConfig()
-            ->withLdflags('-L/usr/ncurses/lib/')
-            //->disableDefaultLdflags()
+            //->withPkgConfig('/usr/ncurses/lib/pkgconfig')
+            ->disableDefaultPkgConfig()
+            //->withLdflags('-L/usr/ncurses/lib/')
+            ->disableDefaultLdflags()
             //->withLicense('https://github.com/projectceladon/libncurses/blob/master/README', Library::LICENSE_MIT)
             ->withLicense('https://invisible-island.net/ncurses/ncurses-license.html', Library::LICENSE_GPL)
             //->withHomePage('https://github.com/projectceladon/libncurses')
@@ -364,13 +369,12 @@ EOF
             ->withMakeInstallOptions("install-static")
             ->withPkgName('readline')
             //->disablePkgName()
-            ->withPkgConfig('/usr/readline/lib/pkgconfig')
-            //->disableDefaultPkgConfig()
-            ->withLdflags('-L/usr/readline/lib')
-            //->disableDefaultLdflags()
+            //->withPkgConfig('/usr/readline/lib/pkgconfig')
+            ->disableDefaultPkgConfig()
+            //->withLdflags('-L/usr/readline/lib')
+            ->disableDefaultLdflags()
             ->withScriptAfterInstall(
                 '
-
             '
             )
             ->withLicense('http://www.gnu.org/licenses/gpl.html', Library::LICENSE_GPL)
@@ -1121,22 +1125,22 @@ function install_socat($p)
 
 //install_gettext($p);
 install_libiconv($p); //没有 libiconv.pc 文件 不能使用 pkg-config 命令
-//install_openssl($p);
-install_openssl_1($p);
+install_openssl($p);  //openssl 3 版本
+install_openssl_1($p); //openssl 1 版本
 
 install_libxml2($p);
 install_libxslt($p);
 install_gmp($p);
 
-# 使用系统库
-// install_icu($p); //虽然自定义安装目录，并且静态编译。但是不使用，默认仍然还是使用静态系统库
+
+install_icu($p); //虽然自定义安装目录，并且静态编译。但是不使用，默认仍然还是使用静态系统库
 
 //install_pcre2($p);
 
 # 使用系统库
-//install_ncurses($p); //虽然自定义安装，但是readline 用不了
+install_ncurses($p); //虽然自定义安装目录，并且静态编译。但是不使用，默认仍然还是使用静态系统库
 # 使用系统库
-//install_readline($p); //虽然自定义安装，但是一直出现链接错误
+install_readline($p); //虽然自定义安装目录，并且静态编译。但是不使用，默认仍然还是使用静态系统库
 
 install_zlib($p);
 install_bzip2($p); //没有 libbz2.pc 文件，不能使用 pkg-config 命令

@@ -36,7 +36,7 @@ make_<?=$item->name?>() {
     <?php if (!empty($item->beforeConfigureScript)) : ?>
     <?= $item->beforeConfigureScript . PHP_EOL ?>
     result=$?
-    [ $result -gt 1 ] &&  echo "[before configure script failure]" && exit 0 && return $result ;
+    [[ $result -gt 1 ]] &&  echo "[before configure script failure]" && exit 0 && return $result ;
     <?php endif; ?>
     cat <<'__EOF__'
     <?= $item->configure . PHP_EOL ?>
@@ -44,24 +44,24 @@ __EOF__
     <?php if (!empty($item->configure)): ?>
     <?=$item->configure . PHP_EOL ?>
     result=$?
-    [ $result -ne 0 ] &&  echo "[configure failure]" && exit 0 &&  return $result ;
+    [[ $result -ne 0 ]] &&  echo "[configure failure]" && exit 0 &&  return $result ;
     <?php endif; ?>
 
     make -j <?=$this->maxJob?>  <?=$item->makeOptions . PHP_EOL ?>
     result=$?
-    [ $result -ne 0 ] && echo "[make failure]" && exit 0 &&  return $result ;
+    [[ $result -ne 0 ]] && echo "[make failure]" && exit 0 &&  return $result ;
     <?php if (!empty($item->beforeInstallScript)): ?>
     <?=$item->beforeInstallScript . PHP_EOL ?>
     result=$?
-    [ $result -ne 0 ] &&  echo "[before install script  failure]" && exit 0 &&  return $result ;
+    [[ $result -ne 0 ]] &&  echo "[before install script  failure]" && exit 0 &&  return $result ;
     <?php endif; ?>
     make <?=$item->makeInstallDefaultOptions?> <?=$item->makeInstallOptions . PHP_EOL?>
     result=$?
-    [ $result -ne 0 ] &&  echo "[make install failure]" && exit 0 &&   return $result;
+    [[ $result -ne 0 ]] &&  echo "[make install failure]" && exit 0 &&   return $result;
     <?php if ($item->afterInstallScript): ?>
     <?=$item->afterInstallScript . PHP_EOL ?>
     result=$?
-    [ $result -gt 1 ] &&  echo "[after install script  failure]" && exit 0 &&  return $result;
+    [[ $result -gt 1 ]] &&  echo "[after install script  failure]" && exit 0 &&  return $result;
     <?php endif; ?>
     cd -
 }
@@ -86,14 +86,6 @@ config_php() {
 
     git config --global --add safe.directory "*"
 
-
-<?php if (0 == true) : ?>
-    test -f main/main.c.save ||  cp -f main/main.c main/main.c.save ;
-    sed -i 's/extern zend_extension zend_extension_entry;//g' main/main.c ;
-    sed -i 's/zend_register_extension(&zend_extension_entry, NULL);//g' main/main.c ;
-<?php else : ?>
-    test -f main/main.c.save &&  cp -f main/main.c.save main/main.c ;
-<?php endif; ?>
     test -f ./configure && rm ./configure ;
 
 
@@ -261,7 +253,7 @@ elif [ "$1" = "all-library" ] ;then
     make_all_library
 <?php foreach ($this->libraryList as $item) : ?>
 elif [ "$1" = "<?= $item->name ?>" ] ;then
-    make_<?= $item->name ?> && [ $? -eq 0 ] && echo "[SUCCESS] make <?= $item->name ?>"
+    make_<?= $item->name ?> && [[ $? -eq 0 ]] && echo "[SUCCESS] make <?= $item->name ?>"
 elif [ "$1" = "clean-<?= $item->name ?>" ] ;then
     clean_<?= $item->name ?> && [ $? -eq 0 ] && echo "[SUCCESS] make clean <?= $item->name ?>"
 <?php endforeach; ?>

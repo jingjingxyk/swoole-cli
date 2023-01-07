@@ -360,7 +360,7 @@ pear list
   //git clone https://chromium.googlesource.com/external/github.com/nmoinvaz/minizip
   //https://chromium.googlesource.com/?format=HTML ;search "external/github.com/"
 
-命令 nm
+命令 nm 和 strip  属于Binutils工具集
 
 连接选项： 链接选项 -rdynamic与动态符号表
 

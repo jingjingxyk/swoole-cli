@@ -14,7 +14,8 @@ export https_proxy=http://192.168.3.26:8015
 
 test -d php-src || git clone -b PHP-7.4.33 --depth=1 https://github.com/php/php-src.git
 
-
+# test -d swoole-src  || git clone -b v5.0.1 --depth=1  https://github.com/swoole/swoole-src.git
+test -d swoole-src  || git clone -b v4.8.11 --depth=1  https://github.com/swoole/swoole-src.git
 
 exit 0
 # 下载重试

@@ -16,12 +16,11 @@ mkdir -p ${__DIR__}/dist/
 cd ${__DIR__}/dist/
 
 
-test -f php || curl -LO https://control-plane-endpoint.jingjingxyk.com/php-cli/php
 
 # test -f php && rm -rf php
 # curl -LO https://control-plane-endpoint.jingjingxyk.com/php-cli/php
 
-chmod a+x ./php
+
 ./php -m > exts.txt
 cat > index.php <<'EOF'
 <?php

@@ -12,7 +12,9 @@ __PROJECT__=$(
 
 cd ${__DIR__}
 
-version=PHP-7.4.33
+version=$(cat version.txt)
+# php 7.4 不支持 openssl 3 版本，请使用openssl 1 版本
+
 
 cd ${__DIR__}/php-src/
 
@@ -24,7 +26,7 @@ test -d /usr/local/lib/pkgconfig && PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$P
 test -d /usr/local/lib64/pkgconfig && PKG_CONFIG_PATH="/usr/local/lib64/pkgconfig:$PKG_CONFIG_PATH"
 
 
-export PKG_CONFIG_PATH=/usr/libiconv/lib/pkgconfig:/usr/openssl/lib/pkgconfig:/usr/libxml2/lib/pkgconfig:/usr/libxslt/lib/pkgconfig:/usr/gmp/lib/pkgconfig:/usr/zlib/lib/pkgconfig:/usr/liblz4/lib/pkgconfig:/usr/liblzma/lib/pkgconfig:/usr/libzstd/lib/pkgconfig:/usr/zip/lib/pkgconfig:/usr/libpng/lib/pkgconfig:/usr/libjpeg/lib64/pkgconfig:/usr/brotli/lib/pkgconfig:/usr/libwebp/lib/pkgconfig:/usr/freetype/lib/pkgconfig:/usr/sqlite3/lib/pkgconfig:/usr/oniguruma/lib/pkgconfig:/usr/imagemagick/lib/pkgconfig:/usr/curl/lib/pkgconfig:/usr/libsodium/lib/pkgconfig:/usr/libyaml/lib/pkgconfig:/usr/mimalloc/lib/pkgconfig:$PKG_CONFIG_PATH
+export PKG_CONFIG_PATH=/usr/libiconv/lib/pkgconfig:/usr/openssl/lib/pkgconfig:/usr/libxml2/lib/pkgconfig:/usr/libxslt/lib/pkgconfig:/usr/gmp/lib/pkgconfig:/usr/zlib/lib/pkgconfig:/usr/liblz4/lib/pkgconfig:/usr/liblzma/lib/pkgconfig:/usr/libzstd/lib/pkgconfig:/usr/zip/lib/pkgconfig:/usr/libpng/lib/pkgconfig:/usr/libjpeg/lib64/pkgconfig:/usr/brotli/lib/pkgconfig:/usr/libwebp/lib/pkgconfig:/usr/freetype/lib/pkgconfig:/usr/sqlite3/lib/pkgconfig:/usr/oniguruma/lib/pkgconfig:/usr/imagemagick/lib/pkgconfig:/usr/curl/lib/pkgconfig:/usr/libsodium/lib/pkgconfig:/usr/libyaml/lib/pkgconfig:/usr/mimalloc/lib/pkgconfig:/usr/icu/lib/pkgconfig:$PKG_CONFIG_PATH
 
 
 install_prefix_dir="/tmp/${version}/php/"
@@ -32,9 +34,14 @@ mkdir -p $install_prefix_dir
 
 mkdir -p ext/redis
 mkdir -p ext/mongodb
+mkdir -p ext/yaml
+
+test -d ext/swoole && rm -rf ext/swoole
+cp -rf ${__DIR__}/swoole-src ext/swoole
 
 tar --strip-components=1 -C ext/redis -xf /work/pool/ext/redis-5.3.7.tgz
 tar --strip-components=1 -C ext/mongodb -xf /work/pool/ext/mongodb-1.14.2.tgz
+tar --strip-components=1 -C ext/yaml -xf /work/pool/ext/yaml-2.2.2.tgz
 
 
     LIBXML_CFLAGS=$(pkg-config --cflags libxml-2.0) ;
@@ -62,8 +69,8 @@ tar --strip-components=1 -C ext/mongodb -xf /work/pool/ext/mongodb-1.14.2.tgz
     FREETYPE2_LIBS=$(pkg-config --libs freetype2) ;
 
 
-export  ICU_CFLAGS=$(pkg-config --cflags  icu-uc icu-io icu-i18n)  ;
-export  ICU_LIBS=$(pkg-config  --libs icu-uc icu-io icu-i18n)  ;
+# export  ICU_CFLAGS=$(pkg-config --cflags --static icu-uc icu-io icu-i18n)  ;
+# export  ICU_LIBS=$(pkg-config  --libs --static icu-uc icu-io icu-i18n)  ;
 
 export  ONIG_CFLAGS=$(pkg-config --cflags oniguruma) ;
 export  ONIG_LIBS=$(pkg-config --libs oniguruma) ;
@@ -96,8 +103,8 @@ test -f ./configure && rm ./configure ;
 
 
 
-LDFLAGS=-static
-./configure --prefix=$install_prefix_dir \
+
+./configure LDFLAGS=-static --prefix=$install_prefix_dir \
     --disable-all \
     --enable-shared=no \
     --enable-static=yes \
@@ -115,30 +122,34 @@ LDFLAGS=-static
     --enable-session \
     --enable-tokenizer \
     --with-iconv=/usr/libiconv \
+    --enable-mysqlnd \
     --with-pdo-sqlite \
+    --with-pdo-mysql=mysqlnd \
     --with-sqlite3=/usr/sqlite3 \
     --enable-xml --enable-simplexml --enable-xmlreader --enable-xmlwriter --enable-dom --with-libxml=/usr/libxml2 \
     --with-curl=/usr/curl \
     --with-bz2=/usr/bzip2 \
     --with-zlib=/usr/zlib/ \
+    --with-zip=/usr/zip/ \
     --enable-bcmath \
     --enable-pcntl \
     --enable-mbstring \
     --enable-sockets \
-    --enable-mysqlnd \
     --with-pdo-mysql=mysqlnd \
     --with-xsl=/usr/libxslt \
     --with-gmp=/usr/gmp \
-    --with-sodium=/usr/libsodium \
-    --enable-intl \
+    --with-sodium=/usr/ \
     --with-readline \
     --with-openssl --with-openssl-dir=/usr/openssl \
-    --enable-redis \
-    --enable-mongodb \
     --enable-gd \
-    --enable-bz2
+    --with-yaml=/usr/libyaml \
+    --enable-swoole  --enable-swoole-curl --enable-http2 --enable-swoole-json
 
-# --enable-intl  # use icu
+# --enable-intl \ # use icu
+#   --enable-mongodb \
+# --enable-redis \
+# --with-brotli-dir=/usr/brotli
+# --enable-swoole --enable-sockets --enable-mysqlnd --enable-swoole-curl --enable-cares   --with-brotli-dir=/usr/brotli  \
 
 sed -ie 's/-export-dynamic//g' "Makefile"
 sed -ie 's/-o $(SAPI_CLI_PATH)/-all-static -o $(SAPI_CLI_PATH)/g' "Makefile"
