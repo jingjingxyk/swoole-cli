@@ -12,7 +12,7 @@ __PROJECT__=$(
   pwd
 )
 
-# export DOCKER_BUILDKIT=1
+export DOCKER_BUILDKIT=1
 
 TIME=`date -u '+%Y%m%dT%H%M%SZ'`
 VERSION="build-dev-all-dependencies-alpine-edge-"${TIME}
