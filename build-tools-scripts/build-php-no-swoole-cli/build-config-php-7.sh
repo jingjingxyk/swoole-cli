@@ -145,11 +145,9 @@ test -f ./configure && rm ./configure ;
     --with-yaml=/usr/libyaml \
     --enable-swoole  --enable-swoole-curl --enable-http2 --enable-swoole-json
 
-# --enable-intl \ # use icu
+#   --enable-intl \ # use icu
 #   --enable-mongodb \
-# --enable-redis \
-# --with-brotli-dir=/usr/brotli
-# --enable-swoole --enable-sockets --enable-mysqlnd --enable-swoole-curl --enable-cares   --with-brotli-dir=/usr/brotli  \
+#   --enable-redis \
 
 sed -ie 's/-export-dynamic//g' "Makefile"
 sed -ie 's/-o $(SAPI_CLI_PATH)/-all-static -o $(SAPI_CLI_PATH)/g' "Makefile"
