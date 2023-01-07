@@ -111,7 +111,7 @@ COPY --from=1  /usr/freetype /usr/freetype
 COPY --from=1  /usr/libwebp /usr/libwebp
 
 COPY --from=1  /usr/sqlite3/ /usr/sqlite3/
-# COPY --from=1  /usr/oniguruma/ /usr/oniguruma/
+COPY --from=1  /usr/oniguruma/ /usr/oniguruma/
 
 COPY --from=1  /usr/curl/ /usr/curl/
 
@@ -119,7 +119,7 @@ COPY --from=1  /usr/libsodium/ /usr/libsodium/
 COPY --from=1  /usr/libyaml /usr/libyaml
 COPY --from=1  /usr/mimalloc/ /usr/mimalloc/
 
-#COPY --from=1  /usr/imagemagick /usr/imagemagick
+COPY --from=1  /usr/imagemagick /usr/imagemagick
 
 # COPY --from=1  /usr/ncurses /usr/ncurses
 # COPY --from=1  /usr/readline /usr/readline

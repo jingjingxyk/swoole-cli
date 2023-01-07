@@ -17,7 +17,7 @@ RUN apk add --no-cache  readline readline-dev readline-static
 RUN apk add --no-cache  c-ares c-ares-dev c-ares-utils
 
 # meson 和ninja 构建
-RUN apk add python3 python3-dev py3-pip ninja
+RUN apk add --no-cache  python3 python3-dev py3-pip ninja
 RUN pip3 install meson  -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 # chown -R 1000:1000 /work 允许容器外用户修改文件
