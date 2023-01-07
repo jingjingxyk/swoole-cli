@@ -441,6 +441,16 @@ readelf -Ds a.out
         'imagick',
         'mongodb', //依赖 openssl zlib
         'ds'
+
+
+
+    bzip2 没有 libbz2.pc 文件，不能使用 pkg-config 命令，使用时需要手动指定
+    libiconv 不能使用 pkg-config 命令
+    扩展 mbstring 依赖库oniguruma
+    扩展 intl 依赖库 ICU
+    扩展 gd 依赖库 freetype , freetype 依赖 zlib bzip2 libpng  brotli
+    扩展'mongodb', 依赖库 openssl, zlib等
+
 ```
 
 词法（Lexical structure ）
