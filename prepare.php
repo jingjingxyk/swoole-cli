@@ -184,13 +184,7 @@ function install_icu(Preprocessor $p)
             ->withUrl('https://github.com/unicode-org/icu/releases/download/release-60-3/icu4c-60_3-src.tgz')
             //->withUrl('https://github.com/unicode-org/icu/releases/download/release-72-1/icu4c-72_1-src.tgz')
             //https://unicode-org.github.io/icu/userguide/icu4c/build.html
-            ->withSkipInstall()
             ->withCleanBuildDirectory()
-            ->withScriptBeforeConfigure(
-                '
-              test -d /usr/icu/ && rm -rf /usr/icu/
-            '
-            )
             ->withConfigure(
                 '
             source/runConfigureICU Linux --help
@@ -202,9 +196,9 @@ function install_icu(Preprocessor $p)
             )
             ->withMakeOptions('all VERBOSE=1')
             ->withPkgName('icu-uc icu-io icu-i18n')
-            //->withPkgConfig('/usr/lib/pkgconfig')
+            ->withPkgConfig('/usr/lib/pkgconfig')
             ->disableDefaultPkgConfig()
-            //->withPkgConfig('/usr/lib]')
+            ->withPkgConfig('/usr/lib]')
             ->disableDefaultLdflags()
             ->withHomePage('https://icu.unicode.org/')
             ->withLicense('https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE', Library::LICENSE_SPEC)
@@ -221,16 +215,16 @@ function install_icu_2(Preprocessor $p)
             ->withCleanBuildDirectory()
             ->withConfigure(
                 '
-            source/runConfigureICU Linux --prefix=/usr/icu/ --enable-static --disable-shared \
+            source/runConfigureICU Linux --prefix=/usr/icu --enable-static --disable-shared \
             --disable-tests --disable-samples --with-data-packaging=static
             '
             )
             ->withMakeOptions('all VERBOSE=1')
             ->withPkgName('icu-uc icu-io icu-i18n')
-            ->withPkgConfig('/usr/icu/lib/pkgconfig')
-            //->disableDefaultPkgConfig()
-            ->withLdflags('-L/usr/icu/lib')
-            // ->disableDefaultLdflags()
+            //->withPkgConfig('/usr/icu/lib/pkgconfig')
+            ->disableDefaultPkgConfig()
+            // ->withLdflags('-L/usr/icu/lib')
+            ->disableDefaultLdflags()
             ->withHomePage('https://icu.unicode.org/')
             ->withLicense('https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE', Library::LICENSE_SPEC)
     );
