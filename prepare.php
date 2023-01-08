@@ -488,7 +488,7 @@ function install_liblz4(Preprocessor $p)
             ->withPkgConfig('/usr/liblz4/lib/pkgconfig')
             ->withLdflags('-L/usr/liblz4/lib')
             ->withHomePage('https://github.com/lz4/lz4.git')
-            ->withLicense('https://github-com.proxy.dengxiaci.com/lz4/lz4/blob/dev/LICENSE', Library::LICENSE_GPL)
+            ->withLicense('https://github.com/lz4/lz4/blob/dev/LICENSE', Library::LICENSE_GPL)
     );
 }
 
