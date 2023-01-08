@@ -56,6 +56,8 @@ class Library extends Project
     public bool $skipInstall = false;
     public bool $cleanBuildDirectory = false;
 
+    public string $untarArchiveCommand = 'tar';
+
     public string $beforeConfigureScript = '';
 
     public string $configure = '';
@@ -118,6 +120,11 @@ class Library extends Project
         return $this;
     }
 
+    public function withUntarArchiveCommand(string $command):static
+    {
+        $this->untarArchiveCommand = $command;
+        return $this;
+    }
     public function withScriptBeforeConfigure(string $script): static
     {
         $this->beforeConfigureScript = $script;

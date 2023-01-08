@@ -14,7 +14,7 @@ ncurses: https://invisible-island.net/ncurses/ncurses-license.html
 readline: http://www.gnu.org/licenses/gpl.html
 zlib: https://zlib.net/zlib_license.html
 bzip2: https://www.sourceware.org/bzip2/
-liblz4: https://github-com.proxy.dengxiaci.com/lz4/lz4/blob/dev/LICENSE
+liblz4: https://github.com/lz4/lz4/blob/dev/LICENSE
 liblzma: https://git.tukaani.org/?p=xz.git;a=blob;f=COPYING
 libzstd: https://github.com/facebook/zstd/blob/dev/COPYING
 zip: https://libzip.org/license/
@@ -36,5 +36,14 @@ curl: https://github.com/curl/curl/blob/master/COPYING
 libsodium: https://en.wikipedia.org/wiki/ISC_license
 libyaml: https://pyyaml.org/wiki/LibYAML
 mimalloc: https://github.com/microsoft/mimalloc/blob/master/LICENSE
-postgresql: https://www.postgresql.org/about/licence/
+pgsql: https://www.postgresql.org/about/licence/
+socat: http://www.dest-unreach.org/socat/doc/README
+nettle: https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+libunistring: https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+gnu_tls: https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+libuv: https://github.com/libuv/libuv/blob/v1.x/LICENSE
+libunwind: https://github.com/libunwind/libunwind/blob/master/LICENSE
+jemalloc: https://github.com/jemalloc/jemalloc/blob/dev/COPYING
+tcmalloc: https://github.com/google/tcmalloc/blob/master/LICENSE
+aria2c: https://github.com/aria2/aria2/blob/master/COPYING
 php: https://github.com/php/php-src/blob/master/LICENSE

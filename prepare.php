@@ -254,9 +254,12 @@ function install_pcre2(Preprocessor $p)
          "
             )
             ->withMakeInstallOptions('install ')
-            ->withPkgConfig('/usr/pcre2/lib/pkgconfig')
-            ->withPkgName("libpcre2-16     libpcre2-32    libpcre2-8      libpcre2-posix")
-            ->withLdflags('-L/usr/pcre2/lib')
+            //->withPkgConfig('/usr/pcre2/lib/pkgconfig')
+            ->disableDefaultPkgConfig()
+            //->withPkgName("libpcre2-16     libpcre2-32    libpcre2-8      libpcre2-posix")
+            ->disablePkgName()
+            //->withLdflags('-L/usr/pcre2/lib')
+            ->disableDefaultLdflags()
             ->withLicense(
                 'https://github.com/PCRE2Project/pcre2/blob/master/COPYING',
                 Library::LICENSE_PCRE2
@@ -488,7 +491,7 @@ function install_liblz4(Preprocessor $p)
             ->withPkgConfig('/usr/liblz4/lib/pkgconfig')
             ->withLdflags('-L/usr/liblz4/lib')
             ->withHomePage('https://github.com/lz4/lz4.git')
-            ->withLicense('https://github-com.proxy.dengxiaci.com/lz4/lz4/blob/dev/LICENSE', Library::LICENSE_GPL)
+            ->withLicense('https://github.com/lz4/lz4/blob/dev/LICENSE', Library::LICENSE_GPL)
     );
 }
 
@@ -736,9 +739,12 @@ function install_harfbuzz(Preprocessor $p)
                 # ninja -C builddir install
             "
             )
-            ->withPkgConfig('/usr/harfbuzz/lib/pkgconfig')
-            ->withPkgName('libbrotlicommon libbrotlidec libbrotlienc')
-            ->withLdflags('-L/usr/harfbuzz/lib')
+            //->withPkgConfig('/usr/harfbuzz/lib/pkgconfig')
+            ->disableDefaultPkgConfig()
+            //->withPkgName('libbrotlicommon libbrotlidec libbrotlienc')
+            ->disablePkgName()
+            //->withLdflags('-L/usr/harfbuzz/lib')
+            ->disableDefaultLdflags()
             ->withScriptAfterInstall(
                 '
 
@@ -1086,15 +1092,15 @@ function install_mimalloc(Preprocessor $p)
 }
 
 
-function install_postgresql(Preprocessor $p)
+function install_pgsql(Preprocessor $p)
 {
     $p->addLibrary(
-        (new Library('postgresql'))
+        (new Library('pgsql'))
             ->withUrl('https://ftp.postgresql.org/pub/source/v15.1/postgresql-15.1.tar.gz')
             //->withSkipInstall()
             ->withScriptBeforeConfigure(
                 '
-
+                test -d /usr/pgsql && rm -rf /usr/pgsql
             '
             )
             ->withConfigure(
@@ -1122,12 +1128,14 @@ function install_postgresql(Preprocessor $p)
             --without-libxslt \
             --with-includes="/usr/openssl/include/:/usr/libxslt/include:/usr/libxml2/include/:/usr/zlib/lib:/usr/include" \
             --with-libraries="/usr/openssl/lib64:/usr/libxslt/lib/:/usr/libxml2/lib/:/usr/zlib/lib:/usr/lib"
+
             '
             )
+
+            //->withMakeOptions("-C src/interfaces/libpq/ libpq.a")
             ->withMakeOptions("-C src/interfaces all-ecpg-recurse")
-            ->withMakeInstallOptions(
-                '-C src/interfaces install-ecpg-recurse '
-            ) //make -C src/interfaces install-ecpg-recurse
+            ->withMakeInstallOptions('-C src/interfaces install-ecpg-recurse ')
+            //make -C src/interfaces install-ecpg-recurse
             ->withPkgConfig('/usr/pgsql/lib/pkgconfig')
             //->disableDefaultPkgConfig()
             ->withLdflags('-L/usr/pgsql/lib/')
@@ -1174,6 +1182,253 @@ function install_socat($p)
             '
             )
             ->withLicense('http://www.dest-unreach.org/socat/doc/README', Library::LICENSE_GPL)
+    );
+}
+
+function install_nettle($p)
+{
+    // https://github.com/aledbf/socat-static-binary/blob/master/build.sh
+    $p->addLibrary(
+        (new Library('nettle'))
+            ->withUrl('https://ftp.gnu.org/gnu/nettle/nettle-3.8.tar.gz')
+            ->withFile('nettle-3.8.tar.gz')
+            ->withHomePage('https://www.lysator.liu.se/~nisse/nettle/')
+            //->withSkipInstall()
+            ->withConfigure(
+                '
+             ./configure --help
+            ./configure \
+            --prefix=/usr/nettle \
+            --enable-static \
+            --disable-shared
+            '
+            )
+            ->withPkgConfig('/usr/nettle/lib/pkgconfig')
+            ->withPkgName('hogweed nettle')
+            ->withLdflags('/usr/nettle/lib')
+            ->withLicense('https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html', Library::LICENSE_LGPL)
+    );
+}
+
+function install_libunistring($p)
+{
+    $p->addLibrary(
+        (new Library('libunistring'))
+            ->withUrl('https://ftp.gnu.org/gnu/libunistring/libunistring-0.9.1.1.tar.gz')
+            ->withFile('libunistring-0.9.1.1.tar.gz')
+            ->withHomePage('https://www.gnu.org/software/libunistring/')
+            ->withSkipInstall()
+            ->withConfigure(
+                '
+             ./configure --help
+            ./configure \
+            --prefix=/usr/libunistring \
+            --enable-static \
+            --disable-shared
+            '
+            )
+            //->withPkgConfig('/usr/libunistring/lib/pkgconfig')
+            ->disableDefaultPkgConfig()
+            //->withPkgName('libunistringe')
+            ->disablePkgName()
+            //->withLdflags('/usr/libunistring/lib')
+            ->disableDefaultLdflags()
+            ->withLicense('https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html', Library::LICENSE_LGPL)
+    );
+}
+
+function install_gnu_tls($p)
+{
+    $p->addLibrary(
+        (new Library('gnu_tls'))
+            ->withUrl('https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.8.tar.xz')
+            ->withHomePage('https://www.gnutls.org/')
+            ->withSkipInstall()
+            ->withConfigure(
+                '
+            ./configure --help ;
+            ./configure \
+            --prefix=/usr/gnutls \
+             --enable-static \
+            --disable-shared \
+            --without-zstd \
+            --without-tpm2 \
+            --without-tpm \
+            --disable-doc \
+            --disable-tests \
+            --without-included-unistring
+            '
+            )
+            //->withPkgConfig('/usr/gnutls/lib/pkgconfig')
+            ->disableDefaultPkgConfig()
+            //->withPkgName('hogweed nettle')
+            ->disablePkgName()
+            //->withLdflags('/usr/gnutls/lib')
+            ->disableDefaultLdflags()
+            ->withLicense('https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html', Library::LICENSE_LGPL)
+    );
+}
+
+function install_libuv($p)
+{
+    // https://github.com/aledbf/socat-static-binary/blob/master/build.sh
+    $p->addLibrary(
+        (new Library('libuv'))
+            ->withUrl('https://github.com/libuv/libuv/archive/refs/tags/v1.44.2.tar.gz')
+            ->withFile('libuv-v1.44.2.tar.gz')
+            ->withHomePage('https://libuv.org/')
+            //->withSkipInstall()
+            ->withConfigure(
+                '
+
+            sh autogen.sh
+            ./configure --help ;
+            ./configure \
+            --prefix=/usr/libuv \
+            --enable-static \
+            --disable-shared
+            '
+            )
+            ->withPkgConfig('/usr/libuv/lib/pkgconfig')
+            ->withPkgName('libuv')
+            ->withLdflags('/usr/libuv/lib')
+            ->withLicense('https://github.com/libuv/libuv/blob/v1.x/LICENSE', Library::LICENSE_GPL)
+    );
+}
+
+function install_libunwind($p)
+{
+    // https://github.com/aledbf/socat-static-binary/blob/master/build.sh
+    $p->addLibrary(
+        (new Library('libunwind'))
+            ->withUrl('https://github.com/libunwind/libunwind/releases/download/v1.6.2/libunwind-1.6.2.tar.gz')
+            ->withFile('libunwind-1.6.2.tar.gz')
+            ->withHomePage('https://github.com/libunwind/libunwind.git')
+            //->withSkipInstall()
+            ->withConfigure(
+                '
+             # autoreconf -i
+                ./configure --prefix=PREFIX
+            ./configure --help ;
+
+            ./configure \
+            --prefix=/usr/libunwind \
+            --enable-static=yes \
+            --enable-shared=no
+            '
+            )
+            ->withPkgConfig('/usr/libunwind/lib/pkgconfig')
+            ->withPkgName('libunwind-coredump  libunwind-generic   libunwind-ptrace    libunwind-setjmp    libunwind')
+            ->withLdflags('/usr/libunwind/lib')
+            ->withLicense('https://github.com/libunwind/libunwind/blob/master/LICENSE', Library::LICENSE_MIT)
+    );
+}
+
+function install_jemalloc($p)
+{
+    // https://github.com/aledbf/socat-static-binary/blob/master/build.sh
+    $p->addLibrary(
+        (new Library('jemalloc'))
+            ->withUrl('https://github.com/jemalloc/jemalloc/archive/refs/tags/5.3.0.tar.gz')
+            ->withFile('jemalloc-5.3.0.tar.gz')
+            ->withHomePage('http://jemalloc.net/')
+            //->withSkipInstall()
+            ->withConfigure(
+                '
+
+            sh autogen.sh
+            ./configure --help ;
+
+            ./configure \
+            --prefix=/usr/jemalloc \
+            --enable-static=yes \
+            --enable-shared=no \
+            --with-static-libunwind=/usr/libunwind/lib/libunwind.a
+            '
+            )
+            ->withPkgConfig('/usr/jemalloc/lib/pkgconfig')
+            ->withPkgName('jemalloc')
+            ->withLdflags('/usr/jemalloc/lib')
+            ->withLicense(
+                'https://github.com/jemalloc/jemalloc/blob/dev/COPYING',
+                Library::LICENSE_GPL
+            )
+    );
+}
+
+function install_tcmalloc($p)
+{
+    // https://github.com/aledbf/socat-static-binary/blob/master/build.sh
+    $p->addLibrary(
+        (new Library('tcmalloc'))
+            ->withUrl('https://github.com/google/tcmalloc/archive/refs/heads/master.zip')
+            ->withFile('tcmalloc.zip')
+            ->withHomePage('https://google.github.io/tcmalloc/overview.html')
+            ->withUntarArchiveCommand('unzip')
+            //->withSkipInstall()
+            ->withCleanBuildDirectory()
+            ->withConfigure(
+                '
+            cd  tcmalloc-master/
+
+            bazel help
+            bazel build
+            return
+            ./configure \
+            --prefix=/usr/tcmalloc \
+            --enable-static \
+            --disable-shared
+            '
+            )
+            ->withPkgConfig('/usr/tcmalloc/lib/pkgconfig')
+            ->withPkgName('tcmalloc')
+            ->withLdflags('/usr/tcmalloc/lib')
+            ->withLicense('https://github.com/google/tcmalloc/blob/master/LICENSE', Library::LICENSE_APACHE2)
+    );
+}
+
+function install_aria2($p)
+{
+    // https://github.com/aledbf/socat-static-binary/blob/master/build.sh
+    $p->addLibrary(
+        (new Library('aria2c'))
+            ->withUrl('https://github.com/aria2/aria2/releases/download/release-1.36.0/aria2-1.36.0.tar.gz')
+            //DOCS https://aria2.github.io/manual/en/html/README.html
+            ->withHomePage('https://aria2.github.io/')
+            //->withSkipInstall()
+            ->withCleanBuildDirectory()
+            ->withConfigure(
+                '
+
+            # CFLAGS=$(pkg-config --cflags --static  libcrypto  libssl    openssl readline)
+
+            # export CFLAGS="-static -O2 -Wall -fPIC $CFLAGS "
+            # export LDFLAGS=$(pkg-config --libs --static libcrypto  libssl    openssl readline)
+
+            # LIBS="-static -Wall -O2 -fPIC  -lcrypt  -lssl   -lreadline"
+            # CFLAGS="-static -Wall -O2 -fPIC"
+
+            export ZLIB_CFLAGS=$(pkg-config --cflags --static zlib) ;
+            export  ZLIB_LIBS=$(pkg-config --libs --static zlib) ;
+
+            ./configure --help ;
+
+             ARIA2_STATIC=yes
+            ./configure \
+            --with-ca-bundle="/etc/ssl/certs/ca-certificates.crt" \
+            --prefix=/usr/aria2 \
+            --enable-static=yes \
+            --enable-shared=no \
+            --enable-libaria2 \
+            --with-libuv \
+            --without-gnutls \
+            --with-openssl \
+            --with-libiconv-prefix=/usr/libiconv/ \
+            --with-libz
+            # --with-tcmalloc
+            '
+            )
+            ->withLicense('https://github.com/aria2/aria2/blob/master/COPYING', Library::LICENSE_GPL)
     );
 }
 
@@ -1239,8 +1494,21 @@ install_mimalloc($p);
 
 
 //参考 https://github.com/docker-library/php/issues/221
-install_postgresql($p);
-//install_socat($p);
+install_pgsql($p);
+
+install_socat($p);
+
+install_nettle($p);
+install_libunistring($p); //未安装成功
+
+install_gnu_tls($p); //未安装成功
+install_libuv($p);
+
+install_libunwind($p); //使用 libunwind 可以很方便的获取函数栈中的内容，极大的方便了对函数间调用关系的了解。
+install_jemalloc($p);
+install_tcmalloc($p);
+
+install_aria2($p);
 
 
 $p->parseArguments($argc, $argv);

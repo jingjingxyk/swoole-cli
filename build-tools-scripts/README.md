@@ -15,9 +15,15 @@ apk add --no-cache  c-ares c-ares-dev c-ares-utils
 
 
 # meson 和ninja 构建
-apk add python3 python3-dev py3-pip ninja
+apk add python3 python3-dev py3-pip ninja bazel
 pip3 install meson  -i https://pypi.tuna.tsinghua.edu.cn/simple
-#
+
+# https://github.com/bazelbuild/bazel/releases
+curl -Lo bazel-6.0.0-linux-x86_64 --connect-timeout 15 --retry 5 --retry-delay 5  https://github.com/bazelbuild/bazel/releases/download/6.0.0/bazel-6.0.0-linux-x86_64
+mv bazel-6.0.0-linux-x86_64 /usr/bin/bazel
+chmod a+x /usr/bin/bazel
+
+
 # 代码比较
 apk add meld
 
@@ -342,6 +348,8 @@ ibpgcommon 和 libpqport
 - [phpunit](https://github.com/sebastianbergmann/phpunit.git)
 - [Compiling PECL extensions statically into PHP](https://www.php.net/manual/en/install.pecl.static.php)
 - [static-php-cli](https://github.com/crazywhalecc/static-php-cli/blob/master/README-en.md)
+- [WebAssembly](https://pecl.php.net/package/wasm)
+- [wasmer-php](https://github.com/wasmerio/wasmer-php)
 
 > PHP_CodeSniffer 是一个代码风格检测工具。它包含两类脚本，phpcs 和 phpcbf(GitHub地址)。
 
@@ -370,6 +378,9 @@ pear list
 
 readelf -Ds a.out
 
+
+编译时使用 -g，使可执行程序中包含调试信息；
+最好不要使用 strip 去除可执行程序的符号信息，否则会看不到栈中的函数名称。
 
 
 ```text
@@ -507,4 +518,18 @@ $ php go-pear.phar
 ```shell
 php -c /path/to/php.ini -r 'echo get_include_path()."\n";'
 
+```
+
+## static compile libpq
+> https://www.postgresql.org/message-id/CABFfbXuxyO20JN8T%2BCyfSe29T-GTON69FrKHQ%3Dc9jDMxnm6C_w%40mail.gmail.com
+```shell
+libpq.a: $(OBJS)
+  ar rcs $@ $^
+
+cat >>  src/interfaces/libpq/Makefile <<EOF
+
+libpq.a: $(OBJS)
+  ar rcs $@ $^
+
+EOF
 ```
