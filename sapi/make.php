@@ -25,6 +25,10 @@ OPTIONS="--disable-all \
 
 <?php foreach ($this->libraryList as $item) : ?>
 make_<?=$item->name?>() {
+    <?php if ($item->skipInstall == true): ?>
+    echo "skip install library <?=$item->name?>" ;
+    return 0 ;
+    <?php endif ;?>
     cd <?=$this->workDir?>/thirdparty
     echo "build <?=$item->name?>"
     <?php if ($item->cleanBuildDirectory) : ?>
@@ -78,7 +82,7 @@ clean_<?= $item->name ?>() {
 
 make_all_library() {
 <?php foreach ($this->libraryList as $item) : ?>
-    make_<?= $item->name ?> && echo "[SUCCESS] make <?= $item->name ?>"
+    make_<?= $item->name ?> && [[ $? -eq 0 ]] && echo "[SUCCESS] make <?= $item->name ?>"
 <?php endforeach; ?>
 }
 

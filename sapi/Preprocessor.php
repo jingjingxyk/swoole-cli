@@ -53,6 +53,7 @@ class Library extends Project
 {
     public string $url;
 
+    public bool $skipInstall = false;
     public bool $cleanBuildDirectory = false;
 
     public string $beforeConfigureScript = '';
@@ -102,6 +103,12 @@ class Library extends Project
     public function withFile(string $file): static
     {
         $this->file = $file;
+        return $this;
+    }
+
+    public function withSkipInstall(): static
+    {
+        $this->skipInstall = true;
         return $this;
     }
 

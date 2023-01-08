@@ -91,6 +91,7 @@ function install_openssl_1(Preprocessor $p)
         (new Library('openssl_1'))
             ->withUrl('https://www.openssl.org/source/openssl-1.1.1p.tar.gz')
             ->withFile('openssl-1.1.1p.tar.gz')
+            ->withSkipInstall()
             ->withCleanBuildDirectory()
             ->withScriptBeforeConfigure(
                 '
@@ -209,12 +210,36 @@ function install_icu(Preprocessor $p)
     );
 }
 
+function install_icu_2(Preprocessor $p)
+{
+    $p->addLibrary(
+        (new Library('icu_2'))
+            ->withUrl('https://github.com/unicode-org/icu/releases/download/release-60-3/icu4c-60_3-src.tgz')
+            //->withUrl('https://github.com/unicode-org/icu/releases/download/release-72-1/icu4c-72_1-src.tgz')
+            //https://unicode-org.github.io/icu/userguide/icu4c/build.html
+            ->withCleanBuildDirectory()
+            ->withConfigure(
+                '
+            source/runConfigureICU Linux --prefix=/usr/ --enable-static --disable-shared \
+            --disable-tests --disable-samples --with-data-packaging=static
+            '
+            )
+            ->withMakeOptions('all VERBOSE=1')
+            ->withPkgName('icu-uc icu-io icu-i18n')
+            ->disableDefaultPkgConfig()
+            ->disableDefaultLdflags()
+            ->withHomePage('https://icu.unicode.org/')
+            ->withLicense('https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE', Library::LICENSE_SPEC)
+    );
+}
+
 function install_pcre2(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('pcre2', '/usr/pcre2'))
             ->withUrl('https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.42/pcre2-10.42.tar.gz')
             ->withFile('pcre2-10.42.tar.gz')
+            ->withSkipInstall()
             //  CFLAGS='-static -O2 -Wall'
             ->withConfigure(
                 "
@@ -251,6 +276,7 @@ function install_ncurses(Preprocessor $p)
             //->withUrl('https://invisible-island.net/datafiles/release/ncurses.tar.gz')
             //->withFile('ncurses.tar.gz')
             ->withFile('ncurses-6.3.tar.gz')
+            ->withSkipInstall()
             ->withCleanBuildDirectory()
             ->withScriptBeforeConfigure(
                 '
@@ -337,6 +363,7 @@ function install_readline(Preprocessor $p)
     $p->addLibrary(
         (new Library('readline', '/usr/readline'))
             ->withUrl('https://ftp.gnu.org/gnu/readline/readline-8.2.tar.gz')
+            ->withSkipInstall()
             ->withCleanBuildDirectory()
             ->withScriptBeforeConfigure(
                 <<<'_EOF_'
@@ -688,6 +715,7 @@ function install_harfbuzz(Preprocessor $p)
         (new Library('harfbuzz', '/usr/brotli'))
             ->withUrl('https://github.com/harfbuzz/harfbuzz/archive/refs/tags/6.0.0.tar.gz')
             ->withFile('harfbuzz-6.0.0.tar.gz')
+            ->withSkipInstall()
             ->withCleanBuildDirectory()
             ->withScriptBeforeConfigure('test -d /usr/harfbuzz/ && rm -rf /usr/harfbuzz/ ')
             ->withConfigure(
@@ -838,6 +866,7 @@ function install_cares(Preprocessor $p)
     $p->addLibrary(
         (new Library('cares'))
             ->withUrl('https://c-ares.org/download/c-ares-1.18.1.tar.gz')
+            ->withSkipInstall()
             ->withScriptBeforeConfigure('pwd')
             //->withConfigure('./configure --prefix=/usr/cares --enable-static --disable-shared ')
             ->withConfigure('./configure --prefix=/usr/ --enable-static --disable-shared ')
@@ -955,6 +984,7 @@ function install_libidn2(Preprocessor $p)
     $p->addLibrary(
         (new Library('libidn2', '/usr/libidn2'))
             ->withUrl('https://ftp.gnu.org/gnu/libidn/libidn2-2.3.4.tar.gz')
+            ->withSkipInstall()
             ->withPkgConfig('')
             ->withLdflags('-L/usr/libidn2/lib')
             ->withConfigure('./configure --prefix=/usr/libidn2 enable_static=yes enable_shared=no')
@@ -967,6 +997,7 @@ function install_nghttp2(Preprocessor $p)
     $p->addLibrary(
         (new Library('nghttp2', '/usr/nghttp2'))
             ->withUrl('https://github.com/nghttp2/nghttp2/releases/download/v1.51.0/nghttp2-1.51.0.tar.gz')
+            ->withSkipInstall()
             ->withPkgConfig('')
             ->withLdflags('-L/usr/nghttp2/lib')
             ->withConfigure('./configure --prefix=/usr/nghttp2 enable_static=yes enable_shared=no')
@@ -1065,9 +1096,10 @@ function install_postgresql(Preprocessor $p)
     $p->addLibrary(
         (new Library('postgresql'))
             ->withUrl('https://ftp.postgresql.org/pub/source/v15.1/postgresql-15.1.tar.gz')
+            ->withSkipInstall()
             ->withScriptBeforeConfigure(
                 '
-                # export PKG_CONFIG_PATH="/usr/lib/pkgconfig:$PKG_CONFIG_PATH"
+
             '
             )
             ->withConfigure(
@@ -1078,18 +1110,16 @@ function install_postgresql(Preprocessor $p)
             export XML2_CFLAGS="$(pkg-config --cflags  libxml-2.0 )"
             export XML2_LIBS="$(pkg-config --libs  libxml-2.0 )"
             ./configure --help
-            # return  0
 
-            CFLAGS="-Wall -O2 -static -I/usr/zlib/include -I/usr/libxml2/include"
-            LDFLAGS="-L/usr/zlib/lib -lz"
-            LIBS="-L/usr/libxml2/lib -lxml2"
+            CFLAGS="-static"
+             LDFLAGS="-static"
             ./configure --prefix=/usr/pgsql \
             --with-ssl=openssl  \
             --with-readline \
             --with-icu \
             --without-ldap \
-            --with-libxml  \
-            --with-libxslt \
+            --without-libxml  \
+            --without-libxslt \
             --with-includes="/usr/openssl/include/:/usr/libxslt/include:/usr/libxml2/include/:/usr/zlib/lib:/usr/include" \
             --with-libraries="/usr/openssl/lib64:/usr/libxslt/lib/:/usr/libxml2/lib/:/usr/zlib/lib:/usr/lib"
             '
@@ -1100,7 +1130,6 @@ function install_postgresql(Preprocessor $p)
             ->disableDefaultLdflags()
             ->withScriptAfterInstall(
                 '
-                export PKG_CONFIG_PATH=$ORIGIN_PKG_CONFIG_PATH ;
             '
             )
             //->withMakeOptions('-C src/interfaces')
@@ -1144,7 +1173,7 @@ function install_socat($p)
 
 install_libiconv($p); //没有 libiconv.pc 文件 不能使用 pkg-config 命令
 install_openssl($p);  //openssl 3 版本
-install_openssl_1($p); //openssl 1 版本
+install_openssl_1($p); //openssl 1 版本 默认跳过安装
 
 install_libxml2($p);
 install_libxslt($p);
@@ -1152,13 +1181,14 @@ install_gmp($p);
 
 
 install_icu($p); //虽然自定义安装目录，并且静态编译。但是不使用，默认仍然还是使用静态系统库
+install_icu_2($p); //安装目录 /usr 默认跳过安装
 
-//install_pcre2($p);
+install_pcre2($p); //默认跳过安装
 
-# 使用系统库
-install_ncurses($p); //虽然自定义安装目录，并且静态编译。但是不使用，默认仍然还是使用静态系统库
-# 使用系统库
-install_readline($p); //虽然自定义安装目录，并且静态编译。但是不使用，默认仍然还是使用静态系统库
+
+install_ncurses($p); // 默认跳过安装，默认仍然还是使用静态系统库
+
+install_readline($p); //默认跳过安装，默认仍然还是使用静态系统库
 
 install_zlib($p);
 install_bzip2($p); //没有 libbz2.pc 文件，不能使用 pkg-config 命令
@@ -1176,7 +1206,7 @@ install_libpng($p);
 install_libjpeg($p);
 
 install_brotli($p);
-//install_harfbuzz($p);
+install_harfbuzz($p); //默认跳过安装
 install_libwebp($p);
 install_freetype($p); //需要 zlib bzip2 libpng  brotli  HarfBuzz(不打算安装）
 install_sqlite3($p);
@@ -1192,8 +1222,8 @@ install_cares_2($p); //目录必须是 /usr ；swoole 使用 SWOOLE_CFLAGS 实�
 //install_libedit($p);
 install_imagemagick($p);
 
-//install_libidn2($p);
-//install_nghttp2($p);
+install_libidn2($p); //默认跳过安装
+install_nghttp2($p); //默认跳过安装
 install_curl($p);
 
 install_libsodium($p);
@@ -1202,7 +1232,7 @@ install_mimalloc($p);
 
 
 //参考 https://github.com/docker-library/php/issues/221
-//install_postgresql($p);
+install_postgresql($p);
 //install_socat($p);
 
 
