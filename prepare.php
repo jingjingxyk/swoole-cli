@@ -887,6 +887,7 @@ function install_cares_2(Preprocessor $p)
     $p->addLibrary(
         (new Library('cares_2'))
             ->withUrl('https://c-ares.org/download/c-ares-1.18.1.tar.gz')
+            ->withSkipInstall()
             ->withScriptBeforeConfigure('pwd')
             ->withConfigure('./configure --prefix=/usr/c-ares --enable-static --disable-shared ')
             //->withPkgName('libcares')
@@ -1141,6 +1142,8 @@ function install_postgresql(Preprocessor $p)
             //->disableDefaultLdflags()
             ->withScriptAfterInstall(
                 '
+                    rm -rf /usr/pgsql/lib/*.so.*
+                    rm -rf /usr/pgsql/lib/*.so
             '
             )
             ->withLicense('https://www.postgresql.org/about/licence/', Library::LICENSE_SPEC)
