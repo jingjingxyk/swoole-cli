@@ -1098,11 +1098,7 @@ function install_pgsql(Preprocessor $p)
         (new Library('pgsql'))
             ->withUrl('https://ftp.postgresql.org/pub/source/v15.1/postgresql-15.1.tar.gz')
             //->withSkipInstall()
-            ->withScriptBeforeConfigure(
-                '
-                test -d /usr/pgsql && rm -rf /usr/pgsql
-            '
-            )
+            ->withCleanBuildDirectory()
             ->withConfigure(
                 '
                   ./configure --help
@@ -1128,20 +1124,34 @@ function install_pgsql(Preprocessor $p)
             --without-libxslt \
             --with-includes="/usr/openssl/include/:/usr/libxslt/include:/usr/libxml2/include/:/usr/zlib/lib:/usr/include" \
             --with-libraries="/usr/openssl/lib64:/usr/libxslt/lib/:/usr/libxml2/lib/:/usr/zlib/lib:/usr/lib"
-
             '
             )
-
-            //->withMakeOptions("-C src/interfaces/libpq/ libpq.a")
-            ->withMakeOptions("-C src/interfaces all-ecpg-recurse")
-            ->withMakeInstallOptions('-C src/interfaces install-ecpg-recurse ')
-            //make -C src/interfaces install-ecpg-recurse
+            ->withMakeOptions("-C src/common all")
+            ->withMakeInstallOptions(
+                '-C src/common install'
+            ) //make -C src/interfaces install-ecpg-recurse
+            ->withPkgName('libecpg libecpg_compat libpgtypes libpq')
             ->withPkgConfig('/usr/pgsql/lib/pkgconfig')
             //->disableDefaultPkgConfig()
             ->withLdflags('-L/usr/pgsql/lib/')
             //->disableDefaultLdflags()
             ->withScriptAfterInstall(
                 '
+
+
+
+                    make -C src/backend/libpq all
+                    make -C src/backend/libpq install
+
+                    make -C src/port all
+                    make -C src/port install
+
+                    make -C src/interfaces all-ecpg-recurse
+                    make -C src/interfaces install-ecpg-recurse
+
+                    make -C src/bin all
+                    make -C src/bin install
+
                     rm -rf /usr/pgsql/lib/*.so.*
                     rm -rf /usr/pgsql/lib/*.so
             '

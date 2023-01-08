@@ -221,7 +221,7 @@ EOF
 
     ./buildconf --force ;
     ./configure --help
-    return 0
+
 
 
 <?php if ($this->osType !== 'macos') : ?>
