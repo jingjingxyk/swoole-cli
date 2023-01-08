@@ -1135,10 +1135,10 @@ function install_postgresql(Preprocessor $p)
             ->withMakeInstallOptions(
                 '-C src/interfaces install-ecpg-recurse '
             ) //make -C src/interfaces install-ecpg-recurse
-            //->withPkgConfig('/usr/pgsql/lib/pkgconfig')
-            ->disableDefaultPkgConfig()
-            //->withLdflags('-L/usr/pgsql/lib/')
-            ->disableDefaultLdflags()
+            ->withPkgConfig('/usr/pgsql/lib/pkgconfig')
+            //->disableDefaultPkgConfig()
+            ->withLdflags('-L/usr/pgsql/lib/')
+            //->disableDefaultLdflags()
             ->withScriptAfterInstall(
                 '
             '
