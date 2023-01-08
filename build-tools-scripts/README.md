@@ -340,6 +340,8 @@ ibpgcommon 和 libpqport
 - [EditorConfig](https://editorconfig.org/)
 - [PSR](https://www.php-fig.org/psr/)
 - [phpunit](https://github.com/sebastianbergmann/phpunit.git)
+- [Compiling PECL extensions statically into PHP](https://www.php.net/manual/en/install.pecl.static.php)
+- [static-php-cli](https://github.com/crazywhalecc/static-php-cli/blob/master/README-en.md)
 
 > PHP_CodeSniffer 是一个代码风格检测工具。它包含两类脚本，phpcs 和 phpcbf(GitHub地址)。
 
@@ -493,5 +495,16 @@ nghttp2-libs
 gir checkout  --orphan new_branch
 git rm -rf .
 
+
+```
+
+```shell
+wget http://pear.php.net/go-pear.phar
+$ php go-pear.phar
+
+```
+
+```shell
+php -c /path/to/php.ini -r 'echo get_include_path()."\n";'
 
 ```
