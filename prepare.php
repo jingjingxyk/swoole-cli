@@ -866,7 +866,6 @@ function install_cares(Preprocessor $p)
     $p->addLibrary(
         (new Library('cares'))
             ->withUrl('https://c-ares.org/download/c-ares-1.18.1.tar.gz')
-            ->withSkipInstall()
             ->withScriptBeforeConfigure('pwd')
             //->withConfigure('./configure --prefix=/usr/cares --enable-static --disable-shared ')
             ->withConfigure('./configure --prefix=/usr/ --enable-static --disable-shared ')
@@ -886,12 +885,12 @@ function install_cares_2(Preprocessor $p)
         (new Library('cares_2'))
             ->withUrl('https://c-ares.org/download/c-ares-1.18.1.tar.gz')
             ->withScriptBeforeConfigure('pwd')
-            ->withConfigure('./configure --prefix=/usr/cares --enable-static --disable-shared ')
+            ->withConfigure('./configure --prefix=/usr/c-ares --enable-static --disable-shared ')
             //->withPkgName('libcares')
             ->disablePkgName()
-            //->withPkgConfig('/usr/cares/lib/pkgconfig')
+            //->withPkgConfig('/usr/c-ares/lib/pkgconfig')
             ->disableDefaultPkgConfig()
-            // ->withLdflags('-L/usr/cares/lib')
+            // ->withLdflags('-L/usr/c-ares/lib')
             ->disableDefaultLdflags()
             ->withLicense('https://c-ares.org/license.html', Library::LICENSE_MIT)
             ->withHomePage('https://c-ares.org/')
@@ -1146,20 +1145,23 @@ function install_socat($p)
         (new Library('socat'))
             ->withUrl('http://www.dest-unreach.org/socat/download/socat-1.7.4.4.tar.gz')
             ->withHomePage('http://www.dest-unreach.org/socat/')
+            ->withSkipInstall()
             ->withConfigure(
                 '
-            pkg-config --cflags  readline
-            pkg-config  --libs readline
+            pkg-config --cflags --static readline
+            pkg-config  --libs --static readline
 
 
             ./configure --help ;
 
-            # export CFLAGS=$(pkg-config --cflags libcrypto  libssl    openssl readline)
-            # export LDFLAGS=$(pkg-config --libs libcrypto  libssl    openssl readline)
-            # export CFLAGS="-static -O2 -Wall -fPIC $CFLAGS -L/usr/lib"
+            CFLAGS=$(pkg-config --cflags --static  libcrypto  libssl    openssl readline)
 
-            LIBS="-static -Wall -O2 -fPIC  -lcrypt  -lssl   -lreadline"
-            CFLAGS="-static -Wall -O2 -fPIC"
+            export CFLAGS="-static -O2 -Wall -fPIC $CFLAGS "
+            export LDFLAGS=$(pkg-config --libs --static libcrypto  libssl    openssl readline)
+
+            # LIBS="-static -Wall -O2 -fPIC  -lcrypt  -lssl   -lreadline"
+            # CFLAGS="-static -Wall -O2 -fPIC"
+
             ./configure \
             --prefix=/usr/socat \
             --enable-readline \
@@ -1216,7 +1218,7 @@ install_oniguruma($p);
 
 
 install_cares($p); //目录必须是 /usr ；swoole 使用 SWOOLE_CFLAGS 实现，目前不完全支持
-install_cares_2($p); //目录必须是 /usr ；swoole 使用 SWOOLE_CFLAGS 实现，目前不完全支持
+install_cares_2($p); //目录必须是 /usr/c-ares ；swoole 使用 SWOOLE_CFLAGS 实现，目前不完全支持
 
 
 //install_libedit($p);
