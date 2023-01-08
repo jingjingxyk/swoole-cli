@@ -42,7 +42,8 @@ then
   # SKIP_LIBRARY_DOWNLOAD=1 php prepare.php +mongodb +inotify
   # php prepare.php  +mongodb +inotify
   # php prepare.php   -inotify -imagick -gd -intl -posix -mysqli -soap -exif  -opcache -pcntl
-  php prepare.php   +inotify +ds +pgsql +pdo_pgsql
+  php prepare.php    +pgsql +pdo_pgsql -inotify -ds -imagick -gd -intl -posix -mysqli -soap -exif  -opcache -pcntl \
+    -redis -swoole  -yaml -imagick -mongodb -opcache -sqlite3 -sodium -gmp  -bcmath -phar -mbstring
 
   pear config-set http_proxy ''
 
