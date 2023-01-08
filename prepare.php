@@ -191,7 +191,6 @@ function install_icu(Preprocessor $p)
             # CPPFLAGS="-DPIC -fPIC -DICU_DATA_DIR=/usr/"
             source/runConfigureICU Linux --prefix=/usr/ --enable-static --disable-shared \
             --disable-tests --disable-samples --with-data-packaging=static
-
             '
             )
             ->withMakeOptions('all VERBOSE=1')
@@ -229,6 +228,7 @@ function install_icu_2(Preprocessor $p)
             ->withLicense('https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE', Library::LICENSE_SPEC)
     );
 }
+
 
 function install_pcre2(Preprocessor $p)
 {
@@ -864,12 +864,10 @@ function install_cares(Preprocessor $p)
         (new Library('cares'))
             ->withUrl('https://c-ares.org/download/c-ares-1.18.1.tar.gz')
             ->withScriptBeforeConfigure('pwd')
-            //->withConfigure('./configure --prefix=/usr/cares --enable-static --disable-shared ')
             ->withConfigure('./configure --prefix=/usr/ --enable-static --disable-shared ')
             ->withPkgName('libcares')
-            //->withPkgConfig('/usr/cares/lib/pkgconfig')
-            ->disableDefaultPkgConfig()
-            // ->withLdflags('-L/usr/cares/lib')
+            ->withPkgConfig('/usr/lib/pkgconfig')
+            ->withLdflags('-L/usr/lib')
             ->disableDefaultLdflags()
             ->withLicense('https://c-ares.org/license.html', Library::LICENSE_MIT)
             ->withHomePage('https://c-ares.org/')
