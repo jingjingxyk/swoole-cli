@@ -1098,7 +1098,7 @@ function install_postgresql(Preprocessor $p)
     $p->addLibrary(
         (new Library('postgresql'))
             ->withUrl('https://ftp.postgresql.org/pub/source/v15.1/postgresql-15.1.tar.gz')
-            ->withSkipInstall()
+            //->withSkipInstall()
             ->withScriptBeforeConfigure(
                 '
 

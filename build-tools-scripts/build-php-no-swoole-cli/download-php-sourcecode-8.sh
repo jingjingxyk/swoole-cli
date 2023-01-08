@@ -18,7 +18,7 @@ test -d php-src || git clone -b $version --depth=1 https://github.com/php/php-sr
 test -d swoole-src  || git clone -b v5.0.1 --depth=1  https://github.com/swoole/swoole-src.git
 
 
-exit 0
+#exit 0
 
 # https://www.php.net/distributions/php-8.2.0.tar.gz
 
