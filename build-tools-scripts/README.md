@@ -486,4 +486,12 @@ nghttp2-libs
 ```
 
 
+```shell
 
+# 创建空分支
+
+gir checkout  --orphan new_branch
+git rm -rf .
+
+
+```
