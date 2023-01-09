@@ -14,8 +14,13 @@ ROOT=$(pwd)
 export CC=clang
 export CXX=clang++
 export LD=ld.lld
+
+export PATH=<?= implode(':', $this->systemConfigPaths) . PHP_EOL ?>
+export ORIGIN_PATH=$PATH
+
 export PKG_CONFIG_PATH=<?= implode(':', $this->pkgConfigPaths) . PHP_EOL ?>
 export ORIGIN_PKG_CONFIG_PATH=$PKG_CONFIG_PATH
+
 OPTIONS="--disable-all \
 <?php foreach ($this->extensionList as $item) : ?>
     <?= $item->options ?> \

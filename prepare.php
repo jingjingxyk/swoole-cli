@@ -36,6 +36,7 @@ if ($p->osType == 'macos') {
 
 # 设置CPU核数 ; 获取CPU核数，用于 make -j $(nproc)
 $p->setMaxJob(`nproc 2> /dev/null || sysctl -n hw.ncpu`); // nproc on macos ；
+// `grep "processor" /proc/cpuinfo | sort -u | wc -l`
 
 // ================================================================================================
 // Library
@@ -1132,14 +1133,10 @@ function install_pgsql(Preprocessor $p)
             ) //make -C src/interfaces install-ecpg-recurse
             ->withPkgName('libecpg libecpg_compat libpgtypes libpq')
             ->withPkgConfig('/usr/pgsql/lib/pkgconfig')
-            //->disableDefaultPkgConfig()
             ->withLdflags('-L/usr/pgsql/lib/')
-            //->disableDefaultLdflags()
+            ->withSystemConfigPath('/usr/pgsql/bin/')
             ->withScriptAfterInstall(
                 '
-
-
-
                     make -C src/backend/libpq all
                     make -C src/backend/libpq install
 
@@ -1158,6 +1155,10 @@ function install_pgsql(Preprocessor $p)
             )
             ->withLicense('https://www.postgresql.org/about/licence/', Library::LICENSE_SPEC)
             ->withHomePage('https://www.postgresql.org/')
+            ->withSkipInstall()
+    //->disablePkgName()
+    //->disableDefaultPkgConfig()
+    //->disableDefaultLdflags()
     );
 }
 

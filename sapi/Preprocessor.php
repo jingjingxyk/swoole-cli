@@ -66,6 +66,8 @@ class Library extends Project
 
     public string $ldflags = '';
 
+    public string $systemConfigPath = '';
+
     public string $makeOptions = '';
 
     public string $makeInstallOptions = '';
@@ -111,6 +113,9 @@ class Library extends Project
     public function withSkipInstall(): static
     {
         $this->skipInstall = true;
+        $this->disableDefaultPkgConfig();
+        $this->disablePkgName();
+        $this->disableDefaultLdflags();
         return $this;
     }
 
@@ -120,11 +125,12 @@ class Library extends Project
         return $this;
     }
 
-    public function withUntarArchiveCommand(string $command):static
+    public function withUntarArchiveCommand(string $command): static
     {
         $this->untarArchiveCommand = $command;
         return $this;
     }
+
     public function withScriptBeforeConfigure(string $script): static
     {
         $this->beforeConfigureScript = $script;
@@ -146,6 +152,12 @@ class Library extends Project
     public function disableDefaultLdflags(): static
     {
         $this->ldflags = '';
+        return $this;
+    }
+
+    public function withSystemConfigPath(string $path): static
+    {
+        $this->systemConfigPath = $path;
         return $this;
     }
 
@@ -245,6 +257,8 @@ class Preprocessor
     protected string $extensionDir;
 
     protected array $pkgConfigPaths = [];
+
+    protected array $systemConfigPaths = [];
 
     protected string $phpSrcDir;
 
@@ -421,6 +435,10 @@ class Preprocessor
             $this->pkgConfigPaths[] = $lib->pkgConfig;
         }
 
+        if (!empty($lib->systemConfigPath)) {
+            $this->systemConfigPaths[] = $lib->systemConfigPath;
+        }
+
         if (empty($lib->license)) {
             throw new \RuntimeException('require license');
         }
@@ -517,6 +535,8 @@ class Preprocessor
     {
         $this->pkgConfigPaths[] = '$PKG_CONFIG_PATH';
         $this->pkgConfigPaths = array_unique($this->pkgConfigPaths);
+        $this->systemConfigPaths[] = '$PATH';
+        $this->systemConfigPaths = array_unique($this->systemConfigPaths);
 
         ob_start();
         include __DIR__ . '/make.php';
