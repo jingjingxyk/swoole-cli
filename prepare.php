@@ -36,6 +36,7 @@ if ($p->osType == 'macos') {
 
 # 设置CPU核数 ; 获取CPU核数，用于 make -j $(nproc)
 $p->setMaxJob(`nproc 2> /dev/null || sysctl -n hw.ncpu`); // nproc on macos ；
+// `grep "processor" /proc/cpuinfo | sort -u | wc -l`
 
 // ================================================================================================
 // Library
@@ -197,7 +198,7 @@ function install_icu(Preprocessor $p)
             ->withPkgName('icu-uc icu-io icu-i18n')
             ->withPkgConfig('/usr/lib/pkgconfig')
             //->disableDefaultPkgConfig()
-            ->withPkgConfig('/usr/lib')
+            ->withLdflags('-L/usr/icu/lib')
             //->disableDefaultLdflags()
             ->withHomePage('https://icu.unicode.org/')
             ->withLicense('https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE', Library::LICENSE_SPEC)
@@ -254,9 +255,12 @@ function install_pcre2(Preprocessor $p)
          "
             )
             ->withMakeInstallOptions('install ')
-            ->withPkgConfig('/usr/pcre2/lib/pkgconfig')
-            ->withPkgName("libpcre2-16     libpcre2-32    libpcre2-8      libpcre2-posix")
-            ->withLdflags('-L/usr/pcre2/lib')
+            //->withPkgConfig('/usr/pcre2/lib/pkgconfig')
+            ->disableDefaultPkgConfig()
+            //->withPkgName("libpcre2-16     libpcre2-32    libpcre2-8      libpcre2-posix")
+            ->disablePkgName()
+            //->withLdflags('-L/usr/pcre2/lib')
+            ->disableDefaultLdflags()
             ->withLicense(
                 'https://github.com/PCRE2Project/pcre2/blob/master/COPYING',
                 Library::LICENSE_PCRE2
@@ -736,9 +740,12 @@ function install_harfbuzz(Preprocessor $p)
                 # ninja -C builddir install
             "
             )
-            ->withPkgConfig('/usr/harfbuzz/lib/pkgconfig')
-            ->withPkgName('libbrotlicommon libbrotlidec libbrotlienc')
-            ->withLdflags('-L/usr/harfbuzz/lib')
+            //->withPkgConfig('/usr/harfbuzz/lib/pkgconfig')
+            ->disableDefaultPkgConfig()
+            //->withPkgName('libbrotlicommon libbrotlidec libbrotlienc')
+            ->disablePkgName()
+            //->withLdflags('-L/usr/harfbuzz/lib')
+            ->disableDefaultLdflags()
             ->withScriptAfterInstall(
                 '
 
@@ -1086,17 +1093,13 @@ function install_mimalloc(Preprocessor $p)
 }
 
 
-function install_postgresql(Preprocessor $p)
+function install_pgsql(Preprocessor $p)
 {
     $p->addLibrary(
-        (new Library('postgresql'))
+        (new Library('pgsql'))
             ->withUrl('https://ftp.postgresql.org/pub/source/v15.1/postgresql-15.1.tar.gz')
             //->withSkipInstall()
-            ->withScriptBeforeConfigure(
-                '
-
-            '
-            )
+            ->withCleanBuildDirectory()
             ->withConfigure(
                 '
                   ./configure --help
@@ -1124,56 +1127,38 @@ function install_postgresql(Preprocessor $p)
             --with-libraries="/usr/openssl/lib64:/usr/libxslt/lib/:/usr/libxml2/lib/:/usr/zlib/lib:/usr/lib"
             '
             )
-            ->withMakeOptions("-C src/interfaces all-ecpg-recurse")
+            ->withMakeOptions("-C src/common all")
             ->withMakeInstallOptions(
-                '-C src/interfaces install-ecpg-recurse '
+                '-C src/common install'
             ) //make -C src/interfaces install-ecpg-recurse
-            //->withPkgConfig('/usr/pgsql/lib/pkgconfig')
-            ->disableDefaultPkgConfig()
-            //->withLdflags('-L/usr/pgsql/lib/')
-            ->disableDefaultLdflags()
+            ->withPkgName('libecpg libecpg_compat libpgtypes libpq')
+            ->withPkgConfig('/usr/pgsql/lib/pkgconfig')
+            ->withLdflags('-L/usr/pgsql/lib/')
+            ->withSystemConfigPath('/usr/pgsql/bin/')
             ->withScriptAfterInstall(
                 '
+                    make -C src/backend/libpq all
+                    make -C src/backend/libpq install
+
+                    make -C src/port all
+                    make -C src/port install
+
+                    make -C src/interfaces all-ecpg-recurse
+                    make -C src/interfaces install-ecpg-recurse
+
+                    make -C src/bin all
+                    make -C src/bin install
+
                     rm -rf /usr/pgsql/lib/*.so.*
                     rm -rf /usr/pgsql/lib/*.so
             '
             )
             ->withLicense('https://www.postgresql.org/about/licence/', Library::LICENSE_SPEC)
             ->withHomePage('https://www.postgresql.org/')
-    );
-}
-
-function install_socat($p)
-{
-    // https://github.com/aledbf/socat-static-binary/blob/master/build.sh
-    $p->addLibrary(
-        (new Library('socat'))
-            ->withUrl('http://www.dest-unreach.org/socat/download/socat-1.7.4.4.tar.gz')
-            ->withHomePage('http://www.dest-unreach.org/socat/')
             ->withSkipInstall()
-            ->withConfigure(
-                '
-            pkg-config --cflags --static readline
-            pkg-config  --libs --static readline
-
-
-            ./configure --help ;
-
-            CFLAGS=$(pkg-config --cflags --static  libcrypto  libssl    openssl readline)
-
-            export CFLAGS="-static -O2 -Wall -fPIC $CFLAGS "
-            export LDFLAGS=$(pkg-config --libs --static libcrypto  libssl    openssl readline)
-
-            # LIBS="-static -Wall -O2 -fPIC  -lcrypt  -lssl   -lreadline"
-            # CFLAGS="-static -Wall -O2 -fPIC"
-
-            ./configure \
-            --prefix=/usr/socat \
-            --enable-readline \
-            --enable-openssl-base=/usr/openssl
-            '
-            )
-            ->withLicense('http://www.dest-unreach.org/socat/doc/README', Library::LICENSE_GPL)
+    //->disablePkgName()
+    //->disableDefaultPkgConfig()
+    //->disableDefaultLdflags()
     );
 }
 
@@ -1239,8 +1224,7 @@ install_mimalloc($p);
 
 
 //参考 https://github.com/docker-library/php/issues/221
-install_postgresql($p);
-//install_socat($p);
+//install_pgsql($p);
 
 
 $p->parseArguments($argc, $argv);

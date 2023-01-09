@@ -56,6 +56,8 @@ class Library extends Project
     public bool $skipInstall = false;
     public bool $cleanBuildDirectory = false;
 
+    public string $untarArchiveCommand = 'tar';
+
     public string $beforeConfigureScript = '';
 
     public string $configure = '';
@@ -63,6 +65,8 @@ class Library extends Project
     public string $file = '';
 
     public string $ldflags = '';
+
+    public string $systemConfigPath = '';
 
     public string $makeOptions = '';
 
@@ -109,12 +113,21 @@ class Library extends Project
     public function withSkipInstall(): static
     {
         $this->skipInstall = true;
+        $this->disableDefaultPkgConfig();
+        $this->disablePkgName();
+        $this->disableDefaultLdflags();
         return $this;
     }
 
     public function withCleanBuildDirectory(): static
     {
         $this->cleanBuildDirectory = true;
+        return $this;
+    }
+
+    public function withUntarArchiveCommand(string $command): static
+    {
+        $this->untarArchiveCommand = $command;
         return $this;
     }
 
@@ -139,6 +152,12 @@ class Library extends Project
     public function disableDefaultLdflags(): static
     {
         $this->ldflags = '';
+        return $this;
+    }
+
+    public function withSystemConfigPath(string $path): static
+    {
+        $this->systemConfigPath = $path;
         return $this;
     }
 
@@ -238,6 +257,8 @@ class Preprocessor
     protected string $extensionDir;
 
     protected array $pkgConfigPaths = [];
+
+    protected array $systemConfigPaths = [];
 
     protected string $phpSrcDir;
 
@@ -414,6 +435,10 @@ class Preprocessor
             $this->pkgConfigPaths[] = $lib->pkgConfig;
         }
 
+        if (!empty($lib->systemConfigPath)) {
+            $this->systemConfigPaths[] = $lib->systemConfigPath;
+        }
+
         if (empty($lib->license)) {
             throw new \RuntimeException('require license');
         }
@@ -510,6 +535,8 @@ class Preprocessor
     {
         $this->pkgConfigPaths[] = '$PKG_CONFIG_PATH';
         $this->pkgConfigPaths = array_unique($this->pkgConfigPaths);
+        $this->systemConfigPaths[] = '$PATH';
+        $this->systemConfigPaths = array_unique($this->systemConfigPaths);
 
         ob_start();
         include __DIR__ . '/make.php';

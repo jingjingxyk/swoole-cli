@@ -14,8 +14,13 @@ ROOT=$(pwd)
 export CC=clang
 export CXX=clang++
 export LD=ld.lld
+
+export PATH=<?= implode(':', $this->systemConfigPaths) . PHP_EOL ?>
+export ORIGIN_PATH=$PATH
+
 export PKG_CONFIG_PATH=<?= implode(':', $this->pkgConfigPaths) . PHP_EOL ?>
 export ORIGIN_PKG_CONFIG_PATH=$PKG_CONFIG_PATH
+
 OPTIONS="--disable-all \
 <?php foreach ($this->extensionList as $item) : ?>
     <?= $item->options ?> \
@@ -31,11 +36,18 @@ make_<?=$item->name?>() {
     <?php endif ;?>
     cd <?=$this->workDir?>/thirdparty
     echo "build <?=$item->name?>"
+
     <?php if ($item->cleanBuildDirectory) : ?>
-        test -d <?= $this->workDir ?>/thirdparty/<?= $item->name ?> && rm -rf <?= $this->workDir ?>/thirdparty/<?= $item->name ?> ;
+        test -d <?= $this->workDir ?>/thirdparty/<?= $item->name ?> && rm -rf <?= $this->workDir ?>/thirdparty/<?= $item->name ?><?= PHP_EOL; ?>
     <?php endif; ?>
-    mkdir -p <?=$this->workDir?>/thirdparty/<?=$item->name?> && \
-    tar --strip-components=1 -C <?=$this->workDir?>/thirdparty/<?=$item->name?> -xf <?=$this->workDir?>/pool/lib/<?=$item->file?>  && \
+    mkdir -p <?=$this->workDir?>/thirdparty/<?=$item->name?>
+    <?= PHP_EOL; ?>
+    <?php if($item->untarArchiveCommand == 'tar' ):?>
+    tar --strip-components=1 -C <?=$this->workDir?>/thirdparty/<?=$item->name?> -xf <?=$this->workDir?>/pool/lib/<?=$item->file?><?= PHP_EOL; ?>
+    <?php endif ;?>
+    <?php if($item->untarArchiveCommand == 'unzip'):?>
+        unzip -d  <?=$this->workDir?>/thirdparty/<?=$item->name?>   <?=$this->workDir?>/pool/lib/<?=$item->file?> <?= PHP_EOL; ?>
+    <?php endif ; ?>
     cd <?=$item->name?> ;
     <?php if (!empty($item->beforeConfigureScript)) : ?>
     <?= $item->beforeConfigureScript . PHP_EOL ?>
@@ -211,6 +223,7 @@ export LIBPQ_LIBS="-L/usr/local/libpq/15.1/lib" &&
 EOF
 
 
+
     ./buildconf --force ;
     ./configure --help
 
@@ -362,5 +375,4 @@ elif [ "$1" = "sync" ] ;then
 else
     help
 fi
-
 
