@@ -182,26 +182,35 @@ function install_icu(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('icu'))
-            ->withUrl('https://github.com/unicode-org/icu/releases/download/release-60-3/icu4c-60_3-src.tgz')
-            //->withUrl('https://github.com/unicode-org/icu/releases/download/release-72-1/icu4c-72_1-src.tgz')
+            ->withHomePage('https://icu.unicode.org/')
+            ->withLicense('https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE', Library::LICENSE_SPEC)
+            //->withUrl('https://github.com/unicode-org/icu/releases/download/release-60-3/icu4c-60_3-src.tgz')
+            ->withUrl('https://github.com/unicode-org/icu/releases/download/release-72-1/icu4c-72_1-src.tgz')
             //https://unicode-org.github.io/icu/userguide/icu4c/build.html
             ->withCleanBuildDirectory()
             ->withConfigure(
                 '
             source/runConfigureICU Linux --help
+            
             # CPPFLAGS="-DPIC -fPIC -DICU_DATA_DIR=/usr/"
-            source/runConfigureICU Linux --prefix=/usr/ --enable-static --disable-shared \
-            --disable-tests --disable-samples --with-data-packaging=static
+            source/runConfigureICU Linux --prefix=/usr/ \
+            --enable-static=yes \
+            --enable-shared=no \
+            --with-data-packaging=static \
+            --enable-release=yes \
+            --enable-extras=yes \
+            --enable-icuio=yes \
+            --enable-icu-config=yes \
+            --enable-dyload=no \
+            --enable-tools=yes \
+            --enable-tests=no \
+            --enable-samples=no
             '
-            )
+            )//
             ->withMakeOptions('all VERBOSE=1')
             ->withPkgName('icu-uc icu-io icu-i18n')
             ->withPkgConfig('/usr/lib/pkgconfig')
-            //->disableDefaultPkgConfig()
             ->withLdflags('-L/usr/icu/lib')
-            //->disableDefaultLdflags()
-            ->withHomePage('https://icu.unicode.org/')
-            ->withLicense('https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE', Library::LICENSE_SPEC)
     );
 }
 
@@ -209,24 +218,36 @@ function install_icu_2(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('icu_2'))
+            ->withHomePage('https://icu.unicode.org/')
+            ->withLicense('https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE', Library::LICENSE_SPEC)
             ->withUrl('https://github.com/unicode-org/icu/releases/download/release-60-3/icu4c-60_3-src.tgz')
             //->withUrl('https://github.com/unicode-org/icu/releases/download/release-72-1/icu4c-72_1-src.tgz')
             //https://unicode-org.github.io/icu/userguide/icu4c/build.html
             ->withCleanBuildDirectory()
             ->withConfigure(
                 '
-            source/runConfigureICU Linux --prefix=/usr/icu --enable-static --disable-shared \
-            --disable-tests --disable-samples --with-data-packaging=static
+            source/runConfigureICU Linux --prefix=/usr/ \
+            --enable-static=yes \
+            --enable-shared=no \
+            --with-data-packaging=static \
+            --enable-release=yes \
+            --enable-extras=yes \
+            --enable-icuio=yes \
+            --enable-icu-config=yes \
+            --enable-dyload=no \
+            --enable-tools=yes \
+            --enable-tests=no \
+            --enable-samples=no
             '
             )
             ->withMakeOptions('all VERBOSE=1')
             ->withPkgName('icu-uc icu-io icu-i18n')
-            //->withPkgConfig('/usr/icu/lib/pkgconfig')
+            ->withPkgConfig('/usr/icu/lib/pkgconfig')
+            ->withLdflags('-L/usr/icu/lib')
+            ->disablePkgName()
             ->disableDefaultPkgConfig()
-            // ->withLdflags('-L/usr/icu/lib')
             ->disableDefaultLdflags()
-            ->withHomePage('https://icu.unicode.org/')
-            ->withLicense('https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE', Library::LICENSE_SPEC)
+            ->withSkipInstall()
     );
 }
 
@@ -900,7 +921,6 @@ function install_cares_2(Preprocessor $p)
     );
 }
 
-
 function install_libedit(Preprocessor $p)
 {
     $p->addLibrary(
@@ -1097,25 +1117,27 @@ function install_pgsql(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('pgsql'))
+            ->withHomePage('https://www.postgresql.org/')
+            ->withLicense('https://www.postgresql.org/about/licence/', Library::LICENSE_SPEC)
             ->withUrl('https://ftp.postgresql.org/pub/source/v15.1/postgresql-15.1.tar.gz')
-            //->withSkipInstall()
+            //https://www.postgresql.org/docs/devel/installation.html
             ->withCleanBuildDirectory()
             ->withConfigure(
                 '
                   ./configure --help
 
-            # export ICU_CFLAGS="$(pkg-config --cflags  icu-uc icu-io icu-i18n)"
-            # export ICU_LIBS="$(pkg-config --libs  icu-uc icu-io icu-i18n)"
-            export XML2_CFLAGS="$(pkg-config --cflags  libxml-2.0 )"
-            export XML2_LIBS="$(pkg-config --libs  libxml-2.0 )"
+            export ICU_CFLAGS="$(pkg-config --cflags  --static icu-uc icu-io icu-i18n)"
+            export ICU_LIBS="$(pkg-config --libs --static icu-uc icu-io icu-i18n)"
+            export XML2_CFLAGS="$(pkg-config --cflags --static libxml-2.0 )"
+            export XML2_LIBS="$(pkg-config --libs --static libxml-2.0 )"
 
             CFLAGS=$(pkg-config --cflags --static  libcrypto  libssl    openssl readline libxml-2.0 icu-uc icu-io icu-i18n)
-
-
-            export CFLAGS="-static -O2 -Wall -fPIC $CFLAGS -I/usr/include "
-            # LDFLAGS=$(pkg-config --libs --static libcrypto  libssl    openssl readline libxml-2.0 icu-uc icu-io icu-i18n)
-            # export LDFLAGS="-static $LDFLAGS -L/usr/lib "
-
+            CFLAGS="-static -O2 -Wall -fPIC $CFLAGS -I/usr/include "
+            LDFLAGS=$(pkg-config --libs --static libcrypto  libssl    openssl readline libxml-2.0 icu-uc icu-io icu-i18n)
+            LDFLAGS="-static  -fPIC  -lstdc++  $LDFLAGS -L/usr/lib -L/lib"
+            
+            # -static -optl-static -optl-pthread -fPIC
+            
             ./configure --prefix=/usr/pgsql \
             --with-ssl=openssl  \
             --with-readline \
@@ -1126,19 +1148,20 @@ function install_pgsql(Preprocessor $p)
             --with-includes="/usr/openssl/include/:/usr/libxslt/include:/usr/libxml2/include/:/usr/zlib/lib:/usr/include" \
             --with-libraries="/usr/openssl/lib64:/usr/libxslt/lib/:/usr/libxml2/lib/:/usr/zlib/lib:/usr/lib"
             '
-            )
-            ->withMakeOptions("-C src/common all")
-            ->withMakeInstallOptions(
-                '-C src/common install'
-            ) //make -C src/interfaces install-ecpg-recurse
+            )//make -C src/interfaces install-ecpg-recurse
+            ->withMakeInstallOptions('install')
             ->withPkgName('libecpg libecpg_compat libpgtypes libpq')
             ->withPkgConfig('/usr/pgsql/lib/pkgconfig')
             ->withLdflags('-L/usr/pgsql/lib/')
             ->withSystemConfigPath('/usr/pgsql/bin/')
             ->withScriptAfterInstall(
                 '
+                    make -C src/common all
+                    make -C src/common install
+                    
                     make -C src/backend/libpq all
                     make -C src/backend/libpq install
+                    
 
                     make -C src/port all
                     make -C src/port install
@@ -1153,12 +1176,11 @@ function install_pgsql(Preprocessor $p)
                     rm -rf /usr/pgsql/lib/*.so
             '
             )
-            ->withLicense('https://www.postgresql.org/about/licence/', Library::LICENSE_SPEC)
-            ->withHomePage('https://www.postgresql.org/')
-            ->withSkipInstall()
-    //->disablePkgName()
-    //->disableDefaultPkgConfig()
-    //->disableDefaultLdflags()
+
+        //->withSkipInstall()
+        //->disablePkgName()
+        //->disableDefaultPkgConfig()
+        //->disableDefaultLdflags()
     );
 }
 
