@@ -864,20 +864,18 @@ function install_oniguruma(Preprocessor $p)
     );
 }
 
-
 function install_cares(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('cares'))
+            ->withHomePage('https://c-ares.org/')
+            ->withLicense('https://c-ares.org/license.html', Library::LICENSE_MIT)
             ->withUrl('https://c-ares.org/download/c-ares-1.18.1.tar.gz')
             ->withScriptBeforeConfigure('pwd')
             ->withConfigure('./configure --prefix=/usr/ --enable-static --disable-shared ')
             ->withPkgName('libcares')
             ->withPkgConfig('/usr/lib/pkgconfig')
             ->withLdflags('-L/usr/lib')
-            ->disableDefaultLdflags()
-            ->withLicense('https://c-ares.org/license.html', Library::LICENSE_MIT)
-            ->withHomePage('https://c-ares.org/')
     );
 }
 
@@ -885,18 +883,19 @@ function install_cares_2(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('cares_2'))
+            ->withHomePage('https://c-ares.org/')
+            ->withLicense('https://c-ares.org/license.html', Library::LICENSE_MIT)
             ->withUrl('https://c-ares.org/download/c-ares-1.18.1.tar.gz')
-            ->withSkipInstall()
             ->withScriptBeforeConfigure('pwd')
             ->withConfigure('./configure --prefix=/usr/c-ares --enable-static --disable-shared ')
-            //->withPkgName('libcares')
-            ->disablePkgName()
-            //->withPkgConfig('/usr/c-ares/lib/pkgconfig')
-            ->disableDefaultPkgConfig()
-            // ->withLdflags('-L/usr/c-ares/lib')
+            ->withPkgName('libcares')
+            ->withPkgConfig('/usr/c-ares/lib/pkgconfig')
+            ->withLdflags('-L/usr/c-ares/lib')
+            ->withSystemConfigPath('/usr/c-ares/bin/')
             ->disableDefaultLdflags()
-            ->withLicense('https://c-ares.org/license.html', Library::LICENSE_MIT)
-            ->withHomePage('https://c-ares.org/')
+            ->disableDefaultPkgConfig()
+            ->disablePkgName()
+            ->withSkipInstall()
     );
 }
 
