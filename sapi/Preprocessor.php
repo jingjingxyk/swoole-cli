@@ -54,6 +54,7 @@ class Library extends Project
     public string $url;
 
     public bool $skipInstall = false;
+
     public bool $cleanBuildDirectory = false;
 
     public string $untarArchiveCommand = 'tar';
@@ -113,6 +114,7 @@ class Library extends Project
     public function withSkipInstall(): static
     {
         $this->skipInstall = true;
+        $this->withSystemConfigPath('');
         $this->disableDefaultPkgConfig();
         $this->disablePkgName();
         $this->disableDefaultLdflags();
