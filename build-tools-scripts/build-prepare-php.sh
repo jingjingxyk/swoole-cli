@@ -14,4 +14,6 @@ __PROJECT__=$(
 cd ${__PROJECT__}
 
 sh make.sh cares
+sh make.sh icu_2
+
 

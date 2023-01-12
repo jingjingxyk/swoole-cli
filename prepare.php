@@ -90,9 +90,10 @@ function install_openssl_1(Preprocessor $p)
     $static = $p->osType === 'macos' ? '' : ' -static --static';
     $p->addLibrary(
         (new Library('openssl_1'))
+            ->withHomePage('https://www.openssl.org/')
+            ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
             ->withUrl('https://www.openssl.org/source/openssl-1.1.1p.tar.gz')
             ->withFile('openssl-1.1.1p.tar.gz')
-            ->withSkipInstall()
             ->withCleanBuildDirectory()
             ->withScriptBeforeConfigure(
                 '
@@ -109,8 +110,7 @@ EOF
             ->withPkgConfig('/usr/openssl/lib/pkgconfig')
             ->withPkgName('libcrypto libssl openssl')
             ->withLdflags('-L/usr/openssl/lib')
-            ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
-            ->withHomePage('https://www.openssl.org/')
+            ->withSkipInstall()
     );
 }
 
@@ -184,15 +184,15 @@ function install_icu(Preprocessor $p)
         (new Library('icu'))
             ->withHomePage('https://icu.unicode.org/')
             ->withLicense('https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE', Library::LICENSE_SPEC)
-            //->withUrl('https://github.com/unicode-org/icu/releases/download/release-60-3/icu4c-60_3-src.tgz')
-            ->withUrl('https://github.com/unicode-org/icu/releases/download/release-72-1/icu4c-72_1-src.tgz')
+            ->withUrl('https://github.com/unicode-org/icu/releases/download/release-60-3/icu4c-60_3-src.tgz')
+            //->withUrl('https://github.com/unicode-org/icu/releases/download/release-72-1/icu4c-72_1-src.tgz')
             //https://unicode-org.github.io/icu/userguide/icu4c/build.html
             ->withCleanBuildDirectory()
             ->withConfigure(
                 '
             source/runConfigureICU Linux --help
-            
             # CPPFLAGS="-DPIC -fPIC -DICU_DATA_DIR=/usr/"
+            
             source/runConfigureICU Linux --prefix=/usr/ \
             --enable-static=yes \
             --enable-shared=no \
@@ -206,11 +206,13 @@ function install_icu(Preprocessor $p)
             --enable-tests=no \
             --enable-samples=no
             '
-            )//
+            )
             ->withMakeOptions('all VERBOSE=1')
             ->withPkgName('icu-uc icu-io icu-i18n')
             ->withPkgConfig('/usr/lib/pkgconfig')
-            ->withLdflags('-L/usr/icu/lib')
+            ->withLdflags('-L/usr/lib')
+            ->withBinPath("/usr/bin")
+            ->withSkipInstall()
     );
 }
 
@@ -220,13 +222,20 @@ function install_icu_2(Preprocessor $p)
         (new Library('icu_2'))
             ->withHomePage('https://icu.unicode.org/')
             ->withLicense('https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE', Library::LICENSE_SPEC)
-            ->withUrl('https://github.com/unicode-org/icu/releases/download/release-60-3/icu4c-60_3-src.tgz')
-            //->withUrl('https://github.com/unicode-org/icu/releases/download/release-72-1/icu4c-72_1-src.tgz')
-            //https://unicode-org.github.io/icu/userguide/icu4c/build.html
+            //->withUrl('https://github.com/unicode-org/icu/releases/download/release-60-3/icu4c-60_3-src.tgz')
+            ->withUrl('https://github.com/unicode-org/icu/releases/download/release-72-1/icu4c-72_1-src.tgz')
+            ->withManual("https://unicode-org.github.io/icu/userguide/icu4c/build.html")
             ->withCleanBuildDirectory()
+            ->withScriptBeforeConfigure('
+                test -d /usr/icu && rm -rf /usr/icu
+            ')
             ->withConfigure(
                 '
-            source/runConfigureICU Linux --prefix=/usr/ \
+            source/runConfigureICU Linux --help
+            
+            # CPPFLAGS="-DU_CHARSET_IS_UTF8=1 -DU_USING_ICU_NAMESPACE=0"  \
+            
+            source/runConfigureICU Linux --prefix=/usr/icu \
             --enable-static=yes \
             --enable-shared=no \
             --with-data-packaging=static \
@@ -244,9 +253,9 @@ function install_icu_2(Preprocessor $p)
             ->withPkgName('icu-uc icu-io icu-i18n')
             ->withPkgConfig('/usr/icu/lib/pkgconfig')
             ->withLdflags('-L/usr/icu/lib')
-            ->disablePkgName()
-            ->disableDefaultPkgConfig()
-            ->disableDefaultLdflags()
+//            ->disablePkgName()
+//            ->disableDefaultPkgConfig()
+//            ->disableDefaultLdflags()
             ->withSkipInstall()
     );
 }
@@ -913,7 +922,7 @@ function install_cares_2(Preprocessor $p)
             ->withPkgName('libcares')
             ->withPkgConfig('/usr/c-ares/lib/pkgconfig')
             ->withLdflags('-L/usr/c-ares/lib')
-            ->withSystemConfigPath('/usr/c-ares/bin/')
+            ->withBinPath('/usr/c-ares/bin/')
             ->disableDefaultLdflags()
             ->disableDefaultPkgConfig()
             ->disablePkgName()
@@ -1121,66 +1130,132 @@ function install_pgsql(Preprocessor $p)
             ->withLicense('https://www.postgresql.org/about/licence/', Library::LICENSE_SPEC)
             ->withUrl('https://ftp.postgresql.org/pub/source/v15.1/postgresql-15.1.tar.gz')
             //https://www.postgresql.org/docs/devel/installation.html
+            //https://www.postgresql.org/docs/devel/install-make.html#INSTALL-PROCEDURE-MAKE
             ->withCleanBuildDirectory()
+            ->withScriptBeforeConfigure('
+               test -d /usr/pgsql && rm -rf /usr/pgsql
+            ')
             ->withConfigure(
                 '
-                  ./configure --help
+                  
 
-            export ICU_CFLAGS="$(pkg-config --cflags  --static icu-uc icu-io icu-i18n)"
-            export ICU_LIBS="$(pkg-config --libs --static icu-uc icu-io icu-i18n)"
-            export XML2_CFLAGS="$(pkg-config --cflags --static libxml-2.0 )"
-            export XML2_LIBS="$(pkg-config --libs --static libxml-2.0 )"
+            # export ICU_CFLAGS="$(pkg-config --cflags  --static icu-uc icu-io icu-i18n)"
+            # export ICU_LIBS="$(pkg-config --libs --static icu-uc icu-io icu-i18n)"
+            # export XML2_CFLAGS="$(pkg-config --cflags --static libxml-2.0 )"
+            # export XML2_LIBS="$(pkg-config --libs --static libxml-2.0 )"
 
-            CFLAGS=$(pkg-config --cflags --static  libcrypto  libssl    openssl readline libxml-2.0 icu-uc icu-io icu-i18n)
-            CFLAGS="-static -O2 -Wall -fPIC $CFLAGS -I/usr/include "
-            LDFLAGS=$(pkg-config --libs --static libcrypto  libssl    openssl readline libxml-2.0 icu-uc icu-io icu-i18n)
-            LDFLAGS="-static  -fPIC  -lstdc++  $LDFLAGS -L/usr/lib -L/lib"
+      
+            
+            # CFLAGS="-O2 -pipe"
             
             # -static -optl-static -optl-pthread -fPIC
+            # libc++  -lstdc++  -lstdc++
+            # -static -lstdc++  -fPIE -fPIC
+            # -fno-rtti  rtti：RTTI（Run-Time Type Identification)
+            ./configure --help
             
-            ./configure --prefix=/usr/pgsql \
+         
+         
+             # CCPFLAGS="-static -fPIE -fPIC  -Dexit=exit_BAD -Dabort=abort_BAD "
+             # CCPFLAGS="-Dexit=exit_BAD -Dabort=abort_BAD -lstdc++"
+             # LIBS="-lpgcommon and -lpgport"
+             
+       
+                 
+            export CPPFLAGS="-static -fPIE -fPIC -O2 -Wall "
+            # export  LDFLAGS="-L/usr/openssl/lib64 -L/usr/libxslt/lib/ -L/usr/libxml2/lib/ -L/usr/zlib/lib -L/usr/lib"
+            export  CPPFLAGS=$CPPFLAGS
+             
+            ./configure  --prefix=/usr/pgsql \
+            --enable-coverage=no \
             --with-ssl=openssl  \
             --with-readline \
-            --with-icu \
+            --without-icu \
             --without-ldap \
             --without-libxml  \
             --without-libxslt \
-            --with-includes="/usr/openssl/include/:/usr/libxslt/include:/usr/libxml2/include/:/usr/zlib/lib:/usr/include" \
+            --with-includes="/usr/openssl/include/:/usr/libxml2/include/:/usr/libxslt/include:/usr/zlib/include:/usr/include" \
             --with-libraries="/usr/openssl/lib64:/usr/libxslt/lib/:/usr/libxml2/lib/:/usr/zlib/lib:/usr/lib"
+           
+           make -C src/interfaces/libpq -j $cpu_nums all-static-lib
+          return 0 
+           make -C src/interfaces/libpq installdirs
+           make -C src/interfaces/libpq install-lib-pc
+           make -C src/interfaces/libpq install-lib-static
+           
+            make  -C src/include install 
+            make -C  src/bin/pg_config install
+            
+           rm -rf /usr/pgsql/lib/*.so.*
+           rm -rf /usr/pgsql/lib/*.so
+           
+           # make -C src/interfaces/libpq install-lib-pc
+           # make -C src/interfaces/libpq install-lib-static
+           
+           
+           # installdirs install-lib
+           
+           return 0
+            cat >> src/interfaces/libpq/Makefile <<"___EOF___" 
+libpq.a: $(OBJS)
+    ar rcs $@ $^
+___EOF___
+           make -C src/interfaces/libpq  libpq.a
+           
+           
+           return 0 
+           
+           
+            make  -C src/common all -j $cpu_nums
+            make  -C src/include install 
+      
+            
+            
+            make -C src/backend all    -j $cpu_nums
+            
+            make -C src/port all  -j $cpu_nums
+            make -C src/port install
+            
+            make  -C src/common install 
+            
+            make -C src/bin/pg_config install
+      
+      
+            # 编译出错
+            make -C src/interfaces/libpq 
+
+          
+            return 0
             '
-            )//make -C src/interfaces install-ecpg-recurse
-            ->withMakeInstallOptions('install')
-            ->withPkgName('libecpg libecpg_compat libpgtypes libpq')
+            )
+            ->withMakeOptions('-C src/common all')
+            ->withMakeInstallOptions('-C src/include install ')
+            ->withPkgName('libpq')
             ->withPkgConfig('/usr/pgsql/lib/pkgconfig')
             ->withLdflags('-L/usr/pgsql/lib/')
-            ->withSystemConfigPath('/usr/pgsql/bin/')
-            ->withScriptAfterInstall(
-                '
-                    make -C src/common all
-                    make -C src/common install
+            ->withBinPath('/usr/pgsql/bin/')
+            ->withScriptAfterInstall('
+                
+               
+                
+# https://stackoverflow.com/questions/29803847/how-to-download-compile-install-only-the-libpq-source-on-a-server-that-does-n
+
+
+# cd src/interfaces/libpq; make; make install; cd -
+# cd src/bin/pg_config; make install; cd -
+# cd src/backend; make generated-headers; cd -
+# cd src/include; make install; cd -
+
+
                     
-                    make -C src/backend/libpq all
-                    make -C src/backend/libpq install
                     
-
-                    make -C src/port all
-                    make -C src/port install
-
-                    make -C src/interfaces all-ecpg-recurse
-                    make -C src/interfaces install-ecpg-recurse
-
-                    make -C src/bin all
-                    make -C src/bin install
-
-                    rm -rf /usr/pgsql/lib/*.so.*
-                    rm -rf /usr/pgsql/lib/*.so
             '
             )
 
-        //->withSkipInstall()
-        //->disablePkgName()
-        //->disableDefaultPkgConfig()
-        //->disableDefaultLdflags()
+    //->withSkipInstall()
+    //->disablePkgName()
+    //->disableDefaultPkgConfig()
+    //->disableDefaultLdflags()
     );
 }
 
@@ -1189,9 +1264,9 @@ function install_socat($p)
     // https://github.com/aledbf/socat-static-binary/blob/master/build.sh
     $p->addLibrary(
         (new Library('socat'))
-            ->withUrl('http://www.dest-unreach.org/socat/download/socat-1.7.4.4.tar.gz')
             ->withHomePage('http://www.dest-unreach.org/socat/')
-            ->withSkipInstall()
+            ->withLicense('http://www.dest-unreach.org/socat/doc/README', Library::LICENSE_GPL)
+            ->withUrl('http://www.dest-unreach.org/socat/download/socat-1.7.4.4.tar.gz')
             ->withConfigure(
                 '
             pkg-config --cflags --static readline
@@ -1214,7 +1289,7 @@ function install_socat($p)
             --enable-openssl-base=/usr/openssl
             '
             )
-            ->withLicense('http://www.dest-unreach.org/socat/doc/README', Library::LICENSE_GPL)
+            ->withSkipInstall()
     );
 }
 
@@ -1223,10 +1298,10 @@ function install_nettle($p)
     // https://github.com/aledbf/socat-static-binary/blob/master/build.sh
     $p->addLibrary(
         (new Library('nettle'))
+            ->withHomePage('https://www.lysator.liu.se/~nisse/nettle/')
+            ->withLicense('https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html', Library::LICENSE_LGPL)
             ->withUrl('https://ftp.gnu.org/gnu/nettle/nettle-3.8.tar.gz')
             ->withFile('nettle-3.8.tar.gz')
-            ->withHomePage('https://www.lysator.liu.se/~nisse/nettle/')
-            //->withSkipInstall()
             ->withConfigure(
                 '
              ./configure --help
@@ -1239,7 +1314,7 @@ function install_nettle($p)
             ->withPkgConfig('/usr/nettle/lib/pkgconfig')
             ->withPkgName('hogweed nettle')
             ->withLdflags('/usr/nettle/lib')
-            ->withLicense('https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html', Library::LICENSE_LGPL)
+            ->withSkipInstall()
     );
 }
 
@@ -1247,10 +1322,10 @@ function install_libunistring($p)
 {
     $p->addLibrary(
         (new Library('libunistring'))
+            ->withHomePage('https://www.gnu.org/software/libunistring/')
+            ->withLicense('https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html', Library::LICENSE_LGPL)
             ->withUrl('https://ftp.gnu.org/gnu/libunistring/libunistring-0.9.1.1.tar.gz')
             ->withFile('libunistring-0.9.1.1.tar.gz')
-            ->withHomePage('https://www.gnu.org/software/libunistring/')
-            ->withSkipInstall()
             ->withConfigure(
                 '
              ./configure --help
@@ -1260,13 +1335,13 @@ function install_libunistring($p)
             --disable-shared
             '
             )
-            //->withPkgConfig('/usr/libunistring/lib/pkgconfig')
+            ->withPkgConfig('/usr/libunistring/lib/pkgconfig')
+            ->withPkgName('libunistringe')
+            ->withLdflags('/usr/libunistring/lib')
             ->disableDefaultPkgConfig()
-            //->withPkgName('libunistringe')
             ->disablePkgName()
-            //->withLdflags('/usr/libunistring/lib')
             ->disableDefaultLdflags()
-            ->withLicense('https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html', Library::LICENSE_LGPL)
+            ->withSkipInstall()
     );
 }
 
@@ -1274,9 +1349,9 @@ function install_gnu_tls($p)
 {
     $p->addLibrary(
         (new Library('gnu_tls'))
-            ->withUrl('https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.8.tar.xz')
             ->withHomePage('https://www.gnutls.org/')
-            ->withSkipInstall()
+            ->withLicense('https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html', Library::LICENSE_LGPL)
+            ->withUrl('https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.8.tar.xz')
             ->withConfigure(
                 '
             ./configure --help ;
@@ -1298,7 +1373,7 @@ function install_gnu_tls($p)
             ->disablePkgName()
             //->withLdflags('/usr/gnutls/lib')
             ->disableDefaultLdflags()
-            ->withLicense('https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html', Library::LICENSE_LGPL)
+            ->withSkipInstall()
     );
 }
 
@@ -1307,10 +1382,10 @@ function install_libuv($p)
     // https://github.com/aledbf/socat-static-binary/blob/master/build.sh
     $p->addLibrary(
         (new Library('libuv'))
+            ->withHomePage('https://libuv.org/')
+            ->withLicense('https://github.com/libuv/libuv/blob/v1.x/LICENSE', Library::LICENSE_GPL)
             ->withUrl('https://github.com/libuv/libuv/archive/refs/tags/v1.44.2.tar.gz')
             ->withFile('libuv-v1.44.2.tar.gz')
-            ->withHomePage('https://libuv.org/')
-            //->withSkipInstall()
             ->withConfigure(
                 '
 
@@ -1325,7 +1400,7 @@ function install_libuv($p)
             ->withPkgConfig('/usr/libuv/lib/pkgconfig')
             ->withPkgName('libuv')
             ->withLdflags('/usr/libuv/lib')
-            ->withLicense('https://github.com/libuv/libuv/blob/v1.x/LICENSE', Library::LICENSE_GPL)
+            ->withSkipInstall()
     );
 }
 
@@ -1334,10 +1409,10 @@ function install_libunwind($p)
     // https://github.com/aledbf/socat-static-binary/blob/master/build.sh
     $p->addLibrary(
         (new Library('libunwind'))
+            ->withHomePage('https://github.com/libunwind/libunwind.git')
+            ->withLicense('https://github.com/libunwind/libunwind/blob/master/LICENSE', Library::LICENSE_MIT)
             ->withUrl('https://github.com/libunwind/libunwind/releases/download/v1.6.2/libunwind-1.6.2.tar.gz')
             ->withFile('libunwind-1.6.2.tar.gz')
-            ->withHomePage('https://github.com/libunwind/libunwind.git')
-            //->withSkipInstall()
             ->withConfigure(
                 '
              # autoreconf -i
@@ -1353,7 +1428,7 @@ function install_libunwind($p)
             ->withPkgConfig('/usr/libunwind/lib/pkgconfig')
             ->withPkgName('libunwind-coredump  libunwind-generic   libunwind-ptrace    libunwind-setjmp    libunwind')
             ->withLdflags('/usr/libunwind/lib')
-            ->withLicense('https://github.com/libunwind/libunwind/blob/master/LICENSE', Library::LICENSE_MIT)
+            ->withSkipInstall()
     );
 }
 
@@ -1362,10 +1437,13 @@ function install_jemalloc($p)
     // https://github.com/aledbf/socat-static-binary/blob/master/build.sh
     $p->addLibrary(
         (new Library('jemalloc'))
+            ->withHomePage('http://jemalloc.net/')
+            ->withLicense(
+                'https://github.com/jemalloc/jemalloc/blob/dev/COPYING',
+                Library::LICENSE_GPL
+            )
             ->withUrl('https://github.com/jemalloc/jemalloc/archive/refs/tags/5.3.0.tar.gz')
             ->withFile('jemalloc-5.3.0.tar.gz')
-            ->withHomePage('http://jemalloc.net/')
-            //->withSkipInstall()
             ->withConfigure(
                 '
 
@@ -1382,10 +1460,7 @@ function install_jemalloc($p)
             ->withPkgConfig('/usr/jemalloc/lib/pkgconfig')
             ->withPkgName('jemalloc')
             ->withLdflags('/usr/jemalloc/lib')
-            ->withLicense(
-                'https://github.com/jemalloc/jemalloc/blob/dev/COPYING',
-                Library::LICENSE_GPL
-            )
+            ->withSkipInstall()
     );
 }
 
@@ -1394,11 +1469,11 @@ function install_tcmalloc($p)
     // https://github.com/aledbf/socat-static-binary/blob/master/build.sh
     $p->addLibrary(
         (new Library('tcmalloc'))
+            ->withHomePage('https://google.github.io/tcmalloc/overview.html')
+            ->withLicense('https://github.com/google/tcmalloc/blob/master/LICENSE', Library::LICENSE_APACHE2)
             ->withUrl('https://github.com/google/tcmalloc/archive/refs/heads/master.zip')
             ->withFile('tcmalloc.zip')
-            ->withHomePage('https://google.github.io/tcmalloc/overview.html')
             ->withUntarArchiveCommand('unzip')
-            //->withSkipInstall()
             ->withCleanBuildDirectory()
             ->withConfigure(
                 '
@@ -1416,7 +1491,7 @@ function install_tcmalloc($p)
             ->withPkgConfig('/usr/tcmalloc/lib/pkgconfig')
             ->withPkgName('tcmalloc')
             ->withLdflags('/usr/tcmalloc/lib')
-            ->withLicense('https://github.com/google/tcmalloc/blob/master/LICENSE', Library::LICENSE_APACHE2)
+            ->withSkipInstall()
     );
 }
 
@@ -1425,10 +1500,10 @@ function install_aria2($p)
     // https://github.com/aledbf/socat-static-binary/blob/master/build.sh
     $p->addLibrary(
         (new Library('aria2c'))
-            ->withUrl('https://github.com/aria2/aria2/releases/download/release-1.36.0/aria2-1.36.0.tar.gz')
-            //DOCS https://aria2.github.io/manual/en/html/README.html
             ->withHomePage('https://aria2.github.io/')
-            //->withSkipInstall()
+            ->withLicense('https://github.com/aria2/aria2/blob/master/COPYING', Library::LICENSE_GPL)
+            ->withUrl('https://github.com/aria2/aria2/releases/download/release-1.36.0/aria2-1.36.0.tar.gz')
+            ->withManual('https://aria2.github.io/manual/en/html/README.html')
             ->withCleanBuildDirectory()
             ->withConfigure(
                 '
@@ -1461,7 +1536,30 @@ function install_aria2($p)
             # --with-tcmalloc
             '
             )
-            ->withLicense('https://github.com/aria2/aria2/blob/master/COPYING', Library::LICENSE_GPL)
+            ->withSkipInstall()
+    );
+}
+function install_bazel($p)
+{
+    $p->addLibrary(
+        (new Library('bazel'))
+            ->withHomePage('https://bazel.build')
+            ->withLicense('https://github.com/bazelbuild/bazel/blob/master/LICENSE', Library::LICENSE_APACHE2)
+            ->withUrl('https://github.com/bazelbuild/bazel/releases/download/6.0.0/bazel-6.0.0-linux-x86_64')
+            ->withManual('https://bazel.build/install')
+            ->withCleanBuildDirectory()
+            ->withUntarArchiveCommand('mv')
+            ->withScriptBeforeConfigure('
+                test -d /usr/bazel/bin/ || mkdir -p /usr/bazel/bin/
+                mv bazel /usr/bazel/bin/
+                chmod a+x /usr/bazel/bin/bazel
+                return 0 
+            ')
+            ->disableDefaultPkgConfig()
+            ->disablePkgName()
+            ->disableDefaultLdflags()
+            ->withManual('/usr/bazel/bin/')
+            ->withSkipInstall()
     );
 }
 
@@ -1542,6 +1640,7 @@ install_jemalloc($p);
 install_tcmalloc($p);
 
 install_aria2($p);
+install_bazel($p);
 
 
 $p->parseArguments($argc, $argv);

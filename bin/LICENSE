@@ -46,4 +46,5 @@ libunwind: https://github.com/libunwind/libunwind/blob/master/LICENSE
 jemalloc: https://github.com/jemalloc/jemalloc/blob/dev/COPYING
 tcmalloc: https://github.com/google/tcmalloc/blob/master/LICENSE
 aria2c: https://github.com/aria2/aria2/blob/master/COPYING
+bazel: https://github.com/bazelbuild/bazel/blob/master/LICENSE
 php: https://github.com/php/php-src/blob/master/LICENSE

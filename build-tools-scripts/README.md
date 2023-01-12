@@ -382,6 +382,8 @@ readelf -Ds a.out
 编译时使用 -g，使可执行程序中包含调试信息；
 最好不要使用 strip 去除可执行程序的符号信息，否则会看不到栈中的函数名称。
 
+nm -A /usr/pgsql/lib/libpq.a |  grep -i 
+nm -A /usr/openssl/lib64/libssl.a  |  grep -i toul
 
 ```text
     // "Core",
@@ -484,6 +486,12 @@ override LDFLAGS += $(shell pkg-config --libs-only-L --libs-only-other ncursesw)
 
 
 ```shell
+# https://github.com/swoole/swoole-src/issues/4946
+
+#  SWOOLE_CFLAGS="$SWOOLE_CFLAGS $LIBPQ_CFLAGS"
+#  SWOOLE_PGSQL_CFLAGS="$SWOOLE_CFLAGS $LIBPQ_CFLAGS"
+
+
 phpize &&
 export LIBPQ_CFLAGS="-I/usr/local/libpq/15.1/include" &&
 export LIBPQ_LIBS="-L/usr/local/libpq/15.1/lib" &&
@@ -533,3 +541,37 @@ libpq.a: $(OBJS)
 
 EOF
 ```
+
+```shell
+
+https://github.com/swoole/swoole-src/issues/4833#issuecomment-1253146715
+
+USE_ZEND_ALLOC=0 valgrind php your_file.php
+
+# https://github.com/swoole/swoole-src/issues/4854#issuecomment-1312298196
+export USE_ZEND_ALLOC=0 && LD_PRELOAD=/usr/local/lib/libjemalloc.so
+
+strace -p
+
+https://github.com/swoole/swoole-src/issues/4818#issuecomment-1240391101
+gdb attach 31626
+```
+
+
+
+```shell
+
+intl 
+
+ --with-icu-dir
+# https://www.php.net/manual/en/book.intl.php#book.intl
+LD_LIBRARY_PATH
+
+```
+
+### 参考
+1. [lwmbs](https://github.com/dixyes/lwmbs)
+1. [static-php-cli](https://github.com/crazywhalecc/static-php-cli.git)
+1. [bash 编写参考](https://github.com/symfony-cli/symfony-cli/blob/main/installer/bash-installer)
+1. [symfony-cli](https://github.com/symfony-cli)
+1. [symfony](https://github.com/symfony/symfony)
