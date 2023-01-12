@@ -480,12 +480,13 @@ class Preprocessor
                 // curl -lO https://pecl.php.net/get/redis
                 // https://pecl.php.net/get/redis-5.3.7.tgz
                 $download_url = '';
+                $ua='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36';
                 if ($ext->peclVersion == 'latest') {
                     $download_url = "https://pecl.php.net/get/" . $ext->name;
                 } else {
                     $download_url = "https://pecl.php.net/get/" . $ext->name . '-' . $ext->peclVersion . '.tgz';
                 }
-                $curl_download_cmd = "curl --connect-timeout 15 --retry 5 --retry-delay 5  -LO {$download_url}";
+                $curl_download_cmd = "curl  --user-agent '{$ua}' --connect-timeout 15 --retry 5 --retry-delay 5  -LO {$download_url}";
                 $cmd = "cd {$this->extensionDir} &&  {$curl_download_cmd} && cd -";
                 echo $curl_download_cmd . PHP_EOL;
                 echo shell_exec($cmd);
