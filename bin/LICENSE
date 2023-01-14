@@ -7,12 +7,9 @@ libxml2: http://www.opensource.org/licenses/mit-license.html
 libxslt: http://www.opensource.org/licenses/mit-license.html
 gmp: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 ncurses: https://invisible-island.net/ncurses/ncurses-license.html
-readline: http://www.gnu.org/licenses/gpl.html
 zlib: https://zlib.net/zlib_license.html
 bzip2: https://www.sourceware.org/bzip2/
 liblz4: https://github.com/lz4/lz4/blob/dev/LICENSE
-liblzma: https://git.tukaani.org/?p=xz.git;a=blob;f=COPYING
-libzstd: https://github.com/facebook/zstd/blob/dev/COPYING
 zip: https://libzip.org/license/
 giflib: http://giflib.sourceforge.net/intro.html
 libpng: http://www.libpng.org/pub/png/src/libpng-LICENSE.txt

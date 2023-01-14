@@ -226,9 +226,11 @@ function install_icu_2(Preprocessor $p)
             ->withUrl('https://github.com/unicode-org/icu/releases/download/release-72-1/icu4c-72_1-src.tgz')
             ->withManual("https://unicode-org.github.io/icu/userguide/icu4c/build.html")
             ->withCleanBuildDirectory()
-            ->withScriptBeforeConfigure('
+            ->withScriptBeforeConfigure(
+                '
                 test -d /usr/icu && rm -rf /usr/icu
-            ')
+            '
+            )
             ->withConfigure(
                 '
             source/runConfigureICU Linux --help
@@ -256,7 +258,7 @@ function install_icu_2(Preprocessor $p)
 //            ->disablePkgName()
 //            ->disableDefaultPkgConfig()
 //            ->disableDefaultLdflags()
-            ->withSkipMirrorLicense()
+            ->withSkipLicense()
             ->withSkipInstall()
     );
 }
@@ -312,7 +314,6 @@ function install_ncurses(Preprocessor $p)
             //->withUrl('https://invisible-island.net/datafiles/release/ncurses.tar.gz')
             //->withFile('ncurses.tar.gz')
             ->withFile('ncurses-6.3.tar.gz')
-
             ->withCleanBuildDirectory()
             ->withScriptBeforeConfigure(
                 '
@@ -402,7 +403,6 @@ function install_readline(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('readline', '/usr/readline'))
-
             ->withHomePage('https://tiswww.case.edu/php/chet/readline/rltop.html')
             ->withUrl('https://ftp.gnu.org/gnu/readline/readline-8.2.tar.gz')
             ->withLicense('http://www.gnu.org/licenses/gpl.html', Library::LICENSE_GPL)
@@ -456,7 +456,7 @@ EOF
 //            ->disablePkgName()
 //            ->disableDefaultPkgConfig()
 //            ->disableDefaultLdflags()
-//            ->withSkipInstall()
+            ->withSkipInstall()
     );
 }
 
@@ -550,14 +550,15 @@ function install_liblzma(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('liblzma'))
+            ->withHomePage('https://tukaani.org/xz/')
+            ->withLicense('https://git.tukaani.org/?p=xz.git;a=blob;f=COPYING', Library::LICENSE_LGPL)
             ->withUrl('https://tukaani.org/xz/xz-5.2.9.tar.gz')
             ->withFile('xz-5.2.9.tar.gz')
             ->withConfigure('./configure --prefix=/usr/liblzma/ --enable-static  --disable-shared --disable-doc')
             ->withPkgName('liblzma')
             ->withPkgConfig('/usr/liblzma/lib/pkgconfig')
             ->withLdflags('-L/usr/liblzma/lib')
-            ->withHomePage('https://tukaani.org/xz/')
-            ->withLicense('https://git.tukaani.org/?p=xz.git;a=blob;f=COPYING', Library::LICENSE_LGPL)
+            ->withSkipInstall()
     );
 }
 
@@ -565,6 +566,8 @@ function install_libzstd(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('libzstd'))
+            ->withHomePage('https://github.com/facebook/zstd')
+            ->withLicense('https://github.com/facebook/zstd/blob/dev/COPYING', Library::LICENSE_GPL)
             ->withUrl('https://github.com/facebook/zstd/releases/download/v1.5.2/zstd-1.5.2.tar.gz')
             ->withFile('zstd-1.5.2.tar.gz')
             ->withCleanBuildDirectory()
@@ -609,8 +612,7 @@ function install_libzstd(Preprocessor $p)
             ->withPkgName('libzstd')
             ->withPkgConfig('/usr/libzstd/lib/pkgconfig')
             ->withLdflags('-L/usr/libzstd/lib')
-            ->withHomePage('https://github.com/facebook/zstd')
-            ->withLicense('https://github.com/facebook/zstd/blob/dev/COPYING', Library::LICENSE_GPL)
+            ->withSkipInstall()
     );
 }
 
@@ -946,7 +948,10 @@ function install_cares_2(Preprocessor $p)
             ->disableDefaultLdflags()
             ->disableDefaultPkgConfig()
             ->disablePkgName()
-            ->withSkipMirrorLicense()
+            ->withSkipLicense()
+            //->disablePkgName()
+            //->disableDefaultPkgConfig()
+            //->disableDefaultLdflags()
             ->withSkipInstall()
     );
 }
@@ -1149,15 +1154,16 @@ function install_pgsql(Preprocessor $p)
         (new Library('pgsql'))
             ->withHomePage('https://www.postgresql.org/')
             ->withLicense('https://www.postgresql.org/about/licence/', Library::LICENSE_SPEC)
-
             ->withUrl('https://ftp.postgresql.org/pub/source/v15.1/postgresql-15.1.tar.gz')
             //https://www.postgresql.org/docs/devel/installation.html
             //https://www.postgresql.org/docs/devel/install-make.html#INSTALL-PROCEDURE-MAKE
-                ->withManual('https://www.postgresql.org/docs/')
+            ->withManual('https://www.postgresql.org/docs/')
             ->withCleanBuildDirectory()
-            ->withScriptBeforeConfigure('
+            ->withScriptBeforeConfigure(
+                '
                test -d /usr/pgsql && rm -rf /usr/pgsql
-            ')
+            '
+            )
             ->withConfigure(
                 '
              # src/Makefile.shlib 有静态配置
@@ -1280,10 +1286,10 @@ install-libpq5555.a: install-lib-static install-lib-pc
             '
             )
 
-        //->withSkipInstall()
-        //->disablePkgName()
-        //->disableDefaultPkgConfig()
-        //->disableDefaultLdflags()
+    //->withSkipInstall()
+    //->disablePkgName()
+    //->disableDefaultPkgConfig()
+    //->disableDefaultLdflags()
     );
 }
 
@@ -1567,6 +1573,7 @@ function install_aria2($p)
             ->withSkipInstall()
     );
 }
+
 function install_bazel($p)
 {
     $p->addLibrary(
@@ -1574,19 +1581,22 @@ function install_bazel($p)
             ->withHomePage('https://bazel.build')
             ->withLicense('https://github.com/bazelbuild/bazel/blob/master/LICENSE', Library::LICENSE_APACHE2)
             ->withUrl('https://github.com/bazelbuild/bazel/releases/download/6.0.0/bazel-6.0.0-linux-x86_64')
+            ->withManual('/usr/bazel/bin/')
             ->withManual('https://bazel.build/install')
             ->withCleanBuildDirectory()
             ->withUntarArchiveCommand('mv')
-            ->withScriptBeforeConfigure('
+            ->withScriptBeforeConfigure(
+                '
                 test -d /usr/bazel/bin/ || mkdir -p /usr/bazel/bin/
                 mv bazel /usr/bazel/bin/
                 chmod a+x /usr/bazel/bin/bazel
                 return 0 
-            ')
+            '
+            )
             ->disableDefaultPkgConfig()
             ->disablePkgName()
             ->disableDefaultLdflags()
-            ->withManual('/usr/bazel/bin/')
+            ->withSkipLicense()
             ->withSkipInstall()
     );
 }

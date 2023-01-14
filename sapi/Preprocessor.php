@@ -56,7 +56,7 @@ class Library extends Project
     public string $url;
 
     public string $manual = '';
-    public bool $skipMirrorLicense = false;
+    public bool $skipLicense = false;
     public bool $skipInstall = false;
 
     public bool $cleanBuildDirectory = false;
@@ -121,15 +121,16 @@ class Library extends Project
         return $this;
     }
 
-    public function withSkipMirrorLicense(): static
+    public function withSkipLicense(): static
     {
-        $this->skipMirrorLicense = true;
+        $this->skipLicense = true;
         return $this;
     }
 
     public function withSkipInstall(): static
     {
         $this->skipInstall = true;
+        $this->skipLicense = true;
         $this->withBinPath('');
         $this->disableDefaultPkgConfig();
         $this->disablePkgName();

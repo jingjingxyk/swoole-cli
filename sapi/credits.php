@@ -63,7 +63,7 @@
 <?php
 foreach ($this->libraryList as $item) : ?>
     <?php
-    if ($item->skipMirrorLicense || $item->skipInstall || empty($item->license)) : ?>
+    if ($item->skipLicense || $item->skipInstall || empty($item->license)) : ?>
         <?php continue  ?>
     <?php endif ?>
     <div class="product">
