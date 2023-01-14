@@ -45,7 +45,7 @@ then
  php prepare.php   \
   +pgsql +pdo_pgsql \
   -mysqli   \
-  -gd -exif \
+  -imagick \
   -pcntl  \
   +inotify \
   +ds   \

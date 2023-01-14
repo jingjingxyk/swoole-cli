@@ -234,17 +234,9 @@ export LIBPQ_CFLAGS=$(pkg-config  --cflags --static      libpq)
 
 export LIBPQ_LIBS=$(pkg-config  --libs  --static       libpq)
 
-CPPFLAGS=$(pkg-config  --cflags --static  libpq)
-CPPFLAGS+=$(pkg-config  --cflags --static ncurses)
-CPPFLAGS+=$(pkg-config  --cflags --static readline)
 
-export CPPFLAGS+=$CPPFLAGS
-
-# export CPPFLAGS=$(pkg-config  --cflags --static  libpq ncurses readline)
-LIBS=$(pkg-config  --libs --static    libpq)
-LIBS+=$(pkg-config  --libs --static    ncurses)
-LIBS+=$(pkg-config  --libs --static   readline)
-export LIBS+=$LIBS
+export CPPFLAGS=$(pkg-config  --cflags --static  libpq ncurses readline)
+export LIBS=$(pkg-config  --libs --static   libpq ncurses readline)
 
     ./buildconf --force ;
     ./configure --help
