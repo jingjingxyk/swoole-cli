@@ -16,7 +16,8 @@ cd ${__PROJECT__}
 
 
 ls -lh ${__PROJECT__}/bin/swoole-cli
-strip ${__PROJECT__}/bin/swoole-cli
+# 禁用移除符号表信息
+# strip ${__PROJECT__}/bin/swoole-cli
 ls -lh ${__PROJECT__}/bin/swoole-cli
 
 ${__PROJECT__}/bin/swoole-cli -v
