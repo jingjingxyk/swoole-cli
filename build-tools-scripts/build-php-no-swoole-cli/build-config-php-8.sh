@@ -13,7 +13,7 @@ __PROJECT__=$(
 cd ${__DIR__}
 
 version=$(cat version.txt)
-# php 7.4 不支持 openssl 3 版本，请使用openssl 1 版本
+
 
 
 cd ${__DIR__}/php-src/
