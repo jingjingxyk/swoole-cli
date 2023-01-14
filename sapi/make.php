@@ -192,13 +192,13 @@ export   EXSLT_LIBS=$(pkg-config --libs --static libexslt) ;
 export   LIBZIP_CFLAGS=$(pkg-config --cflags --static libzip) ;
 export   LIBZIP_LIBS=$(pkg-config --libs --static libzip) ;
 
-:<<'EOF'
-export   NCURSES_CFLAGS=$(pkg-config --cflags formw  menuw  ncursesw panelw);
-export   NCURSES_LIBS=$(pkg-config  --libs formw  menuw  ncursesw panelw);
 
-export   READLINE_CFLAGS=$(pkg-config --cflags  readline)  ;
-export   READLINE_LIBS=$(pkg-config  --libs readline)  ;
-EOF
+export   NCURSES_CFLAGS=$(pkg-config --cflags --static  ncurses);
+export   NCURSES_LIBS=$(pkg-config  --libs --static ncurses);
+
+export   READLINE_CFLAGS=$(pkg-config --cflags --static readline)  ;
+export   READLINE_LIBS=$(pkg-config  --libs --static readline)  ;
+
 
 
 :<<'EOF'
@@ -230,9 +230,21 @@ EOF
 EOF
 
 
-export LIBPQ_CFLAGS=$(pkg-config  --cflags --static libpq)
-export LIBPQ_LIBS=$(pkg-config  --libs  --static libpq)
+export LIBPQ_CFLAGS=$(pkg-config  --cflags --static      libpq)
 
+export LIBPQ_LIBS=$(pkg-config  --libs  --static       libpq)
+
+CPPFLAGS=$(pkg-config  --cflags --static  libpq)
+CPPFLAGS+=$(pkg-config  --cflags --static ncurses)
+CPPFLAGS+=$(pkg-config  --cflags --static readline)
+
+export CPPFLAGS+=$CPPFLAGS
+
+# export CPPFLAGS=$(pkg-config  --cflags --static  libpq ncurses readline)
+LIBS=$(pkg-config  --libs --static    libpq)
+LIBS+=$(pkg-config  --libs --static    ncurses)
+LIBS+=$(pkg-config  --libs --static   readline)
+export LIBS+=$LIBS
 
     ./buildconf --force ;
     ./configure --help

@@ -55,6 +55,8 @@ class Library extends Project
 {
     public string $url;
 
+    public string $manual = '';
+    public bool $skipMirrorLicense = false;
     public bool $skipInstall = false;
 
     public bool $cleanBuildDirectory = false;
@@ -116,6 +118,12 @@ class Library extends Project
     public function withFile(string $file): static
     {
         $this->file = $file;
+        return $this;
+    }
+
+    public function withSkipMirrorLicense(): static
+    {
+        $this->skipMirrorLicense = true;
         return $this;
     }
 
@@ -225,6 +233,8 @@ class Extension extends Project
 {
     public string $url;
 
+    public string $manual = '';
+
     public string $options = '';
 
     public string $peclVersion = '';
@@ -232,6 +242,12 @@ class Extension extends Project
     public string $file = '';
 
     public string $path = '';
+
+    public function withManual(string $manual): static
+    {
+        $this->manual = $manual;
+        return $this;
+    }
 
     public function withOptions(string $options): static
     {
@@ -480,7 +496,7 @@ class Preprocessor
                 // curl -lO https://pecl.php.net/get/redis
                 // https://pecl.php.net/get/redis-5.3.7.tgz
                 $download_url = '';
-                $ua='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36';
+                $ua = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36';
                 if ($ext->peclVersion == 'latest') {
                     $download_url = "https://pecl.php.net/get/" . $ext->name;
                 } else {

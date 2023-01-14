@@ -256,6 +256,7 @@ function install_icu_2(Preprocessor $p)
 //            ->disablePkgName()
 //            ->disableDefaultPkgConfig()
 //            ->disableDefaultLdflags()
+            ->withSkipMirrorLicense()
             ->withSkipInstall()
     );
 }
@@ -303,15 +304,18 @@ function install_ncurses(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('ncurses'))
+            ->withHomePage('https://invisible-island.net/ncurses/#download_ncurses')
+            ->withLicense('https://github.com/projectceladon/libncurses/blob/master/README', Library::LICENSE_MIT)
+            ->withLicense('https://invisible-island.net/ncurses/ncurses-license.html', Library::LICENSE_GPL)
+            //->withHomePage('https://github.com/projectceladon/libncurses')
             ->withUrl('https://ftp.gnu.org/pub/gnu/ncurses/ncurses-6.3.tar.gz')
             //->withUrl('https://invisible-island.net/datafiles/release/ncurses.tar.gz')
             //->withFile('ncurses.tar.gz')
             ->withFile('ncurses-6.3.tar.gz')
-            ->withSkipInstall()
+
             ->withCleanBuildDirectory()
             ->withScriptBeforeConfigure(
                 '
-                test -d /usr/ncurses && rm -rf /usr/ncurses ;
                 test -d /usr/ncurses/ && rm -rf /usr/ncurses/ ;
                 mkdir -p /usr/ncurses/lib/pkgconfig
             '
@@ -328,15 +332,18 @@ function install_ncurses(Preprocessor $p)
 
             #   --with-pcre2 \ --with-curses-h
 
-            #   --enable-widec \
+            #    --enable-widec\
             # --enable-overwrite \
-
+            
             ./configure \
             --prefix=/usr/ncurses \
             --enable-static \
             --disable-shared \
+            --enable-overwrite \
+            --with-curses-h \
             --enable-pc-files \
             --enable-echo \
+            --enable-widec \
             --with-normal \
             --with-pkg-config=/usr/ncurses/lib/pkgconfig \
             --with-pkg-config-libdir=/usr/ncurses/lib/pkgconfig \
@@ -344,48 +351,50 @@ function install_ncurses(Preprocessor $p)
             --without-tests \
             --without-dlsym \
             --without-debug \
-            --disable-relink
+            -enable-symlinks
+            
 
             '
             )
             /*
                 --enable-overwrite\
-            -with-form-libname=form \
+               -with-form-libname=form \
               --with-menu-libname=menu \
               --with-panel-libname=panel \
               --with-cxx-libname=ncurses
              */
             ->withScriptAfterInstall(
                 "
-            tic -x
-            # ln -s /usr/ncurses/include/ncursesw /usr/ncurses/include/ncurses ;
-:<<'EOF'
+              
+            # ln -s  /usr/ncurses/include/ncursesw /usr/ncurses/include/ncurses
+            # ln -s  /usr/ncurses/include/ncursesw /usr/ncurses/include/curses
+            
             ln -s /usr/ncurses/lib/pkgconfig/formw.pc /usr/ncurses/lib/pkgconfig/form.pc ;
             ln -s /usr/ncurses/lib/pkgconfig/menuw.pc /usr/ncurses/lib/pkgconfig/menu.pc ;
             ln -s /usr/ncurses/lib/pkgconfig/ncursesw.pc /usr/ncurses/lib/pkgconfig/ncurses.pc ;
+            ln -s /usr/ncurses/lib/pkgconfig/ncursesw.pc /usr/ncurses/lib/pkgconfig/curses.pc ;
             ln -s /usr/ncurses/lib/pkgconfig/panelw.pc /usr/ncurses/lib/pkgconfig/panel.pc ;
             ln -s /usr/ncurses/lib/pkgconfig/ncurses++w.pc /usr/ncurses/lib/pkgconfig/ncurses++.pc ;
-            ln -s /usr/ncurses/lib/pkgconfig/tinfow.pc /usr/ncurses/lib/pkgconfig/tinfow.pc ;
+            ln -s /usr/ncurses/lib/pkgconfig/ticw.pc /usr/ncurses/lib/pkgconfig/tic.pc ;
 
             ln -s /usr/ncurses/lib/libformw.a /usr/ncurses/lib/libform.a ;
             ln -s /usr/ncurses/lib/libmenuw.a /usr/ncurses/lib/libmenu.a ;
             ln -s /usr/ncurses/lib/libncursesw.a /usr/ncurses/lib/libncurses.a ;
+            ln -s /usr/ncurses/lib/libncurses++w.a /usr/ncurses/lib/libncurses++.a ;
             ln -s /usr/ncurses/lib/libpanelw.a /usr/ncurses/lib/libpanel.a ;
-            ln -s /usr/ncurses/lib/libtinfow.a /usr/ncurses/lib/libtinfo.a ;
-EOF
-                "
+            ln -s /usr/ncurses/lib/libticw.a /usr/ncurses/lib/libtic.a ;
+
+            "
             )
             ->withMakeOptions('all')
             ->withPkgName('ncursesw ncurses')
-            ->disablePkgName()
-            //->withPkgConfig('/usr/ncurses/lib/pkgconfig')
-            ->disableDefaultPkgConfig()
-            //->withLdflags('-L/usr/ncurses/lib/')
-            ->disableDefaultLdflags()
-            //->withLicense('https://github.com/projectceladon/libncurses/blob/master/README', Library::LICENSE_MIT)
-            ->withLicense('https://invisible-island.net/ncurses/ncurses-license.html', Library::LICENSE_GPL)
-            //->withHomePage('https://github.com/projectceladon/libncurses')
-            ->withHomePage('https://invisible-island.net/ncurses/#download_ncurses')
+            ->withPkgConfig('/usr/ncurses/lib/pkgconfig')
+            ->withLdflags('-L/usr/ncurses/lib/')
+            ->withBinPath('/usr/ncurses/bin/')
+//            ->disableDefaultLdflags()
+//            ->disableDefaultPkgConfig()
+//            ->disablePkgName()
+//            ->withSkipInstall()
     );
 }
 
@@ -393,8 +402,10 @@ function install_readline(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('readline', '/usr/readline'))
+
+            ->withHomePage('https://tiswww.case.edu/php/chet/readline/rltop.html')
             ->withUrl('https://ftp.gnu.org/gnu/readline/readline-8.2.tar.gz')
-            ->withSkipInstall()
+            ->withLicense('http://www.gnu.org/licenses/gpl.html', Library::LICENSE_GPL)
             ->withCleanBuildDirectory()
             ->withScriptBeforeConfigure(
                 <<<'_EOF_'
@@ -407,6 +418,7 @@ _EOF_
              # -lncurses
              # -I/usr/include/ncursesw
                ./configure --help
+              
 :<<\'EOF\'
                 CFLAGS=$(pkg-config --cflags  formw menuw ncursesw  panelw )
                 CFLAGS=$(pkg-config --cflags  form menu ncurses  panel )
@@ -419,24 +431,32 @@ _EOF_
                 # -lformw -lmenuw -lncursesw  -lpanelw -Wl,--as-needed,-O1,--sort-common
                # return 0
 EOF
+
+            CPPFLAGS=$(pkg-config --cflags --static formw menuw ncurses++w ncursesw  panelw  ticw)
+            export CPPFLAGS="-static -O2 -Wall $CPPFLAGS"
+            export LIBS=$(pkg-config --libs --static  formw menuw ncurses++w ncursesw  panelw  ticw)
+           
             ./configure --prefix=/usr/readline \
-            --enable-static --disable-shared --with-curses --enable-multibyte
+            --enable-static=yes \
+            --enable-shared=no \
+            --with-curses \
+            --enable-multibyte=yes 
 
             '
             )
             ->withMakeInstallOptions("install-static")
             ->withPkgName('readline')
-            //->disablePkgName()
-            //->withPkgConfig('/usr/readline/lib/pkgconfig')
-            ->disableDefaultPkgConfig()
-            //->withLdflags('-L/usr/readline/lib')
-            ->disableDefaultLdflags()
+            ->withPkgConfig('/usr/readline/lib/pkgconfig')
+            ->withLdflags('-L/usr/readline/lib')
+            ->withBinPath('/usr/readline/bin/')
             ->withScriptAfterInstall(
                 '
             '
             )
-            ->withLicense('http://www.gnu.org/licenses/gpl.html', Library::LICENSE_GPL)
-            ->withHomePage('https://tiswww.case.edu/php/chet/readline/rltop.html')
+//            ->disablePkgName()
+//            ->disableDefaultPkgConfig()
+//            ->disableDefaultLdflags()
+//            ->withSkipInstall()
     );
 }
 
@@ -926,6 +946,7 @@ function install_cares_2(Preprocessor $p)
             ->disableDefaultLdflags()
             ->disableDefaultPkgConfig()
             ->disablePkgName()
+            ->withSkipMirrorLicense()
             ->withSkipInstall()
     );
 }
@@ -1128,44 +1149,55 @@ function install_pgsql(Preprocessor $p)
         (new Library('pgsql'))
             ->withHomePage('https://www.postgresql.org/')
             ->withLicense('https://www.postgresql.org/about/licence/', Library::LICENSE_SPEC)
+
             ->withUrl('https://ftp.postgresql.org/pub/source/v15.1/postgresql-15.1.tar.gz')
             //https://www.postgresql.org/docs/devel/installation.html
             //https://www.postgresql.org/docs/devel/install-make.html#INSTALL-PROCEDURE-MAKE
+                ->withManual('https://www.postgresql.org/docs/')
             ->withCleanBuildDirectory()
             ->withScriptBeforeConfigure('
                test -d /usr/pgsql && rm -rf /usr/pgsql
             ')
             ->withConfigure(
                 '
-                  
+             # src/Makefile.shlib 有静态配置
+             # src/interfaces/libpq/Makefile  有静态配置  参考：  install-lib install-lib-static  installdirs  installdirs-lib install-lib-pc
+              
+           # sed -i "s/ifndef haslibarule/ifndef custom_static/"  src/Makefile.shlib     
+           # sed -i "s/endif #haslibarule/endif #custom_static/"  src/Makefile.shlib     
+           sed -i "s/invokes exit\'; exit 1;/invokes exit\';/"  src/interfaces/libpq/Makefile
+           # cp -rf  /work/Makefile.shlib src/Makefile.shlib   
+           # sed -i "120a \	echo \$<" src/interfaces/libpq/Makefile
+           # sed -i "120a \	echo \$(PORTNAME)" src/interfaces/libpq/Makefile
+           # 替换指定行内容
+           sed -i "102c all: all-lib" src/interfaces/libpq/Makefile
+           
+           cat >> src/interfaces/libpq/Makefile <<"-EOF-"
+           
+libpq5555.a: $(OBJS) | $(SHLIB_PREREQS)
+	echo $(SHLIB_PREREQS)
+	echo $(SHLIB_LINK)
+	echo $(exports_file)
+	#rm -f $@
+	rm -f libpq.a
+	# ar  rcs $@  $^ 
+	ar  rcs libpq.a  $^ 
+	# ranlib $@
+	ranlib libpq.a
+	# touch $@
+	# touch libpq.a
+install-libpq5555.a: install-lib-static install-lib-pc
+	$(MKDIR_P) "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgconfigdir)"
+	$(INSTALL_DATA) $(srcdir)/libpq-fe.h "$(DESTDIR)$(includedir)"
+	$(INSTALL_DATA) $(srcdir)/libpq-events.h "$(DESTDIR)$(includedir)"
+	$(INSTALL_DATA) $(srcdir)/libpq-int.h "$(DESTDIR)$(includedir_internal)"
+	$(INSTALL_DATA) $(srcdir)/fe-auth-sasl.h "$(DESTDIR)$(includedir_internal)"
+	$(INSTALL_DATA) $(srcdir)/pqexpbuffer.h "$(DESTDIR)$(includedir_internal)"
+-EOF-
 
-            # export ICU_CFLAGS="$(pkg-config --cflags  --static icu-uc icu-io icu-i18n)"
-            # export ICU_LIBS="$(pkg-config --libs --static icu-uc icu-io icu-i18n)"
-            # export XML2_CFLAGS="$(pkg-config --cflags --static libxml-2.0 )"
-            # export XML2_LIBS="$(pkg-config --libs --static libxml-2.0 )"
-
-      
-            
-            # CFLAGS="-O2 -pipe"
-            
-            # -static -optl-static -optl-pthread -fPIC
-            # libc++  -lstdc++  -lstdc++
-            # -static -lstdc++  -fPIE -fPIC
-            # -fno-rtti  rtti：RTTI（Run-Time Type Identification)
-            ./configure --help
-            
-         
-         
-             # CCPFLAGS="-static -fPIE -fPIC  -Dexit=exit_BAD -Dabort=abort_BAD "
-             # CCPFLAGS="-Dexit=exit_BAD -Dabort=abort_BAD -lstdc++"
-             # LIBS="-lpgcommon and -lpgport"
              
-       
-                 
             export CPPFLAGS="-static -fPIE -fPIC -O2 -Wall "
-            # export  LDFLAGS="-L/usr/openssl/lib64 -L/usr/libxslt/lib/ -L/usr/libxml2/lib/ -L/usr/zlib/lib -L/usr/lib"
-            export  CPPFLAGS=$CPPFLAGS
-             
+            
             ./configure  --prefix=/usr/pgsql \
             --enable-coverage=no \
             --with-ssl=openssl  \
@@ -1176,56 +1208,65 @@ function install_pgsql(Preprocessor $p)
             --without-libxslt \
             --with-includes="/usr/openssl/include/:/usr/libxml2/include/:/usr/libxslt/include:/usr/zlib/include:/usr/include" \
             --with-libraries="/usr/openssl/lib64:/usr/libxslt/lib/:/usr/libxml2/lib/:/usr/zlib/lib:/usr/lib"
+
+
            
-           make -C src/interfaces/libpq -j $cpu_nums all-static-lib
-          return 0 
-           make -C src/interfaces/libpq installdirs
-           make -C src/interfaces/libpq install-lib-pc
-           make -C src/interfaces/libpq install-lib-static
-           
-            make  -C src/include install 
+            make -C src/include install 
             make -C  src/bin/pg_config install
             
-           rm -rf /usr/pgsql/lib/*.so.*
-           rm -rf /usr/pgsql/lib/*.so
-           
-           # make -C src/interfaces/libpq install-lib-pc
-           # make -C src/interfaces/libpq install-lib-static
-           
-           
-           # installdirs install-lib
-           
-           return 0
-            cat >> src/interfaces/libpq/Makefile <<"___EOF___" 
-libpq.a: $(OBJS)
-    ar rcs $@ $^
-___EOF___
-           make -C src/interfaces/libpq  libpq.a
-           
-           
-           return 0 
-           
-           
-            make  -C src/common all -j $cpu_nums
-            make  -C src/include install 
-      
+            make -C  src/common -j $cpu_nums all 
+            make -C  src/common install 
+            
+            make -C  src/port -j $cpu_nums all 
+            make -C  src/port install 
+            
+     
+            make -C  src/backend/libpq -j $cpu_nums all 
+            make -C  src/backend/libpq install 
+            
+            make -C src/interfaces/ecpg   -j $cpu_nums all-pgtypeslib-recurse all-ecpglib-recurse all-compatlib-recurse all-preproc-recurse
+            make -C src/interfaces/ecpg  install-pgtypeslib-recurse install-ecpglib-recurse install-compatlib-recurse install-preproc-recurse
+            
+            # 静态编译 src/interfaces/libpq/Makefile  有静态配置  参考： all-static-lib
             
             
-            make -C src/backend all    -j $cpu_nums
+ 
+            make -C src/interfaces/libpq  -j $cpu_nums # soname=true
+           
+            make -C src/interfaces/libpq  install 
             
-            make -C src/port all  -j $cpu_nums
-            make -C src/port install
             
-            make  -C src/common install 
+            return 0 
+            make -C  src/interfaces/libpq -j $cpu_nums libpq5555.a
+            make -C  src/interfaces/libpq install-libpq5555.a
             
-            make -C src/bin/pg_config install
-      
-      
-            # 编译出错
-            make -C src/interfaces/libpq 
-
-          
+            rm -rf /usr/pgsql/lib/*.so.*
+            rm -rf /usr/pgsql/lib/*.so
+            
+            return 0 
+            
+            nm -A /usr/pgsql/lib/libpq.a 
+            
+            exit 0 
+            make -C src/interfaces/libpq  -j $cpu_nums  libpq.a 
+            exit 0 
+            make -C src/interfaces/libpq    install-libpq.a
+            
+            return 0 
+            
+            rm -rf /usr/pgsql/lib/*.so.*
+            rm -rf /usr/pgsql/lib/*.so
+            
             return 0
+            
+            # need stage 
+            # src/include         
+            $ src/common        
+            # src/port          
+            # src/interfaces/libpq        
+            # src/bin/pg_config
+           
+           
             '
             )
             ->withMakeOptions('-C src/common all')
@@ -1234,28 +1275,15 @@ ___EOF___
             ->withPkgConfig('/usr/pgsql/lib/pkgconfig')
             ->withLdflags('-L/usr/pgsql/lib/')
             ->withBinPath('/usr/pgsql/bin/')
-            ->withScriptAfterInstall('
-                
-               
-                
-# https://stackoverflow.com/questions/29803847/how-to-download-compile-install-only-the-libpq-source-on-a-server-that-does-n
-
-
-# cd src/interfaces/libpq; make; make install; cd -
-# cd src/bin/pg_config; make install; cd -
-# cd src/backend; make generated-headers; cd -
-# cd src/include; make install; cd -
-
-
-                    
-                    
+            ->withScriptAfterInstall(
+                '
             '
             )
 
-    //->withSkipInstall()
-    //->disablePkgName()
-    //->disableDefaultPkgConfig()
-    //->disableDefaultLdflags()
+        //->withSkipInstall()
+        //->disablePkgName()
+        //->disableDefaultPkgConfig()
+        //->disableDefaultLdflags()
     );
 }
 

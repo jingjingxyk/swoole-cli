@@ -7,6 +7,7 @@ apk update
 apk add --no-cache  ncurses-dev ncurses-libs ncurses-static
 apk add --no-cache  readline-dev readline-static
 # apk add --no-cache  readline readline-dev readline-static
+apk del  ncurses-dev ncurses-libs ncurses-static  readline-dev readline-static
 
 apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
 # swoole 需要
@@ -385,6 +386,10 @@ readelf -Ds a.out
 nm -A /usr/pgsql/lib/libpq.a |  grep -i 
 nm -A /usr/openssl/lib64/libssl.a  |  grep -i toul
 
+ar 命令用于更新，维护管理静态库。
+
+ranlib 命令用于 更新库的符号索引表。
+
 ```text
     // "Core",
         'ctype',
@@ -540,6 +545,10 @@ libpq.a: $(OBJS)
   ar rcs $@ $^
 
 EOF
+
+ $(AR) $@ $(LIBXXX) $(ARFLAGS) 
+        $(RANLIB) $@
+        
 ```
 
 ```shell
@@ -575,3 +584,20 @@ LD_LIBRARY_PATH
 1. [bash 编写参考](https://github.com/symfony-cli/symfony-cli/blob/main/installer/bash-installer)
 1. [symfony-cli](https://github.com/symfony-cli)
 1. [symfony](https://github.com/symfony/symfony)
+1. [Swoole v5.0 版本新特性预览之新的运行模式](https://zhuanlan.zhihu.com/p/459983471)
+1. [Swoole-Cli 5.0.1：PHP 的二进制发行版](https://zhuanlan.zhihu.com/p/581695339)
+1. [nm 简明教程](https://zhuanlan.zhihu.com/p/501339114)
+
+
+```text
+fe-connect
+
+common 
+port 
+ecpg 
+backend/libpq
+include/libpq 
+
+
+
+```
