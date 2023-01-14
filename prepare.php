@@ -929,6 +929,7 @@ function install_cares(Preprocessor $p)
             ->withPkgName('libcares')
             ->withPkgConfig('/usr/lib/pkgconfig')
             ->withLdflags('-L/usr/lib')
+            ->withSkipInstall()
     );
 }
 
@@ -945,11 +946,11 @@ function install_cares_2(Preprocessor $p)
             ->withPkgConfig('/usr/c-ares/lib/pkgconfig')
             ->withLdflags('-L/usr/c-ares/lib')
             ->withBinPath('/usr/c-ares/bin/')
-            //->withSkipLicense()
-            //->disablePkgName()
-            //->disableDefaultPkgConfig()
-            //->disableDefaultLdflags()
-            ->withSkipInstall()
+        //->withSkipLicense()
+        //->disablePkgName()
+        //->disableDefaultPkgConfig()
+        //->disableDefaultLdflags()
+        //->withSkipInstall()
     );
 }
 

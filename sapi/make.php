@@ -229,14 +229,16 @@ export   READLINE_LIBS=$(pkg-config  --libs --static readline)  ;
 
 EOF
 
+echo $(pkg-config  --cflags --static ncurses readline)
+echo $(pkg-config  --libs --static ncurses readline)
 
 export LIBPQ_CFLAGS=$(pkg-config  --cflags --static      libpq)
 
 export LIBPQ_LIBS=$(pkg-config  --libs  --static       libpq)
 
 
-export CPPFLAGS=$(pkg-config  --cflags --static  libpq ncurses readline)
-export LIBS=$(pkg-config  --libs --static   libpq ncurses readline)
+export CPPFLAGS=$(pkg-config  --cflags --static  libpq ncurses readline libcares)
+export LIBS=$(pkg-config  --libs --static   libpq ncurses readline libcares)
 
     ./buildconf --force ;
     ./configure --help

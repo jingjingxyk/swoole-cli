@@ -18,7 +18,7 @@ libwebp: https://github.com/webmproject/libwebp/blob/main/COPYING
 freetype: https://gitlab.freedesktop.org/freetype/freetype/-/blob/master/docs/FTL.TXT
 sqlite3: https://www.sqlite.org/copyright.html
 oniguruma: https://github.com/kkos/oniguruma/blob/master/COPYING
-cares: https://c-ares.org/license.html
+cares_2: https://c-ares.org/license.html
 imagemagick: https://imagemagick.org/script/license.php
 curl: https://github.com/curl/curl/blob/master/COPYING
 libsodium: https://en.wikipedia.org/wiki/ISC_license
