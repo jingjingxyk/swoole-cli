@@ -255,9 +255,9 @@ function install_icu_2(Preprocessor $p)
             ->withPkgName('icu-uc icu-io icu-i18n')
             ->withPkgConfig('/usr/icu/lib/pkgconfig')
             ->withLdflags('-L/usr/icu/lib')
-//            ->disablePkgName()
-//            ->disableDefaultPkgConfig()
-//            ->disableDefaultLdflags()
+        //            ->disablePkgName()
+        //            ->disableDefaultPkgConfig()
+        //            ->disableDefaultLdflags()
             ->withSkipLicense()
             ->withSkipInstall()
     );
@@ -392,10 +392,10 @@ function install_ncurses(Preprocessor $p)
             ->withPkgConfig('/usr/ncurses/lib/pkgconfig')
             ->withLdflags('-L/usr/ncurses/lib/')
             ->withBinPath('/usr/ncurses/bin/')
-//            ->disableDefaultLdflags()
-//            ->disableDefaultPkgConfig()
-//            ->disablePkgName()
-//            ->withSkipInstall()
+        //            ->disableDefaultLdflags()
+        //            ->disableDefaultPkgConfig()
+        //            ->disablePkgName()
+            ->withSkipInstall()
     );
 }
 
@@ -453,9 +453,9 @@ EOF
                 '
             '
             )
-//            ->disablePkgName()
-//            ->disableDefaultPkgConfig()
-//            ->disableDefaultLdflags()
+        //            ->disablePkgName()
+        //            ->disableDefaultPkgConfig()
+        //            ->disableDefaultLdflags()
             ->withSkipInstall()
     );
 }
@@ -1285,11 +1285,10 @@ install-libpq5555.a: install-lib-static install-lib-pc
                 '
             '
             )
-
-    //->withSkipInstall()
-    //->disablePkgName()
-    //->disableDefaultPkgConfig()
-    //->disableDefaultLdflags()
+        //->withSkipInstall()
+        //->disablePkgName()
+        //->disableDefaultPkgConfig()
+        //->disableDefaultLdflags()
     );
 }
 
