@@ -115,13 +115,13 @@ foreach ($this->extensionList as $item) : ?>
             </span>
             <input type="checkbox" hidden="hidden" id=""/>
             <label class="show" tabindex="0"></label>
-            <div class="licence">
+            <span class="licence">
                 <a
                         href="<?= $item->license ?>"
                         target="_blank"
                         rel="noopener noreferrer"
                 >licence</a>
-            </div>
+            </span>
         </div>
     <?php
     endif ?>
