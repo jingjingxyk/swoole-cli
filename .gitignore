@@ -304,21 +304,7 @@ tmp-php.ini
 /thirdparty
 !/thirdparty/.gitkeep
 /usr
-/ext/redis
-/ext/memcached
-/ext/imagick
-/ext/yaml
-/ext/mongodb
-/ext/inotify
-/ext/swoole_tracker_agent
-/ext/loader8
-/ext/ds
-
-
-/build-tools-scripts/php-versions
-/build-tools-scripts/swoole-cli-build-dev-1-container.txt
-/build-tools-scripts/swoole-cli-build-dev-2-container.txt
-/build-tools-scripts/dist/
-/build-tools-scripts/build-php-no-swoole-cli/dist/
+/ext/
+!/ext/.gitkeep
 
 /vendor/
