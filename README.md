@@ -18,6 +18,10 @@ php prepare.php +inotify +mongodb
 # 减少扩展
 php prepare.php -opcache -gd -mongodb
 
+# 执行完毕生成 make.sh 构建脚本，生成credits.html
+
+# 单个扩展配置信息位于目录 conf.d 
+
 
 ```
 
