@@ -15,7 +15,10 @@ cd ${__DIR__}
 version=$(cat version.txt)
 # php 7.4 不支持 openssl 3 版本，请使用openssl 1 版本
 
+test -d ${__DIR__}/php-src && rm -rf ${__DIR__}/php-src
+mkdir -p ${__DIR__}/php-src/
 
+tar --strip-components=1 -C ${__DIR__}/php-src/ -xf ${__DIR__}/php-7.4.33.tar.gz
 cd ${__DIR__}/php-src/
 
 
@@ -26,7 +29,7 @@ test -d /usr/local/lib/pkgconfig && PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$P
 test -d /usr/local/lib64/pkgconfig && PKG_CONFIG_PATH="/usr/local/lib64/pkgconfig:$PKG_CONFIG_PATH"
 
 
-export PKG_CONFIG_PATH=/usr/libiconv/lib/pkgconfig:/usr/openssl/lib/pkgconfig:/usr/libxml2/lib/pkgconfig:/usr/libxslt/lib/pkgconfig:/usr/gmp/lib/pkgconfig:/usr/zlib/lib/pkgconfig:/usr/liblz4/lib/pkgconfig:/usr/liblzma/lib/pkgconfig:/usr/libzstd/lib/pkgconfig:/usr/zip/lib/pkgconfig:/usr/libpng/lib/pkgconfig:/usr/libjpeg/lib64/pkgconfig:/usr/brotli/lib/pkgconfig:/usr/libwebp/lib/pkgconfig:/usr/freetype/lib/pkgconfig:/usr/sqlite3/lib/pkgconfig:/usr/oniguruma/lib/pkgconfig:/usr/imagemagick/lib/pkgconfig:/usr/curl/lib/pkgconfig:/usr/libsodium/lib/pkgconfig:/usr/libyaml/lib/pkgconfig:/usr/mimalloc/lib/pkgconfig:/usr/icu/lib/pkgconfig:$PKG_CONFIG_PATH
+export PKG_CONFIG_PATH=/usr/libiconv/lib/pkgconfig:/usr/openssl/lib/pkgconfig:/usr/libxml2/lib/pkgconfig:/usr/libxslt/lib/pkgconfig:/usr/gmp/lib/pkgconfig:/usr/zlib/lib/pkgconfig:/usr/liblz4/lib/pkgconfig:/usr/liblzma/lib/pkgconfig:/usr/libzstd/lib/pkgconfig:/usr/zip/lib/pkgconfig:/usr/libpng/lib/pkgconfig:/usr/libjpeg/lib64/pkgconfig:/usr/brotli/lib/pkgconfig:/usr/libwebp/lib/pkgconfig:/usr/freetype/lib/pkgconfig:/usr/sqlite3/lib/pkgconfig:/usr/oniguruma/lib/pkgconfig:/usr/imagemagick/lib/pkgconfig:/usr/curl/lib/pkgconfig:/usr/libsodium/lib/pkgconfig:/usr/libyaml/lib/pkgconfig:/usr/mimalloc/lib/pkgconfig:/usr/icu/lib/pkgconfig:/usr/pgsql/lib/pkgconfig:/usr/c-ares/lib/pkgconfig:$PKG_CONFIG_PATH
 
 
 install_prefix_dir="/tmp/${version}"
@@ -39,10 +42,11 @@ mkdir -p ext/yaml
 test -d ext/swoole && rm -rf ext/swoole
 cp -rf ${__DIR__}/swoole-src ext/swoole
 
-tar --strip-components=1 -C ext/redis -xf /work/pool/ext/redis-5.3.7.tgz
-tar --strip-components=1 -C ext/mongodb -xf /work/pool/ext/mongodb-1.14.2.tgz
-tar --strip-components=1 -C ext/yaml -xf /work/pool/ext/yaml-2.2.2.tgz
+tar --strip-components=1 -C ext/redis -xf ${__DIR__}/redis-5.3.7.tgz
+tar --strip-components=1 -C ext/mongodb -xf ${__DIR__}/mongodb-1.15.0.tgz
+tar --strip-components=1 -C ext/yaml -xf ${__DIR__}/yaml-2.2.2.tgz
 
+cp -f ${__DIR__}/php-src/ext/openssl/config0.m4 ${__DIR__}/php-src/ext/openssl/config.m4
 
     LIBXML_CFLAGS=$(pkg-config --cflags libxml-2.0) ;
     LIBXML_LIBS=$(pkg-config --libs libxml-2.0) ;
@@ -88,6 +92,13 @@ export   EXSLT_LIBS=$(pkg-config --libs libexslt) ;
 export   LIBZIP_CFLAGS=$(pkg-config --cflags libzip) ;
 export   LIBZIP_LIBS=$(pkg-config --libs libzip) ;
 
+export LIBPQ_CFLAGS=$(pkg-config  --cflags --static      libpq)
+
+export LIBPQ_LIBS=$(pkg-config  --libs  --static       libpq)
+
+export CPPFLAGS=$(pkg-config  --cflags --static  libpq ncurses readline libcares)
+export LIBS=$(pkg-config  --libs --static   libpq ncurses readline libcares)
+
 :<<'EOF'
 # export   NCURSES_CFLAGS=$(pkg-config --cflags formw  menuw  ncursesw panelw);
 # export   NCURSES_LIBS=$(pkg-config  --libs formw  menuw  ncursesw panelw);
@@ -100,8 +111,6 @@ EOF
 
 test -f ./configure && rm ./configure ;
 ./buildconf --force ;
-
-
 
 
 ./configure LDFLAGS=-static --prefix=$install_prefix_dir \
@@ -136,6 +145,8 @@ test -f ./configure && rm ./configure ;
     --enable-mbstring \
     --enable-sockets \
     --with-pdo-mysql=mysqlnd \
+    --with-pgsql=/usr/pgsql \
+    --with-pdo-pgsql=/usr/pgsql \
     --with-xsl=/usr/libxslt \
     --with-gmp=/usr/gmp \
     --with-sodium=/usr/ \
@@ -143,11 +154,12 @@ test -f ./configure && rm ./configure ;
     --with-openssl --with-openssl-dir=/usr/openssl \
     --enable-gd \
     --with-yaml=/usr/libyaml \
-    --enable-swoole  --enable-swoole-curl --enable-http2 --enable-swoole-json
+    --enable-swoole  --enable-swoole-curl  \
+    -enable-mongodb \
+    --enable-redis
 
 #   --enable-intl \ # use icu
-#   --enable-mongodb \
-#   --enable-redis \
+
 
 sed -ie 's/-export-dynamic//g' "Makefile"
 sed -ie 's/-o $(SAPI_CLI_PATH)/-all-static -o $(SAPI_CLI_PATH)/g' "Makefile"

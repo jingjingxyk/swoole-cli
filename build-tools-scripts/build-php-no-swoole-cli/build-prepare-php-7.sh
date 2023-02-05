@@ -7,9 +7,11 @@ cd ${__DIR__}
 
 cd /work/
 sh make.sh openssl_1
-ln -s /usr/openssl/lib /usr/openssl/lib64
+
+test -d lib64 || ln -s /usr/openssl/lib /usr/openssl/lib64
 
 # 重新构建了openssl，依赖openssl的需要重新构建
-sh make.sh zip
-sh make.sh curl
+# sh make.sh zip
+# sh make.sh curl
+sh make.sh pgsql
 

@@ -13,7 +13,7 @@ __PROJECT__=$(
 
 cd ${__PROJECT__}
 
-sh make.sh cares
+sh make.sh cares_2
 # sh make.sh icu_2
 sh make.sh pgsql
 

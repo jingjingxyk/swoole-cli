@@ -82,6 +82,7 @@ EOF
             ->withLdflags('-L/usr/openssl/lib64')
             ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
             ->withHomePage('https://www.openssl.org/')
+            ->withSkipInstall()
     );
 }
 
@@ -110,7 +111,7 @@ EOF
             ->withPkgConfig('/usr/openssl/lib/pkgconfig')
             ->withPkgName('libcrypto libssl openssl')
             ->withLdflags('-L/usr/openssl/lib')
-            ->withSkipInstall()
+            //->withSkipInstall()
     );
 }
 
@@ -1239,7 +1240,8 @@ install-libpq5555.a: install-lib-static install-lib-pc
            
             make -C src/interfaces/libpq  install 
             
-            
+            rm -rf /usr/pgsql/lib/*.so.*
+            rm -rf /usr/pgsql/lib/*.so
             return 0 
             make -C  src/interfaces/libpq -j $cpu_nums libpq5555.a
             make -C  src/interfaces/libpq install-libpq5555.a
