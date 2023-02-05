@@ -20,7 +20,7 @@ echo $version > version.txt
 
 test -f php-7.4.33.tar.gz || wget https://github.com/php/php-src/archive/refs/tags/php-7.4.33.tar.gz
 
-test -d swoole-src  || git clone -b v4.8.11 --depth=1  https://github.com/swoole/swoole-src.git
+test -d swoole-src  || git clone -b 4.8.x --depth=1  https://github.com/swoole/swoole-src.git
 
 # wget -O swoole-4.8.12.tgz https://pecl.php.net/get/swoole-4.8.12.tgz
 test -f redis-5.3.7.tgz || wget -O redis-5.3.7.tgz https://pecl.php.net/get/redis-5.3.7.tgz

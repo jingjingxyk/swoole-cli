@@ -29,7 +29,7 @@ test -d /usr/local/lib/pkgconfig && PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$P
 test -d /usr/local/lib64/pkgconfig && PKG_CONFIG_PATH="/usr/local/lib64/pkgconfig:$PKG_CONFIG_PATH"
 
 
-export PKG_CONFIG_PATH=/usr/libiconv/lib/pkgconfig:/usr/openssl/lib/pkgconfig:/usr/libxml2/lib/pkgconfig:/usr/libxslt/lib/pkgconfig:/usr/gmp/lib/pkgconfig:/usr/zlib/lib/pkgconfig:/usr/liblz4/lib/pkgconfig:/usr/liblzma/lib/pkgconfig:/usr/libzstd/lib/pkgconfig:/usr/zip/lib/pkgconfig:/usr/libpng/lib/pkgconfig:/usr/libjpeg/lib64/pkgconfig:/usr/brotli/lib/pkgconfig:/usr/libwebp/lib/pkgconfig:/usr/freetype/lib/pkgconfig:/usr/sqlite3/lib/pkgconfig:/usr/oniguruma/lib/pkgconfig:/usr/imagemagick/lib/pkgconfig:/usr/curl/lib/pkgconfig:/usr/libsodium/lib/pkgconfig:/usr/libyaml/lib/pkgconfig:/usr/mimalloc/lib/pkgconfig:/usr/icu/lib/pkgconfig:/usr/pgsql/lib/pkgconfig:/usr/c-ares/lib/pkgconfig:$PKG_CONFIG_PATH
+export PKG_CONFIG_PATH=/usr/libiconv/lib/pkgconfig:/usr/openssl_1/lib/pkgconfig:/usr/libxml2/lib/pkgconfig:/usr/libxslt/lib/pkgconfig:/usr/gmp/lib/pkgconfig:/usr/zlib/lib/pkgconfig:/usr/liblz4/lib/pkgconfig:/usr/liblzma/lib/pkgconfig:/usr/libzstd/lib/pkgconfig:/usr/zip/lib/pkgconfig:/usr/libpng/lib/pkgconfig:/usr/libjpeg/lib64/pkgconfig:/usr/brotli/lib/pkgconfig:/usr/libwebp/lib/pkgconfig:/usr/freetype/lib/pkgconfig:/usr/sqlite3/lib/pkgconfig:/usr/oniguruma/lib/pkgconfig:/usr/imagemagick/lib/pkgconfig:/usr/curl/lib/pkgconfig:/usr/libsodium/lib/pkgconfig:/usr/libyaml/lib/pkgconfig:/usr/mimalloc/lib/pkgconfig:/usr/icu_2/lib/pkgconfig:/usr/pgsql/lib/pkgconfig:/usr/c-ares/lib/pkgconfig:$PKG_CONFIG_PATH
 
 
 install_prefix_dir="/tmp/${version}"
@@ -46,7 +46,7 @@ tar --strip-components=1 -C ext/redis -xf ${__DIR__}/redis-5.3.7.tgz
 tar --strip-components=1 -C ext/mongodb -xf ${__DIR__}/mongodb-1.15.0.tgz
 tar --strip-components=1 -C ext/yaml -xf ${__DIR__}/yaml-2.2.2.tgz
 
-cp -f ${__DIR__}/php-src/ext/openssl/config0.m4 ${__DIR__}/php-src/ext/openssl/config.m4
+# cp -f ${__DIR__}/php-src/ext/openssl_1/config0.m4 ${__DIR__}/php-src/ext/openssl_1/config.m4
 
     LIBXML_CFLAGS=$(pkg-config --cflags libxml-2.0) ;
     LIBXML_LIBS=$(pkg-config --libs libxml-2.0) ;
@@ -73,8 +73,8 @@ cp -f ${__DIR__}/php-src/ext/openssl/config0.m4 ${__DIR__}/php-src/ext/openssl/c
     FREETYPE2_LIBS=$(pkg-config --libs freetype2) ;
 
 
-# export  ICU_CFLAGS=$(pkg-config --cflags --static icu-uc icu-io icu-i18n)  ;
-# export  ICU_LIBS=$(pkg-config  --libs --static icu-uc icu-io icu-i18n)  ;
+export  ICU_CFLAGS=$(pkg-config --cflags --static icu-uc icu-io icu-i18n)  ;
+export  ICU_LIBS=$(pkg-config  --libs --static icu-uc icu-io icu-i18n)  ;
 
 export  ONIG_CFLAGS=$(pkg-config --cflags oniguruma) ;
 export  ONIG_LIBS=$(pkg-config --libs oniguruma) ;
@@ -98,6 +98,9 @@ export LIBPQ_LIBS=$(pkg-config  --libs  --static       libpq)
 
 export CPPFLAGS=$(pkg-config  --cflags --static  libpq ncurses readline libcares)
 export LIBS=$(pkg-config  --libs --static   libpq ncurses readline libcares)
+
+export LIBS="$LIBS -lstdc++"
+env
 
 :<<'EOF'
 # export   NCURSES_CFLAGS=$(pkg-config --cflags formw  menuw  ncursesw panelw);
@@ -149,14 +152,15 @@ test -f ./configure && rm ./configure ;
     --with-pdo-pgsql=/usr/pgsql \
     --with-xsl=/usr/libxslt \
     --with-gmp=/usr/gmp \
-    --with-sodium=/usr/ \
+    --with-sodium=/usr/libsodium \
     --with-readline \
-    --with-openssl --with-openssl-dir=/usr/openssl \
+    --with-openssl --with-openssl-dir=/usr/openssl_1 \
     --enable-gd \
     --with-yaml=/usr/libyaml \
-    --enable-swoole  --enable-swoole-curl  \
+    --enable-swoole  --enable-swoole-curl  --enable-http2 --enable-swoole-json \
     -enable-mongodb \
-    --enable-redis
+    --enable-redis \
+    --enable-intl
 
 #   --enable-intl \ # use icu
 

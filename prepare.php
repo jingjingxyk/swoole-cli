@@ -60,11 +60,11 @@ function install_libiconv(Preprocessor $p)
     );
 }
 
-function install_openssl(Preprocessor $p)
+function install_openssl_3(Preprocessor $p)
 {
     $static = $p->osType === 'macos' ? '' : ' -static --static';
     $p->addLibrary(
-        (new Library('openssl', '/usr/openssl'))
+        (new Library('openssl_3', '/usr/openssl'))
             ->withUrl('https://www.openssl.org/source/openssl-3.0.7.tar.gz')
             ->withFile('openssl-3.0.7.tar.gz')
             ->withCleanBuildDirectory()
@@ -72,14 +72,14 @@ function install_openssl(Preprocessor $p)
                 <<<EOF
             # ./config $static \
             ./Configure   $static  \
-            no-shared --release --prefix=/usr/openssl
+            no-shared --release --prefix=/usr/openssl_3
 EOF
             )
             ->withMakeOptions('build_sw')
             ->withMakeInstallOptions('install_sw')
-            ->withPkgConfig('/usr/openssl/lib64/pkgconfig')
+            ->withPkgConfig('/usr/openssl_3/lib64/pkgconfig')
             ->withPkgName('libcrypto libssl openssl')
-            ->withLdflags('-L/usr/openssl/lib64')
+            ->withLdflags('-L/usr/openssl_3/lib64')
             ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
             ->withHomePage('https://www.openssl.org/')
             ->withSkipInstall()
@@ -98,20 +98,20 @@ function install_openssl_1(Preprocessor $p)
             ->withCleanBuildDirectory()
             ->withScriptBeforeConfigure(
                 '
-                test -d /usr/openssl && rm -rf /usr/openssl
+                test -d /usr/openssl && rm -rf /usr/openssl_1
             '
             )
             ->withConfigure(
                 <<<EOF
             ./config $static \
-            no-shared --release --prefix=/usr/openssl
+            no-shared --release --prefix=/usr/openssl_1
 EOF
             )
             ->withMakeInstallOptions('install_sw')
-            ->withPkgConfig('/usr/openssl/lib/pkgconfig')
+            ->withPkgConfig('/usr/openssl_1/lib/pkgconfig')
             ->withPkgName('libcrypto libssl openssl')
-            ->withLdflags('-L/usr/openssl/lib')
-            //->withSkipInstall()
+            ->withLdflags('-L/usr/openssl_1/lib')
+        //->withSkipInstall()
     );
 }
 
@@ -179,15 +179,14 @@ function install_gmp(Preprocessor $p)
 }
 
 
-function install_icu(Preprocessor $p)
+function install_icu_1(Preprocessor $p)
 {
     $p->addLibrary(
-        (new Library('icu'))
+        (new Library('icu_1'))
             ->withHomePage('https://icu.unicode.org/')
             ->withLicense('https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE', Library::LICENSE_SPEC)
             ->withUrl('https://github.com/unicode-org/icu/releases/download/release-60-3/icu4c-60_3-src.tgz')
-            //->withUrl('https://github.com/unicode-org/icu/releases/download/release-72-1/icu4c-72_1-src.tgz')
-            //https://unicode-org.github.io/icu/userguide/icu4c/build.html
+            ->withManual("https://unicode-org.github.io/icu/userguide/icu4c/build.html")
             ->withCleanBuildDirectory()
             ->withConfigure(
                 '
@@ -229,16 +228,16 @@ function install_icu_2(Preprocessor $p)
             ->withCleanBuildDirectory()
             ->withScriptBeforeConfigure(
                 '
-                test -d /usr/icu && rm -rf /usr/icu
+                test -d /usr/icu && rm -rf /usr/icu_2
             '
             )
             ->withConfigure(
                 '
             source/runConfigureICU Linux --help
-            
-            # CPPFLAGS="-DU_CHARSET_IS_UTF8=1 -DU_USING_ICU_NAMESPACE=0"  \
-            
-            source/runConfigureICU Linux --prefix=/usr/icu \
+           
+            CPPFLAGS="-DU_CHARSET_IS_UTF8=1  -DU_USING_ICU_NAMESPACE=1" 
+           
+            source/runConfigureICU Linux --prefix=/usr/icu_2 \
             --enable-static=yes \
             --enable-shared=no \
             --with-data-packaging=static \
@@ -254,13 +253,13 @@ function install_icu_2(Preprocessor $p)
             )
             ->withMakeOptions('all VERBOSE=1')
             ->withPkgName('icu-uc icu-io icu-i18n')
-            ->withPkgConfig('/usr/icu/lib/pkgconfig')
-            ->withLdflags('-L/usr/icu/lib')
+            ->withPkgConfig('/usr/icu_2/lib/pkgconfig')
+            ->withLdflags('-L/usr/icu_2/lib')
         //            ->disablePkgName()
         //            ->disableDefaultPkgConfig()
         //            ->disableDefaultLdflags()
-            ->withSkipLicense()
-            ->withSkipInstall()
+        //    ->withSkipLicense()
+        //    ->withSkipInstall()
     );
 }
 
@@ -1212,7 +1211,7 @@ install-libpq5555.a: install-lib-static install-lib-pc
             --without-libxml  \
             --without-libxslt \
             --with-includes="/usr/openssl/include/:/usr/libxml2/include/:/usr/libxslt/include:/usr/zlib/include:/usr/include" \
-            --with-libraries="/usr/openssl/lib64:/usr/libxslt/lib/:/usr/libxml2/lib/:/usr/zlib/lib:/usr/lib"
+            --with-libraries="/usr/openssl_1/lib:/usr/openssl_3/lib64:/usr/libxslt/lib/:/usr/libxml2/lib/:/usr/zlib/lib:/usr/lib"
 
 
            
@@ -1602,7 +1601,7 @@ function install_bazel($p)
 
 
 install_libiconv($p); //没有 libiconv.pc 文件 不能使用 pkg-config 命令
-install_openssl($p);  //openssl 3 版本
+install_openssl_3($p);  //openssl 3 版本
 install_openssl_1($p); //openssl 1 版本 默认跳过安装
 
 install_libxml2($p);
@@ -1610,8 +1609,8 @@ install_libxslt($p);
 install_gmp($p);
 
 
-install_icu($p); //虽然自定义安装目录，并且静态编译。但是不使用，默认仍然还是使用静态系统库
-install_icu_2($p); //安装目录 /usr 默认跳过安装
+install_icu_1($p); //安装位于 默认目录 默认跳过安装
+install_icu_2($p); //安装目录 /usr/icu
 
 install_pcre2($p); //默认跳过安装
 
