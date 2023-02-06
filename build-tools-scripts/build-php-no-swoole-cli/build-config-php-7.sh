@@ -29,6 +29,8 @@ test -d /usr/local/lib/pkgconfig && PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$P
 test -d /usr/local/lib64/pkgconfig && PKG_CONFIG_PATH="/usr/local/lib64/pkgconfig:$PKG_CONFIG_PATH"
 
 
+export PATH=/usr/c-ares/bin/:/usr/pgsql/bin/:/usr/libffi/bin/:/usr/icu_2/bin/:$PATH
+
 export PKG_CONFIG_PATH=/usr/libiconv/lib/pkgconfig:/usr/openssl_1/lib/pkgconfig:/usr/libxml2/lib/pkgconfig:/usr/libxslt/lib/pkgconfig:/usr/gmp/lib/pkgconfig:/usr/zlib/lib/pkgconfig:/usr/liblz4/lib/pkgconfig:/usr/liblzma/lib/pkgconfig:/usr/libzstd/lib/pkgconfig:/usr/zip/lib/pkgconfig:/usr/libpng/lib/pkgconfig:/usr/libjpeg/lib64/pkgconfig:/usr/brotli/lib/pkgconfig:/usr/libwebp/lib/pkgconfig:/usr/freetype/lib/pkgconfig:/usr/sqlite3/lib/pkgconfig:/usr/oniguruma/lib/pkgconfig:/usr/imagemagick/lib/pkgconfig:/usr/curl/lib/pkgconfig:/usr/libsodium/lib/pkgconfig:/usr/libyaml/lib/pkgconfig:/usr/mimalloc/lib/pkgconfig:/usr/icu_2/lib/pkgconfig:/usr/pgsql/lib/pkgconfig:/usr/c-ares/lib/pkgconfig:/usr/libffi/lib/pkgconfig:$PKG_CONFIG_PATH
 
 
@@ -78,6 +80,51 @@ tar --strip-components=1 -C ext/apcu -xf ${__DIR__}/apcu-5.1.22.tgz
 export  ICU_CFLAGS=$(pkg-config --cflags --static icu-uc icu-io icu-i18n)  ;
 export  ICU_LIBS=$(pkg-config  --libs --static icu-uc icu-io icu-i18n)  ;
 
+
+
+:<<EOF
+CXX=$(icu-config --cxx)
+
+CPPFLAGS=$(icu-config --cppflags)
+
+CXXFLAGS=$(icu-config --cxxflags)
+
+LDFLAGS=$(icu-config --ldflags)
+
+EOF
+
+
+:<<EOF
+
+# https://unicode-org.github.io/icu/userguide/icu/howtouseicu.html
+
+export PATH=/usr/c-ares/bin/:/usr/pgsql/bin/:/usr/libffi/bin/:/usr/icu_2/bin/:$PATH
+
+
+CC=$(icu-config --cc)
+
+CXX=$(icu-config --cxx)
+
+CPPFLAGS=$(icu-config --cppflags)
+
+CXXFLAGS=$(icu-config --cxxflags)
+
+LDFLAGS =$(icu-config --ldflags)
+
+
+export  CXXFLAGS=$(/usr/icu_2/bin/icu-config --cxxflags)
+export  ICU_CFLAGS=$(/usr/icu_2/bin/icu-config --cppflags-searchpath)  ;
+export  ICU_LIBS=$(/usr/icu_2/bin/icu-config --ldflags --ldflags-icuio)  ;
+
+CFLAGS=-I/usr/icu_2/include LDFLAGS=-L/usr/icu_2/lib
+
+icu-config --cxx --cxxflags --cppflags --ldflags -o sample sample.cpp
+
+EOF
+
+
+
+
 export  ONIG_CFLAGS=$(pkg-config --cflags oniguruma) ;
 export  ONIG_LIBS=$(pkg-config --libs oniguruma) ;
 
@@ -104,8 +151,13 @@ pkg-config  --libs --static   libffi
 CPPFLAGS=$(pkg-config  --cflags --static  libpq ncurses readline libcares libffi)
 LIBS=$(pkg-config  --libs --static   libpq ncurses readline libcares libffi)
 
+
 export CPPFLAGS="$CPPFLAGS -I/usr/include"
 export LIBS="$LIBS -L/usr/lib -lstdc++"
+
+which icu-config
+export CXXFLAGS=$(icu-config --cxxflags)
+export LDFLAGS=$(icu-config --ldflags)
 
 
 :<<'EOF'
@@ -123,6 +175,8 @@ test -f ./configure && rm ./configure ;
 ./buildconf --force ;
 
 ./configure --help
+
+
 
 
 ./configure LDFLAGS=-static --prefix=$install_prefix_dir \
@@ -169,9 +223,12 @@ test -f ./configure && rm ./configure ;
     --enable-apcu \
     --with-ffi=/usr/libffi \
     --enable-opcache \
-    --enable-intl
+    --enable-intl \
+    --enable-mongodb \
+    --with-pgsql=/usr/pgsql \
+    --with-pdo-pgsql=/usr/pgsql
 
-#    --enable-mongodb \
+#    --enable-mongodb \ # need icu
 #   --enable-intl \ # use icu
 #    --with-pgsql=/usr/pgsql \
 #    --with-pdo-pgsql=/usr/pgsql \

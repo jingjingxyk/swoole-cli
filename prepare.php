@@ -82,7 +82,7 @@ EOF
             ->withLdflags('-L/usr/openssl_3/lib64')
             ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
             ->withHomePage('https://www.openssl.org/')
-            ->withSkipInstall()
+            //->withSkipInstall()
     );
 }
 
@@ -111,7 +111,7 @@ EOF
             ->withPkgConfig('/usr/openssl_1/lib/pkgconfig')
             ->withPkgName('libcrypto libssl openssl')
             ->withLdflags('-L/usr/openssl_1/lib')
-        //->withSkipInstall()
+        ->withSkipInstall()
     );
 }
 
@@ -235,9 +235,10 @@ function install_icu_2(Preprocessor $p)
                 '
             source/runConfigureICU Linux --help
            
-            CPPFLAGS="-DU_CHARSET_IS_UTF8=1  -DU_USING_ICU_NAMESPACE=1" 
+            CPPFLAGS="-DU_CHARSET_IS_UTF8=1  -DU_USING_ICU_NAMESPACE=1  -DU_STATIC_IMPLEMENTATION=1" 
            
             source/runConfigureICU Linux --prefix=/usr/icu_2 \
+            --enable-icu-config=no \
             --enable-static=yes \
             --enable-shared=no \
             --with-data-packaging=archive \
@@ -1210,10 +1211,12 @@ install-libpq5555.a: install-lib-static install-lib-pc
             --without-ldap \
             --without-libxml  \
             --without-libxslt \
-            --with-includes="/usr/openssl/include/:/usr/libxml2/include/:/usr/libxslt/include:/usr/zlib/include:/usr/include" \
-            --with-libraries="/usr/openssl_1/lib:/usr/openssl_3/lib64:/usr/libxslt/lib/:/usr/libxml2/lib/:/usr/zlib/lib:/usr/lib"
+            \
+           --with-includes="/usr/openssl_3/include/:/usr/libxml2/include/:/usr/libxslt/include:/usr/zlib/include:/usr/include" \
+           --with-libraries="/usr/openssl_3/lib64:/usr/libxslt/lib/:/usr/libxml2/lib/:/usr/zlib/lib:/usr/lib"
 
-
+            # --with-includes="/usr/openssl_1/include/:/usr/libxml2/include/:/usr/libxslt/include:/usr/zlib/include:/usr/include" \
+            # --with-libraries="/usr/openssl_1/lib:/usr/libxslt/lib/:/usr/libxml2/lib/:/usr/zlib/lib:/usr/lib"
            
             make -C src/include install 
             make -C  src/bin/pg_config install
