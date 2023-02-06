@@ -188,7 +188,6 @@ test -f ./configure && rm ./configure ;
     --enable-dom \
     --enable-fileinfo \
     --enable-filter \
-    --enable-json \
     --enable-dom \
     --enable-pdo \
     --enable-phar \
@@ -217,13 +216,12 @@ test -f ./configure && rm ./configure ;
     --with-openssl --with-openssl-dir=/usr/openssl_1 \
     --enable-gd \
     --with-yaml=/usr/libyaml \
-    --enable-swoole  --enable-swoole-curl  --enable-http2 --enable-swoole-json \
+    --enable-swoole --enable-sockets --enable-mysqlnd --enable-swoole-curl --enable-cares  --enable-swoole-pgsql  --with-brotli-dir=/usr/brotli  \
     --enable-redis \
     --enable-apcu \
     --with-ffi=/usr/libffi \
     --enable-opcache \
     --enable-intl \
-    --enable-mongodb \
     --with-pgsql=/usr/pgsql \
     --with-pdo-pgsql=/usr/pgsql
 
