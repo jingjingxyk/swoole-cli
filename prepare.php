@@ -240,7 +240,7 @@ function install_icu_2(Preprocessor $p)
             source/runConfigureICU Linux --prefix=/usr/icu_2 \
             --enable-static=yes \
             --enable-shared=no \
-            --with-data-packaging=static \
+            --with-data-packaging=archive \
             --enable-release=yes \
             --enable-extras=yes \
             --enable-icuio=yes \
@@ -1291,6 +1291,36 @@ install-libpq5555.a: install-lib-static install-lib-pc
     );
 }
 
+function install_libffi($p)
+{
+    $p->addLibrary(
+        (new Library('libffi'))
+            ->withHomePage('https://sourceware.org/libffi/')
+            ->withLicense('http://github.com/libffi/libffi/blob/master/LICENSE', Library::LICENSE_BSD)
+            ->withUrl('https://github.com/libffi/libffi/releases/download/v3.4.4/libffi-3.4.4.tar.gz')
+            ->withFile('libffi-3.4.4.tar.gz')
+            ->withScriptBeforeConfigure(
+                'test -d /usr/libffi && rm -rf /usr/libffi'
+            )
+            ->withConfigure(
+                '
+            ./configure --help ;
+            ./configure \
+            --prefix=/usr/libffi \
+            --enable-shared=no \
+            --enable-static=yes 
+            '
+            )
+            ->withPkgName('libffi')
+            ->withPkgConfig('/usr/libffi/lib/pkgconfig')
+            ->withLdflags('-L/usr/libffi/lib/')
+            ->withBinPath('/usr/libffi/bin/')
+        //->withSkipInstall()
+        //->disablePkgName()
+        //->disableDefaultPkgConfig()
+        //->disableDefaultLdflags()
+    );
+}
 function install_socat($p)
 {
     // https://github.com/aledbf/socat-static-binary/blob/master/build.sh
@@ -1662,6 +1692,7 @@ install_mimalloc($p);
 
 //参考 https://github.com/docker-library/php/issues/221
 install_pgsql($p);
+install_libffi($p);
 
 install_socat($p);
 

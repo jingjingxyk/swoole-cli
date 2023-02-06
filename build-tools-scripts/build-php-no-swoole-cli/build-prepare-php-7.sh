@@ -14,4 +14,8 @@ sh make.sh openssl_1
 sh make.sh zip
 sh make.sh curl
 sh make.sh pgsql
+sh make.sh icu_2
+sh make.sh cares_2
+sh make.sh libffi
+
 

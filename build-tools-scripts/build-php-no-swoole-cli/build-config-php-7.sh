@@ -29,7 +29,7 @@ test -d /usr/local/lib/pkgconfig && PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$P
 test -d /usr/local/lib64/pkgconfig && PKG_CONFIG_PATH="/usr/local/lib64/pkgconfig:$PKG_CONFIG_PATH"
 
 
-export PKG_CONFIG_PATH=/usr/libiconv/lib/pkgconfig:/usr/openssl_1/lib/pkgconfig:/usr/libxml2/lib/pkgconfig:/usr/libxslt/lib/pkgconfig:/usr/gmp/lib/pkgconfig:/usr/zlib/lib/pkgconfig:/usr/liblz4/lib/pkgconfig:/usr/liblzma/lib/pkgconfig:/usr/libzstd/lib/pkgconfig:/usr/zip/lib/pkgconfig:/usr/libpng/lib/pkgconfig:/usr/libjpeg/lib64/pkgconfig:/usr/brotli/lib/pkgconfig:/usr/libwebp/lib/pkgconfig:/usr/freetype/lib/pkgconfig:/usr/sqlite3/lib/pkgconfig:/usr/oniguruma/lib/pkgconfig:/usr/imagemagick/lib/pkgconfig:/usr/curl/lib/pkgconfig:/usr/libsodium/lib/pkgconfig:/usr/libyaml/lib/pkgconfig:/usr/mimalloc/lib/pkgconfig:/usr/icu_2/lib/pkgconfig:/usr/pgsql/lib/pkgconfig:/usr/c-ares/lib/pkgconfig:$PKG_CONFIG_PATH
+export PKG_CONFIG_PATH=/usr/libiconv/lib/pkgconfig:/usr/openssl_1/lib/pkgconfig:/usr/libxml2/lib/pkgconfig:/usr/libxslt/lib/pkgconfig:/usr/gmp/lib/pkgconfig:/usr/zlib/lib/pkgconfig:/usr/liblz4/lib/pkgconfig:/usr/liblzma/lib/pkgconfig:/usr/libzstd/lib/pkgconfig:/usr/zip/lib/pkgconfig:/usr/libpng/lib/pkgconfig:/usr/libjpeg/lib64/pkgconfig:/usr/brotli/lib/pkgconfig:/usr/libwebp/lib/pkgconfig:/usr/freetype/lib/pkgconfig:/usr/sqlite3/lib/pkgconfig:/usr/oniguruma/lib/pkgconfig:/usr/imagemagick/lib/pkgconfig:/usr/curl/lib/pkgconfig:/usr/libsodium/lib/pkgconfig:/usr/libyaml/lib/pkgconfig:/usr/mimalloc/lib/pkgconfig:/usr/icu_2/lib/pkgconfig:/usr/pgsql/lib/pkgconfig:/usr/c-ares/lib/pkgconfig:/usr/libffi/lib/pkgconfig:$PKG_CONFIG_PATH
 
 
 install_prefix_dir="/tmp/${version}"
@@ -38,6 +38,7 @@ mkdir -p $install_prefix_dir
 mkdir -p ext/redis
 mkdir -p ext/mongodb
 mkdir -p ext/yaml
+mkdir -p ext/apcu
 
 test -d ext/swoole && rm -rf ext/swoole
 cp -rf ${__DIR__}/swoole-src ext/swoole
@@ -45,6 +46,7 @@ cp -rf ${__DIR__}/swoole-src ext/swoole
 tar --strip-components=1 -C ext/redis -xf ${__DIR__}/redis-5.3.7.tgz
 tar --strip-components=1 -C ext/mongodb -xf ${__DIR__}/mongodb-1.15.0.tgz
 tar --strip-components=1 -C ext/yaml -xf ${__DIR__}/yaml-2.2.2.tgz
+tar --strip-components=1 -C ext/apcu -xf ${__DIR__}/apcu-5.1.22.tgz
 
 # cp -f ${__DIR__}/php-src/ext/openssl_1/config0.m4 ${__DIR__}/php-src/ext/openssl_1/config.m4
 
@@ -96,11 +98,15 @@ export LIBPQ_CFLAGS=$(pkg-config  --cflags --static      libpq)
 
 export LIBPQ_LIBS=$(pkg-config  --libs  --static       libpq)
 
-export CPPFLAGS=$(pkg-config  --cflags --static  libpq ncurses readline libcares)
-export LIBS=$(pkg-config  --libs --static   libpq ncurses readline libcares)
+pkg-config  --cflags --static  libffi
+pkg-config  --libs --static   libffi
 
-export LIBS="$LIBS -lstdc++"
-env
+CPPFLAGS=$(pkg-config  --cflags --static  libpq ncurses readline libcares libffi)
+LIBS=$(pkg-config  --libs --static   libpq ncurses readline libcares libffi)
+
+export CPPFLAGS="$CPPFLAGS -I/usr/include"
+export LIBS="$LIBS -L/usr/lib -lstdc++"
+
 
 :<<'EOF'
 # export   NCURSES_CFLAGS=$(pkg-config --cflags formw  menuw  ncursesw panelw);
@@ -113,7 +119,10 @@ EOF
 
 
 test -f ./configure && rm ./configure ;
+
 ./buildconf --force ;
+
+./configure --help
 
 
 ./configure LDFLAGS=-static --prefix=$install_prefix_dir \
@@ -148,8 +157,6 @@ test -f ./configure && rm ./configure ;
     --enable-mbstring \
     --enable-sockets \
     --with-pdo-mysql=mysqlnd \
-    --with-pgsql=/usr/pgsql \
-    --with-pdo-pgsql=/usr/pgsql \
     --with-xsl=/usr/libxslt \
     --with-gmp=/usr/gmp \
     --with-sodium=/usr/libsodium \
@@ -158,12 +165,15 @@ test -f ./configure && rm ./configure ;
     --enable-gd \
     --with-yaml=/usr/libyaml \
     --enable-swoole  --enable-swoole-curl  --enable-http2 --enable-swoole-json \
-    -enable-mongodb \
     --enable-redis \
+    --enable-apcu \
+    --with-ffi=/usr/libffi \
     --enable-intl
 
+#    --enable-mongodb \
 #   --enable-intl \ # use icu
-
+#    --with-pgsql=/usr/pgsql \
+#    --with-pdo-pgsql=/usr/pgsql \
 
 sed -ie 's/-export-dynamic//g' "Makefile"
 sed -ie 's/-o $(SAPI_CLI_PATH)/-all-static -o $(SAPI_CLI_PATH)/g' "Makefile"

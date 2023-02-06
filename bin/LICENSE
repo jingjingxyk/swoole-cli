@@ -26,8 +26,11 @@ libsodium: https://en.wikipedia.org/wiki/ISC_license
 libyaml: https://pyyaml.org/wiki/LibYAML
 mimalloc: https://github.com/microsoft/mimalloc/blob/master/LICENSE
 pgsql: https://www.postgresql.org/about/licence/
+libffi: http://github.com/libffi/libffi/blob/master/LICENSE
 php: https://github.com/php/php-src/blob/master/LICENSE
 php-ext-redis: https://github.com/phpredis/phpredis/blob/develop/COPYING
 php-ext-swoole: https://github.com/swoole/swoole-src/blob/master/LICENSE
 php-ext-yaml: https://github.com/php/pecl-file_formats-yaml/blob/php7/LICENSE
+php-ext-apcu: https://github.com/krakjoe/apcu/blob/master/LICENSE
+php-ext-ffi: http://github.com/libffi/libffi/blob/master/LICENSE
 php-ext-ds: https://github.com/php-ds/ext-ds/blob/master/LICENSE

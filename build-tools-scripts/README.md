@@ -448,7 +448,7 @@ ranlib 命令用于 更新库的符号索引表。
         'swoole',
         'yaml',
         'imagick',
-        'mongodb', //依赖 openssl zlib
+        'mongodb', //依赖 openssl zlib  ICU
         'ds'
 
 
