@@ -227,7 +227,6 @@ test -f ./configure && rm ./configure ;
     --enable-opcache \
     --with-pgsql=/usr/pgsql \
     --with-pdo-pgsql=/usr/pgsql \
-    --enable-mongodb \
     --enable-intl
 
 #    --enable-mongodb \ # need icu
