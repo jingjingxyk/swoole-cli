@@ -237,8 +237,8 @@ export LIBPQ_CFLAGS=$(pkg-config  --cflags --static      libpq)
 export LIBPQ_LIBS=$(pkg-config  --libs  --static       libpq)
 
 
-export CPPFLAGS=$(pkg-config  --cflags --static  libpq ncurses readline libcares)
-export LIBS=$(pkg-config  --libs --static   libpq ncurses readline libcares)
+export CPPFLAGS=$(pkg-config  --cflags --static  libpq ncurses readline libcares libffi)
+export LIBS=$(pkg-config  --libs --static   libpq ncurses readline libcares libffi)
 
     ./buildconf --force ;
     ./configure --help

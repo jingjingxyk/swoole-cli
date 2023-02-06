@@ -2,11 +2,10 @@ License
 ---------------------------------------------------------
 musl-libc: http://git.musl-libc.org/cgit/musl/tree/COPYRIGHT
 libiconv: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-openssl_3: https://github.com/openssl/openssl/blob/master/LICENSE.txt
+openssl: https://github.com/openssl/openssl/blob/master/LICENSE.txt
 libxml2: http://www.opensource.org/licenses/mit-license.html
 libxslt: http://www.opensource.org/licenses/mit-license.html
 gmp: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-icu_2: https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE
 zlib: https://zlib.net/zlib_license.html
 bzip2: https://www.sourceware.org/bzip2/
 liblz4: https://github.com/lz4/lz4/blob/dev/LICENSE
@@ -19,7 +18,7 @@ libwebp: https://github.com/webmproject/libwebp/blob/main/COPYING
 freetype: https://gitlab.freedesktop.org/freetype/freetype/-/blob/master/docs/FTL.TXT
 sqlite3: https://www.sqlite.org/copyright.html
 oniguruma: https://github.com/kkos/oniguruma/blob/master/COPYING
-cares_2: https://c-ares.org/license.html
+cares: https://c-ares.org/license.html
 imagemagick: https://imagemagick.org/script/license.php
 curl: https://github.com/curl/curl/blob/master/COPYING
 libsodium: https://en.wikipedia.org/wiki/ISC_license
@@ -32,5 +31,4 @@ php-ext-redis: https://github.com/phpredis/phpredis/blob/develop/COPYING
 php-ext-swoole: https://github.com/swoole/swoole-src/blob/master/LICENSE
 php-ext-yaml: https://github.com/php/pecl-file_formats-yaml/blob/php7/LICENSE
 php-ext-apcu: https://github.com/krakjoe/apcu/blob/master/LICENSE
-php-ext-ffi: http://github.com/libffi/libffi/blob/master/LICENSE
 php-ext-ds: https://github.com/php-ds/ext-ds/blob/master/LICENSE

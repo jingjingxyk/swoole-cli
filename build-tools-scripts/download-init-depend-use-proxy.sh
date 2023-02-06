@@ -42,10 +42,10 @@ then
   # SKIP_LIBRARY_DOWNLOAD=1 php prepare.php +mongodb +inotify
   # php prepare.php  +mongodb +inotify
   # php prepare.php   -inotify -imagick -gd -intl -posix -mysqli -soap -exif  -opcache -pcntl
- php prepare.php   \
+ php prepare-linux.php   \
   +pgsql +pdo_pgsql \
   +pgsql +pdo_pgsql \
-  +apcu +ffi \
+  +apcu -ffi \
   -mysqli   \
   -imagick \
   -pcntl  \
