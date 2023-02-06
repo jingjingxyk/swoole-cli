@@ -25,6 +25,7 @@ test -f mongodb-1.15.0.tgz || wget -O mongodb-1.15.0.tgz https://pecl.php.net/ge
 test -f yaml-2.2.2.tgz || wget -O yaml-2.2.2.tgz https://pecl.php.net/get/yaml-2.2.2.tgz
 test -f apcu-5.1.22.tgz || wget -O apcu-5.1.22.tgz https://pecl.php.net/get/apcu-5.1.22.tgz
 test -f swoole-5.0.1.tgz || wget -O swoole-5.0.1.tgz https://pecl.php.net/get/swoole-5.0.1.tgz
+test -f swoole-v5.0.2.tar.gz || wget -O swoole-v5.0.2.tar.gz https://github.com/swoole/swoole-src/archive/refs/tags/v5.0.2.tar.gz
 
 
 

@@ -47,7 +47,9 @@ tar --strip-components=1 -C ext/redis -xf ${__DIR__}/redis-5.3.7.tgz
 tar --strip-components=1 -C ext/mongodb -xf ${__DIR__}/mongodb-1.15.0.tgz
 tar --strip-components=1 -C ext/yaml -xf ${__DIR__}/yaml-2.2.2.tgz
 tar --strip-components=1 -C ext/apcu -xf ${__DIR__}/apcu-5.1.22.tgz
-tar --strip-components=1 -C ext/swoole -xf ${__DIR__}/swoole-5.0.1.tgz
+
+#tar --strip-components=1 -C ext/swoole -xf ${__DIR__}/swoole-5.0.1.tgz
+tar --strip-components=1 -C ext/swoole -xf ${__DIR__}/swoole-v5.0.2.tar.gz
 
 # cp -f ${__DIR__}/php-src/ext/openssl_1/config0.m4 ${__DIR__}/php-src/ext/openssl_1/config.m4
 
