@@ -168,6 +168,7 @@ test -f ./configure && rm ./configure ;
     --enable-redis \
     --enable-apcu \
     --with-ffi=/usr/libffi \
+    --enable-opcache \
     --enable-intl
 
 #    --enable-mongodb \
