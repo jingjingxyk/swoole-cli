@@ -320,3 +320,5 @@ tmp-php.ini
 /build-tools-scripts/swoole-cli-build-dev-2-container.txt
 /build-tools-scripts/dist/
 /build-tools-scripts/build-php-no-swoole-cli/dist/
+
+/vendor/

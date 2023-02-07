@@ -36,5 +36,5 @@ cd ${__DIR__}
 echo ${IMAGE} > swoole-cli-build-dev-1-container.txt
 
 
-# docker push ${IMAGE}
+docker push ${IMAGE}
 

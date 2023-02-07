@@ -18,6 +18,8 @@ abstract class Project
 
     public const LICENSE_PHP = 6;
 
+    public const LICENSE_PCRE2 = 7;
+
     public string $name;
 
     public string $homePage = '';
@@ -51,7 +53,10 @@ class Library extends Project
 {
     public string $url;
 
+    public bool $skipInstall = false;
     public bool $cleanBuildDirectory = false;
+
+    public string $untarArchiveCommand = 'tar';
 
     public string $beforeConfigureScript = '';
 
@@ -60,6 +65,8 @@ class Library extends Project
     public string $file = '';
 
     public string $ldflags = '';
+
+    public string $systemConfigPath = '';
 
     public string $makeOptions = '';
 
@@ -103,9 +110,24 @@ class Library extends Project
         return $this;
     }
 
+    public function withSkipInstall(): static
+    {
+        $this->skipInstall = true;
+        $this->disableDefaultPkgConfig();
+        $this->disablePkgName();
+        $this->disableDefaultLdflags();
+        return $this;
+    }
+
     public function withCleanBuildDirectory(): static
     {
         $this->cleanBuildDirectory = true;
+        return $this;
+    }
+
+    public function withUntarArchiveCommand(string $command): static
+    {
+        $this->untarArchiveCommand = $command;
         return $this;
     }
 
@@ -130,6 +152,12 @@ class Library extends Project
     public function disableDefaultLdflags(): static
     {
         $this->ldflags = '';
+        return $this;
+    }
+
+    public function withSystemConfigPath(string $path): static
+    {
+        $this->systemConfigPath = $path;
         return $this;
     }
 
@@ -216,8 +244,7 @@ class Extension extends Project
 
 class Preprocessor
 {
-
-    protected string $osType = 'linux';
+    public string $osType = 'linux';
 
     protected array $libraryList = [];
 
@@ -230,6 +257,8 @@ class Preprocessor
     protected string $extensionDir;
 
     protected array $pkgConfigPaths = [];
+
+    protected array $systemConfigPaths = [];
 
     protected string $phpSrcDir;
 
@@ -251,70 +280,49 @@ class Preprocessor
 
     protected bool $installLibrary = true;
 
-
     /**
      * Extensions enabled by default
      * @var array|string[]
      */
     protected array $extEnabled = [
-       // "Core",
-        "ctype",
-       // "date",
-        //"dom",
-        "fileinfo",
-        "filter",
-        //"hash",
-        "iconv",
-       // "json",
-        //"libxml",
-       // "pcre",
-        // "PDO",
-        "pdo",
-        "pdo_sqlite",
-        //"Phar",
-        "phar",
-        "posix",
-        //"Reflection",
-        //"reflection",
-        "session",
-        //"SimpleXML",
-        //"SPL",
-        "sqlite3",
-        //"standard",
-        "tokenizer",
-        "xml",
-        //"xmlreader",
-        //"xmlwriter",
-
         'opcache',
         'curl',
+        'iconv',
         'bz2',
         'bcmath',
         'pcntl',
+        'filter',
+        'session',
         'tokenizer',
-        'mbstring',  //需要 oniguruma
+        'mbstring',
+        'ctype',
         'zlib',
         'zip',
+        'posix',
         'sockets',
+        'pdo',
+        'sqlite3',
+        'phar',
         'mysqlnd',
-        //'mysqli',
-        'intl',  //需要 ICU
+        'mysqli',
+        'intl',
+        'fileinfo',
         'pdo_mysql',
-        //'pdo_pgsql',
-        //'soap',
+        'pdo_sqlite',
+        'soap',
         'xsl',
         'gmp',
         'exif',
         'sodium',
         'openssl',
         'readline',
-        'gd', //需要freetype,  freetype 需要 libbrotlidec
+        'xml',
+        'gd',
         'redis',
-        //'pgsql',
         'swoole',
         'yaml',
         'imagick',
-        'mongodb', //需要openssl zlib
+        'mongodb',
     ];
 
     protected array $endCallbacks = [];
@@ -352,7 +360,7 @@ class Preprocessor
         }
     }
 
-    protected function setOsType(string $osType)
+    public function setOsType(string $osType)
     {
         $this->osType = $osType;
     }
@@ -417,7 +425,7 @@ class Preprocessor
                 );
                 echo PHP_EOL;
                 echo 'download ' . $lib->file . ' OK ' . PHP_EOL . PHP_EOL;
-                // TODO PGP  验证
+            // TODO PGP  验证
             } else {
                 echo '[Library] file cached: ' . $lib->file . PHP_EOL;
             }
@@ -425,6 +433,10 @@ class Preprocessor
 
         if (!empty($lib->pkgConfig)) {
             $this->pkgConfigPaths[] = $lib->pkgConfig;
+        }
+
+        if (!empty($lib->systemConfigPath)) {
+            $this->systemConfigPaths[] = $lib->systemConfigPath;
         }
 
         if (empty($lib->license)) {
@@ -467,6 +479,7 @@ class Preprocessor
             if (!is_dir($dst_dir)) {
                 echo shell_exec("mkdir -p {$dst_dir}");
                 echo shell_exec("tar --strip-components=1 -C {$dst_dir} -xf {$ext->path}");
+
                 # echo `mkdir -p $dst_dir`;
             }
             # echo `tar --strip-components=1 -C $dst_dir -xf {$ext->path}`;
@@ -529,6 +542,8 @@ class Preprocessor
     {
         $this->pkgConfigPaths[] = '$PKG_CONFIG_PATH';
         $this->pkgConfigPaths = array_unique($this->pkgConfigPaths);
+        $this->systemConfigPaths[] = '$PATH';
+        $this->systemConfigPaths = array_unique($this->systemConfigPaths);
 
         ob_start();
         include __DIR__ . '/make.php';

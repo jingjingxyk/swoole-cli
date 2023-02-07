@@ -14,17 +14,18 @@ cd ${__DIR__}
 
 {
   docker stop swoole-cli-build-dev-2
+} || {
+  echo $?
+}
+{
   docker rm swoole-cli-build-dev-2
 } || {
   echo $?
 }
 
-
 cd ${__DIR__}
 test -f swoole-cli-build-dev-2-container.txt && image=$(cat swoole-cli-build-dev-2-container.txt)
-test -f swoole-cli-build-dev-2-container.txt || image=docker.io/jingjingxyk/build-swoole-cli:build-dev-2-alpine-edge-20221228T065248Z
-
-
+test -f swoole-cli-build-dev-2-container.txt || image=docker.io/jingjingxyk/build-swoole-cli:build-dev-all-dependencies-alpine-edge-20230107T091604Z
 cd ${__DIR__}
 
 

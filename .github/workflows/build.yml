@@ -1,59 +1,100 @@
 name: build-swoole-cli
 
-on: [push, pull_request]
-
+# on: [push, pull_request]
+on:
+  push:
+    branches:
+      - dev-ok
 jobs:
   linux:
-    if: 0
+    if: 1
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Configure
-      run: |
-        git submodule update --init
-        SKIP_LIBRARY_DOWNLOAD=1 php prepare.php +mongodb +inotify
-        chmod +x ./make.sh
-    - name: Build
-      uses: addnab/docker-run-action@v3
-      with:
-        image: phpswoole/swoole_cli_os:1.4
-        options: -v ${{ github.workspace }}:/work
+      - uses: actions/checkout@v3
+      #    - name: Cache-Pool
+      #      id:  cache-pool
+      #      uses: actions/cache@v3
+      #      with:
+      #        path: pool
+      #        key: pool
+      #    - name: Cache-Thirdparty
+      #      id: cache-thirdparty
+      #      uses: actions/cache@v3
+      #      with:
+      #        path: thirdparty
+      #        key: thirdparty
+      - name: Configure
         run: |
-          cd /work
-          ./make.sh config
-          ./make.sh build
-          ./bin/swoole-cli -v
+          sudo apt install -y rsync git curl wget
+          git submodule update --init
+          curl  https://get.docker.com | bash
+          bash  build-tools-scripts/run-swoole-cli-build-dev-1-container.sh
+          docker exec -i swoole-cli-build-dev-1 sh  ./build-tools-scripts/download-init-depend.sh
+          bash  build-tools-scripts/run-build-dev-container.sh
+          docker exec -i build-dev-dependencies sh ./make.sh cares
+          docker exec -i build-dev-dependencies sh ./make.sh config
+          docker exec -i build-dev-dependencies sh ./make.sh build
+          docker exec -i build-dev-dependencies sh ./build-tools-scripts/archive-dist.sh
+  #        docker exec -i swoole-cli-build-dev chmod a+x /work/bin/swoole-cli &&  /work/bin/swoole-cli -v
+  #        docker exec -i swoole-cli-build-dev sh ./make.sh archive
+  #    - name: Build-with-docker-1
+  #      uses: addnab/docker-run-action@v3
+  #      with:
+  #        image: docker.io/jingjingxyk/build-swoole-cli:alpine-edge-20221207T131304Z
+  #        options: -v ${{ github.workspace }}:/work
+  #        run: |
+  #          cd /work
+  #          sh ./build-tools-scripts/init-depend.sh
+  #          sh ./make.sh all-library
+  #
+  #    - name: Build-with-docker-2
+  #      uses: addnab/docker-run-action@v3
+  #      with:
+  #        image: docker.io/jingjingxyk/build-swoole-cli:alpine-edge-20221207T131304Z
+  #        options: -v ${{ github.workspace }}:/work
+  #        run: |
+  #          cd /work
+  #          ./make.sh config
+  #          ./make.sh build
+  #          ./bin/swoole-cli -v
+  #    - name: Build
+  #      run: |
+  #        docker exec -i swoole-cli-build-dev sh ./make.sh all-library
+  #        docker exec -i swoole-cli-build-dev sh ./make.sh config
+  #        docker exec -i swoole-cli-build-dev sh ./make.sh build
+  #        docker exec -i swoole-cli-build-dev sh ./bin/swoole-cli -v
+  #        docker exec -i swoole-cli-build-dev sh ./make.sh archive
   cygwin:
     if: 0
     runs-on: windows-latest
     steps:
-    - name: Prepare git
-      run: |
-        git config --global core.autocrlf false
-        git config --global core.eol lf
-    - uses: actions/checkout@v3
-    - name: Cache cygwin packages
-      id: cache-cygwin
-      uses: actions/cache@v3
-      env:
-        cache-name: cache-cygwin-packages
-      with:
-        path: C:/cygwin-packages
-        key: ${{ runner.os }}-build-${{ env.cache-name }}
-    - name: Install deps
-      uses: cygwin/cygwin-install-action@v2
-      with:
-        platform: x64
-        packages: wget tar libtool re2c bison gcc-g++ autoconf automake openssl libpcre2-devel libssl-devel libcurl-devel libxml2-devel libxslt-devel libgmp-devel ImageMagick libpng-devel libjpeg-devel libfreetype-devel libwebp-devel libsqlite3-devel zlib-devel libbz2-devel libzip-devel libicu-devel libonig-devel libcares-devel libsodium-devel libyaml-devel libMagick-devel
-    - name: Install re2c
-      run: |
-        bash ./sapi/install-re2c.sh
-    - name: Configure
-      run: |
-        uname -a
-        git submodule update --init
-        bash ./sapi/cygwin-config.sh
-    - name: Build
-      run: |
-        make -j $(nproc)
-        ./bin/swoole-cli -v
+      - name: Prepare git
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+      - uses: actions/checkout@v3
+      - name: Cache cygwin packages
+        id: cache-cygwin
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-cygwin-packages
+        with:
+          path: C:/cygwin-packages
+          key: ${{ runner.os }}-build-${{ env.cache-name }}
+      - name: Install deps
+        uses: cygwin/cygwin-install-action@v2
+        with:
+          platform: x64
+          packages: wget tar libtool re2c bison gcc-g++ autoconf automake openssl libpcre2-devel libssl-devel libcurl-devel libxml2-devel libxslt-devel libgmp-devel ImageMagick libpng-devel libjpeg-devel libfreetype-devel libwebp-devel libsqlite3-devel zlib-devel libbz2-devel libzip-devel libicu-devel libonig-devel libcares-devel libsodium-devel libyaml-devel libMagick-devel
+      - name: Install re2c
+        run: |
+          bash ./sapi/install-re2c.sh
+      - name: Configure
+        run: |
+          uname -a
+          git submodule update --init
+          bash ./sapi/cygwin-config.sh
+      - name: Build
+        run: |
+          make -j $(nproc)
+          ./bin/swoole-cli -v
