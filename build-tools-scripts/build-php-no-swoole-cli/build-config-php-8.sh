@@ -32,7 +32,7 @@ test -d /usr/local/lib64/pkgconfig && PKG_CONFIG_PATH="/usr/local/lib64/pkgconfi
 export PATH=/usr/c-ares/bin/:/usr/pgsql/bin/:/usr/libffi/bin/:$PATH
 # export PATH=/usr/c-ares/bin/:/usr/pgsql/bin/:/usr/libffi/bin/:/usr/icu_2/bin/:$PATH
 
-export PKG_CONFIG_PATH=/usr/openssl_3/lib64/pkgconfig:/usr/libxml2/lib/pkgconfig:/usr/libxslt/lib/pkgconfig:/usr/gmp/lib/pkgconfig:/usr/zlib/lib/pkgconfig:/usr/liblz4/lib/pkgconfig:/usr/liblzma/lib/pkgconfig:/usr/libzstd/lib/pkgconfig:/usr/zip/lib/pkgconfig:/usr/libpng/lib/pkgconfig:/usr/libjpeg/lib64/pkgconfig:/usr/brotli/lib/pkgconfig:/usr/libwebp/lib/pkgconfig:/usr/freetype/lib/pkgconfig:/usr/sqlite3/lib/pkgconfig:/usr/oniguruma/lib/pkgconfig:/usr/imagemagick/lib/pkgconfig:/usr/curl/lib/pkgconfig:/usr/libsodium/lib/pkgconfig:/usr/libyaml/lib/pkgconfig:/usr/mimalloc/lib/pkgconfig:/usr/pgsql/lib/pkgconfig:/usr/c-ares/lib/pkgconfig:/usr/libffi/lib/pkgconfig:$PKG_CONFIG_PATH
+export PKG_CONFIG_PATH=/usr/openssl/lib64/pkgconfig:/usr/libxml2/lib/pkgconfig:/usr/libxslt/lib/pkgconfig:/usr/gmp/lib/pkgconfig:/usr/zlib/lib/pkgconfig:/usr/liblz4/lib/pkgconfig:/usr/liblzma/lib/pkgconfig:/usr/libzstd/lib/pkgconfig:/usr/zip/lib/pkgconfig:/usr/libpng/lib/pkgconfig:/usr/libjpeg/lib64/pkgconfig:/usr/brotli/lib/pkgconfig:/usr/libwebp/lib/pkgconfig:/usr/freetype/lib/pkgconfig:/usr/sqlite3/lib/pkgconfig:/usr/oniguruma/lib/pkgconfig:/usr/imagemagick/lib/pkgconfig:/usr/curl/lib/pkgconfig:/usr/libsodium/lib/pkgconfig:/usr/libyaml/lib/pkgconfig:/usr/mimalloc/lib/pkgconfig:/usr/pgsql/lib/pkgconfig:/usr/c-ares/lib/pkgconfig:/usr/libffi/lib/pkgconfig:$PKG_CONFIG_PATH
 
 # /usr/icu_2/lib/pkgconfig
 
@@ -217,7 +217,7 @@ test -f ./configure && rm ./configure ;
     --with-gmp=/usr/gmp \
     --with-sodium=/usr/libsodium \
     --with-readline \
-    --with-openssl --with-openssl-dir=/usr/openssl_1 \
+    --with-openssl --with-openssl-dir=/usr/openssl \
     --enable-gd \
     --with-yaml=/usr/libyaml \
     --enable-swoole --enable-sockets --enable-mysqlnd --enable-swoole-curl --enable-cares  --enable-swoole-pgsql  --with-brotli-dir=/usr/brotli  \
@@ -226,8 +226,8 @@ test -f ./configure && rm ./configure ;
     --with-ffi=/usr/libffi \
     --enable-opcache \
     --with-pgsql=/usr/pgsql \
-    --with-pdo-pgsql=/usr/pgsql \
-    --enable-intl
+    --with-pdo-pgsql=/usr/pgsql
+
 
 #    --enable-mongodb \ # need icu
 #   --enable-intl \ # use icu
