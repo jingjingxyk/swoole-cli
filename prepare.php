@@ -675,7 +675,6 @@ function install_libjpeg(Preprocessor $p)
     $p->addLibrary($lib);
 }
 
-
 function install_brotli(Preprocessor $p)
 {
     $p->addLibrary(
@@ -762,7 +761,6 @@ function install_freetype(Preprocessor $p)
     $p->addLibrary(
         (new Library('freetype', '/usr/freetype'))
             ->withUrl('https://download.savannah.gnu.org/releases/freetype/freetype-2.10.4.tar.gz')
-            ->withConfigure('./configure --prefix=/usr/freetype --enable-static --disable-shared')
             ->withConfigure(
                 "
                 export ZLIB_CFLAGS=$(pkg-config --cflags zlib) ;
@@ -798,6 +796,9 @@ function install_freetype(Preprocessor $p)
             )
             ->withLdflags('-L/usr/freetype/lib/')
             ->withPkgConfig('/usr/freetype/lib/pkgconfig')
+
+           #  ->withConfigure('./configure --prefix=/usr/freetype --enable-static --disable-shared')
+
             ->withHomePage('https://freetype.org/')
             ->withPkgName('freetype2')
             ->withLicense(
@@ -855,6 +856,19 @@ function install_bzip2_origin(Preprocessor $p)
             ->withMakeInstallOptions('install PREFIX=/usr/bzip2')
             ->withHomePage('https://www.sourceware.org/bzip2/')
             ->withLicense('https://www.sourceware.org/bzip2/', Library::LICENSE_BSD)
+            ->withCleanBuildDirectory()
+            ->withScriptBeforeConfigure(
+                '
+                test -d /usr/bzip2 && rm -rf /usr/bzip2 ;
+                echo $?
+            '
+            )
+            ->withMakeOptions('all')
+            ->withMakeInstallOptions(' install PREFIX=/usr/bzip2')
+            ->disableDefaultPkgConfig()
+            ->withLdflags('-L/usr/bzip2/lib')
+
+
     );
 }
 
@@ -869,6 +883,7 @@ function install_icu_origin(Preprocessor $p)
             ->withLicense('https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE', Library::LICENSE_SPEC)
     );
 }
+
 
 function install_oniguruma(Preprocessor $p)
 {
@@ -1194,6 +1209,7 @@ function install_pgsql(Preprocessor $p)
     //->disableDefaultLdflags()
     );
 }
+
 
 function install_socat($p)
 {
@@ -1536,8 +1552,8 @@ install_libsodium($p);
 install_libyaml($p);
 install_mimalloc($p);
 
-
 //参考 https://github.com/docker-library/php/issues/221
+
 install_pgsql($p);
 
 install_socat($p);
@@ -1553,6 +1569,7 @@ install_jemalloc($p);
 install_tcmalloc($p);
 
 install_aria2($p);
+
 
 
 $p->parseArguments($argc, $argv);

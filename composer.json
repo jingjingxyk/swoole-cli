@@ -1,0 +1,36 @@
+{
+  "name": "swoole/swoole-cli",
+  "type": "project",
+  "autoload": {
+    "psr-4": {
+      "Swoole\\SwooleCli\\": ["sapi/","conf.d/"]
+    }
+  },
+  "authors": [
+    {
+      "name": "jingjingxyk"
+    }
+  ],
+  "require": {
+    "friendsofphp/php-cs-fixer": "^3.13.1"
+  },
+  "require-dev": {
+    "phpstan/phpstan": "^1.9.4",
+    "squizlabs/php_codesniffer": "*"
+  },
+  "minimum-stability": "dev",
+  "repositories": {
+    "packagist": {
+      "type": "composer",
+      "url": "https://mirrors.aliyun.com/composer/"
+    }
+  },
+  "scripts": {
+    "php-cs-fixer-help": "php vendor/bin/php-cs-fixer -h",
+    "php-cs-fixer": "php vendor/bin/php-cs-fixer  fix conf.d,sapi --rules=@PSR12 --show-progress",
+    "phpcs": "php vendor/bin/phpcs --standard=PSR12 sapi/make.php",
+    "phpcbf": "php vendor/bin/phpcbf --standard=PSR12 sapi/make.php",
+    "phpunit": "php ./vendor/bin/phpunit --version",
+    "fmt": "sh build-tools-scripts/format-code.sh"
+  }
+}

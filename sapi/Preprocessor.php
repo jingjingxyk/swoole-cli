@@ -54,7 +54,10 @@ class Library extends Project
     public string $url;
 
     public bool $skipInstall = false;
+<<<<<<< HEAD
 
+=======
+>>>>>>> dev
     public bool $cleanBuildDirectory = false;
 
     public string $untarArchiveCommand = 'tar';
@@ -245,7 +248,10 @@ class Extension extends Project
 
 class Preprocessor
 {
+<<<<<<< HEAD
 
+=======
+>>>>>>> dev
     public string $osType = 'linux';
 
     protected array $libraryList = [];
@@ -427,7 +433,7 @@ class Preprocessor
                 );
                 echo PHP_EOL;
                 echo 'download ' . $lib->file . ' OK ' . PHP_EOL . PHP_EOL;
-                // TODO PGP  验证
+            // TODO PGP  验证
             } else {
                 echo '[Library] file cached: ' . $lib->file . PHP_EOL;
             }
@@ -467,6 +473,10 @@ class Preprocessor
             if (!is_file($ext->path)) {
                 _download:
                 $download_name = $ext->peclVersion == 'latest' ? $ext->name : $ext->name . '-' . $ext->peclVersion;
+
+                # echo "pecl download $download_name ".PHP_EOL;
+                # echo `cd {$this->extensionDir} && pecl download $download_name && cd -`;
+
                 echo "pecl download {$download_name} " . PHP_EOL;
                 echo shell_exec("cd {$this->extensionDir} && pecl download {$download_name} && cd -");
             } else {

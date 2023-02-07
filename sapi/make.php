@@ -32,10 +32,18 @@ OPTIONS="--disable-all \
 
 <?php foreach ($this->libraryList as $item) : ?>
 make_<?=$item->name?>() {
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
     <?php if ($item->skipInstall == true): ?>
     echo "skip install library <?=$item->name?>" ;
     return 0 ;
     <?php endif ;?>
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
     cd <?=$this->workDir?>/thirdparty
     echo "build <?=$item->name?>"
 
@@ -56,7 +64,10 @@ make_<?=$item->name?>() {
     result=$?
     [[ $result -gt 1 ]] &&  echo "[before configure script failure]" && exit 0 && return $result ;
     <?php endif; ?>
+<<<<<<< HEAD
 
+=======
+>>>>>>> dev
     cat <<'__EOF__'
     <?= $item->configure . PHP_EOL ?>
 __EOF__
@@ -69,11 +80,19 @@ __EOF__
     make -j <?=$this->maxJob?>  <?=$item->makeOptions . PHP_EOL ?>
     result=$?
     [[ $result -ne 0 ]] && echo "[make failure]" && exit 0 &&  return $result ;
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
     <?php if (!empty($item->beforeInstallScript)): ?>
     <?=$item->beforeInstallScript . PHP_EOL ?>
     result=$?
     [[ $result -ne 0 ]] &&  echo "[before install script  failure]" && exit 0 &&  return $result ;
     <?php endif; ?>
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
     make <?=$item->makeInstallDefaultOptions?> <?=$item->makeInstallOptions . PHP_EOL?>
     result=$?
     [[ $result -ne 0 ]] &&  echo "[make install failure]" && exit 0 &&   return $result;
@@ -104,6 +123,11 @@ make_all_library() {
 
 config_php() {
 
+<<<<<<< HEAD
+=======
+    test -f ./configure && rm ./configure ;
+
+>>>>>>> dev
     git config --global --add safe.directory "*"
 
     test -f ./configure && rm ./configure ;
