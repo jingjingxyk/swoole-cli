@@ -16,6 +16,9 @@ if (!empty($argv[1])) {
     $p->setOsType(trim($argv[1]));
 }
 
+# 设置CPU核数 ; 获取CPU核数，用于 make -j $(nproc)
+$p->setMaxJob(`nproc 2> /dev/null || sysctl -n hw.ncpu`); // nproc on macos ；
+
 if ($p->osType == 'macos') {
     $p->setWorkDir(__DIR__);
     $p->setExtraLdflags(
@@ -163,9 +166,6 @@ function install_gmp(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('gmp', '/usr/gmp'))
-            //站点SSL证书过期
-            //->withUrl('https://gmplib.org/download/gmp/gmp-6.2.1.tar.lz')
-            //->withUrl('https://mirrors.aliyun.com/gnu/gmp/gmp-6.2.1.tar.lz')
             ->withUrl('https://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.lz')
             ->withConfigure('./configure --prefix=/usr/gmp --enable-static --disable-shared')
             ->withPkgConfig('/usr/gmp/lib/pkgconfig')
@@ -761,8 +761,7 @@ function install_freetype(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('freetype', '/usr/freetype'))
-            // 域名 mirror.yongbok.net 无 DNS 解析
-            //->withUrl('https://mirror.yongbok.net/nongnu/freetype/freetype-2.10.4.tar.gz')
+
             ->withUrl('https://download.savannah.gnu.org/releases/freetype/freetype-2.10.4.tar.gz')
             ->withConfigure(
                 "
@@ -800,6 +799,8 @@ function install_freetype(Preprocessor $p)
             )
             ->withLdflags('-L/usr/freetype/lib/')
             ->withPkgConfig('/usr/freetype/lib/pkgconfig')
+
+           #  ->withConfigure('./configure --prefix=/usr/freetype --enable-static --disable-shared')
             ->withHomePage('https://freetype.org/')
             ->withPkgName('freetype2')
             ->withLicense(
@@ -833,6 +834,42 @@ function install_sqlite3(Preprocessor $p)
             ->withPkgName('sqlite3')
             ->withHomePage('https://www.sqlite.org/index.html')
             ->withLicense('https://www.sqlite.org/copyright.html', Library::LICENSE_SPEC)
+    );
+}
+
+
+function install_zlib_origin(Preprocessor $p)
+{
+    $p->addLibrary(
+        (new Library('zlib'))
+            ->withUrl('https://udomain.dl.sourceforge.net/project/libpng/zlib/1.2.11/zlib-1.2.11.tar.gz')
+            ->withConfigure('./configure --prefix=/usr --static')
+            ->withHomePage('https://zlib.net/')
+            ->withLicense('https://zlib.net/zlib_license.html', Library::LICENSE_SPEC)
+    );
+}
+
+function install_bzip2_origin(Preprocessor $p)
+{
+    $p->addLibrary(
+        (new Library('bzip2', '/usr/bzip2'))
+            ->withUrl('https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz')
+            ->withMakeOptions('PREFIX=/usr/bzip2')
+            ->withMakeInstallOptions('install PREFIX=/usr/bzip2')
+            ->withHomePage('https://www.sourceware.org/bzip2/')
+            ->withLicense('https://www.sourceware.org/bzip2/', Library::LICENSE_BSD)
+    );
+}
+
+function install_icu_origin(Preprocessor $p)
+{
+    $p->addLibrary(
+        (new Library('icu'))
+            ->withUrl('https://github.com/unicode-org/icu/releases/download/release-60-3/icu4c-60_3-src.tgz')
+            ->withConfigure('source/runConfigureICU Linux --prefix=/usr --enable-static --disable-shared')
+            ->withPkgName('icu-i18n')
+            ->withHomePage('https://icu.unicode.org/')
+            ->withLicense('https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE', Library::LICENSE_SPEC)
     );
 }
 
@@ -878,27 +915,6 @@ function install_cares(Preprocessor $p)
             ->withLdflags('-L/usr/lib')
     );
 }
-
-function install_cares_2(Preprocessor $p)
-{
-    $p->addLibrary(
-        (new Library('cares_2'))
-            ->withHomePage('https://c-ares.org/')
-            ->withLicense('https://c-ares.org/license.html', Library::LICENSE_MIT)
-            ->withUrl('https://c-ares.org/download/c-ares-1.18.1.tar.gz')
-            ->withScriptBeforeConfigure('pwd')
-            ->withConfigure('./configure --prefix=/usr/c-ares --enable-static --disable-shared ')
-            ->withPkgName('libcares')
-            ->withPkgConfig('/usr/c-ares/lib/pkgconfig')
-            ->withLdflags('-L/usr/c-ares/lib')
-            ->withSystemConfigPath('/usr/c-ares/bin/')
-            ->disableDefaultLdflags()
-            ->disableDefaultPkgConfig()
-            ->disablePkgName()
-            ->withSkipInstall()
-    );
-}
-
 
 function install_libedit(Preprocessor $p)
 {
