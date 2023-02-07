@@ -14,7 +14,6 @@ RUN apk add --no-cache flex bison re2c pkgconf ca-certificates gnutls-dev
 RUN apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
 RUN apk add --no-cache  ncurses-dev ncurses-libs ncurses-static
 RUN apk add --no-cache  readline readline-dev readline-static
-RUN apk add --no-cache  c-ares c-ares-dev c-ares-utils
 
 # meson 和ninja 构建
 RUN apk add --no-cache  python3 python3-dev py3-pip ninja

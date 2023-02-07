@@ -16,3 +16,4 @@ cd ${__PROJECT__}
 sh make.sh openssl
 sh make.sh zip
 sh make.sh curl
+sh make.sh pgsql
