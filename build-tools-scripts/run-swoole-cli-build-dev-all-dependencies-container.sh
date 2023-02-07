@@ -18,14 +18,13 @@ cd ${__DIR__}
 } || {
   echo $?
 }
-
-
 cd ${__DIR__}
+default_image=docker.io/jingjingxyk/build-swoole-cli:build-dev-all-dependencies-alpine-edge-20230207T103936Z
+
 test -f swoole-cli-build-dev-all-dependencies-container.txt && image=$(cat swoole-cli-build-dev-all-dependencies-container.txt)
-test -f swoole-cli-build-dev-all-dependencies-container.txt || image=docker.io/jingjingxyk/build-swoole-cli:build-dev-all-dependencies-alpine-edge-20230107T091604Z
+test -f swoole-cli-build-dev-all-dependencies-container.txt || image=$default_image
+
 cd ${__DIR__}
-
-
 docker run --rm --name  swoole-cli-build-dev-all-dependencies-container -d -v ${__PROJECT__}:/work -w /work $image tail -f /dev/null
 
 
