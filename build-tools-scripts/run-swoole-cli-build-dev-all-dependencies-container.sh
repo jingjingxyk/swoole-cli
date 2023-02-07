@@ -13,24 +13,20 @@ cd ${__DIR__}
 
 
 {
-  docker stop build-dev-dependencies
-} || {
-  echo $?
-}
-{
-  docker rm build-dev-dependencies
+  docker stop swoole-cli-build-dev-all-dependencies-container
+  docker rm swoole-cli-build-dev-all-dependencies-container
 } || {
   echo $?
 }
 
 
 cd ${__DIR__}
-test -f build-dev-dependencies-container.txt && image=$(cat build-dev-dependencies-container.txt)
-test -f build-dev-dependencies-container.txt || image=docker.io/jingjingxyk/build-swoole-cli:build-dev-all-dependencies-alpine-edge-20230107T091604Z
+test -f swoole-cli-build-dev-all-dependencies-container.txt && image=$(cat swoole-cli-build-dev-all-dependencies-container.txt)
+test -f swoole-cli-build-dev-all-dependencies-container.txt || image=docker.io/jingjingxyk/build-swoole-cli:build-dev-all-dependencies-alpine-edge-20230107T091604Z
 cd ${__DIR__}
 
 
-docker run --rm --name  build-dev-dependencies -d -v ${__PROJECT__}:/work -w /work $image tail -f /dev/null
+docker run --rm --name  swoole-cli-build-dev-all-dependencies-container -d -v ${__PROJECT__}:/work -w /work $image tail -f /dev/null
 
 
 exit 0

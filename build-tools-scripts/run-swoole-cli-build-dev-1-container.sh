@@ -19,17 +19,9 @@ cd ${__DIR__}
   echo $?
 }
 
-if test $(ls ${__PROJECT__}/pool | wc -l) -eq 0
-then
-  container_id=$(docker create jingjingxyk/build-swoole-cli:build-dev-download-library-and-extension-alpine-edge-20230107T090322Z)  # returns container ID
-  docker cp $container_id:/swoole-cli/pool/lib ${__PROJECT__}/pool
-  docker cp $container_id:/swoole-cli/pool/ext ${__PROJECT__}/pool
-  docker rm $container_id
-fi
-
 
 test -f swoole-cli-build-dev-1-container.txt && image=$(cat swoole-cli-build-dev-1-container.txt)
-test -f swoole-cli-build-dev-1-container.txt || image=docker.io/jingjingxyk/build-swoole-cli:build-dev-1-alpine-edge-20230107T093432Z
+test -f swoole-cli-build-dev-1-container.txt || image=docker.io/jingjingxyk/build-swoole-cli:build-dev-1-alpine-edge-20230207T100244Z
 
 cd ${__DIR__}
 

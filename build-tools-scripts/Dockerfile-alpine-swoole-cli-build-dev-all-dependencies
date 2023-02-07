@@ -9,8 +9,10 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositorie
 
 RUN apk update  && apk add curl wget git   tini ca-certificates openssl openssl-dev
 
-RUN apk add --no-cache php81-dev php81-cli php81-pear php81-curl php81-openssl php81-phar php81-mbstring php81-xmlwriter php81-xml php81-simplexml php81-dom php81-intl php81-tokenizer && apk add --no-cache  icu icu-dev icu-libs icu-data-full icu-static && \
-pecl channel-update https://pecl.php.net/channel.xml && pear update-channels && pecl config-show
+RUN apk add --no-cache php81-dev php81-cli php81-pear php81-curl php81-openssl php81-phar php81-mbstring php81-xmlwriter php81-xml php81-simplexml php81-dom php81-intl php81-tokenizer
+
+
+
 
 RUN curl -Lo /usr/local/composer.phar https://mirrors.aliyun.com/composer/composer.phar && chmod a+x /usr/local/composer.phar
 RUN ln -s /usr/local/composer.phar /usr/bin/composer
@@ -21,19 +23,33 @@ ARG PROXY_URL=''
 ENV http_proxy=$PROXY_URL
 ENV https_proxy=$PROXY_URL
 
-RUN git clone -b dev-all-dependency --depth=1 --progress  https://github.com/jingjingxyk/swoole-cli.git
+RUN pecl channel-update https://pecl.php.net/channel.xml && pear update-channels && pecl config-show
+
+RUN git clone -b dev --depth=1 --progress  https://github.com/jingjingxyk/swoole-cli.git
 
 
 WORKDIR /swoole-cli
+
 RUN git config --global --add safe.directory '*'
 RUN git submodule update --init --recursive
+
 # RUN git -C ext/swoole pull --progress
-RUN sh build-tools-scripts/download-init-depend.sh
+
+RUN php prepare.php   \
+  +pgsql +pdo_pgsql \
+  +pgsql +pdo_pgsql \
+  +apcu -ffi \
+  -mysqli   \
+  -imagick \
+  -pcntl  \
+  +inotify \
+  +ds   \
+  -soap
 
 ENV http_proxy=''
 ENV https_proxy=''
 # pear config-set http_proxy $PROXY_URL
-# RUN pear config-set http_proxy ""
+RUN pear config-set http_proxy ""
 # RUN pecl config-show
 
 FROM alpine:edge
@@ -57,11 +73,11 @@ ENV LD=ld.lld
 RUN apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
 RUN apk add --no-cache  ncurses-dev ncurses-libs ncurses-static
 RUN apk add --no-cache  readline readline-dev readline-static
-# RUN apk add --no-cache  c-ares c-ares-dev c-ares-utils
+
 
 # meson 和ninja 构建
-RUN apk add python3 python3-dev py3-pip ninja
-RUN pip3 install meson  -i https://pypi.tuna.tsinghua.edu.cn/simple
+# RUN apk add python3 python3-dev py3-pip ninja
+# RUN pip3 install meson  -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 COPY --from=0 /swoole-cli /work
 WORKDIR /work
@@ -87,7 +103,9 @@ ENV LD=ld.lld
 
 WORKDIR /work
 
-
+RUN apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
+RUN apk add --no-cache  ncurses-dev ncurses-libs ncurses-static
+RUN apk add --no-cache  readline readline-dev readline-static
 
 COPY --from=1 /usr/libiconv /usr/libiconv
 COPY --from=1 /usr/openssl/ /usr/openssl/
@@ -114,26 +132,22 @@ COPY --from=1  /usr/sqlite3/ /usr/sqlite3/
 COPY --from=1  /usr/oniguruma/ /usr/oniguruma/
 
 COPY --from=1  /usr/curl/ /usr/curl/
+COPY --from=1  /usr/curl/ /usr/curl/
 
 COPY --from=1  /usr/libsodium/ /usr/libsodium/
 COPY --from=1  /usr/libyaml /usr/libyaml
 COPY --from=1  /usr/mimalloc/ /usr/mimalloc/
 
 COPY --from=1  /usr/imagemagick /usr/imagemagick
+COPY --from=1  /usr/pgsql/ /usr/pgsql/
+COPY --from=1  /usr/libffi /usr/libffi
+COPY --from=1  /usr/c-ares /usr/c-ares
 
 # COPY --from=1  /usr/ncurses /usr/ncurses
 # COPY --from=1  /usr/readline /usr/readline
 
-# COPY --from=1  /usr/cares/ /usr/cares/
-
 # COPY --from=1  /usr/icu/ /usr/icu/
-# COPY --from=1  /usr/ /usr/
 
-
-RUN apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
-RUN apk add --no-cache  ncurses-dev ncurses-libs ncurses-static
-RUN apk add --no-cache  readline readline-dev readline-static
-# RUN apk add --no-cache  c-ares c-ares-dev c-ares-utils
 
 # meson 和ninja 构建
 # RUN apk add --no-cache  python3  py3-pip ninja
