@@ -54,6 +54,7 @@ class Library extends Project
     public string $url;
 
     public bool $skipInstall = false;
+
     public bool $cleanBuildDirectory = false;
 
     public string $untarArchiveCommand = 'tar';
@@ -244,6 +245,7 @@ class Extension extends Project
 
 class Preprocessor
 {
+
     public string $osType = 'linux';
 
     protected array $libraryList = [];
@@ -475,7 +477,11 @@ class Preprocessor
             if (!is_dir($dst_dir)) {
                 echo shell_exec("mkdir -p {$dst_dir}");
                 echo shell_exec("tar --strip-components=1 -C {$dst_dir} -xf {$ext->path}");
+
+                # echo `mkdir -p $dst_dir`;
+
             }
+            # echo `tar --strip-components=1 -C $dst_dir -xf {$ext->path}`;
         }
 
         $this->extensionList[] = $ext;

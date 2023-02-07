@@ -10,6 +10,8 @@ test -d /usr/local/lib/pkgconfig && PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$P
 test -d /usr/local/lib64/pkgconfig && PKG_CONFIG_PATH="/usr/local/lib64/pkgconfig:$PKG_CONFIG_PATH" ;
 
 SRC=<?= $this->phpSrcDir . PHP_EOL ?>
+PKG_CONFIG_PATH='/usr/lib/pkgconfig'
+test -d /usr/lib64/pkgconfig && PKG_CONFIG_PATH="/usr/lib64/pkgconfig:$PKG_CONFIG_PATH" ;
 ROOT=$(pwd)
 export CC=clang
 export CXX=clang++
@@ -54,6 +56,7 @@ make_<?=$item->name?>() {
     result=$?
     [[ $result -gt 1 ]] &&  echo "[before configure script failure]" && exit 0 && return $result ;
     <?php endif; ?>
+
     cat <<'__EOF__'
     <?= $item->configure . PHP_EOL ?>
 __EOF__
@@ -74,6 +77,7 @@ __EOF__
     make <?=$item->makeInstallDefaultOptions?> <?=$item->makeInstallOptions . PHP_EOL?>
     result=$?
     [[ $result -ne 0 ]] &&  echo "[make install failure]" && exit 0 &&   return $result;
+
     <?php if ($item->afterInstallScript): ?>
     <?=$item->afterInstallScript . PHP_EOL ?>
     result=$?
