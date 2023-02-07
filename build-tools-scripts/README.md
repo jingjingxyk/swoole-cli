@@ -7,6 +7,7 @@ apk update
 apk add --no-cache  ncurses-dev ncurses-libs ncurses-static
 apk add --no-cache  readline-dev readline-static
 # apk add --no-cache  readline readline-dev readline-static
+apk del  ncurses-dev ncurses-libs ncurses-static  readline-dev readline-static
 
 apk add --no-cache icu icu-dev icu-libs icu-data-full icu-static
 # swoole 需要
@@ -15,9 +16,15 @@ apk add --no-cache  c-ares c-ares-dev c-ares-utils
 
 
 # meson 和ninja 构建
-apk add python3 python3-dev py3-pip ninja
+apk add python3 python3-dev py3-pip ninja bazel
 pip3 install meson  -i https://pypi.tuna.tsinghua.edu.cn/simple
-#
+
+# https://github.com/bazelbuild/bazel/releases
+curl -Lo bazel-6.0.0-linux-x86_64 --connect-timeout 15 --retry 5 --retry-delay 5  https://github.com/bazelbuild/bazel/releases/download/6.0.0/bazel-6.0.0-linux-x86_64
+mv bazel-6.0.0-linux-x86_64 /usr/bin/bazel
+chmod a+x /usr/bin/bazel
+
+
 # 代码比较
 apk add meld
 
@@ -342,6 +349,8 @@ ibpgcommon 和 libpqport
 - [phpunit](https://github.com/sebastianbergmann/phpunit.git)
 - [Compiling PECL extensions statically into PHP](https://www.php.net/manual/en/install.pecl.static.php)
 - [static-php-cli](https://github.com/crazywhalecc/static-php-cli/blob/master/README-en.md)
+- [WebAssembly](https://pecl.php.net/package/wasm)
+- [wasmer-php](https://github.com/wasmerio/wasmer-php)
 
 > PHP_CodeSniffer 是一个代码风格检测工具。它包含两类脚本，phpcs 和 phpcbf(GitHub地址)。
 
@@ -371,6 +380,15 @@ pear list
 readelf -Ds a.out
 
 
+编译时使用 -g，使可执行程序中包含调试信息；
+最好不要使用 strip 去除可执行程序的符号信息，否则会看不到栈中的函数名称。
+
+nm -A /usr/pgsql/lib/libpq.a |  grep -i 
+nm -A /usr/openssl/lib64/libssl.a  |  grep -i toul
+
+ar 命令用于更新，维护管理静态库。
+
+ranlib 命令用于 更新库的符号索引表。
 
 ```text
     // "Core",
@@ -430,7 +448,7 @@ readelf -Ds a.out
         'swoole',
         'yaml',
         'imagick',
-        'mongodb', //依赖 openssl zlib
+        'mongodb', //依赖 openssl zlib  ICU
         'ds'
 
 
@@ -473,6 +491,12 @@ override LDFLAGS += $(shell pkg-config --libs-only-L --libs-only-other ncursesw)
 
 
 ```shell
+# https://github.com/swoole/swoole-src/issues/4946
+
+#  SWOOLE_CFLAGS="$SWOOLE_CFLAGS $LIBPQ_CFLAGS"
+#  SWOOLE_PGSQL_CFLAGS="$SWOOLE_CFLAGS $LIBPQ_CFLAGS"
+
+
 phpize &&
 export LIBPQ_CFLAGS="-I/usr/local/libpq/15.1/include" &&
 export LIBPQ_LIBS="-L/usr/local/libpq/15.1/lib" &&
@@ -506,5 +530,74 @@ $ php go-pear.phar
 
 ```shell
 php -c /path/to/php.ini -r 'echo get_include_path()."\n";'
+
+```
+
+## static compile libpq
+> https://www.postgresql.org/message-id/CABFfbXuxyO20JN8T%2BCyfSe29T-GTON69FrKHQ%3Dc9jDMxnm6C_w%40mail.gmail.com
+```shell
+libpq.a: $(OBJS)
+  ar rcs $@ $^
+
+cat >>  src/interfaces/libpq/Makefile <<EOF
+
+libpq.a: $(OBJS)
+  ar rcs $@ $^
+
+EOF
+
+ $(AR) $@ $(LIBXXX) $(ARFLAGS) 
+        $(RANLIB) $@
+        
+```
+
+```shell
+
+https://github.com/swoole/swoole-src/issues/4833#issuecomment-1253146715
+
+USE_ZEND_ALLOC=0 valgrind php your_file.php
+
+# https://github.com/swoole/swoole-src/issues/4854#issuecomment-1312298196
+export USE_ZEND_ALLOC=0 && LD_PRELOAD=/usr/local/lib/libjemalloc.so
+
+strace -p
+
+https://github.com/swoole/swoole-src/issues/4818#issuecomment-1240391101
+gdb attach 31626
+```
+
+
+
+```shell
+
+intl 
+
+ --with-icu-dir
+# https://www.php.net/manual/en/book.intl.php#book.intl
+LD_LIBRARY_PATH
+
+```
+
+### 参考
+1. [lwmbs](https://github.com/dixyes/lwmbs)
+1. [static-php-cli](https://github.com/crazywhalecc/static-php-cli.git)
+1. [bash 编写参考](https://github.com/symfony-cli/symfony-cli/blob/main/installer/bash-installer)
+1. [symfony-cli](https://github.com/symfony-cli)
+1. [symfony](https://github.com/symfony/symfony)
+1. [Swoole v5.0 版本新特性预览之新的运行模式](https://zhuanlan.zhihu.com/p/459983471)
+1. [Swoole-Cli 5.0.1：PHP 的二进制发行版](https://zhuanlan.zhihu.com/p/581695339)
+1. [nm 简明教程](https://zhuanlan.zhihu.com/p/501339114)
+
+
+```text
+fe-connect
+
+common 
+port 
+ecpg 
+backend/libpq
+include/libpq 
+
+
 
 ```

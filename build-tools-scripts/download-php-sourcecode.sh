@@ -12,6 +12,7 @@ cd ${__DIR__}/php-versions
 export http_proxy=http://192.168.3.26:8015
 export https_proxy=http://192.168.3.26:8015
 
+
 test -f swoole-cli-v5.0.1-linux-x64.tar.xz || curl -Lo swoole-cli-v5.0.1-linux-x64.tar.xz  https://github.com/swoole/swoole-src/releases/download/v5.0.1/swoole-cli-v5.0.1-linux-x64.tar.xz
 test -f swoole-cli-v5.0.1-linux-x64.tar.xz && xz -d swoole-cli-v5.0.1-linux-x64.tar.xz
 exit 0

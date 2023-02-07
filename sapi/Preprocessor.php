@@ -26,6 +26,8 @@ abstract class Project
 
     public string $license = '';
 
+    public string $manual = '';
+
     public string $prefix = '';
 
     public int $licenseType = self::LICENSE_SPEC;
@@ -53,11 +55,10 @@ class Library extends Project
 {
     public string $url;
 
+    public string $manual = '';
+    public bool $skipLicense = false;
     public bool $skipInstall = false;
-<<<<<<< HEAD
 
-=======
->>>>>>> dev
     public bool $cleanBuildDirectory = false;
 
     public string $untarArchiveCommand = 'tar';
@@ -70,7 +71,7 @@ class Library extends Project
 
     public string $ldflags = '';
 
-    public string $systemConfigPath = '';
+    public string $binPath = '';
 
     public string $makeOptions = '';
 
@@ -100,6 +101,12 @@ class Library extends Project
         return $this;
     }
 
+    public function withManual(string $manual): static
+    {
+        $this->manual = $manual;
+        return $this;
+    }
+
     public function withPrefix(string $prefix): static
     {
         $this->prefix = $prefix;
@@ -114,9 +121,17 @@ class Library extends Project
         return $this;
     }
 
+    public function withSkipLicense(): static
+    {
+        $this->skipLicense = true;
+        return $this;
+    }
+
     public function withSkipInstall(): static
     {
         $this->skipInstall = true;
+        $this->skipLicense = true;
+        $this->withBinPath('');
         $this->disableDefaultPkgConfig();
         $this->disablePkgName();
         $this->disableDefaultLdflags();
@@ -159,9 +174,9 @@ class Library extends Project
         return $this;
     }
 
-    public function withSystemConfigPath(string $path): static
+    public function withBinPath(string $path): static
     {
-        $this->systemConfigPath = $path;
+        $this->binPath = $path;
         return $this;
     }
 
@@ -219,6 +234,8 @@ class Extension extends Project
 {
     public string $url;
 
+    public string $manual = '';
+
     public string $options = '';
 
     public string $peclVersion = '';
@@ -226,6 +243,12 @@ class Extension extends Project
     public string $file = '';
 
     public string $path = '';
+
+    public function withManual(string $manual): static
+    {
+        $this->manual = $manual;
+        return $this;
+    }
 
     public function withOptions(string $options): static
     {
@@ -248,10 +271,7 @@ class Extension extends Project
 
 class Preprocessor
 {
-<<<<<<< HEAD
 
-=======
->>>>>>> dev
     public string $osType = 'linux';
 
     protected array $libraryList = [];
@@ -266,7 +286,7 @@ class Preprocessor
 
     protected array $pkgConfigPaths = [];
 
-    protected array $systemConfigPaths = [];
+    protected array $binPaths = [];
 
     protected string $phpSrcDir;
 
@@ -443,8 +463,8 @@ class Preprocessor
             $this->pkgConfigPaths[] = $lib->pkgConfig;
         }
 
-        if (!empty($lib->systemConfigPath)) {
-            $this->systemConfigPaths[] = $lib->systemConfigPath;
+        if (!empty($lib->binPath)) {
+            $this->binPaths[] = $lib->binPath;
         }
 
         if (empty($lib->license)) {
@@ -474,11 +494,27 @@ class Preprocessor
                 _download:
                 $download_name = $ext->peclVersion == 'latest' ? $ext->name : $ext->name . '-' . $ext->peclVersion;
 
+                echo "curl download {$download_name} " . PHP_EOL;
+                // curl -lO https://pecl.php.net/get/redis
+                // https://pecl.php.net/get/redis-5.3.7.tgz
+                $download_url = '';
+                $ua = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36';
+                if ($ext->peclVersion == 'latest') {
+                    $download_url = "https://pecl.php.net/get/" . $ext->name;
+                } else {
+                    $download_url = "https://pecl.php.net/get/" . $ext->name . '-' . $ext->peclVersion . '.tgz';
+                }
+                $curl_download_cmd = "curl  --user-agent '{$ua}' --connect-timeout 15 --retry 5 --retry-delay 5  -LO {$download_url}";
+                $cmd = "cd {$this->extensionDir} &&  {$curl_download_cmd} && cd -";
+                echo $curl_download_cmd . PHP_EOL;
+                echo shell_exec($cmd);
+                /*
                 # echo "pecl download $download_name ".PHP_EOL;
                 # echo `cd {$this->extensionDir} && pecl download $download_name && cd -`;
 
                 echo "pecl download {$download_name} " . PHP_EOL;
                 echo shell_exec("cd {$this->extensionDir} && pecl download {$download_name} && cd -");
+                */
             } else {
                 echo '[Extension] file cached: ' . $ext->file . PHP_EOL;
             }
@@ -486,6 +522,14 @@ class Preprocessor
             $dst_dir = "{$this->rootDir}/ext/{$ext->name}";
             if (!is_dir($dst_dir)) {
                 echo shell_exec("mkdir -p {$dst_dir}");
+            }
+            //判断目录为空参考文档
+            //https://cloud.tencent.com/developer/ask/sof/116959
+            //$isDirEmpty = (new \DirectoryIterator($dst_dir))->valid();
+
+            $isDirEmpty = count(glob("{$dst_dir}/*")) == 0 ? true : false;
+
+            if ($isDirEmpty) {
                 echo shell_exec("tar --strip-components=1 -C {$dst_dir} -xf {$ext->path}");
 
                 # echo `mkdir -p $dst_dir`;
@@ -551,8 +595,9 @@ class Preprocessor
     {
         $this->pkgConfigPaths[] = '$PKG_CONFIG_PATH';
         $this->pkgConfigPaths = array_unique($this->pkgConfigPaths);
-        $this->systemConfigPaths[] = '$PATH';
-        $this->systemConfigPaths = array_unique($this->systemConfigPaths);
+
+        $this->binPaths[] = '$PATH';
+        $this->binPaths = array_unique($this->binPaths);
 
         ob_start();
         include __DIR__ . '/make.php';
@@ -561,6 +606,10 @@ class Preprocessor
         ob_start();
         include __DIR__ . '/license.php';
         file_put_contents($this->rootDir . '/bin/LICENSE', ob_get_clean());
+
+        ob_start();
+        include __DIR__ . '/credits.php';
+        file_put_contents($this->rootDir . '/bin/credits.html', ob_get_clean());
 
         foreach ($this->endCallbacks as $endCallback) {
             $endCallback($this);

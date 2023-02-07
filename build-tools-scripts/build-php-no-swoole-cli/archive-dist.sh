@@ -19,8 +19,11 @@ install_prefix_dir="/tmp/${version}"
 ${install_prefix_dir}/bin/php -v
 
 ls -lh ${install_prefix_dir}/bin/php
-strip ${install_prefix_dir}/bin/php
+# 移除符号表
+# strip ${install_prefix_dir}/bin/php
+
 ls -lh ${install_prefix_dir}/bin/php
 
 mkdir -p dist/
-cp -rf ${install_prefix_dir}/bin/php dist/
+cp -rf ${install_prefix_dir}/bin/php ${install_prefix_dir}/bin/${version}
+cp -rf ${install_prefix_dir}/bin/${version} dist/

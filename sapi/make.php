@@ -9,6 +9,9 @@ test -d /usr/lib64/pkgconfig && PKG_CONFIG_PATH="/usr/lib64/pkgconfig:$PKG_CONFI
 test -d /usr/local/lib/pkgconfig && PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH" ;
 test -d /usr/local/lib64/pkgconfig && PKG_CONFIG_PATH="/usr/local/lib64/pkgconfig:$PKG_CONFIG_PATH" ;
 
+cpu_nums=`nproc 2> /dev/null || sysctl -n hw.ncpu`
+# `grep "processor" /proc/cpuinfo | sort -u | wc -l`
+
 SRC=<?= $this->phpSrcDir . PHP_EOL ?>
 PKG_CONFIG_PATH='/usr/lib/pkgconfig'
 test -d /usr/lib64/pkgconfig && PKG_CONFIG_PATH="/usr/lib64/pkgconfig:$PKG_CONFIG_PATH" ;
@@ -17,13 +20,17 @@ export CC=clang
 export CXX=clang++
 export LD=ld.lld
 
-export PATH=<?= implode(':', $this->systemConfigPaths) . PHP_EOL ?>
+
+export PATH=<?= implode(':', $this->binPaths) . PHP_EOL ?>
+
 export ORIGIN_PATH=$PATH
 
 export PKG_CONFIG_PATH=<?= implode(':', $this->pkgConfigPaths) . PHP_EOL ?>
 export ORIGIN_PKG_CONFIG_PATH=$PKG_CONFIG_PATH
 
-OPTIONS="--disable-all \
+OPTIONS="--disable-all
+    --enable-static=yes \
+    --enable-shared=no \
 <?php foreach ($this->extensionList as $item) : ?>
     <?= $item->options ?> \
 <?php endforeach; ?>
@@ -32,18 +39,12 @@ OPTIONS="--disable-all \
 
 <?php foreach ($this->libraryList as $item) : ?>
 make_<?=$item->name?>() {
-<<<<<<< HEAD
-=======
 
->>>>>>> dev
     <?php if ($item->skipInstall == true): ?>
     echo "skip install library <?=$item->name?>" ;
     return 0 ;
     <?php endif ;?>
-<<<<<<< HEAD
-=======
 
->>>>>>> dev
     cd <?=$this->workDir?>/thirdparty
     echo "build <?=$item->name?>"
 
@@ -58,16 +59,18 @@ make_<?=$item->name?>() {
     <?php if($item->untarArchiveCommand == 'unzip'):?>
         unzip -d  <?=$this->workDir?>/thirdparty/<?=$item->name?>   <?=$this->workDir?>/pool/lib/<?=$item->file?> <?= PHP_EOL; ?>
     <?php endif ; ?>
+
+    <?php if($item->untarArchiveCommand == 'mv'):?>
+        cp -rf  <?=$this->workDir?>/pool/lib/<?=$item->file?> <?=$this->workDir?>/thirdparty/<?=$item->name?>/<?=$item->name?>    <?= PHP_EOL; ?>
+    <?php endif ; ?>
+
     cd <?=$item->name?> ;
     <?php if (!empty($item->beforeConfigureScript)) : ?>
     <?= $item->beforeConfigureScript . PHP_EOL ?>
     result=$?
     [[ $result -gt 1 ]] &&  echo "[before configure script failure]" && exit 0 && return $result ;
     <?php endif; ?>
-<<<<<<< HEAD
 
-=======
->>>>>>> dev
     cat <<'__EOF__'
     <?= $item->configure . PHP_EOL ?>
 __EOF__
@@ -80,19 +83,13 @@ __EOF__
     make -j <?=$this->maxJob?>  <?=$item->makeOptions . PHP_EOL ?>
     result=$?
     [[ $result -ne 0 ]] && echo "[make failure]" && exit 0 &&  return $result ;
-<<<<<<< HEAD
-=======
 
->>>>>>> dev
     <?php if (!empty($item->beforeInstallScript)): ?>
     <?=$item->beforeInstallScript . PHP_EOL ?>
     result=$?
     [[ $result -ne 0 ]] &&  echo "[before install script  failure]" && exit 0 &&  return $result ;
     <?php endif; ?>
-<<<<<<< HEAD
-=======
 
->>>>>>> dev
     make <?=$item->makeInstallDefaultOptions?> <?=$item->makeInstallOptions . PHP_EOL?>
     result=$?
     [[ $result -ne 0 ]] &&  echo "[make install failure]" && exit 0 &&   return $result;
@@ -123,115 +120,110 @@ make_all_library() {
 
 config_php() {
 
-<<<<<<< HEAD
-=======
     test -f ./configure && rm ./configure ;
 
->>>>>>> dev
     git config --global --add safe.directory "*"
 
     test -f ./configure && rm ./configure ;
 
 
-    LIBXML_CFLAGS=$(pkg-config --cflags libxml-2.0) ;
-    LIBXML_LIBS=$(pkg-config --libs libxml-2.0) ;
+    LIBXML_CFLAGS=$(pkg-config --cflags  --static libxml-2.0) ;
+    LIBXML_LIBS=$(pkg-config --libs  --static libxml-2.0) ;
 
-    OPENSSL_CFLAGS=$(pkg-config --cflags openssl libcrypto libssl) ;
-    OPENSSL_LIBS=$(pkg-config --libs openssl libcrypto libssl) ;
+    OPENSSL_CFLAGS=$(pkg-config --cflags  --static openssl libcrypto libssl) ;
+    OPENSSL_LIBS=$(pkg-config --libs  --static openssl libcrypto libssl) ;
 
 :<<'EOF'
-    PCRE2_CFLAGS=$(pkg-config --cflags libpcre2-8 libpcre2-posix) ;
-    PCRE2_LIBS=$(pkg-config --libs libpcre2-8 libpcre2-posix) ;
+    PCRE2_CFLAGS=$(pkg-config --cflags  --static libpcre2-8 libpcre2-posix) ;
+    PCRE2_LIBS=$(pkg-config --libs  --static libpcre2-8 libpcre2-posix) ;
 EOF
 
-    SQLITE_CFLAGS=$(pkg-config --cflags sqlite3) ;
-    SQLITE_LIBS=$(pkg-config --libs sqlite3) ;
+    SQLITE_CFLAGS=$(pkg-config --cflags  --static sqlite3) ;
+    SQLITE_LIBS=$(pkg-config --libs  --static sqlite3) ;
 
-    ZLIB_CFLAGS=$(pkg-config --cflags  zlib) ;
-    ZLIB_LIBS=$(pkg-config --libs  zlib) ;
+    ZLIB_CFLAGS=$(pkg-config --cflags   --static zlib) ;
+    ZLIB_LIBS=$(pkg-config --libs  --static  zlib) ;
 
-    CURL_CFLAGS=$(pkg-config --cflags libcurl) ;
-    CURL_LIBS=$(pkg-config --libs libcurl) ;
+    CURL_CFLAGS=$(pkg-config --cflags  --static libcurl) ;
+    CURL_LIBS=$(pkg-config --libs  --static libcurl) ;
 
-    PNG_CFLAGS=$(pkg-config --cflags  libpng) ;
-    PNG_LIBS=$(pkg-config --libs  libpng) ;
+    PNG_CFLAGS=$(pkg-config --cflags   --static libpng) ;
+    PNG_LIBS=$(pkg-config --libs   --static libpng) ;
 
-    WEBP_CFLAGS=$(pkg-config --cflags libwebp) ;
-    WEBP_LIBS=$(pkg-config --libs libwebp) ;
+    WEBP_CFLAGS=$(pkg-config --cflags  --static libwebp) ;
+    WEBP_LIBS=$(pkg-config --libs  --static libwebp) ;
 
-    FREETYPE2_CFLAGS=$(pkg-config --cflags freetype2) ;
-    FREETYPE2_LIBS=$(pkg-config --libs freetype2) ;
+    FREETYPE2_CFLAGS=$(pkg-config --cflags  --static freetype2) ;
+    FREETYPE2_LIBS=$(pkg-config --libs  --static freetype2) ;
 
 :<<'EOF'
     GDLIB_CFLAGS=$(pkg-config --cflags "no install") ;
     GDLIB_LIBS=$(pkg-config --libs "no install") ;
 EOF
 
-export  ICU_CFLAGS=$(pkg-config --cflags  icu-uc icu-io icu-i18n)  ;
-export  ICU_LIBS=$(pkg-config  --libs icu-uc icu-io icu-i18n)  ;
 
-export  ONIG_CFLAGS=$(pkg-config --cflags oniguruma) ;
-export  ONIG_LIBS=$(pkg-config --libs oniguruma) ;
+#  export  ICU_CFLAGS=$(pkg-config --cflags --static  icu-uc icu-io icu-i18n)  ;
+#  export  ICU_CFLAGS="-L/usr/include/unicode" ;
+#  export  ICU_LIBS=$(pkg-config  --libs  --static icu-uc icu-io icu-i18n)  ;
+
+
+
+
+export  ONIG_CFLAGS=$(pkg-config --cflags  --static oniguruma) ;
+export  ONIG_LIBS=$(pkg-config --libs  --static oniguruma) ;
 
 :<<'EOF'
     PHP_MONGODB_SNAPPY_CFLAGS=$(pkg-config --cflags "no install") ;
     PHP_MONGODB_SNAPPY_LIBS=$(pkg-config --libs "no install") ;
-EOF
-:<<'EOF'
+
     PHP_MONGODB_ZLIB_CFLAGS=$(pkg-config --cflags zlib) ;
     PHP_MONGODB_ZLIB_LIBS=$(pkg-config --libs zlib) ;
     PHP_MONGODB_ZSTD_CFLAGS=$(pkg-config --cflags libzstd) ;
     PHP_MONGODB_ZSTD_LIBS=$(pkg-config --libs libzstd) ;
-EOF
-:<<'EOF'
+
     PHP_MONGODB_SASL_CFLAGS=$(pkg-config --cflags sasl) ;
-EOF
-:<<'EOF'
+
     PHP_MONGODB_SSL_CFLAGS=$(pkg-config --cflags openssl libcrypto libssl) ;
     PHP_MONGODB_SSL_LIBS=$(pkg-config --libs openssl libcrypto libssl) ;
     PHP_MONGODB_ICU_CFLAGS=$(pkg-config --cflags icu-uc icu-io icu-i18n) ;
     PHP_MONGODB_ICU_LIBS=$(pkg-config --libs icu-uc icu-io icu-i18n) ;
-EOF
-:<<'EOF'
+
     EDIT_CFLAGS=$(pkg-config --cflags "no install") ;
     EDIT_LIBS=$(pkg-config --libs "no install") ;
 EOF
 
 
-export   LIBSODIUM_CFLAGS=$(pkg-config --cflags libsodium) ;
-export   LIBSODIUM_LIBS=$(pkg-config --libs libsodium) ;
+export   LIBSODIUM_CFLAGS=$(pkg-config --cflags  --static libsodium) ;
+export   LIBSODIUM_LIBS=$(pkg-config --libs  --static libsodium) ;
 
-export   XSL_CFLAGS=$(pkg-config --cflags libxslt) ;
-export   XSL_LIBS=$(pkg-config --libs libxslt) ;
+export   XSL_CFLAGS=$(pkg-config --cflags  --static libxslt) ;
+export   XSL_LIBS=$(pkg-config --libs  --static libxslt) ;
 
-export   EXSLT_CFLAGS=$(pkg-config --cflags libexslt) ;
-export   EXSLT_LIBS=$(pkg-config --libs libexslt) ;
+export   EXSLT_CFLAGS=$(pkg-config --cflags --static libexslt) ;
+export   EXSLT_LIBS=$(pkg-config --libs --static libexslt) ;
 
 
-export   LIBZIP_CFLAGS=$(pkg-config --cflags libzip) ;
-export   LIBZIP_LIBS=$(pkg-config --libs libzip) ;
+export   LIBZIP_CFLAGS=$(pkg-config --cflags --static libzip) ;
+export   LIBZIP_LIBS=$(pkg-config --libs --static libzip) ;
+
+
+export   NCURSES_CFLAGS=$(pkg-config --cflags --static  ncurses);
+export   NCURSES_LIBS=$(pkg-config  --libs --static ncurses);
+
+export   READLINE_CFLAGS=$(pkg-config --cflags --static readline)  ;
+export   READLINE_LIBS=$(pkg-config  --libs --static readline)  ;
+
+
 
 :<<'EOF'
-# export   NCURSES_CFLAGS=$(pkg-config --cflags formw  menuw  ncursesw panelw);
-# export   NCURSES_LIBS=$(pkg-config  --libs formw  menuw  ncursesw panelw);
-
-# export   READLINE_CFLAGS=$(pkg-config --cflags  readline)  ;
-# export   READLINE_LIBS=$(pkg-config  --libs readline)  ;
-EOF
-
-
-:<<'EOF'
-export SWOOLE_CFLAGS=$(pkg-config  --cflags libcares)
-export SWOOLE_CFLAGS=$(pkg-config  --libs libcares)
-export SWOOLE_CFLAGS=$(pkg-config --libs  --cflags libcares)
+    export SWOOLE_CFLAGS=$(pkg-config  --cflags libcares)
+    export SWOOLE_CFLAGS=$(pkg-config  --libs libcares)
+    export SWOOLE_CFLAGS=$(pkg-config --libs  --cflags libcares)
 
     SWOOLE_CFLAGS=$(pkg-config  --cflags libcares)
     LIBPQ_CFLAGS=$(pkg-config  --cflags "no install")
     LIBPQ_LIBS=$(pkg-config  --libs "no install")
 
-EOF
-
-:<<'EOF'
     swoole 配置
     $SWOOLE_CFLAGS $LIBPQ_CFLAGS
 
@@ -239,22 +231,44 @@ EOF
 
     SWOOLE_PGSQL_CFLAGS
 
-export LIBPQ_CFLAGS="-I/usr/local/libpq/15.1/include" &&
-export LIBPQ_LIBS="-L/usr/local/libpq/15.1/lib" &&
-
 
     dnl FIXME: this should be SWOOLE_CFLAGS="$SWOOLE_CFLAGS $LIBPQ_CFLAGS"
     dnl or SWOOLE_PGSQL_CFLAGS="$SWOOLE_CFLAGS $LIBPQ_CFLAGS" and SWOOLE_PGSQL_CFLAGS only applies to ext-src/swoole_postgresql_coro.cc
     EXTRA_CFLAGS="$EXTRA_CFLAGS $LIBPQ_CFLAGS"
     PHP_EVAL_LIBLINE($LIBPQ_LIBS, SWOOLE_SHARED_LIBADD)
 
+
+    export CPPFLAGS=-I/usr/local/Cellar/icu4c/69.1/include/
+    export LDFLAGS=-L/usr/local/Cellar/icu4c/69.1/lib
+
 EOF
 
+echo $(pkg-config  --cflags --static ncurses readline)
+echo $(pkg-config  --libs --static ncurses readline)
+
+export LIBPQ_CFLAGS=$(pkg-config  --cflags --static      libpq)
+
+export LIBPQ_LIBS=$(pkg-config  --libs  --static       libpq)
+
+
+export CPPFLAGS=$(pkg-config  --cflags --static  libpq ncurses readline libcares libffi)
+export LIBS=$(pkg-config  --libs --static   libpq ncurses readline libcares libffi)
 
 
     ./buildconf --force ;
     ./configure --help
 
+
+# export CXXFLAGS="-g -O2 -std=c++11"
+# CPPFLAGS+='-DU_USING_ICU_NAMESPACE=1'
+# export CPPFLAGS="-DHAVE_CONFIG_H -DU_USING_ICU_NAMESPACE=1"
+# export CPPFLAGS="-DU_USING_ICU_NAMESPACE=0 -static -static-libstdc++"
+
+# CPPFLAGS='-DU_USING_ICU_NAMESPACE=1'
+# CXXFLAGS='-std=c++11 -stdlib=libc++'
+# CXXFLAGS='-std=c++11 -static -static-libstdc++'
+# export CFLAGS='-static -fPIC -fPIE  -stdlib=libc++'
+# LDAGS='-static -fPIC -fPIE  -stdlib=libc++'
 
 
 <?php if ($this->osType !== 'macos') : ?>
@@ -325,9 +339,9 @@ set +x
 <?php foreach ($this->libraryList as $item) : ?>
     <?php if (!empty($item->pkgName)) : ?>
     echo "[<?= $item->name ?>]"
-    # pkg-config --libs <?= ($item->pkgName ?: $item->name) . PHP_EOL; ?>
-    pkg-config --cflags <?= $item->pkgName . PHP_EOL ?>
-    pkg-config --libs <?= $item->pkgName . PHP_EOL ?>
+    # pkg-config --libs --static <?= ($item->pkgName ?: $item->name) . PHP_EOL; ?>
+    pkg-config --cflags --static <?= $item->pkgName . PHP_EOL ?>
+    pkg-config --libs --static <?= $item->pkgName . PHP_EOL ?>
     echo "==========================================================="
     <?php endif; ?>
 <?php endforeach; ?>

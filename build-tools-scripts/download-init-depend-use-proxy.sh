@@ -42,7 +42,40 @@ then
   # SKIP_LIBRARY_DOWNLOAD=1 php prepare.php +mongodb +inotify
   # php prepare.php  +mongodb +inotify
   # php prepare.php   -inotify -imagick -gd -intl -posix -mysqli -soap -exif  -opcache -pcntl
-  php prepare.php   +inotify +ds
+ php prepare-linux.php   \
+  +pgsql +pdo_pgsql \
+  +pgsql +pdo_pgsql \
+  +apcu -ffi \
+  -mysqli   \
+  -imagick \
+  -pcntl  \
+  +inotify \
+  +ds   \
+  -soap
+
+:<<'EOF'
+  exit 0
+  php prepare.php   \
+  +pgsql +pdo_pgsql \
+  +apcu +ffi \
+  -pdo_mysql -mysqli  -mysqlnd \
+  -sqlite3 -pdo_sqlite \
+  -mongodb \
+  -redis \
+  -intl \
+  -imagick -gd -exif \
+  -bz2 -zlib -zip \
+  -opcache -pcntl  -tokenizer \
+  -swoole  -yaml   -opcache  \
+  -sodium \
+  -gmp  -bcmath \
+  -phar -mbstring \
+  -inotify \
+  -ds   -posix   -soap   \
+  -sockets
+
+
+EOF
 
   pear config-set http_proxy ''
 

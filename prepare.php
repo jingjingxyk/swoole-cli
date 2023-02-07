@@ -16,9 +16,6 @@ if (!empty($argv[1])) {
     $p->setOsType(trim($argv[1]));
 }
 
-# 设置CPU核数 ; 获取CPU核数，用于 make -j $(nproc)
-$p->setMaxJob(`nproc 2> /dev/null || sysctl -n hw.ncpu`); // nproc on macos ；
-
 if ($p->osType == 'macos') {
     $p->setWorkDir(__DIR__);
     $p->setExtraLdflags(
@@ -835,7 +832,6 @@ function install_sqlite3(Preprocessor $p)
     );
 }
 
-
 function install_zlib_origin(Preprocessor $p)
 {
     $p->addLibrary(
@@ -884,7 +880,6 @@ function install_icu_origin(Preprocessor $p)
     );
 }
 
-
 function install_oniguruma(Preprocessor $p)
 {
     $p->addLibrary(
@@ -912,20 +907,19 @@ function install_oniguruma(Preprocessor $p)
     );
 }
 
-
 function install_cares(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('cares'))
+
+            ->withHomePage('https://c-ares.org/')
+            ->withLicense('https://c-ares.org/license.html', Library::LICENSE_MIT)
             ->withUrl('https://c-ares.org/download/c-ares-1.18.1.tar.gz')
             ->withScriptBeforeConfigure('pwd')
             ->withConfigure('./configure --prefix=/usr/ --enable-static --disable-shared ')
             ->withPkgName('libcares')
             ->withPkgConfig('/usr/lib/pkgconfig')
             ->withLdflags('-L/usr/lib')
-            ->disableDefaultLdflags()
-            ->withLicense('https://c-ares.org/license.html', Library::LICENSE_MIT)
-            ->withHomePage('https://c-ares.org/')
     );
 }
 
@@ -933,18 +927,20 @@ function install_cares_2(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('cares_2'))
+            ->withHomePage('https://c-ares.org/')
+            ->withLicense('https://c-ares.org/license.html', Library::LICENSE_MIT)
             ->withUrl('https://c-ares.org/download/c-ares-1.18.1.tar.gz')
-            ->withSkipInstall()
             ->withScriptBeforeConfigure('pwd')
             ->withConfigure('./configure --prefix=/usr/c-ares --enable-static --disable-shared ')
-            //->withPkgName('libcares')
-            ->disablePkgName()
-            //->withPkgConfig('/usr/c-ares/lib/pkgconfig')
-            ->disableDefaultPkgConfig()
-            // ->withLdflags('-L/usr/c-ares/lib')
+            ->withPkgName('libcares')
+            ->withPkgConfig('/usr/c-ares/lib/pkgconfig')
+            ->withLdflags('-L/usr/c-ares/lib')
+            ->withSystemConfigPath('/usr/c-ares/bin/')
             ->disableDefaultLdflags()
-            ->withLicense('https://c-ares.org/license.html', Library::LICENSE_MIT)
-            ->withHomePage('https://c-ares.org/')
+            ->disableDefaultPkgConfig()
+            ->disablePkgName()
+            ->withSkipInstall()
+
     );
 }
 
@@ -1209,6 +1205,7 @@ function install_pgsql(Preprocessor $p)
     //->disableDefaultLdflags()
     );
 }
+
 
 
 function install_socat($p)
@@ -1492,7 +1489,6 @@ function install_aria2($p)
     );
 }
 
-
 install_libiconv($p); //没有 libiconv.pc 文件 不能使用 pkg-config 命令
 install_openssl($p);  //openssl 3 版本
 install_openssl_1($p); //openssl 1 版本 默认跳过安装
@@ -1569,6 +1565,7 @@ install_jemalloc($p);
 install_tcmalloc($p);
 
 install_aria2($p);
+
 
 
 

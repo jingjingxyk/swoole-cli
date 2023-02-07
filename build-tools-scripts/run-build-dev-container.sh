@@ -14,6 +14,10 @@ cd ${__DIR__}
 
 {
   docker stop build-dev-dependencies
+} || {
+  echo $?
+}
+{
   docker rm build-dev-dependencies
 } || {
   echo $?
