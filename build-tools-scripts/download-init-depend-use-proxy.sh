@@ -44,7 +44,6 @@ then
   # php prepare.php   -inotify -imagick -gd -intl -posix -mysqli -soap -exif  -opcache -pcntl
  php prepare.php   \
   +pgsql +pdo_pgsql \
-  +pgsql +pdo_pgsql \
   +apcu -ffi \
   -mysqli   \
   -imagick \
