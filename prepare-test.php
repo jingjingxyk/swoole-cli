@@ -82,7 +82,7 @@ EOF
             ->withLdflags('-L/usr/openssl_3/lib64')
             ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
             ->withHomePage('https://www.openssl.org/')
-            //->withSkipInstall()
+    //->withSkipInstall()
     );
 }
 
@@ -111,7 +111,7 @@ EOF
             ->withPkgConfig('/usr/openssl_1/lib/pkgconfig')
             ->withPkgName('libcrypto libssl openssl')
             ->withLdflags('-L/usr/openssl_1/lib')
-        ->withSkipInstall()
+            ->withSkipInstall()
     );
 }
 
@@ -256,11 +256,11 @@ function install_icu_2(Preprocessor $p)
             ->withPkgName('icu-uc icu-io icu-i18n')
             ->withPkgConfig('/usr/icu_2/lib/pkgconfig')
             ->withLdflags('-L/usr/icu_2/lib')
-        //            ->disablePkgName()
-        //            ->disableDefaultPkgConfig()
-        //            ->disableDefaultLdflags()
-        //    ->withSkipLicense()
-        //    ->withSkipInstall()
+    //            ->disablePkgName()
+    //            ->disableDefaultPkgConfig()
+    //            ->disableDefaultLdflags()
+    //    ->withSkipLicense()
+    //    ->withSkipInstall()
     );
 }
 
@@ -393,9 +393,9 @@ function install_ncurses(Preprocessor $p)
             ->withPkgConfig('/usr/ncurses/lib/pkgconfig')
             ->withLdflags('-L/usr/ncurses/lib/')
             ->withBinPath('/usr/ncurses/bin/')
-        //            ->disableDefaultLdflags()
-        //            ->disableDefaultPkgConfig()
-        //            ->disablePkgName()
+            //            ->disableDefaultLdflags()
+            //            ->disableDefaultPkgConfig()
+            //            ->disablePkgName()
             ->withSkipInstall()
     );
 }
@@ -454,9 +454,9 @@ EOF
                 '
             '
             )
-        //            ->disablePkgName()
-        //            ->disableDefaultPkgConfig()
-        //            ->disableDefaultLdflags()
+            //            ->disablePkgName()
+            //            ->disableDefaultPkgConfig()
+            //            ->disableDefaultLdflags()
             ->withSkipInstall()
     );
 }
@@ -947,11 +947,11 @@ function install_cares_2(Preprocessor $p)
             ->withPkgConfig('/usr/c-ares/lib/pkgconfig')
             ->withLdflags('-L/usr/c-ares/lib')
             ->withBinPath('/usr/c-ares/bin/')
-        //->withSkipLicense()
-        //->disablePkgName()
-        //->disableDefaultPkgConfig()
-        //->disableDefaultLdflags()
-        //->withSkipInstall()
+    //->withSkipLicense()
+    //->disablePkgName()
+    //->disableDefaultPkgConfig()
+    //->disableDefaultLdflags()
+    //->withSkipInstall()
     );
 }
 
@@ -1287,10 +1287,10 @@ install-libpq5555.a: install-lib-static install-lib-pc
                 '
             '
             )
-        //->withSkipInstall()
-        //->disablePkgName()
-        //->disableDefaultPkgConfig()
-        //->disableDefaultLdflags()
+    //->withSkipInstall()
+    //->disablePkgName()
+    //->disableDefaultPkgConfig()
+    //->disableDefaultLdflags()
     );
 }
 
@@ -1318,12 +1318,13 @@ function install_libffi($p)
             ->withPkgConfig('/usr/libffi/lib/pkgconfig')
             ->withLdflags('-L/usr/libffi/lib/')
             ->withBinPath('/usr/libffi/bin/')
-        //->withSkipInstall()
-        //->disablePkgName()
-        //->disableDefaultPkgConfig()
-        //->disableDefaultLdflags()
+    //->withSkipInstall()
+    //->disablePkgName()
+    //->disableDefaultPkgConfig()
+    //->disableDefaultLdflags()
     );
 }
+
 function install_socat($p)
 {
     // https://github.com/aledbf/socat-static-binary/blob/master/build.sh

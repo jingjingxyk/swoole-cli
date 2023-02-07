@@ -9,6 +9,8 @@ gmp: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 zlib: https://zlib.net/zlib_license.html
 bzip2: https://www.sourceware.org/bzip2/
 liblz4: https://github.com/lz4/lz4/blob/dev/LICENSE
+liblzma: https://git.tukaani.org/?p=xz.git;a=blob;f=COPYING
+libzstd: https://github.com/facebook/zstd/blob/dev/COPYING
 zip: https://libzip.org/license/
 giflib: http://giflib.sourceforge.net/intro.html
 libpng: http://www.libpng.org/pub/png/src/libpng-LICENSE.txt
@@ -32,5 +34,3 @@ php-ext-swoole: https://github.com/swoole/swoole-src/blob/master/LICENSE
 php-ext-yaml: https://github.com/php/pecl-file_formats-yaml/blob/php7/LICENSE
 php-ext-apcu: https://github.com/krakjoe/apcu/blob/master/LICENSE
 php-ext-ds: https://github.com/php-ds/ext-ds/blob/master/LICENSE
-php-ext-imagick: https://github.com/Imagick/imagick/blob/master/LICENSE
-

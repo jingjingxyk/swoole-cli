@@ -85,36 +85,6 @@ EOF
     );
 }
 
-function install_openssl_1(Preprocessor $p)
-{
-    $static = $p->osType === 'macos' ? '' : ' -static --static';
-    $p->addLibrary(
-        (new Library('openssl_1'))
-            ->withUrl('https://www.openssl.org/source/openssl-1.1.1p.tar.gz')
-            ->withFile('openssl-1.1.1p.tar.gz')
-            ->withSkipInstall()
-            ->withCleanBuildDirectory()
-            ->withScriptBeforeConfigure(
-                '
-                test -d /usr/openssl && rm -rf /usr/openssl
-            '
-            )
-            ->withConfigure(
-                <<<EOF
-            ./config $static \
-            no-shared --release --prefix=/usr/openssl
-EOF
-            )
-            ->withMakeInstallOptions('install_sw')
-            ->withPkgConfig('/usr/openssl/lib/pkgconfig')
-            ->withPkgName('libcrypto libssl openssl')
-            ->withLdflags('-L/usr/openssl/lib')
-            ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
-            ->withHomePage('https://www.openssl.org/')
-    );
-}
-
-
 // Dependent libiconv
 function install_libxml2(Preprocessor $p)
 {
@@ -180,179 +150,25 @@ function install_icu(Preprocessor $p)
     $p->addLibrary(
         (new Library('icu'))
             ->withUrl('https://github.com/unicode-org/icu/releases/download/release-60-3/icu4c-60_3-src.tgz')
-            //->withUrl('https://github.com/unicode-org/icu/releases/download/release-72-1/icu4c-72_1-src.tgz')
-            //https://unicode-org.github.io/icu/userguide/icu4c/build.html
-            ->withCleanBuildDirectory()
-            ->withConfigure(
-                '
-            source/runConfigureICU Linux --help
-            # CPPFLAGS="-DPIC -fPIC -DICU_DATA_DIR=/usr/"
-            source/runConfigureICU Linux --prefix=/usr/ --enable-static --disable-shared \
-            --disable-tests --disable-samples --with-data-packaging=static
-            '
-            )
-            ->withMakeOptions('all VERBOSE=1')
-            ->withPkgName('icu-uc icu-io icu-i18n')
-            ->withPkgConfig('/usr/lib/pkgconfig')
-            //->disableDefaultPkgConfig()
-            ->withLdflags('-L/usr/icu/lib')
-            //->disableDefaultLdflags()
+            ->withConfigure('source/runConfigureICU Linux --prefix=/usr --enable-static --disable-shared')
+            ->withPkgName('icu-i18n')
             ->withHomePage('https://icu.unicode.org/')
             ->withLicense('https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE', Library::LICENSE_SPEC)
-    );
-}
-
-function install_icu_2(Preprocessor $p)
-{
-    $p->addLibrary(
-        (new Library('icu_2'))
-            ->withUrl('https://github.com/unicode-org/icu/releases/download/release-60-3/icu4c-60_3-src.tgz')
-            //->withUrl('https://github.com/unicode-org/icu/releases/download/release-72-1/icu4c-72_1-src.tgz')
-            //https://unicode-org.github.io/icu/userguide/icu4c/build.html
-            ->withCleanBuildDirectory()
-            ->withConfigure(
-                '
-            source/runConfigureICU Linux --prefix=/usr/icu --enable-static --disable-shared \
-            --disable-tests --disable-samples --with-data-packaging=static
-            '
-            )
-            ->withMakeOptions('all VERBOSE=1')
-            ->withPkgName('icu-uc icu-io icu-i18n')
-            //->withPkgConfig('/usr/icu/lib/pkgconfig')
-            ->disableDefaultPkgConfig()
-            // ->withLdflags('-L/usr/icu/lib')
-            ->disableDefaultLdflags()
-            ->withHomePage('https://icu.unicode.org/')
-            ->withLicense('https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE', Library::LICENSE_SPEC)
-    );
-}
-
-
-function install_pcre2(Preprocessor $p)
-{
-    $p->addLibrary(
-        (new Library('pcre2', '/usr/pcre2'))
-            ->withUrl('https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.42/pcre2-10.42.tar.gz')
-            ->withFile('pcre2-10.42.tar.gz')
             ->withSkipInstall()
-            //  CFLAGS='-static -O2 -Wall'
-            ->withConfigure(
-                "
-            ./configure --help
-
-            ./configure \
-            --prefix=/usr/pcre2 \
-            --enable-static \
-            --disable-shared \
-            --enable-pcre2-16 \
-            --enable-pcre2-32 \
-            --enable-jit \
-            --enable-unicode
-
-         "
-            )
-            ->withMakeInstallOptions('install ')
-            //->withPkgConfig('/usr/pcre2/lib/pkgconfig')
-            ->disableDefaultPkgConfig()
-            //->withPkgName("libpcre2-16     libpcre2-32    libpcre2-8      libpcre2-posix")
-            ->disablePkgName()
-            //->withLdflags('-L/usr/pcre2/lib')
-            ->disableDefaultLdflags()
-            ->withLicense(
-                'https://github.com/PCRE2Project/pcre2/blob/master/COPYING',
-                Library::LICENSE_PCRE2
-            ) //PCRE2 LICENCE
-            ->withHomePage('https://github.com/PCRE2Project/pcre2.git')
     );
 }
+
+
 
 function install_ncurses(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('ncurses'))
             ->withUrl('https://ftp.gnu.org/pub/gnu/ncurses/ncurses-6.3.tar.gz')
-            //->withUrl('https://invisible-island.net/datafiles/release/ncurses.tar.gz')
-            //->withFile('ncurses.tar.gz')
-            ->withFile('ncurses-6.3.tar.gz')
+            ->withConfigure('./configure --prefix=/usr --enable-static --disable-shared')
+            ->withLicense('https://github.com/projectceladon/libncurses/blob/master/README', Library::LICENSE_MIT)
+            ->withHomePage('https://github.com/projectceladon/libncurses')
             ->withSkipInstall()
-            ->withCleanBuildDirectory()
-            ->withScriptBeforeConfigure(
-                '
-                test -d /usr/ncurses && rm -rf /usr/ncurses ;
-                test -d /usr/ncurses/ && rm -rf /usr/ncurses/ ;
-                mkdir -p /usr/ncurses/lib/pkgconfig
-            '
-            )
-            // CFLAGS="-static -O2 -Wall" \
-            //   LDFLAGS="-Wl,R-lncurses"
-            // LDFLAGS="-lncurses" \
-            ->withConfigure(
-                '
-            ./configure --help
-
-            # CFLAGS=$(pkg-config --cflags libpcre2-16     libpcre2-32    libpcre2-8 libpcre2-posix)
-            # LDFLAGS=$(pkg-config  --libs libpcre2-16     libpcre2-32    libpcre2-8  libpcre2-posix)
-
-            #   --with-pcre2 \ --with-curses-h
-
-            #   --enable-widec \
-            # --enable-overwrite \
-
-            ./configure \
-            --prefix=/usr/ncurses \
-            --enable-static \
-            --disable-shared \
-            --enable-pc-files \
-            --enable-echo \
-            --with-normal \
-            --with-pkg-config=/usr/ncurses/lib/pkgconfig \
-            --with-pkg-config-libdir=/usr/ncurses/lib/pkgconfig \
-            --with-ticlib \
-            --without-tests \
-            --without-dlsym \
-            --without-debug \
-            --disable-relink
-
-            '
-            )
-            /*
-                --enable-overwrite\
-            -with-form-libname=form \
-              --with-menu-libname=menu \
-              --with-panel-libname=panel \
-              --with-cxx-libname=ncurses
-             */
-            ->withScriptAfterInstall(
-                "
-            tic -x
-            # ln -s /usr/ncurses/include/ncursesw /usr/ncurses/include/ncurses ;
-:<<'EOF'
-            ln -s /usr/ncurses/lib/pkgconfig/formw.pc /usr/ncurses/lib/pkgconfig/form.pc ;
-            ln -s /usr/ncurses/lib/pkgconfig/menuw.pc /usr/ncurses/lib/pkgconfig/menu.pc ;
-            ln -s /usr/ncurses/lib/pkgconfig/ncursesw.pc /usr/ncurses/lib/pkgconfig/ncurses.pc ;
-            ln -s /usr/ncurses/lib/pkgconfig/panelw.pc /usr/ncurses/lib/pkgconfig/panel.pc ;
-            ln -s /usr/ncurses/lib/pkgconfig/ncurses++w.pc /usr/ncurses/lib/pkgconfig/ncurses++.pc ;
-            ln -s /usr/ncurses/lib/pkgconfig/tinfow.pc /usr/ncurses/lib/pkgconfig/tinfow.pc ;
-
-            ln -s /usr/ncurses/lib/libformw.a /usr/ncurses/lib/libform.a ;
-            ln -s /usr/ncurses/lib/libmenuw.a /usr/ncurses/lib/libmenu.a ;
-            ln -s /usr/ncurses/lib/libncursesw.a /usr/ncurses/lib/libncurses.a ;
-            ln -s /usr/ncurses/lib/libpanelw.a /usr/ncurses/lib/libpanel.a ;
-            ln -s /usr/ncurses/lib/libtinfow.a /usr/ncurses/lib/libtinfo.a ;
-EOF
-                "
-            )
-            ->withMakeOptions('all')
-            ->withPkgName('ncursesw ncurses')
-            ->disablePkgName()
-            //->withPkgConfig('/usr/ncurses/lib/pkgconfig')
-            ->disableDefaultPkgConfig()
-            //->withLdflags('-L/usr/ncurses/lib/')
-            ->disableDefaultLdflags()
-            //->withLicense('https://github.com/projectceladon/libncurses/blob/master/README', Library::LICENSE_MIT)
-            ->withLicense('https://invisible-island.net/ncurses/ncurses-license.html', Library::LICENSE_GPL)
-            //->withHomePage('https://github.com/projectceladon/libncurses')
-            ->withHomePage('https://invisible-island.net/ncurses/#download_ncurses')
     );
 }
 
@@ -361,49 +177,12 @@ function install_readline(Preprocessor $p)
     $p->addLibrary(
         (new Library('readline', '/usr/readline'))
             ->withUrl('https://ftp.gnu.org/gnu/readline/readline-8.2.tar.gz')
-            ->withSkipInstall()
-            ->withCleanBuildDirectory()
-            ->withScriptBeforeConfigure(
-                <<<'_EOF_'
-                 test -d /usr/readline && rm -rf /usr/readline ;
-
-_EOF_
-            )
-            ->withConfigure(
-                '
-             # -lncurses
-             # -I/usr/include/ncursesw
-               ./configure --help
-:<<\'EOF\'
-                CFLAGS=$(pkg-config --cflags  formw menuw ncursesw  panelw )
-                CFLAGS=$(pkg-config --cflags  form menu ncurses  panel )
-                CFLAGS="-I/usr/ncurses/include"
-                export CFLAGS="${CFLAGS} -DNCURSES_WIDECHAR"
-                LDFLAGS=$(pkg-config --libs formw menuw ncursesw  panelw )
-                LDFLAGS=$(pkg-config --libs form menu ncurses  panel )
-                LDFLAGS="-L/usr/ncurses/lib -lformw -lmenuw -lncursesw -lpanelw -ltinfow"
-                 export LDFLAGS="${LDFLAGS} -Wl,--as-needed,-O1,--sort-common "
-                # -lformw -lmenuw -lncursesw  -lpanelw -Wl,--as-needed,-O1,--sort-common
-               # return 0
-EOF
-            ./configure --prefix=/usr/readline \
-            --enable-static --disable-shared --with-curses --enable-multibyte
-
-            '
-            )
-            ->withMakeInstallOptions("install-static")
+            ->withConfigure('./configure --prefix=/usr/readline --enable-static --disable-shared')
             ->withPkgName('readline')
-            //->disablePkgName()
-            //->withPkgConfig('/usr/readline/lib/pkgconfig')
-            ->disableDefaultPkgConfig()
-            //->withLdflags('-L/usr/readline/lib')
-            ->disableDefaultLdflags()
-            ->withScriptAfterInstall(
-                '
-            '
-            )
+            ->withLdflags('-L/usr/readline/lib')
             ->withLicense('http://www.gnu.org/licenses/gpl.html', Library::LICENSE_GPL)
             ->withHomePage('https://tiswww.case.edu/php/chet/readline/rltop.html')
+            ->withSkipInstall()
     );
 }
 
@@ -423,38 +202,6 @@ function install_zlib(Preprocessor $p)
     );
 }
 
-function install_bzip2_dev_latest(Preprocessor $p)
-{
-    $p->addLibrary(
-        (new Library('bzip2', '/usr/bzip2'))
-            ->withUrl('https://gitlab.com/bzip2/bzip2/-/archive/master/bzip2-master.tar.gz')
-            ->withCleanBuildDirectory()
-            ->withScriptBeforeConfigure(
-                '
-              test -d /usr/bzip2 && rm -rf /usr/bzip2 ;
-              apk add python3 py3-pip && python3 -m pip install pytest ;
-              mkdir build && cd build ;
-            '
-            )
-            ->withConfigure(
-                '
-                    cmake .. -DCMAKE_BUILD_TYPE="Release" \
-                    -DCMAKE_INSTALL_PREFIX=/usr/bzip2  \
-                    -DENABLE_STATIC_LIB=ON ;
-                    cmake --build . --target install   ;
-                    cd - ;
-                    :; #  shell空语句
-                    pwd
-                    return 0 ; # 返回本函数调用处，本函数后续代码不在执行
-            '
-            )
-            ->withLdflags('-L/usr/bzip2/lib')
-            ->withHomePage('https://www.sourceware.org/bzip2/')
-            ->withLicense('https://www.sourceware.org/bzip2/', Library::LICENSE_BSD)
-    );
-}
-
-
 function install_bzip2(Preprocessor $p)
 {
     $p->addLibrary(
@@ -464,10 +211,8 @@ function install_bzip2(Preprocessor $p)
             ->withScriptBeforeConfigure(
                 '
                 test -d /usr/bzip2 && rm -rf /usr/bzip2 ;
-                echo $?
             '
             )
-            //->withConfigure('return 0 ')
             ->withMakeOptions('all')
             ->withMakeInstallOptions(' install PREFIX=/usr/bzip2')
             ->disableDefaultPkgConfig()
@@ -863,8 +608,6 @@ function install_bzip2_origin(Preprocessor $p)
             ->withMakeInstallOptions(' install PREFIX=/usr/bzip2')
             ->disableDefaultPkgConfig()
             ->withLdflags('-L/usr/bzip2/lib')
-
-
     );
 }
 
@@ -911,22 +654,6 @@ function install_cares(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('cares'))
-
-            ->withHomePage('https://c-ares.org/')
-            ->withLicense('https://c-ares.org/license.html', Library::LICENSE_MIT)
-            ->withUrl('https://c-ares.org/download/c-ares-1.18.1.tar.gz')
-            ->withScriptBeforeConfigure('pwd')
-            ->withConfigure('./configure --prefix=/usr/ --enable-static --disable-shared ')
-            ->withPkgName('libcares')
-            ->withPkgConfig('/usr/lib/pkgconfig')
-            ->withLdflags('-L/usr/lib')
-    );
-}
-
-function install_cares_2(Preprocessor $p)
-{
-    $p->addLibrary(
-        (new Library('cares_2'))
             ->withHomePage('https://c-ares.org/')
             ->withLicense('https://c-ares.org/license.html', Library::LICENSE_MIT)
             ->withUrl('https://c-ares.org/download/c-ares-1.18.1.tar.gz')
@@ -935,12 +662,7 @@ function install_cares_2(Preprocessor $p)
             ->withPkgName('libcares')
             ->withPkgConfig('/usr/c-ares/lib/pkgconfig')
             ->withLdflags('-L/usr/c-ares/lib')
-            ->withSystemConfigPath('/usr/c-ares/bin/')
-            ->disableDefaultLdflags()
-            ->disableDefaultPkgConfig()
-            ->disablePkgName()
-            ->withSkipInstall()
-
+            ->withBinPath('/usr/c-ares/bin/')
     );
 }
 
@@ -1141,367 +863,126 @@ function install_pgsql(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('pgsql'))
+            ->withHomePage('https://www.postgresql.org/')
+            ->withLicense('https://www.postgresql.org/about/licence/', Library::LICENSE_SPEC)
             ->withUrl('https://ftp.postgresql.org/pub/source/v15.1/postgresql-15.1.tar.gz')
-            //->withSkipInstall()
+            //https://www.postgresql.org/docs/devel/installation.html
+            //https://www.postgresql.org/docs/devel/install-make.html#INSTALL-PROCEDURE-MAKE
+            ->withManual('https://www.postgresql.org/docs/')
             ->withCleanBuildDirectory()
+            ->withScriptBeforeConfigure(
+                '
+               test -d /usr/pgsql && rm -rf /usr/pgsql
+            '
+            )
             ->withConfigure(
                 '
-                  ./configure --help
-
-            # export ICU_CFLAGS="$(pkg-config --cflags  icu-uc icu-io icu-i18n)"
-            # export ICU_LIBS="$(pkg-config --libs  icu-uc icu-io icu-i18n)"
-            export XML2_CFLAGS="$(pkg-config --cflags  libxml-2.0 )"
-            export XML2_LIBS="$(pkg-config --libs  libxml-2.0 )"
-
-            CFLAGS=$(pkg-config --cflags --static  libcrypto  libssl    openssl readline libxml-2.0 icu-uc icu-io icu-i18n)
-
-
-            export CFLAGS="-static -O2 -Wall -fPIC $CFLAGS -I/usr/include "
-            # LDFLAGS=$(pkg-config --libs --static libcrypto  libssl    openssl readline libxml-2.0 icu-uc icu-io icu-i18n)
-            # export LDFLAGS="-static $LDFLAGS -L/usr/lib "
-
-            ./configure --prefix=/usr/pgsql \
+           sed -i "s/invokes exit\'; exit 1;/invokes exit\';/"  src/interfaces/libpq/Makefile
+  
+           # 替换指定行内容
+            sed -i "102c all: all-lib" src/interfaces/libpq/Makefile
+          
+            export CPPFLAGS="-static -fPIE -fPIC -O2 -Wall "
+            
+            ./configure  --prefix=/usr/pgsql \
+            --enable-coverage=no \
             --with-ssl=openssl  \
             --with-readline \
-            --with-icu \
+            --without-icu \
             --without-ldap \
             --without-libxml  \
             --without-libxslt \
-            --with-includes="/usr/openssl/include/:/usr/libxslt/include:/usr/libxml2/include/:/usr/zlib/lib:/usr/include" \
-            --with-libraries="/usr/openssl/lib64:/usr/libxslt/lib/:/usr/libxml2/lib/:/usr/zlib/lib:/usr/lib"
+            \
+           --with-includes="/usr/openssl/include/:/usr/libxml2/include/:/usr/libxslt/include:/usr/zlib/include:/usr/include" \
+           --with-libraries="/usr/openssl/lib64:/usr/libxslt/lib/:/usr/libxml2/lib/:/usr/zlib/lib:/usr/lib"
+
+ 
+            make -C src/include install 
+            make -C  src/bin/pg_config install
+            
+            make -C  src/common -j $cpu_nums all 
+            make -C  src/common install 
+            
+            make -C  src/port -j $cpu_nums all 
+            make -C  src/port install 
+            
+     
+            make -C  src/backend/libpq -j $cpu_nums all 
+            make -C  src/backend/libpq install 
+            
+            make -C src/interfaces/ecpg   -j $cpu_nums all-pgtypeslib-recurse all-ecpglib-recurse all-compatlib-recurse all-preproc-recurse
+            make -C src/interfaces/ecpg  install-pgtypeslib-recurse install-ecpglib-recurse install-compatlib-recurse install-preproc-recurse
+            
+            # 静态编译 src/interfaces/libpq/Makefile  有静态配置  参考： all-static-lib
+            
+          
+            make -C src/interfaces/libpq  -j $cpu_nums # soname=true
+           
+            make -C src/interfaces/libpq  install 
+            
+            rm -rf /usr/pgsql/lib/*.so.*
+            rm -rf /usr/pgsql/lib/*.so
+            return 0 
+            make -C  src/interfaces/libpq -j $cpu_nums libpq5555.a
+            make -C  src/interfaces/libpq install-libpq5555.a
+            
+            rm -rf /usr/pgsql/lib/*.so.*
+            rm -rf /usr/pgsql/lib/*.so
+            
+            return 0 
             '
             )
-            ->withMakeOptions("-C src/common all")
-            ->withMakeInstallOptions(
-                '-C src/common install'
-            ) //make -C src/interfaces install-ecpg-recurse
-            ->withPkgName('libecpg libecpg_compat libpgtypes libpq')
+            ->withPkgName('libpq')
             ->withPkgConfig('/usr/pgsql/lib/pkgconfig')
             ->withLdflags('-L/usr/pgsql/lib/')
-            ->withSystemConfigPath('/usr/pgsql/bin/')
-            ->withScriptAfterInstall(
+            ->withBinPath('/usr/pgsql/bin/')
+        //->withSkipInstall()
+        //->disablePkgName()
+        //->disableDefaultPkgConfig()
+        //->disableDefaultLdflags()
+    );
+}
+
+function install_libffi($p)
+{
+    $p->addLibrary(
+        (new Library('libffi'))
+            ->withHomePage('https://sourceware.org/libffi/')
+            ->withLicense('http://github.com/libffi/libffi/blob/master/LICENSE', Library::LICENSE_BSD)
+            ->withUrl('https://github.com/libffi/libffi/releases/download/v3.4.4/libffi-3.4.4.tar.gz')
+            ->withFile('libffi-3.4.4.tar.gz')
+            ->withScriptBeforeConfigure(
+                'test -d /usr/libffi && rm -rf /usr/libffi'
+            )
+            ->withConfigure(
                 '
-                    make -C src/backend/libpq all
-                    make -C src/backend/libpq install
-
-                    make -C src/port all
-                    make -C src/port install
-
-                    make -C src/interfaces all-ecpg-recurse
-                    make -C src/interfaces install-ecpg-recurse
-
-                    make -C src/bin all
-                    make -C src/bin install
-
-                    rm -rf /usr/pgsql/lib/*.so.*
-                    rm -rf /usr/pgsql/lib/*.so
+            ./configure --help ;
+            ./configure \
+            --prefix=/usr/libffi \
+            --enable-shared=no \
+            --enable-static=yes 
             '
             )
-            ->withLicense('https://www.postgresql.org/about/licence/', Library::LICENSE_SPEC)
-            ->withHomePage('https://www.postgresql.org/')
-            ->withSkipInstall()
+            ->withPkgName('libffi')
+            ->withPkgConfig('/usr/libffi/lib/pkgconfig')
+            ->withLdflags('-L/usr/libffi/lib/')
+            ->withBinPath('/usr/libffi/bin/')
+    //->withSkipInstall()
     //->disablePkgName()
     //->disableDefaultPkgConfig()
     //->disableDefaultLdflags()
     );
 }
 
-
-
-function install_socat($p)
-{
-    // https://github.com/aledbf/socat-static-binary/blob/master/build.sh
-    $p->addLibrary(
-        (new Library('socat'))
-            ->withUrl('http://www.dest-unreach.org/socat/download/socat-1.7.4.4.tar.gz')
-            ->withHomePage('http://www.dest-unreach.org/socat/')
-            ->withSkipInstall()
-            ->withConfigure(
-                '
-            pkg-config --cflags --static readline
-            pkg-config  --libs --static readline
-
-
-            ./configure --help ;
-
-            CFLAGS=$(pkg-config --cflags --static  libcrypto  libssl    openssl readline)
-
-            export CFLAGS="-static -O2 -Wall -fPIC $CFLAGS "
-            export LDFLAGS=$(pkg-config --libs --static libcrypto  libssl    openssl readline)
-
-            # LIBS="-static -Wall -O2 -fPIC  -lcrypt  -lssl   -lreadline"
-            # CFLAGS="-static -Wall -O2 -fPIC"
-
-            ./configure \
-            --prefix=/usr/socat \
-            --enable-readline \
-            --enable-openssl-base=/usr/openssl
-            '
-            )
-            ->withLicense('http://www.dest-unreach.org/socat/doc/README', Library::LICENSE_GPL)
-    );
-}
-
-function install_nettle($p)
-{
-    // https://github.com/aledbf/socat-static-binary/blob/master/build.sh
-    $p->addLibrary(
-        (new Library('nettle'))
-            ->withUrl('https://ftp.gnu.org/gnu/nettle/nettle-3.8.tar.gz')
-            ->withFile('nettle-3.8.tar.gz')
-            ->withHomePage('https://www.lysator.liu.se/~nisse/nettle/')
-            //->withSkipInstall()
-            ->withConfigure(
-                '
-             ./configure --help
-            ./configure \
-            --prefix=/usr/nettle \
-            --enable-static \
-            --disable-shared
-            '
-            )
-            ->withPkgConfig('/usr/nettle/lib/pkgconfig')
-            ->withPkgName('hogweed nettle')
-            ->withLdflags('/usr/nettle/lib')
-            ->withLicense('https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html', Library::LICENSE_LGPL)
-    );
-}
-
-function install_libunistring($p)
-{
-    $p->addLibrary(
-        (new Library('libunistring'))
-            ->withUrl('https://ftp.gnu.org/gnu/libunistring/libunistring-0.9.1.1.tar.gz')
-            ->withFile('libunistring-0.9.1.1.tar.gz')
-            ->withHomePage('https://www.gnu.org/software/libunistring/')
-            ->withSkipInstall()
-            ->withConfigure(
-                '
-             ./configure --help
-            ./configure \
-            --prefix=/usr/libunistring \
-            --enable-static \
-            --disable-shared
-            '
-            )
-            //->withPkgConfig('/usr/libunistring/lib/pkgconfig')
-            ->disableDefaultPkgConfig()
-            //->withPkgName('libunistringe')
-            ->disablePkgName()
-            //->withLdflags('/usr/libunistring/lib')
-            ->disableDefaultLdflags()
-            ->withLicense('https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html', Library::LICENSE_LGPL)
-    );
-}
-
-function install_gnu_tls($p)
-{
-    $p->addLibrary(
-        (new Library('gnu_tls'))
-            ->withUrl('https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.8.tar.xz')
-            ->withHomePage('https://www.gnutls.org/')
-            ->withSkipInstall()
-            ->withConfigure(
-                '
-            ./configure --help ;
-            ./configure \
-            --prefix=/usr/gnutls \
-             --enable-static \
-            --disable-shared \
-            --without-zstd \
-            --without-tpm2 \
-            --without-tpm \
-            --disable-doc \
-            --disable-tests \
-            --without-included-unistring
-            '
-            )
-            //->withPkgConfig('/usr/gnutls/lib/pkgconfig')
-            ->disableDefaultPkgConfig()
-            //->withPkgName('hogweed nettle')
-            ->disablePkgName()
-            //->withLdflags('/usr/gnutls/lib')
-            ->disableDefaultLdflags()
-            ->withLicense('https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html', Library::LICENSE_LGPL)
-    );
-}
-
-function install_libuv($p)
-{
-    // https://github.com/aledbf/socat-static-binary/blob/master/build.sh
-    $p->addLibrary(
-        (new Library('libuv'))
-            ->withUrl('https://github.com/libuv/libuv/archive/refs/tags/v1.44.2.tar.gz')
-            ->withFile('libuv-v1.44.2.tar.gz')
-            ->withHomePage('https://libuv.org/')
-            //->withSkipInstall()
-            ->withConfigure(
-                '
-
-            sh autogen.sh
-            ./configure --help ;
-            ./configure \
-            --prefix=/usr/libuv \
-            --enable-static \
-            --disable-shared
-            '
-            )
-            ->withPkgConfig('/usr/libuv/lib/pkgconfig')
-            ->withPkgName('libuv')
-            ->withLdflags('/usr/libuv/lib')
-            ->withLicense('https://github.com/libuv/libuv/blob/v1.x/LICENSE', Library::LICENSE_GPL)
-    );
-}
-
-function install_libunwind($p)
-{
-    // https://github.com/aledbf/socat-static-binary/blob/master/build.sh
-    $p->addLibrary(
-        (new Library('libunwind'))
-            ->withUrl('https://github.com/libunwind/libunwind/releases/download/v1.6.2/libunwind-1.6.2.tar.gz')
-            ->withFile('libunwind-1.6.2.tar.gz')
-            ->withHomePage('https://github.com/libunwind/libunwind.git')
-            //->withSkipInstall()
-            ->withConfigure(
-                '
-             # autoreconf -i
-                ./configure --prefix=PREFIX
-            ./configure --help ;
-
-            ./configure \
-            --prefix=/usr/libunwind \
-            --enable-static=yes \
-            --enable-shared=no
-            '
-            )
-            ->withPkgConfig('/usr/libunwind/lib/pkgconfig')
-            ->withPkgName('libunwind-coredump  libunwind-generic   libunwind-ptrace    libunwind-setjmp    libunwind')
-            ->withLdflags('/usr/libunwind/lib')
-            ->withLicense('https://github.com/libunwind/libunwind/blob/master/LICENSE', Library::LICENSE_MIT)
-    );
-}
-
-function install_jemalloc($p)
-{
-    // https://github.com/aledbf/socat-static-binary/blob/master/build.sh
-    $p->addLibrary(
-        (new Library('jemalloc'))
-            ->withUrl('https://github.com/jemalloc/jemalloc/archive/refs/tags/5.3.0.tar.gz')
-            ->withFile('jemalloc-5.3.0.tar.gz')
-            ->withHomePage('http://jemalloc.net/')
-            //->withSkipInstall()
-            ->withConfigure(
-                '
-
-            sh autogen.sh
-            ./configure --help ;
-
-            ./configure \
-            --prefix=/usr/jemalloc \
-            --enable-static=yes \
-            --enable-shared=no \
-            --with-static-libunwind=/usr/libunwind/lib/libunwind.a
-            '
-            )
-            ->withPkgConfig('/usr/jemalloc/lib/pkgconfig')
-            ->withPkgName('jemalloc')
-            ->withLdflags('/usr/jemalloc/lib')
-            ->withLicense(
-                'https://github.com/jemalloc/jemalloc/blob/dev/COPYING',
-                Library::LICENSE_GPL
-            )
-    );
-}
-
-function install_tcmalloc($p)
-{
-    // https://github.com/aledbf/socat-static-binary/blob/master/build.sh
-    $p->addLibrary(
-        (new Library('tcmalloc'))
-            ->withUrl('https://github.com/google/tcmalloc/archive/refs/heads/master.zip')
-            ->withFile('tcmalloc.zip')
-            ->withHomePage('https://google.github.io/tcmalloc/overview.html')
-            ->withUntarArchiveCommand('unzip')
-            //->withSkipInstall()
-            ->withCleanBuildDirectory()
-            ->withConfigure(
-                '
-            cd  tcmalloc-master/
-
-            bazel help
-            bazel build
-            return
-            ./configure \
-            --prefix=/usr/tcmalloc \
-            --enable-static \
-            --disable-shared
-            '
-            )
-            ->withPkgConfig('/usr/tcmalloc/lib/pkgconfig')
-            ->withPkgName('tcmalloc')
-            ->withLdflags('/usr/tcmalloc/lib')
-            ->withLicense('https://github.com/google/tcmalloc/blob/master/LICENSE', Library::LICENSE_APACHE2)
-    );
-}
-
-function install_aria2($p)
-{
-    // https://github.com/aledbf/socat-static-binary/blob/master/build.sh
-    $p->addLibrary(
-        (new Library('aria2c'))
-            ->withUrl('https://github.com/aria2/aria2/releases/download/release-1.36.0/aria2-1.36.0.tar.gz')
-            //DOCS https://aria2.github.io/manual/en/html/README.html
-            ->withHomePage('https://aria2.github.io/')
-            //->withSkipInstall()
-            ->withCleanBuildDirectory()
-            ->withConfigure(
-                '
-
-            # CFLAGS=$(pkg-config --cflags --static  libcrypto  libssl    openssl readline)
-
-            # export CFLAGS="-static -O2 -Wall -fPIC $CFLAGS "
-            # export LDFLAGS=$(pkg-config --libs --static libcrypto  libssl    openssl readline)
-
-            # LIBS="-static -Wall -O2 -fPIC  -lcrypt  -lssl   -lreadline"
-            # CFLAGS="-static -Wall -O2 -fPIC"
-
-            export ZLIB_CFLAGS=$(pkg-config --cflags --static zlib) ;
-            export  ZLIB_LIBS=$(pkg-config --libs --static zlib) ;
-
-            ./configure --help ;
-
-             ARIA2_STATIC=yes
-            ./configure \
-            --with-ca-bundle="/etc/ssl/certs/ca-certificates.crt" \
-            --prefix=/usr/aria2 \
-            --enable-static=yes \
-            --enable-shared=no \
-            --enable-libaria2 \
-            --with-libuv \
-            --without-gnutls \
-            --with-openssl \
-            --with-libiconv-prefix=/usr/libiconv/ \
-            --with-libz
-            # --with-tcmalloc
-            '
-            )
-            ->withLicense('https://github.com/aria2/aria2/blob/master/COPYING', Library::LICENSE_GPL)
-    );
-}
-
 install_libiconv($p); //没有 libiconv.pc 文件 不能使用 pkg-config 命令
-install_openssl($p);  //openssl 3 版本
-install_openssl_1($p); //openssl 1 版本 默认跳过安装
+install_openssl($p);  //使用 openssl 3 版本
 
 install_libxml2($p);
 install_libxslt($p);
 install_gmp($p);
 
 
-install_icu($p); //虽然自定义安装目录，并且静态编译。但是不使用，默认仍然还是使用静态系统库
-install_icu_2($p); //安装目录 /usr 默认跳过安装
-
-install_pcre2($p); //默认跳过安装
+install_icu($p);  // 默认跳过安装，默认仍然还是使用静态系统库
 
 
 install_ncurses($p); // 默认跳过安装，默认仍然还是使用静态系统库
@@ -1533,9 +1014,7 @@ install_sqlite3($p);
 install_oniguruma($p);
 
 
-install_cares($p); //目录必须是 /usr ；swoole 使用 SWOOLE_CFLAGS 实现，目前不完全支持
-install_cares_2($p); //目录必须是 /usr/c-ares ；swoole 使用 SWOOLE_CFLAGS 实现，目前不完全支持
-
+install_cares($p);
 
 //install_libedit($p);
 install_imagemagick($p);
@@ -1551,23 +1030,7 @@ install_mimalloc($p);
 //参考 https://github.com/docker-library/php/issues/221
 
 install_pgsql($p);
-
-install_socat($p);
-
-install_nettle($p);
-install_libunistring($p); //未安装成功
-
-install_gnu_tls($p); //未安装成功
-install_libuv($p);
-
-install_libunwind($p); //使用 libunwind 可以很方便的获取函数栈中的内容，极大的方便了对函数间调用关系的了解。
-install_jemalloc($p);
-install_tcmalloc($p);
-
-install_aria2($p);
-
-
-
+install_libffi($p);
 
 $p->parseArguments($argc, $argv);
 $p->gen();

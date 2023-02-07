@@ -45,26 +45,29 @@ function install_libiconv(Preprocessor $p)
 
 function install_openssl(Preprocessor $p)
 {
-    $static = ' -static --static';
+    $static = $p->osType === 'macos' ? '' : ' -static --static';
     $p->addLibrary(
-        (new Library('openssl', '/usr/openssl'))
-            ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
+        (new Library('openssl'))
             ->withHomePage('https://www.openssl.org/')
-            ->withUrl('https://www.openssl.org/source/openssl-3.0.7.tar.gz')
-            ->withFile('openssl-3.0.7.tar.gz')
+            ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
+            ->withUrl('https://www.openssl.org/source/openssl-1.1.1p.tar.gz')
+            ->withFile('openssl-1.1.1p.tar.gz')
             ->withCleanBuildDirectory()
+            ->withScriptBeforeConfigure(
+                '
+                test -d /usr/openssl && rm -rf /usr/openssl
+            '
+            )
             ->withConfigure(
                 <<<EOF
-            # ./config $static \
-            ./Configure   $static  \
+            ./config $static \
             no-shared --release --prefix=/usr/openssl
 EOF
             )
-            ->withMakeOptions('build_sw')
             ->withMakeInstallOptions('install_sw')
-            ->withPkgConfig('/usr/openssl/lib64/pkgconfig')
+            ->withPkgConfig('/usr/openssl/lib/pkgconfig')
             ->withPkgName('libcrypto libssl openssl')
-            ->withLdflags('-L/usr/openssl/lib64')
+            ->withLdflags('-L/usr/openssl/lib')
     );
 }
 
@@ -555,7 +558,7 @@ function install_zip(Preprocessor $p)
                 -DENABLE_MBEDTLS=OFF \
                 -DENABLE_OPENSSL=ON \
                 -DOPENSSL_USE_STATIC_LIBS=TRUE \
-                -DOPENSSL_LIBRARIES=/usr/openssl/lib64 \
+                -DOPENSSL_LIBRARIES=/usr/openssl/lib \
                 -DOPENSSL_INCLUDE_DIR=/usr/openssl/include \
                 -DZLIB_LIBRARY=/usr/zlib/lib \
                 -DZLIB_INCLUDE_DIR=/usr/zlib/include \
@@ -1066,7 +1069,7 @@ function install_pgsql(Preprocessor $p)
             --without-libxml  \
             --without-libxslt \
             --with-includes="/usr/openssl/include/:/usr/libxml2/include/:/usr/libxslt/include:/usr/zlib/include:/usr/include" \
-            --with-libraries="/usr/openssl/lib64:/usr/libxslt/lib/:/usr/libxml2/lib/:/usr/zlib/lib:/usr/lib"
+            --with-libraries="/usr/openssl/lib:/usr/libxslt/lib/:/usr/libxml2/lib/:/usr/zlib/lib:/usr/lib"
 
             make -C src/include install 
             make -C  src/bin/pg_config install
