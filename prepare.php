@@ -16,6 +16,9 @@ if (!empty($argv[1])) {
     $p->setOsType(trim($argv[1]));
 }
 
+# 设置CPU核数 ; 获取CPU核数，用于 make -j $(nproc)
+$p->setMaxJob(`nproc 2> /dev/null || sysctl -n hw.ncpu`); // nproc on macos ；
+
 if ($p->osType == 'macos') {
     $p->setWorkDir(__DIR__);
     $p->setExtraLdflags('-framework CoreFoundation -framework SystemConfiguration -undefined dynamic_lookup -lwebp -licudata -licui18n -licuio');
@@ -105,7 +108,9 @@ function install_gmp(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('gmp', '/usr/gmp'))
-            ->withUrl('https://gmplib.org/download/gmp/gmp-6.2.1.tar.lz')
+            //站点SSL证书过期
+            //->withUrl('https://gmplib.org/download/gmp/gmp-6.2.1.tar.lz')
+            ->withUrl('https://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.lz')
             ->withConfigure('./configure --prefix=/usr/gmp --enable-static --disable-shared')
             ->withPkgConfig('/usr/gmp/lib/pkgconfig')
             ->withLdflags('-L/usr/gmp/lib')
@@ -161,8 +166,6 @@ function install_freetype(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('freetype', '/usr/freetype'))
-            // dig mirror.yongbok.net DNS 无解析
-            //->withUrl('https://mirror.yongbok.net/nongnu/freetype/freetype-2.10.4.tar.gz')
             ->withUrl('https://download.savannah.gnu.org/releases/freetype/freetype-2.10.4.tar.gz')
             ->withConfigure('./configure --prefix=/usr/freetype --enable-static --disable-shared')
             ->withLdflags('-L/usr/freetype/lib/')
@@ -219,13 +222,21 @@ function install_bzip2(Preprocessor $p)
     $p->addLibrary(
         (new Library('bzip2', '/usr/bzip2'))
             ->withUrl('https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz')
-            ->withCleanPackageBeforeConfigure()
-            ->withScriptBeforeConfigure('sed -i "s@PREFIX=/usr/local@PREFIX=/usr/bzip2@" Makefile')
-            ->withMakeOptions('all')
-            ->withLdflags('-L/usr/bzip2/lib')
-            ->disableDefaultPkgConfig()
             ->withHomePage('https://www.sourceware.org/bzip2/')
             ->withLicense('https://www.sourceware.org/bzip2/', Library::LICENSE_BSD)
+            ->withCleanBuildDirectory()
+            ->withScriptBeforeConfigure(
+                '
+                test -d /usr/bzip2 && rm -rf /usr/bzip2 ;
+                echo $?
+            '
+            )
+            ->withMakeOptions('all')
+            ->withMakeInstallOptions(' install PREFIX=/usr/bzip2')
+            ->disableDefaultPkgConfig()
+            ->withLdflags('-L/usr/bzip2/lib')
+
+
     );
 }
 
@@ -346,7 +357,18 @@ function install_cares(Preprocessor $p)
     );
 }
 
-
+function install_readline(Preprocessor $p)
+{
+    $p->addLibrary(
+        (new Library('readline', '/usr/readline'))
+            ->withUrl('https://ftp.gnu.org/gnu/readline/readline-8.2.tar.gz')
+            ->withConfigure('./configure --prefix=/usr/readline --enable-static --disable-shared')
+            ->withPkgName('readline')
+            ->withLdflags('-L/usr/readline/lib')
+            ->withLicense('http://www.gnu.org/licenses/gpl.html', Library::LICENSE_GPL)
+            ->withHomePage('https://tiswww.case.edu/php/chet/readline/rltop.html')
+    );
+}
 
 function install_libedit(Preprocessor $p)
 {
@@ -400,7 +422,7 @@ function install_ncurses(Preprocessor $p)
     );
 }
 
-function install_readline(Preprocessor $p)
+function install_readline_2(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('readline', '/usr/readline'))
@@ -535,19 +557,22 @@ function install_mimalloc(Preprocessor $p)
     $p->addLibrary(
         (new Library('mimalloc', '/usr/mimalloc'))
             ->withUrl('https://github.com/microsoft/mimalloc/archive/refs/tags/v2.0.7.tar.gz')
-            ->withFile('mimalloc-2.0.7.tar.gz')
-            ->withConfigure("cmake . -DMI_BUILD_SHARED=OFF -DCMAKE_INSTALL_PREFIX=/usr/mimalloc -DMI_INSTALL_TOPLEVEL=ON -DMI_PADDING=OFF -DMI_SKIP_COLLECT_ON_EXIT=ON -DMI_BUILD_TESTS=OFF")
-            ->withPkgName('libmimalloc')
-            ->withPkgConfig('/usr/mimalloc/lib/pkgconfig')
-            ->withLdflags('-L/usr/mimalloc/lib')
             ->withLicense('https://github.com/microsoft/mimalloc/blob/master/LICENSE', Library::LICENSE_MIT)
             ->withHomePage('https://microsoft.github.io/mimalloc/')
-            ->withScriptAfterInstall('
-                export PKG_CONFIG_PATH=/usr/mimalloc/lib/pkgconfig ;
-                export EXTRA_LIBS=$(pkg-config --libs mimalloc) ;
-                unset  EXTRA_LIBS ;
-                export PKG_CONFIG_PATH=$ORIGIN_PKG_CONFIG_PATH ;
-            ')
+            ->withFile('mimalloc-2.0.7.tar.gz')
+            ->withConfigure(
+                '
+                cmake . -DCMAKE_INSTALL_PREFIX=/usr/mimalloc \
+                -DMI_BUILD_SHARED=OFF \
+                -DMI_INSTALL_TOPLEVEL=ON \
+                -DMI_PADDING=OFF \
+                -DMI_SKIP_COLLECT_ON_EXIT=ON \
+                -DMI_BUILD_TESTS=OFF
+            '
+            )
+            ->withPkgName('mimalloc')
+            ->withPkgConfig('/usr/mimalloc/lib/pkgconfig')
+            ->withLdflags('-L/usr/mimalloc/lib')
     );
 }
 
@@ -635,11 +660,8 @@ install_mimalloc($p);
 
 
 //参考 https://github.com/docker-library/php/issues/221
-//install_postgresql($p);
+install_postgresql($p);
 
-
-# 禁用zendOpcache
-//$p->disableZendOpcache();
 
 $p->parseArguments($argc, $argv);
 $p->gen();

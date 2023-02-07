@@ -10,6 +10,8 @@ test -d /usr/local/lib/pkgconfig && PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$P
 test -d /usr/local/lib64/pkgconfig && PKG_CONFIG_PATH="/usr/local/lib64/pkgconfig:$PKG_CONFIG_PATH" ;
 
 SRC=<?= $this->phpSrcDir . PHP_EOL ?>
+PKG_CONFIG_PATH='/usr/lib/pkgconfig'
+test -d /usr/lib64/pkgconfig && PKG_CONFIG_PATH="/usr/lib64/pkgconfig:$PKG_CONFIG_PATH" ;
 ROOT=$(pwd)
 export CC=clang
 export CXX=clang++
@@ -26,30 +28,30 @@ OPTIONS="--disable-all \
 <?php foreach ($this->libraryList as $item) : ?>
 
 make_<?=$item->name?>() {
-    cd <?=$this->workDir?>/thirdparty ;
-    echo "build <?=$item->name?>" ;
-    <?php if ($item->beforeConfigureCleanInstallPackageFlag == true ): ?>
-    test -d <?=$this->workDir?>/thirdparty/<?=$item->name?> && rm -rf <?=$this->workDir?>/thirdparty/<?=$item->name?> ;
-    <?php endif;?>
-    mkdir -p <?=$this->workDir?>/thirdparty/<?=$item->name?> ;
-    tar --strip-components=1 -C <?=$this->workDir?>/thirdparty/<?=$item->name?> -xf <?=$this->workDir?>/pool/lib/<?=$item->file?> ;
+    cd <?=$this->workDir?>/thirdparty
+    echo "build <?=$item->name?>"
+    <?php if ($item->cleanBuildDirectory) : ?>
+        test -d <?= $this->workDir ?>/thirdparty/<?= $item->name ?> && rm -rf <?= $this->workDir ?>/thirdparty/<?= $item->name ?> ;
+    <?php endif; ?>
+    mkdir -p <?=$this->workDir?>/thirdparty/<?=$item->name?> && \
+    tar --strip-components=1 -C <?=$this->workDir?>/thirdparty/<?=$item->name?> -xf <?=$this->workDir?>/pool/lib/<?=$item->file?>  && \
     cd <?=$item->name?> ;
-    <?php if (!empty($item->beforeConfigureScript)):?>
-        <?= $item->beforeConfigureScript ?>
-    <?php endif ;?>
+    <?php if (!empty($item->beforeConfigureScript)) : ?>
+        <?= $item->beforeConfigureScript . PHP_EOL ?>
+    <?php endif; ?>
     :;
-    echo  "<?=$item->configure?>" ;
+    cat <<'__EOF__'
+    <?= $item->configure . PHP_EOL ?>
+__EOF__
     <?php if (!empty($item->configure)): ?>
     <?= $item->configure ?> && \
     <?php endif; ?>
     :;
     make -j <?=$this->maxJob?>  <?=$item->makeOptions?> && \
-    <?php if ($item->beforeInstallScript): ?>
-    <?=$item->beforeInstallScript?>
+    <?php if (!empty($item->beforeInstallScript)): ?>
+    <?=$item->beforeInstallScript?> && \
     <?php endif; ?>
-    :;
-    make <?=$item->makeInstallDefaultOptions?> <?= $item->makeInstallOptions ?> && \
-    :;
+    make <?=$item->makeInstallDefaultOptions?> <?=$item->makeInstallOptions?> && \
     <?php if ($item->afterInstallScript): ?>
     <?= $item->afterInstallScript?>
     <?php endif; ?>
@@ -75,13 +77,7 @@ make_all_library() {
 }
 
 config_php() {
-<?php if ( $this->disableZendOpcacheFlag == true ) : ?>
-    test -f main/main.c.save ||  cp -f main/main.c main/main.c.save ;
-    sed -i 's/extern zend_extension zend_extension_entry;//g' main/main.c ;
-    sed -i 's/zend_register_extension(&zend_extension_entry, NULL);//g' main/main.c ;
-<?php else : ?>
-    test -f main/main.c.save &&  cp -f main/main.c.save main/main.c ;
-<?php endif; ?>
+
      test -f ./configure && rm ./configure ;
 
      export FREETYPE2_CFLAGS=$(pkg-config --cflags freetype2) ;
