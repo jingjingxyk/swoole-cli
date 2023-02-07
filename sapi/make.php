@@ -13,12 +13,16 @@ cpu_nums=`nproc 2> /dev/null || sysctl -n hw.ncpu`
 # `grep "processor" /proc/cpuinfo | sort -u | wc -l`
 
 SRC=<?= $this->phpSrcDir . PHP_EOL ?>
+PKG_CONFIG_PATH='/usr/lib/pkgconfig'
+test -d /usr/lib64/pkgconfig && PKG_CONFIG_PATH="/usr/lib64/pkgconfig:$PKG_CONFIG_PATH" ;
 ROOT=$(pwd)
 export CC=clang
 export CXX=clang++
 export LD=ld.lld
 
+
 export PATH=<?= implode(':', $this->binPaths) . PHP_EOL ?>
+
 export ORIGIN_PATH=$PATH
 
 export PKG_CONFIG_PATH=<?= implode(':', $this->pkgConfigPaths) . PHP_EOL ?>
@@ -35,10 +39,12 @@ OPTIONS="--disable-all
 
 <?php foreach ($this->libraryList as $item) : ?>
 make_<?=$item->name?>() {
+
     <?php if ($item->skipInstall == true): ?>
     echo "skip install library <?=$item->name?>" ;
     return 0 ;
     <?php endif ;?>
+
     cd <?=$this->workDir?>/thirdparty
     echo "build <?=$item->name?>"
 
@@ -53,9 +59,11 @@ make_<?=$item->name?>() {
     <?php if($item->untarArchiveCommand == 'unzip'):?>
         unzip -d  <?=$this->workDir?>/thirdparty/<?=$item->name?>   <?=$this->workDir?>/pool/lib/<?=$item->file?> <?= PHP_EOL; ?>
     <?php endif ; ?>
+
     <?php if($item->untarArchiveCommand == 'mv'):?>
         cp -rf  <?=$this->workDir?>/pool/lib/<?=$item->file?> <?=$this->workDir?>/thirdparty/<?=$item->name?>/<?=$item->name?>    <?= PHP_EOL; ?>
     <?php endif ; ?>
+
     cd <?=$item->name?> ;
     <?php if (!empty($item->beforeConfigureScript)) : ?>
     <?= $item->beforeConfigureScript . PHP_EOL ?>
@@ -74,14 +82,17 @@ __EOF__
     make -j <?=$this->maxJob?>  <?=$item->makeOptions . PHP_EOL ?>
     result=$?
     [[ $result -ne 0 ]] && echo "[make failure]" && exit 0 &&  return $result ;
+
     <?php if (!empty($item->beforeInstallScript)): ?>
     <?=$item->beforeInstallScript . PHP_EOL ?>
     result=$?
     [[ $result -ne 0 ]] &&  echo "[before install script  failure]" && exit 0 &&  return $result ;
     <?php endif; ?>
+
     make <?=$item->makeInstallDefaultOptions?> <?=$item->makeInstallOptions . PHP_EOL?>
     result=$?
     [[ $result -ne 0 ]] &&  echo "[make install failure]" && exit 0 &&   return $result;
+
     <?php if ($item->afterInstallScript): ?>
     <?=$item->afterInstallScript . PHP_EOL ?>
     result=$?
@@ -107,6 +118,8 @@ make_all_library() {
 }
 
 config_php() {
+
+    test -f ./configure && rm ./configure ;
 
     git config --global --add safe.directory "*"
 
@@ -239,6 +252,7 @@ export LIBPQ_LIBS=$(pkg-config  --libs  --static       libpq)
 
 export CPPFLAGS=$(pkg-config  --cflags --static  libpq ncurses readline libcares libffi)
 export LIBS=$(pkg-config  --libs --static   libpq ncurses readline libcares libffi)
+
 
     ./buildconf --force ;
     ./configure --help
@@ -402,5 +416,4 @@ elif [ "$1" = "sync" ] ;then
 else
     help
 fi
-
 

@@ -452,7 +452,7 @@ class Preprocessor
                 );
                 echo PHP_EOL;
                 echo 'download ' . $lib->file . ' OK ' . PHP_EOL . PHP_EOL;
-                // TODO PGP  验证
+            // TODO PGP  验证
             } else {
                 echo '[Library] file cached: ' . $lib->file . PHP_EOL;
             }
@@ -508,6 +508,10 @@ class Preprocessor
                 echo $curl_download_cmd . PHP_EOL;
                 echo shell_exec($cmd);
                 /*
+
+                # echo "pecl download $download_name ".PHP_EOL;
+                # echo `cd {$this->extensionDir} && pecl download $download_name && cd -`;
+
                 echo "pecl download {$download_name} " . PHP_EOL;
                 echo shell_exec("cd {$this->extensionDir} && pecl download {$download_name} && cd -");
                 */
@@ -527,7 +531,10 @@ class Preprocessor
 
             if ($isDirEmpty) {
                 echo shell_exec("tar --strip-components=1 -C {$dst_dir} -xf {$ext->path}");
+
+                # echo `mkdir -p $dst_dir`;
             }
+            # echo `tar --strip-components=1 -C $dst_dir -xf {$ext->path}`;
         }
 
         $this->extensionList[] = $ext;
@@ -587,6 +594,7 @@ class Preprocessor
     {
         $this->pkgConfigPaths[] = '$PKG_CONFIG_PATH';
         $this->pkgConfigPaths = array_unique($this->pkgConfigPaths);
+
         $this->binPaths[] = '$PATH';
         $this->binPaths = array_unique($this->binPaths);
 

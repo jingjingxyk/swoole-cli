@@ -16,9 +16,6 @@ if (!empty($argv[1])) {
     $p->setOsType(trim($argv[1]));
 }
 
-# 设置CPU核数 ; 获取CPU核数，用于 make -j $(nproc)
-$p->setMaxJob(`nproc 2> /dev/null || sysctl -n hw.ncpu`); // nproc on macos ；
-
 if ($p->osType == 'macos') {
     $p->setWorkDir(__DIR__);
     $p->setExtraLdflags(
@@ -68,8 +65,6 @@ function install_openssl(Preprocessor $p)
     $static = $p->osType === 'macos' ? '' : ' -static --static';
     $p->addLibrary(
         (new Library('openssl', '/usr/openssl'))
-            ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
-            ->withHomePage('https://www.openssl.org/')
             ->withUrl('https://www.openssl.org/source/openssl-3.0.7.tar.gz')
             ->withFile('openssl-3.0.7.tar.gz')
             ->withCleanBuildDirectory()
@@ -85,6 +80,37 @@ EOF
             ->withPkgConfig('/usr/openssl/lib64/pkgconfig')
             ->withPkgName('libcrypto libssl openssl')
             ->withLdflags('-L/usr/openssl/lib64')
+            ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
+            ->withHomePage('https://www.openssl.org/')
+    );
+}
+
+function install_openssl_1(Preprocessor $p)
+{
+    $static = $p->osType === 'macos' ? '' : ' -static --static';
+    $p->addLibrary(
+        (new Library('openssl_1'))
+            ->withUrl('https://www.openssl.org/source/openssl-1.1.1p.tar.gz')
+            ->withFile('openssl-1.1.1p.tar.gz')
+            ->withSkipInstall()
+            ->withCleanBuildDirectory()
+            ->withScriptBeforeConfigure(
+                '
+                test -d /usr/openssl && rm -rf /usr/openssl
+            '
+            )
+            ->withConfigure(
+                <<<EOF
+            ./config $static \
+            no-shared --release --prefix=/usr/openssl
+EOF
+            )
+            ->withMakeInstallOptions('install_sw')
+            ->withPkgConfig('/usr/openssl/lib/pkgconfig')
+            ->withPkgName('libcrypto libssl openssl')
+            ->withLdflags('-L/usr/openssl/lib')
+            ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
+            ->withHomePage('https://www.openssl.org/')
     );
 }
 
@@ -137,6 +163,9 @@ function install_gmp(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('gmp', '/usr/gmp'))
+            //站点SSL证书过期
+            //->withUrl('https://gmplib.org/download/gmp/gmp-6.2.1.tar.lz')
+            //->withUrl('https://mirrors.aliyun.com/gnu/gmp/gmp-6.2.1.tar.lz')
             ->withUrl('https://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.lz')
             ->withConfigure('./configure --prefix=/usr/gmp --enable-static --disable-shared')
             ->withPkgConfig('/usr/gmp/lib/pkgconfig')
@@ -153,42 +182,26 @@ function install_icu(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('icu'))
-            ->withHomePage('https://icu.unicode.org/')
-            ->withLicense('https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE', Library::LICENSE_SPEC)
             ->withUrl('https://github.com/unicode-org/icu/releases/download/release-60-3/icu4c-60_3-src.tgz')
-            ->withManual("https://unicode-org.github.io/icu/userguide/icu4c/build.html")
+            //->withUrl('https://github.com/unicode-org/icu/releases/download/release-72-1/icu4c-72_1-src.tgz')
+            //https://unicode-org.github.io/icu/userguide/icu4c/build.html
             ->withCleanBuildDirectory()
             ->withConfigure(
                 '
             source/runConfigureICU Linux --help
-           
-            CPPFLAGS="-DU_CHARSET_IS_UTF8=1  -DU_USING_ICU_NAMESPACE=1  -DU_STATIC_IMPLEMENTATION=1" 
-            
             # CPPFLAGS="-DPIC -fPIC -DICU_DATA_DIR=/usr/"
-            
-            source/runConfigureICU Linux --prefix=/usr/ \
-            --enable-static=yes \
-            --enable-shared=no \
-            --with-data-packaging=static \
-            --enable-release=yes \
-            --enable-extras=yes \
-            --enable-icuio=yes \
-            --enable-icu-config=yes \
-            --enable-dyload=no \
-            --enable-tools=yes \
-            --enable-tests=no \
-            --enable-samples=no
+            source/runConfigureICU Linux --prefix=/usr/ --enable-static --disable-shared \
+            --disable-tests --disable-samples --with-data-packaging=static
             '
             )
             ->withMakeOptions('all VERBOSE=1')
             ->withPkgName('icu-uc icu-io icu-i18n')
             ->withPkgConfig('/usr/lib/pkgconfig')
-
-            ->withLdflags('-L/usr/lib')
-            ->withBinPath("/usr/bin")
-            ->withSkipInstall()
-        //->disableDefaultPkgConfig()
-        //->disableDefaultLdflags()
+            //->disableDefaultPkgConfig()
+            ->withLdflags('-L/usr/icu/lib')
+            //->disableDefaultLdflags()
+            ->withHomePage('https://icu.unicode.org/')
+            ->withLicense('https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE', Library::LICENSE_SPEC)
     );
 }
 
@@ -260,17 +273,15 @@ function install_ncurses(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('ncurses'))
-            ->withHomePage('https://invisible-island.net/ncurses/#download_ncurses')
-            ->withLicense('https://github.com/projectceladon/libncurses/blob/master/README', Library::LICENSE_MIT)
-            ->withLicense('https://invisible-island.net/ncurses/ncurses-license.html', Library::LICENSE_GPL)
-            //->withHomePage('https://github.com/projectceladon/libncurses')
             ->withUrl('https://ftp.gnu.org/pub/gnu/ncurses/ncurses-6.3.tar.gz')
             //->withUrl('https://invisible-island.net/datafiles/release/ncurses.tar.gz')
             //->withFile('ncurses.tar.gz')
             ->withFile('ncurses-6.3.tar.gz')
+            ->withSkipInstall()
             ->withCleanBuildDirectory()
             ->withScriptBeforeConfigure(
                 '
+                test -d /usr/ncurses && rm -rf /usr/ncurses ;
                 test -d /usr/ncurses/ && rm -rf /usr/ncurses/ ;
                 mkdir -p /usr/ncurses/lib/pkgconfig
             '
@@ -287,18 +298,15 @@ function install_ncurses(Preprocessor $p)
 
             #   --with-pcre2 \ --with-curses-h
 
-            #    --enable-widec\
+            #   --enable-widec \
             # --enable-overwrite \
-            
+
             ./configure \
             --prefix=/usr/ncurses \
             --enable-static \
             --disable-shared \
-            --enable-overwrite \
-            --with-curses-h \
             --enable-pc-files \
             --enable-echo \
-            --enable-widec \
             --with-normal \
             --with-pkg-config=/usr/ncurses/lib/pkgconfig \
             --with-pkg-config-libdir=/usr/ncurses/lib/pkgconfig \
@@ -306,50 +314,48 @@ function install_ncurses(Preprocessor $p)
             --without-tests \
             --without-dlsym \
             --without-debug \
-            -enable-symlinks
-            
+            --disable-relink
 
             '
             )
             /*
                 --enable-overwrite\
-               -with-form-libname=form \
+            -with-form-libname=form \
               --with-menu-libname=menu \
               --with-panel-libname=panel \
               --with-cxx-libname=ncurses
              */
             ->withScriptAfterInstall(
                 "
-              
-            # ln -s  /usr/ncurses/include/ncursesw /usr/ncurses/include/ncurses
-            # ln -s  /usr/ncurses/include/ncursesw /usr/ncurses/include/curses
-            
+            tic -x
+            # ln -s /usr/ncurses/include/ncursesw /usr/ncurses/include/ncurses ;
+:<<'EOF'
             ln -s /usr/ncurses/lib/pkgconfig/formw.pc /usr/ncurses/lib/pkgconfig/form.pc ;
             ln -s /usr/ncurses/lib/pkgconfig/menuw.pc /usr/ncurses/lib/pkgconfig/menu.pc ;
             ln -s /usr/ncurses/lib/pkgconfig/ncursesw.pc /usr/ncurses/lib/pkgconfig/ncurses.pc ;
-            ln -s /usr/ncurses/lib/pkgconfig/ncursesw.pc /usr/ncurses/lib/pkgconfig/curses.pc ;
             ln -s /usr/ncurses/lib/pkgconfig/panelw.pc /usr/ncurses/lib/pkgconfig/panel.pc ;
             ln -s /usr/ncurses/lib/pkgconfig/ncurses++w.pc /usr/ncurses/lib/pkgconfig/ncurses++.pc ;
-            ln -s /usr/ncurses/lib/pkgconfig/ticw.pc /usr/ncurses/lib/pkgconfig/tic.pc ;
+            ln -s /usr/ncurses/lib/pkgconfig/tinfow.pc /usr/ncurses/lib/pkgconfig/tinfow.pc ;
 
             ln -s /usr/ncurses/lib/libformw.a /usr/ncurses/lib/libform.a ;
             ln -s /usr/ncurses/lib/libmenuw.a /usr/ncurses/lib/libmenu.a ;
             ln -s /usr/ncurses/lib/libncursesw.a /usr/ncurses/lib/libncurses.a ;
-            ln -s /usr/ncurses/lib/libncurses++w.a /usr/ncurses/lib/libncurses++.a ;
             ln -s /usr/ncurses/lib/libpanelw.a /usr/ncurses/lib/libpanel.a ;
-            ln -s /usr/ncurses/lib/libticw.a /usr/ncurses/lib/libtic.a ;
-
-            "
+            ln -s /usr/ncurses/lib/libtinfow.a /usr/ncurses/lib/libtinfo.a ;
+EOF
+                "
             )
             ->withMakeOptions('all')
             ->withPkgName('ncursesw ncurses')
-            ->withPkgConfig('/usr/ncurses/lib/pkgconfig')
-            ->withLdflags('-L/usr/ncurses/lib/')
-            ->withBinPath('/usr/ncurses/bin/')
-            //            ->disableDefaultLdflags()
-            //            ->disableDefaultPkgConfig()
-            //            ->disablePkgName()
-            ->withSkipInstall()
+            ->disablePkgName()
+            //->withPkgConfig('/usr/ncurses/lib/pkgconfig')
+            ->disableDefaultPkgConfig()
+            //->withLdflags('-L/usr/ncurses/lib/')
+            ->disableDefaultLdflags()
+            //->withLicense('https://github.com/projectceladon/libncurses/blob/master/README', Library::LICENSE_MIT)
+            ->withLicense('https://invisible-island.net/ncurses/ncurses-license.html', Library::LICENSE_GPL)
+            //->withHomePage('https://github.com/projectceladon/libncurses')
+            ->withHomePage('https://invisible-island.net/ncurses/#download_ncurses')
     );
 }
 
@@ -357,9 +363,8 @@ function install_readline(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('readline', '/usr/readline'))
-            ->withHomePage('https://tiswww.case.edu/php/chet/readline/rltop.html')
             ->withUrl('https://ftp.gnu.org/gnu/readline/readline-8.2.tar.gz')
-            ->withLicense('http://www.gnu.org/licenses/gpl.html', Library::LICENSE_GPL)
+            ->withSkipInstall()
             ->withCleanBuildDirectory()
             ->withScriptBeforeConfigure(
                 <<<'_EOF_'
@@ -372,7 +377,6 @@ _EOF_
              # -lncurses
              # -I/usr/include/ncursesw
                ./configure --help
-              
 :<<\'EOF\'
                 CFLAGS=$(pkg-config --cflags  formw menuw ncursesw  panelw )
                 CFLAGS=$(pkg-config --cflags  form menu ncurses  panel )
@@ -385,32 +389,24 @@ _EOF_
                 # -lformw -lmenuw -lncursesw  -lpanelw -Wl,--as-needed,-O1,--sort-common
                # return 0
 EOF
-
-            CPPFLAGS=$(pkg-config --cflags --static formw menuw ncurses++w ncursesw  panelw  ticw)
-            export CPPFLAGS="-static -O2 -Wall $CPPFLAGS"
-            export LIBS=$(pkg-config --libs --static  formw menuw ncurses++w ncursesw  panelw  ticw)
-           
             ./configure --prefix=/usr/readline \
-            --enable-static=yes \
-            --enable-shared=no \
-            --with-curses \
-            --enable-multibyte=yes 
+            --enable-static --disable-shared --with-curses --enable-multibyte
 
             '
             )
             ->withMakeInstallOptions("install-static")
             ->withPkgName('readline')
-            ->withPkgConfig('/usr/readline/lib/pkgconfig')
-            ->withLdflags('-L/usr/readline/lib')
-            ->withBinPath('/usr/readline/bin/')
+            //->disablePkgName()
+            //->withPkgConfig('/usr/readline/lib/pkgconfig')
+            ->disableDefaultPkgConfig()
+            //->withLdflags('-L/usr/readline/lib')
+            ->disableDefaultLdflags()
             ->withScriptAfterInstall(
                 '
             '
             )
-            //            ->disablePkgName()
-            //            ->disableDefaultPkgConfig()
-            //            ->disableDefaultLdflags()
-            ->withSkipInstall()
+            ->withLicense('http://www.gnu.org/licenses/gpl.html', Library::LICENSE_GPL)
+            ->withHomePage('https://tiswww.case.edu/php/chet/readline/rltop.html')
     );
 }
 
@@ -504,15 +500,14 @@ function install_liblzma(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('liblzma'))
-            ->withHomePage('https://tukaani.org/xz/')
-            ->withLicense('https://git.tukaani.org/?p=xz.git;a=blob;f=COPYING', Library::LICENSE_LGPL)
             ->withUrl('https://tukaani.org/xz/xz-5.2.9.tar.gz')
             ->withFile('xz-5.2.9.tar.gz')
             ->withConfigure('./configure --prefix=/usr/liblzma/ --enable-static  --disable-shared --disable-doc')
             ->withPkgName('liblzma')
             ->withPkgConfig('/usr/liblzma/lib/pkgconfig')
             ->withLdflags('-L/usr/liblzma/lib')
-            ->withSkipInstall()
+            ->withHomePage('https://tukaani.org/xz/')
+            ->withLicense('https://git.tukaani.org/?p=xz.git;a=blob;f=COPYING', Library::LICENSE_LGPL)
     );
 }
 
@@ -520,8 +515,6 @@ function install_libzstd(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('libzstd'))
-            ->withHomePage('https://github.com/facebook/zstd')
-            ->withLicense('https://github.com/facebook/zstd/blob/dev/COPYING', Library::LICENSE_GPL)
             ->withUrl('https://github.com/facebook/zstd/releases/download/v1.5.2/zstd-1.5.2.tar.gz')
             ->withFile('zstd-1.5.2.tar.gz')
             ->withCleanBuildDirectory()
@@ -566,7 +559,8 @@ function install_libzstd(Preprocessor $p)
             ->withPkgName('libzstd')
             ->withPkgConfig('/usr/libzstd/lib/pkgconfig')
             ->withLdflags('-L/usr/libzstd/lib')
-            ->withSkipInstall()
+            ->withHomePage('https://github.com/facebook/zstd')
+            ->withLicense('https://github.com/facebook/zstd/blob/dev/COPYING', Library::LICENSE_GPL)
     );
 }
 
@@ -681,6 +675,7 @@ function install_libjpeg(Preprocessor $p)
     $p->addLibrary($lib);
 }
 
+
 function install_brotli(Preprocessor $p)
 {
     $p->addLibrary(
@@ -766,6 +761,8 @@ function install_freetype(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('freetype', '/usr/freetype'))
+            // 域名 mirror.yongbok.net 无 DNS 解析
+            //->withUrl('https://mirror.yongbok.net/nongnu/freetype/freetype-2.10.4.tar.gz')
             ->withUrl('https://download.savannah.gnu.org/releases/freetype/freetype-2.10.4.tar.gz')
             ->withConfigure(
                 "
@@ -803,8 +800,6 @@ function install_freetype(Preprocessor $p)
             )
             ->withLdflags('-L/usr/freetype/lib/')
             ->withPkgConfig('/usr/freetype/lib/pkgconfig')
-
-           #  ->withConfigure('./configure --prefix=/usr/freetype --enable-static --disable-shared')
             ->withHomePage('https://freetype.org/')
             ->withPkgName('freetype2')
             ->withLicense(
@@ -838,53 +833,6 @@ function install_sqlite3(Preprocessor $p)
             ->withPkgName('sqlite3')
             ->withHomePage('https://www.sqlite.org/index.html')
             ->withLicense('https://www.sqlite.org/copyright.html', Library::LICENSE_SPEC)
-    );
-}
-
-
-function install_zlib_origin(Preprocessor $p)
-{
-    $p->addLibrary(
-        (new Library('zlib'))
-            ->withUrl('https://udomain.dl.sourceforge.net/project/libpng/zlib/1.2.11/zlib-1.2.11.tar.gz')
-            ->withConfigure('./configure --prefix=/usr --static')
-            ->withHomePage('https://zlib.net/')
-            ->withLicense('https://zlib.net/zlib_license.html', Library::LICENSE_SPEC)
-    );
-}
-
-function install_bzip2_origin(Preprocessor $p)
-{
-    $p->addLibrary(
-        (new Library('bzip2', '/usr/bzip2'))
-            ->withUrl('https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz')
-            ->withMakeOptions('PREFIX=/usr/bzip2')
-            ->withMakeInstallOptions('install PREFIX=/usr/bzip2')
-            ->withHomePage('https://www.sourceware.org/bzip2/')
-            ->withLicense('https://www.sourceware.org/bzip2/', Library::LICENSE_BSD)
-            ->withCleanBuildDirectory()
-            ->withScriptBeforeConfigure(
-                '
-                test -d /usr/bzip2 && rm -rf /usr/bzip2 ;
-                echo $?
-            '
-            )
-            ->withMakeOptions('all')
-            ->withMakeInstallOptions(' install PREFIX=/usr/bzip2')
-            ->disableDefaultPkgConfig()
-            ->withLdflags('-L/usr/bzip2/lib')
-    );
-}
-
-function install_icu_origin(Preprocessor $p)
-{
-    $p->addLibrary(
-        (new Library('icu'))
-            ->withUrl('https://github.com/unicode-org/icu/releases/download/release-60-3/icu4c-60_3-src.tgz')
-            ->withConfigure('source/runConfigureICU Linux --prefix=/usr --enable-static --disable-shared')
-            ->withPkgName('icu-i18n')
-            ->withHomePage('https://icu.unicode.org/')
-            ->withLicense('https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE', Library::LICENSE_SPEC)
     );
 }
 
@@ -924,14 +872,33 @@ function install_cares(Preprocessor $p)
             ->withLicense('https://c-ares.org/license.html', Library::LICENSE_MIT)
             ->withUrl('https://c-ares.org/download/c-ares-1.18.1.tar.gz')
             ->withScriptBeforeConfigure('pwd')
+            ->withConfigure('./configure --prefix=/usr/ --enable-static --disable-shared ')
+            ->withPkgName('libcares')
+            ->withPkgConfig('/usr/lib/pkgconfig')
+            ->withLdflags('-L/usr/lib')
+    );
+}
 
+function install_cares_2(Preprocessor $p)
+{
+    $p->addLibrary(
+        (new Library('cares_2'))
+            ->withHomePage('https://c-ares.org/')
+            ->withLicense('https://c-ares.org/license.html', Library::LICENSE_MIT)
+            ->withUrl('https://c-ares.org/download/c-ares-1.18.1.tar.gz')
+            ->withScriptBeforeConfigure('pwd')
             ->withConfigure('./configure --prefix=/usr/c-ares --enable-static --disable-shared ')
             ->withPkgName('libcares')
             ->withPkgConfig('/usr/c-ares/lib/pkgconfig')
             ->withLdflags('-L/usr/c-ares/lib')
-            ->withBinPath('/usr/c-ares/bin/')
+            ->withSystemConfigPath('/usr/c-ares/bin/')
+            ->disableDefaultLdflags()
+            ->disableDefaultPkgConfig()
+            ->disablePkgName()
+            ->withSkipInstall()
     );
 }
+
 
 function install_libedit(Preprocessor $p)
 {
@@ -1012,7 +979,6 @@ function install_imagemagick(Preprocessor $p)
             ->withLicense('https://imagemagick.org/script/license.php', Library::LICENSE_APACHE2)
     );
 }
-
 
 function install_libidn2(Preprocessor $p)
 {
@@ -1130,119 +1096,83 @@ function install_pgsql(Preprocessor $p)
 {
     $p->addLibrary(
         (new Library('pgsql'))
-            ->withHomePage('https://www.postgresql.org/')
-            ->withLicense('https://www.postgresql.org/about/licence/', Library::LICENSE_SPEC)
             ->withUrl('https://ftp.postgresql.org/pub/source/v15.1/postgresql-15.1.tar.gz')
-            //https://www.postgresql.org/docs/devel/installation.html
-            //https://www.postgresql.org/docs/devel/install-make.html#INSTALL-PROCEDURE-MAKE
-            ->withManual('https://www.postgresql.org/docs/')
+            //->withSkipInstall()
             ->withCleanBuildDirectory()
-            ->withScriptBeforeConfigure(
-                '
-               test -d /usr/pgsql && rm -rf /usr/pgsql
-            '
-            )
-
             ->withConfigure(
                 '
-           sed -i "s/invokes exit\'; exit 1;/invokes exit\';/"  src/interfaces/libpq/Makefile
-  
-           # 替换指定行内容
-           sed -i "102c all: all-lib" src/interfaces/libpq/Makefile
-           
-            export CPPFLAGS="-static -fPIE -fPIC -O2 -Wall "
-            
-            ./configure  --prefix=/usr/pgsql \
-            --enable-coverage=no \
+                  ./configure --help
+
+            # export ICU_CFLAGS="$(pkg-config --cflags  icu-uc icu-io icu-i18n)"
+            # export ICU_LIBS="$(pkg-config --libs  icu-uc icu-io icu-i18n)"
+            export XML2_CFLAGS="$(pkg-config --cflags  libxml-2.0 )"
+            export XML2_LIBS="$(pkg-config --libs  libxml-2.0 )"
+
+            CFLAGS=$(pkg-config --cflags --static  libcrypto  libssl    openssl readline libxml-2.0 icu-uc icu-io icu-i18n)
+
+
+            export CFLAGS="-static -O2 -Wall -fPIC $CFLAGS -I/usr/include "
+            # LDFLAGS=$(pkg-config --libs --static libcrypto  libssl    openssl readline libxml-2.0 icu-uc icu-io icu-i18n)
+            # export LDFLAGS="-static $LDFLAGS -L/usr/lib "
+
+            ./configure --prefix=/usr/pgsql \
             --with-ssl=openssl  \
             --with-readline \
-            --without-icu \
+            --with-icu \
             --without-ldap \
             --without-libxml  \
             --without-libxslt \
-            --with-includes="/usr/openssl/include/:/usr/libxml2/include/:/usr/libxslt/include:/usr/zlib/include:/usr/include" \
+            --with-includes="/usr/openssl/include/:/usr/libxslt/include:/usr/libxml2/include/:/usr/zlib/lib:/usr/include" \
             --with-libraries="/usr/openssl/lib64:/usr/libxslt/lib/:/usr/libxml2/lib/:/usr/zlib/lib:/usr/lib"
-
-            make -C src/include install 
-            make -C  src/bin/pg_config install
-            
-            make -C  src/common -j $cpu_nums all 
-            make -C  src/common install 
-            
-            make -C  src/port -j $cpu_nums all 
-            make -C  src/port install 
-            
-     
-            make -C  src/backend/libpq -j $cpu_nums all 
-            make -C  src/backend/libpq install 
-            
-            make -C src/interfaces/ecpg   -j $cpu_nums all-pgtypeslib-recurse all-ecpglib-recurse all-compatlib-recurse all-preproc-recurse
-            make -C src/interfaces/ecpg  install-pgtypeslib-recurse install-ecpglib-recurse install-compatlib-recurse install-preproc-recurse
-            
-            # 静态编译 src/interfaces/libpq/Makefile  有静态配置  参考： all-static-lib
-            
-            make -C src/interfaces/libpq  -j $cpu_nums # soname=true
-           
-            make -C src/interfaces/libpq  install 
-            
-            rm -rf /usr/pgsql/lib/*.so.*
-            rm -rf /usr/pgsql/lib/*.so
-            return 0 
-            make -C  src/interfaces/libpq -j $cpu_nums libpq5555.a
-            make -C  src/interfaces/libpq install-libpq5555.a
-            
-            rm -rf /usr/pgsql/lib/*.so.*
-            rm -rf /usr/pgsql/lib/*.so
-           
-            return 0 
-          
             '
             )
-            ->withPkgName('libpq')
+            ->withMakeOptions("-C src/common all")
+            ->withMakeInstallOptions(
+                '-C src/common install'
+            ) //make -C src/interfaces install-ecpg-recurse
+            ->withPkgName('libecpg libecpg_compat libpgtypes libpq')
             ->withPkgConfig('/usr/pgsql/lib/pkgconfig')
             ->withLdflags('-L/usr/pgsql/lib/')
-            ->withBinPath('/usr/pgsql/bin/')
-    );
-}
-
-function install_libffi($p)
-{
-    $p->addLibrary(
-        (new Library('libffi'))
-            ->withHomePage('https://sourceware.org/libffi/')
-            ->withLicense('http://github.com/libffi/libffi/blob/master/LICENSE', Library::LICENSE_BSD)
-            ->withUrl('https://github.com/libffi/libffi/releases/download/v3.4.4/libffi-3.4.4.tar.gz')
-            ->withFile('libffi-3.4.4.tar.gz')
-            ->withScriptBeforeConfigure(
-                'test -d /usr/libffi && rm -rf /usr/libffi'
-            )
-            ->withConfigure(
+            ->withSystemConfigPath('/usr/pgsql/bin/')
+            ->withScriptAfterInstall(
                 '
-            ./configure --help ;
-            ./configure \
-            --prefix=/usr/libffi \
-            --enable-shared=no \
-            --enable-static=yes 
+                    make -C src/backend/libpq all
+                    make -C src/backend/libpq install
+
+                    make -C src/port all
+                    make -C src/port install
+
+                    make -C src/interfaces all-ecpg-recurse
+                    make -C src/interfaces install-ecpg-recurse
+
+                    make -C src/bin all
+                    make -C src/bin install
+
+                    rm -rf /usr/pgsql/lib/*.so.*
+                    rm -rf /usr/pgsql/lib/*.so
             '
             )
-            ->withPkgName('libffi')
-            ->withPkgConfig('/usr/libffi/lib/pkgconfig')
-            ->withLdflags('-L/usr/libffi/lib/')
-            ->withBinPath('/usr/libffi/bin/')
+            ->withLicense('https://www.postgresql.org/about/licence/', Library::LICENSE_SPEC)
+            ->withHomePage('https://www.postgresql.org/')
+            ->withSkipInstall()
+    //->disablePkgName()
+    //->disableDefaultPkgConfig()
+    //->disableDefaultLdflags()
     );
 }
 
-install_libiconv($p); //没有 libiconv.pc 文件 不能使用 pkg-config 命令
 
+install_libiconv($p); //没有 libiconv.pc 文件 不能使用 pkg-config 命令
 install_openssl($p);  //openssl 3 版本
+install_openssl_1($p); //openssl 1 版本 默认跳过安装
 
 install_libxml2($p);
 install_libxslt($p);
 install_gmp($p);
 
 
-install_icu($p); //默认不安装，使用系统库
-
+install_icu($p); //虽然自定义安装目录，并且静态编译。但是不使用，默认仍然还是使用静态系统库
+install_icu_2($p); //安装目录 /usr 默认跳过安装
 
 install_pcre2($p); //默认跳过安装
 
@@ -1259,6 +1189,8 @@ install_libzstd($p);
 
 
 install_zip($p); // zip 依赖 openssl zlib bzip2  liblzma zstd
+// 上一步虽然安装里了bizp2，但是仍然需要系统提供的bzip2 ，因为需要解决BZ2_bzCompressInit 找不到的问题
+
 
 install_giflib($p);
 install_libpng($p);
@@ -1273,11 +1205,16 @@ install_sqlite3($p);
 
 install_oniguruma($p);
 
-install_cares($p);
+
+install_cares($p); //目录必须是 /usr ；swoole 使用 SWOOLE_CFLAGS 实现，目前不完全支持
+install_cares_2($p); //目录必须是 /usr/c-ares ；swoole 使用 SWOOLE_CFLAGS 实现，目前不完全支持
+
 
 //install_libedit($p);
 install_imagemagick($p);
 
+install_libidn2($p); //默认跳过安装
+install_nghttp2($p); //默认跳过安装
 install_curl($p);
 
 install_libsodium($p);
@@ -1286,9 +1223,8 @@ install_mimalloc($p);
 
 
 //参考 https://github.com/docker-library/php/issues/221
+//install_pgsql($p);
 
-install_pgsql($p);
-install_libffi($p);
 
 $p->parseArguments($argc, $argv);
 $p->gen();
