@@ -1,12 +1,14 @@
 #!/usr/bin/env php
 <?php
-require __DIR__ . '/sapi/Preprocessor.php';
+require __DIR__ . '/vendor/autoload.php';
 
 use SwooleCli\Preprocessor;
 use SwooleCli\Library;
 
+$homeDir = getenv('HOME');
+
 $p = new Preprocessor(__DIR__);
-$p->setPhpSrcDir(getenv('HOME') . '/.phpbrew/build/php-8.1.12');
+$p->setPhpSrcDir($homeDir . '/.phpbrew/build/php-8.1.12');
 $p->setDockerVersion('1.5');
 # $p->setMaxJob(`nproc 2> /dev/null || sysctl -n hw.ncpu`);
 # `grep "processor" /proc/cpuinfo | sort -u | wc -l`
@@ -14,9 +16,13 @@ $p->setDockerVersion('1.5');
 if ($p->getOsType() == 'macos') {
     $p->setWorkDir(__DIR__);
     $p->setExtraLdflags('-framework CoreFoundation -framework SystemConfiguration -undefined dynamic_lookup -lwebp -licudata -licui18n -licuio');
-    //$p->setExtraOptions('--with-config-file-path=/usr/local/etc');
-    $p->addEndCallback(function () use ($p) {
-        file_put_contents(__DIR__ . '/make.sh', str_replace('/usr', $p->getWorkDir() . '/usr', file_get_contents(__DIR__ . '/make.sh')));
+    $p->addEndCallback(function () use ($p, $homeDir) {
+        $libDir = $homeDir . '/.swoole-cli';
+        if (!is_dir($libDir)) {
+            mkdir($libDir);
+        }
+        // The lib directory MUST not be in the current directory, otherwise the php make clean script will delete librarys
+        file_put_contents(__DIR__ . '/make.sh', str_replace('/usr', $homeDir . '/.swoole-cli', file_get_contents(__DIR__ . '/make.sh')));
     });
 
 }
@@ -119,7 +125,7 @@ function install_imagemagick(Preprocessor $p)
               --prefix=/usr/imagemagick \
               --enable-static\
               --disable-shared \
-              --with-zip=no \
+              --with-zip=yes \
               --with-fontconfig=no \
               --with-heic=no \
               --with-lcms=no \
@@ -130,7 +136,7 @@ function install_imagemagick(Preprocessor $p)
               --with-raw=no \
               --with-tiff=no \
               --with-zstd=no \
-              --with-freetype=no
+              --with-freetype=yes
               ')
             ->withPkgName('ImageMagick')
     );
@@ -167,14 +173,12 @@ function install_giflib(Preprocessor $p)
        
        
             cat >> Makefile <<"EOF"
-            
-            
+                        
 install-lib-static:
 	$(INSTALL) -d "$(DESTDIR)$(LIBDIR)"
 	$(INSTALL) -m 644 libgif.a "$(DESTDIR)$(LIBDIR)/libgif.a"
 EOF
-          
-           
+                     
             ')
             ->withMakeOptions('libgif.a')
             //->withMakeOptions('all')
@@ -311,7 +315,7 @@ function install_icu(Preprocessor $p)
             ->withManual("https://unicode-org.github.io/icu/userguide/icu4c/build.html")
             ->withCleanBuildDirectory()
             ->withConfigure('
-              source/runConfigureICU Linux --help
+             source/runConfigureICU Linux --help
 
              CPPFLAGS="-DU_CHARSET_IS_UTF8=1  -DU_USING_ICU_NAMESPACE=1  -DU_STATIC_IMPLEMENTATION=1"
 
@@ -751,9 +755,9 @@ function install_php_internal_extensions($p)
     $command = '';
     if ($p->getOsType() === 'macos') {
 
-        $command = <<<EOF
-        #  config.m4.backup不存在执行 才执行后面命令 (因为不能多次删除指定行）
-        test -f {$workDir}/ext/curl/config.m4.backup ||  sed -i.backup '75,82d' {$workDir}/ext/curl/config.m4
+        $command =<<<EOF
+#  config.m4.backup不存在执行 才执行后面命令 (因为不能多次删除指定行）
+test -f {$workDir}/ext/curl/config.m4.backup ||  sed -i.backup '75,82d' {$workDir}/ext/curl/config.m4
 
 EOF;
 
@@ -1031,7 +1035,7 @@ install_cares($p);
 //install_libedit($p);
 install_ncurses($p);
 install_readline($p);//依赖 ncurses
-install_imagemagick($p);
+install_imagemagick($p); //依赖zlib bzip2 zip freetype2 lzma libpng libwebp libxml2 xml
 install_libidn2($p);  //默认跳过安装
 install_nghttp2($p);  //默认跳过安装
 install_curl($p); //curl 依赖 openssl brotli(暂不启用) zstd(暂不启用) idn(暂不启用) idn2(暂不启用) nghttp2(暂不启用) nghttp3(暂不启用)
@@ -1062,6 +1066,7 @@ install_re2c($p);
     export LIBS="$LIBS -L/usr/lib -lstdc++"
 
  */
+
 
 $p->parseArguments($argc, $argv);
 $p->gen();

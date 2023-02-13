@@ -2,12 +2,17 @@
 
 namespace SwooleCli;
 
+use MJS\TopSort\CircularDependencyException;
+use MJS\TopSort\ElementNotFoundException;
+use MJS\TopSort\Implementations\StringSort;
+
 abstract class Project
 {
     public string $name;
     public string $homePage = '';
     public string $license = '';
     public string $prefix = '';
+    public array $deps = [];
     public int $licenseType = self::LICENSE_SPEC;
 
     public const LICENSE_SPEC = 0;
@@ -41,6 +46,12 @@ abstract class Project
     public function withManual(string $manual): static
     {
         $this->manual = $manual;
+        return $this;
+    }
+
+    function depends(string ...$libs): static
+    {
+        $this->deps += $libs;
         return $this;
     }
 }
@@ -556,6 +567,7 @@ class Preprocessor
             }
         }
 
+        $this->extEnabled = array_unique($this->extEnabled);
         foreach ($this->extEnabled as $ext) {
             if (!isset($extAvailabled[$ext])) {
                 echo "unsupported extension[$ext]\n";
@@ -568,12 +580,49 @@ class Preprocessor
         }
     }
 
+    /**
+     * @throws CircularDependencyException
+     * @throws ElementNotFoundException
+     */
+    protected function sortLibrary(): void
+    {
+        $libs = [];
+        $sorter = new StringSort();
+        foreach ($this->libraryList as $item) {
+            $libs[$item->name] = $item;
+            $sorter->add($item->name, $item->deps);
+        }
+        $sorted_list = $sorter->sort();
+        foreach ($this->extensionList as $item) {
+            if ($item->deps) {
+                foreach ($item->deps as $lib) {
+                    if (!isset($libs[$lib])) {
+                        throw new \RuntimeException("The ext-{$item->name} depends on $lib, but it does not exist");
+                    }
+                }
+            }
+        }
+
+        $libraryList = [];
+        foreach ($sorted_list as $name) {
+            $libraryList[] = $libs[$name];
+        }
+        $this->libraryList = $libraryList;
+    }
+
+    /**
+     * @throws CircularDependencyException
+     * @throws ElementNotFoundException
+     */
     function gen()
     {
         $this->pkgConfigPaths[] = '$PKG_CONFIG_PATH';
         $this->pkgConfigPaths = array_unique($this->pkgConfigPaths);
+
         $this->binPaths[] = '$PATH';
         $this->binPaths = array_unique($this->binPaths);
+
+        $this->sortLibrary();
 
         ob_start();
         include __DIR__ . '/make.php';
@@ -596,7 +645,7 @@ class Preprocessor
             # $download_urls[]=$item->url;
             $download_urls[]=$item->url .(empty($item->file)?'':PHP_EOL.' out='.$item->file);
         }
-        file_put_contents($this->rootDir . '/bin/download_urls.txt',implode(PHP_EOL,$download_urls));
+        file_put_contents($this->rootDir . '/var/download_urls.txt',implode(PHP_EOL,$download_urls));
         foreach ($this->endCallbacks as $endCallback) {
             $endCallback($this);
         }
