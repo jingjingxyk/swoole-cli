@@ -1009,7 +1009,7 @@ function install_re2c(Preprocessor $p)
             ->disablePkgName()
     );
 }
-
+/*
 install_libiconv($p);//没有 libiconv.pc 文件 不能使用 pkg-config 命令
 install_openssl($p);
 install_libxml2($p); //依赖 libiconv
@@ -1042,6 +1042,7 @@ install_curl($p); //curl 依赖 openssl brotli(暂不启用) zstd(暂不启用) 
 install_libsodium($p);
 install_libyaml($p);
 install_mimalloc($p);
+*/
 install_pgsql($p);//依赖 openssl libxml2 libxslt  zlib
 install_libffi($p);
 install_php_internal_extensions($p);
