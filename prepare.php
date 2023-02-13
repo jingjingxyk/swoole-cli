@@ -10,8 +10,10 @@ $homeDir = getenv('HOME');
 $p = new Preprocessor(__DIR__);
 $p->setPhpSrcDir($homeDir . '/.phpbrew/build/php-8.1.12');
 $p->setDockerVersion('1.5');
+
 # $p->setMaxJob(`nproc 2> /dev/null || sysctl -n hw.ncpu`);
 # `grep "processor" /proc/cpuinfo | sort -u | wc -l`
+
 
 if ($p->getOsType() == 'macos') {
     $p->setWorkDir(__DIR__);
@@ -26,6 +28,7 @@ if ($p->getOsType() == 'macos') {
     });
 
 }
+
 
 $p->addEndCallback(function () use ($p) {
     $header=<<<'EOF'

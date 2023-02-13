@@ -414,14 +414,6 @@ class Preprocessor
         $this->installLibrary = false;
     }
 
-    protected function downloadFile(string $url, string $file)
-    {
-        echo `wget {$url} -O {$file}`;
-        if (!is_file($file) or filesize($file) == 0) {
-            throw new \RuntimeException("Downloading file[$file] from url[$url] failed");
-        }
-    }
-
     function addLibrary(Library $lib)
     {
         if (empty($lib->file)) {
@@ -624,6 +616,8 @@ class Preprocessor
 
         $this->sortLibrary();
 
+        $this->genDownloadLibraryLinks();
+
         ob_start();
         include __DIR__ . '/make.php';
         file_put_contents($this->rootDir . '/make.sh', ob_get_clean());
@@ -636,6 +630,14 @@ class Preprocessor
         include __DIR__ . '/credits.php';
         file_put_contents($this->rootDir . '/bin/credits.html', ob_get_clean());
 
+        foreach ($this->endCallbacks as $endCallback) {
+            $endCallback($this);
+        }
+
+    }
+
+    protected function genDownloadLibraryLinks():void
+    {
         $download_urls=[];
         foreach ($this->libraryList as $item) {
             if (0 && empty($item->label)) {
@@ -646,10 +648,6 @@ class Preprocessor
             $download_urls[]=$item->url .(empty($item->file)?'':PHP_EOL.' out='.$item->file);
         }
         file_put_contents($this->rootDir . '/var/download_urls.txt',implode(PHP_EOL,$download_urls));
-        foreach ($this->endCallbacks as $endCallback) {
-            $endCallback($this);
-        }
-
     }
 
     /**
