@@ -7,7 +7,7 @@ use SwooleCli\Extension;
 return function (Preprocessor $p) {
     $p->addLibrary(
         (new Library('libyaml', '/usr/libyaml'))
-            ->withUrl('http://pyyaml.org/download/libyaml/yaml-0.2.5.tar.gz')
+            ->withUrl('https://pyyaml.org/download/libyaml/yaml-0.2.5.tar.gz')
             ->withConfigure('./configure --prefix=/usr/libyaml --enable-static --disable-shared')
             ->withPkgConfig('/usr/libyaml/lib/pkgconfig')
             ->withPkgName('yaml-0.1')
