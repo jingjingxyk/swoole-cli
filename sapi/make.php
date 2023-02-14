@@ -33,19 +33,19 @@ __EOF__
     <?php endif; ?>
     make -j <?=$this->maxJob?>  <?=$item->makeOptions . PHP_EOL ?>
     result_code=$?
-    [[ $result_code -ne 0 ]] &&  echo "[make failure]" && return  $result_code;
+    [[ $result_code -ne 0 ]] &&  echo "[make FAILURE]" && return  $result_code;
     <?php if ($item->beforeInstallScript): ?>
     <?=$item->beforeInstallScript . PHP_EOL ?>
     result_code=$?
-    [[ $result_code -ne 0 ]] &&  echo "[ before make install failure]" && return  $result_code;
+    [[ $result_code -ne 0 ]] &&  echo "[before make install FAILURE]" && return  $result_code;
     <?php endif; ?>
     make install <?=$item->makeInstallOptions . PHP_EOL ?>
     result_code=$?
-    [[ $result_code -ne 0 ]] &&  echo "[make install failure]" && return  $result_code;
+    [[ $result_code -ne 0 ]] &&  echo "[make install FAILURE]" && return  $result_code;
     <?php if ($item->afterInstallScript): ?>
     <?=$item->afterInstallScript . PHP_EOL ?>
     result_code=$?
-    [[ $result_code -ne 0 ]] &&  echo "[ after make  install failure]" && return  $result_code;
+    [[ $result_code -ne 0 ]] &&  echo "[after make  install FAILURE]" && return  $result_code;
     <?php endif; ?>
     cd -
     return 0
@@ -62,7 +62,10 @@ clean_<?=$item->name?>() {
 
 make_all_library() {
 <?php foreach ($this->libraryList as $item) : ?>
-    make_<?=$item->name?> && echo "[SUCCESS] make <?=$item->name?>"
+    make_<?=$item->name . PHP_EOL ?>
+    result_code=$?
+    [[ $result_code -ne 0 ]] && echo "[FAILURE] make [<?= $item->name ?>]" && exit $result_code
+    echo "[SUCCESS] make <?=$item->name?>"
 <?php endforeach; ?>
 }
 
@@ -88,7 +91,11 @@ config_php() {
     export   LIBZIP_CFLAGS=$(pkg-config --cflags --static libzip) ;
     export   LIBZIP_LIBS=$(pkg-config   --libs   --static libzip) ;
 
-    export LIBS=$(pkg-config  --libs --static readline libcares)
+<?php if ($this->osType !== 'macos') : ?>
+    LIBS=$(pkg-config  --libs --static readline libcares)
+    export LIBS="$LIBS -L/usr/lib -lstdc++"
+<?php endif; ?>
+
     test -f ./configure &&  rm ./configure
     ./buildconf --force
 <?php if ($this->osType !== 'macos') : ?>
@@ -133,11 +140,8 @@ elif [ "$1" = "all-library" ] ;then
 elif [ "$1" = "<?=$item->name?>" ] ;then
     make_<?= $item->name .PHP_EOL ?>
     result_code=$?
-    if [[ $result_code -ne 0 ]] ;then
-        echo "[<?= $item->name ?> make failure]" && exit $result_code
-    else
-        echo "[SUCCESS] make <?=$item->name?>"
-    fi
+    [[ $result_code -ne 0 ]] && echo "[FAILURE] make [<?= $item->name ?>" && exit $result_code
+    echo "[SUCCESS] make <?=$item->name?>"
 elif [ "$1" = "clean-<?=$item->name?>" ] ;then
     clean_<?=$item->name?> && echo "[SUCCESS] make clean <?=$item->name?>"
 <?php endforeach; ?>
