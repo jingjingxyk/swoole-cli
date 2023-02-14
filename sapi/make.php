@@ -138,7 +138,7 @@ elif [ "$1" = "all-library" ] ;then
     make_all_library
 <?php foreach ($this->libraryList as $item) : ?>
 elif [ "$1" = "<?=$item->name?>" ] ;then
-    make_<?= $item->name .PHP_EOL ?>
+    make_<?=$item->name .PHP_EOL ?>
     result_code=$?
     [[ $result_code -ne 0 ]] && echo "[FAILURE] make [<?= $item->name ?>" && exit $result_code
     echo "[SUCCESS] make <?=$item->name?>"
