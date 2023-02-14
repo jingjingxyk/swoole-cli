@@ -50,19 +50,15 @@ EOF
 
     $p->addLibrary(
         (new Library('giflib'))
-        (new Library('giflib'))
             ->withUrl('https://nchc.dl.sourceforge.net/project/giflib/giflib-5.2.1.tar.gz')
             ->withLicense('http://giflib.sourceforge.net/intro.html', Library::LICENSE_SPEC)
-            ->withCleanBuildDirectory()
-            ->withScriptBeforeConfigure('
-
+            ->withConfigure('
             default_prefix_dir="/ u s r" # 阻止 macos 系统下编译路径被替换
             # 替换空格
             default_prefix_dir=$(echo "$default_prefix_dir" | sed -e "s/[ ]//g")
             
             sed -i.bakup "s@PREFIX = $default_prefix_dir/local@PREFIX = /usr/giflib@" Makefile
-       
-       
+
             cat >> Makefile <<"EOF"
        
 install-lib-static:
