@@ -62,7 +62,10 @@ clean_<?=$item->name?>() {
 
 make_all_library() {
 <?php foreach ($this->libraryList as $item) : ?>
-    make_<?=$item->name?> && echo "[SUCCESS] make <?=$item->name?>"
+    make_<?=$item->name . PHP_EOL ?>
+    result_code=$?
+    [[ $result_code -ne 0 ]] && echo "[FAILURE] make [<?= $item->name ?>]" && exit $result_code
+    echo "[SUCCESS] make <?=$item->name?>"
 <?php endforeach; ?>
 }
 
@@ -109,13 +112,10 @@ elif [ "$1" = "all-library" ] ;then
     make_all_library
 <?php foreach ($this->libraryList as $item) : ?>
 elif [ "$1" = "<?=$item->name?>" ] ;then
-    make_<?= $item->name .PHP_EOL ?>
+    make_<?=$item->name .PHP_EOL ?>
     result_code=$?
-    if [[ $result_code -ne 0 ]] ;then
-        echo "[<?= $item->name ?> make failure]" && exit $result_code
-    else
-        echo "[SUCCESS] make <?=$item->name?>"
-    fi
+    [[ $result_code -ne 0 ]] && echo "[FAILURE] make [<?= $item->name ?>" && exit $result_code
+    echo "[SUCCESS] make <?=$item->name?>"
 elif [ "$1" = "clean-<?=$item->name?>" ] ;then
     clean_<?=$item->name?> && echo "[SUCCESS] make clean <?=$item->name?>"
 <?php endforeach; ?>
