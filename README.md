@@ -14,6 +14,7 @@ git submodule update --init
 ## 生成构建脚本
 
 ```shell
+compser update 
 php prepare.php
 php prepare.php +inotify +mongodb
 ```
