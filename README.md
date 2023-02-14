@@ -12,6 +12,13 @@
 
 ## [Swoole v5.0 版本新特性预览之新的运行模式](https://zhuanlan.zhihu.com/p/459983471)
 
+## 下载`swoole-cli`发行版
+
+- [swoole-cli release site 1](https://www.swoole.com/download)
+- [swoole-cli release site 2](https://github/swoole/swoole-src/releases)
+- [swoole-cli release site 3](https://github.com/swoole/swoole-cli/releases/tag/v5.0.1)
+
+
 ## Clone
 ```shell
 git clone --recursive git@github.com:swoole/swoole-cli.git
