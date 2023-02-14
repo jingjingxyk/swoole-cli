@@ -9,7 +9,6 @@ return function (Preprocessor $p) {
         (new Library('sqlite3',"/usr/sqlite3"))
             ->withUrl('https://www.sqlite.org/2021/sqlite-autoconf-3370000.tar.gz')
             ->withConfigure('./configure --prefix=/usr/sqlite3 --enable-static --disable-shared')
-            ->withConfigure('sqlite3')
             ->withHomePage('https://www.sqlite.org/index.html')
             ->withLicense('https://www.sqlite.org/copyright.html', Library::LICENSE_SPEC)
     );
