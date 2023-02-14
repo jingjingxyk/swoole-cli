@@ -1,6 +1,7 @@
 # swoole-cli
 
 ## [Swoole-Cli 介绍](https://zhuanlan.zhihu.com/p/581695339)
+
 > Swoole-Cli 是一个 PHP 的二进制发行版，集成了 swoole、php 内核、php-cli、php-fpm以及多个常用扩展。Swoole-Cli 是全部静态编译打包的，不依赖任何操作系统的so动态链接库，具备非常好的移植性，可以在任意 Linux 系统之间复制，下载即可使用。
 
 > 作为 PHP 开发者都应该知道 PHP 有两种运行模式：php-fpm和php-cli，那么在 Swoole 5.0中将迎来一种新的运行模式：swoole-cli。   
