@@ -10,7 +10,6 @@ return function (Preprocessor $p) {
             ->withUrl('https://ftp.gnu.org/pub/gnu/ncurses/ncurses-6.3.tar.gz')
             ->withConfigure(<<<EOF
             mkdir -p /usr/ncurses/lib/pkgconfig
-
             ./configure \
             --prefix=/usr/ncurses \
             --enable-static \

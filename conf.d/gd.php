@@ -24,7 +24,14 @@ return function (Preprocessor $p) {
             ->withConfigure(<<<EOF
             export BZIP2_CFLAGS='-I/usr/bzip2/include'
             export BZIP2_LIBS='-L/usr/bzip2/lib -lbz2'
-            ./configure --prefix=/usr/freetype --enable-static --disable-shared  --with-zlib=yes --with-bzip2=yes --with-png=yes --with-harfbuzz=no --with-brotli=no
+            ./configure --prefix=/usr/freetype \
+            --enable-static \
+            --disable-shared  \
+            --with-zlib=yes \
+            --with-bzip2=yes \
+            --with-png=yes \
+            --with-harfbuzz=no \
+            --with-brotli=no
 EOF
             )
             ->withHomePage('https://freetype.org/')
