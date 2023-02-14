@@ -14,8 +14,8 @@
 
 ## 下载`swoole-cli`发行版
 
-- [swoole-cli release site 1](https://www.swoole.com/download)
-- [swoole-cli release site 2](https://github/swoole/swoole-src/releases)
+- [swoole-cli release site 1 (recommend)](https://www.swoole.com/download)
+- [swoole-cli release site 2](https://github.com/swoole/swoole-src/releases)
 - [swoole-cli release site 3](https://github.com/swoole/swoole-cli/releases/tag/v5.0.1)
 
 
