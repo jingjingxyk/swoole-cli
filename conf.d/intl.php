@@ -11,7 +11,7 @@ return function (Preprocessor $p) {
             ->withConfigure(<<<EOF
              export CPPFLAGS="-DU_CHARSET_IS_UTF8=1  -DU_USING_ICU_NAMESPACE=1  -DU_STATIC_IMPLEMENTATION=1"
              source/runConfigureICU Linux --prefix=/usr/icu \
-             --enable-icu-config=no \
+             --enable-icu-config=yes \
              --enable-static=yes \
              --enable-shared=no \
              --with-data-packaging=archive \
