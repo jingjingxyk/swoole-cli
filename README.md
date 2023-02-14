@@ -1,5 +1,11 @@
 # swoole-cli
 
+## [Swoole-Cli 介绍](https://zhuanlan.zhihu.com/p/581695339)
+
+## [Swoole-Cli 使用说明](https://wenda.swoole.com/detail/108876)
+
+## [Swoole v5.0 版本新特性预览之新的运行模式](https://zhuanlan.zhihu.com/p/459983471)
+
 ## Clone
 ```shell
 git clone --recursive git@github.com:swoole/swoole-cli.git
