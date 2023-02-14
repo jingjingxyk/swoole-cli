@@ -9,9 +9,11 @@ return function (Preprocessor $p) {
         (new Library('icu',"/usr/icu"))
             ->withUrl('https://github.com/unicode-org/icu/releases/download/release-60-3/icu4c-60_3-src.tgz')
             ->withConfigure(<<<EOF
-             CPPFLAGS="-DU_CHARSET_IS_UTF8=1  -DU_USING_ICU_NAMESPACE=1  -DU_STATIC_IMPLEMENTATION=1"
-             source/runConfigureICU Linux --prefix=/usr/icu --enable-static --disable-shared \
-             --enable-icu-config=yes \
+             export CPPFLAGS="-DU_CHARSET_IS_UTF8=1  -DU_USING_ICU_NAMESPACE=1  -DU_STATIC_IMPLEMENTATION=1"
+             source/runConfigureICU Linux --prefix=/usr/icu \
+             --enable-icu-config=no \
+             --enable-static=yes \
+             --enable-shared=no \
              --with-data-packaging=archive \
              --enable-release=yes \
              --enable-extras=yes \

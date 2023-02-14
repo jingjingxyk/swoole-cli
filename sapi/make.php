@@ -87,8 +87,9 @@ config_php() {
     export   LIBZIP_CFLAGS=$(pkg-config --cflags --static libzip) ;
     export   LIBZIP_LIBS=$(pkg-config   --libs   --static libzip) ;
 
-<?php if ($this->osType !== 'macos') : ?>
-    LIBS=$(pkg-config  --libs --static readline libcares)
+<?php if ($this->getOsType() == 'linux') : ?>
+    export CPPFLAGS=$(pkg-config  --cflags --static  readline icu-uc)
+    LIBS=$(pkg-config  --libs --static readline libcares icu-uc)
     export LIBS="$LIBS -L/usr/lib -lstdc++"
 <?php endif; ?>
 
