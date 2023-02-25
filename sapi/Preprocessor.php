@@ -842,7 +842,6 @@ class Preprocessor
         $this->binPaths[] = '$PATH';
         $this->binPaths = array_unique($this->binPaths);
 
-
         //暂时由手工维护，依赖关系
         // $this->sortLibrary();
 
