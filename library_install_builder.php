@@ -971,11 +971,11 @@ function install_pgsql(Preprocessor $p)
 
     $includes=<<<EOF
 {$openssl_prefix}/include/:
-{$libxml2_prefix}/usr/libxml2/include/:
-{$libxslt_prefix}/usr/libxslt/include:
-{$readline_prefix}/usr/readline/include/readline:
-{$icu_prefix}/usr/icu/include:
-{$zlib_prefix}/usr/zlib/include:
+{$libxml2_prefix}/include/:
+{$libxslt_prefix}/include:
+{$readline_prefix}/include/readline:
+{$icu_prefix}/include:
+{$zlib_prefix}/include:
 /usr/include
 
 EOF;
@@ -983,13 +983,15 @@ EOF;
     $includes=trim(str_replace(PHP_EOL,'',$includes));
     $libraries=<<<EOF
 {$openssl_prefix}/lib/:
-{$libxml2_prefix}/usr/libxml2/lib/:
-{$libxslt_prefix}/usr/libxslt/lib:
-{$readline_prefix}/usr/readline/lib:
-{$icu_prefix}/usr/icu/lib:
-{$zlib_prefix}/usr/zlib/lib:
+{$libxml2_prefix}/lib/:
+{$libxslt_prefix}/lib:
+{$readline_prefix}/lib:
+{$icu_prefix}/lib:
+{$zlib_prefix}/lib:
 /usr/lib
 EOF;
+
+
 
     $libraries=trim(str_replace(PHP_EOL,'',$libraries));
     $p->addLibrary(
@@ -1004,7 +1006,7 @@ EOF;
             ->withCleanBuildDirectory()
             ->withCleanInstallDirectory($pgsql_prefix)
             ->withConfigure(
-                <<<EOF
+                <<<'EOF'
             ./configure --help
             
             sed -i.backup "s/invokes exit\'; exit 1;/invokes exit\';/"  src/interfaces/libpq/Makefile
@@ -1015,9 +1017,19 @@ EOF;
             # export CPPFLAGS="-static -fPIE -fPIC -O2 -Wall "
             # export CFLAGS="-static -fPIE -fPIC -O2 -Wall "
             
-            export CPPFLAGS=$(pkg-config  --cflags --static  icu-uc icu-io icu-i18n readline libxml-2.0)
-            export LIBS=$(pkg-config  --libs --static   icu-uc icu-io icu-i18n readline libxml-2.0)
-          
+       
+            package_names="icu-uc icu-io icu-i18n readline libxml-2.0 openssl "
+         
+        
+            CPPFLAGS=$(pkg-config  --cflags-only-I --static $package_names )
+            export   CPPFLAGS="$CPPFLAGS -I/usr/include"
+            LDFLAGS=$(pkg-config   --libs-only-L   --static $package_names )
+            export   LDFLAGS="$LDFLAGS -L/usr/lib"
+            LIBS=$(pkg-config      --libs-only-l   --static $package_names )
+            export  LIBS="$LIBS "
+            
+EOF
+.          <<<EOF
           
             ./configure  --prefix={$pgsql_prefix} \
             --enable-coverage=no \
@@ -1027,8 +1039,8 @@ EOF;
             --without-ldap \
             --with-libxml  \
             --with-libxslt \
-            --with-includes="{$includes}" \
-            --with-libraries="{$libraries}"
+            # --with-includes="{$includes}" \
+            # --with-libraries="{$libraries}"
 EOF
         .   <<<'EOF'
 
