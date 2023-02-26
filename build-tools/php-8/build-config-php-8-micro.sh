@@ -129,6 +129,7 @@ OPTIONS="--disable-all \
 --with-ffi \
  --enable-ds \
 --enable-inotify \
+--with-mcrypt=/usr/libmcrypt/ \
 --enable-micro=all-static
 
 "
@@ -139,13 +140,15 @@ OPTIONS="--disable-all \
 # mongodb 扩展暂时（2023-02-26）不支持 php-8.20
 # 扩展 --enable-micro=yes 或者   --enable-micro=all-static （区别请看文档：https://github.com/dixyes/phpmicro
 
+# libmcrypt 没有pkg-config 配置
 
 test -f ./configure && rm ./configure ;
 
 ./buildconf --force ;
 
-./configure --help | grep mcrypt
-exit 0
+# ./configure --help | grep mcrypt
+./configure --help
+
 export   ICU_CFLAGS=$(pkg-config --cflags --static icu-i18n  icu-io   icu-uc)
 export   ICU_LIBS=$(pkg-config   --libs   --static icu-i18n  icu-io   icu-uc)
 export   ONIG_CFLAGS=$(pkg-config --cflags --static oniguruma)
@@ -167,11 +170,11 @@ package_names="${package_names} openssl libcares  libidn2  libzstd libbrotlicomm
 package_names="${package_names} "
 
 CPPFLAGS=$(pkg-config  --cflags-only-I --static $package_names )
-export   CPPFLAGS="$CPPFLAGS -I/usr/include"
+export   CPPFLAGS="$CPPFLAGS -I/usr/include -I/usr/libmcrypt/include"
 LDFLAGS=$(pkg-config   --libs-only-L   --static $package_names )
-export   LDFLAGS="$LDFLAGS -L/usr/lib -static"
+export   LDFLAGS="$LDFLAGS -L/usr/lib -L/usr/libmcrypt/lib -static"
 LIBS=$(pkg-config      --libs-only-l   --static $package_names )
-export  LIBS="$LIBS -lstdc++"
+export  LIBS="$LIBS  -lstdc++"
 
 ./configure  --prefix=$install_prefix_dir $OPTIONS
 
