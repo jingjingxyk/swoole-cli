@@ -101,6 +101,8 @@ function install_brotli(Preprocessor $p)
     -DCMAKE_BUILD_TYPE="${BUILD_TYPE}" \
     -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
     -DCMAKE_INSTALL_LIBDIR="${LIBDIR}" \
+
+    -Wno-dev
   */
     $brotli_prefix = BROTLI_PREFIX;
     $p->addLibrary(
@@ -1079,7 +1081,7 @@ EOF;
             # export CFLAGS="-static -fPIE -fPIC -O2 -Wall "
             
        
-            package_names="icu-uc icu-io icu-i18n readline libxml-2.0 openssl "
+            package_names="icu-uc icu-io icu-i18n readline libxml-2.0 openssl zlib"
          
         
             CPPFLAGS=$(pkg-config  --cflags-only-I --static $package_names )
