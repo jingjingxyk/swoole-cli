@@ -63,10 +63,11 @@ tar --strip-components=1 -C ext/swoole -xf ${__DIR__}/download/swoole-v5.0.2.tar
 
 cp -rf ${__DIR__}/download/phpmicro/ sapi/micro
 
+# 打patch
 
 patch -p1 < sapi/micro/patches/phar.patch
-patch -p1 < sapi/micro/patches/static_opcache_81.patch
 patch -p1 < sapi/micro/patches/cli_checks_81.patch
+patch -p1 < sapi/micro/patches/static_opcache_81.patch
 patch -p1 < sapi/micro/patches/disable_huge_page.patch
 
 
@@ -115,6 +116,7 @@ OPTIONS="--disable-all \
 --with-imagick=/usr/imagemagick \
 --with-pgsql=/usr/pgsql \
 --with-pdo-pgsql=/usr/pgsql \
+--enable-mongodb \
 --enable-apcu \
 --with-ffi \
  --enable-ds \
@@ -126,12 +128,6 @@ OPTIONS="--disable-all \
 # mongodb 扩展暂时（2023-02-26）不支持 php-8.20
 # mongodb 扩展支持 php-8.1
 
-
-
-
-# --enable-mongodb \
-# mongodb 扩展暂时不兼容 php-8.20
-# mongodb 扩展支持 php-8.1
 
 
 test -f ./configure && rm ./configure ;

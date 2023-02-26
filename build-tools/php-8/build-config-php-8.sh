@@ -104,6 +104,7 @@ OPTIONS="--disable-all \
 --with-imagick=/usr/imagemagick \
 --with-pgsql=/usr/pgsql \
 --with-pdo-pgsql=/usr/pgsql \
+--enable-mongodb \
 --enable-apcu \
 --with-ffi \
  --enable-ds \
