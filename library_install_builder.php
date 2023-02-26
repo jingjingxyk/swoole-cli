@@ -1024,7 +1024,6 @@ function install_pgsql(Preprocessor $p)
     $pgsql_prefix= PGSQL_PREFIX ;
 
     $openssl_prefix = OPENSSL_PREFIX;
-    $curl_prefix = CURL_PREFIX;
     $libxml2_prefix = LIBXML2_PREFIX;
     $libxslt_prefix = LIBXSLT_PREFIX;
     $readline_prefix = READLINE_PREFIX;
@@ -1080,10 +1079,8 @@ EOF;
             # export CPPFLAGS="-static -fPIE -fPIC -O2 -Wall "
             # export CFLAGS="-static -fPIE -fPIC -O2 -Wall "
             
-       
-            package_names="icu-uc icu-io icu-i18n readline libxml-2.0 openssl zlib"
-         
-        
+            package_names="icu-uc icu-io icu-i18n readline libxml-2.0 openssl zlib libxslt"
+
             CPPFLAGS=$(pkg-config  --cflags-only-I --static $package_names )
             export   CPPFLAGS="$CPPFLAGS -I/usr/include"
             LDFLAGS=$(pkg-config   --libs-only-L   --static $package_names )
