@@ -7,12 +7,9 @@ __DIR__=$(
 )
 cd ${__DIR__}
 
-test -d dist && rm -rf dist
-mkdir -p dist/
 
-cd ${__DIR__}/
 
-php -c php-env.ini build.php
+php -c php-env.ini build-phar.php
 
 cp -f ${__DIR__}/../build/php-src/sapi/micro/micro.sfx .
 

@@ -84,7 +84,7 @@ function libraries_builder($p)
      */
 
     //测试
-    if(0){
+    if(10){
         install_libmcrypt($p);
 
     }
