@@ -129,10 +129,10 @@ OPTIONS="--disable-all \
 --with-ffi \
  --enable-ds \
 --enable-inotify \
---with-mcrypt=/usr/libmcrypt/ \
 --enable-micro=all-static
 
 "
+# --with-mcrypt=/usr/libmcrypt/ \
 
 # --enable-mongodb
 # mongodb 扩展支持 php-8.1
@@ -141,7 +141,7 @@ OPTIONS="--disable-all \
 # 扩展 --enable-micro=yes 或者   --enable-micro=all-static （区别请看文档：https://github.com/dixyes/phpmicro
 
 # libmcrypt 没有pkg-config 配置
-# --with-mcrypt=/usr/libmcrypt/
+
 
 test -f ./configure && rm ./configure ;
 
@@ -171,9 +171,9 @@ package_names="${package_names} openssl libcares  libidn2  libzstd libbrotlicomm
 package_names="${package_names} "
 
 CPPFLAGS=$(pkg-config  --cflags-only-I --static $package_names )
-export   CPPFLAGS="$CPPFLAGS  -I/usr/libmcrypt/include -I/usr/include"
+export   CPPFLAGS="$CPPFLAGS   -I/usr/include" #  -I/usr/libmcrypt/include
 LDFLAGS=$(pkg-config   --libs-only-L   --static $package_names )
-export   LDFLAGS="$LDFLAGS  -L/usr/libmcrypt/lib -L/usr/lib -static"
+export   LDFLAGS="$LDFLAGS  -L/usr/lib -static" #  -L/usr/libmcrypt/lib
 LIBS=$(pkg-config      --libs-only-l   --static $package_names )
 export  LIBS="$LIBS   -lstdc++ "
 
