@@ -66,7 +66,7 @@ cp -rf ${__DIR__}/download/phpmicro/ sapi/micro
 # 打patch
 
 patch -p1 < sapi/micro/patches/phar.patch
-patch -p1 < sapi/micro/patches/cli_checks_81.patch
+# patch -p1 < sapi/micro/patches/cli_checks_81.patch
 patch -p1 < sapi/micro/patches/static_opcache_81.patch
 patch -p1 < sapi/micro/patches/disable_huge_page.patch
 
@@ -121,13 +121,14 @@ OPTIONS="--disable-all \
 --with-ffi \
  --enable-ds \
 --enable-inotify \
---enable-micro
+--enable-micro=all-static
+
 "
 
 # --enable-mongodb \
 # mongodb 扩展暂时（2023-02-26）不支持 php-8.20
 # mongodb 扩展支持 php-8.1
-
+# 扩展 --enable-micro=yes 或者   --enable-micro=all-static （区别请看文档：https://github.com/dixyes/phpmicro
 
 
 test -f ./configure && rm ./configure ;

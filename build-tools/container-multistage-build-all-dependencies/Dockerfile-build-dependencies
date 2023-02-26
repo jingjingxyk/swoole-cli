@@ -51,7 +51,7 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositorie
 RUN apk update
 RUN apk add --no-cache alpine-sdk xz autoconf automake linux-headers clang-dev clang lld libtool  cmake  tini
 RUN apk add --no-cache flex bison re2c pkgconf ca-certificates  gettext  coreutils
-RUN apk add --no-cache curl git wget
+RUN apk add --no-cache curl git wget zip unzip
 
 WORKDIR /
 
