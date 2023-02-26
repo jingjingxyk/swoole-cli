@@ -18,6 +18,8 @@ cd download
 
 test -d phpmicro || git clone --depth=1 --progress  https://github.com/easysoft/phpmicro.git
 test -d phpmicro && git -C phpmicro pull --rebase=true --depth=1 --allow-unrelated-histories
+
+
 cd ${__DIR__}
 
 

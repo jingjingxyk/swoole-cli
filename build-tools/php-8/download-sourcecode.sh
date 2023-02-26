@@ -39,6 +39,9 @@ test -f imagick-3.6.0.tgz || curl --retry 5 --retry-delay 5 -Lo imagick-3.6.0.tg
 test -f ds-1.4.0.tgz || curl --retry 5 --retry-delay 5 -Lo ds-1.4.0.tgz https://pecl.php.net/get/ds-1.4.0.tgz
 test -f inotify-3.0.0.tgz || curl --retry 5 --retry-delay 5 -Lo inotify-3.0.0.tgz https://pecl.php.net/get/inotify-3.0.0.tgz
 
+test -f mcrypt-1.0.5.tgz || curl --retry 5 --retry-delay 5 -Lo mcrypt-1.0.5.tgz https://pecl.php.net/get/mcrypt-1.0.5.tgz
+
+
 cd ${__DIR__}
 
 

@@ -19,6 +19,7 @@ make  EXTRA_LDFLAGS_PROGRAM='-all-static   -L/usr/openssl/lib -L/usr/libiconv/li
 
 make install
 # 编译 imagick 过程中，会主动下载 此库 https://github.com/nikic/PHP-Parser.git
+# 如果一直下载不下来，请添加代理
 # 详见截图： 截图 2023-02-26 17-02-40.png
 
 exit 0

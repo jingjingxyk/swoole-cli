@@ -56,7 +56,7 @@ tar --strip-components=1 -C ext/inotify -xf ${__DIR__}/download/inotify-3.0.0.tg
 #tar --strip-components=1 -C ext/swoole -xf ${__DIR__}/swoole-5.0.1.tgz
 tar --strip-components=1 -C ext/swoole -xf ${__DIR__}/download/swoole-v5.0.2.tar.gz
 
-# cp -f ${__DIR__}/php-src/ext/openssl_1/config0.m4 ${__DIR__}/php-src/ext/openssl_1/config.m4
+# cp -f ${__DIR__}/php-src/ext/openssl/config0.m4 ${__DIR__}/php-src/ext/openssl/config.m4
 
 
 
@@ -111,9 +111,10 @@ OPTIONS="--disable-all \
 --enable-inotify \
 "
 
-# --enable-mongodb \
-# mongodb 扩展暂时不兼容 php-8.20
+# --enable-mongodb
 # mongodb 扩展支持 php-8.1
+# 重点：
+# mongodb 扩展暂时（2023-02-26）不支持 php-8.20
 
 
 test -f ./configure && rm ./configure ;

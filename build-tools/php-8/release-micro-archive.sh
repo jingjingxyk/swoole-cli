@@ -8,15 +8,14 @@ __DIR__=$(
 cd ${__DIR__}
 
 
-
-mkdir -p release/
-cd release
-
 ls -lh ${__DIR__}/build/php-src/sapi/micro/micro.sfx
-cp -rf ${__DIR__}/build/php-src/sapi/micro/micro.sfx .
+cp -rf ${__DIR__}/build/php-src/sapi/micro/micro.sfx ${__DIR__}/micro/micro.sfx
 
 
+cd ${__DIR__}/micro/
 test -f micro.sfx.zip && rm -f micro.sfx.zip
 
-zip  -r  ./micro.sfx.zip ./micro.sfx
+zip  -r  ./micro.sfx.linux.zip ./micro.sfx
+
+cd ${__DIR__}
 chown -R 1000:1000 .

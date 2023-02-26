@@ -43,6 +43,7 @@ mkdir -p ext/imagick
 mkdir -p ext/ds
 mkdir -p ext/inotify
 mkdir -p ext/swoole
+mkdir -p ext/mcrypt
 
 
 tar --strip-components=1 -C ext/redis -xf ${__DIR__}/download/redis-5.3.7.tgz
@@ -52,29 +53,38 @@ tar --strip-components=1 -C ext/apcu -xf ${__DIR__}/download/apcu-5.1.22.tgz
 tar --strip-components=1 -C ext/imagick -xf ${__DIR__}/download/imagick-3.6.0.tgz
 tar --strip-components=1 -C ext/ds -xf ${__DIR__}/download/ds-1.4.0.tgz
 tar --strip-components=1 -C ext/inotify -xf ${__DIR__}/download/inotify-3.0.0.tgz
+tar --strip-components=1 -C ext/mcrypt -xf ${__DIR__}/download/mcrypt-1.0.5.tgz
 
 # tar --strip-components=1 -C ext/swoole -xf ${__DIR__}/swoole-5.0.1.tgz
 tar --strip-components=1 -C ext/swoole -xf ${__DIR__}/download/swoole-v5.0.2.tar.gz
 
-# cp -f ${__DIR__}/php-src/ext/openssl_1/config0.m4 ${__DIR__}/php-src/ext/openssl_1/config.m4
+# cp -f ${__DIR__}/php-src/ext/openssl/config0.m4 ${__DIR__}/php-src/ext/openssl/config.m4
 
+
+
+cp -rf ${__DIR__}/download/phpmicro/ sapi/micro
 # 参考文档： https://github.com/dixyes/phpmicro/tree/master/patches
 # 参考文档： https://github.com/easysoft/phpmicro/tree/master/patches
 
-cp -rf ${__DIR__}/download/phpmicro/ sapi/micro
+# 打patch （static-php-cli 没有按照这个流程来，暂时不清楚为什么，以及原理）
+# patch -p1 < sapi/micro/patches/phar.patch
+# patch -p1 < sapi/micro/patches/cli_checks_81.patch
+# patch -p1 < sapi/micro/patches/static_opcache_81.patch
+# patch -p1 < sapi/micro/patches/disable_huge_page.patch
 
-# 打patch
+# micro 参考这里： https://github.com/crazywhalecc/static-php-cli/blob/1ca64d6626e8bbcb36370d10fea785dcd0a2aa30/docker/check-extensions.sh#L83
+sed -ie 's/#include "php.h"/#include "php.h"\n#define PHP_MICRO_FAKE_CLI 1/g' sapi/micro/php_micro.c
 
-patch -p1 < sapi/micro/patches/phar.patch
-patch -p1 < sapi/micro/patches/cli_checks_81.patch
-patch -p1 < sapi/micro/patches/static_opcache_81.patch
-patch -p1 < sapi/micro/patches/disable_huge_page.patch
-
+# micro 参考这里 https://github.com/easysoft/phpmicro/issues/1#issuecomment-774608418
+#   sed -ie 's/strcmp("cli", sapi_module.name) == 0/strcmp("cli", sapi_module.name) == 0 || strcmp("micro", sapi_module.name) == 0/g' "$php_dir/ext/swoole/ext-src/php_swoole.cc"
 
 
 OPTIONS="--disable-all \
 --enable-shared=no \
 --enable-static=yes \
+--disable-cgi \
+--disable-phpdbg \
+--with-pear=no \
 --enable-opcache \
 --with-curl \
 --with-iconv=/usr/libiconv \
@@ -123,9 +133,10 @@ OPTIONS="--disable-all \
 
 "
 
-# --enable-mongodb \
-# mongodb 扩展暂时（2023-02-26）不支持 php-8.20
+# --enable-mongodb
 # mongodb 扩展支持 php-8.1
+# 重点：
+# mongodb 扩展暂时（2023-02-26）不支持 php-8.20
 # 扩展 --enable-micro=yes 或者   --enable-micro=all-static （区别请看文档：https://github.com/dixyes/phpmicro
 
 
@@ -133,8 +144,8 @@ test -f ./configure && rm ./configure ;
 
 ./buildconf --force ;
 
-./configure --help
-
+./configure --help | grep mcrypt
+exit 0
 export   ICU_CFLAGS=$(pkg-config --cflags --static icu-i18n  icu-io   icu-uc)
 export   ICU_LIBS=$(pkg-config   --libs   --static icu-i18n  icu-io   icu-uc)
 export   ONIG_CFLAGS=$(pkg-config --cflags --static oniguruma)
@@ -158,7 +169,7 @@ package_names="${package_names} "
 CPPFLAGS=$(pkg-config  --cflags-only-I --static $package_names )
 export   CPPFLAGS="$CPPFLAGS -I/usr/include"
 LDFLAGS=$(pkg-config   --libs-only-L   --static $package_names )
-export   LDFLAGS="$LDFLAGS -L/usr/lib"
+export   LDFLAGS="$LDFLAGS -L/usr/lib -static"
 LIBS=$(pkg-config      --libs-only-l   --static $package_names )
 export  LIBS="$LIBS -lstdc++"
 
@@ -166,6 +177,10 @@ export  LIBS="$LIBS -lstdc++"
 
 sed -ie 's/-export-dynamic//g' "Makefile"
 sed -ie 's/-o $(SAPI_CLI_PATH)/-all-static -o $(SAPI_CLI_PATH)/g' "Makefile"
+
+# 这里也需要处理，请参考  https://github.com/crazywhalecc/static-php-cli/blob/1ca64d6626e8bbcb36370d10fea785dcd0a2aa30/docker/check-extensions.sh#L182
+
+# sed -ie 's/strcmp("cli", sapi_module.name) == 0/strcmp("cli", sapi_module.name) == 0 || strcmp("micro", sapi_module.name) == 0/g' "ext/swoole/ext-src/php_swoole.cc"
 
 cd ${__DIR__}
 
