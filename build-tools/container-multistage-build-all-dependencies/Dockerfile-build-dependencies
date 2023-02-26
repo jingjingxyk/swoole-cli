@@ -1,0 +1,112 @@
+FROM alpine:edge as builder-all-library
+
+ENV TZ=Etc/UTC
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN test -f /etc/apk/repositories.save || cp /etc/apk/repositories /etc/apk/repositories.save
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
+
+RUN apk update
+RUN apk add --no-cache alpine-sdk xz autoconf automake linux-headers clang-dev clang lld libtool  cmake  tini
+RUN apk add --no-cache flex bison re2c pkgconf ca-certificates  gettext  coreutils
+RUN apk add --no-cache curl git wget
+
+WORKDIR /
+
+ADD  ./source-code/swoole-cli /usr/local/bin/swoole-cli
+ADD  ./source-code/composer.phar /usr/local/bin/composer.phar
+ADD  ./source-code/swoole-cli-source-code/ /work/
+ADD  ./source-code/extensions/ /work/pool/ext
+ADD  ./source-code/libraries/ /work/pool/lib
+
+
+RUN ln -s /usr/local/bin/swoole-cli /usr/local/bin/php
+RUN ln -s /usr/local/bin/composer.phar /usr/local/bin/composer
+RUN chmod +x /usr/local/bin/swoole-cli
+RUN chmod +x /usr/local/bin/composer.phar
+
+RUN ls -lh /work/
+
+WORKDIR /work/
+
+RUN composer install
+
+
+RUN php prepare.php  \
+  +pgsql +pdo_pgsql \
+  +apcu +ffi \
+  +ds +inotify
+
+RUN sh make.sh build-all-library
+
+
+FROM alpine:edge as builder
+
+ENV TZ=Etc/UTC
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN test -f /etc/apk/repositories.save || cp /etc/apk/repositories /etc/apk/repositories.save
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
+
+RUN apk update
+RUN apk add --no-cache alpine-sdk xz autoconf automake linux-headers clang-dev clang lld libtool  cmake  tini
+RUN apk add --no-cache flex bison re2c pkgconf ca-certificates  gettext  coreutils
+RUN apk add --no-cache curl git wget
+
+WORKDIR /
+
+
+## php 和 composer.phar
+COPY --from=builder-all-library /usr/local/bin/swoole-cli /usr/local/bin/swoole-cli
+COPY --from=builder-all-library /usr/local/bin/composer.phar /usr/local/bin/composer.phar
+
+
+RUN ln -s /usr/local/bin/swoole-cli /usr/local/bin/php
+RUN ln -s /usr/local/bin/composer.phar /usr/local/bin/composer
+RUN chmod +x /usr/local/bin/swoole-cli
+RUN chmod +x /usr/local/bin/composer.phar
+
+COPY --from=builder-all-library /usr/openssl/ /usr/openssl/
+COPY --from=builder-all-library /usr/libiconv /usr/libiconv
+COPY --from=builder-all-library /usr/libxml2/ /usr/libxml2/
+COPY --from=builder-all-library /usr/libxslt/ /usr/libxslt/
+
+
+COPY --from=builder-all-library  /usr/brotli/ /usr/brotli/
+COPY --from=builder-all-library  /usr/zlib /usr/zlib
+COPY --from=builder-all-library  /usr/bzip2 /usr/bzip2
+COPY --from=builder-all-library  /usr/liblz4 /usr/liblz4
+COPY --from=builder-all-library  /usr/liblzma /usr/liblzma
+COPY --from=builder-all-library  /usr/libzstd /usr/libzstd
+COPY --from=builder-all-library  /usr/libzip /usr/libzip
+
+COPY --from=builder-all-library  /usr/libgif /usr/libgif
+COPY --from=builder-all-library  /usr/libpng /usr/libpng
+COPY --from=builder-all-library  /usr/libjpeg /usr/libjpeg
+COPY --from=builder-all-library  /usr/freetype /usr/freetype
+COPY --from=builder-all-library  /usr/libwebp /usr/libwebp
+COPY --from=builder-all-library  /usr/imagemagick /usr/imagemagick
+
+
+
+COPY --from=builder-all-library /usr/libidn2 /usr/libidn2
+COPY --from=builder-all-library  /usr/cares /usr/cares
+COPY --from=builder-all-library  /usr/curl/ /usr/curl/
+
+
+
+COPY --from=builder-all-library  /usr/icu/ /usr/icu/
+COPY --from=builder-all-library  /usr/ncurses /usr/ncurses
+COPY --from=builder-all-library  /usr/readline /usr/readline
+
+
+COPY --from=builder-all-library  /usr/mimalloc/ /usr/mimalloc/
+
+COPY --from=builder-all-library  /usr/pgsql/ /usr/pgsql/
+COPY --from=builder-all-library  /usr/libffi /usr/libffi
+
+COPY --from=builder-all-library  /usr/gmp/ /usr/gmp/
+COPY --from=builder-all-library  /usr/sqlite3/ /usr/sqlite3/
+COPY --from=builder-all-library  /usr/oniguruma/ /usr/oniguruma/
+COPY --from=builder-all-library  /usr/libsodium/ /usr/libsodium/
+COPY --from=builder-all-library  /usr/libyaml /usr/libyaml
