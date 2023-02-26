@@ -66,7 +66,7 @@ cp -rf ${__DIR__}/download/phpmicro/ sapi/micro
 # 打patch
 
 patch -p1 < sapi/micro/patches/phar.patch
-# patch -p1 < sapi/micro/patches/cli_checks_81.patch
+patch -p1 < sapi/micro/patches/cli_checks_81.patch
 patch -p1 < sapi/micro/patches/static_opcache_81.patch
 patch -p1 < sapi/micro/patches/disable_huge_page.patch
 
@@ -75,8 +75,6 @@ patch -p1 < sapi/micro/patches/disable_huge_page.patch
 OPTIONS="--disable-all \
 --enable-shared=no \
 --enable-static=yes \
---disable-cgi \
---disable-phpdbg \
 --enable-opcache \
 --with-curl \
 --with-iconv=/usr/libiconv \
