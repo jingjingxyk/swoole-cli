@@ -7,9 +7,9 @@ __DIR__=$(
 )
 cd ${__DIR__}
 
-
-export http_proxy=http://192.168.3.26:8015
-export https_proxy=http://192.168.3.26:8015
+# 使用代理
+# export http_proxy=http://192.168.3.26:8015
+# export https_proxy=http://192.168.3.26:8015
 
 version="php-7.4.33"
 echo $version > version.txt

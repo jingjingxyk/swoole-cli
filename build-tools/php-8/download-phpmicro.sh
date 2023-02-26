@@ -8,11 +8,9 @@ __DIR__=$(
 cd ${__DIR__}
 
 
-export http_proxy=http://192.168.3.26:8015
-export https_proxy=http://192.168.3.26:8015
-
-version="php-8.2.3"
-echo $version > version.txt
+# 使用代理
+# export http_proxy=http://192.168.3.26:8015
+# export https_proxy=http://192.168.3.26:8015
 
 
 mkdir -p download

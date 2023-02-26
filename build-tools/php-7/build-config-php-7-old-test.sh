@@ -107,7 +107,7 @@ EOF
 
 # https://unicode-org.github.io/icu/userguide/icu/howtouseicu.html
 
-export PATH=/usr/c-ares/bin/:/usr/pgsql/bin/:/usr/libffi/bin/:/usr/icu_2/bin/:$PATH
+export PATH=/usr/cares/bin/:/usr/pgsql/bin/:/usr/libffi/bin/:/usr/icu/bin/:$PATH
 
 
 CC=$(icu-config --cc)
@@ -186,55 +186,6 @@ test -f ./configure && rm ./configure ;
 
 ./configure --help
 
-
-
-./configure LDFLAGS=-static --prefix=$install_prefix_dir \
-    --disable-all \
-    --enable-shared=no \
-    --enable-static=yes \
-    --disable-cgi \
-    --disable-phpdbg \
-    --enable-ctype \
-    --enable-fileinfo \
-    --enable-filter \
-    --enable-json \
-    --enable-pdo \
-    --enable-phar \
-    --enable-posix \
-    --enable-session \
-    --enable-tokenizer \
-    --with-iconv=/usr/libiconv \
-    --enable-mysqlnd \
-    --with-pdo-mysql=mysqlnd \
-    --with-pdo-sqlite \
-    --with-sqlite3=/usr/sqlite3 \
-    --enable-dom \
-    --enable-xml --enable-simplexml --enable-xmlreader --enable-xmlwriter --enable-dom --with-libxml=/usr/libxml2 \
-    --with-curl=/usr/curl \
-    --with-bz2=/usr/bzip2 \
-    --with-zlib=/usr/zlib/ \
-    --with-zip=/usr/zip/ \
-    --enable-bcmath \
-    --enable-pcntl \
-    --enable-mbstring \
-    --enable-sockets \
-    --with-pdo-mysql=mysqlnd \
-    --with-xsl=/usr/libxslt \
-    --with-gmp=/usr/gmp \
-    --with-sodium=/usr/libsodium \
-    --with-readline \
-    --with-openssl --with-openssl-dir=/usr/openssl \
-    --with-brotli-dir=/usr/brotli/ \
-    --with-yaml=/usr/libyaml \
-    --enable-swoole  --enable-swoole-curl  --enable-http2 --enable-swoole-json \
-    --enable-redis \
-    --enable-apcu \
-    --with-ffi=/usr/libffi \
-    --enable-opcache \
-    --enable-intl \
-    --enable-mongodb \
-    --with-pgsql=/usr/pgsql --with-pdo-pgsql=/usr/pgsql \
-    --enable-gd --with-jpeg=/usr/libjpeg/ --with-freetype=/usr/freetype --with-webp=/usr/libwebp \
 
 
 
