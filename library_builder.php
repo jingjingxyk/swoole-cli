@@ -99,21 +99,22 @@ function libraries_builder($p)
 
     }
 
+    if (1) {
+        install_ninja($p); //需要自己构建，alpine 默认没有提供源
+    }
 
 
     if (0) {
         install_openssl_v3($p);
         install_openssl_v3_quic($p);
         install_libedit($p);
-        install_ninja($p); //需要自己构建，alpine 默认没有提供源
+
         install_harfbuzz($p); //依赖ninja （alpine ninja 需要源码编译)
         install_libdeflate($p); //依赖 libzip zlib gzip
 
         install_bzip2_dev_latest($p);
 
 
-        install_libuv($p);
-        install_libev($p);
 
 
         install_nettle($p); //加密库
@@ -149,14 +150,15 @@ function libraries_builder($p)
 
 
         install_libunwind($p); //使用 libunwind 可以很方便的获取函数栈中的内容，极大的方便了对函数间调用关系的了解。
-        install_socat($p);
+
         install_jemalloc($p);
         install_tcmalloc($p);
 
-        install_aria2($p);
+
         install_bazel($p);
         install_libelf($p);
         install_libbpf($p);
+
         install_valgrind($p);
         install_snappy($p);
         install_kerberos($p);
@@ -167,14 +169,36 @@ function libraries_builder($p)
     }
 
     if (0) {
-        install_php_internal_extension_curl_patch($p);
-        install_php_extension_fastdfs($p);
-        install_php_extension_libuv($p);
+        install_libuv($p);
+        install_libev($p); //无 pkg-config
     }
     if (0) {
-        install_opencv($p);
+        install_aria2($p); //依赖libuv openssl zlib libxml2 sqlite3 openssl c-ares
+        install_socat($p); //依赖 readline openssl
+    }
+
+    if (0) {
+        install_php_internal_extension_curl_patch($p);
+        install_php_extension_fastdfs($p);
+    }
+    if (0) {
+        install_aom($p);
+        install_av1($p);
+        install_libvpx($p);
+        install_libopus($p);
+        install_libx264($p);
+        install_libx265($p);
+        install_mp3lame($p);
         install_ffmpeg($p);
-        install_ovs($p);
+        // install_librabbitmq($p);
+        install_opencv($p); //构建过程中，会去github.com 下载 ippicv xfeatures2d wechat_qrcode unifont  face_landmark_model.dat
+        //依赖ffmpeg zlib ninja zlib libjpeg libwebp freetype
+    }
+    if (0) {
+        //改善iptables/netfilter的规模瓶颈，提高Linux内核协议栈IO性能
+        install_dpdk($p); //ninja
+        install_xdp($p);  //依赖 llvm bpftool
+        install_ovs($p);  //依赖 openssl python3  ; 网络优化以来 dpdk
         install_ovn($p);
     }
 }
