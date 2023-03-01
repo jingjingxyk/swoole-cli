@@ -12,6 +12,7 @@ cd ${__DIR__}
 # export https_proxy=http://192.168.3.26:8015
 
 version="php-7.4.33"
+# version="php-7.0.21"
 echo $version > version.txt
 
 

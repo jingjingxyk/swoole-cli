@@ -690,7 +690,6 @@ class Preprocessor
 
     public function setExtCallback($name, $fn)
     {
-        var_dump($fn);
         $this->extCallbacks[$name] = $fn;
     }
 
