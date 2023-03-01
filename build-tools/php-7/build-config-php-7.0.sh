@@ -99,11 +99,11 @@ OPTIONS="--disable-all \
 --with-xsl \
 --with-gmp=/usr/gmp \
 --enable-exif \
---with-openssl --with-openssl-dir=/usr/openssl \
+--enable-openssl \
+--with-openssl=/usr/openssl --with-openssl-dir=/usr/openssl \
 --with-readline=/usr/readline \
 --enable-xml --enable-simplexml --enable-xmlreader --enable-xmlwriter --enable-dom  \
 --enable-redis \
---enable-swoole --enable-sockets --enable-mysqlnd --enable-swoole-curl --enable-cares --with-brotli-dir=/usr/brotli \
 --with-yaml=/usr/libyaml \
 --with-pgsql=/usr/pgsql \
 --with-pdo-pgsql=/usr/pgsql \
@@ -111,8 +111,6 @@ OPTIONS="--disable-all \
  --enable-ds \
 --enable-inotify \
 --with-curl=/usr/curl \
---enable-zip \
---with-libzip=/usr/libzip \
 --enable-libxml \
 --with-libxml-dir=/usr/libxml2 \
 --with-xsl=/usr/libxslt/ \
@@ -125,15 +123,16 @@ OPTIONS="--disable-all \
 # 7.0 版本
 
 # 扩展 GD 需要重新构建
-# 扩展 mongdob 需要降版本
+# 扩展 mongdob 需要 降版本
 # --enable-opcache
 # --with-imagick=/usr/imagemagick \
 # --enable-intl \
+# --enable-swoole --enable-sockets --enable-mysqlnd --enable-swoole-curl --enable-cares --with-brotli-dir=/usr/brotli \
 #  不支持 sodium ffi
 # unrecognized options：--with-zip, --with-sodium, --with-libxml, --enable-gd, --with-jpeg, --with-freetype, --with-webp, --with-ffi
 :<<'EOF'
 # 这些都是于PHP7.4 不同的地方，以及上述不支持的选项
-
+--with-openssl=/usr/openssl \
 --with-curl=/usr/curl \
 --enable-zip \
 --with-libzip=/usr/libzip \
@@ -160,9 +159,10 @@ test -f ./configure && rm ./configure ;
 ./configure --help | grep webp
 ./configure --help | grep xslt
 ./configure --help | grep gd
+./configure --help | grep openssl
 
 
-export PATH=/usr/icu/bin:/usr/libxml2/bin/:/usr/libxslt/bin:$PATH
+export PATH=/usr/icu/bin:/usr/libxml2/bin/:/usr/libxslt/bin:/usr/openssl/bin/:$PATH
 xslt-config --cflags
 xslt-config --libs
 
@@ -185,7 +185,7 @@ export   XSL_LIBS=$(xslt-config --libs) ;
 
 
 package_names="readline icu-i18n  icu-io   icu-uc libpq "
-package_names="${package_names} openssl libcares  libidn2  libzstd libbrotlicommon  libbrotlidec  libbrotlienc"
+package_names="${package_names} openssl libcrypto libssl libcares  libidn2  libzstd libbrotlicommon  libbrotlidec  libbrotlienc"
 package_names="${package_names} libcurl libjpeg libpng libturbojpeg libxslt"
 
 CPPFLAGS=$(pkg-config  --cflags-only-I --static $package_names )
