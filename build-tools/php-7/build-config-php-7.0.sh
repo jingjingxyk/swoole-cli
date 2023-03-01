@@ -74,7 +74,6 @@ OPTIONS="--disable-all \
 --disable-cgi \
 --disable-phpdbg \
 --enable-json \
---enable-opcache \
 --with-curl \
 --with-iconv=/usr/libiconv \
 --with-bz2=/usr/bzip2 \
@@ -86,7 +85,6 @@ OPTIONS="--disable-all \
 --enable-mbstring \
 --enable-ctype \
 --with-zlib --with-zlib-dir=/usr/zlib \
---with-zip \
 --enable-posix \
 --enable-sockets \
 --enable-pdo \
@@ -94,7 +92,6 @@ OPTIONS="--disable-all \
 --enable-phar \
 --enable-mysqlnd \
 --with-mysqli \
---enable-intl \
 --enable-fileinfo \
 --with-pdo_mysql  \
 --with-pdo-sqlite \
@@ -108,7 +105,6 @@ OPTIONS="--disable-all \
 --enable-redis \
 --enable-swoole --enable-sockets --enable-mysqlnd --enable-swoole-curl --enable-cares --with-brotli-dir=/usr/brotli \
 --with-yaml=/usr/libyaml \
---with-imagick=/usr/imagemagick \
 --with-pgsql=/usr/pgsql \
 --with-pdo-pgsql=/usr/pgsql \
 --enable-apcu \
@@ -119,22 +115,31 @@ OPTIONS="--disable-all \
 --with-libzip=/usr/libzip \
 --enable-libxml \
 --with-libxml-dir=/usr/libxml2 \
+--with-xsl=/usr/libxslt/ \
 --with-jpeg-dir=/usr/libjpeg \
 --with-freetype-dir=/usr/freetype \
 --with-webp-dir=/usr/libwebp
 
 "
+
+# 7.0 版本
+
 # 扩展 GD 需要重新构建
 # 扩展 mongdob 需要降版本
-# 7.0 版本
+# --enable-opcache
+# --with-imagick=/usr/imagemagick \
+# --enable-intl \
 #  不支持 sodium ffi
 # unrecognized options：--with-zip, --with-sodium, --with-libxml, --enable-gd, --with-jpeg, --with-freetype, --with-webp, --with-ffi
 :<<'EOF'
+# 这些都是于PHP7.4 不同的地方，以及上述不支持的选项
+
 --with-curl=/usr/curl \
 --enable-zip \
 --with-libzip=/usr/libzip \
 --enable-libxml \
 --with-libxml-dir=/usr/libxml2 \
+--with-xsl=/usr/libxslt/ \
 --with-jpeg-dir=/usr/libjpeg \
 --with-freetype-dir=/usr/freetype \
 --with-webp-dir=/usr/libwebp \
@@ -153,8 +158,11 @@ test -f ./configure && rm ./configure ;
 ./configure --help | grep jpeg
 ./configure --help | grep freetype
 ./configure --help | grep webp
+./configure --help | grep xslt
+./configure --help | grep gd
 
-export PATH=/usr/icu/bin:/usr/libxslt/bin:$PATH
+
+export PATH=/usr/icu/bin:/usr/libxml2/bin/:/usr/libxslt/bin:$PATH
 xslt-config --cflags
 xslt-config --libs
 
