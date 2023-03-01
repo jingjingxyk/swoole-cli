@@ -732,16 +732,16 @@ EOF
             ->depends('openssl', 'cares', 'zlib', 'brotli', 'libzstd', 'libidn2')
 
 
-        #--with-gnutls=GNUTLS_PREFIX
-        #--with-nghttp3=NGHTTP3_PREFIX
-        #--with-ngtcp2=NGTCP2_PREFIX
-        #--with-nghttp2=NGHTTP2_PREFIX
-        #--without-brotli
-        #--disable-ares
+    #--with-gnutls=GNUTLS_PREFIX
+    #--with-nghttp3=NGHTTP3_PREFIX
+    #--with-ngtcp2=NGTCP2_PREFIX
+    #--with-nghttp2=NGHTTP2_PREFIX
+    #--without-brotli
+    #--disable-ares
 
-        #--with-ngtcp2=/usr/ngtcp2 \
-        #--with-quiche=/usr/quiche
-        #--with-msh3=PATH
+    #--with-ngtcp2=/usr/ngtcp2 \
+    #--with-quiche=/usr/quiche
+    #--with-msh3=PATH
     );
     /**
      * configure: pkg-config: SSL_LIBS: "-lssl -lcrypto"
@@ -836,7 +836,7 @@ EOF;
             export  LIBS="$LIBS "
             
 EOF
-.          <<<EOF
+                .          <<<EOF
           
             ./configure  --prefix={$pgsql_prefix} \
             --enable-coverage=no \
@@ -849,7 +849,7 @@ EOF
             # --with-includes="{$includes}" \
             # --with-libraries="{$libraries}"
 EOF
-        .   <<<'EOF'
+                .   <<<'EOF'
 
             make -C src/include install 
             result_code=$?
