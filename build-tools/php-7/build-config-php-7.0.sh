@@ -104,7 +104,6 @@ OPTIONS="--disable-all \
 --with-readline=/usr/readline \
 --enable-xml --enable-simplexml --enable-xmlreader --enable-xmlwriter --enable-dom  \
 --enable-redis \
---with-yaml=/usr/libyaml \
 --with-pgsql=/usr/pgsql \
 --with-pdo-pgsql=/usr/pgsql \
 --enable-apcu \
@@ -124,6 +123,7 @@ OPTIONS="--disable-all \
 
 # 扩展 GD 需要重新构建
 # 扩展 mongdob 需要 降版本
+# --with-yaml=/usr/libyaml \
 # --enable-opcache
 # --with-imagick=/usr/imagemagick \
 # --enable-intl \
@@ -160,6 +160,7 @@ test -f ./configure && rm ./configure ;
 ./configure --help | grep xslt
 ./configure --help | grep gd
 ./configure --help | grep openssl
+./configure --help | grep yaml
 
 
 export PATH=/usr/icu/bin:/usr/libxml2/bin/:/usr/libxslt/bin:/usr/openssl/bin/:$PATH
