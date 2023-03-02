@@ -56,9 +56,9 @@ mkdir -p ext/inotify
 test -d ext/swoole && rm -rf ext/swoole
 cp -rf ${__DIR__}/download/swoole-src ext/swoole
 
-tar --strip-components=1 -C ext/redis -xf ${__DIR__}/download/redis-5.1.1.tgz
+tar --strip-components=1 -C ext/redis -xf ${__DIR__}/download/redis-5.3.7.tgz
 tar --strip-components=1 -C ext/mongodb -xf ${__DIR__}/download/mongodb-1.6.0.tgz
-tar --strip-components=1 -C ext/yaml -xf ${__DIR__}/download/yaml-2.2.2.tgz
+tar --strip-components=1 -C ext/yaml -xf ${__DIR__}/download/yaml-2.1.0.tgz
 tar --strip-components=1 -C ext/apcu -xf ${__DIR__}/download/apcu-5.1.22.tgz
 tar --strip-components=1 -C ext/imagick -xf ${__DIR__}/download/imagick-3.6.0.tgz
 tar --strip-components=1 -C ext/ds -xf ${__DIR__}/download/ds-1.4.0.tgz
@@ -112,38 +112,52 @@ OPTIONS="--disable-all \
 --with-xsl=/usr/libxslt/ \
 --with-jpeg-dir=/usr/libjpeg \
 --with-freetype-dir=/usr/freetype \
---with-webp-dir=/usr/libwebp
-
-
+--with-webp-dir=/usr/libwebp \
+--enable-hash \
+--enable-redis \
+--enable-opcache \
+--enable-mongodb \
+--with-icu-dir=/usr/icu \
+--with-swoole --enable-swoole --enable-sockets --enable-mysqlnd  --enable-coroutine-postgresql     --enable-swoole-static
 "
 
 # php 7.0 版本
 
-# 扩展 GD 需要重新构建
-# 扩展 mongdob 需要 降版本
-# libzip 要降版本
-# --enable-apcu \
-# --enable-redis \
+# 扩展 GD 需要创建 libgd 库
+# 扩展 mongodb  需要 降低版本
+# 扩展 swoole  需要 降低版本
+# ICU   需要 单独处理  multiple definition ，意味着 intl 扩展启用不了，大概律需要降低ICU库版本
+# libzip 库 需要 降低版本
+# --enable-http2 需要 libnghttp2 库 参数的启用，需要研究一下
+# --enable-async-redis  参数的启用，需要研究一下
 # --with-yaml=/usr/libyaml \
 # --enable-opcache
+# --enable-apcu
 # --with-imagick=/usr/imagemagick \
 # --enable-intl \
-# --enable-swoole --enable-sockets --enable-mysqlnd --enable-swoole-curl --enable-cares --with-brotli-dir=/usr/brotli \
 #  不支持 sodium ffi
 # unrecognized options：--with-zip, --with-sodium, --with-libxml, --enable-gd, --with-jpeg, --with-freetype, --with-webp, --with-ffi
 :<<'EOF'
 # 这些都是于PHP7.4 不同的地方，以及上述不支持的选项
 --with-openssl=/usr/openssl \
 --with-curl=/usr/curl \
---enable-zip \
---with-libzip=/usr/libzip \
 --enable-libxml \
 --with-libxml-dir=/usr/libxml2 \
 --with-xsl=/usr/libxslt/ \
 --with-jpeg-dir=/usr/libjpeg \
 --with-freetype-dir=/usr/freetype \
 --with-webp-dir=/usr/libwebp \
---with-gd=/usr/
+--enable-hash \
+--enable-redis \
+--enable-opcache \
+--enable-mongodb \
+--enable-intl \
+--with-icu-dir=/usr/icu \
+--with-swoole --enable-swoole --enable-sockets --enable-mysqlnd  --enable-coroutine-postgresql   --enable-swoole-static \
+
+--with-gd=/usr/libgd \
+--enable-zip \
+
 EOF
 
 test -f ./configure && rm ./configure ;
@@ -151,6 +165,7 @@ test -f ./configure && rm ./configure ;
 ./buildconf --force ;
 
 # 查看需要的配置信息
+./configure --help
 ./configure --help | grep curl
 ./configure --help | grep zip
 ./configure --help | grep libxml
@@ -162,6 +177,8 @@ test -f ./configure && rm ./configure ;
 ./configure --help | grep gd
 ./configure --help | grep openssl
 ./configure --help | grep yaml
+./configure --help | grep intl
+./configure --help | grep icu
 
 
 export PATH=/usr/icu/bin:/usr/libxml2/bin/:/usr/libxslt/bin:/usr/openssl/bin/:$PATH
