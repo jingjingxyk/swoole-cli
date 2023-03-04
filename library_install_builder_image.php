@@ -14,7 +14,7 @@ function install_libjpeg(Preprocessor $p)
         ->withFile('libjpeg-turbo-2.1.2.tar.gz')
         ->withPrefix($libjpeg_prefix)
         ->withCleanBuildDirectory()
-        ->withCleanInstallDirectory($libjpeg_prefix)
+        ->withCleanPreInstallDirectory($libjpeg_prefix)
         ->withConfigure('cmake -G"Unix Makefiles" -DENABLE_STATIC=1 -DENABLE_SHARED=0  -DCMAKE_INSTALL_PREFIX=' . $libjpeg_prefix . ' .')
         ->withPkgName('libjpeg');
 
@@ -102,7 +102,7 @@ function install_libpng(Preprocessor $p)
             ->withLicense('http://www.libpng.org/pub/png/src/libpng-LICENSE.txt', Library::LICENSE_SPEC)
             ->withPrefix($libpng_prefix)
             ->withCleanBuildDirectory()
-            ->withCleanInstallDirectory($libpng_prefix)
+            ->withCleanPreInstallDirectory($libpng_prefix)
             ->withConfigure(
                 <<<EOF
                 ./configure --help 
@@ -135,7 +135,7 @@ function install_libwebp(Preprocessor $p)
             ->withLicense('https://github.com/webmproject/libwebp/blob/main/COPYING', Library::LICENSE_SPEC)
             ->withPrefix($libwebp_prefix)
             ->withCleanBuildDirectory()
-            ->withCleanInstallDirectory($libwebp_prefix)
+            ->withCleanPreInstallDirectory($libwebp_prefix)
             ->withConfigure(
                 <<<EOF
                 ./autogen.sh && \
@@ -174,7 +174,7 @@ function install_libavif(Preprocessor $p)
             ->withManual('https://github.com/AOMediaCodec/libavif')
             ->withPrefix($libavif_prefix)
             ->withCleanBuildDirectory()
-            ->withCleanInstallDirectory($libavif_prefix)
+            ->withCleanPreInstallDirectory($libavif_prefix)
             ->withConfigure(
                 <<<EOF
     
@@ -207,7 +207,7 @@ function install_libde265(Preprocessor $p)
 
         ->withPrefix($libde265_prefix)
         ->withCleanBuildDirectory()
-        ->withCleanInstallDirectory($libde265_prefix)
+        ->withCleanPreInstallDirectory($libde265_prefix)
         ->withConfigure(
             <<<EOF
         ./autogen.sh
@@ -232,7 +232,7 @@ function install_libheif(Preprocessor $p)
 
         ->withPrefix($libheif_prefix)
         ->withCleanBuildDirectory()
-        ->withCleanInstallDirectory($libheif_prefix)
+        ->withCleanPreInstallDirectory($libheif_prefix)
         ->withConfigure(
             <<<'EOF'
             ./configure --help
@@ -275,15 +275,15 @@ function install_freetype(Preprocessor $p)
                 Library::LICENSE_SPEC
             )
             ->withCleanBuildDirectory()
-            ->withCleanInstallDirectory($freetype_prefix)
+            ->withCleanPreInstallDirectory($freetype_prefix)
             ->withConfigure(
                 <<<EOF
             ./configure --help  
             BZIP2_CFLAGS="-I{$bzip2_prefix}/include"  \
             BZIP2_LIBS="-L{$bzip2_prefix}/lib -lbz2"  \
-            CPPFLAGS="$(pkg-config --cflags-only-I --static zlib libpng  libbrotlicommon  libbrotlidec  libbrotlienc)" \
-            LDFLAGS="$(pkg-config  --libs-only-L   --static zlib libpng  libbrotlicommon  libbrotlidec  libbrotlienc)" \
-            LIBS="$(pkg-config     --libs-only-l   --static zlib libpng  libbrotlicommon  libbrotlidec  libbrotlienc)" \
+            CPPFLAGS="$(pkg-config --cflags-only-I --static zlib libpng  libbrotli  libbrotlidec  libbrotlienc)" \
+            LDFLAGS="$(pkg-config  --libs-only-L   --static zlib libpng  libbrotli  libbrotlidec  libbrotlienc)" \
+            LIBS="$(pkg-config     --libs-only-l   --static zlib libpng  libbrotli  libbrotlidec  libbrotlienc)" \
             ./configure --prefix={$freetype_prefix} \
             --enable-static \
             --disable-shared \
@@ -315,26 +315,33 @@ function install_libgd2($p)
         ->withManual('https://libgd.github.io/pages/docs.html')
         ->withPrefix($libgd_prefix)
         ->withCleanBuildDirectory()
-        ->withCleanInstallDirectory($libgd_prefix)
+        ->withCleanPreInstallDirectory($libgd_prefix)
         ->withConfigure(
-            <<<EOF
+            <<<'EOF'
         # 下载依赖
          ./configure --help
-        CPPFLAGS="$(pkg-config  --cflags-only-I  --static zlib libpng freetype2 libjpeg  libturbojpeg libwebp  libwebpdecoder  libwebpdemux  libwebpmux   ) -I/usr/brotli/include/" \
-        LDFLAGS="$(pkg-config   --libs-only-L    --static zlib libpng freetype2 libjpeg  libturbojpeg libwebp  libwebpdecoder  libwebpdemux  libwebpmux   ) -L/usr/brotli/lib/" \
-        LIBS="$(pkg-config      --libs-only-l    --static zlib libpng freetype2 libjpeg  libturbojpeg libwebp  libwebpdecoder  libwebpdemux  libwebpmux   ) " \
+         # -lbrotlicommon-static -lbrotlidec-static -lbrotlienc-static
+        export CPPFLAGS="$(pkg-config  --cflags-only-I  --static zlib libpng freetype2 libjpeg  libturbojpeg libwebp  libwebpdecoder  libwebpdemux  libwebpmux  libbrotlicommon  libbrotlidec  libbrotlienc ) " \
+        export LDFLAGS="$(pkg-config   --libs-only-L    --static zlib libpng freetype2 libjpeg  libturbojpeg libwebp  libwebpdecoder  libwebpdemux  libwebpmux  libbrotlicommon  libbrotlidec  libbrotlienc ) " \
+        export LIBS="$(pkg-config      --libs-only-l    --static zlib libpng freetype2 libjpeg  libturbojpeg libwebp  libwebpdecoder  libwebpdemux  libwebpmux  libbrotlicommon  libbrotlidec  libbrotlienc ) " \
+        
+        echo $LIBS
+    
+EOF . PHP_EOL . <<<EOF
         ./configure \
         --prefix={$libgd_prefix} \
         --enable-shared=no \
         --enable-static=yes \
+        --without-freetype \
         --with-libiconv-prefix={$libiconv_prefix}
-         
+         # --with-freetype=/usr/freetype \
 
 :<<'_EOF_'       
         mkdir -p build
         cd build
-        cmake  -DCMAKE_BUILD_TYPE=Release  ..  \
+        cmake   ..  \
         -DCMAKE_INSTALL_PREFIX={$libgd_prefix} \
+        -DCMAKE_BUILD_TYPE=Release \
         -DENABLE_GD_FORMATS=1 \
         -DENABLE_JPEG=1 \
         -DENABLE_TIFF=1 \
@@ -371,7 +378,7 @@ function install_libtiff(Preprocessor $p)
         ->withUrl('http://download.osgeo.org/libtiff/tiff-4.5.0.tar.gz')
         ->withPrefix($libtiff_prefix)
         ->withCleanBuildDirectory()
-        ->withCleanInstallDirectory($libtiff_prefix)
+        ->withCleanPreInstallDirectory($libtiff_prefix)
         ->withConfigure(
             <<<'EOF'
             ./configure --help
@@ -406,7 +413,7 @@ function install_libXpm(Preprocessor $p)
         ->withFile('libXpm-3.5.11.tar.gz')
         ->withPrefix($libXpm_prefix)
         ->withCleanBuildDirectory()
-        ->withCleanInstallDirectory($libXpm_prefix)
+        ->withCleanPreInstallDirectory($libXpm_prefix)
         ->withConfigure(
             <<<'EOF'
             ./autogen.sh
@@ -443,7 +450,7 @@ function install_libraw(Preprocessor $p)
 
         ->withPrefix($libraw_prefix)
         ->withCleanBuildDirectory()
-        ->withCleanInstallDirectory($libraw_prefix)
+        ->withCleanPreInstallDirectory($libraw_prefix)
         ->withConfigure(
             <<<'EOF'
             ./configure --help
@@ -483,7 +490,7 @@ function install_libjxl(Preprocessor $p)
         ->withFile('libjpegxl-v0.8.1.tar.gz')
         ->withPrefix($libjxl_prefix)
         ->withCleanBuildDirectory()
-        ->withCleanInstallDirectory($libjxl_prefix)
+        ->withCleanPreInstallDirectory($libjxl_prefix)
         ->withBuildScript(
             <<<EOF
         //下载依赖
@@ -513,7 +520,7 @@ function install_imagemagick(Preprocessor $p)
             ->withManual('https://github.com/ImageMagick/ImageMagick.git')
             ->withPrefix($imagemagick_prefix)
             ->withCleanBuildDirectory()
-            ->withCleanInstallDirectory($imagemagick_prefix)
+            ->withCleanPreInstallDirectory($imagemagick_prefix)
             ->withFile('ImageMagick-v7.1.0-62.tar.gz')
             ->withPrefix($imagemagick_prefix)
             ->withConfigure(

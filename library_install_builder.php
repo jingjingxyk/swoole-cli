@@ -26,7 +26,7 @@ function install_openssl(Preprocessor $p)
             ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
             ->withPrefix($openssl_prefix)
             ->withCleanBuildDirectory()
-            ->withCleanInstallDirectory($openssl_prefix)
+            ->withCleanPreInstallDirectory($openssl_prefix)
             ->withConfigure(
                 './config' . ($p->getOsType(
                 ) === 'macos' ? '' : ' -static --static') . ' no-shared --prefix=' . $openssl_prefix
@@ -45,7 +45,7 @@ function install_libiconv(Preprocessor $p)
             ->withUrl('https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.16.tar.gz')
             ->withPrefix($libiconv_prefix)
             ->withCleanBuildDirectory()
-            ->withCleanInstallDirectory($libiconv_prefix)
+            ->withCleanPreInstallDirectory($libiconv_prefix)
             ->withPkgConfig('')
             ->withConfigure('./configure --prefix=' . $libiconv_prefix . ' enable_static=yes enable_shared=no')
             ->withLicense('https://www.gnu.org/licenses/old-licenses/gpl-2.0.html', Library::LICENSE_GPL)
@@ -63,7 +63,7 @@ function install_libxml2(Preprocessor $p)
             ->withUrl('https://gitlab.gnome.org/GNOME/libxml2/-/archive/v2.9.10/libxml2-v2.9.10.tar.gz')
             ->withPrefix($libxml2_prefix)
             ->withCleanBuildDirectory()
-            ->withCleanInstallDirectory($libxml2_prefix)
+            ->withCleanPreInstallDirectory($libxml2_prefix)
             ->withConfigure(
                 <<<EOF
 ./autogen.sh && ./configure --prefix=$libxml2_prefix --with-iconv=$iconv_prefix --enable-static=yes --enable-shared=no --without-python
@@ -85,7 +85,7 @@ function install_libxslt(Preprocessor $p)
             ->withLicense('http://www.opensource.org/licenses/mit-license.html', Library::LICENSE_MIT)
             ->withPrefix($libxslt_prefix)
             ->withCleanBuildDirectory()
-            ->withCleanInstallDirectory($libxslt_prefix)
+            ->withCleanPreInstallDirectory($libxslt_prefix)
             ->withConfigure(
                 './autogen.sh && ./configure --prefix=' . $libxslt_prefix . ' --enable-static=yes --enable-shared=no'
             )
@@ -112,14 +112,14 @@ function install_brotli(Preprocessor $p)
             ->withFile('brotli-1.0.9.tar.gz')
             ->withPrefix($brotli_prefix)
             ->withCleanBuildDirectory()
-            ->withCleanInstallDirectory($brotli_prefix)
+            ->withCleanPreInstallDirectory($brotli_prefix)
             ->withBuildScript(
                 <<<EOF
             cmake . -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_INSTALL_PREFIX={$brotli_prefix} \
             -DBROTLI_SHARED_LIBS=OFF \
             -DBROTLI_STATIC_LIBS=ON \
-            -DBROTLI_DISABLE_TESTS=ON \
+            -DBROTLI_DISABLE_TESTS=OFF \
             -DBROTLI_BUNDLED_MODE=OFF \
             && \
             cmake --build . --config Release --target install
@@ -183,7 +183,7 @@ function install_ncurses(Preprocessor $p)
             ->withMirrorUrl('https://mirrors.tuna.tsinghua.edu.cn/gnu/ncurses/ncurses-6.3.tar.gz')
             ->withMirrorUrl('https://mirrors.ustc.edu.cn/gnu/ncurses/ncurses-6.3.tar.gz')
             ->withPrefix($ncurses_prefix)
-            ->withCleanInstallDirectory($ncurses_prefix)
+            ->withCleanPreInstallDirectory($ncurses_prefix)
             ->withConfigure(
                 <<<EOF
             mkdir -p {$ncurses_prefix}/lib/pkgconfig
@@ -322,7 +322,7 @@ function install_bzip2(Preprocessor $p)
             ->withUrl('https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz')
             ->withPrefix($libbzip2_prefix)
             ->withCleanBuildDirectory()
-            ->withCleanInstallDirectory($libbzip2_prefix)
+            ->withCleanPreInstallDirectory($libbzip2_prefix)
             ->withMakeOptions('PREFIX=' . $libbzip2_prefix)
             ->withMakeInstallOptions('PREFIX=' . $libbzip2_prefix)
     );
@@ -337,7 +337,7 @@ function install_zlib(Preprocessor $p)
             ->withUrl('https://udomain.dl.sourceforge.net/project/libpng/zlib/1.2.11/zlib-1.2.11.tar.gz')
             ->withPrefix($zlib_prefix)
             ->withCleanBuildDirectory()
-            ->withCleanInstallDirectory($zlib_prefix)
+            ->withCleanPreInstallDirectory($zlib_prefix)
             ->withConfigure('./configure --prefix=' . $zlib_prefix . ' --static')
             ->withHomePage('https://zlib.net/')
             ->withLicense('https://zlib.net/zlib_license.html', Library::LICENSE_SPEC)
@@ -359,7 +359,7 @@ function install_liblz4(Preprocessor $p)
             ->withPkgName('liblz4')
             ->withPrefix($liblz4_prefix)
             ->withCleanBuildDirectory()
-            ->withCleanInstallDirectory($liblz4_prefix)
+            ->withCleanPreInstallDirectory($liblz4_prefix)
             ->withConfigure(
                 <<<EOF
             cd build/cmake/
@@ -388,7 +388,7 @@ function install_liblzma(Preprocessor $p)
             ->withFile('xz-5.4.1.tar.gz')
             ->withPrefix($liblzma_prefix)
             ->withCleanBuildDirectory()
-            ->withCleanInstallDirectory($liblzma_prefix)
+            ->withCleanPreInstallDirectory($liblzma_prefix)
             ->withConfigure(
                 './configure --prefix=' . $liblzma_prefix . ' --enable-static  --disable-shared --disable-doc'
             )
@@ -408,7 +408,7 @@ function install_libzstd(Preprocessor $p)
             ->withFile('zstd-1.5.2.tar.gz')
             ->withPrefix($libzstd_prefix)
             ->withCleanBuildDirectory()
-            ->withCleanInstallDirectory($libzstd_prefix)
+            ->withCleanPreInstallDirectory($libzstd_prefix)
             ->withConfigure(
                 <<<EOF
             mkdir -p build/cmake/builddir
@@ -479,7 +479,7 @@ function install_libzip(Preprocessor $p)
             ->withManual('https://libzip.org')
             ->withPrefix($libzip_prefix)
             ->withCleanBuildDirectory()
-            ->withCleanInstallDirectory($libzip_prefix)
+            ->withCleanPreInstallDirectory($libzip_prefix)
             ->withConfigure(
                 <<<EOF
             cmake -Wno-dev .  \
@@ -603,22 +603,6 @@ function install_mimalloc(Preprocessor $p)
     );
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function install_libidn2(Preprocessor $p)
 {
     $libidn2_prefix = LIBIDN2_PREFIX;
@@ -647,7 +631,6 @@ EOF
             ->withPkgName('libidn2')
             ->depends('libiconv')
     );
-
 }
 
 
@@ -704,7 +687,7 @@ function install_curl(Preprocessor $p)
             ->withLicense('https://github.com/curl/curl/blob/master/COPYING', Library::LICENSE_SPEC)
             ->withPrefix($curl_prefix)
             ->withCleanBuildDirectory()
-            ->withCleanInstallDirectory($curl_prefix)
+            ->withCleanPreInstallDirectory($curl_prefix)
             ->withConfigure(
                 <<<EOF
             CPPFLAGS="$(pkg-config  --cflags-only-I  --static zlib libbrotlicommon  libbrotlidec  libbrotlienc openssl libcares libidn2 )" \
@@ -768,7 +751,7 @@ EOF
 }
 
 
-function install_pgsql(Preprocessor $p)
+function install_pgsql(Preprocessor $p): void
 {
     $pgsql_prefix= PGSQL_PREFIX ;
 
@@ -815,8 +798,8 @@ EOF;
             ->withManual('https://www.postgresql.org/docs/')
             ->withPrefix($pgsql_prefix)
             ->withCleanBuildDirectory()
-            ->withCleanInstallDirectory($pgsql_prefix)
-            ->withConfigure(
+            ->withCleanPreInstallDirectory($pgsql_prefix)
+            ->withBuildScript(
                 <<<'EOF'
             ./configure --help
             
@@ -891,8 +874,6 @@ EOF
                         
             rm -rf /usr/pgsql/lib/*.so.*
             rm -rf /usr/pgsql/lib/*.so
-            return 0 
-
 EOF
             )
             ->withPkgName('libpq')
@@ -947,13 +928,6 @@ function install_bison(Preprocessor $p)
     );
 }
 
-
-
-
-
-
-
-
 function install_re2c(Preprocessor $p)
 {
     $p->addLibrary(
@@ -982,33 +956,63 @@ function install_re2c(Preprocessor $p)
     );
 }
 
-function install_unixodbc(Preprocessor $p)
+function install_libmcrypt(Preprocessor $p)
 {
-    $unixODBC_prefix = UNIX_ODBC_PREFIX;
-    $p->addLibrary(
-        (new Library('unixodbc'))
-            ->withHomePage('https://www.unixodbc.org/')
-            ->withUrl('https://www.unixodbc.org/unixODBC-2.3.11.tar.gz')
-            ->withLicense('https://github.com/lurcher/unixODBC/blob/master/LICENSE', Library::LICENSE_LGPL)
-            ->withManual('https://www.unixodbc.org/doc/')
-            ->withManual('https://github.com/lurcher/unixODBC.git')
-            ->withLabel('build_env_bin')
-            ->withCleanBuildDirectory()
+    $libmcrypt_prefix = LIBMCRYPT_PREFIX;
+    $lib = new Library('libmcrypt');
+    $lib->withHomePage('https://sourceforge.net/projects/mcrypt/files/Libmcrypt/')
+        ->withLicense('https://gitlab.com/libtiff/libtiff/-/blob/master/LICENSE.md', Library::LICENSE_LGPL)
+        ->withUrl('https://github.com/winlibs/libmcrypt/archive/refs/tags/libmcrypt-2.5.8-3.4.tar.gz')
+        ->withManual('https://github.com/winlibs/libmcrypt/blob/master/INSTALL')
+        ->withPrefix($libmcrypt_prefix)
+        ->withCleanBuildDirectory()
+        ->withCleanPreInstallDirectory($libmcrypt_prefix)
+        ->withConfigure(
+            <<<EOF
+sh ./configure --help
+chmod a+x ./install-sh
+sh ./configure --prefix=$libmcrypt_prefix \
+--enable-static=yes \
+--enable-shared=no
 
-            ->withConfigure(
-                "
-                autoreconf -fi
-             ./configure --help 
-             ./configure \
-             --prefix={$unixODBC_prefix} \
-             --enable-shared=no \
-             --enable-static=yes \
-             --enable-iconv \
-             --enable-readline \
-             --enable-threads
-            "
-            )
-            ->withBinPath($unixODBC_prefix .'/bin/')
-            ->disablePkgName()
-    );
+
+EOF
+        )
+        ->withPkgName('libmcrypt');
+
+    $p->addLibrary($lib);
+}
+
+function install_libxlsxwriter(Preprocessor $p)
+{
+    $libxlsxwriter_prefix = LIBXLSXWRITER_PREFIX;
+    $zlib_prefix =  ZLIB_PREFIX;
+    $lib = new Library('libxlsxwriter');
+    $lib->withHomePage('https://sourceforge.net/projects/mcrypt/files/Libmcrypt/')
+        ->withLicense('https://github.com/jmcnamara/libxlsxwriter/blob/main/License.txt', Library::LICENSE_LGPL)
+        ->withUrl('https://github.com/jmcnamara/libxlsxwriter/archive/refs/tags/RELEASE_1.1.5.tar.gz')
+        ->withFile('libxlsxwriter-1.1.5.tar.gz')
+        ->withManual('http://libxlsxwriter.github.io/getting_started.html')
+        ->withPrefix($libxlsxwriter_prefix)
+        ->withCleanBuildDirectory()
+        ->withCleanPreInstallDirectory($libxlsxwriter_prefix)
+        ->withBuildScript(
+            <<<EOF
+            # 启用DBUILD_TESTS 需要安装python3 pytest
+            mkdir build && cd build
+            cmake .. -DCMAKE_INSTALL_PREFIX={$libxlsxwriter_prefix} \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DZLIB_ROOT:STRING={$zlib_prefix} \
+            -DBUILD_TESTS=OFF \
+            -DBUILD_EXAMPLES=OFF \
+            -DUSE_STANDARD_TMPFILE=ON \
+            -DUSE_OPENSSL_MD5=ON \
+            && \
+            cmake --build . --config Release --target install
+EOF
+        )
+        ->depends('zlib')
+        ->withPkgName('xlsxwriter');
+
+    $p->addLibrary($lib);
 }

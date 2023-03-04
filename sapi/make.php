@@ -16,6 +16,7 @@ export CXX=<?= $this->cppCompiler . PHP_EOL ?>
 export LD=<?= $this->lld . PHP_EOL ?>
 export PKG_CONFIG_PATH=<?= implode(':', $this->pkgConfigPaths) . PHP_EOL ?>
 export ORIGIN_PKG_CONFIG_PATH=$PKG_CONFIG_PATH
+export PATH=<?= implode(':', $this->binPaths) . PHP_EOL ?>
 
 OPTIONS="--disable-all \
 <?php foreach ($this->extensionList as $item) : ?>
@@ -72,7 +73,7 @@ make_<?=$item->name?>() {
 
     cd <?=$this->getBuildDir()?>/<?=$item->name . PHP_EOL?>
 
-<?php if($item->cleanInstallDirectory): ?>
+<?php if($item->cleanPreInstallDirectory): ?>
     # If the install directory exist, clean the install directory
     test -d <?=$item->preInstallDirectory?>/ && rm -rf <?=$item->preInstallDirectory?>/ ;
 <?php endif; ?>
@@ -88,7 +89,6 @@ make_<?=$item->name?>() {
 <?php endif; ?>
 
     cd <?=$this->getBuildDir()?>/<?=$item->name?>/
-
 
     # configure
 <?php if (!empty($item->configure)): ?>
@@ -119,9 +119,8 @@ __EOF__
     result_code=$?
     [[ $result_code -ne 0 ]] &&  echo "[<?=$item->name?>] [make install FAILURE]" && exit  $result_code;
 <?php endif; ?>
-
 <?php else: ?>
-cat <<'__EOF__'
+    cat <<'__EOF__'
     <?= $item->buildScript . PHP_EOL ?>
 __EOF__
     <?= $item->buildScript . PHP_EOL ?>
@@ -212,7 +211,7 @@ EOF
 <?php endif; ?>
 
 <?php if ($this->osType == 'macos') : ?>
-    export  LIBS="-llibc++"
+    # export  LIBS="-llibc++"
 <?php endif; ?>
 
     #  gnutls libnghttp3 libngtcp2 p11-kit-1

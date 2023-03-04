@@ -82,12 +82,15 @@ function install_ninja(Preprocessor $p)
             ->withManual('https://github.com/ninja-build/ninja/wiki')
             ->withPrefix($ninja_prefix)
             ->withLabel('build_env_bin')
-            //->withCleanBuildDirectory()
+            ->withCleanBuildDirectory()
             //->withUntarArchiveCommand('unzip')
             ->withBuildScript(
                 "
-                /usr/bin/ar -h 
-                cmake -Bbuild-cmake -D CMAKE_AR=/usr/bin/ar
+                # apk add ninja
+                
+                #  ./configure.py --bootstrap
+         
+                cmake -Bbuild-cmake 
                 cmake --build build-cmake
                 mkdir -p {$ninja_prefix}/bin/
                 cp build-cmake/ninja  {$ninja_prefix}/bin/
@@ -171,7 +174,7 @@ function install_libdeflate(Preprocessor $p)
             ->withLabel('library')
             ->withPrefix($libdeflate_prefix)
             ->withCleanBuildDirectory()
-            ->withCleanInstallDirectory($libdeflate_prefix)
+            ->withCleanPreInstallDirectory($libdeflate_prefix)
             ->withConfigure(
                 "
                 ls -lh
@@ -251,7 +254,7 @@ EOF
 function install_libuv($p)
 {
     //as epoll/kqueue/event ports/inotify/eventfd/signalfd support
-    $libuv_prefix = '/usr/libuv';
+    $libuv_prefix = LIBUV_PREFIX;
     $p->addLibrary(
         (new Library('libuv'))
             ->withHomePage('https://libuv.org/')
@@ -261,7 +264,7 @@ function install_libuv($p)
             ->withFile('libuv-v1.44.2.tar.gz')
             ->withPrefix($libuv_prefix)
             ->withCleanBuildDirectory()
-            ->withCleanInstallDirectory($libuv_prefix)
+            ->withCleanPreInstallDirectory($libuv_prefix)
             ->withConfigure(
                 <<<EOF
             ls -lh 
@@ -276,7 +279,6 @@ function install_libuv($p)
 EOF
             )
             ->withPkgName('libuv')
-
     );
 }
 
@@ -569,6 +571,33 @@ EOF
         //->withSkipBuildInstall()
     );
 }
+function install_libressl($p)
+{
+    $libressl_prefix = '/usr/libressl';
+    $p->addLibrary(
+        (new Library('libressl'))
+            ->withHomePage('https://www.libressl.org/')
+            ->withLicense('https://github.com/wolfSSL/wolfssl/blob/master/COPYING', Library::LICENSE_GPL)
+            ->withUrl('https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.5.4.tar.gz')
+            ->withFile('libressl-3.5.4.tar.gz')
+            ->withManual('https://github.com/libressl/portable.git')
+            ->withCleanBuildDirectory()
+            ->withPrefix($libressl_prefix)
+            ->withCleanPreInstallDirectory($libressl_prefix)
+            ->withConfigure(
+                <<<EOF
+            ./configure  --help
+            ./configure \
+            --prefix={$libressl_prefix} \
+            --enable-shared=no \
+            --enable-static=yes
+
+EOF
+            )
+            ->withPkgName('libressl')
+        //->withSkipBuildInstall()
+    );
+}
 
 function install_nghttp3(Preprocessor $p)
 {
@@ -736,7 +765,7 @@ function install_nghttp2(Preprocessor $p): void
             ->withUrl('https://github.com/nghttp2/nghttp2/releases/download/v1.51.0/nghttp2-1.51.0.tar.gz')
             ->withCleanBuildDirectory()
             ->withPrefix($nghttp2_prefix)
-            ->withCleanInstallDirectory($nghttp2_prefix)
+            ->withCleanPreInstallDirectory($nghttp2_prefix)
             ->withConfigure(
                 <<<EOF
             ./configure --help
@@ -1146,41 +1175,50 @@ function install_p11_kit(Preprocessor $p)
             ->withFile('p11-kit-0.24.1.tar.gz')
             ->withCleanBuildDirectory()
             ->withPrefix('/usr/p11_kit/')
-            ->withConfigure(
+            ->withCleanPreInstallDirectory('/usr/p11_kit/')
+            ->withBuildScript(
                 '
           
                 # apk add python3 py3-pip  gettext  coreutils
                 # pip3 install meson  -i https://pypi.tuna.tsinghua.edu.cn/simple
             
-            echo $PATH;
-            #./autogen.sh
-            #./configure --help
+         
+            # ./autogen.sh --prefix=/usr/p11_kit/ --disable-trust-module --disable-debug
+            #  ./configure --help
             # --with-libtasn1 --with-libffi
-           
+          
             # meson setup -Dprefix=/usr/p11_kit/ -Dsystemd=disabled -Dbash_completion=disabled  --reconfigure  _build
             # run "ninja reconfigure" or "meson setup --reconfigure"
             # ninja reconfigure -C _build
             # meson setup --reconfigure _build
-            meson setup  -Dprefix=/usr/p11_kit/ -Dsystemd=disabled    -Dbackend=ninja \
+            
+            meson setup  \
+            -Dprefix=/usr/p11_kit/ \
+            -Dsystemd=disabled  \
+            -Dbash_completion=disabled \
+            -Dbackend=ninja \
             -Dbuildtype=release \
             -Ddefault_library=static \
             -Db_staticpic=true \
+            -Db_pie=true \
             -Dprefer_static=true \
             -Ddebug=false \
+            -Dstrict=true \
             -Dunity=off \
              _build
              
            
             # meson setup --wipe
             
-            meson compile -C _build
-            
            # DESTDIR=/usr/p11_kit/  meson install -C _build
-            meson install -C _build
-            exit 0 
+            # meson install -C _build
+            
+            ninja  -C _build
+            ninja  -C _build install 
+           
             '
             )
-            ->withBypassMakeAndMakeInstall()
+
             ->withPkgName('p11_kit')
     );
 }
@@ -1501,7 +1539,7 @@ function install_jansson(Preprocessor $p)
             ->withLicense('https://github.com/akheron/jansson/blob/master/LICENSE', Library::LICENSE_MIT)
             ->withPrefix($jansson_prefix)
             ->withCleanBuildDirectory()
-            ->withCleanInstallDirectory($jansson_prefix)
+            ->withCleanPreInstallDirectory($jansson_prefix)
             ->withConfigure(
                 <<<EOF
              autoreconf -fi
@@ -1553,66 +1591,6 @@ EOF;
 }
 
 
-function install_libmcrypt(Preprocessor $p)
-{
-    $libmcrypt_prefix = LIBMCRYPT_PREFIX;
-    $lib = new Library('libmcrypt');
-    $lib->withHomePage('https://sourceforge.net/projects/mcrypt/files/Libmcrypt/')
-        ->withLicense('https://gitlab.com/libtiff/libtiff/-/blob/master/LICENSE.md', Library::LICENSE_LGPL)
-        ->withUrl('https://github.com/winlibs/libmcrypt/archive/refs/tags/libmcrypt-2.5.8-3.4.tar.gz')
-        ->withManual('https://github.com/winlibs/libmcrypt/blob/master/INSTALL')
-        ->withPrefix($libmcrypt_prefix)
-        ->withCleanBuildDirectory()
-        ->withCleanInstallDirectory($libmcrypt_prefix)
-        ->withConfigure(
-            <<<EOF
-sh ./configure --help
-chmod a+x ./install-sh
-sh ./configure --prefix=$libmcrypt_prefix \
---enable-static=yes \
---enable-shared=no
-
-
-EOF
-        )
-        ->withPkgName('libmcrypt');
-
-    $p->addLibrary($lib);
-}
-
-function install_libxlsxwriter(Preprocessor $p)
-{
-    $libxlsxwriter_prefix = LIBXLSXWRITER_PREFIX;
-    $zlib_prefix =  ZLIB_PREFIX;
-    $lib = new Library('libxlsxwriter');
-    $lib->withHomePage('https://sourceforge.net/projects/mcrypt/files/Libmcrypt/')
-        ->withLicense('https://github.com/jmcnamara/libxlsxwriter/blob/main/License.txt', Library::LICENSE_LGPL)
-        ->withUrl('https://github.com/jmcnamara/libxlsxwriter/archive/refs/tags/RELEASE_1.1.5.tar.gz')
-        ->withFile('libxlsxwriter-1.1.5.tar.gz')
-        ->withManual('http://libxlsxwriter.github.io/getting_started.html')
-        ->withPrefix($libxlsxwriter_prefix)
-        ->withCleanBuildDirectory()
-        ->withCleanInstallDirectory($libxlsxwriter_prefix)
-        ->withBuildScript(
-            <<<EOF
-            # 启用DBUILD_TESTS 需要安装python3 pytest
-            mkdir build && cd build
-            cmake .. -DCMAKE_INSTALL_PREFIX={$libxlsxwriter_prefix} \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DZLIB_ROOT:STRING={$zlib_prefix} \
-            -DBUILD_TESTS=OFF \
-            -DBUILD_EXAMPLES=OFF \
-            -DUSE_STANDARD_TMPFILE=ON \
-            -DUSE_OPENSSL_MD5=ON \
-            && \
-            cmake --build . --config Release --target install
-EOF
-        )
-        ->depends('zlib')
-        ->withPkgName('xlsxwriter');
-
-    $p->addLibrary($lib);
-}
 
 
 
@@ -1626,7 +1604,7 @@ function install_libgomp(Preprocessor $p)
         ->withManual('https://gcc.gnu.org/onlinedocs/libgomp/')
         ->withPrefix($libgomp_prefix)
         ->withCleanBuildDirectory()
-        ->withCleanInstallDirectory($libgomp_prefix)
+        ->withCleanPreInstallDirectory($libgomp_prefix)
         ->withConfigure(
             <<<EOF
 ./configure --help
@@ -1637,3 +1615,110 @@ EOF
     $p->addLibrary($lib);
 }
 
+function install_libzip_ng(Preprocessor $p)
+{
+    $zlib_ng_prefix = '/usr/zlib_ng';
+    $lib = new Library('libgomp');
+    $lib->withHomePage('https://github.com/zlib-ng/zlib-ng.git')
+        ->withLicense('https://github.com/zlib-ng/minizip-ng/blob/master/LICENSE', Library::LICENSE_SPEC)
+        ->withUrl('https://github.com/zlib-ng/zlib-ng/archive/refs/tags/2.0.6.tar.gz')
+        ->withManual('https://github.com/zlib-ng/zlib-ng.git')
+        ->withPrefix($zlib_ng_prefix)
+        ->withCleanBuildDirectory()
+        ->withCleanPreInstallDirectory($zlib_ng_prefix)
+        ->withConfigure(
+            <<<EOF
+./configure --help
+EOF
+        )
+        ->withPkgName('zlib_ng');
+
+    $p->addLibrary($lib);
+}
+
+
+function install_zookeeper_client($p)
+{
+    $workDir = $p->getWorkDir();
+    $openssl_prefix = OPENSSL_PREFIX;
+    $zookeeper_client_prefix = '/usr/zookeeper_client';
+    $p->addLibrary(
+        (new Library('zookeeper_client'))
+            ->withHomePage('https://zookeeper.apache.org/')
+            ->withLicense('https://www.apache.org/licenses/', Library::LICENSE_APACHE2)
+            //->withUrl('https://www.apache.org/dyn/closer.lua/zookeeper/zookeeper-3.8.1/apache-zookeeper-3.8.1.tar.gz')
+            ->withUrl('https://dlcdn.apache.org/zookeeper/zookeeper-3.8.1/apache-zookeeper-3.8.1.tar.gz')
+            ->withManual('https://zookeeper.apache.org/doc/r3.8.1/zookeeperStarted.html')
+            ->withLabel('library')
+            ->withCleanBuildDirectory()
+            ->withBuildScript(
+                <<<EOF
+             ant compile_jute
+            cd zookeeper-client/zookeeper-client-c
+            cmake .
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX="{$zookeeper_client_prefix}" \
+            -DWANT_CPPUNIT=OFF \
+            -DWITH_OPENSSL=ON  \
+            -DBUILD_SHARED_LIBS=OFF  
+
+            cmake --build .
+EOF
+            )
+            ->withConfigure(
+                <<<EOF
+
+            ant compile_jute
+            cd zookeeper-client/zookeeper-client-c
+            autoreconf -if
+            ./configure --help 
+            
+            ./configure \
+            --prefix={$zookeeper_client_prefix} \
+            --enable-shared=no \
+            --enable-static=yes  \
+            --with-openssl={$openssl_prefix} \
+            --without-cppunit
+
+EOF
+            )
+            //->withSkipDownload()
+            ->disablePkgName()
+            ->disableDefaultPkgConfig()
+            ->disableDefaultLdflags()
+            ->withSkipBuildLicense()
+        // ->withSkipBuildInstall()
+    );
+}
+
+
+function install_unixodbc(Preprocessor $p)
+{
+    $unixODBC_prefix = UNIX_ODBC_PREFIX;
+    $p->addLibrary(
+        (new Library('unixodbc'))
+            ->withHomePage('https://www.unixodbc.org/')
+            ->withUrl('https://www.unixodbc.org/unixODBC-2.3.11.tar.gz')
+            ->withLicense('https://github.com/lurcher/unixODBC/blob/master/LICENSE', Library::LICENSE_LGPL)
+            ->withManual('https://www.unixodbc.org/doc/')
+            ->withManual('https://github.com/lurcher/unixODBC.git')
+            ->withLabel('build_env_bin')
+            ->withCleanBuildDirectory()
+
+            ->withConfigure(
+                "
+                autoreconf -fi
+             ./configure --help 
+             ./configure \
+             --prefix={$unixODBC_prefix} \
+             --enable-shared=no \
+             --enable-static=yes \
+             --enable-iconv \
+             --enable-readline \
+             --enable-threads
+            "
+            )
+            ->withBinPath($unixODBC_prefix .'/bin/')
+            ->disablePkgName()
+    );
+}
