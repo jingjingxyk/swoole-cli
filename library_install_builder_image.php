@@ -296,7 +296,6 @@ EOF
             )
             ->withHomePage('https://freetype.org/')
             ->withPkgName('freetype2')
-            ->withBinPath($freetype_prefix . '/bin/')
             ->depends('zlib', 'bzip2', 'libpng', 'brotli')
     );
 }
@@ -405,6 +404,43 @@ EOF
 }
 
 
+function install_libXpm(Preprocessor $p)
+{
+    $libXpm_prefix = LIBXPM_PREFIX;
+    $lib = new Library('libXpm');
+    $lib->withHomePage('https://github.com/freedesktop/libXpm.git')
+        ->withLicense('https://github.com/freedesktop/libXpm/blob/master/COPYING', Library::LICENSE_SPEC)
+        ->withUrl('https://github.com/freedesktop/libXpm/archive/refs/tags/libXpm-3.5.11.tar.gz')
+        ->withFile('libXpm-3.5.11.tar.gz')
+        ->withPrefix($libXpm_prefix)
+        ->withCleanBuildDirectory()
+        ->withCleanPreInstallDirectory($libXpm_prefix)
+        ->withScriptBeforeConfigure(
+            <<<EOF
+         # 依赖 xorg-macros
+         # 解决依赖
+         # apk add util-macros
+         # apk add libxpm-dev 
+EOF
+        )
+        ->withConfigure(
+            <<<EOF
+            ./autogen.sh
+            ./configure --help
+            ./configure --prefix={$libXpm_prefix} \
+            --enable-shared=no \
+            --enable-static=yes \
+            --disable-docs \
+            --disable-tests \
+            --enable-strict-compilation 
+
+EOF
+        )
+        ->withPkgName('libXpm');
+
+    $p->addLibrary($lib);
+}
+
 
 function install_libraw(Preprocessor $p)
 {
@@ -437,7 +473,7 @@ EOF
             --enable-shared=no \
             --enable-static=yes \
             --enable-jpeg \
-            --enable-zlib
+            --enable-zlib 
 EOF
         )
         ->withPkgName('librawc  libraw_r');
@@ -469,7 +505,7 @@ function install_libOpenEXR(Preprocessor $p)
         cmake $buildDir   --install-prefix={$libOpenEXR_prefix}
         pwd
         ls -lh .
-        cmake --build .  --target install --config Release
+        cmake --build .  --target install --config Release 
 EOF
         )
         ->withPkgName('libOpenEXR');
@@ -496,7 +532,7 @@ EOF
         cmake -DJPEGXL_STATIC=true -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF .. 
         cmake --build . -- -j$(nproc)
         exit 0 
-        cmake --install . 
+        cmake --install .  
 EOF
         )
         ->withPkgName('libjxl');
@@ -548,7 +584,7 @@ function install_imagemagick(Preprocessor $p)
             --with-zip=yes \
             --with-zlib=yes \
             --with-zstd=yes \
-            --with-freetype=yes 
+            --with-freetype=yes  
 
 EOF
             )
