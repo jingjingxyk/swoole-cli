@@ -118,7 +118,9 @@ OPTIONS="--disable-all \
 --enable-opcache \
 --enable-mongodb \
 --with-icu-dir=/usr/icu \
---with-swoole --enable-swoole --enable-sockets --enable-mysqlnd  --enable-coroutine-postgresql     --enable-swoole-static
+--with-swoole --enable-swoole --enable-sockets --enable-mysqlnd  --enable-coroutine-postgresql     --enable-swoole-static \
+--with-png-dir=/usr/libpng \
+--with-gd=/usr/libgd2
 "
 
 # php 7.0 版本
@@ -154,8 +156,8 @@ OPTIONS="--disable-all \
 --enable-intl \
 --with-icu-dir=/usr/icu \
 --with-swoole --enable-swoole --enable-sockets --enable-mysqlnd  --enable-coroutine-postgresql   --enable-swoole-static \
-
---with-gd=/usr/libgd \
+--with-png-dir=/usr/libpng \
+--with-gd=/usr/libgd2
 --enable-zip \
 
 EOF
@@ -179,9 +181,10 @@ test -f ./configure && rm ./configure ;
 ./configure --help | grep yaml
 ./configure --help | grep intl
 ./configure --help | grep icu
+./configure --help | grep xpm
 
 
-export PATH=/usr/icu/bin:/usr/libxml2/bin/:/usr/libxslt/bin:/usr/openssl/bin/:$PATH
+export PATH=/usr/icu/bin:/usr/libxml2/bin/:/usr/libxslt/bin:/usr/openssl/bin/:/usr/freetype/bin:$PATH
 xslt-config --cflags
 xslt-config --libs
 
