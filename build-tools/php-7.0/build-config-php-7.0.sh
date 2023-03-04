@@ -18,7 +18,7 @@ test -d /usr/local/lib/pkgconfig/ && PKG_CONFIG_PATH="/usr/local/lib/pkgconfig/:
 cpu_nums=`nproc`
 # `grep "processor" /proc/cpuinfo | sort -u | wc -l`
 
-export PATH=/usr/pgsql/bin/:/usr/libffi/bin/:$PATH
+export PATH=/usr/pgsql/bin/:/usr/libffi/bin/:/usr/freetype/bin:$PATH
 export ORIGIN_PATH=$PATH
 
 
@@ -120,7 +120,8 @@ OPTIONS="--disable-all \
 --with-icu-dir=/usr/icu \
 --with-swoole --enable-swoole --enable-sockets --enable-mysqlnd  --enable-coroutine-postgresql     --enable-swoole-static \
 --with-png-dir=/usr/libpng \
---with-gd=/usr/libgd2
+--with-gd=/usr/libgd2 \
+--with-libdir=lib --with-xpm-dir=/usr
 "
 
 # php 7.0 版本
