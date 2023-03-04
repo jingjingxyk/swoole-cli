@@ -24,8 +24,17 @@ test -d depot_tools || git clone -b main --depth 1  https://chromium.googlesourc
 test -d libyuv      || git clone -b main   https://chromium.googlesource.com/libyuv/libyuv
 
 test -d ${__PROJECT__}/pool/lib/depot_tools || cp -rf depot_tools ${__PROJECT__}/pool/lib/
-#test -d ${__PROJECT__}/pool/lib/gn          || cp -rf gn          ${__PROJECT__}/pool/lib/
+
+export PATH=${__PROJECT__}/var/git-download/depot_tools:$PATH
+test -d ${__PROJECT__}/pool/lib/gn          || cp -rf gn          ${__PROJECT__}/pool/lib/
 test -d ${__PROJECT__}/pool/lib/libyuv      || cp -rf libyuv      ${__PROJECT__}/pool/lib/
+
+export DEPOT_TOOLS_UPDATE=0
+# https://www.chromium.org/developers/how-tos/depottools/#gclient-file
+
+# test -f .gclient || gclient config --name src https://chromium.googlesource.com/libyuv/libyuv
+# gclient sync
+
 
 
 cd ${__PROJECT__}/var/git-download
