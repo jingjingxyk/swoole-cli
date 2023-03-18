@@ -23,31 +23,33 @@ function install_qemu(Preprocessor $p): void
     $qemu_prefix = '/usr/qemu';
     $p->addLibrary(
         (new Library('qemu'))
-            ->withHomePage('https://github.com/xdp-project/xdp-tools.git')
-            ->withLicense('https://github.com/xdp-project/xdp-tools/blob/master/LICENSE', Library::LICENSE_BSD)
-            ->withUrl('https://github.com/xdp-project/xdp-tools/archive/refs/tags/v1.3.1.tar.gz')
-            ->withFile('xdp-v1.3.1.tar.gz')
-            ->withManual('https://github.com/xdp-project/xdp-tutorial')
+            ->withHomePage('http://www.qemu.org/')
+            ->withLicense('https://github.com/qemu/qemu/blob/master/COPYING.LIB', Library::LICENSE_GPL)
+            ->withUrl('https://download.qemu.org/qemu-7.2.0.tar.xz')
+            ->withManual('https://www.qemu.org/docs/master/')
+            ->withUntarArchiveCommand('xz')
+            ->withPrefix($qemu_prefix)
             ->withCleanBuildDirectory()
             ->withScriptBeforeConfigure(
                 <<<EOF
-            apk add llvm bpftool
-           
+
+
 EOF
             )
             ->withConfigure(
                 <<<EOF
-cd lib/libxdp 
-make libxdp
+            set -eux
+            pwd
+            ls -lh .
 
-
-exit 0 
-./configure 
-exit 0 
+            mkdir build
+            cd build
+            ../configure
+            make
 EOF
             )
             ->withBinPath($qemu_prefix . '/bin/')
-            ->withSkipBuildInstall()
+
     );
 }
 
@@ -72,10 +74,10 @@ function install_ninja(Preprocessor $p)
             ->withBuildScript(
                 "
                 # apk add ninja
-                
+
                 #  ./configure.py --bootstrap
-         
-                cmake -Bbuild-cmake 
+
+                cmake -Bbuild-cmake
                 cmake --build build-cmake
                 mkdir -p {$ninja_prefix}/bin/
                 cp build-cmake/ninja  {$ninja_prefix}/bin/
@@ -107,9 +109,10 @@ function install_depot_tools(Preprocessor $p): void
             ->withHomePage('https://chromium.googlesource.com/chromium/tools/depot_tools')
             ->withLicense('https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/refs/heads/main/LICENSE', Library::LICENSE_SPEC)
             ->withUrl('https://chromium.googlesource.com/chromium/tools/depot_tools')
+            ->withFile('depot_tools')
             ->withSkipDownload()
             ->withManual('https://commondatastorage.googleapis.com/chrome-infra-docs/flat/depot_tools/docs/html/depot_tools_tutorial.html#_setting_up')
-            ->withUntarArchiveCommand('mv')
+            ->withUntarArchiveCommand('cp')
             ->withCleanBuildDirectory()
             ->withCleanPreInstallDirectory($depot_tools_prefix)
             ->withBuildScript("
@@ -168,16 +171,16 @@ function install_gn(Preprocessor $p): void
             ->withUrl('')
             ->withSkipDownload()
             ->withManual('https://gn.googlesource.com/gn/')
-            ->withUntarArchiveCommand('mv')
+            ->withUntarArchiveCommand('cp')
             ->withCleanBuildDirectory()
             ->withCleanPreInstallDirectory($gn_prefix)
             ->withBuildScript("
                 cd gn
                 ls -lha .
-                
+
                 python3 build/gen.py --allow-warning
                 ninja -C out
-                exit 0 
+                exit 0
                 mkdir -p $gn_prefix
                 cp -rf gn/* $gn_prefix
             ")
@@ -185,5 +188,54 @@ function install_gn(Preprocessor $p): void
             ->disableDefaultPkgConfig()
             ->disableDefaultLdflags()
             ->disablePkgName()
+    );
+}
+
+
+function install_bazel(Preprocessor $p)
+{
+    /**
+     * alpine 无法直接用 bazel ，原因： alpine 使用 musl ， Bazel 使用 glibc
+     *
+     * 需要把alpine 切换到 test 版本
+     *  https://pkgs.alpinelinux.org/package/edge/testing/x86_64/bazel4
+     */
+    $bazel_prefix = '/usr/bazel';
+    $p->addLibrary(
+        (new Library('bazel'))
+            ->withHomePage('https://bazel.build')
+            ->withLicense('https://github.com/bazelbuild/bazel/blob/master/LICENSE', Library::LICENSE_APACHE2)
+            //->withUrl('https://github.com/bazelbuild/bazel/releases/download/6.0.0/bazel-6.0.0-linux-x86_64')
+            //->withUrl('https://github.com/bazelbuild/bazel/archive/refs/tags/6.0.0.tar.gz')
+            //->withFile('bazel-6.0.0.tar.gz')
+            ->withUrl('https://github.com/bazelbuild/bazel/releases/download/7.0.0-pre.20230215.2/bazel-7.0.0-pre.20230215.2-dist.zip')
+            ->withUntarArchiveCommand('unzip')
+            ->withManual('https://bazel.build/install')
+            ->withManual('https://bazel.build/install/compile-source')
+            ->withPrefix($bazel_prefix)
+            ->withCleanBuildDirectory()
+            ->withCleanPreInstallDirectory($bazel_prefix)
+            ->withBuildScript(
+                '
+                # apk add openjdk13-jdk bash zip
+
+                # 会自动安装 libx11  libtasn1  p11_kit gnutls
+
+                env EXTRA_BAZEL_ARGS="--tool_java_runtime_version=local_jdk" bash ./compile.sh
+
+
+                exit 0
+
+
+                mv bazel /usr/bazel/bin/
+                chmod a+x /usr/bazel/bin/bazel
+                /usr/bazel/bin/bazel -h
+
+               '
+            )
+            ->withBinPath($bazel_prefix . '/bin/')
+            ->disableDefaultPkgConfig()
+            ->disablePkgName()
+            ->disableDefaultLdflags()
     );
 }

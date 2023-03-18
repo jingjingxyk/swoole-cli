@@ -4,7 +4,6 @@ require __DIR__ . '/vendor/autoload.php';
 
 use SwooleCli\Preprocessor;
 
-define('SUPPPER_SKIP', 0);
 $homeDir = getenv('HOME');
 $p = Preprocessor::getInstance();
 $p->parseArguments($argc, $argv);
@@ -20,9 +19,9 @@ if ($p->getInputOption('without-docker')) {
 }
 
 if ($p->getOsType() == 'macos') {
-    $p->setExtraLdflags('-framework CoreFoundation -framework SystemConfiguration -undefined dynamic_lookup');
-    // fix "checking for curl_easy_perform in -lcurl"
-    $p->setConfigureVarables('LDFLAGS="-framework CoreFoundation -framework SystemConfiguration"');
+    // -lintl -Wl,-framework -Wl,CoreFoundation
+    //$p->setExtraLdflags('-framework CoreFoundation -framework SystemConfiguration -undefined dynamic_lookup');
+    $p->setExtraLdflags('-undefined dynamic_lookup');
 }
 
 
@@ -31,8 +30,16 @@ if ($p->getOsType() == 'macos') {
 # $p->setMaxJob(`nproc 2> /dev/null || sysctl -n hw.ncpu`); // nproc on macos ；
 # `grep "processor" /proc/cpuinfo | sort -u | wc -l`
 
-
-
+//release 版本，屏蔽这两个函数，使其不生效
+// ->withCleanBuildDirectory()
+// ->withCleanPreInstallDirectory($prefix)
+//SWOOLE_CLI_SKIP_DEPEND_DOWNLOAD
+//SWOOLE_CLI_BUILD_TYPE=release
+if ($p->getInputOption('with-build-type') == 'release') {
+    define('SWOOLE_CLI_BUILD_TYPE', 1);
+} else {
+    define('SWOOLE_CLI_BUILD_TYPE', 0);
+}
 
 if ($p->getOsType() == 'macos') {
     $p->addEndCallback(function () use ($p) {
@@ -54,15 +61,16 @@ brew=$(which brew  | wc -l)
 if test $brew -eq 1 ;then
 {
     meson=$(which meson  | wc -l)
-    if test $meson -ne  1 ;then 
+    if test $meson -ne  1 ;then
     {
         export HOMEBREW_API_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/api"
         export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
         # export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.ustc.edu.cn/brew.git"
-        brew install ninja  python3 pip3
-        pip3 install meson -i https://pypi.tuna.tsinghua.edu.cn/simple
+        brew install ninja  python3 gn zip unzip 7zip lzip
+        pip3 install meson virtualenv -i https://pypi.tuna.tsinghua.edu.cn/simple
     }
     fi
+}
 fi
 
 
@@ -71,17 +79,21 @@ EOF;
 if ($p->getOsType() == 'linux') {
     $cmd .=<<<'EOF'
 if test -f /etc/os-release; then
+{
     alpine=$(cat /etc/os-release | grep "ID=alpine" | wc -l)
-    if test $alpine -eq 1  ;then 
+    if test $alpine -eq 1  ;then
     {
         meson=$(which meson | wc -l )
         if test $meson -ne 1 ;then
-             apk add ninja python3 py3-pip gn
+        {
+             apk add ninja python3 py3-pip gn zip unzip 7zip lzip
              pip3 install meson -i https://pypi.tuna.tsinghua.edu.cn/simple
              # git config --global --add safe.directory /work
+        }
         fi
     }
     fi
+}
 fi
 
 EOF;

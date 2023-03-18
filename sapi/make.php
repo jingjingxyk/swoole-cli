@@ -2,23 +2,30 @@
 /**
  * @var $this SwooleCli\Preprocessor
  */
+
+use SwooleCli\Library;
 use SwooleCli\Preprocessor;
 ?>
-
-export PATH=<?= implode(':', $this->binPaths) . PHP_EOL ?>
-export ORIGIN_PATH=$PATH
-
 
 SRC=<?= $this->phpSrcDir . PHP_EOL ?>
 ROOT=<?= $this->getRootDir() . PHP_EOL ?>
 export CC=<?= $this->cCompiler . PHP_EOL ?>
 export CXX=<?= $this->cppCompiler . PHP_EOL ?>
 export LD=<?= $this->lld . PHP_EOL ?>
+
+export SYSTEM_ORIGIN_PKG_CONFIG_PATH=$PKG_CONFIG_PATH
 export PKG_CONFIG_PATH=<?= implode(':', $this->pkgConfigPaths) . PHP_EOL ?>
-export ORIGIN_PKG_CONFIG_PATH=$PKG_CONFIG_PATH
+export SWOOLE_CLI_PKG_CONFIG_PATH=$PKG_CONFIG_PATH
+
+export SYSTEM_ORIGIN_PATH=$PATH
 export PATH=<?= implode(':', $this->binPaths) . PHP_EOL ?>
+export SWOOLE_CLI_PATH=$PATH
+
+# 参考： https://www.php.net/manual/en/install.pecl.static.php
 
 OPTIONS="--disable-all \
+--enable-shared=no \
+--enable-static=yes \
 <?php foreach ($this->extensionList as $item) : ?>
 <?=$item->options?> \
 <?php endforeach; ?>
@@ -61,8 +68,11 @@ make_<?=$item->name?>() {
    xz -f -d -k   <?=$this->workDir?>/pool/lib/<?=$item->file?>    <?= PHP_EOL; ?>
    tar --strip-components=1 -C <?=$this->getBuildDir()?>/<?=$item->name?> -xf <?= rtrim($this->workDir . '/pool/lib/' . $item->file,'.xz') . PHP_EOL?>
 <?php endif ; ?>
+<?php if($item->untarArchiveCommand == 'cp'):?>
+        cp -rfa  <?=$this->workDir?>/pool/lib/<?=$item->file?>/. <?=$this->getBuildDir()?>/<?=$item->name?>/<?=$item->name?>    <?= PHP_EOL; ?>
+<?php endif ; ?>
 <?php if($item->untarArchiveCommand == 'mv'):?>
-        cp -rfa  <?=$this->workDir?>/pool/lib/<?=$item->name?>/. <?=$this->getBuildDir()?>/<?=$item->name?>/<?=$item->name?>    <?= PHP_EOL; ?>
+        cp -rfa  <?=$this->workDir?>/pool/lib/<?=$item->file?> <?=$this->getBuildDir()?>/<?=$item->name?>/    <?= PHP_EOL; ?>
 <?php endif ; ?>
 
     if [ -f <?=$this->getBuildDir()?>/<?=$item->name?>/.completed ]; then
@@ -78,7 +88,7 @@ make_<?=$item->name?>() {
     test -d <?=$item->preInstallDirectory?>/ && rm -rf <?=$item->preInstallDirectory?>/ ;
 <?php endif; ?>
 
-    # use build script replace  configure、make、make install
+
 <?php if(empty($item->buildScript)): ?>
 
     # before configure
@@ -120,6 +130,7 @@ __EOF__
     [[ $result_code -ne 0 ]] &&  echo "[<?=$item->name?>] [make install FAILURE]" && exit  $result_code;
 <?php endif; ?>
 <?php else: ?>
+    # use build script replace  configure、make、make install
     cat <<'__EOF__'
     <?= $item->buildScript . PHP_EOL ?>
 __EOF__
@@ -144,7 +155,11 @@ __EOF__
 
 clean_<?=$item->name?>() {
     cd <?=$this->getBuildDir()?> && echo "clean <?=$item->name?>"
+<?php if( ($item->getLabel() == 'php_internal_extension') || ($item->getLabel() == 'php_extension' )) : ?>
+    cd <?=$this->getBuildDir()?>/<?= $item->name . PHP_EOL ?>
+<?php else: ?>
     cd <?=$this->getBuildDir()?>/<?= $item->name ?> && make clean
+<?php endif; ?>
     rm -f <?=$this->getBuildDir()?>/<?=$item->name?>/.completed
     cd <?= $this->workDir . PHP_EOL ?>
 }
@@ -161,60 +176,84 @@ make_all_library() {
 <?php foreach ($this->libraryList as $item) : ?>
     make_<?= $item->name ?> && [[ $? -eq 0 ]] && echo "[SUCCESS] make <?= $item->name ?>"
 <?php endforeach; ?>
+    return 0
+}
+
+
+export_variables() {
+<?php foreach ($this->varables as $name => $value) : ?>
+    export <?= $name ?>="<?= $value ?>"
+<?php endforeach; ?>
 }
 
 
 make_config() {
     cd <?= $this->getWorkDir() . PHP_EOL ?>
 
-:<<'EOF'
-    export   NCURSES_CFLAGS=$(pkg-config --cflags --static  ncurses);
-    export   NCURSES_LIBS=$(pkg-config  --libs --static ncurses);
-
-    export   READLINE_CFLAGS=$(pkg-config --cflags --static readline)  ;
-    export   READLINE_LIBS=$(pkg-config  --libs --static readline)  ;
-EOF
-
     set -uex
 
-    export   ICU_CFLAGS=$(pkg-config --cflags --static icu-i18n  icu-io   icu-uc)
-    export   ICU_LIBS=$(pkg-config   --libs   --static icu-i18n  icu-io   icu-uc)
-    export   ONIG_CFLAGS=$(pkg-config --cflags --static oniguruma)
-    export   ONIG_LIBS=$(pkg-config   --libs   --static oniguruma)
-    export   LIBSODIUM_CFLAGS=$(pkg-config --cflags --static libsodium)
-    export   LIBSODIUM_LIBS=$(pkg-config   --libs   --static libsodium)
-    export   LIBZIP_CFLAGS=$(pkg-config --cflags --static libzip) ;
-    export   LIBZIP_LIBS=$(pkg-config   --libs   --static libzip) ;
-    export   LIBPQ_CFLAGS=$(pkg-config  --cflags --static       libpq)
-    export   LIBPQ_LIBS=$(pkg-config    --libs   --static       libpq)
+:<<'_____EO_____'
+    = 是最基本的赋值
+    := 是覆盖之前的值
+    ?= 是如果没有被赋值过就赋予等号后面的值
+    += 是添加等号后面的值
 
 
-<?php if ($this->getOsType() == 'linux') : ?>
-    export   XSL_CFLAGS=$(pkg-config --cflags --static libxslt) ;
-    export   XSL_LIBS=$(pkg-config   --libs   --static libxslt) ;
+    # GNU C编译器的gnu11和c11 https://www.cnblogs.com/litifeng/p/8328499.html
+    # -g是生成调试信息
+    # -Wall 是打开警告开关,-O代表默认优化,可选：-O0不优化,-O1低级优化,-O2中级优化,-O3高级优化,-Os代码空间优化
 
-    # export   CPPFLAGS=$(pkg-config  --cflags --static libcares readline icu-i18n  icu-io   icu-uc libpq libffi)
-    # LIBS=$(pkg-config               --libs   --static libcares readline icu-i18n  icu-io   icu-uc libpq libffi)
-    # export LIBS="$LIBS -L/usr/lib -lstdc++"
+    # 更多配置
+    export EXTRA_INCLUDES=
+    export EXTRA_CFLAGS
+    export EXTRA_LDFLAGS=
+    export EXTRA_LDFLAGS_PROGRAM=
+    export EXTRA_LIBS=
+    export ZEND_EXTRA_LIBS=
 
-    package_names="readline icu-i18n  icu-io   icu-uc libpq libffi"
-    package_names="${package_names} openssl libcares  libidn2  libzstd libbrotlicommon  libbrotlidec  libbrotlienc"
-    package_names="${package_names} xlsxwriter"
 
-    CPPFLAGS=$(pkg-config  --cflags-only-I --static $package_names )
-    export   CPPFLAGS="$CPPFLAGS -I/usr/libmcrypt/include -I/usr/include"
-    LDFLAGS=$(pkg-config   --libs-only-L   --static $package_names )
-    export   LDFLAGS="$LDFLAGS -L/usr/libmcrypt/lib -L/usr/lib"
-    LIBS=$(pkg-config      --libs-only-l   --static $package_names )
-    export  LIBS="$LIBS -lmcrypt -lstdc++"
+    export   CAPSTONE_CFLAGS="<?=$this->getGlobalPrefix()?>/capstone/include"
+    export   CAPSTONE_LIBS="<?=$this->getGlobalPrefix()?>/capstone/lib"
 
-<?php endif; ?>
+    export   OPENSSL_CFLAGS=$(pkg-config --cflags --static libcrypto libssl    openssl)
+    export   OPENSSL_LIBS=$(pkg-config   --libs   --static libcrypto libssl    openssl)
 
-<?php if ($this->osType == 'macos') : ?>
-    # export  LIBS="-llibc++"
-<?php endif; ?>
+    export   NCURSES_CFLAGS=$(pkg-config --cflags --static  ncurses ncursesw);
+    export   NCURSES_LIBS=$(pkg-config  --libs --static ncurses ncursesw);
+    export   READLINE_CFLAGS=$(pkg-config --cflags --static readline)  ;
+    export   READLINE_LIBS=$(pkg-config  --libs --static readline)  ;
 
-    #  gnutls libnghttp3 libngtcp2 p11-kit-1
+    export   LIBPQ_CFLAGS=$(pkg-config  --cflags --static libpq)
+    export   LIBPQ_LIBS=$(pkg-config    --libs   --static libpq)
+
+
+    # -lmcrypt
+    # -lm  math.h 链接数学库， -lptread 链接线程库
+
+    # macOS clang llvm 不支持  -static
+    # export CFLAGS="-static"
+    # export CFLAGS="-std=gnu11 -g -Wall -O3 -fPIE"
+    # -std=gnu++ -fno-common -DPIC -static
+    # package_names="${package_names}  libtiff-4 lcms2"
+    # export CFLAGS="-Wno-error=implicit-function-declaration"
+    CPPFLAGS="$(pkg-config  --cflags-only-I --static ${package_names} ) $CPPFLAGS"
+    LDFLAGS="$(pkg-config   --libs-only-L   --static ${package_names} ) $LDFLAGS"
+    LIBS="$(pkg-config      --libs-only-l   --static ${package_names} ) $LIBS"
+
+    # macOS
+    #  /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib
+    #  ll /Library/Developer/CommandLineTools/
+    #  /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
+
+    ./configure --help
+    ./configure --help | grep -e '--enable'
+    ./configure --help | grep -e '--with'
+    ./configure --help | grep -e '--disable'
+    ./configure --help | grep -e '--without'
+    ./configure --help | grep -e 'jit'
+_____EO_____
+
+
     test -f ./configure &&  rm ./configure
     ./buildconf --force
 <?php if ($this->osType !== 'macos') : ?>
@@ -223,22 +262,48 @@ EOF
     cat /tmp/cnt >> main/php_config.h.in
     echo -ne '\n#endif\n' >> main/php_config.h.in
 <?php endif; ?>
+
     echo $OPTIONS
     echo $PKG_CONFIG_PATH
 
-    <?= $this->configureVarables ?> ./configure $OPTIONS
+    ./configure --help
+    export_variables
+    ./configure $OPTIONS
 
 }
 
 make_build() {
     cd <?= $this->getWorkDir() . PHP_EOL ?>
+
+    make -j <?= $this->maxJob ?> <?= PHP_EOL ?>
+    return 0
+
+   # export EXTRA_LDFLAGS="$(pkg-config   --libs-only-L   --static openssl libraw_r )"
+   # export EXTRA_LDFLAGS_PROGRAM=""
+   # EXTRA_LDFLAGS_PROGRAM='-all-static -fno-ident '
+
+
+    export_variables
     make EXTRA_CFLAGS='<?= $this->extraCflags ?>' \
-    EXTRA_LDFLAGS_PROGRAM='-all-static -fno-ident <?= $this->extraLdflags ?> <?php foreach ($this->libraryList as $item) {
+    EXTRA_LDFLAGS_PROGRAM=' <?= $this->extraLdflags ?> <?php foreach ($this->libraryList as $item) {
         if (!empty($item->ldflags)) {
             echo $item->ldflags;
             echo ' ';
         }
     } ?>'  -j <?= $this->maxJob ?> && echo ""
+}
+
+make_clean() {
+    set -ex
+    find . -name \*.gcno -o -name \*.gcda | grep -v "^\./thirdparty" | xargs rm -f
+    find . -name \*.lo -o -name \*.o -o -name \*.dep | grep -v "^\./thirdparty" | xargs rm -f
+    find . -name \*.la -o -name \*.a | grep -v "^\./thirdparty" | xargs rm -f
+    find . -name \*.so | grep -v "^\./thirdparty" | xargs rm -f
+    find . -name .libs -a -type d | grep -v "^./thirdparty" | xargs rm -rf
+    rm -f libphp.la bin/swoole-cli     modules/* libs/*
+    rm -f ext/opcache/jit/zend_jit_x86.c
+    rm -f ext/opcache/jit/zend_jit_arm64.c
+    rm -f ext/opcache/minilua
 }
 
 help() {
@@ -262,6 +327,7 @@ help() {
     echo "./make.sh [library-name]"
     echo  "./make.sh clean-[library-name]"
     echo  "./make.sh clean-[library-name]-cached"
+    echo  "./make.sh clean"
 }
 
 if [ "$1" = "docker-build" ] ;then
@@ -314,6 +380,8 @@ elif [ "$1" = "config" ] ;then
 elif [ "$1" = "build" ] ;then
     make_build
 elif [ "$1" = "test" ] ;then
+    file bin/swoole-cli
+    nm -D bin/swoole-cli
     ./bin/swoole-cli vendor/bin/phpunit
 elif [ "$1" = "archive" ] ;then
     cd bin
@@ -327,11 +395,13 @@ elif [ "$1" = "clean-all-library" ] ;then
 <?php foreach ($this->libraryList as $item) : ?>
     clean_<?=$item->name?> && echo "[SUCCESS] make clean [<?=$item->name?>]"
 <?php endforeach; ?>
+    exit 0
 elif [ "$1" = "clean-all-library-cached" ] ;then
 <?php foreach ($this->libraryList as $item) : ?>
     echo "rm <?= $this->getBuildDir() ?>/<?= $item->name ?>/.completed"
     rm <?= $this->getBuildDir() ?>/<?= $item->name ?>/.completed
 <?php endforeach; ?>
+    exit 0
 elif [ "$1" = "diff-configure" ] ;then
     meld $SRC/configure.ac ./configure.ac
 elif [ "$1" = "list-swoole-branch" ] ;then
@@ -345,22 +415,31 @@ elif [ "$1" = "pkg-check" ] ;then
 <?php foreach ($this->libraryList as $item) : ?>
     <?php if(!empty($item->pkgName)): ?>
     echo "[<?= $item->name ?>]"
-<?php if(!empty($item->pkgName)) :?>
-    pkg-config --libs <?= $item->pkgName . PHP_EOL ?>
+<?php if(!empty($item->pkgNames)) :?>
+<?php foreach ($item->pkgNames as $item) : ?>
+    pkg-config --libs-only-L <?= $item . PHP_EOL ?>
+    pkg-config --libs-only-l <?= $item . PHP_EOL ?>
+    pkg-config --cflags-only-I <?= $item . PHP_EOL ?>
+<?php endforeach; ?>
 <?php else :?>
     echo "no PKG_CONFIG !"
 <?php endif ?>
     echo "==========================================================="
     <?php endif ?>
 <?php endforeach; ?>
+    exit 0
 elif [ "$1" = "list-library" ] ;then
 <?php foreach ($this->libraryList as $item) : ?>
     echo "<?= $item->name ?>"
 <?php endforeach; ?>
+    exit 0
 elif [ "$1" = "list-extension" ] ;then
 <?php foreach ($this->extensionList as $item) : ?>
     echo "<?= $item->name ?>"
 <?php endforeach; ?>
+    exit 0
+elif [ "$1" = "clean" ] ;then
+    make_clean
 elif [ "$1" = "sync" ] ;then
   echo "sync"
   # ZendVM

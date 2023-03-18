@@ -1,7 +1,8 @@
 {
   "require": {
     "marcj/topsort": "^2.0",
-    "workerman/workerman": "^4.1"
+    "workerman/workerman": "^4.1",
+    "ext-posix": "*"
   },
   "autoload": {
     "psr-4": {
