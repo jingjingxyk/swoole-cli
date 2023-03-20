@@ -678,26 +678,32 @@ EOF
 
 function install_openssl_v3(Preprocessor $p)
 {
+    $openssl_prefix = OPENSSL_PREFIX;
     $static = $p->getOsType() === 'macos' ? '' : ' -static --static';
     $p->addLibrary(
-        (new Library('openssl_v3', '/usr/openssl'))
+        (new Library('openssl'))
+            ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
+            ->withHomePage('https://www.openssl.org/')
             ->withUrl('https://www.openssl.org/source/openssl-3.0.7.tar.gz')
             ->withFile('openssl-3.0.7.tar.gz')
+            ->withPrefix($openssl_prefix)
             ->withCleanBuildDirectory()
+            ->withCleanPreInstallDirectory($openssl_prefix)
             ->withConfigure(
                 <<<EOF
             # ./config $static \
             ./Configure   $static  \
-            no-shared --release --prefix=/usr/openssl_v3
+            no-shared --release --prefix=$openssl_prefix
 EOF
             )
             ->withMakeOptions('build_sw')
             ->withMakeInstallOptions('install_sw')
-            ->withPkgConfig('/usr/openssl_v3/lib64/pkgconfig')
-            ->withPkgName('libcrypto libssl openssl')
-            ->withLdflags('-L/usr/openssl_v3/lib64')
-            ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
-            ->withHomePage('https://www.openssl.org/')
+            ->withPkgConfig($openssl_prefix . '/lib64/pkgconfig')
+            ->withPkgName('libcrypto')
+            ->withPkgName('libssl')
+            ->withPkgName('openssl')
+            ->withLdflags('-L' . $openssl_prefix . '/lib64')
+
     );
 }
 
@@ -1013,13 +1019,14 @@ EOF;
 
             '
             )->withPkgName('gnutls')
-        //依赖：nettle, hogweed, libtasn1, libidn2, p11-kit-1, zlib, libbrotlienc, libbrotlidec, libzstd -lgmp  -latomic
+    //依赖：nettle, hogweed, libtasn1, libidn2, p11-kit-1, zlib, libbrotlienc, libbrotlidec, libzstd -lgmp  -latomic
     );
 }
 
 
 function install_boringssl($p)
 {
+    $boringssl_prefix = BORINGSSL_PREFIX;
     $p->addLibrary(
         (new Library('boringssl'))
             ->withHomePage('https://boringssl.googlesource.com/boringssl/')
@@ -1035,33 +1042,31 @@ function install_boringssl($p)
             ->withManual('https://boringssl.googlesource.com/boringssl/+/refs/heads/master/BUILDING.md')
             ->withUntarArchiveCommand('unzip')
             ->withCleanBuildDirectory()
-            ->withPrefix('/usr/boringssl')
-            ->withScriptBeforeConfigure(
-                '
-                 test -d /usr/boringssl && rm -rf /usr/boringssl
-                '
-            )
+            ->withPrefix($boringssl_prefix)
+            ->withCleanBuildDirectory()
+            ->withCleanPreInstallDirectory($boringssl_prefix)
             ->withBuildScript(
-                '
+                <<<EOF
                 cd boringssl-master
                 mkdir build
                 cd build
-                cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=0 -DCMAKE_INSTALL_PREFIX=/usr/boringssl
+                cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=0 -DCMAKE_INSTALL_PREFIX=$boringssl_prefix
 
                 cd ..
                 # ninja
                 ninja -C build
 
                 ninja -C build install
-            '
+EOF
             )
             ->disableDefaultPkgConfig()
-        //->withSkipBuildInstall()
+    //->withSkipBuildInstall()
     );
 }
 
 function install_wolfssl($p)
 {
+    $wolfssl_prefix = WOLFSSL_PREFIX;
     $p->addLibrary(
         (new Library('wolfssl'))
             ->withHomePage('https://github.com/wolfSSL/wolfssl.git')
@@ -1069,13 +1074,9 @@ function install_wolfssl($p)
             ->withUrl('https://github.com/wolfSSL/wolfssl/archive/refs/tags/v5.5.4-stable.tar.gz')
             ->withFile('wolfssl-v5.5.4-stable.tar.gz')
             ->withManual('https://wolfssl.com/wolfSSL/Docs.html')
+            ->withPrefix($wolfssl_prefix)
             ->withCleanBuildDirectory()
-            ->withPrefix('/usr/wolfssl')
-            ->withScriptBeforeConfigure(
-                '
-                 test -d /usr/wolfssl && rm -rf /usr/wolfssl
-                '
-            )
+            ->withCleanPreInstallDirectory($wolfssl_prefix)
             ->withBuildScript(
                 <<<EOF
                 ./autogen.sh
@@ -1089,7 +1090,7 @@ function install_wolfssl($p)
 EOF
             )
             ->withPkgName('wolfssl')
-        //->withSkipBuildInstall()
+    //->withSkipBuildInstall()
     );
 }
 
@@ -1117,7 +1118,7 @@ function install_libressl($p)
 EOF
             )
             ->withPkgName('libressl')
-        //->withSkipBuildInstall()
+    //->withSkipBuildInstall()
     );
 }
 
@@ -1134,8 +1135,8 @@ function install_nghttp3(Preprocessor $p)
             ->withPrefix('/usr/nghttp3')
             ->withConfigure(
                 '
-                export GNUTLS_CFLAGS=$(pkg-config  --cflags --static gnutls)
-                export GNUTLS_LIBS=$(pkg-config    --libs   --static gnutls)
+            export GNUTLS_CFLAGS=$(pkg-config  --cflags --static gnutls)
+            export GNUTLS_LIBS=$(pkg-config    --libs   --static gnutls)
 
             autoreconf -fi
             ./configure --help
@@ -1209,7 +1210,7 @@ function install_quiche(Preprocessor $p)
             ->withCleanBuildDirectory()
             ->withUntarArchiveCommand('unzip')
             ->withPrefix('/usr/quiche')
-            ->withScriptBeforeConfigure(
+            ->withBuildScript(
                 '
              test  -d /usr/quiche && rm -rf /usr/quiche
              # export RUSTUP_DIST_SERVER=https://mirrors.tuna.edu.cn/rustup
@@ -1254,7 +1255,7 @@ function install_msh3(Preprocessor $p)
             //->withCleanBuildDirectory()
             ->withUntarArchiveCommand('')
             ->withPrefix('/usr/msh3')
-            ->withScriptBeforeConfigure(
+            ->withBuildScript(
                 '
               cp -rf /work/pool/lib/msh3 /work/thirdparty/msh3
               apk add bsd-compat-headers
@@ -1285,29 +1286,45 @@ function install_nghttp2(Preprocessor $p): void
         (new Library('nghttp2'))
             ->withHomePage('https://github.com/nghttp2/nghttp2.git')
             ->withUrl('https://github.com/nghttp2/nghttp2/releases/download/v1.51.0/nghttp2-1.51.0.tar.gz')
-            ->withCleanBuildDirectory()
             ->withPrefix($nghttp2_prefix)
+            ->withCleanBuildDirectory()
             ->withCleanPreInstallDirectory($nghttp2_prefix)
             ->withConfigure(
                 <<<EOF
+            # automake # for git 
+            # autoconf # for git 
             ./configure --help
-
-            CPPFLAGS="$(pkg-config  --cflags-only-I  --static zlib libxml-2.0 jansson  libcares openssl )"  \
-            LDFLAGS="$(pkg-config --libs-only-L      --static zlib libxml-2.0 jansson  libcares openssl )"  \
-            LIBS="$(pkg-config --libs-only-l         --static zlib libxml-2.0 jansson  libcares openssl )"  \
+            packages="zlib libxml-2.0 libcares openssl" # jansson  libev 
+            CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$packages )"  \
+            LDFLAGS="$(pkg-config --libs-only-L      --static \$packages )"  \
+            LIBS="$(pkg-config --libs-only-l         --static \$packages )"  \
             ./configure --prefix={$nghttp2_prefix} \
             --enable-static=yes \
             --enable-shared=no \
             --enable-lib-only \
-            --enable-python-bindings=no \
             --with-libxml2  \
-            --with-jansson  \
             --with-zlib \
-            --with-libcares
+            --with-libcares \
+            --with-openssl \
+            --disable-http3 \
+            --disable-python-bindings  \
+            --without-jansson  \
+            --without-libevent-openssl \
+            --without-libev \
+            --without-cunit \
+            --without-jemalloc \
+            --without-mruby \
+            --without-neverbleed \
+            --without-cython \
+            --without-libngtcp2 \
+            --without-libnghttp3  \
+            --without-libbpf   \
+            --with-boost=no
 EOF
             )
             ->withLicense('https://github.com/nghttp2/nghttp2/blob/master/COPYING', Library::LICENSE_MIT)
-            ->depends('openssl', 'zlib', 'libxml2', 'jansson', 'cares')
+            ->withPkgName('libnghttp2')
+            ->depends('openssl', 'zlib', 'libxml2', 'cares')
     );
 }
 
@@ -1483,6 +1500,8 @@ function install_tcmalloc($p)
             ->withCleanBuildDirectory()
             ->withConfigure(
                 '
+                # apk add bazel
+                # https://pkgs.alpinelinux.org/packages?name=bazel*&branch=edge&repo=testing&arch=&maintainer= 
             cd  tcmalloc-master/
             bazel help
             bazel build
@@ -1558,7 +1577,7 @@ EOF
 
 function install_capstone(Preprocessor $p)
 {
-    $capstone_prefix = $p->getGlobalPrefix() . '/capstone';
+    $capstone_prefix = CAPSTONE_PREFIX;
     $p->addLibrary(
         (new Library('capstone'))
             ->withHomePage('http://www.capstone-engine.org/')
@@ -1593,7 +1612,7 @@ EOF
 
 function install_dynasm(Preprocessor $p)
 {
-    $dynasm_prefix = $p->getGlobalPrefix() . '/dynasm';
+    $dynasm_prefix = DYNASM_PREFIX;
     $p->addLibrary(
         (new Library('dynasm'))
             ->withHomePage('https://luajit.org/dynasm.html')
@@ -1614,38 +1633,48 @@ function install_dynasm(Preprocessor $p)
 
 function install_valgrind(Preprocessor $p)
 {
+    $valgrind_prefix = VALGRIND_PREFIX;
     $p->addLibrary(
         (new Library('valgrind'))
             ->withHomePage('https://valgrind.org/')
-            ->withLicense('https://github.com/libbpf/libbpf/blob/master/LICENSE.BSD-2-Clause', Library::LICENSE_LGPL)
+            ->withLicense('http://www.gnu.org/licenses/gpl-2.0.html', Library::LICENSE_LGPL)
             ->withUrl('https://sourceware.org/pub/valgrind/valgrind-3.20.0.tar.bz2')
             ->withManual('https://valgrind.org/docs/man')
-            ->withPrefix('/usr/valgrind')
+            ->withPrefix($valgrind_prefix)
             ->withCleanBuildDirectory()
+            ->withCleanPreInstallDirectory($valgrind_prefix)
             ->withConfigure(
                 <<<EOF
-
-./autogen.sh
-./configure --prefix=/usr/valgrind
-
+                export PATH=\$SYSTEM_ORIGIN_PATH
+                export PKG_CONFIG_PATH=\$SYSTEM_ORIGIN_PKG_CONFIG_PATH
+  
+                ./autogen.sh
+                ./configure \
+                --prefix={$valgrind_prefix}
 
 EOF
             )
+            ->withScriptAfterInstall(<<<EOF
+                export PATH=\$SWOOLE_CLI_PATH
+                export PKG_CONFIG_PATH=\$SWOOLE_CLI_PKG_CONFIG_PATH
+EOF
+)
             ->withPkgName('valgrind')
-            ->withBinPath('/usr/valgrind/bin/')
+            ->withBinPath($valgrind_prefix . '/bin/')
     );
 }
 
 function install_snappy(Preprocessor $p)
 {
+    $snappy_prefix = SNAPPY_PREFIX;
     $p->addLibrary(
-        (new Library('valgrind'))
+        (new Library('snappy'))
             ->withHomePage('https://github.com/google/snappy')
             ->withLicense('https://github.com/google/snappy/blob/main/COPYING', Library::LICENSE_BSD)
             ->withUrl('https://github.com/google/snappy/archive/refs/tags/1.1.9.tar.gz')
             ->withFile('snappy-1.1.9.tar.gz')
             ->withManual('https://github.com/google/snappy/blob/main/README.md')
-            ->withPrefix('/usr/snappy')
+            ->withPrefix($snappy_prefix)
             ->withCleanBuildDirectory()
             ->withConfigure(
                 <<<EOF
@@ -1658,7 +1687,7 @@ cd build && cmake ../ && make
 EOF
             )
             ->withPkgName('snappy')
-            ->withBinPath('/usr/snappy/bin/')
+            ->withBinPath($snappy_prefix . '/bin/')
     );
 }
 
@@ -1774,15 +1803,22 @@ function install_p11_kit(Preprocessor $p)
 
 function install_pcre2(Preprocessor $p)
 {
+    $pcre2_prefix = PCRE2_PREFIX;
     $p->addLibrary(
-        (new Library('pcre2', '/usr/pcre2'))
+        (new Library('pcre2'))
+
+            ->withHomePage('https://github.com/PCRE2Project/pcre2.git')
             ->withUrl('https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.42/pcre2-10.42.tar.gz')
+            ->withLicense(
+                'https://github.com/PCRE2Project/pcre2/blob/master/COPYING',
+                Library::LICENSE_SPEC
+            ) //PCRE2 LICENCE
             ->withFile('pcre2-10.42.tar.gz')
-            ->withSkipInstall()
             //  CFLAGS='-static -O2 -Wall'
-            ->withConfigure(
+            ->withConfigure(<<<EOF
                 "
             ./configure --help
+            exit 0 
             ./configure \
             --prefix=/usr/pcre2 \
             --enable-static \
@@ -1790,21 +1826,22 @@ function install_pcre2(Preprocessor $p)
             --enable-pcre2-16 \
             --enable-pcre2-32 \
             --enable-jit \
-            --enable-unicode
+            --enable-unicode 
+
          "
+ EOF
             )
             ->withMakeInstallOptions('install ')
-            //->withPkgConfig('/usr/pcre2/lib/pkgconfig')
+            //->withPkgConfig(PCRE2_PREFIX . '')
             ->disableDefaultPkgConfig()
-            //->withPkgName("libpcre2-16     libpcre2-32    libpcre2-8      libpcre2-posix")
+            //->withPkgName("libpcre2-16")
+     
+            //->withPkgName("libpcrelibpcre2-32libpcre2-8 libpcre2-posix")
+            //->withPkgName("libpcre2-16 libpcre2-32 libpcre2 -8 ibpcre2-posix")
             ->disablePkgName()
             //->withLdflags('-L/usr/pcre2/lib')
             ->disableDefaultLdflags()
-            ->withLicense(
-                'https://github.com/PCRE2Project/pcre2/blob/master/COPYING',
-                Library::LICENSE_PCRE2
-            ) //PCRE2 LICENCE
-            ->withHomePage('https://github.com/PCRE2Project/pcre2.git')
+
     );
 }
 
@@ -1947,10 +1984,10 @@ install-libpq5555.a: install-lib-static install-lib-pc
                 '
             '
             )
-        //->withSkipInstall()
-        //->disablePkgName()
-        //->disableDefaultPkgConfig()
-        //->disableDefaultLdflags()
+    //->withSkipInstall()
+    //->disablePkgName()
+    //->disableDefaultPkgConfig()
+    //->disableDefaultLdflags()
     );
 }
 
@@ -1979,10 +2016,10 @@ function install_fastdfs($p)
             ->withLdflags('-L/usr/fastdfs/lib/')
             ->withBinPath('/usr/fastdfs/bin/')
             ->withSkipBuildInstall()
-        //->withSkipInstall()
-        //->disablePkgName()
-        //->disableDefaultPkgConfig()
-        //->disableDefaultLdflags()
+    //->withSkipInstall()
+    //->disablePkgName()
+    //->disableDefaultPkgConfig()
+    //->disableDefaultLdflags()
     );
 }
 
@@ -2006,9 +2043,9 @@ function install_libserverframe($p)
             )
             ->withPkgName('')
             ->withSkipBuildInstall()
-        //->disablePkgName()
-        //->disableDefaultPkgConfig()
-        //->disableDefaultLdflags()
+    //->disablePkgName()
+    //->disableDefaultPkgConfig()
+    //->disableDefaultLdflags()
     );
 }
 
@@ -2035,9 +2072,9 @@ function install_libfastcommon($p)
             ->withPkgName('')
             ->withPkgConfig('/usr/libfastcommon/usr/lib/pkgconfig')
             ->withLdflags('-L/usr/libfastcommon/usr/lib -L/usr/libfastcommon/usr/lib64')
-        //->disablePkgName()
-        //->disableDefaultPkgConfig()
-        //->disableDefaultLdflags()
+    //->disablePkgName()
+    //->disableDefaultPkgConfig()
+    //->disableDefaultLdflags()
     );
 }
 
@@ -2233,7 +2270,7 @@ EOF
             ->disableDefaultPkgConfig()
             ->disableDefaultLdflags()
             ->withSkipBuildLicense()
-        // ->withSkipBuildInstall()
+    // ->withSkipBuildInstall()
     );
 }
 
@@ -2356,6 +2393,38 @@ EOF
 EOF
         )
         ->withPkgName('opencv');
+
+    $p->addLibrary($lib);
+}
+
+function install_boost(Preprocessor $p)
+{
+    $boost_prefix = BOOST_PREFIX;
+    $lib = new Library('boost');
+    $lib->withHomePage('https://www.boost.org/')
+        ->withLicense('https://www.boost.org/users/license.html', Library::LICENSE_SPEC)
+        ->withUrl('https://boostorg.jfrog.io/artifactory/main/release/1.81.0/source/boost_1_81_0.tar.gz')
+        ->withManual('https://www.boost.org/doc/libs/1_81_0/more/getting_started/index.html')
+        ->withManual('https://github.com/boostorg/wiki/wiki/')
+        ->withManual('https://github.com/boostorg/wiki/wiki/Getting-Started%3A-Overview')
+        ->withManual('https://www.boost.org/build/')
+        ->withManual('https://www.boost.org/build/doc/html/index.html')
+        ->withPrefix($boost_prefix)
+        ->withCleanBuildDirectory()
+        ->withCleanPreInstallDirectory($boost_prefix)
+        ->withBuildScript(
+            <<<EOF
+            export PATH=\$SYSTEM_ORIGIN_PATH
+            export PKG_CONFIG_PATH=\$SYSTEM_ORIGIN_PKG_CONFIG_PATH
+            ./bootstrap.sh
+            ./b2 headers
+            ./b2 --release install --prefix={$boost_prefix}
+            
+            export PATH=\$SWOOLE_CLI_PATH
+            export PKG_CONFIG_PATH=\$SWOOLE_CLI_PKG_CONFIG_PATH
+EOF
+        )
+        ->withPkgName('boost');
 
     $p->addLibrary($lib);
 }

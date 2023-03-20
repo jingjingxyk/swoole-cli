@@ -10,11 +10,20 @@ use MJS\TopSort\Implementations\StringSort;
 abstract class Project
 {
     public string $name;
+
     public string $manual = '';
     public string $homePage = '';
+
     public string $license = '';
+
     public string $prefix = '';
+
     public array $deps = [];
+
+    public string $md5sum = '';
+
+    public string $gnupg = '';
+
     public int $licenseType = self::LICENSE_SPEC;
 
     const LICENSE_SPEC = 0;
@@ -54,6 +63,19 @@ abstract class Project
         $this->deps += $libs;
         return $this;
     }
+
+    public function withMd5sum(string $md5sum): static
+    {
+        $this->md5sum = $md5sum;
+        return $this;
+    }
+
+    public function withGnuPG(string $gpg): static
+    {
+        $this->gnupg = $gpg;
+        return $this;
+    }
+
 }
 
 class Library extends Project
@@ -90,6 +112,8 @@ class Library extends Project
     public string $pkgConfig = '';
     public array $pkgNames = [];
 
+    public string $enablePkgNames = 'yes';
+
     public string $prefix = '/usr';
 
     public string $binPath = '';
@@ -99,7 +123,8 @@ class Library extends Project
         $this->url = $url;
         return $this;
     }
-    public function withMirrorUrl(string $url):static
+
+    public function withMirrorUrl(string $url): static
     {
         $this->mirrorUrls[] = $url;
         return $this;
@@ -124,7 +149,7 @@ class Library extends Project
         return $this;
     }
 
-    public function withBuildScript(string $script):static
+    public function withBuildScript(string $script): static
     {
         $this->buildScript = $script;
         return $this;
@@ -187,6 +212,12 @@ class Library extends Project
     function withPkgName(string $pkgName): static
     {
         $this->pkgNames[] = $pkgName;
+        return $this;
+    }
+
+    public function disablePkgNames(): static
+    {
+        $this->enablePkgNames = 'no';
         return $this;
     }
 
@@ -583,12 +614,20 @@ class Preprocessor
 
     protected function downloadFile(string $url, string $file)
     {
-        $userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36';
-        echo `curl --user-agent '{$userAgent}' --connect-timeout 15 --retry 5 --retry-delay 5  -Lo '{$file}' '{$url}' `;
-        if (!is_file($file) or filesize($file) == 0) {
-            if (is_file($file) && (filesize($file) == 0)) {
-                `test -d $file && rm -rf $file`;
-            }
+        # $userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36';
+        # echo `curl --user-agent '{$userAgent}' --connect-timeout 15 --retry 5 --retry-delay 5  -Lo '{$file}' '{$url}' `;
+
+        $retry_number = DOWNLOAD_FILE_RETRY_NUMBE;
+        $user_agent = DOWNLOAD_FILE_USER_AGENT;
+        $wait_retry = DOWNLOAD_FILE_WAIT_RETRY;
+        echo $cmd = "wget   {$url}  -O {$file}  -t {$retry_number} --wait={$wait_retry} -T 15 --user-agent='{$user_agent}'";
+        echo PHP_EOL;
+        echo `$cmd`;
+        echo PHP_EOL;
+        if (is_file($file) && (filesize($file) == 0)) {
+            echo `rm -f "{$file}"`;
+        }
+        if (!is_file($file)) {
             throw new \RuntimeException("Downloading file[$file] from url[$url] failed");
         }
     }
@@ -597,21 +636,31 @@ class Preprocessor
      * @param Library $lib
      * @throws \RuntimeException
      */
-    public function addLibrary(Library $lib)
+    public function addLibrary(Library $lib): void
     {
         if (empty($lib->file)) {
             $lib->file = basename($lib->url);
         }
 
+        if (
+            $this->getInputOption('enable-download-mirror')
+            &&
+            !empty($this->getInputOption('with-download-mirror-url'))
+        ) {
+            $lib->url = $this->getInputOption('with-download-mirror-url') . '/libraries/' . $lib->file;
+        }
+        $skip_download = ($this->getInputOption('skip-download') || $lib->getSkipDownload());
 
-        $skip_download = ($this->getInputOption('skip-download') ||  $lib->getSkipDownload());
         if (!$skip_download) {
-            $file=$this->libraryDir . '/' . $lib->file;
-            if (!is_file($this->libraryDir . '/' . $lib->file)) {
-                echo "[Library] {$lib->file} not found, downloading: " . $lib->url . PHP_EOL;
-                $this->downloadFile($lib->url, "{$file}");
+            $file = $this->libraryDir . '/' . $lib->file;
+            if (is_file($file) && ((!empty($lib->md5sum) && $lib->md5sum = !md5($file)) || (filesize($file) == 0))) {
+                echo `rm -f "{$file}"`;
+            }
+            if (!is_file($file)) {
+                echo "[Library] { $file } not found, downloading: " . $lib->url . PHP_EOL;
+                $this->downloadFile($lib->url, $file);
             } else {
-                echo "[Library] file cached: " . $lib->file . PHP_EOL;
+                echo "[Library] file cached: " . $file . PHP_EOL;
             }
         }
 
@@ -631,21 +680,35 @@ class Preprocessor
         $this->libraryMap[$lib->name] = $lib;
     }
 
-    public function addExtension(Extension $ext)
+    public function addExtension(Extension $ext): void
     {
         if ($ext->peclVersion) {
             $ext->file = $ext->name . '-' . $ext->peclVersion . '.tgz';
             $ext->path = $this->extensionDir . '/' . $ext->file;
             $ext->url = "https://pecl.php.net/get/{$ext->file}";
 
-            if (!$this->getInputOption('skip-download')) {
-                if (!is_file($ext->path)) {
-                    echo "[Extension] {$ext->file} not found, downloading: " . $ext->url . PHP_EOL;
-                    $this->downloadFile($ext->url, $ext->path);
-                } else {
-                    echo "[Extension] file cached: " . $ext->file . PHP_EOL;
-                }
+            if (
+                $this->getInputOption('enable-download-mirror')
+                &&
+                !empty($this->getInputOption('with-download-mirror-url'))
+            ) {
+                $ext->url = $this->getInputOption('with-download-mirror-url') . '/extensions/' . $ext->file;
+            }
 
+            if (!$this->getInputOption('skip-download')) {
+                $file = $this->extensionDir . '/' . $ext->file;
+                if (
+                    is_file($file) &&
+                    ((!empty($ext->md5sum) && $ext->md5sum = !md5($file)) || (filesize($file) == 0))
+                ) {
+                    echo `rm -f "{$file}"`;
+                }
+                if (!is_file($file)) {
+                    echo "[Extension] {$file} not found, downloading: " . $ext->url . PHP_EOL;
+                    $this->downloadFile($ext->url, $file);
+                } else {
+                    echo "[Extension] file cached: " . $file . PHP_EOL;
+                }
                 $dst_dir = "{$this->rootDir}/ext/{$ext->name}";
                 $this->mkdirIfNotExists($dst_dir, 0777, true);
 
@@ -665,14 +728,14 @@ class Preprocessor
         return $this->libraryMap[$name];
     }
 
-    function getLibraryPackages(): array
+    public function getLibraryPackages(): array
     {
         $packages = [];
         /**
          * @var $item Library
          */
         foreach ($this->libraryList as $item) {
-            if (!empty($item->pkgNames)) {
+            if (!empty($item->pkgNames) && ($item->enablePkgNames == 'yes')) {
                 $packages = array_merge($packages, $item->pkgNames);
             }
         }
@@ -815,11 +878,76 @@ class Preprocessor
         }
     }
 
+    public array $extensionDependPkgNameMap = [];
+
+    public array $extensionDependPkgNameList = [];
+
+    protected function setExtensionDependPkgNameMap(): void
+    {
+        $extensionDepsMap = [];
+        foreach ($this->extensionList as $extension) {
+            if (empty($extension->deps)) {
+                $this->extensionDependPkgNameMap[$extension->name] = [];
+            } else {
+                $extensionDepsMap[$extension->name] = $extension->deps;
+            }
+        }
+
+        foreach ($extensionDepsMap as $extension_name => $depends) {
+            $pkgNames = [];
+            foreach ($depends as $library_name) {
+                $packages = [];
+                $this->getDependPkgNameByLibraryName($library_name, $packages);
+                foreach ($packages as $item) {
+                    if (empty($item)) {
+                        continue;
+                    } else {
+                        $pkgNames[] = trim($item);
+                    }
+                }
+            }
+            $this->extensionDependPkgNameMap[$extension_name] = $pkgNames;
+        }
+
+        $pkgNames = [];
+        foreach ($this->extensionDependPkgNameMap as $extension_name => $pkgName) {
+            if ($extension_name == 'imagick') {
+                //imagick 需要特别处理，主要是为了兼容macOS 环境下 imagick 扩展的启用
+                continue;
+            }
+            $pkgNames = array_merge($pkgNames, $pkgName);
+        }
+        $this->extensionDependPkgNameList = array_unique(array_values($pkgNames));
+    }
+
+    private function getDependPkgNameByLibraryName($library_name, &$packages)
+    {
+        $lib = $this->libraryMap[$library_name];
+        $packages = array_merge($packages, $lib->pkgNames);
+        if (empty($lib->deps)) {
+            return null;
+        } else {
+            foreach ($lib->deps as $library_name) {
+                $this->getDependPkgNameByLibraryName($library_name, $packages);
+            }
+        }
+    }
+
+    protected function getPkgNamesByLibraryName($library_name): array
+    {
+        if (isset($this->libraryMap[$library_name])) {
+            return $this->libraryMap[$library_name]->pkgNames;
+        } else {
+            return [];
+        }
+    }
+
     /**
      * @throws CircularDependencyException
      * @throws ElementNotFoundException
      */
-    public function execute()
+    public function execute(): void
+
     {
         if (empty($this->rootDir)) {
             $this->rootDir = dirname(__DIR__);
@@ -864,6 +992,11 @@ class Preprocessor
 
         $this->pkgConfigPaths[] = '$PKG_CONFIG_PATH';
         $this->pkgConfigPaths = array_unique($this->pkgConfigPaths);
+        $this->binPaths[] = '$PATH';
+        $this->binPaths = array_unique($this->binPaths);
+        //暂时由手工维护，依赖关系
+        // $this->sortLibrary();
+        $this->setExtensionDependPkgNameMap();
 
         if ($this->getOsType() == 'macos') {
             $libcpp = '-lc++';
@@ -871,18 +1004,19 @@ class Preprocessor
             $libcpp = '-lstdc++';
         }
 
-        $packages = implode(' ', $this->getLibraryPackages());
-        $this->setVarable('PACKAGES', $packages);
-        $this->setVarable('CPPFLAGS', '$(pkg-config --cflags-only-I --static ' . $packages . ' ) ');
+
+        # $packages = implode(' ', $this->getLibraryPackages());
+        # $this->setVarable('PACKAGES', $packages);
+        # $this->setVarable('CPPFLAGS', '$(pkg-config --cflags-only-I --static ' . $packages . ' ) ');
         # $this->setVarable('CFLAGS', '$(pkg-config  --cflags-only-I --static ' . $packages . ' )');
         # $this->setVarable('LDFLAGS', '$(pkg-config --libs-only-L --static ' . $packages . ' ) $(pkg-config --libs-only-l --static ' . $packages . ' ) ' . $libcpp);
-        $this->setVarable('LDFLAGS', '$(pkg-config --libs-only-L --static ' . $packages . ' ) ');
-        $this->setVarable('LIBS', '$(pkg-config --libs-only-l --static ' . $packages . ' ) ' . $libcpp);
-        $this->binPaths[] = '$PATH';
-        $this->binPaths = array_unique($this->binPaths);
 
-        //暂时由手工维护，依赖关系
-        // $this->sortLibrary();
+        $packages = implode(' ', $this->extensionDependPkgNameList);
+        $this->setVarable('packages', $packages);
+        $this->setVarable('CPPFLAGS', '$(pkg-config  --cflags-only-I --static ${packages}  ) ');
+        $this->setVarable('LDFLAGS', '$(pkg-config  --libs-only-L --static ${packages}  ) ');
+        # $this->setVarable('EXTRA_LDFLAGS_PROGRAM=', '$(pkg-config --libs-only-L --static ${packages}  ) ');
+        $this->setVarable('LIBS', '$(pkg-config  --libs-only-l --static  ${packages}  ) ' . $libcpp);
 
 
         if ($this->getInputOption('skip-download')) {
@@ -923,26 +1057,26 @@ class Preprocessor
     protected function generateLibraryDownloadLinks(): void
     {
         $this->mkdirIfNotExists($this->getWorkDir() . '/var/', 0755, true);
-        $download_urls=[];
+        $download_urls = [];
         foreach ($this->libraryList as $item) {
             if (empty($item->url)) {
                 continue;
             }
-            $url='';
-            $item->mirrorUrls[]=$item->url;
+            $url = '';
+            $item->mirrorUrls[] = $item->url;
             if (!empty($item->mirrorUrls)) {
-                $newMirrorUrls= [];
+                $newMirrorUrls = [];
                 foreach ($item->mirrorUrls as $value) {
-                    $newMirrorUrls[] =trim($value);
+                    $newMirrorUrls[] = trim($value);
                 }
-                $url =implode("\t", $newMirrorUrls);
+                $url = implode("\t", $newMirrorUrls);
             }
-            $download_urls[]= $url . PHP_EOL. " out=".$item->file;
+            $download_urls[] = $url . PHP_EOL . " out=" . $item->file;
         }
         file_put_contents($this->getWorkDir() . '/var/download_library_urls.txt', implode(PHP_EOL, $download_urls));
-        $download_urls=[];
+        $download_urls = [];
         foreach ($this->downloadExtensionList as $item) {
-            $download_urls[]= $item['url'] . PHP_EOL . " out=".$item['file'];
+            $download_urls[] = $item['url'] . PHP_EOL . " out=" . $item['file'];
         }
         file_put_contents($this->getWorkDir() . '/var/download_extension_urls.txt', implode(PHP_EOL, $download_urls));
     }

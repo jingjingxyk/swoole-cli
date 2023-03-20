@@ -20,14 +20,21 @@ function libraries_builder($p)
     install_libyaml($p);
     install_libsodium($p);
 
-    install_bzip2($p);//没有 libbz2.pc 文件，不能使用 pkg-config 命令  BZIP2_LIBS=-L/usr/bizp2/lib -lbz2  BZIP2_CFLAGS="-I/usr/bizp2/include"
+    install_bzip2($p);//没有 libbz2.pc 文件，不能使用 pkg-config 命令
+    // 使用时类似： BZIP2_LIBS=-L/usr/bizp2/lib -lbz2  BZIP2_CFLAGS="-I/usr/bizp2/include"
     install_zlib($p);
     install_liblz4($p); //有多种安装方式，选择cmake方式安装
     install_libzstd($p); //zstd 依赖 lz4
     install_libzip($p); //zip 依赖 openssl zlib bzip2  liblzma zstd
 
     install_sqlite3($p);
-    install_icu($p); //依赖 linux : -lstdc++ ; macOS:  libc++ //注意事项：https://www.zhihu.com/question/343205052
+    install_icu($p);
+    //依赖 linux : -lstdc++ ; macOS:  libc++ //注意事项：https://www.zhihu.com/question/343205052
+    //CLDR 是 i18n 的一套核心规范( Common Locale Data Respository ) 即 通用的本地化数据存储库
+    //https://cldr.unicode.org/
+
+    // php composer 依赖的扩展 ： https://github.com/composer/composer/blob/c23beac9c508b701bb481d1c5269e7a2a79e0b60/src/Composer/Repository/PlatformRepository.php#L203
+
     install_oniguruma($p);
     install_mimalloc($p);
 
@@ -38,14 +45,20 @@ function libraries_builder($p)
     install_libwebp($p); //依赖 libgif libpng libjpeg
     install_freetype($p); //依赖 zlib bzip2 libpng  brotli  HarfBuzz  (HarfBuzz暂不启用，启用需要安装ninja meson python3 pip3 进行构建)
 
-    install_imagemagick($p);//依赖 freetype2 libjpeg  libpng libwebp libxml2 libzip zlib libzstd liblzma bzlib2  lcms(默认不启用) libraw(默认不启用) libtiff(默认不启用) libjxl(默认不启用)
+    install_imagemagick($p);
+    //依赖 freetype2 libjpeg  libpng libwebp libxml2 libzip zlib libzstd liblzma bzlib2
+    //  lcms(默认不启用) libraw(默认不启用) libtiff(默认不启用) libjxl(默认不启用)
 
-    install_libidn2($p);//依赖 intl libunistring ； (gettext库包含intl 、coreutils库包含libunistring ); //解决依赖 apk add  gettext  coreutils
-    install_curl($p); //curl 依赖 openssl c-ares brotli libzstd idn(暂不启用) libidn2 libnghttp2 libnghttp3
+    install_libidn2($p);//依赖 intl libunistring ； (gettext库包含intl 、coreutils库包含libunistring );
+    // //解决依赖 apk add  gettext  coreutils
+
+
+    install_nghttp2($p); //依赖 install_nghttp2($p);
+    install_curl($p); //curl 依赖 openssl c-ares brotli libzstd idn(暂不启用) libidn2 libnghttp2 libnghttp3(暂不启用)
 
     //参考 https://github.com/docker-library/php/issues/221
     install_pgsql($p);//依赖 openssl libxml2 libxslt  zlib readline icu libxml2 libxslt liblzma libiconv
-    install_libffi($p);
+    //install_libffi($p);
 
     //扩展不兼容本项目
     //install_libmcrypt($p); //无 pkg-config 配置
@@ -121,7 +134,6 @@ function libraries_builder($p)
         install_php_extension_micro($p);
         install_php_extension_zookeeper($p);
         install_php_extension_wasm($p);
-
         // install_php_extension_fastdfs($p);
     }
 
@@ -168,7 +180,7 @@ function libraries_builder($p)
 
 
         install_nettle($p); //加密库
-        install_jansson($p);
+
         install_libtasn1($p);
         //install_libexpat($p);
         install_unbound($p); //依赖 libsodium nghttp2 nettle openssl ibtasn1 libexpat
@@ -180,6 +192,8 @@ function libraries_builder($p)
         install_wolfssl($p);//
         install_libressl($p);//
 
+        install_jansson($p); //c json 库
+
         //参考 ：HTTP3 and QUIC 有多种实现   curl 使用 http3 参考： https://curl.se/docs/http3.html
         install_nghttp3($p); // 使用 GnuTLS或者wolfss，这样就不用更换openssl版本了 ；
         install_ngtcp2($p); //依赖gnutls nghttp3
@@ -188,7 +202,6 @@ function libraries_builder($p)
         install_quiche($p); // 依赖 boringssl ，需要 rust ；
         install_msh3($p);  //需要安装库 bsd-compat-headers 解决 sys/queue.h 不存在的问题
 
-        install_nghttp2($p);
 
         install_coreutils($p);
         install_gnulib($p);
@@ -206,14 +219,13 @@ function libraries_builder($p)
         install_tcmalloc($p);
 
 
-
         install_libelf($p);
         install_libbpf($p); //libbpf 库是一个基于 C/C++ 的通用 eBPF 库
 
         install_snappy($p);
         install_kerberos($p);
         install_fontconfig($p);
-        install_pcre2($p);
+        //install_pcre2($p);
         install_pgsql_test($p);
         install_libgomp($p); //压缩算法
         install_libzip_ng($p); //zlib next
@@ -227,6 +239,10 @@ function libraries_builder($p)
         install_aria2($p); //依赖libuv openssl zlib libxml2 sqlite3 openssl c-ares
         install_socat($p); //依赖 readline openssl
     }
+    if (0) {
+        install_pcre2($p);
+        install_nginx($p);
+    }
 
     if (0) {
         //Wasm
@@ -236,7 +252,13 @@ function libraries_builder($p)
 
     //排版相关
     if (0) {
-        install_graphviz($p); //依赖git libwbp freetype
+        # pip3 install graphviz
+
+        install_graphviz($p); //依赖git libwbp freetype  // https://www.graphviz.org/doc/info/lang.html
+        //networkx    //https://github.com/networkx/networkx.git
+        // 工业级的还得用neo4j搭配graphx  面对巨量数据   https://www.cnblogs.com/jingjingxyk/p/16826546.html
+        // draw.io  https://app.diagrams.net/
+
         install_TeX($p); //排版系统
     }
     if (0) {
@@ -254,7 +276,7 @@ function libraries_builder($p)
         */
     }
     if (0) {
-        install_rav1e($p);
+        install_rav1e($p); //https://github.com/videolan/dav1d.git //https://www.cnblogs.com/eguid/p/16015446.html
         install_aom($p);
         install_av1($p);
         install_libvpx($p);
@@ -297,7 +319,16 @@ function libraries_builder($p)
         //原理： 类似 SwarmAgent  （Agent/Coordinator ）  //https://docs.unrealengine.com/5.1/en-US/unreal-swarm-in-unreal-engine/
     }
 
+    if ($p->getInputOption('with-valgrind') == 'yes') {
+        install_valgrind($p); //Valgrind是一款用于内存调试、内存泄漏检测以及性能分析的软件开发工具。
+    }
+    if ($p->getInputOption('with-capstone') == 'yes') {
+        install_capstone($p);
+    }
+
     if (0) {
+        // brew  //  https://mirrors.tuna.tsinghua.edu.cn/help/homebrew
+        // brew  //  https://github.com/Homebrew/brew.git
         //apk add ninja
         //install_ninja($p); //源码编译ninja，alpine 默认没有提供源；默认不安装 //依赖python
         install_depot_tools($p); //依赖python
@@ -350,9 +381,12 @@ function libraries_builder($p)
         install_thrift($p); //https://thrift.apache.org/
     }
     if (0) {
+        install_boost($p);
+    }
+    if (0) {
         //申明式  和 命令式
 
-         //一个为异构并行计算平台编写程序的工业标准  https://www.intel.com/content/www/us/en/docs/programmable/683846/22-1/opencl-library.html
+        //一个为异构并行计算平台编写程序的工业标准  https://www.intel.com/content/www/us/en/docs/programmable/683846/22-1/opencl-library.html
         install_opencl($p); //OpenCL全称为Open Computing Language（开放计算语言） OpenCL不但支持数据并行，还支持任务并行
         //用于共享内存并行系统的多处理器程序设
 
@@ -361,4 +395,15 @@ function libraries_builder($p)
 
         //并发编程：SIMD 介绍  https://zhuanlan.zhihu.com/p/416172020
     }
+    /*
+    export PATH=$SYSTEM_ORIGIN_PATH
+    export PKG_CONFIG_PATH=$SYSTEM_ORIGIN_PKG_CONFIG_PATH
+    # 执行构建前
+
+    # 执行构建操作
+
+    # 执行构建后
+    export PATH=$SWOOLE_CLI_PATH
+    export PKG_CONFIG_PATH=$SWOOLE_CLI_PKG_CONFIG_PATH
+    */
 }

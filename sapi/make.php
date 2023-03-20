@@ -184,6 +184,7 @@ export_variables() {
 <?php foreach ($this->varables as $name => $value) : ?>
     export <?= $name ?>="<?= $value ?>"
 <?php endforeach; ?>
+    return 0
 }
 
 
@@ -202,6 +203,8 @@ make_config() {
     # GNU C编译器的gnu11和c11 https://www.cnblogs.com/litifeng/p/8328499.html
     # -g是生成调试信息
     # -Wall 是打开警告开关,-O代表默认优化,可选：-O0不优化,-O1低级优化,-O2中级优化,-O3高级优化,-Os代码空间优化
+
+    # PKG_CONFIG_LIBDIR
 
     # 更多配置
     export EXTRA_INCLUDES=
@@ -267,7 +270,9 @@ _____EO_____
     echo $PKG_CONFIG_PATH
 
     ./configure --help
+
     export_variables
+
     ./configure $OPTIONS
 
 }
@@ -275,8 +280,8 @@ _____EO_____
 make_build() {
     cd <?= $this->getWorkDir() . PHP_EOL ?>
 
-    make -j <?= $this->maxJob ?> <?= PHP_EOL ?>
-    return 0
+    # make -j <?= $this->maxJob ?> <?= PHP_EOL ?>
+    # return 0
 
    # export EXTRA_LDFLAGS="$(pkg-config   --libs-only-L   --static openssl libraw_r )"
    # export EXTRA_LDFLAGS_PROGRAM=""
