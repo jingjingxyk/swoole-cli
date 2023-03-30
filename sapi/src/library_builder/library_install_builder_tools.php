@@ -30,12 +30,6 @@ function install_qemu(Preprocessor $p): void
             ->withUntarArchiveCommand('xz')
             ->withPrefix($qemu_prefix)
             ->withCleanBuildDirectory()
-            ->withScriptBeforeConfigure(
-                <<<EOF
-
-
-EOF
-            )
             ->withConfigure(
                 <<<EOF
             set -eux
@@ -49,7 +43,6 @@ EOF
 EOF
             )
             ->withBinPath($qemu_prefix . '/bin/')
-
     );
 }
 
@@ -103,23 +96,30 @@ function install_ninja(Preprocessor $p)
 
 function install_depot_tools(Preprocessor $p): void
 {
-    $depot_tools_prefix = '/usr/depot_tools';
+    $depot_tools_prefix = DEPOT_TOOLS_PREFIX;
+    $workDir = $p->getWorkDir();
     $p->addLibrary(
         (new Library('depot_tools'))
             ->withHomePage('https://chromium.googlesource.com/chromium/tools/depot_tools')
             ->withLicense('https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/refs/heads/main/LICENSE', Library::LICENSE_SPEC)
             ->withUrl('https://chromium.googlesource.com/chromium/tools/depot_tools')
-            ->withFile('depot_tools')
-            ->withSkipDownload()
             ->withManual('https://commondatastorage.googleapis.com/chrome-infra-docs/flat/depot_tools/docs/html/depot_tools_tutorial.html#_setting_up')
-            ->withUntarArchiveCommand('cp')
+            ->withFile('depot_tools.tar.gz')
+            ->withDownloadScript(
+                'depot_tools',
+                <<<EOF
+                git clone -b main  --single-branch  --depth=1  https://chromium.googlesource.com/chromium/tools/depot_tools
+EOF
+            )
+            //->withUntarArchiveCommand('cp')
             ->withCleanBuildDirectory()
             ->withCleanPreInstallDirectory($depot_tools_prefix)
             ->withBuildScript("
                 mkdir -p $depot_tools_prefix
+                cd ..
                 cp -rf depot_tools/* $depot_tools_prefix
             ")
-            ->withBinPath($depot_tools_prefix . '/bin/')
+            ->withBinPath($depot_tools_prefix)
             ->disableDefaultPkgConfig()
             ->disableDefaultLdflags()
             ->disablePkgName()

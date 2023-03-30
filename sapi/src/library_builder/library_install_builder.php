@@ -18,6 +18,11 @@ use SwooleCli\Preprocessor;
 
 function install_openssl(Preprocessor $p)
 {
+    install_openssl_v3_quic($p);
+}
+
+function install_openssl_v1(Preprocessor $p)
+{
     $openssl_prefix = OPENSSL_PREFIX;
     $p->addLibrary(
         (new Library('openssl'))
@@ -32,13 +37,75 @@ function install_openssl(Preprocessor $p)
                 ) === 'macos' ? '' : ' -static --static') . ' no-shared --prefix=' . $openssl_prefix
             )
             ->withMakeInstallCommand('install_sw')
-            ->withPkgName('libcrypto libssl   openssl')
+            ->withPkgName('openssl')
             ->withBinPath($openssl_prefix . '/bin/')
     );
 }
 
+function install_openssl_v3(Preprocessor $p)
+{
+    $openssl_prefix = OPENSSL_PREFIX;
+    $static = $p->getOsType() === 'macos' ? '' : ' -static --static';
+    # openssl v3.0 ； linux 位于 lib64 目录, macOS 位于 lib 目录；
+    $openssl_lib = $p->getOsType() === 'linux' ? $openssl_prefix . '/lib64' : $openssl_prefix . '/lib';
+    $p->addLibrary(
+        (new Library('openssl'))
+            ->withHomePage('https://www.openssl.org/')
+            ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
+            ->withUrl('https://www.openssl.org/source/openssl-3.0.8.tar.gz')
+            ->withFile('openssl-3.0.8.tar.gz')
+            ->withPrefix($openssl_prefix)
+            ->withConfigure(
+                <<<EOF
+                # ./Configure LIST 
+                # INSTALL help info
+                ./config {$static} no-shared  --release --prefix={$openssl_prefix}
+EOF
+            )
+            ->withMakeOptions('build_sw')
+            ->withMakeInstallCommand('install_sw')
+            ->withPkgName('openssl')
+            ->withPkgName('libcrypto')
+            ->withPkgName('libssl')
+            ->withLdflags('-L' . $openssl_lib)
+            ->withPkgConfig($openssl_lib . '/pkgconfig')
+            ->withBinPath($openssl_prefix . '/bin/')
+    );
+}
+function install_openssl_v3_quic(Preprocessor $p)
+{
+    $openssl_prefix = OPENSSL_PREFIX;
+    $static = $p->getOsType() === 'macos' ? '' : ' -static --static';
+    //openssl v3 库 linux 位于 lib64 目录, macOS 位于 lib 目录；
+    $openssl_lib = $p->getOsType() === 'linux' ? $openssl_prefix . '/lib64' : $openssl_prefix . '/lib';
+    $p->addLibrary(
+        (new Library('openssl'))
+            ->withHomePage('https://www.openssl.org/')
+            ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
+            #->withUrl('https://www.openssl.org/source/openssl-1.1.1p.tar.gz')
+            ->withUrl('https://github.com/quictls/openssl/archive/refs/tags/openssl-3.0.8-quic1.tar.gz')
+            ->disableDownloadWithMirrorURL()
+            ->withPrefix($openssl_prefix)
+            ->withCleanBuildDirectory()
+            ->withCleanPreInstallDirectory($openssl_prefix)
+            ->withConfigure(
+                <<<EOF
+                 # ./Configure LIST 
+                ./config {$static} no-shared  enable-tls1_3 --release --prefix={$openssl_prefix}
+EOF
+            )
+            ->withMakeOptions('build_sw')
+            ->withMakeInstallCommand('install_sw')
+            ->withPkgName('libcrypto')
+            ->withPkgName('libssl')
+            ->withPkgName('openssl')
+            ->withLdflags('-L' . $openssl_lib)
+            ->withPkgConfig($openssl_lib . '/pkgconfig')
+            ->withBinPath($openssl_prefix . '/bin/')
+    );
+}
 
-function install_libiconv(Preprocessor $p)
+function install_libiconv(Preprocessor $p): void
 {
     $libiconv_prefix = ICONV_PREFIX;
     $p->addLibrary(
@@ -73,7 +140,7 @@ function install_libxml2(Preprocessor $p)
             --with-iconv=$iconv_prefix \
             --enable-static=yes \
             --enable-shared=no \
-            --without-python
+            --without-python 
 EOF
             )
             ->withPkgName('libxml-2.0')
@@ -115,7 +182,7 @@ function install_libxslt(Preprocessor $p)
             --without-crypto \
             --without-profiler \
             --without-plugins \
-            --without-debugger
+            --without-debugger 
 EOF
             )
             ->withPkgName('libexslt')
@@ -155,7 +222,7 @@ function install_brotli(Preprocessor $p)
             -DBROTLI_DISABLE_TESTS=OFF \
             -DBROTLI_BUNDLED_MODE=OFF \
             && \
-            cmake --build . --config Release --target install
+            cmake --build . --config Release --target install 
 EOF
             )
             ->withScriptAfterInstall(
@@ -166,7 +233,7 @@ EOF
             cp  -f {$brotli_prefix}/lib/libbrotlicommon-static.a {$brotli_prefix}/lib/libbrotli.a
             mv     {$brotli_prefix}/lib/libbrotlicommon-static.a {$brotli_prefix}/lib/libbrotlicommon.a
             mv     {$brotli_prefix}/lib/libbrotlienc-static.a    {$brotli_prefix}/lib/libbrotlienc.a
-            mv     {$brotli_prefix}/lib/libbrotlidec-static.a    {$brotli_prefix}/lib/libbrotlidec.a
+            mv     {$brotli_prefix}/lib/libbrotlidec-static.a    {$brotli_prefix}/lib/libbrotlidec.a 
 EOF
             )
             ->withPkgName('libbrotlicommon')
@@ -208,7 +275,7 @@ function install_gmp(Preprocessor $p)
             ./configure \
             --prefix=$gmp_prefix \
             --enable-static=yes \
-            --enable-static=no
+            --enable-static=no 
 EOF
             )
             ->withLicense('https://www.gnu.org/licenses/old-licenses/gpl-2.0.html', Library::LICENSE_GPL)
@@ -258,7 +325,7 @@ function install_ncurses(Preprocessor $p)
             --without-tests \
             --without-dlsym \
             --without-debug \
-            --enable-symlinks
+            --enable-symlinks 
 EOF
             )
             ->withScriptBeforeInstall(
@@ -304,7 +371,7 @@ function install_readline(Preprocessor $p)
                 --enable-static \
                 --disable-shared \
                 --with-curses \
-                --enable-multibyte
+                --enable-multibyte 
 EOF
             )
             ->withPkgName('readline')
@@ -403,7 +470,7 @@ function install_liblz4(Preprocessor $p)
             ->withConfigure(
                 <<<EOF
             cd build/cmake/
-            cmake . -DCMAKE_INSTALL_PREFIX={$liblz4_prefix}  -DBUILD_SHARED_LIBS=OFF  -DBUILD_STATIC_LIBS=ON
+            cmake . -DCMAKE_INSTALL_PREFIX={$liblz4_prefix}  -DBUILD_SHARED_LIBS=OFF  -DBUILD_STATIC_LIBS=ON 
 EOF
             )
             ->withPkgName('liblz4')
@@ -464,7 +531,7 @@ function install_libzstd(Preprocessor $p)
             -DZSTD_BUILD_PROGRAMS=ON \
             -DZSTD_BUILD_SHARED=OFF \
             -DZSTD_BUILD_TESTS=OFF \
-            -DZSTD_LEGACY_SUPPORT=ON
+            -DZSTD_LEGACY_SUPPORT=ON 
 EOF
             )
             ->withMakeOptions('lib')
@@ -516,29 +583,33 @@ function install_libzip(Preprocessor $p)
     $libzstd_prefix = LIBZSTD_PREFIX;
     $zlib_prefix = ZLIB_PREFIX;
     $bzip2_prefix = BZIP2_PREFIX;
+    $openssl_lib = $p->getOsType() === 'linux' ? $openssl_prefix . '/lib64' : $openssl_prefix . '/lib';
     $p->addLibrary(
         (new Library('libzip'))
             //->withUrl('https://libzip.org/download/libzip-1.8.0.tar.gz')
             ->withUrl('https://libzip.org/download/libzip-1.9.2.tar.gz')
-            ->withManual('https://libzip.org/')
+            ->withManual('https://libzip.org')
             ->withPrefix($libzip_prefix)
             ->withCleanBuildDirectory()
             ->withCleanPreInstallDirectory($libzip_prefix)
             ->withConfigure(
                 <<<EOF
-            cmake -Wno-dev .  \
+            # -Wno-dev
+            cmake  .  \
             -DCMAKE_INSTALL_PREFIX={$libzip_prefix} \
-            -DCMAKE_BUILD_TYPE=optimized \
+            -DCMAKE_BUILD_TYPE=Release  \
+            -DBUILD_SHARED_LIBS=OFF  \
             -DBUILD_TOOLS=OFF \
+            -DBUILD_REGRESS=OFF \
             -DBUILD_EXAMPLES=OFF \
             -DBUILD_DOC=OFF \
             -DLIBZIP_DO_INSTALL=ON \
-            -DBUILD_SHARED_LIBS=OFF \
             -DENABLE_GNUTLS=OFF  \
             -DENABLE_MBEDTLS=OFF \
+            -DENABLE_COMMONCRYPTO=OFF \
             -DENABLE_OPENSSL=ON \
             -DOPENSSL_USE_STATIC_LIBS=TRUE \
-            -DOPENSSL_LIBRARIES={$openssl_prefix}/lib \
+            -DOPENSSL_LIBRARIES={$openssl_lib} \
             -DOPENSSL_INCLUDE_DIR={$openssl_prefix}/include \
             -DZLIB_LIBRARY={$zlib_prefix}/lib \
             -DZLIB_INCLUDE_DIR={$zlib_prefix}/include \
@@ -555,7 +626,7 @@ function install_libzip(Preprocessor $p)
             -DLIBLZMA_HAS_LZMA_PRESET=ON \
             -DENABLE_ZSTD=ON \
             -DZstd_LIBRARY={$libzstd_prefix}/lib \
-            -DZstd_INCLUDE_DIR={$libzstd_prefix}/include
+            -DZstd_INCLUDE_DIR={$libzstd_prefix}/include 
 EOF
             )
             ->withMakeOptions('VERBOSE=1')
@@ -606,12 +677,11 @@ function install_icu(Preprocessor $p)
             ->withPrefix($icu_prefix)
             ->withConfigure(
                 <<<EOF
-             export CPPFLAGS="-DU_CHARSET_IS_UTF8=1  -DU_USING_ICU_NAMESPACE=1  -DU_STATIC_IMPLEMENTATION=1"
+             CPPFLAGS="-DU_CHARSET_IS_UTF8=1  -DU_USING_ICU_NAMESPACE=1  -DU_STATIC_IMPLEMENTATION=1" \
              source/runConfigureICU $os --prefix={$icu_prefix} \
-             --enable-icu-config=yes \
              --enable-static=yes \
              --enable-shared=no \
-             --with-data-packaging=archive \
+             --with-data-packaging=static \
              --enable-release=yes \
              --enable-extras=yes \
              --enable-icuio=yes \
@@ -679,11 +749,10 @@ function install_libidn2(Preprocessor $p)
             ->withCleanPreInstallDirectory($libidn2_prefix)
             ->withConfigure(
                 <<<EOF
-            ./configure --help
-
-            #  intl  依赖  gettext
+            # 依赖 intl libunistring ； (gettext库包含intl 、coreutils库包含libunistring )
             # 解决依赖  apk add  gettext  coreutils
-
+            
+            ./configure --help
             ./configure --prefix={$libidn2_prefix} \
             enable_static=yes \
             enable_shared=no \
@@ -693,9 +762,54 @@ function install_libidn2(Preprocessor $p)
 
 EOF
             )
+            ->withScriptAfterInstall(
+                "
+            # 查看是否有动态链接库 (已确认，无动态链接库）
+            # nm -D {$libidn2_prefix}/lib/libidn2.a
+            # nm {$libidn2_prefix}/lib/libidn2.a
+            ar -t {$libidn2_prefix}/lib/libidn2.a
+            "
+            )
             ->withPkgName('libidn2')
             ->withBinPath($libidn2_prefix . '/bin/')
             ->depends('libiconv')
+    );
+}
+
+function install_libssh2(Preprocessor $p)
+{
+    $libssh2_prefix = LIBSSH2_PREFIX;
+    $zlib_prefix = ZLIB_PREFIX;
+    $p->addLibrary(
+        (new Library('libssh2'))
+            ->withHomePage('https://www.libssh2.org/')
+            ->withUrl('https://www.libssh2.org/download/libssh2-1.10.0.tar.gz')
+            ->withLicense('https://www.libssh2.org/license.html', Library::LICENSE_SPEC)
+            ->withManual('https://github.com/libssh2/libssh2.git')
+            ->withManual('https://github.com/libssh2/libssh2/blob/master/docs/INSTALL_CMAKE.md')
+            ->withPrefix($libssh2_prefix)
+            ->withCleanBuildDirectory()
+            ->withCleanPreInstallDirectory($libssh2_prefix)
+            ->withBuildScript(
+                <<<EOF
+              mkdir -p build
+              cd build
+              cmake .. \
+              -DCMAKE_INSTALL_PREFIX={$libssh2_prefix} \
+              -DCMAKE_BUILD_TYPE=Release  \
+              -DBUILD_STATIC_LIBS=ON \
+              -DBUILD_SHARED_LIBS=OFF \
+              -DENABLE_ZLIB_COMPRESSION=ON  \
+              -DZLIB_ROOT={$zlib_prefix} \
+              -DCLEAR_MEMORY=ON  \
+              -DENABLE_GEX_NEW=ON  \  \
+              -DENABLE_CRYPT_NONE=OFF
+              -DCRYPTO_BACKEND=OpenSSL
+              cmake --build . --target install
+EOF
+            )
+            ->withPkgName('libssh2')
+            ->depends('zlib')
     );
 }
 
@@ -737,7 +851,8 @@ function install_curl(Preprocessor $p)
     //http3 有多个实现
     //参考文档： https://curl.se/docs/http3.html
     //https://curl.se/docs/protdocs.html
-    $curl_prefix = CURL_PREFIX;
+    // curl 依赖库 https://curl.se/docs/libs.html
+
     $openssl_prefix = OPENSSL_PREFIX;
     $zlib_prefix = ZLIB_PREFIX;
 
@@ -745,6 +860,13 @@ function install_curl(Preprocessor $p)
     $libzstd_prefix = LIBZSTD_PREFIX;
     $cares_prefix = CARES_PREFIX;
     $brotli_prefix = BROTLI_PREFIX;
+    $gnutls_prefix = GNUTLS_PREFIX;
+    $libssh2_prefix = LIBSSH2_PREFIX;
+    $openssl_prefix = OPENSSL_PREFIX;
+    $zlib_prefix = ZLIB_PREFIX;
+    $cares_prefix = CARES_PREFIX;
+
+    $curl_prefix = CURL_PREFIX;
     $p->addLibrary(
         (new Library('curl'))
             ->withHomePage('https://curl.se/')
@@ -756,10 +878,13 @@ function install_curl(Preprocessor $p)
             ->withCleanPreInstallDirectory($curl_prefix)
             ->withConfigure(
                 <<<EOF
-            packages="zlib libbrotlicommon  libbrotlidec  libbrotlienc openssl libcares libidn2 libnghttp2"
-            CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$packages )" \
-            LDFLAGS="$(pkg-config --libs-only-L      --static \$packages )" \
-            LIBS="$(pkg-config --libs-only-l         --static \$packages )" \
+            ./configure --help
+
+            PACKAGES='zlib openssl libcares libbrotlicommon libbrotlidec libbrotlienc libzstd libnghttp2 '
+            PACKAGES="\$PACKAGES libidn2 libssh2 " #libnghttp3 libngtcp2  libngtcp2_crypto_openssl
+            CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$PACKAGES)" \
+            LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES)" \
+            LIBS="$(pkg-config      --libs-only-l    --static \$PACKAGES)" \
             ./configure --prefix={$curl_prefix}  \
             --enable-static \
             --disable-shared \
@@ -784,33 +909,47 @@ function install_curl(Preprocessor $p)
             --enable-progress-meter \
             --enable-optimize \
             --with-zlib={$zlib_prefix} \
-            --with-openssl={$openssl_prefix} \
-            --with-libidn2={$libidn2_prefix} \
-            --with-zstd={$libzstd_prefix} \
             --enable-ares={$cares_prefix} \
-            --with-brotli={$brotli_prefix} \
-            --with-default-ssl-backend=openssl \
             --with-nghttp2 \
             --without-ngtcp2 \
-            --without-nghttp3
+            --without-nghttp3 \
+            --with-libidn2 \
+            --with-libssh2 \
+            --with-openssl  \
+            --with-default-ssl-backend=openssl \
+            --without-gnutls \
+            --without-mbedtls \
+            --without-wolfssl \
+            --without-bearssl \
+            --without-rustls
 EOF
             )
             ->withPkgName('libcurl')
             ->withBinPath($curl_prefix . '/bin/')
-            ->depends('openssl', 'cares', 'zlib', 'brotli', 'libzstd', 'libidn2', 'nghttp2')
-
-
-        #--with-gnutls=GNUTLS_PREFIX
-        #--with-nghttp3=NGHTTP3_PREFIX
-        #--with-ngtcp2=NGTCP2_PREFIX
-        #--with-nghttp2=NGHTTP2_PREFIX
-        #--without-brotli
-        #--disable-ares
-
-        #--with-ngtcp2=/usr/ngtcp2 \
-        #--with-quiche=/usr/quiche
-        #--with-msh3=PATH
+            ->depends(
+                'openssl',
+                'cares',
+                'zlib',
+                'brotli',
+                'libzstd',
+                'libidn2',
+                'nghttp2',
+                // 'nghttp3',
+                //'ngtcp2',
+                'libssh2'
+            )
     );
+
+    #--with-gnutls=GNUTLS_PREFIX
+    #--with-nghttp3=NGHTTP3_PREFIX
+    #--with-ngtcp2=NGTCP2_PREFIX
+    #--with-nghttp2=NGHTTP2_PREFIX
+    #--without-brotli
+    #--disable-ares
+    #--with-ngtcp2=/usr/ngtcp2 \
+    #--with-quiche=/usr/quiche
+    #--with-msh3=PATH
+
     /**
      * configure: pkg-config: SSL_LIBS: "-lssl -lcrypto"
      * configure: pkg-config: SSL_LDFLAGS: "-L/usr/openssl/lib"
@@ -883,8 +1022,8 @@ EOF;
             ->withCleanBuildDirectory()
             ->withCleanPreInstallDirectory($pgsql_prefix)
             ->withBuildScript(
-                <<<'EOF'
-
+                <<<EOF
+            set -uex 
             sed -i.backup "s/invokes exit\'; exit 1;/invokes exit\';/"  src/interfaces/libpq/Makefile
 
             # 替换指定行内容
@@ -895,13 +1034,11 @@ EOF;
 
             # --with-includes="{$includes}"
             # --with-libraries="{$libraries}"
-            package_names="icu-uc icu-io icu-i18n readline libxml-2.0 openssl zlib libxslt liblz4 libzstd"
+            PACKAGES="icu-uc icu-io icu-i18n readline libxml-2.0 openssl zlib libxslt liblz4 libzstd"
 
-            CPPFLAGS="$(pkg-config  --cflags-only-I --static $package_names )" \
-            LDFLAGS="$(pkg-config   --libs-only-L   --static $package_names )" \
-EOF
-                . PHP_EOL . <<<EOF
-            LIBS="\$(pkg-config      --libs-only-l   --static \$package_names ) $link_cpp" \
+            CPPFLAGS="\$(pkg-config  --cflags-only-I --static \$PACKAGES )" \
+            LDFLAGS="\$(pkg-config   --libs-only-L   --static \$PACKAGES )" \
+            LIBS="\$(pkg-config     --libs-only-l   --static \$package_names ) $link_cpp" \
             ./configure  --prefix={$pgsql_prefix} \
             --enable-coverage=no \
             --with-ssl=openssl  \
@@ -916,14 +1053,10 @@ EOF
             --without-perl \
             --without-systemd
 
+            result_code=\$?
+            [[ \$result_code -ne 0 ]] && echo "[make FAILURE]" && exit \$result_code;
 
-
-EOF
-                . PHP_EOL . <<<'EOF'
-            result_code=$?
-            [[ $result_code -ne 0 ]] && echo "[make FAILURE]" && exit $result_code;
-
-            # make -j $cpu_nums
+            # make -j \$cpu_nums
             # make -C  src/bin/pg_config install
             # make install
 
@@ -933,25 +1066,25 @@ EOF
 
             make -C  src/bin/pg_config install
 
-            make -C  src/common -j $cpu_nums all
+            make -C  src/common -j \$cpu_nums all
             make -C  src/common install
 
 
-            make -C  src/port -j $cpu_nums all
+            make -C  src/port -j \$cpu_nums all
             make -C  src/port install
 
 
-            make -C  src/backend/libpq -j $cpu_nums all
+            make -C  src/backend/libpq -j \$cpu_nums all
             make -C  src/backend/libpq install
 
 
-            make -C src/interfaces/ecpg   -j $cpu_nums all-pgtypeslib-recurse all-ecpglib-recurse all-compatlib-recurse all-preproc-recurse
+            make -C src/interfaces/ecpg   -j \$cpu_nums all-pgtypeslib-recurse all-ecpglib-recurse all-compatlib-recurse all-preproc-recurse
             make -C src/interfaces/ecpg  install-pgtypeslib-recurse install-ecpglib-recurse install-compatlib-recurse install-preproc-recurse
 
 
             # 静态编译 src/interfaces/libpq/Makefile  有静态配置  参考： all-static-lib
 
-            make -C src/interfaces/libpq  -j $cpu_nums # soname=true
+            make -C src/interfaces/libpq  -j \$cpu_nums # soname=true
             make -C src/interfaces/libpq  install
 
 EOF
@@ -965,6 +1098,7 @@ EOF
             )
             ->withPkgName('libpq')
             ->withBinPath($pgsql_prefix . '/bin/')
+            ->depends('libxml2','liblz4','libzstd','')
     );
 }
 
@@ -1009,14 +1143,10 @@ function install_bison(Preprocessor $p)
             ->withLabel('build_env_bin')
             ->withCleanBuildDirectory()
             ->withCleanPreInstallDirectory($bison_prefix)
-            ->withScriptBeforeConfigure(
-                <<<'EOF'
-            export PATH=$SYSTEM_ORIGIN_PATH
-            export PKG_CONFIG_PATH=$SYSTEM_ORIGIN_PKG_CONFIG_PATH
-EOF
-            )
             ->withConfigure(
                 "
+                            export PATH=\$SYSTEM_ORIGIN_PATH
+            export PKG_CONFIG_PATH=\$SYSTEM_ORIGIN_PKG_CONFIG_PATH
              ./configure --help
 
              ./configure --prefix={$bison_prefix} \
@@ -1045,13 +1175,9 @@ function install_re2c(Preprocessor $p)
             ->withManual('https://re2c.org/build/build.html')
             ->withLabel('build_env_bin')
             ->withCleanBuildDirectory()
-            ->withScriptBeforeConfigure(
-                '
-             autoreconf -i -W all
-            '
-            )
             ->withConfigure(
                 "
+              autoreconf -i -W all
              ./configure --help
              ./configure --prefix=/usr/re2c
             "
@@ -1106,21 +1232,27 @@ function install_libxlsxwriter(Preprocessor $p)
         ->withCleanPreInstallDirectory($libxlsxwriter_prefix)
         ->withBuildScript(
             <<<EOF
+            
             # 启用DBUILD_TESTS 需要安装python3 pytest
             mkdir -p build
             cd build
-            cmake .. -DCMAKE_INSTALL_PREFIX={$libxlsxwriter_prefix} \
+            cmake .. \
+            -DCMAKE_INSTALL_PREFIX={$libxlsxwriter_prefix} \
             -DCMAKE_BUILD_TYPE=Release \
+            -DBUILD_SHARED_LIBS=OFF \
             -DZLIB_ROOT={$zlib_prefix} \
             -DBUILD_TESTS=OFF \
             -DBUILD_EXAMPLES=OFF \
-            -DUSE_STANDARD_TMPFILE=ON \
-            -DUSE_OPENSSL_MD5=ON
+            -DUSE_DTOA_LIBRARY=ON \
+            -DUSE_OPENSSL_MD5=OFF \
+            -DUSE_NO_MD5=OFF \
+            -DUSE_SYSTEM_MINIZIP=OFF \
+            -DUSE_STANDARD_TMPFILE=OFF 
 
             cmake --build . --config Release --target install
 EOF
         )
-        ->depends('zlib')
+        ->depends('zlib', 'openssl')
         ->withPkgName('xlsxwriter');
 
     $p->addLibrary($lib);
@@ -1146,20 +1278,27 @@ function install_minizip(Preprocessor $p)
             # -Wno-dev 
 
             cmake   -S . -B build \
-            -D CMAKE_INSTALL_PREFIX={$libminzip_prefix} \
-            -D MZ_ZLIB=ON \
-            -D MZ_BZIP2=ON \
-            -D MZ_LZMA=ON \
-            -D MZ_ZSTD=ON \
-            -D MZ_OPENSSL=ON \
-            -D MZ_COMPAT=ON \
-            -D MZ_ICONV=ON \
-            -D MZ_FETCH_LIBS=OFF \
-            -D MZ_BUILD_TESTS=ON \
-            -D ZLIB_ROOT={$zlib_prefix} \
-            -D BZIP2_ROOT={$libzip2_prefix} \
-
+            -DCMAKE_INSTALL_PREFIX={$libminzip_prefix} \
+            -DCMAKE_INSTALL_LIBDIR={$libminzip_prefix}/lib \
+            -DCMAKE_BUILD_TYPE=Release  \
+            -DBUILD_SHARED_LIBS=OFF  \
+            -DMZ_ZLIB=ON \
+            -DMZ_BZIP2=ON \
+            -DMZ_LZMA=ON \
+            -DMZ_ZSTD=ON \
+            -DMZ_OPENSSL=ON \
+            -DMZ_COMPAT=ON \
+            -DMZ_ICONV=ON \
+            -DMZ_FETCH_LIBS=OFF \
+            -DMZ_FORCE_FETCH_LIBS=OFF \
+            -DMZ_BUILD_TESTS=ON \
+            -DZLIB_ROOT={$zlib_prefix}  \
+            -DBZIP2_ROOT={$libzip2_prefix}
+            
+            
             cmake --build build  --config Release --target install
+            # mkdir -p {$libzip2_prefix}/include/minizip
+            # cp -f {$libzip2_prefix}/include/*.h {$libzip2_prefix}/include/minizip
 EOF
         )
         ->depends('zlib', 'bzip2', 'liblzma', 'libzstd', 'openssl', 'libiconv')
@@ -1176,42 +1315,62 @@ function install_libxlsxio(Preprocessor $p)
     $libzip_prefix = ZIP_PREFIX;
     $zlib_prefix = ZLIB_PREFIX;
     $libexpat_prefix = LIBEXPAT_PREFIX;
-    $lib = new Library('libxlsxio');
-    $lib->withHomePage('https://github.com/brechtsanders/xlsxio.git')
-        ->withLicense('https://github.com/brechtsanders/xlsxio/blob/master/LICENSE.txt', Library::LICENSE_MIT)
-        ->withUrl('https://github.com/brechtsanders/xlsxio/archive/refs/tags/0.2.34.tar.gz')
-        ->withFile('libxlsxio-0.2.34.tar.gz')
-        ->withManual('https://brechtsanders.github.io/xlsxio/')
-        ->withPrefix($libxlsxio_prefix)
-        ->withCleanBuildDirectory()
-        ->withCleanPreInstallDirectory($libxlsxio_prefix)
-        ->withConfigure(
-            <<<EOF
-            # apk add graphviz  doxygen
+
+    $p->addLibrary(
+        (new Library('libxlsxio'))
+            ->withHomePage('https://github.com/brechtsanders/xlsxio.git')
+            ->withLicense('https://github.com/brechtsanders/xlsxio/blob/master/LICENSE.txt', Library::LICENSE_MIT)
+            ->withUrl('https://github.com/brechtsanders/xlsxio/archive/refs/tags/0.2.34.tar.gz')
+            ->withFile('libxlsxio-0.2.34.tar.gz')
+            ->withManual('https://brechtsanders.github.io/xlsxio/')
+            ->withPrefix($libxlsxio_prefix)
+            ->withCleanBuildDirectory()
+            ->withCleanPreInstallDirectory($libxlsxio_prefix)
+            ->withConfigure(
+                <<<EOF
+            # apk add graphviz  doxygen  // 能看到常见安装的依赖库
+            
             # export CFLAGS="$(pkg-config  --cflags --static expat minizip ) " 
-          
+            #  SET (CMAKE_EXE_LINKER_FLAGS "-static")
+        
+            # find_package的简单用法   https://blog.csdn.net/weixin_43940314/article/details/128252940
+        
+            # CMAKE_BUILD_TYPE =  Debug Release 
+            
             cmake -G"Unix Makefiles" .  \
             -DCMAKE_INSTALL_PREFIX={$libxlsxio_prefix} \
-            -DBUILD_STATIC=ON \
+            -DCMAKE_BUILD_TYPE=Release  \
+            -DBUILD_SHARED_LIBS=OFF  \
             -DBUILD_SHARED=OFF \
+            -DBUILD_STATIC=ON \
             -DBUILD_TOOLS=OFF \
             -DBUILD_EXAMPLES=OFF \
+            -DBUILD_DOCUMENTATION=OFF \
             -DWITH_WIDE=ON \
-            -DMINIZIP_DIR={$libminizip_prefix} \
             -DZLIB_DIR={$zlib_prefix} \
+            -DZLIB_ROOT={$zlib_prefix} \
+            -DEXPATW_DIR={$libexpat_prefix} \
+            -DEXPATW_ROOT={$libexpat_prefix} \
+            -DEXPATW_LIBRARIES={$libexpat_prefix} \
             -DWITH_LIBZIP=ON \
             -DLIBZIP_DIR={$libzip_prefix} \
-            -DEXPAT_DIR={$libexpat_prefix} \
-            -DBUILD_DOCUMENTATION=OFF
+            -DLIBZIP_ROOT={$libzip_prefix} \
+            -DLIBZIP_LIBRARIES={$libzip_prefix}/lib \
+            
+            
+            # -DMINIZIP_DIR={$libminizip_prefix} \
+            # -DMINIZIP_LIBRARIES={$libminizip_prefix}/lib \
+            # -DMINIZIP_INCLUDE_DIRS='{$libminizip_prefix}/include/' \
 
 
 
 EOF
-        )
-        ->depends('zlib', 'libzip')
-        ->withPkgName('libxlsxio');
-
-    $p->addLibrary($lib);
+            )
+            ->depends('zlib', 'libzip')
+            ->withPkgName('libxlsxio_read')
+            ->withPkgName('libxlsxio_readw')
+            ->withPkgName('libxlsxio_write')
+    );
 }
 
 

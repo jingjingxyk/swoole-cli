@@ -5,6 +5,7 @@
 
 use SwooleCli\Library;
 use SwooleCli\Preprocessor;
+
 ?>
 
 SRC=<?= $this->phpSrcDir . PHP_EOL ?>
@@ -43,8 +44,8 @@ make_<?=$item->name?>() {
     echo "build <?=$item->name?>"
 
 <?php if($item->cleanBuildDirectory): ?>
-    # If the build directory exist, clean the build directory
-    test -d <?=$this->getBuildDir()?>/<?=$item->name?> && rm -rf <?=$this->getBuildDir()?>/<?=$item->name?> ;
+     # If the build directory exist, clean the build directory
+     test -d <?=$this->getBuildDir()?>/<?=$item->name?> && rm -rf <?=$this->getBuildDir()?>/<?=$item->name?> ;
 <?php endif; ?>
 
     # If the source code directory does not exist, create a directory and decompress the source code archive
@@ -52,7 +53,7 @@ make_<?=$item->name?>() {
         mkdir -p <?=$this->getBuildDir()?>/<?=$item->name . PHP_EOL?>
     fi
 
-<?php if($item->untarArchiveCommand == 'tar' ):?>
+<?php if($item->untarArchiveCommand == 'tar'):?>
     tar --strip-components=1 -C <?=$this->getBuildDir()?>/<?=$item->name?> -xf <?=$this->workDir?>/pool/lib/<?=$item->file . PHP_EOL?>
     result_code=$?
     if [ $result_code -ne 0 ]; then
@@ -66,10 +67,10 @@ make_<?=$item->name?>() {
 <?php endif ; ?>
 <?php if($item->untarArchiveCommand == 'xz'):?>
    xz -f -d -k   <?=$this->workDir?>/pool/lib/<?=$item->file?>    <?= PHP_EOL; ?>
-   tar --strip-components=1 -C <?=$this->getBuildDir()?>/<?=$item->name?> -xf <?= rtrim($this->workDir . '/pool/lib/' . $item->file,'.xz') . PHP_EOL?>
+   tar --strip-components=1 -C <?=$this->getBuildDir()?>/<?=$item->name?> -xf <?= rtrim($this->workDir . '/pool/lib/' . $item->file, '.xz') . PHP_EOL?>
 <?php endif ; ?>
 <?php if($item->untarArchiveCommand == 'cp'):?>
-        cp -rfa  <?=$this->workDir?>/pool/lib/<?=$item->file?>/. <?=$this->getBuildDir()?>/<?=$item->name?>/<?=$item->name?>    <?= PHP_EOL; ?>
+        cp -rfa  <?=$this->workDir?>/pool/lib/<?=$item->file?>/* <?=$this->getBuildDir()?>/<?=$item->name?>/   <?= PHP_EOL; ?>
 <?php endif ; ?>
 <?php if($item->untarArchiveCommand == 'mv'):?>
         cp -rfa  <?=$this->workDir?>/pool/lib/<?=$item->file?> <?=$this->getBuildDir()?>/<?=$item->name?>/    <?= PHP_EOL; ?>
@@ -81,13 +82,12 @@ make_<?=$item->name?>() {
         return 0
     fi
 
-    cd <?=$this->getBuildDir()?>/<?=$item->name . PHP_EOL?>
-
 <?php if($item->cleanPreInstallDirectory): ?>
     # If the install directory exist, clean the install directory
     test -d <?=$item->preInstallDirectory?>/ && rm -rf <?=$item->preInstallDirectory?>/ ;
 <?php endif; ?>
 
+    cd <?=$this->getBuildDir()?>/<?=$item->name . PHP_EOL?>
 
 <?php if(empty($item->buildScript)): ?>
 
@@ -97,8 +97,6 @@ make_<?=$item->name?>() {
     result_code=$?
     [[ $result_code -gt 1 ]] &&  echo "[ before configure FAILURE]" && exit $result_code;
 <?php endif; ?>
-
-    cd <?=$this->getBuildDir()?>/<?=$item->name?>/
 
     # configure
 <?php if (!empty($item->configure)): ?>
@@ -155,7 +153,7 @@ __EOF__
 
 clean_<?=$item->name?>() {
     cd <?=$this->getBuildDir()?> && echo "clean <?=$item->name?>"
-<?php if( ($item->getLabel() == 'php_internal_extension') || ($item->getLabel() == 'php_extension' )) : ?>
+<?php if(($item->getLabel() == 'php_internal_extension') || ($item->getLabel() == 'php_extension')) : ?>
     cd <?=$this->getBuildDir()?>/<?= $item->name . PHP_EOL ?>
 <?php else: ?>
     cd <?=$this->getBuildDir()?>/<?= $item->name ?> && make clean
@@ -181,9 +179,18 @@ make_all_library() {
 
 
 export_variables() {
-<?php foreach ($this->varables as $name => $value) : ?>
-    export <?= $name ?>="<?= $value ?>"
+    CPPFLAGS=""
+    CFLAGS=""
+    LDFLAGS=""
+    LIBS=""
+<?php foreach ($this->variables as $name => $value) : ?>
+    <?= key($value) ?>="<?= current($value) ?>"
 <?php endforeach; ?>
+<?php foreach ($this->exportVariables as $value) : ?>
+    export  <?= key($value) ?>="<?= current($value) ?>"
+<?php endforeach; ?>
+    result_code=$?
+    [[ $result_code -ne 0 ]] &&  echo " [ export_variables  FAILURE]" && exit  $result_code;
     return 0
 }
 
@@ -336,7 +343,7 @@ help() {
 }
 
 if [ "$1" = "docker-build" ] ;then
-    cd <?=$this->getRootDir()?>/sapi
+    cd <?=$this->getRootDir()?>/sapi/docker
     docker build -t <?= Preprocessor::IMAGE_NAME ?>:<?= $this->getBaseImageTag() ?> -f <?= $this->getBaseImageDockerFile() ?>  .
     exit 0
 elif [ "$1" = "docker-bash" ] ;then
@@ -393,7 +400,7 @@ elif [ "$1" = "archive" ] ;then
     SWOOLE_VERSION=$(./swoole-cli -r "echo SWOOLE_VERSION;")
     SWOOLE_CLI_FILE=swoole-cli-v${SWOOLE_VERSION}-<?=$this->getOsType()?>-<?=$this->getSystemArch()?>.tar.xz
     strip swoole-cli
-    tar -cJvf ${SWOOLE_CLI_FILE} swoole-cli LICENSE
+    tar -cJvf ${SWOOLE_CLI_FILE} swoole-cli LICENSE pack-sfx.php
     mv ${SWOOLE_CLI_FILE} ../
     cd -
 elif [ "$1" = "clean-all-library" ] ;then
@@ -481,6 +488,7 @@ elif [ "$1" = "sync" ] ;then
   cp -r $SRC/ext/pdo_mysql/ ./ext
   cp -r $SRC/ext/pdo_sqlite/ ./ext
   cp -r $SRC/ext/phar/ ./ext
+  echo -e '\n#include "sapi/cli/sfx/hook_stream.h"' >> ext/phar/phar_internal.h
   cp -r $SRC/ext/posix/ ./ext
   cp -r $SRC/ext/readline/ ./ext
   cp -r $SRC/ext/reflection/ ./ext

@@ -7,21 +7,20 @@ use SwooleCli\Preprocessor;
 function install_libjpeg(Preprocessor $p)
 {
     $libjpeg_prefix = JPEG_PREFIX;
+    // linux 系统中是保存在 /usr/lib64 目录下的，而 macos 是放在 /usr/lib 目录中的，不清楚这里是什么原因？
+    $jpeg_lib_dir = $libjpeg_prefix . '/' . ($p->getOsType() === 'macos' ? 'lib' : 'lib64');
     $lib = new Library('libjpeg');
     $lib->withHomePage('https://libjpeg-turbo.org/')
         ->withLicense('https://github.com/libjpeg-turbo/libjpeg-turbo/blob/main/LICENSE.md', Library::LICENSE_BSD)
         ->withUrl('https://codeload.github.com/libjpeg-turbo/libjpeg-turbo/tar.gz/refs/tags/2.1.2')
         ->withFile('libjpeg-turbo-2.1.2.tar.gz')
         ->withPrefix($libjpeg_prefix)
-        ->withCleanBuildDirectory()
-        ->withCleanPreInstallDirectory($libjpeg_prefix)
-        ->withConfigure('cmake -G"Unix Makefiles" -DENABLE_STATIC=1 -DENABLE_SHARED=0  -DCMAKE_INSTALL_PREFIX=' . $libjpeg_prefix . ' .')
+        ->withConfigure('cmake -G"Unix Makefiles" -DCMAKE_INSTALL_PREFIX=' . $libjpeg_prefix . ' .')
         ->withPkgName('libjpeg')
         ->withBinPath($libjpeg_prefix . '/bin/')
-    ;
+        ->withLdflags('-L' . $jpeg_lib_dir)
+        ->withPkgConfig($jpeg_lib_dir . '/pkgconfig');
 
-    // linux 系统中是保存在 /usr/lib64 目录下的，而 macos 是放在 /usr/lib 目录中的，不清楚这里是什么原因？
-    $jpeg_lib_dir = $libjpeg_prefix . '/' . ($p->getOsType() === 'macos' ? 'lib' : 'lib64');
     $lib->withLdflags('-L' . $jpeg_lib_dir)
         ->withPkgConfig($jpeg_lib_dir . '/pkgconfig');
     if ($p->getOsType() === 'macos') {
@@ -58,6 +57,8 @@ function install_libgif(Preprocessor $p)
             ->withPkgName('')
             ->withPkgConfig('')
     );
+
+
     if (0) {
         $p->addLibrary(
             (new Library('giflib'))
@@ -65,7 +66,7 @@ function install_libgif(Preprocessor $p)
                 ->withLicense('http://giflib.sourceforge.net/intro.html', Library::LICENSE_SPEC)
                 ->withCleanBuildDirectory()
                 ->withPrefix('/usr/giflib')
-                ->withScriptBeforeConfigure(
+                ->withBuildScript(
                     '
 
                 default_prefix_dir="/ u s r" # 阻止 macos 系统下编译路径被替换
@@ -176,7 +177,6 @@ EOF
 }
 
 
-
 function install_freetype(Preprocessor $p)
 {
     $freetype_prefix = FREETYPE_PREFIX;
@@ -212,12 +212,10 @@ function install_freetype(Preprocessor $p)
             --with-brotli=yes
 EOF
             )
-
             ->withPkgName('freetype2')
             ->depends('zlib', 'bzip2', 'libpng', 'brotli')
     );
 }
-
 
 
 function install_libtiff(Preprocessor $p)
@@ -260,8 +258,7 @@ EOF
 }
 
 
-
-function install_lcms2(Preprocessor $p)
+function install_lcms2(Preprocessor $p): void
 {
     $lcms2_prefix = LCMS2_PREFIX;
     $libjpeg_prefix = JPEG_PREFIX;
@@ -298,7 +295,6 @@ EOF
 }
 
 
-
 /**
  * 参考文档 https://zhuanlan.zhihu.com/p/355256489
  * AVIF是一种基于AV1视频编码的新图像格式，相对于JPEG，WEBP这类图片格式来说，它的压缩率更高，并且画面细节更好。而最关键的是，它是免费且开源的，没有任何授权费用。
@@ -319,11 +315,28 @@ EOF
  * 谷歌将专注于最终进一步推进 WebP 和 AVIF 图像格式
  *
  *  颜色管理引擎 https://littlecms.com/color-engine/
+ *
  * @param Preprocessor $p
  * @return void
  */
-function install_imagemagick(Preprocessor $p)
+function install_imagemagick(Preprocessor $p): void
 {
+    /**
+    # lcms2 libtiff-4 libraw libraw_r
+    # export RAW_R_CFLAGS=$(pkg-config  --cflags-only-I --static libraw_r )
+    # export RAW_R_LIBS=$(pkg-config    --libs-only-l   --static libraw_r )
+
+    # export TIFF_CFLAGS=$(pkg-config  --cflags-only-I --static libtiff-4 )
+    # export TIFF_LIBS=$(pkg-config    --libs-only-l   --static libtiff-4 )
+
+    #  HEIF_CFLAGS C compiler flags for HEIF, overriding pkg-config
+    #  HEIF_LIBS   linker flags for HEIF, overriding pkg-config
+    #  JXL_CFLAGS  C compiler flags for JXL, overriding pkg-config
+    #  JXL_LIBS    linker flags for JXL, overriding pkg-config
+
+    # export LCMS2_CFLAGS=$(pkg-config  --cflags-only-I --static lcms2 )
+    # export LCMS2_LIBS=$(pkg-config    --libs-only-l   --static lcms2 )
+     */
     $bzip2_prefix = BZIP2_PREFIX;
     $imagemagick_prefix = IMAGEMAGICK_PREFIX;
     $p->addLibrary(
@@ -335,26 +348,10 @@ function install_imagemagick(Preprocessor $p)
             ->withFile('ImageMagick-v7.1.0-62.tar.gz')
             ->withMd5sum('37b896e9eecd379a6cd0d6359b9f525a')
             ->withPrefix($imagemagick_prefix)
-            ->withCleanBuildDirectory()
-            ->withCleanPreInstallDirectory($imagemagick_prefix)
             ->withConfigure(
                 <<<EOF
             ./configure --help
-            # lcms2 libtiff-4 libraw libraw_r
-            # export RAW_R_CFLAGS=$(pkg-config  --cflags-only-I --static libraw_r )
-            # export RAW_R_LIBS=$(pkg-config    --libs-only-l   --static libraw_r )
 
-            # export TIFF_CFLAGS=$(pkg-config  --cflags-only-I --static libtiff-4 )
-            # export TIFF_LIBS=$(pkg-config    --libs-only-l   --static libtiff-4 )
-
-            #  HEIF_CFLAGS C compiler flags for HEIF, overriding pkg-config
-            #  HEIF_LIBS   linker flags for HEIF, overriding pkg-config
-            #  JXL_CFLAGS  C compiler flags for JXL, overriding pkg-config
-            #  JXL_LIBS    linker flags for JXL, overriding pkg-config
-
-            # export LCMS2_CFLAGS=$(pkg-config  --cflags-only-I --static lcms2 )
-            # export LCMS2_LIBS=$(pkg-config    --libs-only-l   --static lcms2 )
-            
             package_names="libjpeg  libturbojpeg libwebp  libwebpdecoder  libwebpdemux  libwebpmux  "
             package_names="\${package_names} libbrotlicommon libbrotlidec    libbrotlienc libcrypto libssl   openssl"
 
@@ -415,7 +412,7 @@ function install_imagemagick(Preprocessor $p)
             --without-pango \
             --without-jbig \
             --without-x \
-            --with-modules \
+            --without-modules \
             --without-magick-plus-plus \
             --without-utilities 
 EOF

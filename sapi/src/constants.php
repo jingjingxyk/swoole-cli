@@ -41,18 +41,21 @@ define("LIBSODIUM_PREFIX", $p->getGlobalPrefix() . '/libsodium');
 define("LIBEDIT_PREFIX", $p->getGlobalPrefix() . '/libedit');
 
 define("BROTLI_PREFIX", $p->getGlobalPrefix() . '/brotli');
+
 define("LIBLZ4_PREFIX", $p->getGlobalPrefix() . '/liblz4');
 define("LIBLZMA_PREFIX", $p->getGlobalPrefix() . '/liblzma');
 define("LIBZSTD_PREFIX", $p->getGlobalPrefix() . '/libzstd');
 
 define("BISON_PREFIX", $p->getGlobalPrefix() . '/bison');
 define("NGHTTP2_PREFIX", $p->getGlobalPrefix() . '/nghttp2');
-
-
 define("LIBIDN2_PREFIX", $p->getGlobalPrefix() . '/libidn2');
+
+
+
 define("PGSQL_PREFIX", $p->getGlobalPrefix() . '/pgsql');
 define("LIBFFI_PREFIX", $p->getGlobalPrefix() . '/libffi');
 
+define("LIBEV_PREFIX", $p->getGlobalPrefix() . '/libev');
 define("LIBEVENT_PREFIX", $p->getGlobalPrefix() . '/libevent');
 define("LIBUV_PREFIX", $p->getGlobalPrefix() . '/libuv');
 
@@ -68,7 +71,12 @@ define("LIBDE265_PREFIX", $p->getGlobalPrefix() . '/libde265');
 define("LIBHEIF_PREFIX", $p->getGlobalPrefix() . '/libheif');
 define("LIBJXL_PREFIX", $p->getGlobalPrefix() . '/libjxl');
 define("LIBGD_PREFIX", $p->getGlobalPrefix() . '/libgd');
+define("DAV1D_PREFIX", $p->getGlobalPrefix() . '/dav1d');
 define("LIBAVIF_PREFIX", $p->getGlobalPrefix() . '/libavif');
+define("NASM_PREFIX", $p->getGlobalPrefix() . '/nasm');
+define("LIBYUV_PREFIX", $p->getGlobalPrefix() . '/libyuv');
+define("DEPOT_TOOLS_PREFIX", $p->getGlobalPrefix() . '/depot_tools');
+
 
 define("HARFBUZZ_PREFIX", $p->getGlobalPrefix() . '/harfbuzz');
 define("LIBFRIBIDI_PREFIX", $p->getGlobalPrefix() . '/libfribidi');
@@ -76,9 +84,9 @@ define("LIBFRIBIDI_PREFIX", $p->getGlobalPrefix() . '/libfribidi');
 define("LIBXPM_PREFIX", $p->getGlobalPrefix() . '/libXpm');
 
 define("JANSSON_PREFIX", $p->getGlobalPrefix() . '/jansson');
+define("NETTLE_PREFIX", $p->getGlobalPrefix() . '/nettle');
 define("LIBTASN1_PREFIX", $p->getGlobalPrefix() . '/libtasn1');
-define("NGHTTP3_PREFIX", $p->getGlobalPrefix() . '/nghttp3');
-define("NGTCP2_PREFIX", $p->getGlobalPrefix() . '/ngtcp2');
+
 define("GNUTLS_PREFIX", $p->getGlobalPrefix() . '/gnutls');
 
 define("OPENCV_PREFIX", $p->getGlobalPrefix() . '/opencv');
@@ -96,10 +104,15 @@ define("DYNASM_PREFIX", $p->getGlobalPrefix() . '/dynasm');
 
 define("SNAPPY_PREFIX", $p->getGlobalPrefix() . '/snappy');
 define("NGINX_PREFIX", $p->getGlobalPrefix() . '/nginx');
-define("PCRE2_PREFIX", $p->getGlobalPrefix() . 'PCRE2' );
+define("PCRE2_PREFIX", $p->getGlobalPrefix() . '/pcre2');
 
 
 const DOWNLOAD_FILE_RETRY_NUMBE = 5;
-const DOWNLOAD_FILE_WAIT_RETRY = 5 ;
+const DOWNLOAD_FILE_WAIT_RETRY = 5;
 const DOWNLOAD_FILE_USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36';
 
+
+define("NGHTTP3_PREFIX", $p->getGlobalPrefix() . '/nghttp3');
+define("NGTCP2_PREFIX", $p->getGlobalPrefix() . '/ngtcp2');
+define("LIBSSH2_PREFIX", $p->getGlobalPrefix() . '/libssh2');
+define("FFMPEG_PREFIX", $p->getGlobalPrefix() . '/ffmpeg');

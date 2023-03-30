@@ -112,39 +112,45 @@ EOF
 
 function install_libyuv(Preprocessor $p)
 {
-    $libyuv_prefix = "/usr/libyuv";
+    $libyuv_prefix = LIBYUV_PREFIX;
     $libjpeg_prefix = JPEG_PREFIX;
     $libjpeg_lib_dir = $p->getOsType() == 'linux' ? $libjpeg_prefix . '/lib64/' : $libjpeg_prefix . '/lib/';
     $p->addLibrary(
         (new Library('libyuv'))
             ->withUrl('https://chromium.googlesource.com/libyuv/libyuv')
             ->withHomePage('https://chromium.googlesource.com/libyuv/libyuv')
-            ->withLicense('https://github.com/AOMediaCodec/libavif/blob/main/LICENSE', Library::LICENSE_SPEC)
-            ->withManual('https://https://chromium.googlesource.com/libyuv/libyuv/+/HEAD/docs/getting_started.md')
-            ->withSkipDownload()
-            ->withUntarArchiveCommand('mv')
+            ->withLicense('https://chromium.googlesource.com/libyuv/libyuv/+/refs/heads/main/LICENSE', Library::LICENSE_SPEC)
+            ->withManual('https://chromium.googlesource.com/libyuv/libyuv/+/HEAD/docs/getting_started.md')
+            ->withDownloadScript(
+                'libyuv',
+                <<<EOF
+            git clone -b main --depth=1 https://chromium.googlesource.com/libyuv/libyuv
+EOF
+            )
+            //->withUntarArchiveCommand('cp')
             ->withPrefix($libyuv_prefix)
             ->withCleanBuildDirectory()
             ->withCleanPreInstallDirectory($libyuv_prefix)
             ->withBuildScript(
                 <<<EOF
-            set -uex
-            pwd
-            ls -lh .
-            cd libyuv
-
-
-            ls -lh .
-
-            make -f linux.mk
-            mkdir -p $libyuv_prefix/lib
-            cp -rf libyuv.a  $libyuv_prefix/lib
-            cp -rf include $libyuv_prefix/
-
-            exit  0
+                mkdir -p  out
+                cd out
+                cmake -DCMAKE_INSTALL_PREFIX="{$libyuv_prefix}" \
+                -DBUILD_STATIC_LIBS=ON \
+                -DBUILD_SHARED_LIBS=OFF  \
+                -DCMAKE_BUILD_TYPE="Release" ..
+                cmake --build . --config Release
+                cmake --build . --target install --config Release
+:<<'_____EOF_____'
+            make V=1 -f linux.mk
+            make V=1 -f linux.mk clean
+            make V=1 -f linux.mk CXX=clang++ CC=clang
+            exit 0 
             gn gen out/Release "--args=is_debug=false"
-
+            gn gen out/Debug "--args=is_debug=true"
             ninja -v -C out/Release
+            ninja -v -C out/Debug
+            
             exit  0
 
 
@@ -170,10 +176,11 @@ function install_libyuv(Preprocessor $p)
             cmake --build . --config Release
             cmake --build . --target install --config Release
 
-
+_____EOF_____
 EOF
             )
             ->withPkgName('')
+            ->withBinPath($libyuv_prefix . '/bin/')
     );
 }
 
@@ -226,13 +233,49 @@ EOF
     $p->addLibrary($lib);
 }
 
-function install_libavif(Preprocessor $p)
+function install_dav1d(Preprocessor $p)
+{
+    $dav1d_prefix = DAV1D_PREFIX;
+    $p->addLibrary(
+        (new Library('dav1d'))
+            ->withHomePage('https://code.videolan.org/videolan/dav1d/')
+            ->withLicense('https://code.videolan.org/videolan/dav1d/-/blob/master/COPYING', Library::LICENSE_BSD)
+            ->withUrl('https://code.videolan.org/videolan/dav1d/-/archive/1.1.0/dav1d-1.1.0.tar.gz')
+            ->withFile('dav1d-1.1.0.tar.gz')
+            ->withManual('https://code.videolan.org/videolan/dav1d')
+            ->withPrefix($dav1d_prefix)
+            ->withCleanBuildDirectory()
+            ->withCleanPreInstallDirectory($dav1d_prefix)
+            ->withBuildScript(
+                <<<EOF
+           
+                mkdir -p build 
+                cd build
+                meson setup \
+                --backend=ninja \
+                --prefix={$dav1d_prefix} \
+                --default-library=static \
+                ..  
+                ninja
+                ninja install
+
+                
+EOF
+            )
+            ->withPkgName('dav1d')
+            ->withBinPath($dav1d_prefix . '/bin/')
+    );
+}
+
+function install_libavif(Preprocessor $p): void
 {
     $libavif_prefix = LIBAVIF_PREFIX;
+    $libyuv_prefix = LIBYUV_PREFIX;
+    $dav1d_prefix = DAV1D_PREFIX;
     $p->addLibrary(
         (new Library('libavif'))
             ->withUrl('https://github.com/AOMediaCodec/libavif/archive/refs/tags/v0.11.1.tar.gz')
-            ->withFile('libavif-v0.11.1.tar.g')
+            ->withFile('libavif-v0.11.1.tar.gz')
             ->withHomePage('https://aomediacodec.github.io/av1-avif/')
             ->withLicense('https://github.com/AOMediaCodec/libavif/blob/main/LICENSE', Library::LICENSE_SPEC)
             ->withManual('https://github.com/AOMediaCodec/libavif')
@@ -241,23 +284,51 @@ function install_libavif(Preprocessor $p)
             ->withCleanPreInstallDirectory($libavif_prefix)
             ->withConfigure(
                 <<<EOF
-            CPPFLAGS="$(pkg-config  --cflags-only-I  --static libpng libjpeg )" \
-            LDFLAGS="$(pkg-config --libs-only-L      --static libpng libjpeg )" \
-            LIBS="$(pkg-config --libs-only-l         --static libpng libjpeg )" \
+            CPPFLAGS="$(pkg-config  --cflags-only-I  --static libpng libjpeg dav1d)" 
+            LDFLAGS="$(pkg-config --libs-only-L      --static libpng libjpeg dav1d)" 
+            LIBS="$(pkg-config --libs-only-l         --static libpng libjpeg dav1d )" 
             cmake .  \
             -DCMAKE_INSTALL_PREFIX={$libavif_prefix} \
-            -DAVIF_BUILD_EXAMPLES=ON \
+            -DAVIF_BUILD_EXAMPLES=OFF \
+            -DLIBYUV_ROOT={$libyuv_prefix} \
+            -DDAV1D_ROOT={$dav1d_prefix} \
             -DBUILD_SHARED_LIBS=OFF \
-            -DAVIF_CODEC_AOM=OFF \
-            -DAVIF_CODEC_DAV1D=OFF \
-            -DAVIF_CODEC_LIBGAV1=OFF \
-            -DAVIF_CODEC_RAV1E=OFF
+            -DAVIF_CODEC_AOM=ON \
+            -DAVIF_CODEC_DAV1D=ON \
+            -DAVIF_CODEC_LIBGAV1=ON \
+            -DAVIF_CODEC_RAV1E=ON
             exit 0
 
 EOF
             )
             ->withPkgName('libavif')
             ->withLdflags('')
+    );
+}
+
+function install_nasm(Preprocessor $p)
+{
+    $nasm_prefix = NASM_PREFIX;
+    $p->addLibrary(
+        (new Library('nasm'))
+            ->withHomePage('https://www.nasm.us/')
+            ->withUrl('https://www.nasm.us/pub/nasm/releasebuilds/2.16.01/nasm-2.16.01.tar.gz')
+            ->withLicense('http://opensource.org/licenses/BSD-2-Clause', Library::LICENSE_BSD)
+            ->withManual('https://github.com/netwide-assembler/nasm.git')
+            ->withPrefix($nasm_prefix)
+            ->withCleanBuildDirectory()
+            ->withCleanPreInstallDirectory($nasm_prefix)
+            ->withConfigure(
+                <<<EOF
+                sh autogen.sh
+                sh configure --help
+                sh configure --prefix={$nasm_prefix}
+          
+EOF
+            )
+            ->withPkgName('')
+            ->withLdflags('')
+            ->withBinPath($nasm_prefix . '/bin/')
     );
 }
 
@@ -393,7 +464,7 @@ function install_harfbuzz(Preprocessor $p)
             ->withCleanBuildDirectory()
             ->withCleanPreInstallDirectory($harfbuzz_prefix)
             ->withBuildScript(
-                "
+                <<<EOF
                 meson help
                 meson setup --help
 
@@ -411,9 +482,9 @@ function install_harfbuzz(Preprocessor $p)
                 meson compile -C build
                 meson install -C build
                 # ninja -C build
-                # ninja -C build install
+                # ninja -C build install 
 
-            "
+EOF
             )
             ->withPkgName('harfbuzz-icu  harfbuzz-subset harfbuzz')
     );
@@ -540,16 +611,12 @@ function install_libXpm(Preprocessor $p)
         ->withPrefix($libXpm_prefix)
         ->withCleanBuildDirectory()
         ->withCleanPreInstallDirectory($libXpm_prefix)
-        ->withScriptBeforeConfigure(
+        ->withConfigure(
             <<<EOF
-         # 依赖 xorg-macros
+      # 依赖 xorg-macros
          # 解决依赖
          # apk add util-macros
          # apk add libxpm-dev
-EOF
-        )
-        ->withConfigure(
-            <<<EOF
             ./autogen.sh
             ./configure --help
             ./configure --prefix={$libXpm_prefix} \
@@ -676,62 +743,9 @@ EOF
     $p->addLibrary($lib);
 }
 
-function install_openssl_v3(Preprocessor $p)
-{
-    $openssl_prefix = OPENSSL_PREFIX;
-    $static = $p->getOsType() === 'macos' ? '' : ' -static --static';
-    $p->addLibrary(
-        (new Library('openssl'))
-            ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
-            ->withHomePage('https://www.openssl.org/')
-            ->withUrl('https://www.openssl.org/source/openssl-3.0.7.tar.gz')
-            ->withFile('openssl-3.0.7.tar.gz')
-            ->withPrefix($openssl_prefix)
-            ->withCleanBuildDirectory()
-            ->withCleanPreInstallDirectory($openssl_prefix)
-            ->withConfigure(
-                <<<EOF
-            # ./config $static \
-            ./Configure   $static  \
-            no-shared --release --prefix=$openssl_prefix
-EOF
-            )
-            ->withMakeOptions('build_sw')
-            ->withMakeInstallOptions('install_sw')
-            ->withPkgConfig($openssl_prefix . '/lib64/pkgconfig')
-            ->withPkgName('libcrypto')
-            ->withPkgName('libssl')
-            ->withPkgName('openssl')
-            ->withLdflags('-L' . $openssl_prefix . '/lib64')
 
-    );
-}
 
-function install_openssl_v3_quic(Preprocessor $p)
-{
-    $static = $p->getOsType() === 'macos' ? '' : ' -static --static';
-    $p->addLibrary(
-        (new Library('openssl_v3_quic', '/usr/openssl'))
-            ->withUrl('https://www.openssl.org/source/openssl-3.0.7.tar.gz')
-            //https://github.com/quictls/openssl
-            ->withFile('openssl-3.0.7.tar.gz')
-            ->withCleanBuildDirectory()
-            ->withConfigure(
-                <<<EOF
-            # ./config $static \
-            ./Configure   $static  \
-            no-shared --release --prefix=/usr/openssl_v3_quic
-EOF
-            )
-            ->withMakeOptions('build_sw')
-            ->withMakeInstallOptions('install_sw')
-            ->withPkgConfig('/usr/openssl_v3_quic/lib64/pkgconfig')
-            ->withPkgName('libcrypto libssl openssl')
-            ->withLdflags('-L/usr/openssl_v3_quic/lib64')
-            ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
-            ->withHomePage('https://curl.se/docs/http3.html')
-    );
-}
+
 
 function install_libedit(Preprocessor $p)
 {
@@ -780,13 +794,6 @@ function install_bzip2_dev_latest(Preprocessor $p)
         (new Library('bzip2', '/usr/bzip2'))
             ->withUrl('https://gitlab.com/bzip2/bzip2/-/archive/master/bzip2-master.tar.gz')
             ->withCleanBuildDirectory()
-            ->withScriptBeforeConfigure(
-                '
-              test -d /usr/bzip2 && rm -rf /usr/bzip2 ;
-              apk add python3 py3-pip && python3 -m pip install pytest ;
-              mkdir build && cd build ;
-            '
-            )
             ->withConfigure(
                 '
                     cmake .. -DCMAKE_BUILD_TYPE="Release" \
@@ -808,45 +815,54 @@ function install_bzip2_dev_latest(Preprocessor $p)
 
 function install_libev($p)
 {
+    $libev_prefix = LIBEV_PREFIX;
     $p->addLibrary(
         (new Library('libev'))
             ->withHomePage('http://software.schmorp.de/pkg/libev.html')
-            ->withLicense('https://github.com/libevent/libevent/blob/master/LICENSE', Library::LICENSE_BSD)
+            ->withLicense('http://cvs.schmorp.de/libev/README', Library::LICENSE_BSD)
             ->withUrl('http://dist.schmorp.de/libev/libev-4.33.tar.gz')
             ->withManual('http://cvs.schmorp.de/libev/README')
-            ->withPrefix('/usr/libev')
+            ->withPrefix($libev_prefix)
             ->withCleanBuildDirectory()
+            ->withCleanPreInstallDirectory($libev_prefix)
             ->withConfigure(
                 <<<EOF
-            ls -lh
             ./configure --help
-            ./configure --prefix=/usr/libev \
+            ./configure \
+            --prefix={$libev_prefix} \
             --enable-shared=no \
             --enable-static=yes
-
 EOF
             )
-            ->withPkgName('libev')
     );
+
+
+    $p->setVarable('SWOOLE_CLI_EXTRA_CPPLAGS', '$SWOOLE_CLI_EXTRA_CPPLAGS -I' . LIBEV_PREFIX . '/include');
+    $p->setVarable('SWOOLE_CLI_EXTRA_LDLAGS', '$SWOOLE_CLI_EXTRA_LDLAGS -L' . LIBEV_PREFIX . '/lib');
+    $p->setVarable('SWOOLE_CLI_EXTRA_LIBS', '$SWOOLE_CLI_EXTRA_LIBS -lev');
 }
 
 function install_nettle($p)
 {
+    $nettle_prefix = NETTLE_PREFIX;
     $p->addLibrary(
         (new Library('nettle'))
             ->withHomePage('https://www.lysator.liu.se/~nisse/nettle/')
             ->withLicense('https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html', Library::LICENSE_LGPL)
             ->withUrl('https://ftp.gnu.org/gnu/nettle/nettle-3.8.tar.gz')
             ->withFile('nettle-3.8.tar.gz')
-            ->withPrefix('/usr/nettle/')
+            ->withPrefix($nettle_prefix)
+            ->withCleanBuildDirectory()
+            ->withCleanPreInstallDirectory($nettle_prefix)
             ->withConfigure(
-                '
+                <<<EOF
              ./configure --help
             ./configure \
-            --prefix=/usr/nettle \
+            --prefix={$nettle_prefix} \
             --enable-static \
-            --disable-shared
-            '
+            --disable-shared \
+            --enable-mini-gmp
+EOF
             )
             ->withPkgName('nettle')
     );
@@ -896,8 +912,7 @@ function install_libexpat($p)
             --enable-static=yes \
             --enable-shared=no
 EOF
-            )
-            ->withPkgName('expat')
+            )->withPkgName('expat')
             ->withBinPath($libexpat_prefix . '/bin')
     );
 }
@@ -912,11 +927,7 @@ function install_unbound($p)
             ->withUrl('https://nlnetlabs.nl/downloads/unbound/unbound-1.17.1.tar.gz')
             ->withPrefix('/usr/unbound/')
             ->withCleanBuildDirectory()
-            ->withScriptBeforeConfigure(
-                '
-                test -d /usr/unbound/ && rm -rf /usr/unbound/
-            '
-            )
+            ->withCleanPreInstallDirectory('/usr/unbound/')
             ->withConfigure(
                 '
              ./configure --help
@@ -955,7 +966,9 @@ function install_gnutls($p)
         libunbound for DNSSEC/DANE functionality
 EOF;
 
-
+    $gnutls_prefix = GNUTLS_PREFIX;
+    $iconv_prefix = ICONV_PREFIX;
+    $zlib_prefix = ZLIB_PREFIX;
     $p->addLibrary(
         (new Library('gnutls'))
             ->withHomePage('https://www.gnutls.org/')
@@ -963,11 +976,12 @@ EOF;
             ->withUrl('https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.8.tar.xz')
             ->withManual('https://gitlab.com/gnutls/gnutls.git')
             ->withManual('https://www.gnutls.org/download.html')
+            ->withPrefix($gnutls_prefix)
             ->withCleanBuildDirectory()
-            ->withPrefix('/usr/gnutls')
+            ->withCleanPreInstallDirectory($gnutls_prefix)
             ->withConfigure(
-                '
-                 test -d /usr/gnutls && rm -rf /usr/gnutls
+                <<<EOF
+       
                  set -uex
                 export GMP_CFLAGS=$(pkg-config  --cflags --static gmp)
                 export GMP_LIBS=$(pkg-config    --libs   --static gmp)
@@ -986,9 +1000,13 @@ EOF;
 
                 export LIBZSTD_CFLAGS=$(pkg-config  --cflags --static libzstd)
                 export LIBZSTD_LIBS=$(pkg-config    --libs   --static libzstd)
+                export NETTLE_CFLAGS=$(pkg-config  --cflags --static nettle)
+                export NETTLE_LIBS=$(pkg-config    --libs   --static nettle)
+                export LIBIDN2_CFLAGS=$(pkg-config  --cflags --static libidn2)
+                export LIBIDN2_LIBS=$(pkg-config    --libs   --static libidn2)
 
-                export P11_KIT_CFLAGS=$(pkg-config  --cflags --static p11-kit-1)
-                export P11_KIT_LIBS=$(pkg-config    --libs   --static p11-kit-1)
+                # export P11_KIT_CFLAGS=$(pkg-config  --cflags --static p11-kit-1)
+                # export P11_KIT_LIBS=$(pkg-config    --libs   --static p11-kit-1)
 
 
 
@@ -996,30 +1014,37 @@ EOF;
                 export LIBS=$(pkg-config        --libs     --static libbrotlicommon libbrotlienc libbrotlidec)
                  //  exit 0
                 # ./bootstrap
-                ./configure --help
-
+                ./configure --help | grep -e '--without'
+                ./configure --help | grep -e '--with-'
+               
+                
 
                 ./configure \
-                --prefix=/usr/gnutls \
+                --prefix={$gnutls_prefix} \
                 --enable-static=yes \
                 --enable-shared=no \
                 --with-zstd \
                 --with-brotli \
-                --with-libiconv-prefix=/usr/libiconv \
-                --with-libz-prefix=/usr/zlib \
+                --with-libiconv-prefix={$iconv_prefix} \
+                --with-libz-prefix={$zlib_prefix} \
+                --with-nettle-mini \
                 --with-libintl-prefix \
                 --with-included-unistring \
-                --with-nettle-mini  \
                 --with-included-libtasn1 \
                 --without-tpm2 \
                 --without-tpm \
                 --disable-doc \
-                --disable-tests
-               # --with-libev-prefix=/usr/libev \
-
-            '
+                --disable-tests \
+                --enable-openssl-compatibility \
+                --without-p11-kit \
+                --without-libseccomp-prefix \
+                --without-libcrypto-prefix \
+                --without-librt-prefix 
+                # --with-libev-prefix=/usr/libev \
+EOF
             )->withPkgName('gnutls')
-    //依赖：nettle, hogweed, libtasn1, libidn2, p11-kit-1, zlib, libbrotlienc, libbrotlidec, libzstd -lgmp  -latomic
+            ->withBinPath($gnutls_prefix . '/bin/')
+        //依赖：nettle, hogweed, libtasn1, libidn2, p11-kit-1, zlib, libbrotlienc, libbrotlidec, libzstd -lgmp  -latomic
     );
 }
 
@@ -1060,7 +1085,7 @@ function install_boringssl($p)
 EOF
             )
             ->disableDefaultPkgConfig()
-    //->withSkipBuildInstall()
+        //->withSkipBuildInstall()
     );
 }
 
@@ -1090,7 +1115,7 @@ function install_wolfssl($p)
 EOF
             )
             ->withPkgName('wolfssl')
-    //->withSkipBuildInstall()
+        //->withSkipBuildInstall()
     );
 }
 
@@ -1118,83 +1143,78 @@ function install_libressl($p)
 EOF
             )
             ->withPkgName('libressl')
-    //->withSkipBuildInstall()
+        //->withSkipBuildInstall()
     );
 }
 
 function install_nghttp3(Preprocessor $p)
 {
+    $nghttp3_prefix = NGHTTP3_PREFIX;
     $p->addLibrary(
         (new Library('nghttp3'))
             ->withHomePage('https://github.com/ngtcp2/nghttp3')
+            ->withLicense('https://github.com/ngtcp2/nghttp3/blob/main/COPYING', Library::LICENSE_MIT)
             ->withManual('https://nghttp2.org/nghttp3/')
-            ->withUrl('https://github.com/ngtcp2/nghttp3/archive/refs/tags/v0.8.0.tar.gz')
+            ->withUrl('https://github.com/ngtcp2/nghttp3/archive/refs/tags/v0.9.0.tar.gz')
             //->withUrl('https://github.com/ngtcp2/nghttp3/archive/refs/heads/main.zip')
-            ->withFile('nghttp3-v0.8.0.tar.gz')
-            ->withCleanBuildDirectory()
-            ->withPrefix('/usr/nghttp3')
+            ->withFile('nghttp3-v0.9.0.tar.gz')
+            ->disableDownloadWithMirrorURL()
+            ->withPrefix($nghttp3_prefix)
             ->withConfigure(
-                '
-            export GNUTLS_CFLAGS=$(pkg-config  --cflags --static gnutls)
-            export GNUTLS_LIBS=$(pkg-config    --libs   --static gnutls)
-
+                <<<EOF
             autoreconf -fi
             ./configure --help
-
-            ./configure --prefix=/usr/nghttp3 --enable-lib-only \
+            ./configure --prefix={$nghttp3_prefix} \
+            --enable-lib-only \
             --enable-shared=no \
-            --enable-static=yes
-
-        '
+            --enable-static=yes 
+EOF
             )
-            ->withLicense('https://github.com/ngtcp2/nghttp3/blob/main/COPYING', Library::LICENSE_MIT)
             ->withPkgName('libnghttp3')
     );
 }
 
 function install_ngtcp2(Preprocessor $p)
 {
-    //libexpat pcre2 libidn2 brotli
-
+    $ngtcp2_prefix = NGTCP2_PREFIX;
+    $openssl_prefix = OPENSSL_PREFIX;
     $p->addLibrary(
         (new Library('ngtcp2'))
             ->withHomePage('https://github.com/ngtcp2/ngtcp2')
+            ->withLicense('https://github.com/ngtcp2/ngtcp2/blob/main/COPYING', Library::LICENSE_MIT)
             ->withManual('https://curl.se/docs/http3.html')
             ->withUrl('https://github.com/ngtcp2/ngtcp2/archive/refs/tags/v0.13.1.tar.gz')
             ->withFile('ngtcp2-v0.13.1.tar.gz')
-            ->withCleanBuildDirectory()
-            ->withPrefix('/usr/ngtcp2')
+            ->disableDownloadWithMirrorURL()
+            ->withPrefix($ngtcp2_prefix)
             ->withConfigure(
-                '
+                <<<EOF
+                autoreconf -fi
+                ./configure --help
 
-            # openssl does not have QUIC interface, disabling it
-            #
-            # OPENSSL_CFLAGS=$(pkg-config  --cflags --static openssl)
-            # OPENSSL_LIBS=$(pkg-config    --libs   --static openssl)
-
-
-            export GNUTLS_CFLAGS=$(pkg-config  --cflags --static gnutls)
-            export GNUTLS_LIBS=$(pkg-config    --libs   --static gnutls)
-            export LIBNGHTTP3_CFLAGS=$(pkg-config  --cflags --static libnghttp3)
-            export LIBNGHTTP3_LIBS=$(pkg-config    --libs   --static libnghttp3)
-
-            export LIBEV_CFLAGS="-I/usr/libev/include"
-            export LIBEV_LIBS="-L/usr/libev/lib -lev"
-
-             autoreconf -fi
-            ./configure --help
-
-            ./configure \
-            --prefix=/usr/ngtcp2 \
-            --enable-shared=no \
-            --enable-static=yes \
-            --with-gnutls=yes \
-            --with-libnghttp3=yes \
-            --with-libev=yes
-            '
+                PACKAGES="openssl libnghttp3 "
+                CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$PACKAGES )"  \
+                LDFLAGS="$(pkg-config --libs-only-L      --static \$PACKAGES )"  \
+                LIBS="$(pkg-config --libs-only-l         --static \$PACKAGES )"  \
+                ./configure \
+                --prefix=$ngtcp2_prefix \
+                --enable-shared=no \
+                --enable-static=yes \
+                --enable-lib-only \
+                --without-libev \
+                --with-openssl  \
+                --with-libnghttp3=yes \
+                --without-gnutls \
+                --without-boringssl \
+                --without-picotls \
+                --without-wolfssl \
+                --without-cunit  \
+                --without-jemalloc 
+EOF
             )
-            ->withLicense('https://github.com/ngtcp2/ngtcp2/blob/main/COPYING', Library::LICENSE_MIT)
-            ->withPkgName('libngtcp2  libngtcp2_crypto_gnutls')
+            ->withPkgName('libngtcp2')
+            ->withPkgName('libngtcp2_crypto_openssl')
+            ->depends('openssl', 'nghttp3')
     );
 }
 
@@ -1287,14 +1307,10 @@ function install_nghttp2(Preprocessor $p): void
             ->withHomePage('https://github.com/nghttp2/nghttp2.git')
             ->withUrl('https://github.com/nghttp2/nghttp2/releases/download/v1.51.0/nghttp2-1.51.0.tar.gz')
             ->withPrefix($nghttp2_prefix)
-            ->withCleanBuildDirectory()
-            ->withCleanPreInstallDirectory($nghttp2_prefix)
             ->withConfigure(
                 <<<EOF
-            # automake # for git 
-            # autoconf # for git 
             ./configure --help
-            packages="zlib libxml-2.0 libcares openssl" # jansson  libev 
+            packages="zlib libxml-2.0 libcares openssl "  # jansson  libev libbpf libelf libngtcp2 libnghttp3
             CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$packages )"  \
             LDFLAGS="$(pkg-config --libs-only-L      --static \$packages )"  \
             LIBS="$(pkg-config --libs-only-l         --static \$packages )"  \
@@ -1406,14 +1422,6 @@ function install_libunistring($p)
             ->withUrl('https://ftp.gnu.org/gnu/libunistring/libunistring-0.9.1.1.tar.gz')
             ->withFile('libunistring-0.9.1.1.tar.gz')
             ->withCleanBuildDirectory()
-            ->withScriptBeforeConfigure(
-                '
-
-            apk add coreutils
-
-            test -d /usr/libunistring && rm -rf /usr/libunistring
-            '
-            )
             ->withConfigure(
                 '
              ./configure --help
@@ -1557,7 +1565,7 @@ function install_libbpf(Preprocessor $p)
             ->withLicense('https://github.com/libbpf/libbpf/blob/master/LICENSE.BSD-2-Clause', Library::LICENSE_LGPL)
             ->withUrl('https://github.com/libbpf/libbpf/archive/refs/tags/v1.1.0.tar.gz')
             ->withFile('libbpf-v1.1.0.tar.gz')
-            ->withManual('https://libbpf.readthedocs.io/en/latest/api.html')
+            ->withManual('https://libbpf.readthedocs.io/en/latest/libbpf_build.html')
             ->withPrefix('/usr/libbpf')
             ->withCleanBuildDirectory()
             ->withConfigure(
@@ -1566,7 +1574,11 @@ function install_libbpf(Preprocessor $p)
                 BUILD_STATIC_ONLY=y  make
                 exit 0
                 mkdir build /usr/libbpf
-                BUILD_STATIC_ONLY=y OBJDIR=build DESTDIR=/usr/libbpf make install
+                PKG_CONFIG_PATH=/usr/libbpf/lib64/pkgconfig
+                BUILD_STATIC_ONLY=y \
+                OBJDIR=build \
+                DESTDIR=/usr/libbpf \
+                make install
                 eixt 0
 
 EOF
@@ -1654,11 +1666,12 @@ function install_valgrind(Preprocessor $p)
 
 EOF
             )
-            ->withScriptAfterInstall(<<<EOF
+            ->withScriptAfterInstall(
+                <<<EOF
                 export PATH=\$SWOOLE_CLI_PATH
                 export PKG_CONFIG_PATH=\$SWOOLE_CLI_PKG_CONFIG_PATH
 EOF
-)
+            )
             ->withPkgName('valgrind')
             ->withBinPath($valgrind_prefix . '/bin/')
     );
@@ -1806,42 +1819,35 @@ function install_pcre2(Preprocessor $p)
     $pcre2_prefix = PCRE2_PREFIX;
     $p->addLibrary(
         (new Library('pcre2'))
-
             ->withHomePage('https://github.com/PCRE2Project/pcre2.git')
             ->withUrl('https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.42/pcre2-10.42.tar.gz')
+            ->withDocumentation('https://pcre2project.github.io/pcre2/doc/html/index.html')
+            ->withManual('https://github.com/PCRE2Project/pcre2.git')
             ->withLicense(
                 'https://github.com/PCRE2Project/pcre2/blob/master/COPYING',
                 Library::LICENSE_SPEC
-            ) //PCRE2 LICENCE
+            )
             ->withFile('pcre2-10.42.tar.gz')
-            //  CFLAGS='-static -O2 -Wall'
-            ->withConfigure(<<<EOF
-                "
-            ./configure --help
-            exit 0 
-            ./configure \
-            --prefix=/usr/pcre2 \
-            --enable-static \
-            --disable-shared \
-            --enable-pcre2-16 \
-            --enable-pcre2-32 \
-            --enable-jit \
-            --enable-unicode 
+            ->withPrefix($pcre2_prefix)
+            ->withCleanBuildDirectory()
+            ->withCleanPreInstallDirectory($pcre2_prefix)
+            ->withConfigure(
+                <<<EOF
+                ./configure --help
 
-         "
+                ./configure \
+                --prefix=$pcre2_prefix \
+                --enable-shared=no \
+                --enable-static=yes \
+                --enable-pcre2-16 \
+                --enable-pcre2-32 \
+                --enable-jit \
+                --enable-unicode 
+
+         
  EOF
             )
-            ->withMakeInstallOptions('install ')
-            //->withPkgConfig(PCRE2_PREFIX . '')
-            ->disableDefaultPkgConfig()
-            //->withPkgName("libpcre2-16")
-     
-            //->withPkgName("libpcrelibpcre2-32libpcre2-8 libpcre2-posix")
-            //->withPkgName("libpcre2-16 libpcre2-32 libpcre2 -8 ibpcre2-posix")
-            ->disablePkgName()
-            //->withLdflags('-L/usr/pcre2/lib')
-            ->disableDefaultLdflags()
-
+        //->withPkgName("libpcrelibpcre2-32libpcre2-8 libpcre2-posix")
     );
 }
 
@@ -1857,11 +1863,7 @@ function install_pgsql_test(Preprocessor $p)
             //https://www.postgresql.org/docs/devel/install-make.html#INSTALL-PROCEDURE-MAKE
             ->withManual('https://www.postgresql.org/docs/')
             ->withCleanBuildDirectory()
-            ->withScriptBeforeConfigure(
-                '
-               test -d /usr/pgsql && rm -rf /usr/pgsql
-            '
-            )
+
             ->withConfigure(
                 '
              # src/Makefile.shlib 有静态配置
@@ -1984,10 +1986,10 @@ install-libpq5555.a: install-lib-static install-lib-pc
                 '
             '
             )
-    //->withSkipInstall()
-    //->disablePkgName()
-    //->disableDefaultPkgConfig()
-    //->disableDefaultLdflags()
+        //->withSkipInstall()
+        //->disablePkgName()
+        //->disableDefaultPkgConfig()
+        //->disableDefaultLdflags()
     );
 }
 
@@ -2001,9 +2003,7 @@ function install_fastdfs($p)
             ->withUrl('https://github.com/happyfish100/fastdfs/archive/refs/tags/V6.9.4.tar.gz')
             ->withFile('fastdfs-V6.9.4.tar.gz')
             ->withPrefix('/usr/fastdfs/')
-            ->withScriptBeforeConfigure(
-                'test -d /usr/fastdfs/ && rm -rf /usr/fastdfs/'
-            )
+
             ->withConfigure(
                 '
             export DESTDIR=/usr/libserverframe/
@@ -2016,10 +2016,10 @@ function install_fastdfs($p)
             ->withLdflags('-L/usr/fastdfs/lib/')
             ->withBinPath('/usr/fastdfs/bin/')
             ->withSkipBuildInstall()
-    //->withSkipInstall()
-    //->disablePkgName()
-    //->disableDefaultPkgConfig()
-    //->disableDefaultLdflags()
+        //->withSkipInstall()
+        //->disablePkgName()
+        //->disableDefaultPkgConfig()
+        //->disableDefaultLdflags()
     );
 }
 
@@ -2032,9 +2032,7 @@ function install_libserverframe($p)
             ->withUrl('https://github.com/happyfish100/libserverframe/archive/refs/tags/V1.1.25.tar.gz')
             ->withFile('libserverframe-V1.1.25.tar.gz')
             ->withPrefix('/usr/libserverframe/')
-            ->withScriptBeforeConfigure(
-                'test -d /usr/libserverframe/ && rm -rf /usr/libserverframe/'
-            )
+
             ->withConfigure(
                 '
                 export DESTDIR=/usr/libserverframe/
@@ -2043,9 +2041,9 @@ function install_libserverframe($p)
             )
             ->withPkgName('')
             ->withSkipBuildInstall()
-    //->disablePkgName()
-    //->disableDefaultPkgConfig()
-    //->disableDefaultLdflags()
+        //->disablePkgName()
+        //->disableDefaultPkgConfig()
+        //->disableDefaultLdflags()
     );
 }
 
@@ -2059,9 +2057,7 @@ function install_libfastcommon($p)
             ->withFile('libfastcommon-V1.0.66.tar.gz')
             ->withPrefix('/usr/libfastcommon/')
             ->withCleanBuildDirectory()
-            ->withScriptBeforeConfigure(
-                'test -d /usr/libfastcommon/ && rm -rf /usr/libfastcommon/'
-            )
+
             ->withConfigure(
                 '
              export DESTDIR=/usr/libfastcommon
@@ -2072,9 +2068,9 @@ function install_libfastcommon($p)
             ->withPkgName('')
             ->withPkgConfig('/usr/libfastcommon/usr/lib/pkgconfig')
             ->withLdflags('-L/usr/libfastcommon/usr/lib -L/usr/libfastcommon/usr/lib64')
-    //->disablePkgName()
-    //->disableDefaultPkgConfig()
-    //->disableDefaultLdflags()
+        //->disablePkgName()
+        //->disableDefaultPkgConfig()
+        //->disableDefaultLdflags()
     );
 }
 
@@ -2088,11 +2084,6 @@ function install_gettext(Preprocessor $p)
             ->withLicense('https://www.gnu.org/licenses/licenses.html', Library::LICENSE_GPL)
             ->withCleanBuildDirectory()
             ->withPrefix('/usr/gettext')
-            ->withScriptBeforeConfigure(
-                '
-            test -d /usr/gettext && rm -rf /usr/gettext
-            '
-            )
             ->withConfigure(
                 '
             ./configure --help
@@ -2168,7 +2159,6 @@ EOF;
             ->withUrl('https://github.com/php/php-src/archive/refs/tags/php-8.1.12.tar.gz')
             ->withManual('https://www.php.net/docs.php')
             ->withLabel('php_extension_patch')
-            ->withScriptBeforeConfigure($command)
             ->withConfigure('return 0 ')
             ->disableDefaultPkgConfig()
             ->disableDefaultLdflags()
@@ -2270,7 +2260,7 @@ EOF
             ->disableDefaultPkgConfig()
             ->disableDefaultLdflags()
             ->withSkipBuildLicense()
-    // ->withSkipBuildInstall()
+        // ->withSkipBuildInstall()
     );
 }
 

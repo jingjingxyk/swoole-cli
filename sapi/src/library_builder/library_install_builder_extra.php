@@ -18,13 +18,9 @@ function install_ovs(Preprocessor $p)
         ->withPrefix($ovs_prefix)
         ->withCleanBuildDirectory()
         ->withCleanPreInstallDirectory($ovs_prefix)
-        ->withScriptBeforeConfigure(
-            <<<EOF
-          # apk add python3 
-EOF
-        )
         ->withConfigure(
             <<<EOF
+  # apk add python3 
         ./boot.sh
         ./configure --help
 
@@ -44,7 +40,7 @@ EOF
 
 function install_ovn(Preprocessor $p)
 {
-    $workdir=$p->getBuildDir();
+    $workdir = $p->getBuildDir();
     $ovs_prefix = '/usr/ovs';
     $ovn_prefix = '/usr/ovn';
     $lib = new Library('ovn');
@@ -56,11 +52,6 @@ function install_ovn(Preprocessor $p)
         ->withPrefix($ovn_prefix)
         ->withCleanBuildDirectory()
         ->withCleanPreInstallDirectory($ovn_prefix)
-        ->withScriptBeforeConfigure(
-            <<<EOF
-          
-EOF
-        )
         ->withConfigure(
             <<<EOF
         sh ./boot.sh
@@ -100,7 +91,7 @@ function install_socat($p)
             export LDFLAGS=$(pkg-config --libs --static libcrypto  libssl    openssl readline)
             # LIBS="-static -Wall -O2 -fPIC  -lcrypt  -lssl   -lreadline"
             # CFLAGS="-static -Wall -O2 -fPIC"
-            '. PHP_EOL .
+            ' . PHP_EOL .
                 <<<EOF
             ./configure \
             --prefix=/usr/socat \
@@ -108,7 +99,7 @@ function install_socat($p)
             --enable-openssl-base={ $openssl_prefix}
 EOF
             )
-        ->withBinPath($socat_prefix . '/bin/')
+            ->withBinPath($socat_prefix . '/bin/')
     );
 }
 
@@ -152,43 +143,81 @@ function install_aria2($p)
             # --with-tcmalloc
             '
             )
-        ->withBinPath($aria2_prefix . '/bin/')
+            ->withBinPath($aria2_prefix . '/bin/')
     );
 }
 
 function install_nginx($p)
 {
+    $builderDir=$p->getBuildDir();
+    $workDir=$p->getWorkDir();
+
     $nginx_prefix = NGINX_PREFIX;
-    $zlib_prefix = ZLIB_PREFIX;
-    $openssl_prefix = OPENSSL_PREFIX;
+
+    $openssl=$p->getLibrary('openssl');
+    $zlib= $p->getLibrary('zlib');
+    $pcre2=$p->getLibrary('pcre2');
 
     $p->addLibrary(
         (new Library('nginx'))
-            ->withHomePage('https://nginx.org/en/docs/')
+            ->withHomePage('https://nginx.org/')
             ->withLicense('https://github.com/nginx/nginx/blob/master/docs/text/LICENSE', Library::LICENSE_SPEC)
             ->withUrl('https://nginx.org/download/nginx-1.23.3.tar.gz')
             ->withManual('https://github.com/nginx/nginx')
-            ->withManual('https://nginx.org/en/docs/')
+            ->withManual('http://nginx.org/en/docs/configure.html')
+            ->withDocumentation('https://nginx.org/en/docs/')
             ->withPrefix($nginx_prefix)
             ->withCleanBuildDirectory()
             ->withCleanPreInstallDirectory($nginx_prefix)
             ->withConfigure(
                 <<<EOF
+             set -uex 
+            # sed -i "50i echo 'stop preprocessor'; exit 3 " ./configure
+            
             ./configure --help
-            exit 0 
+ 
+            # 使用 zlib openssl pcre2 新的源码目录
+            mkdir -p {$builderDir}/nginx/openssl
+            mkdir -p {$builderDir}/nginx/zlib
+            mkdir -p {$builderDir}/nginx/pcre2
+            tar --strip-components=1 -C {$builderDir}/nginx/openssl -xf  {$workDir}/pool/lib/{$openssl->file}
+            tar --strip-components=1 -C {$builderDir}/nginx/zlib    -xf  {$workDir}/pool/lib/{$zlib->file}
+            tar --strip-components=1 -C {$builderDir}/nginx/pcre2   -xf  {$workDir}/pool/lib/{$pcre2->file}
+            
+            packages="libxml-2.0 libexslt libxslt "
+            CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$packages )" 
+            CFLAGS="$(pkg-config    --cflags-only-I  --static \$packages )" 
+            LDFLAGS="$(pkg-config --libs-only-L      --static \$packages )" 
+            LIBS="$(pkg-config --libs-only-l         --static \$packages )" 
+            
             ./configure \
             --prefix={$nginx_prefix} \
+            --with-openssl={$builderDir}/nginx/openssl \
+            --with-pcre={$builderDir}/nginx/pcre2 \
+            --with-zlib={$builderDir}/nginx/zlib \
             --with-http_ssl_module \
-            --with-openssl={$openssl_prefix} \
-            --with-pcre=../pcre2-10.39 \
-            --with-zlib={$zlib_prefix} \
             --with-http_gzip_static_module \
-            --with-cc-opt="-O2" \
-            --with-ld-opt="-s -static"
+            --with-http_stub_status_module \
+            --with-http_realip_module \
+            --with-http_auth_request_module \
+            --with-http_v2_module \
+            --with-http_flv_module \
+            --with-http_sub_module \
+            --with-stream \
+            --with-stream_ssl_preread_module \
+            --with-stream_ssl_module \
+            --with-threads \
+            --with-cc-opt="\$CPPFLAGS -static -O2" \
+            --with-ld-opt="\$LDFLAGS -s -static"
+            
+       
+            #--with-cc-opt="-O2 -static -Wl,-pie \$CPPFLAGS" 
+            # --with-ld-opt=parameters — sets additional parameters that will be used during linking. 
+            # --with-cc-opt=parameters — sets additional parameters that will be added to the CFLAGS variable. 
 EOF
-
             )
-        ->withBinPath($nginx_prefix . '/bin/')
+            //->withMakeOptions('CFLAGS="-O2 -s" LDFLAGS="-static"')
+            ->withBinPath($nginx_prefix . '/bin/')
     );
 }
 
@@ -204,16 +233,11 @@ function install_dpdk(Preprocessor $p): void
             ->withManual('https://core.dpdk.org/doc/quick-start/')
             ->withUntarArchiveCommand('xz')
             ->withCleanBuildDirectory()
-            ->withScriptBeforeConfigure(
-                <<<EOF
-            apk add python3 py3-pip 
-            pip3 install meson pyelftools -i https://pypi.tuna.tsinghua.edu.cn/simple
-            # pip3 install meson pyelftools -ihttps://pypi.python.org/simple
-EOF
-            )
             ->withConfigure(
                 <<<EOF
-               
+                           apk add python3 py3-pip 
+            pip3 install meson pyelftools -i https://pypi.tuna.tsinghua.edu.cn/simple
+            # pip3 install meson pyelftools -ihttps://pypi.python.org/simple
             meson  build
             ninja -C build
             ninja -C build
@@ -225,6 +249,7 @@ EOF
             ->withBinPath($dpdk_prefix . '/bin/')
     );
 }
+
 function install_xdp(Preprocessor $p): void
 {
     $xdp_prefix = '/usr/xdp';
@@ -236,19 +261,12 @@ function install_xdp(Preprocessor $p): void
             ->withFile('xdp-v1.3.1.tar.gz')
             ->withManual('https://github.com/xdp-project/xdp-tutorial')
             ->withCleanBuildDirectory()
-            ->withScriptBeforeConfigure(
-                <<<EOF
-            apk add llvm bpftool
-           
-EOF
-            )
             ->withConfigure(
                 <<<EOF
-
+ apk add llvm bpftool
 EOF
             )
             ->withBinPath($xdp_prefix . '/bin/')
             ->withSkipBuildInstall()
     );
 }
-

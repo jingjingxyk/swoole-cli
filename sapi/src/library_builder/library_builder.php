@@ -36,7 +36,7 @@ function libraries_builder($p)
     // php composer 依赖的扩展 ： https://github.com/composer/composer/blob/c23beac9c508b701bb481d1c5269e7a2a79e0b60/src/Composer/Repository/PlatformRepository.php#L203
 
     install_oniguruma($p);
-    install_mimalloc($p);
+    //install_mimalloc($p);
 
     install_libjpeg($p);
     install_libgif($p);//没有 libgif.pc 文件，不能使用 pkg-config 命令
@@ -52,12 +52,16 @@ function libraries_builder($p)
     install_libidn2($p);//依赖 intl libunistring ； (gettext库包含intl 、coreutils库包含libunistring );
     // //解决依赖 apk add  gettext  coreutils
 
-
+    install_libssh2($p);
     install_nghttp2($p); //依赖 install_nghttp2($p);
+    install_nghttp3($p); // 使用 GnuTLS或者wolfss，这样就不用更换openssl版本了 ；
+    install_ngtcp2($p); //依赖gnutls nghttp3
+
+
     install_curl($p); //curl 依赖 openssl c-ares brotli libzstd idn(暂不启用) libidn2 libnghttp2 libnghttp3(暂不启用)
 
     //参考 https://github.com/docker-library/php/issues/221
-    install_pgsql($p);//依赖 openssl libxml2 libxslt  zlib readline icu libxml2 libxslt liblzma libiconv
+    //install_pgsql($p);//依赖 openssl libxml2 libxslt  zlib readline icu libxml2 libxslt liblzma libiconv
     //install_libffi($p);
 
     //扩展不兼容本项目
@@ -67,6 +71,8 @@ function libraries_builder($p)
     //install_libexpat($p); //依赖zlib openssl （使用cmake，便于配置参数)
     //install_minizip($p);
     //install_libxlsxio($p); //依赖zlib openssl （使用cmake，便于配置参数)
+    // Use libzip instead of Minizip
+
     //扩展不兼容本项目
     //install_libevent($p);
     //install_libuv($p);
@@ -87,6 +93,9 @@ function libraries_builder($p)
 
     /**
      * # 需要特别设置的地方
+     *   //  CFLAGS='-static -O2 -Wall'
+     *     直接编译可执行文件 -fPIE
+    *      直接编译成库      -fPIC
      *
      * export  CPPFLAGS=$(pkg-config  --cflags --static  libpq libcares libffi icu-uc icu-io icu-i18n readline )
      * LIBS=$(pkg-config  --libs --static   libpq libcares libffi icu-uc icu-io icu-i18n readline )
@@ -104,7 +113,7 @@ function libraries_builder($p)
         install_php_parser($p); //imagemagick 安装过程中需要
     }
 
-    if (1) {
+    if (0) {
         install_php_internal_extensions($p); //安装内置扩展; ffi  pgsql pdo_pgsql
     }
 
@@ -139,6 +148,11 @@ function libraries_builder($p)
 
 
     if (0) {
+        install_nasm($p);
+        install_dav1d($p); //AV1解码器dav1d  依赖 nasm : apk add nasm   //https://github.com/videolan/dav1d.git
+        install_libyuv($p); //libyuv是Google开源的yuv图像处理库，实现对各种yuv数据之间的转换，包括数据转换，裁剪，缩放，旋转
+        install_libavif($p); //依赖 libyuv dav1d
+
         install_libtiff($p); //依赖  zlib libjpeg liblzma  libzstd
         install_lcms2($p); //lcms2  //依赖libtiff libjpeg zlib
         install_libraw($p);  //依赖 zlib  libjpeg liblcms2
@@ -150,8 +164,7 @@ function libraries_builder($p)
         install_libde265($p);
         install_libheif($p); //依赖 libde265
 
-        install_libyuv($p);
-        install_libavif($p); //依赖 libyuv
+
         install_libOpenEXR($p); // 依赖Imath，不存在，会自动到github.com 下载
         install_highway($p);
         install_libjxl($p); //libgif libjpeg libopenexr libpng libwebp libbrotli highway
@@ -170,6 +183,7 @@ function libraries_builder($p)
     }
 
     if (0) {
+        install_openssl_v1($p);
         install_openssl_v3($p);
         install_openssl_v3_quic($p);
         install_libedit($p);
@@ -179,15 +193,17 @@ function libraries_builder($p)
         install_bzip2_dev_latest($p);
 
 
-        install_nettle($p); //加密库
-
-        install_libtasn1($p);
-        //install_libexpat($p);
         install_unbound($p); //依赖 libsodium nghttp2 nettle openssl ibtasn1 libexpat
         install_p11_kit($p);
         # TLS/ESNI/ECH/DoT/DoH/  参考文档https://zhuanlan.zhihu.com/p/572101957
         # SSL 比较 https://curl.se/docs/ssl-compared.html
+        install_nettle($p); //加密库
+        install_libtasn1($p);
         install_gnutls($p); //依赖 gmp libiconv  libtasn1 libzip  libzstd libbrotli libzlib
+        install_nghttp3($p); // 使用 GnuTLS或者wolfss，这样就不用更换openssl版本了 ；
+        install_libev($p); //无 pkg-config
+        install_ngtcp2($p); //依赖gnutls nghttp3
+        install_nghttp2($p); //依赖 install_nghttp2($p);
         install_boringssl($p);//需要 golang
         install_wolfssl($p);//
         install_libressl($p);//
@@ -195,8 +211,7 @@ function libraries_builder($p)
         install_jansson($p); //c json 库
 
         //参考 ：HTTP3 and QUIC 有多种实现   curl 使用 http3 参考： https://curl.se/docs/http3.html
-        install_nghttp3($p); // 使用 GnuTLS或者wolfss，这样就不用更换openssl版本了 ；
-        install_ngtcp2($p); //依赖gnutls nghttp3
+
 
 
         install_quiche($p); // 依赖 boringssl ，需要 rust ；
@@ -232,9 +247,9 @@ function libraries_builder($p)
     }
 
 
-    if (0) {
-        install_libev($p); //无 pkg-config
-    }
+
+
+
     if (0) {
         install_aria2($p); //依赖libuv openssl zlib libxml2 sqlite3 openssl c-ares
         install_socat($p); //依赖 readline openssl
@@ -275,8 +290,9 @@ function libraries_builder($p)
             pjproject
         */
     }
+
     if (0) {
-        install_rav1e($p); //https://github.com/videolan/dav1d.git //https://www.cnblogs.com/eguid/p/16015446.html
+        install_rav1e($p);  //https://www.cnblogs.com/eguid/p/16015446.html
         install_aom($p);
         install_av1($p);
         install_libvpx($p);
@@ -285,6 +301,17 @@ function libraries_builder($p)
         install_libx265($p);
         install_mp3lame($p);
         install_ffmpeg($p);
+        /*
+        ffmpeg -encoders
+        ffmpeg -decoders
+        ffmpeg -codecs
+        ffmpeg -formats
+        ffmpeg -muxers
+        ffmpeg -demuxers
+        ffmpeg -protocols
+        ffmpeg -filters
+        */
+
         // install_librabbitmq($p);
         install_opencv_contrib($p);
         install_opencv($p); //构建过程中，会去github.com 下载 ippicv xfeatures2d wechat_qrcode unifont  face_landmark_model.dat
@@ -320,18 +347,19 @@ function libraries_builder($p)
     }
 
     if ($p->getInputOption('with-valgrind') == 'yes') {
+        echo 111111111111111 . PHP_EOL;
         install_valgrind($p); //Valgrind是一款用于内存调试、内存泄漏检测以及性能分析的软件开发工具。
     }
     if ($p->getInputOption('with-capstone') == 'yes') {
         install_capstone($p);
     }
-
+    //install_depot_tools($p); //依赖python
     if (0) {
         // brew  //  https://mirrors.tuna.tsinghua.edu.cn/help/homebrew
         // brew  //  https://github.com/Homebrew/brew.git
         //apk add ninja
         //install_ninja($p); //源码编译ninja，alpine 默认没有提供源；默认不安装 //依赖python
-        install_depot_tools($p); //依赖python
+        //install_depot_tools($p); //依赖python
         //install_gn($p);//依赖python
         //install_gn_test($p);//源码编译GN
 
@@ -358,6 +386,7 @@ function libraries_builder($p)
         //OProfile是Linux内核支持的一种性能分析机制。 它在时钟中断处理入口处建立监测点，记录被中断的上下文现场，由配套的用户态的工具oprof_start负责在用户态收集数据
 
         //nm  结果参考 https://www.cnblogs.com/vaughnhuang/p/15771582.html
+        // gcc的ar,nm,objdump,objcopy
 
         //gdb bin/swoole-cli
         //set args -m
@@ -374,6 +403,8 @@ function libraries_builder($p)
         // 动态链接库和静态链接库 https://www.cnblogs.com/Blog-c/p/7811190.html
         // .la 为libtool生成的共享库，其实是个配置文档。可以用file或者vim查看。
         // .ko 文件是Linux内核使用的动态链接文件后缀，属于模块文件，用在Linux系统启动时加载内核模块
+
+        //  gcov是一个测试代码覆盖率的工具。 https://zhuanlan.zhihu.com/p/410077415
     }
 
     if (0) {
@@ -389,6 +420,9 @@ function libraries_builder($p)
         //一个为异构并行计算平台编写程序的工业标准  https://www.intel.com/content/www/us/en/docs/programmable/683846/22-1/opencl-library.html
         install_opencl($p); //OpenCL全称为Open Computing Language（开放计算语言） OpenCL不但支持数据并行，还支持任务并行
         //用于共享内存并行系统的多处理器程序设
+
+        //metal，opencl   vulkan和metal除了通用计算，还能做渲染  ;
+        // CUDA，OpenCL，Metal GPU加速有什么区别 更多信息 https://www.zhihu.com/question/481772259/answer/2762594628
 
         //Openmp和thread都是共享一个进程内存的并行，openmp最显著的特点是命令式(directive-based)语言
         //install_openmp($p);
@@ -406,4 +440,62 @@ function libraries_builder($p)
     export PATH=$SWOOLE_CLI_PATH
     export PKG_CONFIG_PATH=$SWOOLE_CLI_PKG_CONFIG_PATH
     */
+
+    /**
+     * 交叉编译
+        --build=BUILD           configure for building on BUILD [BUILD=HOST]
+        --host=HOST             configure for HOST [guessed]
+        --target=TARGET         configure for TARGET [TARGET=HOST]
+
+     */
+
+    /**
+     * BIO 全称Block-IO 是一种阻塞同步的通信模式 BIO 全称Block-IO 是一种阻塞同步的通信模式。我们常说的Stock IO 一般指的是BIO。是一个比较传统的通信方式，模式简单，使用方便。但并发处理能力低，通信耗时，依赖网速。
+     * NIO 全称New IO，也叫Non-Block IO 是一种非阻塞同步的通信模式。
+     * AIO 也叫NIO2.0 是一种非阻塞异步的通信模式。在NIO的基础上引入了新的异步通道的概念，并提供了异步文件通道和异步套接字通道的实现。
+     * AIO 并没有采用NIO的多路复用器，而是使用异步通道的概念
+     *
+     */
+
+    /**
+     * LC_ALL=C 是为了去除所有本地化的设置
+     */
+
+    /**
+            SYSTEM=`uname -s 2>/dev/null`
+            RELEASE=`uname -r 2>/dev/null`
+            MACHINE=`uname -m 2>/dev/null`
+
+            PLATFORM="$SYSTEM:$RELEASE:$MACHINE";
+     */
+
+    /**
+     *     export CFLAGS="$(pkg-config  --cflags --static expat minizip ) "
+
+           SET (CMAKE_EXE_LINKER_FLAGS "-static")
+
+            target
+                    ARCHIVE 静态库
+                    LIBRARY 动态库
+                    RUNTIME  可执行二进制文件
+
+            # find_package的简单用法   https://blog.csdn.net/weixin_43940314/article/details/128252940
+                      -D 从外部传入搜索路径：
+                            <PackageName>_ROOT
+                            <PackageName>_DIR
+
+             c++(CMake篇)  https://zhuanlan.zhihu.com/p/470681241
+            # CMAKE_BUILD_TYPE=Debug Release
+
+            cmake -G"Unix Makefiles" .  \
+            -DCMAKE_INSTALL_PREFIX={$libxlsxio_prefix} \
+            -DCMAKE_INSTALL_LIBDIR={$libminzip_prefix}/lib \
+            -DCMAKE_INSTALL_INCLUDEDIR={$libminzip_prefix}/include \
+            -DCMAKE_BUILD_TYPE=Release  \
+            -DBUILD_SHARED_LIBS=OFF  \
+            -DBUILD_STATIC_LIBS=ON \
+            -DCMAKE_COLOR_MAKEFILE=ON
+
+
+     */
 }

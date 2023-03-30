@@ -15,11 +15,6 @@ function install_php_parser($p)
             ->withManual('https://www.php.net/docs.php')
             ->withLabel('php_internal_extension')
             ->withCleanBuildDirectory()
-            ->withScriptBeforeConfigure(
-                <<<EOF
-】
-EOF
-            )
             ->withConfigure('return 0')
             ->withSkipDownload()
             ->disablePkgName()
@@ -52,6 +47,12 @@ function install_php_internal_extensions($p)
 
                     test -d {$workDir}/ext/pgsql && rm -rf {$workDir}/ext/pgsql
                     cp -rf  ext/pgsql {$workDir}/ext/
+                    
+                    test -d {$workDir}/library && rm -rf {$workDir}/library
+                    test -d {$workDir}/ext/xlswriter/library && cp -rf {$workDir}/ext/xlswriter/library  {$workDir}/
+                    test -d {$workDir}/kernel && rm -rf {$workDir}/kernel
+                    test -d {$workDir}/ext/xlswriter/kernel && cp -rf {$workDir}/ext/xlswriter/kernel  {$workDir}/
+                    
 EOF
             )
             ->withSkipDownload()
@@ -74,7 +75,6 @@ function install_php_extension_micro(Preprocessor $p)
             ->withLabel('php_extension')
             ->withCleanBuildDirectory()
             ->withUntarArchiveCommand('unzip')
-            ->withScriptBeforeConfigure('return 0')
             ->disableDefaultPkgConfig()
             ->disableDefaultLdflags()
             ->disablePkgName()
