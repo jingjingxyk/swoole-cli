@@ -45,14 +45,22 @@ function install_libraries($p): void
     $php_install_prefix = $p->getGlobalPrefix() .'/php';
     $p->addLibrary(
         (new Library('php_src'))
-            ->withUrl('https://github.com/php/php-src/archive/refs/tags/php-8.2.4.tar.gz')
-
+            ->withUrl('https://github.com/php/php-src/archive/refs/tags/php-7.4.33.tar.gz')
             ->withHomePage('https://www.php.net/')
             ->withLicense('https://github.com/php/php-src/blob/master/LICENSE', Library::LICENSE_PHP)
+            ->withFile('php-7.4.33.tar.gz')
+            ->withDownloadScript(
+                'php-src',
+                <<<EOF
+                git clone -b php-7.4.33 --depth=1 https://github.com/php/php-src.git
+EOF
+            )
             ->withPrefix($php_install_prefix)
             ->withCleanBuildDirectory()
             ->withBuildScript(
                 <<<EOF
+          
+            ./buildconf --force
             ./configure --help
 EOF
             )
