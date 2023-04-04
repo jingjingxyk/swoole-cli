@@ -17,6 +17,7 @@ export PATH=<?= implode(':', $this->binPaths) . PHP_EOL ?>
 OPTIONS="--prefix=<?= PHP_INSTALL_PREFIX ?> --disable-all \
 --enable-shared=no \
 --enable-static=yes \
+--enable-json \
 <?php foreach ($this->extensionList as $item) : ?>
 <?=$item->options?> \
 <?php endforeach; ?>
