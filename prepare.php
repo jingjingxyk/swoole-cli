@@ -11,7 +11,7 @@ $p->parseArguments($argc, $argv);
 
 
 // Sync code from php-src
-$p->setPhpSrcDir($homeDir . '/.phpbrew/build/php-8.1.12');
+# $p->setPhpSrcDir($homeDir . '/.phpbrew/build/php-8.1.12');
 
 // Compile directly on the host machine, not in the docker container
 if ($p->getInputOption('without-docker')) {
@@ -19,8 +19,7 @@ if ($p->getInputOption('without-docker')) {
     $p->setBuildDir(__DIR__ . '/thirdparty');
     $p->setGlobalPrefix($homeDir . '/.swoole-cli');
 }
-//重新设置PHP 源码所在目录
-$p->setPhpSrcDir($p->getbuildDir() . '/php_src');
+
 
 $build_type = $p->getInputOption('with-build-type');
 if (!in_array($build_type, ['dev', 'debug'])) {
@@ -37,16 +36,23 @@ if ($p->getOsType() == 'macos') {
 $p->setExtraCflags('-fno-ident -Os');
 
 
-
 // Generate make.sh
 $p->execute();
 
 function install_libraries($p): void
 {
-    $php_install_prefix = $p->getGlobalPrefix() .'/php';
+    //重新设置 PHP 源码所在目录
+    $p->setPhpSrcDir($p->getbuildDir() . '/php_src');
+
+    //设置PHP 安装目录和版本号
+    $version = '7.3.33';
+    define("PHP_VERSION", $version);
+    define("PHP_INSTALL_PREFIX", $p->getGlobalPrefix() . '/php-' . $version);
+
+    $php_install_prefix = PHP_INSTALL_PREFIX;
     $p->addLibrary(
         (new Library('php_src'))
-            ->withUrl('https://github.com/php/php-src/archive/refs/tags/php-7.3.33.tar.gz')
+            ->withUrl('https://github.com/php/php-src/archive/refs/tags/php-' . $version . '.tar.gz')
             ->withHomePage('https://www.php.net/')
             ->withLicense('https://github.com/php/php-src/blob/master/LICENSE', Library::LICENSE_PHP)
             ->withFile('php-7.3.33.tar.gz')
@@ -62,7 +68,7 @@ EOF
                 <<<EOF
             cp -rf {$p->getRootDir()}/ext/* {$p->getPhpSrcDir()}/ext/
             ./buildconf --force
-            ./configure --help
+            ./configure --help 
 EOF
             )
     );

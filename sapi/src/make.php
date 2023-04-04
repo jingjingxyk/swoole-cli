@@ -14,7 +14,7 @@ export CXX=<?= $this->cppCompiler . PHP_EOL ?>
 export LD=<?= $this->lld . PHP_EOL ?>
 export PKG_CONFIG_PATH=<?= implode(':', $this->pkgConfigPaths) . PHP_EOL ?>
 export PATH=<?= implode(':', $this->binPaths) . PHP_EOL ?>
-OPTIONS="--prefix=<?= $this->getGlobalPrefix(). '/php/' ?> --disable-all \
+OPTIONS="--prefix=<?= PHP_INSTALL_PREFIX ?> --disable-all \
 --enable-shared=no \
 --enable-static=yes \
 --enable-json \
@@ -152,12 +152,12 @@ export_variables() {
 make_config() {
     cd <?= $this->phpSrcDir . PHP_EOL ?>
     set -exu
+    # 执行 sh make.sh php_src 时已经执行此项
     # cp -rf <?= $this->rootDir ?>/ext/* <?= $this->phpSrcDir ?>/ext/
     test -f ./configure &&  rm ./configure
     ./buildconf --force
 
     ./configure --help
-    exit 3
      export_variables
     ./configure $OPTIONS
 }
