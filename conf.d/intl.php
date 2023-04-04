@@ -38,5 +38,5 @@ EOF
     );
     $p->withExportVariable('ICU_CFLAGS', '$(pkg-config  --cflags --static icu-i18n  icu-io   icu-uc)');
     $p->withExportVariable('ICU_LIBS', '$(pkg-config    --libs   --static icu-i18n  icu-io   icu-uc)');
-    $p->addExtension((new Extension('intl'))->withOptions('--enable-intl')->depends('icu'));
+    $p->addExtension((new Extension('intl'))->withOptions('--enable-intl --with-icu-dir='. ICU_PREFIX)->depends('icu'));
 };

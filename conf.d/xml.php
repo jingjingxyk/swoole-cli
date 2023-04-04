@@ -23,7 +23,7 @@ EOF
     );
     $p->addExtension(
         (new Extension('xml'))
-        ->withOptions('--enable-xml --enable-simplexml --enable-xmlreader --enable-xmlwriter --enable-dom --with-libxml-dir=' . $libxml2_prefix)
+        ->withOptions('--enable-xml --enable-simplexml --enable-xmlreader --enable-xmlwriter --enable-dom --enable-libxml --with-libxml-dir=' . $libxml2_prefix)
         ->depends('libxml2')
     );
 };

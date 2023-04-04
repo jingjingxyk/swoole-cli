@@ -22,7 +22,7 @@ return function (Preprocessor $p) {
     $p->withExportVariable('ONIG_LIBS', '$(pkg-config   --libs   --static oniguruma)');
     $p->addExtension(
         (new Extension('mbstring'))
-            ->withOptions('--enable-mbstring')
+            ->withOptions('--enable-mbstring --with-onig=' . ONIGURUMA_PREFIX)
             ->depends('oniguruma')
     );
 };

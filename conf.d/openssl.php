@@ -19,7 +19,7 @@ return function (Preprocessor $p) {
     );
     $p->addExtension(
         (new Extension('openssl'))
-            ->withOptions('--with-openssl=' . OPENSSL_PREFIX)
+            ->withOptions('--with-openssl=' . OPENSSL_PREFIX . '  --with-openssl-dir=' . OPENSSL_PREFIX)
             ->depends('openssl')
     );
 };

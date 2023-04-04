@@ -154,9 +154,18 @@ EOF
             ->depends('zlib', 'bzip2', 'libpng', 'brotli')
     );
 
+    $options = '--with-gd=';
+    $options .= ' --with-webp-dir=' . WEBP_PREFIX;
+    $options .= ' --with-jpeg-dir=' . JPEG_PREFIX;
+    $options .= ' --with-png-dir=' . PNG_PREFIX;
+    $options .= ' --with-zlib-dir=' . ZLIB_PREFIX;
+    $options .= ' --with-freetype-dir=' . FREETYPE_PREFIX;
+    $options .= ' --without-libXpm' ;
+    //$options .= ' --with-gettext=' ;
+
     $p->addExtension(
         (new Extension('gd'))
-            ->withOptions('--enable-gd --with-jpeg --with-freetype --with-webp')
+            ->withOptions($options)
             ->depends('libjpeg', 'freetype', 'libwebp', 'libpng', 'libgif')
     );
 };
