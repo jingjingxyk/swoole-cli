@@ -152,11 +152,12 @@ export_variables() {
 make_config() {
     cd <?= $this->phpSrcDir . PHP_EOL ?>
     set -exu
-    cp -rf <?= $this->rootDir ?>/ext/* <?= $this->phpSrcDir ?>/ext/
+    # cp -rf <?= $this->rootDir ?>/ext/* <?= $this->phpSrcDir ?>/ext/
     test -f ./configure &&  rm ./configure
     ./buildconf --force
 
     ./configure --help
+    exit 3
      export_variables
     ./configure $OPTIONS
 }
