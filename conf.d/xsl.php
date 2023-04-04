@@ -42,5 +42,5 @@ EOF
     $p->withExportVariable('XSL_LIBS', '$(pkg-config      --libs   --static libxslt)');
     $p->withExportVariable('EXSLT_CFLAGS', '$(pkg-config  --cflags --static libexslt)');
     $p->withExportVariable('EXSLT_LIBS', '$(pkg-config    --libs   --static libexslt)');
-    $p->addExtension((new Extension('xsl'))->withOptions('--with-xsl')->depends('libxslt'));
+    $p->addExtension((new Extension('xsl'))->withOptions('--with-xsl=' . LIBXSLT_PREFIX)->depends('libxslt'));
 };

@@ -18,9 +18,9 @@ class Preprocessor
     protected array $libraryList = [];
     protected array $extensionList = [];
 
-    protected string $cCompiler = 'clang';
-    protected string $cppCompiler = 'clang++';
-    protected string $lld = 'ld.lld';
+    protected string $cCompiler = 'gcc';
+    protected string $cppCompiler = 'g++';
+    protected string $lld = 'ld';
 
     protected array $libraryMap = [];
     protected array $extensionMap = [];

@@ -16,5 +16,5 @@ return function (Preprocessor $p) {
             ->withBinPath($sqlite3_prefix)
             ->withPkgName('sqlite3')
     );
-    $p->addExtension((new Extension('sqlite3'))->withOptions('--with-sqlite3')->depends('sqlite3'));
+    $p->addExtension((new Extension('sqlite3'))->withOptions('--with-sqlite3=' . SQLITE3_PREFIX)->depends('sqlite3'));
 };
