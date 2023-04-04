@@ -200,7 +200,7 @@ EOF
             --with-default-ssl-backend=openssl \
             --with-libidn2 \
             --with-libssh2 \
-            --with-nghttp2 \
+            --without-nghttp2 \
             --without-ngtcp2 \
             --without-nghttp3 
             
