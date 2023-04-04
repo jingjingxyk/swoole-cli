@@ -44,7 +44,7 @@ function install_libraries($p): void
     $p->setPhpSrcDir($p->getbuildDir() . '/php_src');
 
     //设置PHP 安装目录和版本号
-    $version = '8.2.4';
+    $version = '7.4.33';
     define("PHP_VERSION", $version);
     define("PHP_INSTALL_PREFIX", $p->getGlobalPrefix() . '/php-' . $version);
 
