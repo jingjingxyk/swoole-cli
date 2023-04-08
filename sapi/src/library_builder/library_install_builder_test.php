@@ -114,13 +114,13 @@ function install_libyuv(Preprocessor $p)
 {
     $libyuv_prefix = LIBYUV_PREFIX;
     $libjpeg_prefix = JPEG_PREFIX;
-    $libjpeg_lib_dir = $p->getOsType() == 'linux' ? $libjpeg_prefix . '/lib64/' : $libjpeg_prefix . '/lib/';
     $p->addLibrary(
         (new Library('libyuv'))
             ->withUrl('https://chromium.googlesource.com/libyuv/libyuv')
             ->withHomePage('https://chromium.googlesource.com/libyuv/libyuv')
             ->withLicense('https://chromium.googlesource.com/libyuv/libyuv/+/refs/heads/main/LICENSE', Library::LICENSE_SPEC)
             ->withManual('https://chromium.googlesource.com/libyuv/libyuv/+/HEAD/docs/getting_started.md')
+            ->disableDownloadWithMirrorURL()
             ->withDownloadScript(
                 'libyuv',
                 <<<EOF
@@ -135,12 +135,19 @@ EOF
                 <<<EOF
                 mkdir -p  out
                 cd out
-                cmake -DCMAKE_INSTALL_PREFIX="{$libyuv_prefix}" \
+                cmake .. \
+                -DCMAKE_INSTALL_PREFIX="{$libyuv_prefix}" \
+                -DJPEG_ROOT={$libjpeg_prefix} \
                 -DBUILD_STATIC_LIBS=ON \
                 -DBUILD_SHARED_LIBS=OFF  \
-                -DCMAKE_BUILD_TYPE="Release" ..
+                -DCMAKE_BUILD_TYPE="Release" \
+                -DTEST=OFF 
                 cmake --build . --config Release
                 cmake --build . --target install --config Release
+                return 0 
+                rm -rf {$libyuv_prefix}/lib/*.so.*
+                rm -rf {$libyuv_prefix}/lib/*.so
+                rm -rf {$libyuv_prefix}/lib/*.dylib
 :<<'_____EOF_____'
             make V=1 -f linux.mk
             make V=1 -f linux.mk clean
@@ -162,7 +169,7 @@ EOF
             # -DJPEG_LIBRARY_RELEASE={$libjpeg_prefix}/lib/libjpeg.a
             # CMAKE_INCLUDE_PATH 和 CMAKE_LIBRARY_PATH
 
-            # -DJPEG_LIBRARY:PATH={$libjpeg_lib_dir}/libjpeg.a -DJPEG_INCLUDE_DIR:PATH={$libjpeg_prefix}/include/ \
+            # -DJPEG_LIBRARY:PATH={$libjpeg_prefix}/lib/libjpeg.a -DJPEG_INCLUDE_DIR:PATH={$libjpeg_prefix}/include/ \
 
             mkdir -p build
             cd build
@@ -170,7 +177,7 @@ EOF
             -Wno-dev \
             -DCMAKE_INSTALL_PREFIX="{$libyuv_prefix}" \
             -DCMAKE_BUILD_TYPE="Release"  \
-            -DJPEG_LIBRARY:PATH={$libjpeg_lib_dir}/libjpeg.a -DJPEG_INCLUDE_DIR:PATH={$libjpeg_prefix}/include/ \
+            -DJPEG_LIBRARY:PATH={$libjpeg_prefix}/lib/libjpeg.a -DJPEG_INCLUDE_DIR:PATH={$libjpeg_prefix}/include/ \
             -DBUILD_SHARED_LIBS=OFF  ..
 
             cmake --build . --config Release
@@ -219,7 +226,8 @@ function install_libraw(Preprocessor $p)
             
 EOF
         )
-        ->withPkgName('libraw  libraw_r')
+        ->withPkgName('libraw')
+        ->withPkgName('libraw_r')
         ->withScriptAfterInstall(
             <<<EOF
         ls -lh {$libraw_prefix}/lib/pkgconfig/libraw.pc
@@ -243,6 +251,7 @@ function install_dav1d(Preprocessor $p)
             ->withUrl('https://code.videolan.org/videolan/dav1d/-/archive/1.1.0/dav1d-1.1.0.tar.gz')
             ->withFile('dav1d-1.1.0.tar.gz')
             ->withManual('https://code.videolan.org/videolan/dav1d')
+            ->disableDownloadWithMirrorURL()
             ->withPrefix($dav1d_prefix)
             ->withCleanBuildDirectory()
             ->withCleanPreInstallDirectory($dav1d_prefix)
@@ -267,11 +276,54 @@ EOF
     );
 }
 
+function install_libgav1(Preprocessor $p)
+{
+    $libgav1_prefix = LIBGAV1_PREFIX;
+    $p->addLibrary(
+        (new Library('libgav1'))
+            ->withHomePage('https://chromium.googlesource.com/codecs/libgav1')
+            ->withLicense('https://chromium.googlesource.com/codecs/libgav1/+/refs/heads/main/LICENSE', Library::LICENSE_APACHE2)
+            ->withFile('libgav1.tar.gz')
+            ->withManual('https://chromium.googlesource.com/codecs/libgav1/+/refs/heads/main')
+            ->withDownloadScript(
+                'libgav1',
+                <<<EOF
+                git clone --depth 1  https://chromium.googlesource.com/codecs/libgav1
+                mkdir -p libgav1/third_party/abseil-cpp
+                git clone -b 20220623.0 --depth 1 https://github.com/abseil/abseil-cpp.git libgav1/third_party/abseil-cpp
+EOF
+            )
+            ->disableDownloadWithMirrorURL()
+            ->withPrefix($libgav1_prefix)
+            ->withCleanBuildDirectory()
+            ->withCleanPreInstallDirectory($libgav1_prefix)
+            ->withConfigure(
+                <<<EOF
+                mkdir -p build 
+                cd build
+                # 查看更多选项 
+                # cmake .. -LH
+                cmake -G "Unix Makefiles" .. \
+                -DCMAKE_INSTALL_PREFIX={$libgav1_prefix} \
+                -DCMAKE_BUILD_TYPE=Release  \
+                -DBUILD_SHARED_LIBS=OFF  \
+                -DBUILD_STATIC_LIBS=ON \
+                -DLIBGAV1_ENABLE_TESTS=OFF 
+            
+EOF
+            )
+            ->withPkgName('libgav1')
+            ->withBinPath($libgav1_prefix . '/bin/')
+    );
+}
+
 function install_libavif(Preprocessor $p): void
 {
     $libavif_prefix = LIBAVIF_PREFIX;
     $libyuv_prefix = LIBYUV_PREFIX;
     $dav1d_prefix = DAV1D_PREFIX;
+    $libgav1_prefix = LIBGAV1_PREFIX;
+    $aom_prefix = AOM_PREFIX;
     $p->addLibrary(
         (new Library('libavif'))
             ->withUrl('https://github.com/AOMediaCodec/libavif/archive/refs/tags/v0.11.1.tar.gz')
@@ -279,25 +331,25 @@ function install_libavif(Preprocessor $p): void
             ->withHomePage('https://aomediacodec.github.io/av1-avif/')
             ->withLicense('https://github.com/AOMediaCodec/libavif/blob/main/LICENSE', Library::LICENSE_SPEC)
             ->withManual('https://github.com/AOMediaCodec/libavif')
+            ->disableDownloadWithMirrorURL()
             ->withPrefix($libavif_prefix)
             ->withCleanBuildDirectory()
             ->withCleanPreInstallDirectory($libavif_prefix)
             ->withConfigure(
                 <<<EOF
-            CPPFLAGS="$(pkg-config  --cflags-only-I  --static libpng libjpeg dav1d)" 
-            LDFLAGS="$(pkg-config --libs-only-L      --static libpng libjpeg dav1d)" 
-            LIBS="$(pkg-config --libs-only-l         --static libpng libjpeg dav1d )" 
+
             cmake .  \
             -DCMAKE_INSTALL_PREFIX={$libavif_prefix} \
             -DAVIF_BUILD_EXAMPLES=OFF \
             -DLIBYUV_ROOT={$libyuv_prefix} \
             -DDAV1D_ROOT={$dav1d_prefix} \
+            -DLIBGAV1_ROOT={$libgav1_prefix} \
             -DBUILD_SHARED_LIBS=OFF \
             -DAVIF_CODEC_AOM=ON \
             -DAVIF_CODEC_DAV1D=ON \
             -DAVIF_CODEC_LIBGAV1=ON \
-            -DAVIF_CODEC_RAV1E=ON
-            exit 0
+            -DAVIF_CODEC_RAV1E=OFF
+            
 
 EOF
             )
@@ -315,6 +367,8 @@ function install_nasm(Preprocessor $p)
             ->withUrl('https://www.nasm.us/pub/nasm/releasebuilds/2.16.01/nasm-2.16.01.tar.gz')
             ->withLicense('http://opensource.org/licenses/BSD-2-Clause', Library::LICENSE_BSD)
             ->withManual('https://github.com/netwide-assembler/nasm.git')
+            ->withMd5sum('42c4948349d01662811c8641fad4494c')
+            ->disableDownloadWithMirrorURL()
             ->withPrefix($nasm_prefix)
             ->withCleanBuildDirectory()
             ->withCleanPreInstallDirectory($nasm_prefix)
@@ -350,10 +404,42 @@ function install_libde265(Preprocessor $p)
         ./configure --help
         ./configure --prefix={$libde265_prefix} \
         --enable-shared=no \
-        --enable-static=yes
+        --enable-static=yes \
+        --with-pic
 EOF
         )
         ->withPkgName('libde265');
+
+    $p->addLibrary($lib);
+}
+
+function install_svt_av1(Preprocessor $p)
+{
+    $svt_av1_prefix = SVT_AV1_PREFIX;
+    $lib = new Library('svt_av1');
+    $lib->withHomePage('https://gitlab.com/AOMediaCodec/SVT-AV1/')
+        ->withLicense('https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/LICENSE.md', Library::LICENSE_BSD)
+        ->withManual('https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/Build-Guide.md')
+        ->withUrl('https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v1.4.1/SVT-AV1-v1.4.1.tar.gz')
+        ->withFile('SVT-AV1-v1.4.1.tar.gz')
+        ->withPrefix($svt_av1_prefix)
+        ->withCleanBuildDirectory()
+        ->withCleanPreInstallDirectory($svt_av1_prefix)
+        ->withConfigure(
+            <<<EOF
+        cd SVT-AV1
+        cd Build
+        cmake .. -G"Unix Makefiles" \
+        -DCMAKE_INSTALL_PREFIX={$svt_av1_prefix} \
+        -DCMAKE_BUILD_TYPE=Release  \
+        -DBUILD_SHARED_LIBS=OFF  \
+        -DBUILD_STATIC_LIBS=ON 
+
+EOF
+        )
+        ->withPkgName('SvtAv1Dec')
+        ->withPkgName('SvtAv1Enc')
+        ->withBinPath($svt_av1_prefix . '/bin/');
 
     $p->addLibrary($lib);
 }
@@ -369,20 +455,15 @@ function install_libheif(Preprocessor $p)
         ->withCleanBuildDirectory()
         ->withCleanPreInstallDirectory($libheif_prefix)
         ->withConfigure(
-            <<<'EOF'
-            ./configure --help
-
-            libde265_CFLAGS=$(pkg-config  --cflags --static libde265 ) \
-            libde265_LIBS=$(pkg-config    --libs   --static libde265 ) \
-            libpng_CFLAGS=$(pkg-config  --cflags --static libpng ) \
-            libpng_LIBS=$(pkg-config    --libs   --static libpng ) \
-EOF
-            . PHP_EOL .
             <<<EOF
-            ./configure \
-            --prefix={$libheif_prefix} \
-            --enable-shared=no \
-            --enable-static=yes
+        mkdir -p build 
+        cd build 
+        cmake .. -G"Unix Makefiles" \
+        -DCMAKE_INSTALL_PREFIX={$libheif_prefix} \
+        -DCMAKE_BUILD_TYPE=Release  \
+        -DBUILD_SHARED_LIBS=OFF  \
+        -DBUILD_STATIC_LIBS=ON \
+        -DWITH_EXAMPLES=OFF
 EOF
         )
         ->withPkgName('libheif');
@@ -497,6 +578,9 @@ function install_libgd2($p)
 {
     $libgd_prefix = LIBGD_PREFIX;
     $libiconv_prefix = ICONV_PREFIX;
+    $zlib_prefix= ZLIB_PREFIX;
+    $webp_prefix = WEBP_PREFIX;
+    $iconv_prefix = ICONV_PREFIX;
     $lib = new Library('libgd2');
     $lib->withHomePage('https://www.libgd.org/')
         ->withLicense('https://github.com/libgd/libgd/blob/master/COPYING', Library::LICENSE_SPEC)
@@ -507,26 +591,7 @@ function install_libgd2($p)
         ->withCleanBuildDirectory()
         ->withCleanPreInstallDirectory($libgd_prefix)
         ->withConfigure(
-            <<<'EOF'
-        # 下载依赖
-         ./configure --help
-         # -lbrotlicommon-static -lbrotlidec-static -lbrotlienc-static
-        export CPPFLAGS="$(pkg-config  --cflags-only-I  --static zlib libpng freetype2 libjpeg  libturbojpeg libwebp  libwebpdecoder  libwebpdemux  libwebpmux  libbrotlicommon  libbrotlidec  libbrotlienc ) " \
-        export LDFLAGS="$(pkg-config   --libs-only-L    --static zlib libpng freetype2 libjpeg  libturbojpeg libwebp  libwebpdecoder  libwebpdemux  libwebpmux  libbrotlicommon  libbrotlidec  libbrotlienc ) " \
-        export LIBS="$(pkg-config      --libs-only-l    --static zlib libpng freetype2 libjpeg  libturbojpeg libwebp  libwebpdecoder  libwebpdemux  libwebpmux  libbrotlicommon  libbrotlidec  libbrotlienc ) " \
-
-        echo $LIBS
-
-EOF. PHP_EOL . <<<EOF
-        ./configure \
-        --prefix={$libgd_prefix} \
-        --enable-shared=no \
-        --enable-static=yes \
-        --without-freetype \
-        --with-libiconv-prefix={$libiconv_prefix}
-         # --with-freetype=/usr/freetype \
-
-:<<'_EOF_'
+            <<<EOF
         mkdir -p build
         cd build
         cmake   ..  \
@@ -536,16 +601,41 @@ EOF. PHP_EOL . <<<EOF
         -DENABLE_JPEG=1 \
         -DENABLE_TIFF=1 \
         -DENABLE_ICONV=1 \
-        -DENABLE_FREETYPE=1 \
-        -DENABLE_FONTCONFIG=1 \
+        -DENABLE_FREETYPE=0 \
+        -DENABLE_FONTCONFIG=0 \
         -DENABLE_WEBP=1 \
         -DENABLE_HEIF=1 \
         -DENABLE_AVIF=1 \
-        -DENABLE_WEBP=1
+        -DENABLE_WEBP=1 \
+        -DZLIB_ROOT={$zlib_prefix} \
+        -DWEBP_ROOT={$webp_prefix} \
+        -DICONV_ROOT={$iconv_prefix} 
 
         cmake --build . -- -j$(nproc)
-        exit 0
         cmake --install .
+
+     
+
+:<<'_EOF_'
+
+        
+        
+        ./configure --help
+        # freetype2 libbrotlicommon libbrotlidec  libbrotlienc
+        PACKAGES='zlib libpng  libjpeg  libturbojpeg libwebp  libwebpdecoder  libwebpdemux  libwebpmux libtiff-4 libavif ' 
+        CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$PACKAGES ) " \
+        LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES ) " \
+        LIBS="$(pkg-config      --libs-only-l    --static \$PACKAGES ) " \
+        ./configure \
+        --prefix={$libgd_prefix} \
+        --enable-shared=no \
+        --enable-static=yes \
+        --with-libiconv-prefix={$libiconv_prefix} \
+        --without-freetype 
+        # --with-freetype=/usr/freetype \
+        # --without-freetype 
+        
+        
 _EOF_
 
 EOF
@@ -613,18 +703,16 @@ function install_libXpm(Preprocessor $p)
         ->withCleanPreInstallDirectory($libXpm_prefix)
         ->withConfigure(
             <<<EOF
-      # 依赖 xorg-macros
+         
          # 解决依赖
-         # apk add util-macros
-         # apk add libxpm-dev
+         apk add util-macros xorgproto libx11
+   
             ./autogen.sh
             ./configure --help
-            ./configure --prefix={$libXpm_prefix} \
+            ./configure \
+            --prefix={$libXpm_prefix} \
             --enable-shared=no \
-            --enable-static=yes \
-            --disable-docs \
-            --disable-tests \
-            --enable-strict-compilation
+            --enable-static=yes 
 
 EOF
         )
@@ -1060,23 +1148,29 @@ function install_boringssl($p)
                 Library::LICENSE_BSD
             )
             ->withUrl('https://github.com/google/boringssl/archive/refs/heads/master.zip')
-            ->withFile('latest-boringssl.zip')
-            ->withSkipDownload()
+            ->withFile('boringssl-latest.tar.gz')
+            ->disableDownloadWithMirrorURL()
+            ->withDownloadScript(
+                'boringssl',
+                <<<EOF
+            git clone -b master --depth=1 https://boringssl.googlesource.com/boringssl
+EOF
+            )
             ->withMirrorUrl('https://boringssl.googlesource.com/boringssl')
-            ->withMirrorUrl('https://github.com/google/boringssl.git')
             ->withManual('https://boringssl.googlesource.com/boringssl/+/refs/heads/master/BUILDING.md')
-            ->withUntarArchiveCommand('unzip')
-            ->withCleanBuildDirectory()
             ->withPrefix($boringssl_prefix)
             ->withCleanBuildDirectory()
             ->withCleanPreInstallDirectory($boringssl_prefix)
             ->withBuildScript(
                 <<<EOF
-                cd boringssl-master
-                mkdir build
+          
+                mkdir -p build
                 cd build
-                cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=0 -DCMAKE_INSTALL_PREFIX=$boringssl_prefix
-
+                cmake -GNinja .. \
+                -DCMAKE_INSTALL_PREFIX=$boringssl_prefix
+                -DCMAKE_BUILD_TYPE=Release \
+                -DBUILD_SHARED_LIBS=OFF 
+                 
                 cd ..
                 # ninja
                 ninja -C build
@@ -2296,49 +2390,115 @@ function install_unixodbc(Preprocessor $p)
 }
 
 
+function install_xorg_macros(Preprocessor $p)
+{
+
+    $xorg_macros_prefix = XORG_MACROS_PREFIX;
+    $lib = new Library('xorg_macros');
+    $lib->withHomePage('https://github.com/freedesktop/xorg-macros.git')
+        ->withLicense('https://github.com/freedesktop/xorg-macros/blob/master/COPYING', Library::LICENSE_SPEC)
+        ->withManual('https://gitlab.freedesktop.org/xorg/util/macros/-/blob/util-macros-1.20.0/INSTALL')
+        ->withUrl('https://gitlab.freedesktop.org/xorg/util/macros/-/archive/util-macros-1.20.0/macros-util-macros-1.20.0.tar.gz')
+        ->withFile('util-macros-1.20.0.tar.gz')
+        ->withDownloadScript(
+            'macros',
+            <<<EOF
+            git clone -b util-macros-1.20.0 --depth=1  https://gitlab.freedesktop.org/xorg/util/macros.git
+EOF
+        )
+        ->withPrefix($xorg_macros_prefix)
+        ->withCleanBuildDirectory()
+        ->withCleanPreInstallDirectory($xorg_macros_prefix)
+        ->withConfigure(
+            <<<EOF
+            ls -lha .
+             ./autogen.sh
+             ./configure --help
+             ./configure \
+             --prefix={$xorg_macros_prefix} 
+           
+EOF
+        )
+        ->withLdflags('');
+
+    $p->addLibrary($lib);
+}
 function install_xorgproto(Preprocessor $p)
 {
-    $xproto_prefix = LIBXPM_PREFIX;
-    $xorgproto_prefix = '/usr/xorgproto';
+
+    $xorgproto_prefix = XORGPROTO_PREFIX;
     $lib = new Library('xorgproto');
     $lib->withHomePage('xorgproto')
         ->withLicense('https://gitlab.freedesktop.org/xorg/proto/xorgproto', Library::LICENSE_SPEC)
+        ->withManual('https://gitlab.freedesktop.org/xorg/proto/xorgproto/-/blob/master/INSTALL')
         ->withUrl('https://gitlab.freedesktop.org/xorg/proto/xorgproto/-/archive/master/xorgproto-master.tar.gz')
+        ->withFile('xorgproto-2022.2.tar.gz')
+        ->withDownloadScript(
+            'xorgproto',
+            <<<EOF
+            git clone -b xorgproto-2022.2 --depth=1  https://gitlab.freedesktop.org/xorg/proto/xorgproto.git
+EOF
+        )
         ->withPrefix($xorgproto_prefix)
         ->withCleanBuildDirectory()
         ->withCleanPreInstallDirectory($xorgproto_prefix)
         ->withBuildScript(
             <<<EOF
-         # https://mesonbuild.com/Builtin-options.html#build-type-options
-         # meson configure build
-        meson setup  \
-        -Dprefix={$xorgproto_prefix} \
-        -Dbackend=ninja \
-        -Dbuildtype=release \
-        -Ddefault_library=static \
-        -Db_staticpic=true \
-        -Db_pie=true \
-        -Dprefer_static=true \
-        build
+            ls -lha .
 
+            
+            # https://mesonbuild.com/Builtin-options.html#build-type-options
+            # meson configure build
+            # meson wrap --help
+            # --backend=ninja \
+            
+            meson setup  build \
+            -Dprefix={$xorgproto_prefix} \
+            -Dbackend=ninja \
+            -Dbuildtype=release \
+            -Ddefault_library=static \
+            -Db_staticpic=true \
+            -Db_pie=true \
+            -Dprefer_static=true 
 
-        ninja -C build
-        ninja -C build install
+            # meson configure build
+            # meson -C build install
+
+            ninja  -C build
+            ninja  -C build install
+
 EOF
         )
+        ->withLdflags('');
+
+    $p->addLibrary($lib);
+}
+
+function install_libX11(Preprocessor $p)
+{
+
+    $libX11_prefix = LIBX11_PREFIX;
+    $lib = new Library('libX11');
+    $lib->withHomePage('http://www.x.org/releases/current/doc/libX11/libX11/libX11.html')
+        ->withLicense('https://github.com/mirror/libX11/blob/master/COPYING', Library::LICENSE_SPEC)
+        ->withManual('http://www.x.org/releases/current/doc/libX11/libX11/libX11.html')
+        ->withUrl('https://github.com/mirror/libX11/archive/refs/tags/libX11-1.8.4.tar.gz')
+        ->withFile('libX11-1.8.4.tar.gz')
+        ->withPrefix($libX11_prefix)
+        ->withCleanBuildDirectory()
+        ->withCleanPreInstallDirectory($libX11_prefix)
         ->withConfigure(
             <<<EOF
-            autoreconf -ivf
-            ./configure --help
-
-            LDFLAGS="-static " \
-            ./configure --prefix={$xorgproto_prefix} \
-            --enable-legacy \
-            --enable-strict-compilation
-
+        ./autogen.sh
+        ./configure --help 
+        ./configure \
+        --prefix={$libX11_prefix} \
+        --enable-shared=no \
+        --enable-static=yes 
 EOF
         )
-        ->withPkgName('xproto');
+
+        ->withLdflags('');
 
     $p->addLibrary($lib);
 }

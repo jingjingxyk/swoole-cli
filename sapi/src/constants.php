@@ -68,10 +68,17 @@ define("LIBMCRYPT_PREFIX", $p->getGlobalPrefix() . '/libmcrypt');
 
 //  test
 define("LIBDE265_PREFIX", $p->getGlobalPrefix() . '/libde265');
+define("LIBX264_PREFIX", $p->getGlobalPrefix() . '/libx264');
+define("NUMA_PREFIX", $p->getGlobalPrefix() . '/numa');
+define("LIBX265_PREFIX", $p->getGlobalPrefix() . '/libx265');
+define("SVT_AV1_PREFIX", $p->getGlobalPrefix() . '/svt_av1');
 define("LIBHEIF_PREFIX", $p->getGlobalPrefix() . '/libheif');
 define("LIBJXL_PREFIX", $p->getGlobalPrefix() . '/libjxl');
 define("LIBGD_PREFIX", $p->getGlobalPrefix() . '/libgd');
 define("DAV1D_PREFIX", $p->getGlobalPrefix() . '/dav1d');
+define("LIBGAV1_PREFIX", $p->getGlobalPrefix() . '/libgav1');
+define("RAV1E_PREFIX", $p->getGlobalPrefix() . '/rav1e');
+define("AOM_PREFIX", $p->getGlobalPrefix() . '/aom');
 define("LIBAVIF_PREFIX", $p->getGlobalPrefix() . '/libavif');
 define("NASM_PREFIX", $p->getGlobalPrefix() . '/nasm');
 define("LIBYUV_PREFIX", $p->getGlobalPrefix() . '/libyuv');
@@ -81,7 +88,7 @@ define("DEPOT_TOOLS_PREFIX", $p->getGlobalPrefix() . '/depot_tools');
 define("HARFBUZZ_PREFIX", $p->getGlobalPrefix() . '/harfbuzz');
 define("LIBFRIBIDI_PREFIX", $p->getGlobalPrefix() . '/libfribidi');
 
-define("LIBXPM_PREFIX", $p->getGlobalPrefix() . '/libXpm');
+
 
 define("JANSSON_PREFIX", $p->getGlobalPrefix() . '/jansson');
 define("NETTLE_PREFIX", $p->getGlobalPrefix() . '/nettle');
@@ -116,3 +123,11 @@ define("NGHTTP3_PREFIX", $p->getGlobalPrefix() . '/nghttp3');
 define("NGTCP2_PREFIX", $p->getGlobalPrefix() . '/ngtcp2');
 define("LIBSSH2_PREFIX", $p->getGlobalPrefix() . '/libssh2');
 define("FFMPEG_PREFIX", $p->getGlobalPrefix() . '/ffmpeg');
+define("NODEJS_PREFIX", $p->getGlobalPrefix() . '/nodejs');
+define("GOLANG_PREFIX", $p->getGlobalPrefix() . '/golang');
+
+
+define("XORG_MACROS_PREFIX", $p->getGlobalPrefix() . '/xorg_macros');
+define("XORGPROTO_PREFIX", $p->getGlobalPrefix() . '/xorgproto');
+define("LIBX11_PREFIX", $p->getGlobalPrefix() . '/libX11');
+define("LIBXPM_PREFIX", $p->getGlobalPrefix() . '/libXpm');

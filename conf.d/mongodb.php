@@ -1,6 +1,7 @@
 <?php
 
 use SwooleCli\Preprocessor;
+use SwooleCli\Library;
 use SwooleCli\Extension;
 
 return function (Preprocessor $p) {

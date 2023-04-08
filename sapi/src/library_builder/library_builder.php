@@ -146,12 +146,21 @@ function libraries_builder($p)
         // install_php_extension_fastdfs($p);
     }
 
-
+    install_nasm($p);
+    install_dav1d($p); //AV1解码器dav1d  依赖 nasm : apk add nasm   //https://github.com/videolan/dav1d.git
+    install_libgav1($p);
+    install_libyuv($p); //libyuv是Google开源的yuv图像处理库，实现对各种yuv数据之间的转换，包括数据转换，裁剪，缩放，旋转
+    install_aom($p);
+    install_libavif($p); //依赖 libyuv dav1d
+    install_libx264($p);
+    install_numa($p); //把NUMA看作集群运算的一个紧密耦合的形式 https://baike.baidu.com/item/NUMA/6906025
+    install_libx265($p);
+    install_libde265($p);
+    install_svt_av1($p);
+    install_libheif($p); //依赖 libde265
+    install_libtiff($p); //依赖  zlib libjpeg liblzma  libzstd
+    install_libgd2($p);
     if (0) {
-        install_nasm($p);
-        install_dav1d($p); //AV1解码器dav1d  依赖 nasm : apk add nasm   //https://github.com/videolan/dav1d.git
-        install_libyuv($p); //libyuv是Google开源的yuv图像处理库，实现对各种yuv数据之间的转换，包括数据转换，裁剪，缩放，旋转
-        install_libavif($p); //依赖 libyuv dav1d
 
         install_libtiff($p); //依赖  zlib libjpeg liblzma  libzstd
         install_lcms2($p); //lcms2  //依赖libtiff libjpeg zlib
@@ -174,15 +183,19 @@ function libraries_builder($p)
 
         if (0) {
             install_xorgproto($p); //依赖 xorg-macros
-            install_libXpm($p); //依赖 xorg-macros  xorgproto
+            //install_xorg_macros($p);
+            //install_xorgproto($p);
+            //install_libX11($p);
+            install_libXpm($p); //依赖 xorg-macros  xorgproto libx11 # apk add util-macros xorgproto libx11
         }
 
-        install_libgd2($p);
+
         //GraphicsMagick  http://www.graphicsmagick.org/index.html
         install_GraphicsMagick($p);
     }
 
     if (0) {
+
         install_openssl_v1($p);
         install_openssl_v3($p);
         install_openssl_v3_quic($p);
@@ -204,7 +217,8 @@ function libraries_builder($p)
         install_libev($p); //无 pkg-config
         install_ngtcp2($p); //依赖gnutls nghttp3
         install_nghttp2($p); //依赖 install_nghttp2($p);
-        install_boringssl($p);//需要 golang
+        install_boringssl($p);//需要golang
+
         install_wolfssl($p);//
         install_libressl($p);//
 
@@ -267,14 +281,48 @@ function libraries_builder($p)
 
     //排版相关
     if (0) {
-        # pip3 install graphviz
+        //Linux_kernel_diagram   // https://makelinux.github.io/kernel/diagram/
+        //  panzoom  用于向元素添加平移和缩放功能 https://timmywil.com/panzoom/demo/
 
-        install_graphviz($p); //依赖git libwbp freetype  // https://www.graphviz.org/doc/info/lang.html
+        # apk add graphviz
+        # pip3 install graphviz   -i https://pypi.tuna.tsinghua.edu.cn/simple
+        //plantuml
+        // https://www.graphviz.org/documentation/
+        // https://www.graphviz.org/doc/info/lang.html
+        install_graphviz($p); //依赖git libwbp freetype
         //networkx    //https://github.com/networkx/networkx.git
+        //graphviz 是一个专门用于可视化图状数据结构的工具包，而networkx是专门用于表示图状数据结构以及操作图状数据结构的工具包。
         // 工业级的还得用neo4j搭配graphx  面对巨量数据   https://www.cnblogs.com/jingjingxyk/p/16826546.html
         // draw.io  https://app.diagrams.net/
 
+        // ASCIIFlow Infinity  https://asciiflow.com/
+        // flowchart.js        http://flowchart.js.org/
+        // js-sequence-diagrams by bramp  https://bramp.github.io/js-sequence-diagrams/
+
         install_TeX($p); //排版系统
+
+
+        /*
+            UML - Unified modeling language UML 统一建模语言
+
+            泛化（Generalizations），聚合（aggregations）和关联（associations）
+            分栏（Rectangle）
+
+            依赖（Dependencies）
+
+            跟踪（Traces）
+            实现（Realizations）
+            嵌套（Nestings）
+
+         */
+        /*
+           生成器（iterabler)
+           生成器（Generator)
+
+         */
+        /*
+           享有数据分析“三剑客之一”的盛名（NumPy、Matplotlib、Pandas）
+         */
     }
     if (0) {
         /*
@@ -291,8 +339,9 @@ function libraries_builder($p)
         */
     }
 
+    install_rav1e($p);  //https://www.cnblogs.com/eguid/p/16015446.html
     if (0) {
-        install_rav1e($p);  //https://www.cnblogs.com/eguid/p/16015446.html
+
         install_aom($p);
         install_av1($p);
         install_libvpx($p);
@@ -301,6 +350,7 @@ function libraries_builder($p)
         install_libx265($p);
         install_mp3lame($p);
         install_ffmpeg($p);
+        install_vlc($p);
         /*
         ffmpeg -encoders
         ffmpeg -decoders
@@ -316,6 +366,9 @@ function libraries_builder($p)
         install_opencv_contrib($p);
         install_opencv($p); //构建过程中，会去github.com 下载 ippicv xfeatures2d wechat_qrcode unifont  face_landmark_model.dat
         //依赖ffmpeg zlib ninja zlib libjpeg libwebp freetype
+
+        //A free, open source XR platform
+        install_monado($p);// https://gitlab.freedesktop.org/monado/monado
     }
     if (0) {
         // 改善iptables/netfilter的规模瓶颈，提高Linux内核协议栈IO性能
@@ -328,11 +381,19 @@ function libraries_builder($p)
         //  XDP 是Linux 内核中提供高性能、可编程的网络数据包处理框架。
         //  eBPF/XDP
 
+        //SDN（Software Defined Networking） 它将网络控制层和数据层分离，使得网络可以通过软件进行灵活的配置和管理。
+        //DPDK（Data Plane Development Kit） 它提供了一套高性能的数据包处理库和驱动程序，可以让应用程序直接访问网络设备，绕过操作系统的开销。
+        // VPP（Vector Packet Processing）它基于DPDK实现了一个高性能的软件路由器和交换机，可以支持多种协议和功能。
+        // FRR（Free Range Routing）是一个开源项目，它提供了一套路由协议的实现，包括BGP、OSPF、IS-IS等，可以与VPP集成，实现动态路由功能。
         install_dpdk($p); //ninja
         install_xdp($p);  //依赖 llvm bpftool
+        //Underlay/Overlay 新技术
         install_ovs($p);  //依赖 openssl python3  ; 网络优化以来 dpdk
         install_ovn($p);
+        install_FRR($p);  //路由协议栈 实现和管理各种 IPv4 和 IPv6 路由协议的免费软件 //https://github.com/FRRouting/frr.git
+        //'https://www.bianyuanyun.com/wp-content/uploads/2021/06/whitepaper-未来网络白皮书——白盒交换机技术白皮书.pdf'
     }
+
     if (0) {
         install_qemu($p);
     }
@@ -353,11 +414,16 @@ function libraries_builder($p)
     if ($p->getInputOption('with-capstone') == 'yes') {
         install_capstone($p);
     }
-    //install_depot_tools($p); //依赖python
+    install_rust($p);
     if (0) {
         // brew  //  https://mirrors.tuna.tsinghua.edu.cn/help/homebrew
         // brew  //  https://github.com/Homebrew/brew.git
         //apk add ninja
+        install_rust($p);
+        install_nodejs($p);
+        install_golang($p);
+        install_depot_tools($p); //依赖python
+
         //install_ninja($p); //源码编译ninja，alpine 默认没有提供源；默认不安装 //依赖python
         //install_depot_tools($p); //依赖python
         //install_gn($p);//依赖python
@@ -496,6 +562,52 @@ function libraries_builder($p)
             -DBUILD_STATIC_LIBS=ON \
             -DCMAKE_COLOR_MAKEFILE=ON
 
+            set(libgav1_root "${CMAKE_CURRENT_SOURCE_DIR}")
+            set(libgav1_build "${CMAKE_BINARY_DIR}")
+
+            cmake -G 'Unix Makefiles' -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
+            cmake --build .
+            cmake --install .
+
+            cmake -G 'Visual Studio 17 2022' -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
+            cmake --build . --config Release
+            cmake --install . --config Release
+
+           CURL ARCHITECTURE   https://curl.se/docs/install.html#:~:text=26%20CPU%20Architectures
+           CURL Cross compile  https://curl.se/docs/install.html#:~:text=Cross%20compile
+     */
+
+
+    //Hot Module Replacement（以下简称 HMR） inotify
+
+    /*
+            CPPFLAGS="$(pkg-config  --cflags-only-I  --static libpng libjpeg dav1d libgav1)" \
+            LDFLAGS="$(pkg-config --libs-only-L      --static libpng libjpeg dav1d libgav1)" \
+            LIBS="$(pkg-config --libs-only-l         --static libpng libjpeg dav1d libgav1)" \
 
      */
+    /*
+         # https://mesonbuild.com/Builtin-options.html#build-type-options
+         # meson configure build
+         # meson wrap --help
+        meson setup  build \
+        -Dprefix={$xorgproto_prefix} \
+        -Dbackend=ninja \
+        -Dbuildtype=release \
+        -Ddefault_library=static \
+        -Db_staticpic=true \
+        -Db_pie=true \
+        -Dprefer_static=true
+    */
+
+    /*
+        NUMA（Non Uniform Memory Access）技术可以使众多服务器像单一系统那样运转，同时保留小系统便于编程和管理的优点
+
+    计算平台的体系结构  https://baike.baidu.com/item/NUMA/6906025
+        当今数据计算领域的主要应用程序和模型可大致分为
+        联机事务处理（OLTP）、
+        决策支持系统（DSS）和企业信息通讯（BusinessCommunications）三大类。
+        而小型独立服务器模式、SMP（对称多处理）模式、MPP（大规模并行处理）模式和NUMA模式，则是上述3类系统设计人员在计算平台的体系结构方面可以采用的选择。
+     */
+
 }
