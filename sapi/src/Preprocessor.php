@@ -378,7 +378,7 @@ class Preprocessor
                 test -d {$lib->downloadDirName} && rm -rf {$lib->downloadDirName}
                 {$lib->downloadScript}
                 cd {$lib->downloadDirName}
-                test -f {$lib->path} || tar --exclude='{$lib->file}'  -zcf {$lib->path} .[!.]* * 
+                test -f {$lib->path} || tar   -zcf {$lib->path} ./
                 cd {$workDir}  
 EOF;
 
@@ -440,7 +440,7 @@ EOF;
                                 test -d {$ext->downloadDirName} && rm -rf {$ext->downloadDirName}
                                 {$ext->downloadScript}
                                 cd {$ext->downloadDirName}
-                                test -f {$ext->path} ||  tar --exclude='{$ext->file}' -zcf {$ext->path} .[!.]* * 
+                                test -f {$ext->path} ||  tar  -zcf {$ext->path} ./
                                 cd {$workDir}  
 
 EOF;
@@ -811,7 +811,8 @@ EOF;
             cd {$cacheDir}
             test -d {$item->downloadDirName} && rm -rf {$item->downloadDirName}
             {$item->downloadScript}
-            test -f {$workDir}/libraries/{$item->file} || tar -czf {$workDir}/{$item->file} {$item->downloadDirName}/*  
+            cd {$item->downloadDirName}
+            test -f {$workDir}/libraries/{$item->file} || tar  -czf {$workDir}/{$item->file} ./
             cp -f {$workDir}/{$item->file} "\${__DIR__}/libraries/"
             cd {$workDir}  
 EOF;
@@ -839,7 +840,8 @@ EOF;
                 cd {$cacheDir}
                 test -d {$item->downloadDirName} && rm -rf {$item->downloadDirName}
                 {$item->downloadScript}
-                test -f {$workDir}/extensions/{$item->file} || tar -czf  {$workDir}/{$item->file} {$item->downloadDirName}/*
+                cd {$item->downloadDirName}
+                test -f {$workDir}/extensions/{$item->file} || tar -czf  {$workDir}/{$item->file} ./
                 cp -f {$workDir}/{$item->file} "\${__DIR__}/extensions/"
                 cd {$workDir}  
                 
