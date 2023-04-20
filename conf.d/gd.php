@@ -8,6 +8,7 @@ return function (Preprocessor $p) {
     $libjpeg_prefix = JPEG_PREFIX;
     $lib = new Library('libjpeg');
     $lib->withHomePage('https://libjpeg-turbo.org/')
+        ->withManual('https://libjpeg-turbo.org/Documentation/Documentation')
         ->withLicense('https://github.com/libjpeg-turbo/libjpeg-turbo/blob/main/LICENSE.md', Library::LICENSE_BSD)
         ->withUrl('https://codeload.github.com/libjpeg-turbo/libjpeg-turbo/tar.gz/refs/tags/2.1.2')
         ->withFile('libjpeg-turbo-2.1.2.tar.gz')
@@ -39,8 +40,9 @@ EOF
     $libzlib_prefix = ZLIB_PREFIX;
     $p->addLibrary(
         (new Library('libpng'))
-            ->withUrl('https://nchc.dl.sourceforge.net/project/libpng/libpng16/1.6.37/libpng-1.6.37.tar.gz')
+            ->withHomePage('http://www.libpng.org/pub/png/libpng.html')
             ->withLicense('http://www.libpng.org/pub/png/src/libpng-LICENSE.txt', Library::LICENSE_SPEC)
+            ->withUrl('https://nchc.dl.sourceforge.net/project/libpng/libpng16/1.6.37/libpng-1.6.37.tar.gz')
             ->withPrefix($libpng_prefix)
             ->withConfigure(
                 <<<EOF
@@ -51,7 +53,7 @@ EOF
                 ./configure --prefix={$libpng_prefix} \
                 --enable-static --disable-shared \
                 --with-zlib-prefix={$libzlib_prefix} \
-                --with-binconfigs
+                --with-binconfigs 
 EOF
             )
             ->withPkgName('libpng')
@@ -63,8 +65,10 @@ EOF
     $libgif_prefix = GIF_PREFIX;
     $p->addLibrary(
         (new Library('libgif'))
-            ->withUrl('https://nchc.dl.sourceforge.net/project/giflib/giflib-5.2.1.tar.gz')
+            ->withHomePage('https://giflib.sourceforge.net/')
+            ->withManual('https://giflib.sourceforge.net/intro.html')
             ->withLicense('https://giflib.sourceforge.net/intro.html', Library::LICENSE_SPEC)
+            ->withUrl('https://nchc.dl.sourceforge.net/project/giflib/giflib-5.2.1.tar.gz')
             ->withPrefix($libgif_prefix)
             ->withMakeOptions('libgif.a')
             ->withMakeInstallCommand('')
@@ -90,10 +94,11 @@ EOF
     $libwebp_prefix = WEBP_PREFIX;
     $p->addLibrary(
         (new Library('libwebp'))
+            ->withHomePage('https://chromium.googlesource.com/webm/libwebp')
+            ->withManual('https://chromium.googlesource.com/webm/libwebp/+/HEAD/doc/building.md')
+            ->withLicense('https://github.com/webmproject/libwebp/blob/main/COPYING', Library::LICENSE_SPEC)
             ->withUrl('https://codeload.github.com/webmproject/libwebp/tar.gz/refs/tags/v1.2.1')
             ->withFile('libwebp-1.2.1.tar.gz')
-            ->withHomePage('https://github.com/webmproject/libwebp')
-            ->withLicense('https://github.com/webmproject/libwebp/blob/main/COPYING', Library::LICENSE_SPEC)
             ->withPrefix($libwebp_prefix)
             ->withConfigure(
                 <<<EOF
@@ -112,7 +117,7 @@ EOF
                 --with-jpeglibdir={$libjpeg_prefix}/lib \
                 --with-gifincludedir={$libgif_prefix}/include \
                 --with-giflibdir={$libgif_prefix}/lib \
-                --disable-tiff 
+                --disable-tiff  
 EOF
             )
             ->withPkgName('libwebp')
@@ -126,11 +131,12 @@ EOF
     $p->addLibrary(
         (new Library('freetype'))
             ->withHomePage('https://freetype.org/')
-            ->withUrl('https://download.savannah.gnu.org/releases/freetype/freetype-2.10.4.tar.gz')
+            ->withManual('https://freetype.org/freetype2/docs/documentation.html')
             ->withLicense(
                 'https://gitlab.freedesktop.org/freetype/freetype/-/blob/master/docs/GPLv2.TXT',
                 Library::LICENSE_GPL
             )
+            ->withUrl('https://download.savannah.gnu.org/releases/freetype/freetype-2.10.4.tar.gz')
             ->withPrefix($freetype_prefix)
             ->withConfigure(
                 <<<EOF
@@ -147,7 +153,7 @@ EOF
             --with-bzip2=yes \
             --with-png=yes \
             --with-harfbuzz=no  \
-            --with-brotli=yes 
+            --with-brotli=yes  
 EOF
             )
             ->withPkgName('freetype2')
@@ -160,11 +166,12 @@ EOF
     $options .= ' --with-png-dir=' . PNG_PREFIX;
     $options .= ' --with-zlib-dir=' . ZLIB_PREFIX;
     $options .= ' --with-freetype-dir=' . FREETYPE_PREFIX;
-    $options .= ' --without-libXpm' ;
+    $options .= ' --without-libXpm';
     //$options .= ' --with-gettext=' ;
 
     $p->addExtension(
         (new Extension('gd'))
+            ->withHomePage('https://www.php.net/manual/zh/book.image.php')
             ->withOptions($options)
             ->depends('libjpeg', 'freetype', 'libwebp', 'libpng', 'libgif')
     );
