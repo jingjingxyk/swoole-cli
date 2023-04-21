@@ -22,5 +22,7 @@ return function (Preprocessor $p) {
         (new Extension('sodium'))
             ->withHomePage('https://github.com/jedisct1/libsodium-php')
             ->withOptions('--with-sodium=' . LIBSODIUM_PREFIX)
+            ->depends('libsodium')
+
     );
 };

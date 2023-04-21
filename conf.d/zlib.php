@@ -20,5 +20,6 @@ return function (Preprocessor $p) {
         (new Extension('zlib'))
             ->withHomePage('https://www.php.net/zlib')
             ->withOptions('--with-zlib=' . ZLIB_PREFIX)
+            ->depends('zlib')
     );
 };
