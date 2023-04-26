@@ -236,7 +236,6 @@ EOF
                 'nghttp2',
                 'libssh2'
             )
-
     );
     $p->addExtension(
         (new Extension('curl'))
@@ -244,4 +243,5 @@ EOF
             ->withOptions('--with-curl')
             ->depends('curl')
     );
+
 };

@@ -18,7 +18,7 @@ return function (Preprocessor $p) {
             ->withDownloadScript(
                 'swoole-src',
                 <<<EOF
-            git clone -b 4.8.x --depth=1  https://github.com/swoole/swoole-src.git 
+            git clone -b 4.8.x --depth=1  https://github.com/swoole/swoole-src.git
 EOF
             )
     );
