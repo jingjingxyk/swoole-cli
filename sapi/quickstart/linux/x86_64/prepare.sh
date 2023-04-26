@@ -17,8 +17,7 @@ export PATH=${__PROJECT__}/bin/runtime:$PATH
 composer update
 
 
-php prepare.php  --with-build-type=release -gd  -swoole  -imagick
+php prepare.php  --with-build-type=release -gd  =  -imagick -soap -mysqli  #  intl zip  暂启用不了
 
 # php prepare.php  --with-build-type=release +apcu +ds
 
-php prepare.php  --with-build-type=release -gd  -swoole  -imagick  -mongodb  -gmp -curl -redis  -soap -pdo_mysql -mysql

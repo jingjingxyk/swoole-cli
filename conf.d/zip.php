@@ -80,7 +80,7 @@ EOF
             ->withHomePage('https://libzip.org/')
             ->withLicense('https://libzip.org/license/', Library::LICENSE_BSD)
             ->withUrl('https://libzip.org/download/libzip-1.9.2.tar.gz')
-            ->withUrl('https://github.com/nih-at/libzip/releases/download/rel-1-6-0/libzip-1.6.0.tar.gz')
+            //->withUrl('https://github.com/nih-at/libzip/releases/download/rel-1-6-0/libzip-1.6.0.tar.gz')
             ->withManual('https://libzip.org')
             ->withPrefix($libzip_prefix)
             ->withConfigure(
