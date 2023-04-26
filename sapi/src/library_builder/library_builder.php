@@ -160,12 +160,14 @@ function libraries_builder($p)
     install_libheif($p); //依赖 libde265
     install_libtiff($p); //依赖  zlib libjpeg liblzma  libzstd
     install_libgd2($p);
+    install_librsvg($p);
+
     if (0) {
         install_libtiff($p); //依赖  zlib libjpeg liblzma  libzstd
         install_lcms2($p); //lcms2  //依赖libtiff libjpeg zlib
         install_libraw($p);  //依赖 zlib  libjpeg liblcms2
         install_librsvg($p);
-        install_libfribidi($p); //以来c2man
+        install_libfribidi($p); //依赖 c2man
         //文本绘制引擎
         install_harfbuzz($p); //依赖ninja icu
 
@@ -180,18 +182,19 @@ function libraries_builder($p)
         install_graphite2($p);
         install_harfbuzz($p); //依赖ninja icu zlib glib
 
-        if (0) {
-            install_xorgproto($p); //依赖 xorg-macros
-            //install_xorg_macros($p);
-            //install_xorgproto($p);
-            //install_libX11($p);
-            install_libXpm($p); //依赖 xorg-macros  xorgproto libx11 # apk add util-macros xorgproto libx11
-        }
-
 
         //GraphicsMagick  http://www.graphicsmagick.org/index.html
         install_GraphicsMagick($p);
     }
+
+    if (0) {
+        install_xorgproto($p); //依赖 xorg-macros
+        //install_xorg_macros($p);
+        install_xorgproto($p);
+        install_libX11($p);
+        install_libXpm($p); //依赖 xorg-macros  xorgproto libx11 # apk add util-macros xorgproto libx11
+    }
+
 
     if (0) {
         install_openssl_v1($p);
@@ -256,7 +259,7 @@ function libraries_builder($p)
         install_libgomp($p); //压缩算法
         install_libzip_ng($p); //zlib next
     }
-
+    install_snappy($p);
 
     if (0) {
         install_aria2($p); //依赖libuv openssl zlib libxml2 sqlite3 openssl c-ares
@@ -411,7 +414,13 @@ function libraries_builder($p)
     if ($p->getInputOption('with-capstone') == 'yes') {
         install_capstone($p);
     }
-    install_rust($p);
+
+
+    install_musl($p); //https://musl.libc.org/
+    //解决依赖 apt install git build-essential
+    // Automated cross toolchain builde
+    install_musl_cross_make($p);
+
     if (0) {
         // brew  //  https://mirrors.tuna.tsinghua.edu.cn/help/homebrew
         // brew  //  https://github.com/Homebrew/brew.git
@@ -448,13 +457,19 @@ function libraries_builder($p)
 
         //OProfile是Linux内核支持的一种性能分析机制。 它在时钟中断处理入口处建立监测点，记录被中断的上下文现场，由配套的用户态的工具oprof_start负责在用户态收集数据
 
+        //alpine 上默认的 gcc 就是 musl-gcc
         //nm  结果参考 https://www.cnblogs.com/vaughnhuang/p/15771582.html
-        // gcc的ar,nm,objdump,objcopy
+        // binutils 二进制工具集   gcc的ar,nm,objdump,objcopy
+        // gcc -Wall -Wextra -pedantic -pthread    # -pedanti 编译器严格遵守 C++ 标准 ； -Wextra（启用额外的警告信息，提高代码质量和安全性）
 
         //gdb bin/swoole-cli
         //set args -m
         //run
 
+        // AR CC CXX CPP CFLAGS CXXFLAGS LDFLAGS LDLIBS 功能介绍
+        // https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html
+
+        // pstack命令(跟踪进程栈)
 
         //下载 boringssl 镜像地址 https://source.codeaurora.org/quic/lc
 
@@ -468,6 +483,20 @@ function libraries_builder($p)
         // .ko 文件是Linux内核使用的动态链接文件后缀，属于模块文件，用在Linux系统启动时加载内核模块
 
         //  gcov是一个测试代码覆盖率的工具。 https://zhuanlan.zhihu.com/p/410077415
+
+        // ca-certificates    /etc/ssl/certs  /etc/ca-certificates/update.d
+
+        //build system type
+        //host  system type
+        //target system type    x86_64-unknown-linux-gnu
+
+        // gcc -idirafter dir 在 -I 的目录里面查找失败, 讲到这个目录里面查找。
+
+        // gcc -iprefix prefix  -iwithprefix dir 一般一起使用, 当 -I 的目录查找失败, 会到 prefix+dir 下查找
+        // gcc -nostdinc -nostdinc++ 不搜索默认路径头文件
+        // gcc -nostdlib 不使用标准库
+
+        //clang main.c -static -nostdinc -nostdlib -I/usr/include/x86_64-linux-musl -L/usr/lib/x86_64-linux-musl
     }
 
     if (0) {
@@ -571,6 +600,13 @@ function libraries_builder($p)
      *
      * CURL ARCHITECTURE   https://curl.se/docs/install.html#:~:text=26%20CPU%20Architectures
      * CURL Cross compile  https://curl.se/docs/install.html#:~:text=Cross%20compile
+     *
+     *   cmake -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_C_COMPILER=clang -DCMAKE_C_FLAGS_RELWITHDEBINFO="-O1 -g -fsanitize=address,undefined -fno-sanitize-recover=all -fno-omit-frame-pointer" -DENABLE_SHARED=0 ..
+     *   export NUMCPUS=`grep -c '^processor' /proc/cpuinfo`
+     *
+     *
+     *
+     *   make install DESTDIR=/usr/libzip
      */
 
 
@@ -613,11 +649,23 @@ function libraries_builder($p)
        debian 容器精简版本
        debian:bullseye-slim 或者 debian:stable-slim
 
+        scratch scratch 镜像的第一个不便是没有 shell，这意味着 CMD/RUN 语句中不能使用字符串
+
      */
     /*
        linux内置的沙盒:Seccomp-bpf  内核安全技术,支持创建沙盒来限制进程可以进行的系统调用
 
     seccomp与capabilities的区别
          seccomp是比capabilities 更细粒度的capabilities权限限制系统内核提供的能力。
+     */
+    /*
+      gcc 常见链接库
+             （1）-lm：链接m动态库，即math数学库
+            （2）-static –lm：链接m静态库
+            （3）-ldl：当代码中用到dlopen，dlsym，dlclose，dlerror显示加载动态库时，需加上
+            （4）-lstdc++：加上该编译选项表示编译c++文件，链接c++库
+            （5）-lc：表示编译c文件，链接c库，gcc默认编译c文件和链接c库，当编译c文件时可以不用额外加该选项
+            （6）-lpthread：链接到pthread的库
+             (7) -lresolv DNS
      */
 }
