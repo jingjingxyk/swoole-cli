@@ -21,7 +21,10 @@ return function (Preprocessor $p) {
             -DCMAKE_INSTALL_INCLUDEDIR={$libjpeg_prefix}/include \
             -DCMAKE_BUILD_TYPE=Release  \
             -DBUILD_SHARED_LIBS=OFF  \
-            -DBUILD_STATIC_LIBS=ON 
+            -DBUILD_STATIC_LIBS=ON \
+            -DENABLE_SHARED=OFF  \
+            -DENABLE_STATIC=ON
+
 EOF
         )
         ->withScriptAfterInstall(
@@ -53,7 +56,9 @@ EOF
                 ./configure --prefix={$libpng_prefix} \
                 --enable-static --disable-shared \
                 --with-zlib-prefix={$libzlib_prefix} \
-                --with-binconfigs 
+                --with-binconfigs
+
+
 EOF
             )
             ->withPkgName('libpng')
@@ -82,7 +87,9 @@ EOF
                 fi
                 cp libgif.a {$libgif_prefix}/lib/libgif.a
                 cp gif_lib.h {$libgif_prefix}/include/gif_lib.h
-                EOF
+
+
+EOF
             )
             ->withLdflags('-L' . $libgif_prefix . '/lib')
     );
@@ -117,7 +124,8 @@ EOF
                 --with-jpeglibdir={$libjpeg_prefix}/lib \
                 --with-gifincludedir={$libgif_prefix}/include \
                 --with-giflibdir={$libgif_prefix}/lib \
-                --disable-tiff  
+                --disable-tiff
+
 EOF
             )
             ->withPkgName('libwebp')
@@ -153,7 +161,8 @@ EOF
             --with-bzip2=yes \
             --with-png=yes \
             --with-harfbuzz=no  \
-            --with-brotli=yes  
+            --with-brotli=yes
+
 EOF
             )
             ->withPkgName('freetype2')
