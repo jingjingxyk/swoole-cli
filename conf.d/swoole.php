@@ -12,7 +12,7 @@ return function (Preprocessor $p) {
             ->withOptions($options)
             ->withLicense('https://github.com/swoole/swoole-src/blob/master/LICENSE', Extension::LICENSE_APACHE2)
             ->withHomePage('https://github.com/swoole/swoole-src')
-            ->depends('curl', 'openssl', 'cares', 'zlib', 'brotli', 'nghttp2')
+            ->depends('curl', 'openssl', 'cares', 'zlib', 'brotli')
             ->withFile('swoole-4.8.x.tar.gz')
             ->withDownloadScript(
                 'swoole-src',

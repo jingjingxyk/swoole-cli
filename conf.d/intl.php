@@ -45,6 +45,7 @@ EOF
         (new Extension('intl'))
             ->withHomePage('https://www.php.net/intl')
             ->withOptions('--enable-intl --with-icu-dir=' . ICU_PREFIX)
+            ->withOptions('') //暂时无法启用
             ->depends('icu')
     );
 };

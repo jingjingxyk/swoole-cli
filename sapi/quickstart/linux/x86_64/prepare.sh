@@ -16,4 +16,9 @@ export PATH=${__PROJECT__}/bin/runtime:$PATH
 # composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
 composer update
 
-php prepare.php  --with-build-type=release +apcu +ds
+
+php prepare.php  --with-build-type=release -gd  -swoole  -imagick
+
+# php prepare.php  --with-build-type=release +apcu +ds
+
+php prepare.php  --with-build-type=release -gd  -swoole  -imagick  -mongodb  -gmp -curl -redis  -soap -pdo_mysql -mysql

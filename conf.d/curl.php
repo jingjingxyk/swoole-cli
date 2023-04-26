@@ -134,7 +134,7 @@ EOF
                 <<<EOF
             ./configure --help
 
-            PACKAGES='zlib openssl libcares libbrotlicommon libbrotlidec libbrotlienc libzstd libnghttp2 '
+            PACKAGES='zlib openssl libcares libbrotlicommon libbrotlidec libbrotlienc libzstd  '
             PACKAGES="\$PACKAGES libidn2 libssh2 "
             CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$PACKAGES)" \
             LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES)" \
@@ -168,7 +168,7 @@ EOF
             --with-libssh2 \
             --without-nghttp2 \
             --without-ngtcp2 \
-            --without-nghttp3
+            --without-nghttp3 \
             --with-openssl  \
             --with-default-ssl-backend=openssl \
             --without-gnutls \

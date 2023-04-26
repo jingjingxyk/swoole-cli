@@ -31,6 +31,7 @@ EOF
         (new Extension('openssl'))
             ->withHomePage('https://www.php.net/openssl')
             ->withOptions('--with-openssl=' . OPENSSL_PREFIX . '  --with-openssl-dir=' . OPENSSL_PREFIX)
+            ->withOptions('')
             ->depends('openssl')
     );
 };
