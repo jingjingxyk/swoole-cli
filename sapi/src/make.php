@@ -147,7 +147,8 @@ export_variables() {
     return 0
 }
 
-make_extensions(){
+
+prepare_extensions(){
     cd <?= $this->phpSrcDir . PHP_EOL ?>
 
 <?php
@@ -170,11 +171,39 @@ EOF;
 
 make_config() {
     set -exu
+    cd <?= $this->phpSrcDir . PHP_EOL ?>
 <?php if ($this->getInputOption('with-build-type') != 'release') : ?>
     make_php_src
 <?php endif ;?>
-    make_extensions
-    cd <?= $this->phpSrcDir . PHP_EOL ?>
+
+    prepare_extensions
+
+<?php if ($this->getInputOption('with-php-sfx-micro')) : ?>
+    PHP_VERSION=$(cat main/php_version.h | grep 'PHP_VERSION_ID' | grep -E -o "[0-9]+")
+    if [[ $PHP_VERSION -lt 80000 ]] ; then
+        echo "only support PHP >= 8.0 "
+    else
+        if [[ -f php-sfx-micro.cached ]] ; then
+            echo "php-sfx-micro patch exists !"
+        else
+            cp -rf <?= $this->buildDir ?>/php_patch_sfx_micro/ sapi/micro
+            patch -p1 < sapi/micro/patches/phar.patch
+            touch php-sfx-micro.cached
+            echo "php-sfx-micro patch ok "
+        fi
+    fi
+<?php endif ;?>
+
+<?php if ($this->getInputOption('with-swoole-cli-sfx')) : ?>
+    PHP_VERSION=$(cat main/php_version.h | grep 'PHP_VERSION_ID' | grep -E -o "[0-9]+")
+    if [[ $PHP_VERSION -lt 80000 ]] ; then
+        echo "only support PHP >= 8.0 "
+    else
+        # 请把这个做成 patch  https://github.com/swoole/swoole-cli/pull/55/files
+
+    fi
+<?php endif ;?>
+
     test -f ./configure &&  rm ./configure
     ./buildconf --force
 
@@ -189,13 +218,23 @@ make_build() {
     export EXTRA_CFLAGS='<?= $this->extraCflags ?>' \
     export EXTRA_LDFLAGS_PROGRAM='-all-static -fno-ident <?= $this->extraLdflags ?>
 <?php foreach ($this->libraryList as $item) {
-    if (!empty($item->ldflags)) {
-        echo $item->ldflags;
-        echo ' ';
+        if (!empty($item->ldflags)) {
+            echo $item->ldflags;
+            echo ' ';
+        }
     }
-} ?>'
-    make -j <?= $this->maxJob  ?> cli
-    make install
+echo "'";
+echo PHP_EOL;
+if ($this->getInputOption('with-php-sfx-micro')) {
+    echo "    make -j " . $this->maxJob . ' micro' ;
+} else {
+    echo "    make -j " . $this->maxJob . ' cli' ;
+    echo PHP_EOL;
+    echo "    make install " ;
+}
+
+?>
+
 }
 
 make_clean() {
