@@ -17,7 +17,15 @@ export PATH=${__PROJECT__}/bin/runtime:$PATH
 composer update
 
 
+<<<<<<< HEAD:sapi/quickstart/linux/x86_64/prepare.sh
 php prepare.php  --with-build-type=release -gd   -imagick -soap -mysqli  #  intl zip  暂启用不了
 
 # php prepare.php  --with-build-type=release +apcu +ds
 
+=======
+php prepare.php  --with-build-type=release +apcu +ds
+
+exit 0
+# use sfx micro
+php prepare.php  --with-build-type=release +apcu +ds --with-php-sfx-micro=1
+>>>>>>> build_native_php:sapi/quickstart/linux/x86_64/prepare2.sh
