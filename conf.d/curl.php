@@ -54,30 +54,51 @@ EOF
             ->withPkgName('libcares')
     );
 
-    $libidn2_prefix = LIBIDN2_PREFIX;
     $libiconv_prefix = ICONV_PREFIX;
-    $p->addLibrary(
-        (new Library('libidn2'))
-            ->withHomePage('https://gitlab.com/libidn/libidn2')
-            ->withManual('https://www.gnu.org/software/libidn/libidn2/manual/')
-            ->withLicense('https://www.gnu.org/licenses/old-licenses/gpl-2.0.html', Library::LICENSE_GPL)
-            ->withUrl('https://ftp.gnu.org/gnu/libidn/libidn2-2.3.4.tar.gz')
-            ->withPrefix($libidn2_prefix)
-            ->withConfigure(
-                <<<EOF
+    $libunistring_prefix = LIBUNISTRING_PREFIX;
+    if (0) {
+        $p->addLibrary(
+            (new Library('libunistring'))
+                ->withHomePage('https://www.gnu.org/software/libunistring/')
+                ->withLicense('https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html', Library::LICENSE_LGPL)
+                ->withUrl('https://ftp.gnu.org/gnu/libunistring/libunistring-1.1.tar.gz')
+                ->withPrefix($libunistring_prefix)
+                ->withConfigure(
+                    <<<EOF
+            ./configure --help
+            ./configure \
+            --prefix={$libunistring_prefix} \
+            --with-libiconv-prefix={$libiconv_prefix} \
+            --enable-shared=no \
+            --enable-static=yes
+EOF
+                )
+        );
+        $libidn2_prefix = LIBIDN2_PREFIX;
+        $p->addLibrary(
+            (new Library('libidn2'))
+                ->withHomePage('https://gitlab.com/libidn/libidn2')
+                ->withManual('https://www.gnu.org/software/libidn/libidn2/manual/')
+                ->withLicense('https://www.gnu.org/licenses/old-licenses/gpl-2.0.html', Library::LICENSE_GPL)
+                ->withUrl('https://ftp.gnu.org/gnu/libidn/libidn2-2.3.4.tar.gz')
+                ->withPrefix($libidn2_prefix)
+                ->withConfigure(
+                    <<<EOF
             ./configure --help
             ./configure --prefix={$libidn2_prefix} \
-            enable_static=yes \
-            enable_shared=no \
+            --enable-static=yes \
+            --enable-shared=no \
             --disable-doc \
             --with-libiconv-prefix={$libiconv_prefix} \
-            --with-libintl-prefix
+            --with-libunistring-prefix={$libunistring_prefix} \
+            --without-libintl-prefix
 
 EOF
-            )
-            ->withPkgName('libidn2')
-            ->depends('libiconv')
-    );
+                )
+                ->withPkgName('libidn2')
+                ->depends('libiconv', 'libunistring')
+        );
+    }
 
     $nghttp2_prefix = NGHTTP2_PREFIX;
     $p->addLibrary(
@@ -152,7 +173,6 @@ EOF
               -DCRYPTO_BACKEND=OpenSSL \
               -DBUILD_TESTING=OFF \
               -DBUILD_EXAMPLES=OFF
-
               cmake --build . --target install
 EOF
             )
@@ -176,8 +196,8 @@ EOF
                 <<<EOF
             ./configure --help
 
-            PACKAGES='zlib openssl libcares libbrotlicommon libbrotlidec libbrotlienc libzstd libnghttp2 '
-            PACKAGES="\$PACKAGES libidn2 libssh2 "
+            PACKAGES='zlib openssl libcares libbrotlicommon libbrotlidec libbrotlienc libzstd  libnghttp2'
+            PACKAGES="\$PACKAGES  libssh2 " # libidn2
             CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$PACKAGES)" \
             LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES)" \
             LIBS="$(pkg-config      --libs-only-l    --static \$PACKAGES)" \
@@ -206,14 +226,11 @@ EOF
             --enable-optimize \
             --with-zlib={$zlib_prefix} \
             --enable-ares={$cares_prefix} \
-            --with-nghttp2 \
-            --with-ngtcp2 \
-            --with-nghttp3 \
-            --with-libidn2 \
+            --without-libidn2 \
             --with-libssh2 \
-            --without-nghttp2 \
+            --with-nghttp2 \
             --without-ngtcp2 \
-            --without-nghttp3 
+            --without-nghttp3
             --with-openssl  \
             --with-default-ssl-backend=openssl \
             --without-gnutls \
@@ -232,10 +249,9 @@ EOF
                 'zlib',
                 'brotli',
                 'libzstd',
-                'libidn2',
                 'nghttp2',
                 'libssh2'
-            )
+            )  # 'libidn2',
     );
     $p->addExtension(
         (new Extension('curl'))
@@ -243,5 +259,4 @@ EOF
             ->withOptions('--with-curl')
             ->depends('curl')
     );
-
 };
