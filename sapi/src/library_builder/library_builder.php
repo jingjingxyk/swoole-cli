@@ -195,7 +195,11 @@ function libraries_builder($p)
         install_libXpm($p); //依赖 xorg-macros  xorgproto libx11 # apk add util-macros xorgproto libx11
     }
 
-
+    install_libunistring($p); //coreutils 包含  libiconv
+    install_libintl($p); //coreutils 包含  libiconv
+    install_gettext($p);// gettext 包含 intl
+    install_coreutils($p);// gettext 包含 intl   GNU Core Utilities 包括常用的命令，如 cat、ls、rm、chmod、mkdir、wc、whoami 和许多其他命令
+    install_gnulib($p);
     if (0) {
         install_openssl_v1($p);
         install_openssl_v3($p);
@@ -232,10 +236,8 @@ function libraries_builder($p)
         install_msh3($p);  //需要安装库 bsd-compat-headers 解决 sys/queue.h 不存在的问题
 
 
-        install_coreutils($p);
-        install_gnulib($p);
-        install_libunistring($p); //coreutils 包含  libiconv
-        install_gettext($p);// gettext 包含 intl
+
+
 
         install_libfastcommon($p);
         install_libserverframe($p);
@@ -660,12 +662,56 @@ function libraries_builder($p)
      */
     /*
       gcc 常见链接库
-             （1）-lm：链接m动态库，即math数学库
+            （1）-lm：链接m动态库，即math数学库
             （2）-static –lm：链接m静态库
             （3）-ldl：当代码中用到dlopen，dlsym，dlclose，dlerror显示加载动态库时，需加上
             （4）-lstdc++：加上该编译选项表示编译c++文件，链接c++库
             （5）-lc：表示编译c文件，链接c库，gcc默认编译c文件和链接c库，当编译c文件时可以不用额外加该选项
             （6）-lpthread：链接到pthread的库
              (7) -lresolv DNS
+     */
+    /*
+     *
+        debian 使用 libc编译器
+        组合一： musl-gcc g++
+        组合二： clang clang++
+
+        alpine 使用 libc编译器
+        组合一： gcc g++   (gcc 默认就是musl-gcc)
+        组合二： clang clang++
+     */
+
+    /*
+
+       autoreconf -vfi
+        -d 不删除临时文件
+        -f 认为所有的文件都是过期的文件/强制执行
+        -i 复制辅助文件
+        -s 创建符号链接，而不是复制
+        -m 当可用时，重新运行命令./configure 和 make
+        -W 报告语法错误信息
+     */
+
+    /*
+        envsubst 使用环境变量替换文件中的变量  模板文件
+     */
+
+    /*
+       使用GCC时 Static link libstdc++
+        -static-libgcc -static-libstdc++
+
+       使用CLANG时 Static link libstdc++
+        -static      # -static -lc++abi -pthread -fuse-ld=lld
+
+        GNU libstdc++ 和 LLVM libc++ 是标准 C++ 库的两种不同实现。
+     */
+
+    /*
+
+       export alias sh='bash'
+
+     */
+    /**
+        php static compile
      */
 }
