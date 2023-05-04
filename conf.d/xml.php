@@ -23,11 +23,20 @@ EOF
             ->depends('libiconv')
             ->withBinPath($libxml2_prefix . '/bin/')
     );
+    $options = " --enable-xml";
+    $options .= " --enable-simplexml";
+    $options .= " --enable-simplexml";
+    $options .= " --enable-xmlreader";
+    $options .= " --enable-xmlwriter";
+    $options .= " --enable-dom";
+    $options .= " --enable-xmlwriter";
+    $options .= " --with-libxml-dir=" . $libxml2_prefix;
+    $options .= "  ";
     $p->addExtension(
         (new Extension('xml'))
             ->withHomePage('https://www.php.net/xml')
             ->withOptions(
-                '--enable-xml --enable-simplexml --enable-xmlreader --enable-xmlwriter --enable-dom --with-libxml=' . $libxml2_prefix
+                $options
             )
             ->depends('libxml2')
 
