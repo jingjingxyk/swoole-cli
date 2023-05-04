@@ -21,7 +21,7 @@ if ($p->getInputOption('without-docker')) {
 //重新设置 PHP 源码所在目录
 $p->setPhpSrcDir($p->getWorkDir() . '/php-src');
 //设置PHP 安装目录和版本号
-$version = '8.2.4';
+$version = '7.4.33';
 define("BUILD_PHP_VERSION", $version);
 define("BUILD_PHP_INSTALL_PREFIX", $p->getWorkDir() . '/bin/php-' . $version);
 
