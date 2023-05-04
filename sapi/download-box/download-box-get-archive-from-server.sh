@@ -11,18 +11,20 @@ __PROJECT__=$(
 )
 cd ${__PROJECT__}
 
+mkdir -p pool/lib
+mkdir -p pool/ext
+
 test -d ${__PROJECT__}/var || mkdir -p ${__PROJECT__}/var
 
 cd ${__PROJECT__}/var
-
 
 DOMAIN='http://127.0.0.1:8000'
 DOMAIN='https://swoole-cli.jingjingxyk.com/'
 URL="${DOMAIN}/all-archive.zip"
 
-wget -O all-archive.zip ${URL}
+test -f all-archive.zip || wget -O all-archive.zip ${URL}
 
-unzip all-archive.zip
+unzip -n all-archive.zip
 
 cd ${__PROJECT__}/
 
