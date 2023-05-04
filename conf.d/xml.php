@@ -27,7 +27,7 @@ EOF
         (new Extension('xml'))
             ->withHomePage('https://www.php.net/xml')
             ->withOptions(
-                '--enable-xml --enable-simplexml --enable-xmlreader --enable-xmlwriter --enable-dom '
+                '--enable-xml --enable-simplexml --enable-xmlreader --enable-xmlwriter --enable-dom --with-libxml=' . $libxml2_prefix
             )
             ->depends('libxml2')
 
