@@ -156,13 +156,14 @@ EOF
             LDFLAGS="$(pkg-config  --libs-only-L   --static zlib libpng  libbrotlicommon  libbrotlidec  libbrotlienc)" \
             LIBS="$(pkg-config     --libs-only-l   --static zlib libpng  libbrotlicommon  libbrotlidec  libbrotlienc)" \
             ./configure --prefix={$freetype_prefix} \
-            --enable-static \
-            --disable-shared \
+            --enable-static=yes \
+            --enable-shared=no \
             --with-zlib=yes \
             --with-bzip2=yes \
             --with-png=yes \
             --with-harfbuzz=no  \
-            --with-brotli=yes
+            --with-brotli=yes \
+            --enable-freetype-config
 
 EOF
             )
@@ -170,13 +171,61 @@ EOF
             ->depends('zlib', 'bzip2', 'libpng', 'brotli')
     );
 
+
+    $libgd_prefix = LIBGD_PREFIX;
+    $zlib_prefix = ZLIB_PREFIX;
+    $webp_prefix = WEBP_PREFIX;
+    $iconv_prefix = ICONV_PREFIX;
+    $lib = new Library('libgd2');
+    $lib->withHomePage('https://www.libgd.org/')
+        ->withLicense('https://github.com/libgd/libgd/blob/master/COPYING', Library::LICENSE_SPEC)
+        ->withUrl('https://github.com/libgd/libgd/releases/download/gd-2.3.3/libgd-2.3.3.tar.gz')
+        ->withManual('https://github.com/libgd/libgd.git')
+        ->withManual('https://libgd.github.io/pages/docs.html')
+        ->withPrefix($libgd_prefix)
+        ->withCleanBuildDirectory()
+        ->withCleanPreInstallDirectory($libgd_prefix)
+        ->withBuildScript(
+            <<<EOF
+        mkdir -p build
+        cd build
+        cmake   ..  \
+        -DCMAKE_INSTALL_PREFIX={$libgd_prefix} \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DBUILD_SHARED_LIBS=OFF  \
+        -DBUILD_STATIC_LIBS=ON \
+        -DCMAKE_POLICY_DEFAULT_CMP0074=NEW \
+        -DENABLE_GD_FORMATS=1 \
+        -DENABLE_JPEG=1 \
+        -DENABLE_TIFF=0 \
+        -DENABLE_ICONV=1 \
+        -DENABLE_FREETYPE=1 \
+        -DENABLE_FONTCONFIG=0 \
+        -DENABLE_WEBP=1 \
+        -DENABLE_HEIF=0 \
+        -DENABLE_AVIF=0 \
+        -DZLIB_ROOT={$zlib_prefix} \
+        -DWEBP_ROOT={$webp_prefix} \
+        -DICONV_ROOT={$iconv_prefix}
+
+        cmake --build . -- -j$(nproc)
+        cmake --install .
+
+EOF
+        )
+        ->withPkgName('libgd2');
+
+    $p->addLibrary($lib);
+
     $options = '--with-gd=';
     $options .= ' --with-webp-dir=' . WEBP_PREFIX;
     $options .= ' --with-jpeg-dir=' . JPEG_PREFIX;
     $options .= ' --with-png-dir=' . PNG_PREFIX;
     $options .= ' --with-zlib-dir=' . ZLIB_PREFIX;
     $options .= ' --with-freetype-dir=' . FREETYPE_PREFIX;
-    $options .= ' --without-libXpm';
+    //$options .= ' --without-libXpm';
+    $options .= ' --without-xpm-dir';
+    #$options .= ' --without-libxpm';
     //$options .= ' --with-gettext=' ;
     $p->addExtension(
         (new Extension('gd'))

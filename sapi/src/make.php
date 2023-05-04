@@ -200,21 +200,20 @@ make_config() {
     cd <?= $this->phpSrcDir . PHP_EOL ?>
 
 
-<?php if ($this->getInputOption('with-swoole-cli-sfx')) : ?>
-    PHP_VERSION=$(cat main/php_version.h | grep 'PHP_VERSION_ID' | grep -E -o "[0-9]+")
-    if [[ $PHP_VERSION -lt 80000 ]] ; then
-        echo "only support PHP >= 8.0 "
-    else
-        # 请把这个做成 patch  https://github.com/swoole/swoole-cli/pull/55/files
+    # 替换指定行
 
-    fi
-<?php endif ;?>
-    echo $OPTIONS
     test -f ./configure &&  rm ./configure
+    sed -i.bak '244s/PHP_GD_XPM/ /' ext/gd/config.m4
+    sed -i.bak '313s/PHP_GD_XPM/ /' ext/gd/config.m4
+    sed -i.bak 's@$PHP_FREETYPE_DIR /usr/local@$PHP_FREETYPE_DIR <?= FREETYPE_PREFIX ?>@' ext/gd/config.m4
+    sed -i.bak '157,182d'   ext/gd/config.m4
     ./buildconf --force
 
     ./configure --help
+    exit 0
      export_variables
+
+
     ./configure $OPTIONS
 
     # more info https://stackoverflow.com/questions/19456518/error-when-using-sed-with-find-command-on-os-x-invalid-command-code
