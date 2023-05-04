@@ -22,11 +22,8 @@ OPTIONS="--prefix=<?= BUILD_PHP_INSTALL_PREFIX ?> --disable-all \
 --disable-phpdbg \
 --enable-shared=no \
 --enable-static=yes \
-<<<<<<< HEAD
 --enable-json \
-=======
 --enable-cli  \
->>>>>>> build_native_php
 <?php foreach ($this->extensionList as $item) : ?>
     <?=$item->options?> \
 <?php endforeach; ?>
