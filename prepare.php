@@ -1,4 +1,3 @@
-#!/usr/bin/env php
 <?php
 require __DIR__ . '/vendor/autoload.php';
 
@@ -41,14 +40,17 @@ $p->execute();
 function install_libraries($p): void
 {
     //重新设置 PHP 源码所在目录
-    $p->setPhpSrcDir($p->getbuildDir() . '/php_src');
+    $p->setPhpSrcDir($p->getWorkDir() . '/php-src');
 
     //设置PHP 安装目录和版本号
-    $version = '7.4.33';
-    define("PHP_VERSION", $version);
-    define("PHP_INSTALL_PREFIX", $p->getGlobalPrefix() . '/php-' . $version);
 
-    $php_install_prefix = PHP_INSTALL_PREFIX;
+    $version = '7.4.33';
+    define("BUILD_PHP_VERSION", $version);
+    define("BUILD_PHP_INSTALL_PREFIX", $p->getWorkDir() . '/bin/php-' . $version);
+
+    $php_install_prefix = BUILD_PHP_INSTALL_PREFIX;
+    $php_src = $p->getPhpSrcDir();
+    $build_dir = $p->getBuildDir();
     $p->addLibrary(
         (new Library('php_src'))
             ->withUrl('https://github.com/php/php-src/archive/refs/tags/php-' . $version . '.tar.gz')
@@ -58,28 +60,13 @@ function install_libraries($p): void
             ->withCleanBuildDirectory()
             ->withBuildScript(
                 <<<EOF
-                return 0
+                cd ..
+                if test -d {$php_src} ; then
+                    rm -rf {$php_src}
+                fi
+                cp -rf php_src {$php_src}
+                cd {$build_dir}/php_src
 EOF
             )
     );
-
-    $sfx_micro=$p->getInputOption('with-php-sfx-micro');
-    if ($sfx_micro) {
-        $p->addLibrary(
-            (new Library('php_patch_sfx_micro'))
-                ->withUrl('https://github.com/dixyes/phpmicro.git')
-                ->withHomePage('https://github.com/dixyes/phpmicro.git')
-                ->withManual('https://github.com/dixyes/phpmicro')
-                ->withLicense('https://github.com/dixyes/phpmicro/blob/master/LICENSE', Library::LICENSE_APACHE2)
-                ->withFile('phpmicro-master.tar.gz')
-                ->withDownloadScript(
-                    'phpmicro',
-                    <<<EOF
-             git clone -b master --depth=1 https://github.com/dixyes/phpmicro.git
-EOF
-                )
-                ->withBuildScript('return 0')
-                ->withLdflags('')
-        );
-    }
 }

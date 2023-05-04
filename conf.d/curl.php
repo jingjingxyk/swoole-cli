@@ -173,6 +173,7 @@ EOF
               -DCRYPTO_BACKEND=OpenSSL \
               -DBUILD_TESTING=OFF \
               -DBUILD_EXAMPLES=OFF
+
               cmake --build . --target install
 EOF
             )
@@ -252,6 +253,7 @@ EOF
                 'nghttp2',
                 'libssh2'
             )  # 'libidn2',
+
     );
     $p->addExtension(
         (new Extension('curl'))

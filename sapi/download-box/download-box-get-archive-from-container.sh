@@ -13,8 +13,7 @@ cd ${__PROJECT__}
 
 test -d ${__PROJECT__}/var || mkdir -p ${__PROJECT__}/var
 
-
-TAG='download-box-nginx-alpine-20230329T114730Z'
+TAG='download-box-nginx-alpine-20230429T061856Z'
 
 IMAGE="docker.io/phpswoole/swoole-cli-builder:donload-box-v5.0.2"
 IMAGE="docker.io/jingjingxyk/build-swoole-cli:${TAG}"
@@ -40,6 +39,9 @@ docker cp $container_id:/usr/share/nginx/html/libraries libraries
 docker rm $container_id
 
 cd ${__PROJECT__}/
+
+mkdir -p pool/lib
+mkdir -p pool/ext
 
 awk 'BEGIN { cmd="cp -ri var/libraries/* pool/lib"  ; print "n" |cmd; }'
 awk 'BEGIN { cmd="cp -ri var/extensions/* pool/ext"; print "n" |cmd; }'

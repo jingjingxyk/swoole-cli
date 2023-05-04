@@ -12,9 +12,10 @@ return function (Preprocessor $p) {
                 ->withHomePage('https://www.gnu.org/software/bison/')
                 ->withUrl('http://ftp.gnu.org/gnu/bison/bison-3.8.tar.gz')
                 ->withLicense('https://www.gnu.org/licenses/gpl-3.0.html', Library::LICENSE_GPL)
+                ->withPrefix($bison_prefix)
                 ->withConfigure(
                     "
-                    ./configure --help 
+                    ./configure --help
                     ./configure --prefix={$bison_prefix}
                     "
                 )
@@ -30,7 +31,7 @@ return function (Preprocessor $p) {
             ->withHomePage('https://www.php.net/mongodb')
             ->withHomePage('https://www.mongodb.com/docs/drivers/php/')
             ->withOptions('--enable-mongodb --with-mongodb-system-libs=no --with-mongodb-ssl=openssl')
-            ->withPeclVersion('1.14.2')
+            ->withPeclVersion('1.15.2')
             ->depends('icu', 'openssl', 'zlib', 'libzstd')
     );
 };

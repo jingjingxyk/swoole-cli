@@ -24,8 +24,6 @@ EOF
             ->withPkgName('libcrypto')
             ->withPkgName('libssl')
             ->withPkgName('openssl')
-            ->withPkgName('libcrypto')
-            ->withPkgName('libssl')
             ->withBinPath($openssl_prefix . '/bin/')
     );
 
