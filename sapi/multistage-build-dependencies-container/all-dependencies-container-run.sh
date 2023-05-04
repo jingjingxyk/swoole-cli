@@ -16,7 +16,7 @@ cd ${__PROJECT__}/
 ARCH=$(uname -m)
 
 
-TAG="native-php-all-dependencies-alpine-php-8.2.4-${ARCH}-20230428T164512Z"
+TAG="native-php-all-dependencies-alpine-php-7.3.33-${ARCH}-20230428T164512Z"
 
 
 IMAGE="phpswoole/swoole-cli-builder:1.6"
