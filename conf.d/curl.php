@@ -130,13 +130,13 @@ EOF
               -DCRYPTO_BACKEND=OpenSSL \
               -DBUILD_TESTING=OFF \
               -DBUILD_EXAMPLES=OFF
+
               cmake --build . --target install
 EOF
             )
             ->withPkgName('libssh2')
             ->depends('zlib', 'openssl')
     );
-
 
     $curl_prefix = CURL_PREFIX;
     $openssl_prefix = OPENSSL_PREFIX;
@@ -209,6 +209,7 @@ EOF
                 'libzstd',
                 'libssh2'
             )  # 'libidn2',
+
     );
     $p->addExtension(
         (new Extension('curl'))

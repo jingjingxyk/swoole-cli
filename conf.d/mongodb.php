@@ -12,6 +12,7 @@ return function (Preprocessor $p) {
                 ->withHomePage('https://www.gnu.org/software/bison/')
                 ->withUrl('http://ftp.gnu.org/gnu/bison/bison-3.8.tar.gz')
                 ->withLicense('https://www.gnu.org/licenses/gpl-3.0.html', Library::LICENSE_GPL)
+                ->withPrefix($bison_prefix)
                 ->withConfigure(
                     "
                     ./configure --help

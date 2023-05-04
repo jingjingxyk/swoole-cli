@@ -32,13 +32,21 @@ case $ARCH in
 'x86_64')
   ARCH="x64"
   ;;
+'aarch64')
+  ARCH="arm64"
+  ;;
 *)
   echo '暂未配置的 ARCH '
   exit 0
   ;;
 esac
 
+
 VERSION='v5.0.3'
+
+if [[ $OS = 'macos' ]] ;then
+  VERSION='v5.0.1'
+fi
 
 mkdir -p bin/runtime
 mkdir -p var/runtime
@@ -53,6 +61,11 @@ while [ $# -gt 0 ]; do
   case "$1" in
   --mirror)
     mirror="$2"
+    shift
+    ;;
+  --proxy)
+    export http_proxy="$2"
+    export https_proxy="$2"
     shift
     ;;
   --*)
@@ -91,7 +104,7 @@ set +x
 
 echo " "
 echo " "
-echo " use  PHP  rumtime :"
+echo " USE  PHP  rumtime :"
 echo " "
 echo " export PATH=\"${__PROJECT__}/bin/runtime:\$PATH\" "
 echo " "

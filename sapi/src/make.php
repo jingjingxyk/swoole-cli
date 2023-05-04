@@ -7,6 +7,9 @@ use SwooleCli\Library;
 use SwooleCli\Preprocessor;
 
 ?>
+
+set -x
+if [[ -z $PKG_CONFIG_PATH ]];then export PKG_CONFIG_PATH=' ';fi
 SRC=<?= $this->phpSrcDir . PHP_EOL ?>
 ROOT=<?= $this->getRootDir() . PHP_EOL ?>
 export CC=<?= $this->cCompiler . PHP_EOL ?>
@@ -14,16 +17,19 @@ export CXX=<?= $this->cppCompiler . PHP_EOL ?>
 export LD=<?= $this->lld . PHP_EOL ?>
 export PKG_CONFIG_PATH=<?= implode(':', $this->pkgConfigPaths) . PHP_EOL ?>
 export PATH=<?= implode(':', $this->binPaths) . PHP_EOL ?>
-OPTIONS="--prefix=<?= PHP_INSTALL_PREFIX ?> --disable-all \
+OPTIONS="--prefix=<?= BUILD_PHP_INSTALL_PREFIX ?> --disable-all \
+--disable-cgi  \
+--disable-phpdbg \
 --enable-shared=no \
 --enable-static=yes \
 --enable-json \
+--enable-cli  \
 <?php foreach ($this->extensionList as $item) : ?>
     <?=$item->options?> \
 <?php endforeach; ?>
 <?=$this->extraOptions?>
 "
-
+set +x
 <?php foreach ($this->libraryList as $item) : ?>
 make_<?=$item->name?>() {
     echo "build <?=$item->name?>"
@@ -133,8 +139,15 @@ make_all_library() {
 }
 
 export_variables() {
+    # -all-static | -static | -static-libtool-libs
     CPPFLAGS=""
     CFLAGS=""
+<?php if($this->cCompiler=='clang') : ?>
+    LDFLAGS="-static"
+<?php else :?>
+    LDFLAGS="-static-libgcc -static-libstdc++"
+<?php endif ;?>
+
     LDFLAGS=""
     LIBS=""
 <?php foreach ($this->variables as $name => $value) : ?>
@@ -171,29 +184,20 @@ EOF;
 }
 
 make_config() {
-    set -exu
+    set -x
+
+    if [[ -f <?= $this->buildDir ?>/php_src/.completed ]] ;then
+        rm -rf <?= $this->buildDir ?>/php_src/.completed
+    fi
+    make_php_src
     cd <?= $this->phpSrcDir . PHP_EOL ?>
 <?php if ($this->getInputOption('with-build-type') != 'release') : ?>
-    make_php_src
+
 <?php endif ;?>
 
     prepare_extensions
+    cd <?= $this->phpSrcDir . PHP_EOL ?>
 
-<?php if ($this->getInputOption('with-php-sfx-micro')) : ?>
-    PHP_VERSION=$(cat main/php_version.h | grep 'PHP_VERSION_ID' | grep -E -o "[0-9]+")
-    if [[ $PHP_VERSION -lt 80000 ]] ; then
-        echo "only support PHP >= 8.0 "
-    else
-        if [[ -f php-sfx-micro.cached ]] ; then
-            echo "php-sfx-micro patch exists !"
-        else
-            cp -rf <?= $this->buildDir ?>/php_patch_sfx_micro/ sapi/micro
-            patch -p1 < sapi/micro/patches/phar.patch
-            touch php-sfx-micro.cached
-            echo "php-sfx-micro patch ok "
-        fi
-    fi
-<?php endif ;?>
 
 <?php if ($this->getInputOption('with-swoole-cli-sfx')) : ?>
     PHP_VERSION=$(cat main/php_version.h | grep 'PHP_VERSION_ID' | grep -E -o "[0-9]+")
@@ -204,35 +208,42 @@ make_config() {
 
     fi
 <?php endif ;?>
-
+    echo $OPTIONS
     test -f ./configure &&  rm ./configure
     ./buildconf --force
 
     ./configure --help
      export_variables
     ./configure $OPTIONS
+
+    # more info https://stackoverflow.com/questions/19456518/error-when-using-sed-with-find-command-on-os-x-invalid-command-code
+    sed -i.backup 's/-export-dynamic/-all-static/g' Makefile
+
 }
 
 make_build() {
     cd <?= $this->phpSrcDir . PHP_EOL ?>
     export_variables
-    export EXTRA_CFLAGS='<?= $this->extraCflags ?>' \
-    export EXTRA_LDFLAGS_PROGRAM='-all-static -fno-ident <?= $this->extraLdflags ?>
-<?php foreach ($this->libraryList as $item) {
-        if (!empty($item->ldflags)) {
-            echo $item->ldflags;
-            echo ' ';
-        }
+    export LDFLAGS="$LDFLAGS -all-static"
+    export EXTRA_CFLAGS='<?= $this->extraCflags ?>'
+    export EXTRA_LDFLAGS_PROGRAM='-all-static -fno-ident -fuse-ld=lld <?= $this->extraLdflags ?>
+<?php
+foreach ($this->libraryList as $item) {
+    if (!empty($item->ldflags)) {
+        echo $item->ldflags;
+        echo ' ';
     }
-echo "'";
-echo PHP_EOL;
-if ($this->getInputOption('with-php-sfx-micro')) {
-    echo "    make -j " . $this->maxJob . ' micro' ;
-} else {
-    echo "    make -j " . $this->maxJob . ' cli' ;
-    echo PHP_EOL;
-    echo "    make install " ;
 }
+echo "'";
+
+echo PHP_EOL;
+
+echo "    make -j " . $this->maxJob . ' cli' ;
+echo PHP_EOL;
+//echo "    elfedit --output-osabi linux sapi/cli/php";
+echo PHP_EOL;
+echo "    make install " ;
+echo PHP_EOL;
 
 ?>
 
@@ -260,6 +271,7 @@ help() {
     echo "./make.sh build"
     echo "./make.sh test"
     echo "./make.sh archive"
+    echo "./make.sh archive-sfx-micro"
     echo "./make.sh all-library"
     echo "./make.sh list-library"
     echo "./make.sh list-extension"
@@ -325,11 +337,12 @@ elif [ "$1" = "config" ] ;then
 elif [ "$1" = "build" ] ;then
     make_build
 elif [ "$1" = "test" ] ;then
-    <?= PHP_INSTALL_PREFIX ?>/bin/php vendor/bin/phpunit
+    <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/php vendor/bin/phpunit
 elif [ "$1" = "archive" ] ;then
-    cd <?= PHP_INSTALL_PREFIX ?>/bin
+    cd <?= BUILD_PHP_INSTALL_PREFIX ?>/bin
     PHP_VERSION=$(./php -r "echo PHP_VERSION;")
     PHP_CLI_FILE=php-cli-v${PHP_VERSION}-<?=$this->getOsType()?>-<?=$this->getSystemArch()?>.tar.xz
+    cp -f php php-dbg
     strip php
     tar -cJvf ${PHP_CLI_FILE} php
     mv ${PHP_CLI_FILE} <?= $this->workDir ?>/
