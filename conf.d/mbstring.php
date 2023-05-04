@@ -24,7 +24,7 @@ return function (Preprocessor $p) {
     $p->addExtension(
         (new Extension('mbstring'))
             ->withHomePage('https://www.php.net/mbstring')
-            ->withOptions('--enable-mbstring --with-onig=' . ONIGURUMA_PREFIX)
+            ->withOptions('--enable-mbstring')
             ->depends('oniguruma')
     );
 };
