@@ -23,6 +23,7 @@ OPTIONS="--prefix=<?= BUILD_PHP_INSTALL_PREFIX ?> --disable-all \
 --enable-shared=no \
 --enable-static=yes \
 --enable-json \
+--enable-hash \
 --enable-cli  \
 <?php foreach ($this->extensionList as $item) : ?>
     <?=$item->options?> \

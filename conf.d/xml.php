@@ -31,7 +31,7 @@ EOF
     $options .= " --enable-dom";
     $options .= " --enable-xmlwriter";
     $options .= " --with-libxml-dir=" . $libxml2_prefix;
-    $options .= " --with-libxml";
+    $options .= " --enable-libxml";
     $options .= "  ";
     $p->addExtension(
         (new Extension('xml'))
