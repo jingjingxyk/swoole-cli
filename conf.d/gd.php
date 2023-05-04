@@ -206,7 +206,13 @@ EOF
         -DENABLE_AVIF=0 \
         -DZLIB_ROOT={$zlib_prefix} \
         -DWEBP_ROOT={$webp_prefix} \
-        -DICONV_ROOT={$iconv_prefix}
+        -DICONV_ROOT={$iconv_prefix} \
+        -DWEBP_INCLUDE_DIR={$webp_prefix}/include \
+        -DWEBP_LIBRARY={$webp_prefix}/lib \
+        -DJPEG_LIBRARY={$libjpeg_prefix}/lib \
+        -DJPEG_INCLUDE_DIR={$libjpeg_prefix}/include \
+        -DFREETYPE_INCLUDE_DIRS={$freetype_prefix}/include/freetype2 \
+        -DFREETYPE_LIBRARY={$freetype_prefix}/lib
 
         cmake --build . -- -j$(nproc)
         cmake --install .
