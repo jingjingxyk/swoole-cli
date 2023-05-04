@@ -47,15 +47,16 @@ jobs:
             pwd
             set -x
             composer update --no-dev  --optimize-autoloader
-            php prepare.php  +inotify +apcu +ds -gd -zip -imagick # gd 库 libXpm 编译不成功，libzip 需要降低版本 ，imagick 依赖libzip
+            php prepare.php  +inotify +apcu +ds -gd -zip -imagick
             chmod a+x make.sh
-            bash ./make.sh curl # 需要重新编译 php7.33 依赖库不包含 nghttp2 (curl nghttp2 与 swoole 里面包含的nghttp2 冲突，保留 swoole 内置的nghttp2)
       - name: Build
         uses: addnab/docker-run-action@v3
         with:
           image: docker.io/jingjingxyk/build-swoole-cli:native-php-all-dependencies-alpine-php-7.4-x86_64-20230504T124927Z
           options: -v ${{ github.workspace }}:/work -w /work -e "BUILD_PHP_VERSION=${{ env.BUILD_PHP_VERSION }}"
           run: |
+            rm -rf /usr/curl
+            bash ./make.sh curl
             ./make.sh config
             ./make.sh build
             ./make.sh archive
