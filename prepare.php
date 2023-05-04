@@ -73,7 +73,7 @@ EOF
                 cp -rf php_src {$php_src}
                 cd {$build_dir}/php_src
                 ./buildconf --force
-                ./configure --help
+                ./configure --help | grep -e 'dom'
 EOF
             )
     );
