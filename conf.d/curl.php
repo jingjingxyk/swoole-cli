@@ -214,7 +214,8 @@ EOF
     $p->addExtension(
         (new Extension('curl'))
             ->withHomePage('https://www.php.net/curl')
-            ->withOptions('--with-curl=' . CURL_PREFIX)
+            //->withOptions('--with-curl=' . CURL_PREFIX)
+            ->withOptions('')
             ->depends('curl')
     );
 };
