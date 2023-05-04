@@ -54,7 +54,7 @@ done
 
 cd ${__PROJECT__}/var
 
-test -d swoole-cli || git clone -b build_native_php --depth=1 --single-branch https://github.com/jingjingxyk/swoole-cli.git
+test -d swoole-cli || git clone -b build_php_7.3 --depth=1 --single-branch https://github.com/jingjingxyk/swoole-cli.git
 test -d swoole-cli && git -C swoole-cli pull --depth=1
 
 cd ${__PROJECT__}/var/swoole-cli

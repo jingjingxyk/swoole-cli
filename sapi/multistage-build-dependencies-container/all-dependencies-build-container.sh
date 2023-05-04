@@ -15,7 +15,7 @@ mkdir -p ${__PROJECT__}/var
 # export DOCKER_BUILDKIT=1
 
 TIME=$(date -u '+%Y%m%dT%H%M%SZ')
-TAG="native-php-all-dependencies-alpine-php-8.2.4-$(uname -m)-${TIME}"
+TAG="native-php-all-dependencies-alpine-php-7.3.33-$(uname -m)-${TIME}"
 
 IMAGE="docker.io/jingjingxyk/build-swoole-cli:${TAG}"
 ALIYUN_IMAGE="registry.cn-beijing.aliyuncs.com/jingjingxyk-public/app:build-swoole-cli-${TAG}"
