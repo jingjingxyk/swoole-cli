@@ -231,7 +231,7 @@ EOF
             --with-libssh2 \
             --with-nghttp2 \
             --without-ngtcp2 \
-            --without-nghttp3
+            --without-nghttp3 \
             --with-openssl  \
             --with-default-ssl-backend=openssl \
             --without-gnutls \
