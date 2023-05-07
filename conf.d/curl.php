@@ -209,7 +209,6 @@ EOF
                 'libzstd',
                 'libssh2'
             )  # 'libidn2',
-
     );
     $p->addExtension(
         (new Extension('curl'))
