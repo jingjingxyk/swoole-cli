@@ -11,7 +11,6 @@ __PROJECT__=$(
 )
 
 cd ${__PROJECT__}/
-
 ARCH=$(uname -m)
 
 TAG="native-php-all-dependencies-alpine-${ARCH}-20230428T164512Z"
