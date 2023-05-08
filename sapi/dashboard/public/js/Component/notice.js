@@ -21,7 +21,7 @@ signaling.onmessage = e => {
                 console.log('already in call, ignoring');
                 return;
             }
-            startButton.disabled = false;
+            state_box.start=true;
             break;
         case 'bye':
             if (pc) {
@@ -41,8 +41,8 @@ let state_box={
     send:false
 }
 let init = async () => {
-    state_box.start=true;
-    close.close=false;
+    state_box.start=false;
+    close.close=true;
 
     await createPeerConnection();
     sendChannel = pc.createDataChannel('sendDataChannel');
