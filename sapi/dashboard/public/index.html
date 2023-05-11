@@ -13,8 +13,13 @@
     <style>
         label {
             color: #000;
+            /*
             background-color: #ffc107;
             border-color: #ffc107;
+
+             */
+            color:#2ecc71;
+            color:#8e44ad;
         }
 
         button {
@@ -37,9 +42,15 @@
             background-color: #198754;
             border-color: #198754;
         }
-
+        li{
+            list-style: none;
+        }
         .extension-list {
             display: flex;
+        }
+        .ready_extension{
+            background-color:#1abc9c;
+            color:#1f2328;
         }
     </style>
 </head>
@@ -52,12 +63,47 @@
                 <header>
                     <div>
                         <label>
-                            <span>当前分支:</span>
+                            <span>当前分支：</span>
                             <select name="branch_list"></select>
+                        </label>
+                        <label>
+                            <span>构建环境 OS：</span>
+                            <select name="os">
+                                <option value="linux">linux</option>
+                                <option value="macos">macos</option>
+                            </select>
+                        </label>
+                        <label>
+                            <span>是否容器环境：</span>
+                            <select name="without-docker">
+                                <option value="0">容器</option>
+                                <option value="1">不使用容器</option>
+                            </select>
+                        </label>
+                        <label>
+                            <span>跳过下载依赖库：</span>
+                            <select name="skip-download">
+                                <option value="0">不跳过</option>
+                                <option value="1">跳过</option>
+                            </select>
+                        </label>
+                        <label>
+                            <span>使用镜像库站下载依赖库：</span>
+                            <select name="with-download-mirror-url">
+                                <option value="1">不使用</option>
+                                <option value="0">使用</option>
+                            </select>
+                        </label>
+                        <label>
+                            <span>生成扩展依赖图</span>
+                            <select name="with-dependency-graph">
+                                <option value="0">不生成</option>
+                                <option value="1">生成</option>
+                            </select>
                         </label>
                     </div>
                     <div>
-                        <button class="btn-success">运行</button>
+                        <button class="btn-success exec-button">运行</button>
                     </div>
                 </header>
                 <section class="extension-list">

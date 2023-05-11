@@ -5,9 +5,10 @@ use Swoole\Http\Response;
 use Swoole\WebSocket\CloseFrame;
 use Swoole\Coroutine\Http\Server;
 
-use function Swoole\Coroutine\run;
 use Swoole\Coroutine\Channel;
 use Swoole\Coroutine;
+
+use function Swoole\Coroutine\run;
 
 run(function () {
     $server = new Server('0.0.0.0', 9502, false);
@@ -46,20 +47,82 @@ run(function () {
         $parameter= $request->getContent();
         $parameter=json_decode($parameter, true);
         var_dump($parameter);
-        $branch_name = $parameter['data']['branch_name'];
+
         $word_dir=realpath(__DIR__ . '/../../');
         $runtime=realpath($word_dir . '/bin/runtime');
         if ($action==='changeBranchAction') {
+            $branch_name = $parameter['data']['branch_name'];
             $cmd=<<<EOF
          cd $word_dir
          git checkout $branch_name
 
 EOF;
             ob_start();
-            passthru($cmd,$result_code);
+            passthru($cmd, $result_code);
             $result = ob_get_contents();
             ob_end_clean();
             echo $result;
+        } elseif ($action === 'branchListAction') {
+            $cmd=<<<EOF
+         cd $word_dir
+         git branch
+
+EOF;
+            ob_start();
+            passthru($cmd, $result_code);
+            $result = ob_get_contents();
+            ob_end_clean();
+
+            $result= explode("\n", $result);
+            array_walk($result, function ($value, $key) use (&$result) {
+                $result[$key]=trim($value);
+                if (empty($value)) {
+                    unset($result[$key]);
+                }
+            });
+            var_dump($result);
+        } elseif ($action === 'extensionListAction') {
+            $cmd=<<<EOF
+           cd $word_dir/conf.d
+            ls .
+
+EOF;
+            ob_start();
+            passthru($cmd, $result_code);
+            $result = ob_get_contents();
+            ob_end_clean();
+
+            $result= explode("\n", $result);
+
+            array_walk($result, function ($value, $key) use (&$result) {
+                $result[$key]=str_replace('.php', '', trim($value));
+                if (empty($value)) {
+                    unset($result[$key]);
+                }
+            });
+            var_dump($result);
+        } elseif ($action === 'defaultExtensionListAction') {
+            $result=[];
+            $fp = new \SplFileObject($word_dir . '/sapi/src/Preprocessor.php', 'r');
+            if ($fp) {
+                $fp->seek(73);
+                while (!$fp->eof()) {
+                    $line = $fp->current();
+                    $cursor = $fp->ftell();
+                    $line_no = $fp->key();
+                    //$line = $fp->fgets();
+                    $fp->next();
+                    $ext_name=trim(str_replace(['\'','\n',','], '', $line));
+                    echo $ext_name . PHP_EOL;
+                    if (!empty($ext_name)) {
+                        $result[]=$ext_name;
+                    }
+                    if ($line_no >=110) {
+                        break;
+                    }
+                }
+                $fp=null;
+            }
         }
 
         $cmd=<<<EOF
@@ -76,9 +139,8 @@ EOF;
                 [
                 'code'=>200,
                 "msg"=>'success',
-                "data"=>[
-                    'result'=>$result
-                ]],
+                "data"=>$result
+                ],
                 JSON_UNESCAPED_UNICODE
             ));
         } catch (\RuntimeException $e) {
