@@ -10,20 +10,77 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
     <meta name="keywords" content="swoole-cli ui"/>
     <meta name="description" content="swoole-cli ui"/>
+    <style>
+        label {
+            color: #000;
+            background-color: #ffc107;
+            border-color: #ffc107;
+        }
+
+        button {
+            display: inline-block;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #212529;
+            text-align: center;
+            text-decoration: none;
+            vertical-align: middle;
+            cursor: pointer;
+            user-select: none;
+            background-color: transparent;
+            border: 1px solid transparent;
+            padding: 0.375rem 0.75rem;
+        }
+
+        .btn-success {
+            color: #fff;
+            background-color: #198754;
+            border-color: #198754;
+        }
+
+        .extension-list {
+            display: flex;
+        }
+    </style>
 </head>
 <body>
 
-    <div class="wrap">
-        <div class="main">
-            <div class="main-container">
-                <h1>web UI </h1>
+<div class="wrap">
+    <div class="main">
+        <div class="main-container">
+            <div class="container">
+                <header>
+                    <div>
+                        <label>
+                            <span>当前分支:</span>
+                            <select name="branch_list"></select>
+                        </label>
+                    </div>
+                    <div>
+                        <button class="btn-success">运行</button>
+                    </div>
+                </header>
+                <section class="extension-list">
+                    <div>
+                        <label> 支持的扩展列表
+                            <ul name="all_extentions"></ul>
+                        </label>
+                    </div>
+                    <div>
+                        <label> 将编译的扩展</label>
+                        <ul name="ready_extentions"></ul>
+                    </div>
+                </section>
+
             </div>
         </div>
     </div>
-    <script type="application/javascript" src="/js/Component/message.js"></script>
-    <script type="module" >
-        import app from '/js/app.js'
-        app()
-    </script>
+</div>
+<script type="application/javascript" src="/js/Component/message.js"></script>
+<script type="module">
+    import app from '/js/app.js'
+
+    app()
+</script>
 </body>
 </html>

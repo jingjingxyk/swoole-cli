@@ -1,0 +1,36 @@
+[
+    {
+        "name": "opcache"
+    },
+    {
+        "name": "iconv"
+    },
+    {
+        "name": "bz2"
+    },
+    {
+        "name": "bcmath"
+    },
+    {
+        "name": "session"
+    },
+    {
+        "name": "mbstring"
+    },
+    {
+        "name": "tokenizer"
+    },
+    {
+        "name": "ctype"
+    },
+    {
+        "name": "tokenizer"
+    },
+    {
+        "name": "zlib"
+    },
+    {
+        "name": "intl"
+    }
+]
+

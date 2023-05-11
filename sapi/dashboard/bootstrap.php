@@ -44,6 +44,9 @@ run(function () {
         $action = empty($action) ? 'index' : $action;
         $action = preg_match('/\w+/', $action) ? $action : 'index';
         $action = lcfirst($action) . 'Action';
+
+        var_dump($action);
+
         $word_dir=realpath(__DIR__ . '/../../');
         $runtime=realpath($word_dir . '/bin/runtime');
         $cmd=<<<EOF
@@ -53,7 +56,7 @@ run(function () {
 
 EOF;
         ob_start();
-         passthru($cmd,$result_code);
+         //passthru($cmd,$result_code);
         $result = ob_get_contents();
         ob_end_clean();
         echo $result;
