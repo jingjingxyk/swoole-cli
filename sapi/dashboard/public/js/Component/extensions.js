@@ -52,12 +52,12 @@ let exec=(e)=>{
     let skip_download =document.querySelector('select[name="skip-download"]')
     let with_download_mirror_url =document.querySelector('select[name="with-download-mirror-url"]')
     let with_dependecny_graph=document.querySelector('select[name="with-dependency-graph"]')
-
-        console.log(os.value)
-        console.log(with_docker.value)
-        console.log(skip_download.value)
-        console.log(with_download_mirror_url.value)
-        console.log(with_dependecny_graph.value)
+    let cmd="  @os="+os.value
+        cmd +="  --without-docker="+with_docker.value
+        cmd +="  --skip-download="+skip_download.value
+        cmd +="  --with-download-mirror-url="+with_download_mirror_url.value
+        cmd +="  --with-dependency-graph="+with_dependecny_graph.value
+        console.log(cmd)
 
 }
 export {extension_list}
