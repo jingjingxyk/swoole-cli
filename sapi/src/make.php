@@ -271,34 +271,15 @@ make_build() {
 
     export LDFLAGS="$LDFLAGS -all-static -fno-ident <?= $this->extraLdflags ?>"
     export EXTRA_CFLAGS='<?= $this->extraCflags ?>'
-    make -j <?= $this->maxJob ?> ;
+    make -j <?= $this->maxJob ?> micro;
 
 <?php if ($this->osType == 'macos') : ?>
-    otool -L <?= $this->getWorkDir() ?>/sapi/cli/php
+    otool -L <?= $this->getWorkDir() ?>/sapi/micro/micro.sfx
 <?php else : ?>
-    file <?= $this->getWorkDir() ?>/sapi/cli/php
-    readelf -h <?= $this->getWorkDir() ?>/sapi/cli/php
+    file <?= $this->getWorkDir() ?>/sapi/micro/micro.sfx
+    readelf -h <?= $this->getWorkDir() ?>/sapi/micro/micro.sfx
 <?php endif; ?>
     return 0
-<?php
-
-echo PHP_EOL;
-
-if ($this->getInputOption('with-php-sfx-micro')) {
-    echo "    make -j " . $this->maxJob . ' micro' ;
-} else {
-    echo "    make -j " . $this->maxJob . ' cli' ;
-    echo PHP_EOL;
-    //echo "    elfedit --output-osabi linux sapi/cli/php";
-    echo PHP_EOL;
-    echo "    make install " ;
-    echo PHP_EOL;
-}
-
-?>
-
-
-
 
 }
 
