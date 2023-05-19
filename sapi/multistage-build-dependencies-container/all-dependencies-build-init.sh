@@ -56,9 +56,10 @@ done
 
 cd ${__PROJECT__}/var
 
+
 GIT_BRANCH=build_php_7.3
-test -d swoole-cli && git -C swoole-cli pull origin ${GIT_BRANCH} --depth=1 --progress --rebase=true --allow-unrelated-histories
-test -d swoole-cli || git clone -b ${GIT_BRANCH} --depth=1 https://github.com/jingjingxyk/swoole-cli.git
+test -d swoole-cli && rm -rf swoole-cli
+git clone -b ${GIT_BRANCH} --depth=1  --recursive https://github.com/jingjingxyk/swoole-cli.git
 
 cd ${__PROJECT__}/var/swoole-cli
 
@@ -68,7 +69,7 @@ mkdir -p pool/ext
 cd ${__PROJECT__}/var
 
 awk 'BEGIN { cmd="cp -ri libraries/* swoole-cli/pool/lib"  ; print "n" |cmd; }'
-awk 'BEGIN { cmd="cp -ri extensions/* swoole-cli/pool/ext"; print "n" |cmd; }'
+awk 'BEGIN { cmd="cp -ri extensions/* swoole-cli/pool/ext" ; print "n" |cmd; }'
 
 cd ${__PROJECT__}/var/swoole-cli
 
