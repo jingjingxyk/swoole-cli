@@ -12,6 +12,7 @@ set -x
 if [[ -z $PKG_CONFIG_PATH ]];then export PKG_CONFIG_PATH=' ';fi
 SRC=<?= $this->phpSrcDir . PHP_EOL ?>
 ROOT=<?= $this->getRootDir() . PHP_EOL ?>
+PREPARE_ARGS="<?= implode(' ', $this->getPrepareArgs())?>"
 export CC=<?= $this->cCompiler . PHP_EOL ?>
 export CXX=<?= $this->cppCompiler . PHP_EOL ?>
 export LD=<?= $this->lld . PHP_EOL ?>
@@ -137,6 +138,37 @@ make_all_library() {
     return 0
 }
 
+prepare_extensions() {
+    cd <?= $this->phpSrcDir . PHP_EOL ?>
+
+<?php
+foreach ($this->extensionMap as $extension) {
+    if ($extension->peclVersion || $extension->enableDownloadScript) {
+        echo <<<EOF
+    if [[ -d {$this->phpSrcDir}/ext/{$extension->name}/ ]]
+    then
+        rm -rf {$this->phpSrcDir}/ext/{$extension->name}/
+    fi
+    cp -rf {$this->rootDir}/ext/{$extension->name} {$this->phpSrcDir}/ext/
+EOF;
+        echo PHP_EOL;
+        echo PHP_EOL;
+    }
+}
+
+?>
+}
+
+make_ext_hook() {
+    cd <?= $this->getWorkDir() . PHP_EOL ?>
+<?php foreach ($this->extHooks as $name => $value) : ?>
+    # ext <?= $name ?> hook
+    <?= $value($this) . PHP_EOL ?>
+<?php endforeach; ?>
+    cd <?= $this->getWorkDir() . PHP_EOL ?>
+    return 0
+}
+
 export_variables() {
     # -all-static | -static | -static-libtool-libs
     CPPFLAGS=""
@@ -161,28 +193,8 @@ export_variables() {
 }
 
 
-prepare_extensions(){
-    cd <?= $this->phpSrcDir . PHP_EOL ?>
-
-<?php
-foreach ($this->extensionMap as $extension) {
-    if ($extension->peclVersion || $extension->enableDownloadScript) {
-        echo <<<EOF
-    if [[ -d {$this->phpSrcDir}/ext/{$extension->name}/ ]]
-    then
-        rm -rf {$this->phpSrcDir}/ext/{$extension->name}/
-    fi
-    cp -rf {$this->rootDir}/ext/{$extension->name} {$this->phpSrcDir}/ext/
-EOF;
-        echo PHP_EOL;
-        echo PHP_EOL;
-    }
-}
-
-?>
-}
-
 make_config() {
+
     set -x
 
     if [[ -f <?= $this->buildDir ?>/php_src/.completed ]] ;then
@@ -193,30 +205,12 @@ make_config() {
 <?php if ($this->getInputOption('with-build-type') != 'release') : ?>
 
 <?php endif ;?>
+    cd <?= $this->getWorkDir() . PHP_EOL ?>
+    make_ext_hook
+    cd <?= $this->getWorkDir() . PHP_EOL ?>
 
-    prepare_extensions
     cd <?= $this->phpSrcDir . PHP_EOL ?>
-
-<?php if ($this->getInputOption('with-php-sfx-micro')) : ?>
-    PHP_VERSION=$(cat main/php_version.h | grep 'PHP_VERSION_ID' | grep -E -o "[0-9]+")
-    if [[ $PHP_VERSION -lt 80000 ]] ; then
-        echo "only support PHP >= 8.0 "
-    else
-        make_php_patch_sfx_micro
-        cd <?= $this->phpSrcDir . PHP_EOL ?>
-        if [[ ! -f php-sfx-micro.cached ]] ;then
-            cp -rf <?= $this->buildDir ?>/php_patch_sfx_micro/ sapi/micro
-            patch -p1 < sapi/micro/patches/phar.patch
-            touch php-sfx-micro.cached
-            echo "php-sfx-micro patch ok "
-
-        fi
-
-        OPTIONS="${OPTIONS} --enable-micro=all-static "
-    fi
-
-<?php endif ;?>
-
+    prepare_extensions
     cd <?= $this->phpSrcDir . PHP_EOL ?>
 
 <?php if ($this->getInputOption('with-swoole-cli-sfx')) : ?>
@@ -229,11 +223,15 @@ make_config() {
     fi
 <?php endif ;?>
     echo $OPTIONS
+
     test -f ./configure &&  rm ./configure
     ./buildconf --force
 
     ./configure --help
      export_variables
+     echo $LDFLAGS > <?= $this->getWorkDir() ?>/ldflags.log
+     echo $CPPFLAGS > <?= $this->getWorkDir() ?>/cppflags.log
+
     ./configure $OPTIONS
 
     # more info https://stackoverflow.com/questions/19456518/error-when-using-sed-with-find-command-on-os-x-invalid-command-code
@@ -244,33 +242,21 @@ make_config() {
 make_build() {
     cd <?= $this->phpSrcDir . PHP_EOL ?>
     export_variables
-    export LDFLAGS="$LDFLAGS -all-static"
+
+    export LDFLAGS="$LDFLAGS -all-static -fno-ident <?= $this->extraLdflags ?>"
     export EXTRA_CFLAGS='<?= $this->extraCflags ?>'
-    export EXTRA_LDFLAGS_PROGRAM='-all-static -fno-ident -fuse-ld=lld <?= $this->extraLdflags ?>
-<?php
-foreach ($this->libraryList as $item) {
-    if (!empty($item->ldflags)) {
-        echo $item->ldflags;
-        echo ' ';
-    }
-}
-echo "'";
+    make -j <?= $this->maxJob ?> ;
 
-echo PHP_EOL;
+<?php if ($this->osType == 'macos') : ?>
+    otool -L <?= $this->phpSrcDir  ?>/sapi/cli/php
+<?php else : ?>
+    file <?= $this->phpSrcDir  ?>/sapi/cli/php
+    readelf -h <?= $this->phpSrcDir  ?>/sapi/cli/php
+<?php endif; ?>
+    make install
+    return 0
 
-if ($this->getInputOption('with-php-sfx-micro')) {
-    echo "    make -j " . $this->maxJob . ' micro' ;
-} else {
-    echo "    make -j " . $this->maxJob . ' cli' ;
-    echo PHP_EOL;
-    //echo "    elfedit --output-osabi linux sapi/cli/php";
-    echo PHP_EOL;
-    echo "    make install " ;
-    echo PHP_EOL;
-}
-
-?>
-
+   # elfedit --output-osabi linux sapi/cli/php
 }
 
 make_clean() {
@@ -369,14 +355,6 @@ elif [ "$1" = "archive" ] ;then
     cp -f php php-dbg
     strip php
     tar -cJvf ${PHP_CLI_FILE} php
-    mv ${PHP_CLI_FILE} <?= $this->workDir ?>/
-    cd -
-elif [ "$1" = "archive-sfx-micro" ] ;then
-    cd <?= $this->phpSrcDir ?>/sapi/micro/
-    # sapi/micro/micro.sfx
-    PHP_VERSION=<?= BUILD_PHP_VERSION . PHP_EOL ?>
-    PHP_CLI_FILE=php-sfx-micro-v${PHP_VERSION}-<?=$this->getOsType()?>-<?=$this->getSystemArch()?>.tar.xz
-    tar -cJvf ${PHP_CLI_FILE} micro.sfx
     mv ${PHP_CLI_FILE} <?= $this->workDir ?>/
     cd -
 elif [ "$1" = "clean-all-library" ] ;then

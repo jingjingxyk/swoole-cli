@@ -5,34 +5,35 @@ require __DIR__ . '/vendor/autoload.php';
 use SwooleCli\Preprocessor;
 use SwooleCli\Library;
 
+const BUILD_PHP_VERSION = '8.2.4';
+
 $homeDir = getenv('HOME');
 $p = Preprocessor::getInstance();
 $p->parseArguments($argc, $argv);
-
 
 // Compile directly on the host machine, not in the docker container
 if ($p->getInputOption('without-docker')) {
     $p->setWorkDir(__DIR__);
     $p->setBuildDir(__DIR__ . '/thirdparty');
-    $p->setGlobalPrefix($homeDir . '/.swoole-cli');
 }
 
 // Sync code from php-src
-//重新设置 PHP 源码所在目录
+//设置 PHP 源码所在目录
 $p->setPhpSrcDir($p->getWorkDir() . '/php-src');
-//设置PHP 安装目录和版本号
-$version = '8.2.4';
-define("BUILD_PHP_VERSION", $version);
-define("BUILD_PHP_INSTALL_PREFIX", $p->getWorkDir() . '/bin/php-' . $version);
 
+//设置PHP 安装目录
+define("BUILD_PHP_INSTALL_PREFIX", $p->getWorkDir() . '/bin/php-' .BUILD_PHP_VERSION);
+
+if ($p->getInputOption('with-global-prefix')) {
+    $p->setGlobalPrefix($p->getInputOption('with-global-prefix'));
+}
 
 $build_type = $p->getInputOption('with-build-type');
 if (!in_array($build_type, ['dev', 'debug'])) {
     $build_type = 'release';
 }
-define('SWOOLE_CLI_BUILD_TYPE', $build_type);
-define('SWOOLE_CLI_GLOBAL_PREFIX', $p->getGlobalPrefix());
-
+define('PHP_CLI_BUILD_TYPE', $build_type);
+define('PHP_CLI_GLOBAL_PREFIX', $p->getGlobalPrefix());
 
 if ($p->getOsType() == 'macos') {
     $p->setExtraLdflags('-undefined dynamic_lookup');
@@ -68,23 +69,4 @@ EOF
             )
     );
 
-    $sfx_micro = $p->getInputOption('with-php-sfx-micro');
-    if ($sfx_micro) {
-        $p->addLibrary(
-            (new Library('php_patch_sfx_micro'))
-                ->withUrl('https://github.com/dixyes/phpmicro.git')
-                ->withHomePage('https://github.com/dixyes/phpmicro.git')
-                ->withManual('https://github.com/dixyes/phpmicro')
-                ->withLicense('https://github.com/dixyes/phpmicro/blob/master/LICENSE', Library::LICENSE_APACHE2)
-                ->withFile('phpmicro-master.tar.gz')
-                ->withDownloadScript(
-                    'phpmicro',
-                    <<<EOF
-                        git clone -b master --depth=1 https://github.com/dixyes/phpmicro.git
-EOF
-                )
-                ->withBuildScript('return 0')
-                ->withLdflags('')
-        );
-    }
 }
