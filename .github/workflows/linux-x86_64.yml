@@ -7,7 +7,7 @@ env:
 
 jobs:
   linux-x86_64:
-    if: 0
+    if: 1
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -29,8 +29,7 @@ jobs:
       - name: Prepare Libraries and Extensions
         uses: addnab/docker-run-action@v3
         with:
-          #image: docker.io/jingjingxyk/build-swoole-cli:download-box-nginx-alpine-20230429T061856Z
-          image: docker.io/jingjingxyk/build-swoole-cli:download-box-nginx-alpine-20230505T112517Z
+          image: docker.io/jingjingxyk/build-swoole-cli:download-box-nginx-alpine-20230429T061856Z
           options: -v ${{ github.workspace }}:/work -w /work
           run: |
             set -x
@@ -42,30 +41,33 @@ jobs:
       - name: Prepare
         uses: addnab/docker-run-action@v3
         with:
-          image: docker.io/jingjingxyk/build-swoole-cli:native-php-all-dependencies-alpine-20230429T064207Z
-          #image: docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-swoole-cli-x86_64-20230505T120137Z
+          image: docker.io/jingjingxyk/build-swoole-cli:native-php-all-dependencies-alpine-php-7.4-x86_64-20230504T124927Z
           options: -v ${{ github.workspace }}:/work -w /work
           run: |
             set -eux
             # export PATH=/work/bin/runtime:$PATH  # 容器已经内置 php 和 composer 容器
             composer update --no-dev  --optimize-autoloader
-            php prepare.php  +inotify +apcu +ds
+            php prepare.php  +inotify +apcu +ds  --with-global-prefix=/usr
             chmod a+x make.sh
             head -n 20 make.sh
       - name: Build
         uses: addnab/docker-run-action@v3
         with:
-          image: docker.io/jingjingxyk/build-swoole-cli:native-php-all-dependencies-alpine-20230429T064207Z
-          # image: docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-swoole-cli-x86_64-20230505T120137Z
+          image: docker.io/jingjingxyk/build-swoole-cli:native-php-all-dependencies-alpine-php-7.4-x86_64-20230504T124927Z
           options: -v ${{ github.workspace }}:/work -w /work -e "BUILD_PHP_VERSION=${{ env.BUILD_PHP_VERSION }}"
           run: |
-            ./make.sh config
-            ./make.sh build
-            ./make.sh archive
-            ./thirdparty/php_src/sapi/cli/php -v
-            file ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-            readelf -h ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-            ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -r "echo PHP_VERSION;"
+            bash ./make.sh config
+            bash ./make.sh build
+            bash ./make.sh archive
+
+      - name: Show Build Result
+        run: |
+          ./php-src/sapi/cli/php -v
+          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -v
+          file ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
+          readelf -h ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
+          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -r "echo PHP_VERSION;"
+
       - name: production artifacts
         uses: actions/upload-artifact@v3
         with:

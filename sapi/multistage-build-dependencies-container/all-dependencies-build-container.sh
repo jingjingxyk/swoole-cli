@@ -17,11 +17,12 @@ mkdir -p ${__PROJECT__}/var
 ARCH=$(uname -m)
 
 TIME=$(date -u '+%Y%m%dT%H%M%SZ')
-
-TAG="native-php-all-dependencies-alpine-php-7.4-${ARCH}-${TIME}"
+VERSION="1.7"
+TAG="native-php-all-dependencies-alpine-php-7.4-${VERSION}-${ARCH}-${TIME}"
 
 IMAGE="docker.io/jingjingxyk/build-swoole-cli:${TAG}"
 ALIYUN_IMAGE="registry.cn-beijing.aliyuncs.com/jingjingxyk-public/app:build-swoole-cli-${TAG}"
+
 
 USE_COMPOSER_MIRROR=0
 

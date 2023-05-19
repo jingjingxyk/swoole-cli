@@ -9,12 +9,15 @@ use RuntimeException;
 
 class Preprocessor
 {
+    use DownloadBoxTrait;
+
     public const VERSION = '1.6';
     public const IMAGE_NAME = 'phpswoole/swoole-cli-builder';
     public const CONTAINER_NAME = 'swoole-cli-builder';
 
     protected static ?Preprocessor $instance = null;
 
+    protected array $prepareArgs = [];
     protected string $osType = 'linux';
     protected array $libraryList = [];
     protected array $extensionList = [];
@@ -50,7 +53,7 @@ class Preprocessor
      * 编译后.a静态库文件安装目录的全局前缀，在构建阶段使用
      * @var string
      */
-    protected string $globalPrefix = '/usr';
+    protected string $globalPrefix = '/usr/local/swoole-cli';
 
     protected string $extraLdflags = '';
     protected string $extraOptions = '';
@@ -111,6 +114,9 @@ class Preprocessor
 
     protected array $endCallbacks = [];
     protected array $extCallbacks = [];
+
+    protected array $extHooks = [];
+
     protected string $configureVarables;
 
     protected function __construct()
@@ -119,14 +125,21 @@ class Preprocessor
             default:
             case 'Linux':
                 $this->setOsType('linux');
+                $this->setLinker('ld.lld');
                 break;
             case 'Darwin':
                 $this->setOsType('macos');
+                $this->setLinker('ld64');
                 break;
             case 'WINNT':
                 $this->setOsType('win');
                 break;
         }
+    }
+
+    public function  setLinker(string $ld): void
+    {
+        $this->lld=$ld;
     }
 
     public static function getInstance(): static
@@ -218,6 +231,11 @@ class Preprocessor
     public function getRootDir(): string
     {
         return $this->rootDir;
+    }
+
+    public function getPrepareArgs(): array
+    {
+        return $this->prepareArgs;
     }
 
     public function setLibraryDir(string $libraryDir)
@@ -368,20 +386,21 @@ class Preprocessor
 
         $skip_download = ($this->getInputOption('skip-download'));
         if (!$skip_download) {
-            if (is_file($lib->path)) {
+            if (is_file($lib->path) && (filesize($lib->path) != 0)) {
                 echo "[Library] file cached: " . $lib->file . PHP_EOL;
             } else {
                 if ($lib->enableDownloadScript) {
                     $cacheDir = $this->getWorkDir() . '/var/tmp';
                     $workDir = $this->getWorkDir();
                     $lib->downloadScript = <<<EOF
-                mkdir -p {$cacheDir}
-                cd {$cacheDir}
-                test -d {$lib->downloadDirName} && rm -rf {$lib->downloadDirName}
-                {$lib->downloadScript}
-                cd {$lib->downloadDirName}
-                test -f {$lib->path} || tar   -zcf {$lib->path} ./
-                cd {$workDir}
+                        mkdir -p {$cacheDir}
+                        cd {$cacheDir}
+                        test -d {$lib->downloadDirName} && rm -rf {$lib->downloadDirName}
+                        {$lib->downloadScript}
+                        cd {$lib->downloadDirName}
+                        test -f {$lib->path} || tar   -zcf {$lib->path} ./
+                        cd {$workDir}
+
 
 EOF;
 
@@ -458,7 +477,7 @@ EOF;
                             $this->checkFileMd5sum($ext->path, $ext->md5sum);
                         }
 
-                        if (!is_file($ext->path)) {
+                        if (!is_file($ext->path) || filesize($ext->path) === 0) {
                             echo "[Extension] {$ext->file} not found, downloading: " . $ext->url . PHP_EOL;
                             $this->downloadFile($ext->url, $ext->path, $ext->md5sum);
                         }
@@ -594,8 +613,14 @@ EOF;
         $this->extCallbacks[$name] = $fn;
     }
 
+    public function setExtHook($name, $fn)
+    {
+        $this->extHooks[$name] = $fn;
+    }
+
     public function parseArguments(int $argc, array $argv)
     {
+        $this->prepareArgs = $argv;
         // parse the parameters passed in by the user
         for ($i = 1; $i < $argc; $i++) {
             $arg = $argv[$i];
@@ -818,118 +843,4 @@ EOF;
         }
     }
 
-
-    protected function generateLibraryDownloadLinks(): void
-    {
-        $this->mkdirIfNotExists($this->getWorkDir() . '/var/', 0755, true);
-        $download_urls = [];
-        foreach ($this->libraryList as $item) {
-            if (empty($item->url) || $item->enableDownloadScript || !$item->enableDownloadWithMirrorURL) {
-                continue;
-            }
-            $url = '';
-            $item->mirrorUrls[] = $item->url;
-            if (!empty($item->mirrorUrls)) {
-                $newMirrorUrls = [];
-                foreach ($item->mirrorUrls as $value) {
-                    $newMirrorUrls[] = trim($value);
-                }
-                $url = implode("\t", $newMirrorUrls);
-            }
-            $download_urls[] = $url . PHP_EOL . " out=" . $item->file;
-        }
-        file_put_contents($this->getWorkDir() . '/var/download_library_urls.txt', implode(PHP_EOL, $download_urls));
-
-        $download_urls = [];
-        foreach ($this->extensionMap as $item) {
-            if (empty($item->peclVersion) || $item->enableDownloadScript || !$item->enableDownloadWithMirrorURL) {
-                continue;
-            }
-            $item->file = $item->name . '-' . $item->peclVersion . '.tgz';
-            $item->path = $this->extensionDir . '/' . $item->file;
-            $item->url = "https://pecl.php.net/get/{$item->file}";
-            $download_urls[] = $item->url . PHP_EOL . " out=" . $item->file;
-        }
-        file_put_contents($this->getWorkDir() . '/var/download_extension_urls.txt', implode(PHP_EOL, $download_urls));
-
-
-        $shell_cmd_header = <<<'EOF'
-#!/bin/bash
-
-set -exu
-__DIR__=$(
-  cd "$(dirname "$0")"
-  pwd
-)
-
-cd ${__DIR__}
-mkdir -p ${__DIR__}/var/tmp
-mkdir -p ${__DIR__}/libraries
-mkdir -p ${__DIR__}/extensions
-
-EOF;
-
-        $download_scripts = [];
-        foreach ($this->libraryList as $item) {
-            if (!$item->enableDownloadScript || !$item->enableDownloadWithMirrorURL) {
-                continue;
-            }
-            if (empty($item->file)) {
-                $item->file = $item->name . '.tar.gz';
-            }
-            $cacheDir = '${__DIR__}/var/tmp';
-            $workDir = '${__DIR__}/var';
-            $downloadScript = <<<EOF
-            mkdir -p {$cacheDir}
-            cd {$cacheDir}
-            test -d {$item->downloadDirName} && rm -rf {$item->downloadDirName}
-            {$item->downloadScript}
-            cd {$item->downloadDirName}
-            test -f {$workDir}/libraries/{$item->file} || tar  -czf {$workDir}/{$item->file} ./
-            cp -f {$workDir}/{$item->file} "\${__DIR__}/libraries/"
-            cd {$workDir}/
-
-
-EOF;
-
-            $download_scripts[] = $downloadScript . PHP_EOL;
-        }
-        file_put_contents(
-            $this->getWorkDir() . '/var/download_library_use_git.sh',
-            $shell_cmd_header . PHP_EOL . implode(PHP_EOL, $download_scripts)
-        );
-        $download_scripts = [];
-        foreach ($this->extensionMap as $item) {
-            if (!$item->enableDownloadScript || !$item->enableDownloadWithMirrorURL) {
-                continue;
-            }
-            if (!empty($item->peclVersion)) {
-                $item->file = $item->name . '-' . $item->peclVersion . '.tgz';
-            }
-            if (empty($item->peclVersion) && empty($item->file)) {
-                $item->file = $item->name . '.tgz';
-            }
-            $cacheDir = '${__DIR__}/var/tmp';
-            $workDir = '${__DIR__}/var';
-            $downloadScript = <<<EOF
-                mkdir -p {$cacheDir}
-                cd {$cacheDir}
-                test -d {$item->downloadDirName} && rm -rf {$item->downloadDirName}
-                {$item->downloadScript}
-                cd {$item->downloadDirName}
-                test -f {$workDir}/extensions/{$item->file} || tar -czf  {$workDir}/{$item->file} ./
-                cp -f {$workDir}/{$item->file} "\${__DIR__}/extensions/"
-                cd {$workDir}/
-
-
-
-EOF;
-
-            $download_scripts[] = $downloadScript . PHP_EOL;
-        }
-        file_put_contents(
-            $this->getWorkDir() . '/var/download_extension_use_git.sh',
-            $shell_cmd_header . PHP_EOL . implode(PHP_EOL, $download_scripts)
-        );
-    }
 }

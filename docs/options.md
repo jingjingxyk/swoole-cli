@@ -42,6 +42,7 @@ skip-download
 
 # 构建依赖库之前，批量下载依赖库和扩展的脚本
 sh sapi/scripts/download-dependencies-use-aria2.sh
+sh sapi/scripts/download-dependencies-use-git.sh
 
 ```
 
@@ -74,6 +75,14 @@ without-docker
 
 > 在 `macOS` 系统无法使用 `docker`，需指定此参数
 
+with-global-prefix
+----
+设置依赖库安装目录前缀
+默认安装目录前缀： `/usr/local/swoole-cli/`
+
+```shell
+./prepare.php --with-global-prefix=/usr/local/swoole-cli/
+```
 
 with-dependency-graph
 ----
@@ -104,16 +113,6 @@ sh sapi/scripts/generate-dependency-graph.sh
 
 ```
 
-with-php-sfx-micro
-----
-
-> [自执行](https://github.com/dixyes/phpmicro)
-
-```shell
-
-php prepare.php  --with-build-type=release +apcu +ds --with-php-sfx-micro=1
-
-```
 
 
 
