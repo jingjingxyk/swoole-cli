@@ -46,7 +46,7 @@ jobs:
             set -eux
             # export PATH=/work/bin/runtime:$PATH  # 容器已经内置 php 和 composer 容器
             composer update --no-dev  --optimize-autoloader
-            php prepare.php  +inotify +apcu +ds
+            php prepare.php  +inotify +apcu +ds -mongodb --with-global-prefix=/usr
             chmod a+x make.sh
             head -n 20 make.sh
       - name: Build
@@ -62,19 +62,18 @@ jobs:
 
       - name: Show Build Result
         run: |
-          ./php_src/sapi/cli/php -v
-          file ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-          readelf -h ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -r "echo PHP_VERSION;"
+          file ./bin/micro.sfx
+          readelf -h ./bin/micro.sfx
+
 
       - name: production artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: php-cli-linux-aarch64-${{ env.BUILD_PHP_VERSION }}
+          name: php-micro-linux-aarch64-${{ env.BUILD_PHP_VERSION }}
           retention-days: 7
-          path: ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
+          path: ./bin/micro.sfx
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: swoole-cli-*-linux-arm64.tar.xz
+          files: php-micro-v${{ env.BUILD_PHP_VERSION }}-linux-arm64.tar.xz

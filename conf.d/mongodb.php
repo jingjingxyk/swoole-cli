@@ -5,7 +5,7 @@ use SwooleCli\Library;
 use SwooleCli\Extension;
 
 return function (Preprocessor $p) {
-    if ($p->getOsType() == 'macos') {
+    if (1 || $p->getOsType() == 'macos') {
         $bison_prefix = BISON_PREFIX;
         $p->addLibrary(
             (new Library('bison'))
@@ -52,18 +52,20 @@ EOF
                 ->withPkgName('snappy')
                 ->withBinPath($snappy_prefix . '/bin/')
         );
-    }
-    $libsasl_prefix = LIBSASL_PREFIX;
-    $p->addLibrary(
-        (new Library('libsasl'))
-            ->withHomePage('https://www.cyrusimap.org/sasl/')
-            ->withManual('https://www.cyrusimap.org/sasl/sasl/installation.html#installation')
-            ->withLicense('https://github.com/google/snappy/blob/main/COPYING', Library::LICENSE_BSD)
-            ->withUrl('https://github.com/cyrusimap/cyrus-sasl/releases/download/cyrus-sasl-2.1.28/cyrus-sasl-2.1.28.tar.gz')
-            ->withFile('cyrus-sasl-2.1.28.tar.gz')
-            ->withPrefix($libsasl_prefix)
-            ->withConfigure(
-                <<<EOF
+
+        $libsasl_prefix = LIBSASL_PREFIX;
+        $p->addLibrary(
+            (new Library('libsasl'))
+                ->withHomePage('https://www.cyrusimap.org/sasl/')
+                ->withManual('https://www.cyrusimap.org/sasl/sasl/installation.html#installation')
+                ->withLicense('https://github.com/google/snappy/blob/main/COPYING', Library::LICENSE_BSD)
+                ->withUrl(
+                    'https://github.com/cyrusimap/cyrus-sasl/releases/download/cyrus-sasl-2.1.28/cyrus-sasl-2.1.28.tar.gz'
+                )
+                ->withFile('cyrus-sasl-2.1.28.tar.gz')
+                ->withPrefix($libsasl_prefix)
+                ->withConfigure(
+                    <<<EOF
 
                 ./configure --help
                 # 支持很多参数，按需要启用
@@ -74,10 +76,11 @@ EOF
 
 
 EOF
-            )
-            ->withPkgName('libsasl2')
-            ->withBinPath($libsasl_prefix  . '/sbin/')
-    );
+                )
+                ->withPkgName('libsasl2')
+                ->withBinPath($libsasl_prefix . '/sbin/')
+        );
+    }
     $p->withExportVariable('PHP_MONGODB_SSL_CFLAGS', '$(pkg-config --cflags --static libcrypto libssl  openssl)');
     $p->withExportVariable('PHP_MONGODB_SSL_LIBS', '$(pkg-config   --libs   --static libcrypto libssl  openssl)');
     $p->withExportVariable('PHP_MONGODB_ICU_CFLAGS', '$(pkg-config --cflags --static icu-i18n  icu-io  icu-uc)');
@@ -89,7 +92,7 @@ EOF
         (new Extension('mongodb'))
             ->withHomePage('https://www.php.net/mongodb')
             ->withHomePage('https://www.mongodb.com/docs/drivers/php/')
-            ->withPeclVersion('1.15.2')
+            ->withPeclVersion('1.15.3')
             ->withOptions(
                 $options
             )

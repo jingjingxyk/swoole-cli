@@ -12,6 +12,7 @@ set -x
 if [[ -z $PKG_CONFIG_PATH ]];then export PKG_CONFIG_PATH=' ';fi
 SRC=<?= $this->phpSrcDir . PHP_EOL ?>
 ROOT=<?= $this->getRootDir() . PHP_EOL ?>
+PREPARE_ARGS="<?= implode(' ', $this->getPrepareArgs())?>"
 export CC=<?= $this->cCompiler . PHP_EOL ?>
 export CXX=<?= $this->cppCompiler . PHP_EOL ?>
 export LD=<?= $this->lld . PHP_EOL ?>
@@ -212,9 +213,15 @@ make_config() {
     prepare_extensions
     cd <?= $this->phpSrcDir . PHP_EOL ?>
 
+<?php if ($this->getInputOption('with-swoole-cli-sfx')) : ?>
+    PHP_VERSION=$(cat main/php_version.h | grep 'PHP_VERSION_ID' | grep -E -o "[0-9]+")
+    if [[ $PHP_VERSION -lt 80000 ]] ; then
+        echo "only support PHP >= 8.0 "
+    else
+        # 请把这个做成 patch  https://github.com/swoole/swoole-cli/pull/55/files
 
-
-<?php if ($this->getInputOption('with-php-sfx-micro')) : ?>
+    fi
+<?php endif ;?>
     PHP_VERSION=$(cat main/php_version.h | grep 'PHP_VERSION_ID' | grep -E -o "[0-9]+")
     if [[ $PHP_VERSION -lt 80000 ]] ; then
         echo "only support PHP >= 8.0 "
@@ -226,37 +233,20 @@ make_config() {
             patch -p1 < sapi/micro/patches/phar.patch
             touch php-sfx-micro.cached
             echo "php-sfx-micro patch ok "
-
         fi
 
         OPTIONS="${OPTIONS} --enable-micro=all-static "
     fi
-
-<?php endif ;?>
-
-    cd <?= $this->phpSrcDir . PHP_EOL ?>
-
-<?php if ($this->getInputOption('with-swoole-cli-sfx')) : ?>
-    PHP_VERSION=$(cat main/php_version.h | grep 'PHP_VERSION_ID' | grep -E -o "[0-9]+")
-    if [[ $PHP_VERSION -lt 80000 ]] ; then
-        echo "only support PHP >= 8.0 "
-    else
-        # 请把这个做成 patch  https://github.com/swoole/swoole-cli/pull/55/files
-
-    fi
-<?php endif ;?>
     echo $OPTIONS
-
-
-
 
     test -f ./configure &&  rm ./configure
     ./buildconf --force
 
     ./configure --help
      export_variables
-     echo $LDFLAGS > ldflags.log
-     echo $CPPFLAGS > cppflags.log
+     echo $LDFLAGS > <?= $this->getWorkDir() ?>/ldflags.log
+     echo $CPPFLAGS > <?= $this->getWorkDir() ?>/cppflags.log
+
     ./configure $OPTIONS
 
     # more info https://stackoverflow.com/questions/19456518/error-when-using-sed-with-find-command-on-os-x-invalid-command-code
@@ -268,19 +258,20 @@ make_build() {
     cd <?= $this->phpSrcDir . PHP_EOL ?>
     export_variables
 
-
     export LDFLAGS="$LDFLAGS -all-static -fno-ident <?= $this->extraLdflags ?>"
     export EXTRA_CFLAGS='<?= $this->extraCflags ?>'
     make -j <?= $this->maxJob ?> micro;
 
 <?php if ($this->osType == 'macos') : ?>
-    otool -L <?= $this->getWorkDir() ?>/sapi/micro/micro.sfx
+    otool -L <?= $this->phpSrcDir ?>/sapi/micro/micro.sfx
 <?php else : ?>
-    file <?= $this->getWorkDir() ?>/sapi/micro/micro.sfx
-    readelf -h <?= $this->getWorkDir() ?>/sapi/micro/micro.sfx
+    file <?= $this->phpSrcDir ?>/sapi/micro/micro.sfx
+    readelf -h <?= $this->phpSrcDir ?>/sapi/micro/micro.sfx
 <?php endif; ?>
+    cd <?= $this->getWorkDir() . PHP_EOL ?>
+    cp -f <?= $this->phpSrcDir ?>/sapi/micro/micro.sfx bin/
     return 0
-
+   # elfedit --output-osabi linux sapi/cli/php
 }
 
 make_clean() {
@@ -373,19 +364,11 @@ elif [ "$1" = "build" ] ;then
 elif [ "$1" = "test" ] ;then
     <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/php vendor/bin/phpunit
 elif [ "$1" = "archive" ] ;then
-    cd <?= BUILD_PHP_INSTALL_PREFIX ?>/bin
-    PHP_VERSION=$(./php -r "echo PHP_VERSION;")
-    PHP_CLI_FILE=php-cli-v${PHP_VERSION}-<?=$this->getOsType()?>-<?=$this->getSystemArch()?>.tar.xz
-    cp -f php php-dbg
-    strip php
-    tar -cJvf ${PHP_CLI_FILE} php
-    mv ${PHP_CLI_FILE} <?= $this->workDir ?>/
-    cd -
-elif [ "$1" = "archive-sfx-micro" ] ;then
-    cd <?= $this->phpSrcDir ?>/sapi/micro/
-    # sapi/micro/micro.sfx
-    PHP_VERSION=<?= BUILD_PHP_VERSION . PHP_EOL ?>
-    PHP_CLI_FILE=php-sfx-micro-v${PHP_VERSION}-<?=$this->getOsType()?>-<?=$this->getSystemArch()?>.tar.xz
+    cd <?= $this->getWorkDir() ?>/bin
+    PHP_VERSION=<?= BUILD_PHP_VERSION ?>
+    PHP_CLI_FILE=php-micro-v${PHP_VERSION}-<?=$this->getOsType()?>-<?=$this->getSystemArch()?>.tar.xz
+    cp -f micro.sfx  micro-dbg.sfx
+    strip micro.sfx
     tar -cJvf ${PHP_CLI_FILE} micro.sfx
     mv ${PHP_CLI_FILE} <?= $this->workDir ?>/
     cd -
