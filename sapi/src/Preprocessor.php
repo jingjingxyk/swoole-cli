@@ -17,6 +17,7 @@ class Preprocessor
 
     protected static ?Preprocessor $instance = null;
 
+    protected array $prepareArgs = [];
     protected string $osType = 'linux';
     protected array $libraryList = [];
     protected array $extensionList = [];
@@ -52,7 +53,7 @@ class Preprocessor
      * 编译后.a静态库文件安装目录的全局前缀，在构建阶段使用
      * @var string
      */
-    protected string $globalPrefix = '/usr';
+    protected string $globalPrefix = '/usr/local/swoole-cli';
 
     protected string $extraLdflags = '';
     protected string $extraOptions = '';
@@ -218,6 +219,10 @@ class Preprocessor
         return $this->rootDir;
     }
 
+    public function getPrepareArgs(): array {
+        return $this->prepareArgs;
+    }
+
     public function setLibraryDir(string $libraryDir)
     {
         $this->libraryDir = $libraryDir;
@@ -365,7 +370,7 @@ class Preprocessor
 
         $skip_download = ($this->getInputOption('skip-download'));
         if (!$skip_download) {
-            if (is_file($lib->path)) {
+            if (is_file($lib->path) && (filesize($lib->path) != 0)) {
                 echo "[Library] file cached: " . $lib->file . PHP_EOL;
             } else {
                 if ($lib->enableDownloadScript) {
@@ -430,7 +435,7 @@ EOF;
                 }
 
                 $workDir = $this->getWorkDir();
-                if (!file_exists($ext->path)) {
+                if (!file_exists($ext->path) || (filesize($ext->path) === 0)) {
                     if ($ext->enableDownloadScript) {
                         $cacheDir = $this->getWorkDir() . '/var/tmp';
                         $ext->downloadScript = <<<EOF
@@ -588,6 +593,7 @@ EOF;
 
     public function parseArguments(int $argc, array $argv)
     {
+        $this->prepareArgs = $argv;
         // parse the parameters passed in by the user
         for ($i = 1; $i < $argc; $i++) {
             $arg = $argv[$i];
@@ -872,13 +878,13 @@ EOF;
             $cacheDir = '${__DIR__}/var/tmp';
             $workDir = '${__DIR__}/var';
             $downloadScript = <<<EOF
-            cd {$cacheDir}
-            test -d {$item->downloadDirName} && rm -rf {$item->downloadDirName}
-            {$item->downloadScript}
-            cd {$item->downloadDirName}
-            test -f {$workDir}/libraries/{$item->file} || tar  -czf {$workDir}/{$item->file} ./
-            cp -f {$workDir}/{$item->file} "\${__DIR__}/libraries/"
-            cd {$workDir}
+                cd {$cacheDir}
+                test -d {$item->downloadDirName} && rm -rf {$item->downloadDirName}
+                {$item->downloadScript}
+                cd {$item->downloadDirName}
+                test -f {$workDir}/libraries/{$item->file} || tar  -czf {$workDir}/{$item->file} ./
+                cp -f {$workDir}/{$item->file} "\${__DIR__}/libraries/"
+                cd {$workDir}
 EOF;
 
             $download_scripts[] = $downloadScript . PHP_EOL;

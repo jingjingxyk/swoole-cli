@@ -9,6 +9,7 @@ use SwooleCli\Preprocessor;
 ?>
 SRC=<?= $this->phpSrcDir . PHP_EOL ?>
 ROOT=<?= $this->getRootDir() . PHP_EOL ?>
+PREPARE_ARGS="<?= implode(' ', $this->getPrepareArgs())?>"
 export CC=<?= $this->cCompiler . PHP_EOL ?>
 export CXX=<?= $this->cppCompiler . PHP_EOL ?>
 export LD=<?= $this->lld . PHP_EOL ?>
@@ -121,6 +122,7 @@ make_all_library() {
     return 0
 }
 
+
 export_variables() {
     CPPFLAGS=""
     CFLAGS=""
@@ -140,7 +142,6 @@ export_variables() {
 make_config() {
     cd <?= $this->getWorkDir() . PHP_EOL ?>
     set -exu
-
     test -f ./configure &&  rm ./configure
     ./buildconf --force
 <?php if ($this->osType !== 'macos') : ?>
