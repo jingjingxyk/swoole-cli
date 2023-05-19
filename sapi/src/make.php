@@ -218,15 +218,18 @@ make_config() {
 
     echo $OPTIONS
     # 替换指定行
+:<<'EOF'
     test -f ./configure &&  rm ./configure
     sed -i.bak '244s/PHP_GD_XPM/ /' ext/gd/config.m4
     sed -i.bak '313s/PHP_GD_XPM/ /' ext/gd/config.m4
     sed -i.bak 's@$PHP_FREETYPE_DIR /usr/local@$PHP_FREETYPE_DIR <?= FREETYPE_PREFIX ?>@' ext/gd/config.m4
     sed -i.bak '157,182d'   ext/gd/config.m4
+EOF
+
     ./buildconf --force
 
     ./configure --help
-     exit 0
+
      export_variables
 
      echo $LDFLAGS > <?= $this->getWorkDir() ?>/ldflags.log
