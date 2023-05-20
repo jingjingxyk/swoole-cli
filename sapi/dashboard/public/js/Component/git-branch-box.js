@@ -1,5 +1,5 @@
 let git_branch_list = async() => {
-    let response = await fetch('http://192.168.3.26:9502/api/branchList')
+    let response = await fetch('/api/branchList')
     let res = await response.json();
     if (response.status === 200 && res) {
         let branch_list = document.querySelector('select[name="branch_list"]')

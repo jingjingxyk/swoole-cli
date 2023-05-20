@@ -13,21 +13,51 @@ use function Swoole\Coroutine\run;
 run(function () {
     $server = new Server('0.0.0.0', 9502, false);
 
+    $message = <<<EOF
+
+    dashboard  listen http://0.0.0.0:9502
+
+EOF;
+    printf($message);
+
     $channel = new Channel(1);
 
     $server->handle('/', function ($request, $response) use ($server) {
-        var_dump($request->server);
-        $response->end('<h1>hello </h1>');
+        //https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Basics_of_HTTP/MIME_types
+
+        $request_uri = str_replace('..', '', $request->server['request_uri']);
+        $prefix = substr($request_uri, 0, 4);
+        $file = __DIR__ . '/public/' . $request_uri;
+        if ($prefix == '/js/') {
+            $response->header('content-type', 'application/javascript');
+        } elseif ($prefix == '/js/') {
+            $response->header('content-type', 'text/css');
+        } elseif ($request->server['request_uri'] == '/' || $request->server['request_uri'] == '/index.html') {
+            $response->header('content-type', 'text/html;charset=utf-8');
+            $response->end(file_get_contents(__DIR__ . '/public/index.html'));
+        } else {
+            $response->header('content-type', 'application/octet-stream');
+        }
+        if (is_file($file)) {
+            echo $file;
+            $response->end(file_get_contents($file));
+        } else {
+            $response->end('');
+        }
     });
     $server->handle('/api', function (Request $request, Response $response) use ($server, $channel) {
+        var_dump($request->header);
         $response->header('Content-Type', 'application/json; charset=utf-8');
         $response->header('access-control-allow-credentials', 'true');
+
+
         $response->header('access-control-allow-methods', 'GET,HEAD,POST,OPTIONS');
         $response->header('access-control-allow-headers', 'content-type,Authorization');
         $origin = empty($request->header['origin']) ? '*' : $request->header['origin'];
         $response->header('access-control-allow-origin', $origin);
         $request_method = empty($request->header['request_method']) ? '' : $request->header['request_method'];
         if ($request_method == "OPTIONS") {
+            $response->header('access-control-allow-private-network', 'true');
             $response->header->status(200);
             $response->end();
             return null;
@@ -44,15 +74,15 @@ run(function () {
         $action = lcfirst($action) . 'Action';
 
         var_dump($action);
-        $parameter= $request->getContent();
-        $parameter=json_decode($parameter, true);
+        $parameter = $request->getContent();
+        $parameter = json_decode($parameter, true);
         var_dump($parameter);
 
-        $word_dir=realpath(__DIR__ . '/../../');
-        $runtime=realpath($word_dir . '/bin/runtime');
-        if ($action==='changeBranchAction') {
+        $word_dir = realpath(__DIR__ . '/../../');
+        $runtime = realpath($word_dir . '/bin/runtime');
+        if ($action === 'changeBranchAction') {
             $branch_name = $parameter['data']['branch_name'];
-            $cmd=<<<EOF
+            $cmd = <<<EOF
          cd $word_dir
          git checkout $branch_name
 
@@ -63,7 +93,7 @@ EOF;
             ob_end_clean();
             echo $result;
         } elseif ($action === 'branchListAction') {
-            $cmd=<<<EOF
+            $cmd = <<<EOF
          cd $word_dir
          git branch
 
@@ -73,16 +103,16 @@ EOF;
             $result = ob_get_contents();
             ob_end_clean();
 
-            $result= explode("\n", $result);
+            $result = explode("\n", $result);
             array_walk($result, function ($value, $key) use (&$result) {
-                $result[$key]=trim($value);
+                $result[$key] = trim($value);
                 if (empty($value)) {
                     unset($result[$key]);
                 }
             });
             var_dump($result);
         } elseif ($action === 'extensionListAction') {
-            $cmd=<<<EOF
+            $cmd = <<<EOF
            cd $word_dir/conf.d
             ls .
 
@@ -92,40 +122,40 @@ EOF;
             $result = ob_get_contents();
             ob_end_clean();
 
-            $result= explode("\n", $result);
+            $result = explode("\n", $result);
 
             array_walk($result, function ($value, $key) use (&$result) {
-                $result[$key]=str_replace('.php', '', trim($value));
+                $result[$key] = str_replace('.php', '', trim($value));
                 if (empty($value)) {
                     unset($result[$key]);
                 }
             });
             var_dump($result);
         } elseif ($action === 'defaultExtensionListAction') {
-            $result=[];
+            $result = [];
             $fp = new \SplFileObject($word_dir . '/sapi/src/Preprocessor.php', 'r');
             if ($fp) {
-                $fp->seek(73);
+                $fp->seek(74);
                 while (!$fp->eof()) {
                     $line = $fp->current();
                     $cursor = $fp->ftell();
                     $line_no = $fp->key();
                     //$line = $fp->fgets();
                     $fp->next();
-                    $ext_name=trim(str_replace(['\'','\n',','], '', $line));
+                    $ext_name = trim(str_replace(['\'', '\n', ','], '', $line));
                     echo $ext_name . PHP_EOL;
                     if (!empty($ext_name)) {
-                        $result[]=$ext_name;
+                        $result[] = $ext_name;
                     }
-                    if ($line_no >=110) {
+                    if ($line_no >= 110) {
                         break;
                     }
                 }
-                $fp=null;
+                $fp = null;
             }
         }
 
-        $cmd=<<<EOF
+        $cmd = <<<EOF
         cd $word_dir
         export PATH=${runtime}:\$PATH
         php prepare.php --with-build-type=release +apcu +ds
@@ -133,16 +163,17 @@ EOF;
 EOF;
 
 
-
         try {
-            $response->end(json_encode(
-                [
-                'code'=>200,
-                "msg"=>'success',
-                "data"=>$result
-                ],
-                JSON_UNESCAPED_UNICODE
-            ));
+            $response->end(
+                json_encode(
+                    [
+                        'code' => 200,
+                        "msg" => 'success',
+                        "data" => $result
+                    ],
+                    JSON_UNESCAPED_UNICODE
+                )
+            );
         } catch (\RuntimeException $e) {
             echo $e->getMessage();
             $response->end(json_encode(["code" => 500, 'msg' => 'system error' . $e->getMessage()]));

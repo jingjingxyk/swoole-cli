@@ -1,5 +1,12 @@
 let extension_list = async() => {
-    let response = await fetch('http://192.168.3.26:9502/api/extensionList')
+    let response = await fetch('/api/extensionList',{
+        credentials: 'include',
+        headers: {
+            "Access-Control-Request-Credentials": true,
+            "Access-Control-Request-Private-Network": true
+        },
+
+    })
     let res = await response.json();
     if (response.status === 200 && res) {
         let extension_list = document.querySelector('ul[name="all_extentions"]')
@@ -10,7 +17,12 @@ let extension_list = async() => {
                 value=value.replace(patt,"")
                 value=value.trim()
                 children += `
-                    <li value="${value}">${value}</li>
+                    <li value="${value}">
+                    <label>
+                         <input name="ext_${value}" type="checkbox" value="${value}" />
+                         ${value}
+                     </label>
+                   </li>
                 `
             });
 
@@ -20,8 +32,15 @@ let extension_list = async() => {
     default_ready_extension_list();
 }
 let default_ready_extension_list = async()=>{
+    let response = await fetch('/api/defaultExtensionList',{
+        credentials: 'include',
+        headers: {
+            "Access-Control-Request-Method": "GET",
+            "Access-Control-Request-Credentials": true,
+            "Access-Control-Request-Private-Network": true
+        },
 
-    let response = await fetch('http://192.168.3.26:9502/api/defaultExtensionList')
+    })
     let res = await response.json();
     if (response.status === 200 && res && res['data']) {
         let extension_list = document.querySelector('ul[name="ready_extentions"]')
@@ -30,9 +49,17 @@ let default_ready_extension_list = async()=>{
             res['data'].map((value, index, array) => {
                 let ele=document.querySelector(`ul[name="all_extentions"] li[value="${value}"]`)
                 ele.classList.add('ready_extension')
+                let input=ele.querySelector(`input[name="ext_${value}"]`)
+                input.setAttribute('checked',true)
 
                 children += `
-                    <li value="${value}" class="ready_extension">${value}</li>
+                    <li value="${value}" class="ready_extension">
+                     <label>
+                         <input name="ready_ext_${value}" type="checkbox" value="${value}" checked="true" />
+                         ${value}
+                     </label>
+                    </li>
+
                 `
             });
 
