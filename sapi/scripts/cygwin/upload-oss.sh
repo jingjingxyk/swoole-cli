@@ -14,7 +14,6 @@ cd ${__PROJECT__}
 exit 0
 
 ## tencentyun upload oss
-## 下载与安装配置
 ## https://cloud.tencent.com/document/product/436/63144
 
 test -f coscli-windows.exe  ||  wget https://github.com/tencentyun/coscli/releases/download/v0.13.0-beta/coscli-windows.exe

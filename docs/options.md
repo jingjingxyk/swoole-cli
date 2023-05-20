@@ -42,6 +42,7 @@ skip-download
 
 # 构建依赖库之前，批量下载依赖库和扩展的脚本
 sh sapi/scripts/download-dependencies-use-aria2.sh
+sh sapi/scripts/download-dependencies-use-git.sh
 
 ```
 
@@ -74,6 +75,14 @@ without-docker
 
 > 在 `macOS` 系统无法使用 `docker`，需指定此参数
 
+with-global-prefix
+----
+设置依赖库安装目录前缀
+默认安装目录前缀： `/usr/local/swoole-cli/`
+
+```shell
+./prepare.php --with-global-prefix=/usr/local/swoole-cli/
+```
 
 with-dependency-graph
 ----
@@ -82,17 +91,20 @@ with-dependency-graph
 > 依赖 graphviz
 
 ```shell
+
 # macos
 brew install graphviz
 # debian
 apt install -y graphviz
 # alpine
 apk add graphviz
+
 ```
 
 > 生成扩展依赖库 图 步骤
 
 ```shell
+
 # 生成扩展依赖图模板
 php ./prepare.php --without-docker --with-dependency-graph=1
 
@@ -100,4 +112,5 @@ php ./prepare.php --without-docker --with-dependency-graph=1
 sh sapi/scripts/generate-dependency-graph.sh
 
 ```
+
 
