@@ -58,6 +58,7 @@ jobs:
           export MACOSX_DEPLOYMENT_TARGET=12.6
           export PATH=${GITHUB_WORKSPACE}/bin/runtime:$PATH
           sudo chmod a+x ./make.sh
+          sudo bash make.sh bison
           sudo ./make.sh config
           sudo ./make.sh build
           sudo ./make.sh archive
