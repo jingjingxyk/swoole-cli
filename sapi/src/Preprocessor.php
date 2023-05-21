@@ -129,7 +129,7 @@ class Preprocessor
                 break;
             case 'Darwin':
                 $this->setOsType('macos');
-                $this->setLinker('ld64');
+                $this->setLinker('ld64.lld');
                 break;
             case 'WINNT':
                 $this->setOsType('win');
@@ -137,7 +137,7 @@ class Preprocessor
         }
     }
 
-    public function  setLinker(string $ld): void
+    public function setLinker(string $ld): void
     {
         $this->lld=$ld;
     }
@@ -722,6 +722,27 @@ EOF;
         }
     }
 
+    public function loadLibrary($library_name)
+    {
+        if (!isset($this->libraryMap[$library_name])) {
+            $file = realpath(__DIR__ . '/builder/library/' . $library_name . '.php');
+            if (!is_file($file)) {
+                return;
+            }
+            $func = require $file;
+            $func($this);
+        }
+
+        if (isset($this->libraryMap[$library_name])) {
+            $deps = $this->libraryMap[$library_name]->deps;
+            if (!empty($deps)) {
+                foreach ($deps as $library_name) {
+                    $this->loadLibrary($library_name);
+                }
+            }
+        }
+    }
+
     /**
      * @throws CircularDependencyException
      * @throws ElementNotFoundException
@@ -765,6 +786,12 @@ EOF;
             ($extAvailabled[$ext])($this);
             if (isset($this->extCallbacks[$ext])) {
                 ($this->extCallbacks[$ext])($this);
+            }
+        }
+        // autoload  library
+        foreach ($this->extensionMap as $ext) {
+            foreach ($ext->deps as $library_name) {
+                $this->loadLibrary($library_name);
             }
         }
 
@@ -842,5 +869,4 @@ EOF;
             echo "{$item->name}\n";
         }
     }
-
 }
