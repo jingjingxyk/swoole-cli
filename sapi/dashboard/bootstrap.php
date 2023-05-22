@@ -30,7 +30,7 @@ EOF;
         $file = __DIR__ . '/public/' . $request_uri;
         if ($prefix == '/js/') {
             $response->header('content-type', 'application/javascript');
-        } elseif ($prefix == '/js/') {
+        } elseif ($prefix == '/css/') {
             $response->header('content-type', 'text/css');
         } elseif ($request->server['request_uri'] == '/' || $request->server['request_uri'] == '/index.html') {
             $response->header('content-type', 'text/html;charset=utf-8');
@@ -113,7 +113,7 @@ EOF;
             var_dump($result);
         } elseif ($action === 'extensionListAction') {
             $cmd = <<<EOF
-           cd $word_dir/conf.d
+            cd $word_dir/sapi/src/builder/extension
             ls .
 
 EOF;
