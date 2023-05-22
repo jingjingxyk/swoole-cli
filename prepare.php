@@ -19,6 +19,7 @@ if ($p->getInputOption('without-docker')) {
     $p->setBuildDir(__DIR__ . '/thirdparty');
 }
 
+<<<<<<< HEAD
 
 $build_type = $p->getInputOption('with-build-type');
 if (!in_array($build_type, ['dev', 'debug'])) {
@@ -27,12 +28,17 @@ if (!in_array($build_type, ['dev', 'debug'])) {
 define('SWOLLEN_CLI_BUILD_TYPE', $build_type);
 define('SWOOLE_CLI_GLOBAL_PREFIX', $p->getGlobalPrefix());
 
+=======
+>>>>>>> main
 if ($p->getInputOption('with-global-prefix')) {
     $p->setGlobalPrefix($p->getInputOption('with-global-prefix'));
 }
 
 if ($p->getOsType() == 'macos') {
     $p->setExtraLdflags('-undefined dynamic_lookup');
+    if (is_file('/usr/local/opt/llvm/bin/ld64.lld')) {
+        $p->withPath('/usr/local/opt/llvm/bin')->setLinker('ld64.lld');
+    }
 }
 
 $p->setExtraCflags('-fno-ident -Os');
