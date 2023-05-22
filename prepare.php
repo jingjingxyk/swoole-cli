@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 require __DIR__ . '/vendor/autoload.php';
 
@@ -19,8 +20,6 @@ if ($p->getInputOption('without-docker')) {
     $p->setBuildDir(__DIR__ . '/thirdparty');
 }
 
-<<<<<<< HEAD
-
 $build_type = $p->getInputOption('with-build-type');
 if (!in_array($build_type, ['dev', 'debug'])) {
     $build_type = 'release';
@@ -28,8 +27,7 @@ if (!in_array($build_type, ['dev', 'debug'])) {
 define('SWOLLEN_CLI_BUILD_TYPE', $build_type);
 define('SWOOLE_CLI_GLOBAL_PREFIX', $p->getGlobalPrefix());
 
-=======
->>>>>>> main
+
 if ($p->getInputOption('with-global-prefix')) {
     $p->setGlobalPrefix($p->getInputOption('with-global-prefix'));
 }
