@@ -11,10 +11,15 @@
 使用 `brew` 安装的库可能会干扰 `swoole-cli` 的编译，必须要在构建之前将关联的软件进行卸载。在构建完成后再重新安装。
 
 ```shell
-brew uninstall --ignore-dependencies oniguruma
-brew uninstall --ignore-dependencies brotli
-brew uninstall --ignore-dependencies freetype
-brew uninstall --ignore-dependencies zstd
+
+# 多数情况下，只需要卸载  snappy 和 capstone
+
+# brew uninstall --ignore-dependencies oniguruma
+# brew uninstall --ignore-dependencies brotli
+# brew uninstall --ignore-dependencies freetype
+# brew uninstall --ignore-dependencies zstd
+
+brew uninstall --ignore-dependencies snappy
 brew uninstall --ignore-dependencies capstone
 
 ```
@@ -23,7 +28,18 @@ brew uninstall --ignore-dependencies capstone
 
 ## 缺少 bison
 
-下载源代码，自行编译安装 (此问题已经决，安装依赖库时 已经包含bison源码编译)
+下载源代码，自行编译安装 (此问题已解决，安装依赖库时 已经包含bison源码编译)
+
+## llvm 连接器 ld64.lld 、 lld 找不到
+
+```shell
+    # 若目录不存在，可以先安装 llvm
+    brew intall llvm
+
+    export PATH=/usr/local/opt/llvm/bin:$PATH
+
+```
+>>>>>>> main
 
 ## 缺少`libtool`
 
@@ -90,3 +106,5 @@ export LIBSODIUM_LIBS=$(pkg-config --libs libsodium)
 ## [在macOS上不能创建静态链接的可执行文件](https://developer.apple.com/library/archive/qa/qa1118/_index.html)
 
 > 参考文档： https://blog.csdn.net/EvianZhang/article/details/125301503
+## [macOS doesn't officially support fully static linking ](https://developer.apple.com/library/archive/qa/qa1118/_index.html)
+

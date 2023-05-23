@@ -13,7 +13,7 @@ $p->parseArguments($argc, $argv);
 $p->setPhpSrcDir($homeDir . '/.phpbrew/build/php-' . BUILD_PHP_VERSION);
 
 // Compile directly on the host machine, not in the docker container
-if ($p->getInputOption('without-docker')) {
+if ($p->getInputOption('without-docker') || ($p->getOsType() == 'macos')) {
     $p->setWorkDir(__DIR__);
     $p->setBuildDir(__DIR__ . '/thirdparty');
 }
@@ -24,6 +24,9 @@ if ($p->getInputOption('with-global-prefix')) {
 
 if ($p->getOsType() == 'macos') {
     $p->setExtraLdflags('-undefined dynamic_lookup');
+    if (is_file('/usr/local/opt/llvm/bin/ld64.lld')) {
+        $p->withPath('/usr/local/opt/llvm/bin')->setLinker('ld64.lld');
+    }
 }
 
 $p->setExtraCflags('-fno-ident -Os');

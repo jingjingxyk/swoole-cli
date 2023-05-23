@@ -126,7 +126,7 @@ class Preprocessor
                 break;
             case 'Darwin':
                 $this->setOsType('macos');
-                $this->setLinker('ld64.lld');
+                $this->setLinker('ld');
                 break;
             case 'WINNT':
                 $this->setOsType('win');
@@ -134,9 +134,9 @@ class Preprocessor
         }
     }
 
-    public function  setLinker(string $ld): void
+    public function setLinker(string $ld): void
     {
-        $this->lld=$ld;
+        $this->lld = $ld;
     }
 
     public static function getInstance(): static
@@ -226,7 +226,8 @@ class Preprocessor
         return $this->rootDir;
     }
 
-    public function getPrepareArgs(): array {
+    public function getPrepareArgs(): array
+    {
         return $this->prepareArgs;
     }
 
@@ -304,7 +305,14 @@ class Preprocessor
     {
         $retry_number = DOWNLOAD_FILE_RETRY_NUMBE;
         $wait_retry = DOWNLOAD_FILE_WAIT_RETRY;
-        echo $cmd = "wget   {$url}  -O {$file}  -t {$retry_number} --wait={$wait_retry} -T 15 ";
+        $connect_timeout = DOWNLOAD_FILE_CONNECTION_TIMEOUT;
+        echo PHP_EOL;
+        if ($this->getInputOption('with-downloader') === 'wget') {
+            $cmd = "wget   {$url}  -O {$file}  -t {$retry_number} --wait={$wait_retry} -T {$connect_timeout} ";
+        } else {
+            $cmd = "curl  --connect-timeout {$connect_timeout} --retry {$retry_number}  --retry-delay {$wait_retry}  -Lo '{$file}' '{$url}' ";
+        }
+        echo $cmd;
         echo PHP_EOL;
         echo `$cmd`;
         echo PHP_EOL;
@@ -503,14 +511,22 @@ EOF;
         return $packages;
     }
 
-    public function withVariable(string $key, string $value): void
+    public function withPath(string $path): static
     {
-        $this->variables[] = [$key => $value];
+        $this->binPath[] = $path;
+        return $this;
     }
 
-    public function withExportVariable(string $key, string $value): void
+    public function withVariable(string $key, string $value): static
+    {
+        $this->variables[] = [$key => $value];
+        return $this;
+    }
+
+    public function withExportVariable(string $key, string $value): static
     {
         $this->exportVariables[] = [$key => $value];
+        return $this;
     }
 
     public function getExtension(string $name): ?Extension
@@ -702,6 +718,37 @@ EOF;
         }
     }
 
+    public function loadLibrary($library_name)
+    {
+        if (!isset($this->libraryMap[$library_name])) {
+            $file = realpath(__DIR__ . '/builder/library/' . $library_name . '.php');
+            if (!is_file($file)) {
+                return;
+            }
+            $func = require $file;
+            $func($this);
+        }
+
+        if (isset($this->libraryMap[$library_name])) {
+            $deps = $this->libraryMap[$library_name]->deps;
+            if (!empty($deps)) {
+                foreach ($deps as $library_name) {
+                    $this->loadLibrary($library_name);
+                }
+            }
+        }
+    }
+
+    public function generateFile(string $templateFile, string $outFile): bool
+    {
+        if (!is_file($templateFile)) {
+            return false;
+        }
+        ob_start();
+        include $templateFile;
+        return file_put_contents($outFile, ob_get_clean());
+    }
+
     /**
      * @throws CircularDependencyException
      * @throws ElementNotFoundException
@@ -722,9 +769,8 @@ EOF;
         include __DIR__ . '/constants.php';
 
         $extAvailabled = [];
-        if (is_dir($this->rootDir . '/conf.d')) {
-            $this->scanConfigFiles($this->rootDir . '/conf.d', $extAvailabled);
-        }
+        $this->scanConfigFiles(__DIR__ . '/builder/extension', $extAvailabled);
+
         $confPath = $this->getInputOption('conf-path');
         if ($confPath) {
             $confDirList = explode(':', $confPath);
@@ -745,6 +791,12 @@ EOF;
             ($extAvailabled[$ext])($this);
             if (isset($this->extCallbacks[$ext])) {
                 ($this->extCallbacks[$ext])($this);
+            }
+        }
+        // autoload  library
+        foreach ($this->extensionMap as $ext) {
+            foreach ($ext->deps as $library_name) {
+                $this->loadLibrary($library_name);
             }
         }
 
@@ -780,27 +832,17 @@ EOF;
             $this->generateLibraryDownloadLinks();
         }
 
-        ob_start();
-        include __DIR__ . '/make.php';
-        file_put_contents($this->rootDir . '/make.sh', ob_get_clean());
-
-        ob_start();
-        include __DIR__ . '/license.php';
+        $this->generateFile(__DIR__ . '/template/make.php', $this->rootDir . '/make.sh');
         $this->mkdirIfNotExists($this->rootDir . '/bin');
-        file_put_contents($this->rootDir . '/bin/LICENSE', ob_get_clean());
-
-        ob_start();
-        include __DIR__ . '/credits.php';
-        file_put_contents($this->rootDir . '/bin/credits.html', ob_get_clean());
+        $this->generateFile(__DIR__ . '/template/license.php', $this->rootDir . '/bin/LICENSE');
+        $this->generateFile(__DIR__ . '/template/credits.php', $this->rootDir . '/bin/credits.html');
 
         copy($this->rootDir . '/sapi/scripts/pack-sfx.php', $this->rootDir . '/bin/pack-sfx.php');
 
         if ($this->getInputOption('with-dependency-graph')) {
-            ob_start();
-            include __DIR__ . '/ExtensionDependencyGraph.php';
-            file_put_contents(
-                $this->rootDir . '/bin/ext-dependency-graph.graphviz.dot',
-                ob_get_clean()
+            $this->generateFile(
+                __DIR__ . '/template/extension_ependency_graph.php',
+                $this->rootDir . '/bin/ext-dependency-graph.graphviz.dot'
             );
         }
 
