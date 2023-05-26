@@ -11,9 +11,8 @@ return function (Preprocessor $p) {
     $options .= ' --with-png-dir=' . PNG_PREFIX;
     $options .= ' --with-zlib-dir=' . ZLIB_PREFIX;
     $options .= ' --with-freetype-dir=' . FREETYPE_PREFIX;
-    //$options .= ' --without-libXpm';
-    $options .= ' --without-xpm-dir';
-    #$options .= ' --without-libxpm';
+    $options .= ' --with-xpm-dir=no';
+
     //$options .= ' --with-gettext=' ;
     $p->addExtension(
         (new Extension('gd'))
@@ -21,4 +20,18 @@ return function (Preprocessor $p) {
             ->withOptions($options)
             ->depends('libjpeg', 'freetype', 'libwebp', 'libpng', 'libgif')
     );
+    $p->setExtHook('gd', function (Preprocessor $p) {
+        // compatible with redis
+        $workdir = $p->getWorkDir();
+
+        $cmd = <<<EOF
+                cd {$p->getPhpSrcDir()}/
+                if [[ ! -f ext/gd/config.m4.backup ]] ;then
+                   sed -i.backup "180c test -f ext/gd/config.m4" ext/gd/config.m4
+                fi
+
+EOF;
+
+        return $cmd;
+    });
 };
