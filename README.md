@@ -12,7 +12,9 @@
 
 - [Swoole-Cli 介绍](https://zhuanlan.zhihu.com/p/581695339)
 - [Swoole-Cli 使用说明](https://wenda.swoole.com/detail/108876)
-- [Swoole v5.0 版本新特性预览之新的运行模式](https://zhuanlan.zhihu.com/p/459983471)
+- [Swoole-Cli v5.0.0 版本新特性预览之新的运行模式](https://zhuanlan.zhihu.com/p/459983471)
+- [Swoole-Cli v5.0.1 PHP 的二进制发行版](https://zhuanlan.zhihu.com/p/581695339)
+- [Swoole-Cli v5.0.2 增加 opcache/readline 扩展，强化 Cli-Server](https://zhuanlan.zhihu.com/p/610014616)
 
 ## 下载`swoole-cli`发行版
 
@@ -29,18 +31,16 @@
 - [swoole-cli 构建选项文档](docs/options.md)
 - [打包成二进制可执行文件 文档](sapi/samples/sfx/README.md)
 - [swoole-cli 搭建依赖库镜像服务](sapi/download-box/README.md)
-- [快速开始构建环境](sapi/quickstart/README.md)
+- [快速初始化构建环境](sapi/quickstart/README.md)
 
 ## Clone
 
 ```shell
-git clone --recursive git@github.com:swoole/swoole-cli.git
+git clone --recursive https://github.com/swoole/swoole-cli.git
 ```
 
-或者
-
 ```shell
-git clone git@github.com:swoole/swoole-cli.git
+git clone https://github.com/swoole/swoole-cli.git
 git submodule update --init
 ```
 
