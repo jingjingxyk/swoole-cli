@@ -1,9 +1,9 @@
-name: build-swoole-cli-linux-aarch64
+name: build-php-cli-linux-aarch64
 
 on: [ push, pull_request ]
 
 env:
-  BUILD_PHP_VERSION: 8.2.4
+  BUILD_PHP_VERSION: 7.3.33
 
 jobs:
   linux-aarch64:

@@ -16,6 +16,7 @@ return function (Preprocessor $p) {
                 <<<EOF
                 CFLAGS="-DSQLITE_ENABLE_COLUMN_METADATA=1" \
                 ./configure --prefix={$sqlite3_prefix}  --enable-static --disable-shared
+
 EOF
             )
             ->withBinPath($sqlite3_prefix)
