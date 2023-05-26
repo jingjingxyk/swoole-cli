@@ -20,6 +20,7 @@ cd ${__DIR__}
 cd ${__DIR__}
 IMAGE=alpine:3.16
 
+
 ARCH=$(uname -m)
 
 IMAGE=docker.io/jingjingxyk/build-swoole-cli:native-php-all-dependencies-alpine-php-7.4-${ARCH}-20230504T124927Z

@@ -12,7 +12,7 @@ $p = Preprocessor::getInstance();
 $p->parseArguments($argc, $argv);
 
 // Compile directly on the host machine, not in the docker container
-if ($p->getInputOption('without-docker')) {
+if ($p->getInputOption('without-docker') || ($p->getOsType() == 'macos')) {
     $p->setWorkDir(__DIR__);
     $p->setBuildDir(__DIR__ . '/thirdparty');
 }
@@ -38,6 +38,9 @@ define('PHP_CLI_GLOBAL_PREFIX', $p->getGlobalPrefix());
 
 if ($p->getOsType() == 'macos') {
     $p->setExtraLdflags('-undefined dynamic_lookup');
+    if (is_file('/usr/local/opt/llvm/bin/ld64.lld')) {
+        $p->withPath('/usr/local/opt/llvm/bin')->setLinker('ld64.lld');
+    }
 }
 
 $p->setExtraCflags('-fno-ident -Os');
