@@ -22,8 +22,6 @@ OPTIONS="--disable-all \
 --disable-cgi  \
 --enable-shared=no \
 --enable-static=yes \
---enable-json \
---enable-hash \
 --enable-cli  \
 --disable-phpdbg \
 <?php foreach ($this->extensionList as $item) : ?>
