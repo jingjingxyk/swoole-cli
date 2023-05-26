@@ -12,7 +12,7 @@ return function (Preprocessor $p) {
     $p->addExtension(
         (new Extension('xsl'))
             ->withHomePage('https://www.php.net/xsl')
-            ->withOptions('--with-xsl')
+            ->withOptions('--with-xsl=' . LIBXSLT_PREFIX)
             ->depends('libxslt')
     );
 };

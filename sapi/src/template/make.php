@@ -24,6 +24,8 @@ OPTIONS="--disable-all \
 --enable-static=yes \
 --enable-cli  \
 --disable-phpdbg \
+--enable-json \
+--enable-hash \
 <?php foreach ($this->extensionList as $item) : ?>
     <?=$item->options?> \
 <?php endforeach; ?>
