@@ -18,12 +18,12 @@ export CXX=<?= $this->cppCompiler . PHP_EOL ?>
 export LD=<?= $this->lld . PHP_EOL ?>
 export PKG_CONFIG_PATH=<?= implode(':', $this->pkgConfigPaths) . PHP_EOL ?>
 export PATH=<?= implode(':', $this->binPaths) . PHP_EOL ?>
-OPTIONS="--prefix=<?= BUILD_PHP_INSTALL_PREFIX ?> --disable-all \
+OPTIONS="--disable-all \
 --disable-cgi  \
---disable-phpdbg \
 --enable-shared=no \
 --enable-static=yes \
 --enable-cli  \
+--disable-phpdbg \
 <?php foreach ($this->extensionList as $item) : ?>
     <?=$item->options?> \
 <?php endforeach; ?>
@@ -138,7 +138,7 @@ make_all_library() {
     return 0
 }
 
-prepare_extensions() {
+make_ext() {
     cd <?= $this->phpSrcDir . PHP_EOL ?>
 
 <?php
@@ -210,7 +210,7 @@ make_config() {
     cd <?= $this->getWorkDir() . PHP_EOL ?>
 
     cd <?= $this->phpSrcDir . PHP_EOL ?>
-    prepare_extensions
+    make_ext
     cd <?= $this->phpSrcDir . PHP_EOL ?>
 
 <?php if ($this->getInputOption('with-swoole-cli-sfx')) : ?>
@@ -249,7 +249,9 @@ make_config() {
     ./configure $OPTIONS
 
     # more info https://stackoverflow.com/questions/19456518/error-when-using-sed-with-find-command-on-os-x-invalid-command-code
-    sed -i.backup 's/-export-dynamic/-all-static/g' Makefile
+<?php if ($this->getOsType()=='linux'): ?>
+     sed -i.backup 's/-export-dynamic/-all-static/g' Makefile
+<?php endif ; ?>
 
 }
 
@@ -269,9 +271,10 @@ make_build() {
     file <?= $this->phpSrcDir ?>/sapi/micro/micro.sfx
     readelf -h <?= $this->phpSrcDir ?>/sapi/micro/micro.sfx
 <?php endif; ?>
-    cd <?= $this->getWorkDir() . PHP_EOL ?>
-    cp -f <?= $this->phpSrcDir ?>/sapi/micro/micro.sfx bin/
-    return 0
+
+    mkdir -p <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/
+    cp -f <?= $this->phpSrcDir ?>/sapi/micro/micro.sfx <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/
+
    # elfedit --output-osabi linux sapi/cli/php
 }
 
@@ -365,7 +368,7 @@ elif [ "$1" = "build" ] ;then
 elif [ "$1" = "test" ] ;then
     <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/php vendor/bin/phpunit
 elif [ "$1" = "archive" ] ;then
-    cd <?= $this->getWorkDir() ?>/bin
+    cd <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/
     PHP_VERSION=<?= BUILD_PHP_VERSION ?>
     PHP_CLI_FILE=php-micro-v${PHP_VERSION}-<?=$this->getOsType()?>-<?=$this->getSystemArch()?>.tar.xz
     cp -f micro.sfx  micro-dbg.sfx
