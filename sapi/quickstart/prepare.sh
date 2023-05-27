@@ -21,8 +21,11 @@ php -v
 
 composer update
 
+# curl 不起用 nghttp2
+#  -gd -zip -imagick 三个扩展编译不成功，需要更换依赖库
+
 # macos
-php prepare.php --with-build-type=release +apcu +ds @macos
+php prepare.php --with-build-type=release +apcu +ds @macos    -gd -zip -imagick
 
 # linux
-php prepare.php --with-build-type=release +apcu +ds
+php prepare.php --with-build-type=release +apcu +ds   -gd -zip -imagick

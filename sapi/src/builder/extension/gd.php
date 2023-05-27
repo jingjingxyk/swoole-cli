@@ -5,7 +5,7 @@ use SwooleCli\Preprocessor;
 use SwooleCli\Extension;
 
 return function (Preprocessor $p) {
-    $options = '--with-gd=';
+    $options = '--with-gd=' . LIBGD_PREFIX;
     $options .= ' --with-webp-dir=' . WEBP_PREFIX;
     $options .= ' --with-jpeg-dir=' . JPEG_PREFIX;
     $options .= ' --with-png-dir=' . PNG_PREFIX;
@@ -18,10 +18,10 @@ return function (Preprocessor $p) {
         (new Extension('gd'))
             ->withHomePage('https://www.php.net/manual/zh/book.image.php')
             ->withOptions($options)
-            ->depends('libjpeg', 'freetype', 'libwebp', 'libpng', 'libgif')
+            ->depends('libjpeg', 'freetype', 'libwebp', 'libpng', 'libgif', 'libgd2')
     );
     $p->setExtHook('gd', function (Preprocessor $p) {
-        // compatible with redis
+        //  屏蔽 xpm 检测，替换相关行
         $workdir = $p->getWorkDir();
 
         $cmd = <<<EOF
