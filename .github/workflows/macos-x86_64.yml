@@ -80,8 +80,8 @@ jobs:
 
       - name: Show Build Result
         run: |
-          file ./bin/micro.sfx
-          otool -L ./bin/micro.sfx
+          file ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/micro.sfx
+          otool -L ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/micro.sfx
 
       - name: Archive production artifacts
         uses: actions/upload-artifact@v3

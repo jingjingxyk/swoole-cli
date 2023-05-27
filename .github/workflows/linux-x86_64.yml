@@ -65,8 +65,8 @@ jobs:
 
       - name: Show Build Result
         run: |
-          file ./bin/micro.sfx
-          readelf -h ./bin/micro.sfx
+          file ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/micro.sfx
+          readelf -h ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/micro.sfx
 
       - name: production artifacts
         uses: actions/upload-artifact@v3
