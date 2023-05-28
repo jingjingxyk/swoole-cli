@@ -5,6 +5,7 @@ on: [ push, pull_request ]
 env:
   BUILD_PHP_VERSION: 7.3.33
 
+
 jobs:
   linux-aarch64:
     if: 0
@@ -47,6 +48,7 @@ jobs:
             # export PATH=/work/bin/runtime:$PATH  # 容器已经内置 php 和 composer 容器
             composer update --no-dev  --optimize-autoloader
             php prepare.php  +inotify +apcu +ds -gd -zip -imagick  --with-global-prefix=/usr
+
             chmod a+x make.sh
             head -n 20 make.sh
       - name: Build

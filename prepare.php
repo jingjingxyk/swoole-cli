@@ -5,7 +5,11 @@ require __DIR__ . '/vendor/autoload.php';
 use SwooleCli\Preprocessor;
 use SwooleCli\Library;
 
+<<<<<<< HEAD
 const BUILD_PHP_VERSION = '7.3.33';
+=======
+const BUILD_PHP_VERSION = '8.2.4';
+>>>>>>> build_native_php
 
 $homeDir = getenv('HOME');
 $p = Preprocessor::getInstance();
@@ -17,13 +21,20 @@ if ($p->getInputOption('without-docker') || ($p->getOsType() == 'macos')) {
     $p->setBuildDir(__DIR__ . '/thirdparty');
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> build_native_php
 // Sync code from php-src
 //设置 PHP 源码所在目录
 $p->setPhpSrcDir($p->getWorkDir() . '/php-src');
 
 //设置PHP 安装目录
+<<<<<<< HEAD
 define("BUILD_PHP_INSTALL_PREFIX", $p->getWorkDir() . '/bin/php-' . BUILD_PHP_VERSION);
+=======
+define("BUILD_PHP_INSTALL_PREFIX", $p->getWorkDir() . '/bin/php-' .BUILD_PHP_VERSION);
+>>>>>>> build_native_php
 
 if ($p->getInputOption('with-global-prefix')) {
     $p->setGlobalPrefix($p->getInputOption('with-global-prefix'));
@@ -59,6 +70,7 @@ function install_libraries($p): void
             ->withUrl('https://github.com/php/php-src/archive/refs/tags/php-' . BUILD_PHP_VERSION . '.tar.gz')
             ->withHomePage('https://www.php.net/')
             ->withLicense('https://github.com/php/php-src/blob/master/LICENSE', Library::LICENSE_PHP)
+<<<<<<< HEAD
             ->withFile('php-7.3.33.tar.gz')
             ->withDownloadScript(
                 'php-src',
@@ -66,6 +78,8 @@ function install_libraries($p): void
                 git clone -b php-7.3.33 --depth=1 https://github.com/php/php-src.git
 EOF
             )
+=======
+>>>>>>> build_native_php
             ->withPrefix($php_install_prefix)
             ->withCleanBuildDirectory()
             ->withBuildScript(
@@ -76,8 +90,11 @@ EOF
                 fi
                 cp -rf php_src {$php_src}
                 cd {$build_dir}/php_src
+<<<<<<< HEAD
                 ./buildconf --force
                 ./configure --help | grep -e 'dom'
+=======
+>>>>>>> build_native_php
 EOF
             )
     );

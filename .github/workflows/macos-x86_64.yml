@@ -5,6 +5,7 @@ on: [ push, pull_request ]
 env:
   BUILD_PHP_VERSION: 7.3.33
 
+
 jobs:
   macos-x86_64:
     if: 1

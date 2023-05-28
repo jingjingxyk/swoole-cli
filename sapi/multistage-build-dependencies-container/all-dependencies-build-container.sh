@@ -19,6 +19,7 @@ ARCH=$(uname -m)
 TIME=$(date -u '+%Y%m%dT%H%M%SZ')
 VERSION="1.7"
 TAG="native-php-all-dependencies-alpine-php-7.3.33-${VERSION}-${ARCH}-${TIME}"
+
 IMAGE="docker.io/jingjingxyk/build-swoole-cli:${TAG}"
 ALIYUN_IMAGE="registry.cn-beijing.aliyuncs.com/jingjingxyk-public/app:build-swoole-cli-${TAG}"
 

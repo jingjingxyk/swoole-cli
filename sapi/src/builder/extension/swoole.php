@@ -28,6 +28,7 @@ EOF
         )
         ->withDependExtension('curl', 'openssl', 'sockets', 'mysqlnd')
     ;
+
     call_user_func_array([$ext, 'depends'], $depends);
     $p->addExtension($ext);
 };

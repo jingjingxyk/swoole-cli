@@ -7,6 +7,7 @@ use SwooleCli\Library;
 use SwooleCli\Preprocessor;
 
 ?>
+#!/usr/bin/env bash
 
 set -x
 if [[ -z $PKG_CONFIG_PATH ]];then export PKG_CONFIG_PATH=' ';fi
@@ -213,9 +214,8 @@ make_config() {
     make_ext
     cd <?= $this->phpSrcDir . PHP_EOL ?>
 
-    echo $OPTIONS
-    # 替换指定行
 :<<'EOF'
+    # 替换指定行
     test -f ./configure &&  rm ./configure
     sed -i.bak '244s/PHP_GD_XPM/ /' ext/gd/config.m4
     sed -i.bak '313s/PHP_GD_XPM/ /' ext/gd/config.m4
@@ -223,6 +223,7 @@ make_config() {
     sed -i.bak '157,182d'   ext/gd/config.m4
 EOF
 
+     echo $OPTIONS
     ./buildconf --force
 
     ./configure --help
