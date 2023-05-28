@@ -18,8 +18,11 @@ ARCH=$(uname -m)
 
 TIME=$(date -u '+%Y%m%dT%H%M%SZ')
 VERSION="1.7"
+
+TAG="all-dependencies-alpine-${VERSION}-${ARCH}-${TIME}"
 TAG="native-php-all-dependencies-alpine-php-7.4-${VERSION}-${ARCH}-${TIME}"
 
+IMAGE="docker.io/phpswoole/swoole-cli-builder:${TAG}"
 IMAGE="docker.io/jingjingxyk/build-swoole-cli:${TAG}"
 ALIYUN_IMAGE="registry.cn-beijing.aliyuncs.com/jingjingxyk-public/app:build-swoole-cli-${TAG}"
 

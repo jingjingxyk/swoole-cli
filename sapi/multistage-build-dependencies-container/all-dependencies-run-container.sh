@@ -13,7 +13,7 @@ __PROJECT__=$(
 cd ${__PROJECT__}/
 ARCH=$(uname -m)
 
-TAG="native-php-all-dependencies-alpine-${ARCH}-20230428T164512Z"
+TAG="native-php-all-dependencies-alpine-php-7.4-${ARCH}-20230428T164512Z"
 
 IMAGE="docker.io/jingjingxyk/build-swoole-cli:${TAG}"
 ALIYUN_IMAGE="registry.cn-beijing.aliyuncs.com/jingjingxyk-public/app:build-swoole-cli-${TAG}"

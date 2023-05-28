@@ -32,8 +32,8 @@ chmod a+x composer.phar
 
 set -x
 
+cd ${__PROJECT__}
 
-cd ${__PROJECT__}/
 
 ## 借助 download-box 获得已经准备好的 依赖库源码 ，缩减下载时间  存放于 var目录
 bash sapi/download-box/download-box-get-archive-from-server.sh
@@ -57,7 +57,6 @@ done
 
 cd ${__PROJECT__}/var
 
-<<<<<<< HEAD
 
 GIT_BRANCH=build_php_7.4
 test -d swoole-cli && rm -rf swoole-cli
