@@ -17,9 +17,9 @@ ARCH=$(uname -m)
 if [ $OS = 'Linux' ]; then
   {
 
-   xdg-open "http://0.0.0.0:9501"
+   xdg-open "http://0.0.0.0:9502"
 
-   # gnome-terminal --window -- xdg-open 'http://0.0.0.0:9501'
+   # gnome-terminal --window -- xdg-open 'http://0.0.0.0:9502'
    # gnome-terminal --window -- nautilus ${__PROJECT__}
    # gnome-screenshot --help
    # gnome-screenshot -i

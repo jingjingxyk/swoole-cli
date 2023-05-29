@@ -1,5 +1,15 @@
 let git_branch_list = async() => {
-    let response = await fetch('/api/branchList')
+    let response = await fetch('/api/branchList',{
+        credentials: 'include',
+        mode:'cors',
+        method:'GET',
+        headers: {
+            //"Access-Control-Request-Method": "GET",
+           // "Access-Control-Request-Credentials": true,
+            //"Access-Control-Request-Private-Network": true
+        },
+       //https://developer.chrome.com/blog/private-network-access-preflight/
+    })
     let res = await response.json();
     if (response.status === 200 && res) {
         let branch_list = document.querySelector('select[name="branch_list"]')
@@ -26,7 +36,7 @@ let git_branch_list = async() => {
 
 let change_branch=async(event)=>{
     console.log(event,event.target,event.target.value)
-    let url="http://192.168.3.26:9502/api/changeBranch"
+    let url="/api/changeBranch"
     if (event.target.value) {
         let data={
             "action":"change_branch",

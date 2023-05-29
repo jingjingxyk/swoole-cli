@@ -11,6 +11,8 @@ class Preprocessor
 {
     use DownloadBoxTrait;
 
+    use WebUITrait;
+
     public const VERSION = '1.6';
     public const IMAGE_NAME = 'phpswoole/swoole-cli-builder';
     public const CONTAINER_NAME = 'swoole-cli-builder';
@@ -862,6 +864,7 @@ EOF;
             );
         }
 
+
         foreach ($this->endCallbacks as $endCallback) {
             $endCallback($this);
         }
@@ -880,5 +883,4 @@ EOF;
             echo "{$item->name}\n";
         }
     }
-
 }

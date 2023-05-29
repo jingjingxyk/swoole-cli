@@ -1,5 +1,5 @@
 
-var wsServer = 'ws://127.0.0.1:9502/websocket';
+var wsServer = 'ws://'+document.domain+':9502/websocket';
 var websocket = new WebSocket(wsServer);
 websocket.onopen = function (evt) {
     console.log("Connected to WebSocket server.");

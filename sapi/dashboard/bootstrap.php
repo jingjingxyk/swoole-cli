@@ -4,7 +4,6 @@ use Swoole\Http\Request;
 use Swoole\Http\Response;
 use Swoole\WebSocket\CloseFrame;
 use Swoole\Coroutine\Http\Server;
-
 use Swoole\Coroutine\Channel;
 use Swoole\Coroutine;
 
@@ -20,36 +19,41 @@ run(function () {
 EOF;
     printf($message);
 
-    $channel = new Channel(1);
-
     $server->handle('/', function ($request, $response) use ($server) {
         //https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Basics_of_HTTP/MIME_types
 
         $request_uri = str_replace('..', '', $request->server['request_uri']);
-        $prefix = substr($request_uri, 0, 4);
+        $request_uri = str_replace('//', '/', $request_uri);
+        $path_info = explode('/', $request_uri);
         $file = __DIR__ . '/public/' . $request_uri;
+        if (isset($path_info[1]) && isset($path_info[2])) {
+            $prefix = '/' . $path_info[1] . '/';
+        } else {
+            $prefix = '/';
+        }
         if ($prefix == '/js/') {
             $response->header('content-type', 'application/javascript');
         } elseif ($prefix == '/css/') {
             $response->header('content-type', 'text/css');
+        } elseif ($prefix == '/data/') {
+            $response->header('content-type', 'application/json;charset=utf-8');
         } elseif ($request->server['request_uri'] == '/' || $request->server['request_uri'] == '/index.html') {
             $response->header('content-type', 'text/html;charset=utf-8');
             $response->end(file_get_contents(__DIR__ . '/public/index.html'));
+            return null;
         } else {
             $response->header('content-type', 'application/octet-stream');
         }
         if (is_file($file)) {
-            echo $file;
             $response->end(file_get_contents($file));
         } else {
-            $response->end('');
+            $response->status(404);
         }
     });
-    $server->handle('/api', function (Request $request, Response $response) use ($server, $channel) {
+    $server->handle('/api', function (Request $request, Response $response) {
         var_dump($request->header);
         $response->header('Content-Type', 'application/json; charset=utf-8');
         $response->header('access-control-allow-credentials', 'true');
-
 
         $response->header('access-control-allow-methods', 'GET,HEAD,POST,OPTIONS');
         $response->header('access-control-allow-headers', 'content-type,Authorization');
@@ -57,8 +61,8 @@ EOF;
         $response->header('access-control-allow-origin', $origin);
         $request_method = empty($request->header['request_method']) ? '' : $request->header['request_method'];
         if ($request_method == "OPTIONS") {
-            $response->header('access-control-allow-private-network', 'true');
-            $response->header->status(200);
+            $response->header('Access-Control-Allow-Private-Network', 'true');
+            $response->status(200);
             $response->end();
             return null;
         }
@@ -133,6 +137,8 @@ EOF;
             var_dump($result);
         } elseif ($action === 'defaultExtensionListAction') {
             $result = [];
+
+
             $fp = new \SplFileObject($word_dir . '/sapi/src/Preprocessor.php', 'r');
             if ($fp) {
                 $fp->seek(74);
