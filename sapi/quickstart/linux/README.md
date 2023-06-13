@@ -19,10 +19,10 @@ sed -i "s@https://mirrors.aliyun.com/docker-ce@https://mirrors.tuna.tsinghua.edu
 sed -i "s@https://mirrors.aliyun.com/docker-ce@https://mirrors.ustc.edu.cn/docker-ce@g" get-docker.sh
 bash get-docker.sh --mirror Aliyun
 
-# 方法三： # 使用 阿里云镜像
+# 方法三： 使用 阿里云镜像
 bash get-docker.sh --mirror Aliyun
 
-# 方法三： # 使用 AzureChinaCloud 镜像
+# 方法三： 使用 AzureChinaCloud 镜像
 bash get-docker.sh --mirror AzureChinaCloud
 
 ```
