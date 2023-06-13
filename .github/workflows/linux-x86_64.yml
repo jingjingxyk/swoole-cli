@@ -37,6 +37,7 @@ jobs:
 
           # git submodule update --init
 
+
       - name: Prepare Libraries and Extensions
         run: |
           set -x
@@ -45,7 +46,7 @@ jobs:
       - name: Prepare
         uses: addnab/docker-run-action@v3
         with:
-          image: docker.io/jingjingxyk/build-swoole-cli:native-php-all-dependencies-alpine-php-7.4-x86_64-20230504T124927Z
+          image: docker.io/jingjingxyk/build-swoole-cli:native-php-all-dependencies-alpine-php-7.4-1.7.1-x86_64-20230613T195242Z
           options: -v ${{ github.workspace }}:/work -w /work -e BUILD_PHP_VERSION=${{ env.BUILD_PHP_VERSION }}
           run: |
             set -eux
@@ -58,11 +59,9 @@ jobs:
       - name: Build
         uses: addnab/docker-run-action@v3
         with:
-          image: docker.io/jingjingxyk/build-swoole-cli:native-php-all-dependencies-alpine-php-7.4-x86_64-20230504T124927Z
+          image: docker.io/jingjingxyk/build-swoole-cli:native-php-all-dependencies-alpine-php-7.4-1.7.1-x86_64-20230613T195242Z
           options: -v ${{ github.workspace }}:/work -w /work -e BUILD_PHP_VERSION=${{ env.BUILD_PHP_VERSION }}
           run: |
-            rm -rf /usr/curl
-            bash ./make.sh curl
             bash ./make.sh config
             bash ./make.sh build
             ./php-src/sapi/cli/php -v

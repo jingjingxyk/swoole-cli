@@ -34,7 +34,7 @@ ARCH=$(uname -m)
 
 case $ARCH in
 'x86_64')
-  IMAGE=docker.io/jingjingxyk/build-swoole-cli:native-php-all-dependencies-alpine-php-7.4-x86_64-20230504T124927Z
+  IMAGE=docker.io/jingjingxyk/build-swoole-cli:native-php-all-dependencies-alpine-php-7.4-1.7.1-x86_64-20230613T195242Z
   ;;
 'aarch64')
   IMAGE=docker.io/phpswoole/swoole-cli-builder:1.7-arm64
