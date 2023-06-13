@@ -87,7 +87,7 @@ class Preprocessor
         'mbstring',
         'ctype',
         'zlib',
-        'zip',
+        //'zip',
         'posix',
         'sockets',
         'pdo',
@@ -107,11 +107,11 @@ class Preprocessor
         'openssl',
         'readline',
         'xml',
-        'gd',
+        //'gd',
         'redis',
         'swoole',
         'yaml',
-        'imagick',
+        //'imagick',
         'mongodb',
     ];
 
