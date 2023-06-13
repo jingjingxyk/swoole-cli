@@ -62,9 +62,13 @@ jobs:
           run: |
             rm -rf /usr/curl
             bash ./make.sh curl
-            ./make.sh config
-            ./make.sh build
-            ./make.sh archive
+            bash ./make.sh imagemagick
+            bash ./make.sh config
+            bash ./make.sh build
+            bash ./make.sh archive
+            # ./php-src/sapi/cli/php ./vendor/bin/phpunit ./sapi/unit/MainTest.php  --list-tests
+            # ./php-src/sapi/cli/php ./vendor/bin/phpunit ./sapi/unit/MainTest.php
+
 
       - name: Show Build Result
         run: |
