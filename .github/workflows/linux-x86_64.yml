@@ -55,7 +55,7 @@ jobs:
             # composer update --no-dev  --optimize-autoloader
             composer update   --optimize-autoloader
             # php prepare.php  --with-global-prefix=/usr  +inotify +apcu +ds -mongodb -gd -zip -imagick
-            php prepare.php   +inotify +apcu +ds -mongodb -gd -zip -imagick
+            php prepare.php   +inotify +apcu +ds
 
       - name: Build
         uses: addnab/docker-run-action@v3
