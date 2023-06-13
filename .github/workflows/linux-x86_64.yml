@@ -49,10 +49,11 @@ jobs:
           run: |
             set -eux
             # export PATH=/work/bin/runtime:$PATH  # 容器已经内置 php 和 composer 容器
-            composer update --optimize-autoloader
-            php prepare.php  +inotify +apcu +ds -mongodb --with-global-prefix=/usr -gd -zip -imagick
 
-            chmod a+x make.sh
+            # composer update --no-dev  --optimize-autoloader
+            composer update   --optimize-autoloader
+            php prepare.php  --with-global-prefix=/usr  +inotify +apcu +ds -mongodb -gd -zip -imagick
+
       - name: Build
         uses: addnab/docker-run-action@v3
         with:
