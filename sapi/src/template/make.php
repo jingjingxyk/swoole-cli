@@ -147,13 +147,17 @@ make_ext() {
 
 <?php
 foreach ($this->extensionMap as $extension) {
+    $name = $extension->name;
+    if ($extension->aliasName) {
+        $name = $extension->aliasName;
+    }
     if ($extension->peclVersion || $extension->enableDownloadScript) {
         echo <<<EOF
-    if [[ -d {$this->phpSrcDir}/ext/{$extension->name}/ ]]
+    if [[ -d {$this->phpSrcDir}/ext/{$name}/ ]]
     then
-        rm -rf {$this->phpSrcDir}/ext/{$extension->name}/
+        rm -rf {$this->phpSrcDir}/ext/{$name}/
     fi
-    cp -rf {$this->rootDir}/ext/{$extension->name} {$this->phpSrcDir}/ext/
+    cp -rf {$this->rootDir}/ext/{$name} {$this->phpSrcDir}/ext/
 EOF;
         echo PHP_EOL;
         echo PHP_EOL;
@@ -177,7 +181,7 @@ export_variables() {
     # -all-static | -static | -static-libtool-libs
     CPPFLAGS=""
     CFLAGS=""
-<?php if($this->cCompiler=='clang') : ?>
+<?php if ($this->cCompiler=='clang') : ?>
     LDFLAGS="-static"
 <?php else :?>
     LDFLAGS="-static-libgcc -static-libstdc++"
@@ -207,7 +211,6 @@ make_config() {
     make_php_src
     cd <?= $this->phpSrcDir . PHP_EOL ?>
 <?php if ($this->getInputOption('with-build-type') != 'release') : ?>
-
 <?php endif ;?>
     cd <?= $this->getWorkDir() . PHP_EOL ?>
     make_ext_hook
@@ -247,7 +250,7 @@ EOF
     ./configure $OPTIONS
 
     # more info https://stackoverflow.com/questions/19456518/error-when-using-sed-with-find-command-on-os-x-invalid-command-code
-<?php if ($this->getOsType()=='linux'): ?>
+<?php if ($this->getOsType()=='linux') : ?>
      sed -i.backup 's/-export-dynamic/-all-static/g' Makefile
 <?php endif ; ?>
 

@@ -5,11 +5,24 @@ require __DIR__ . '/vendor/autoload.php';
 use SwooleCli\Preprocessor;
 use SwooleCli\Library;
 
-const BUILD_PHP_VERSION = '7.3.33';
-
 $homeDir = getenv('HOME');
 $p = Preprocessor::getInstance();
 $p->parseArguments($argc, $argv);
+
+# PHP 默认版本
+$version = '7.3.33';
+
+if ($p->getInputOption('with-php-version')) {
+    $subject = $p->getInputOption('with-php-version');
+    $pattern = '/(\d{1,2})\.\d{1,2}\.\d{1,2}/';
+    if (preg_match($pattern, $subject, $match)) {
+        if (intval($match[1]) >= 8) {
+            $version = $match[0];
+        }
+    }
+}
+
+define('BUILD_PHP_VERSION', $version);
 
 // Compile directly on the host machine, not in the docker container
 if ($p->getInputOption('without-docker') || ($p->getOsType() == 'macos')) {
@@ -79,5 +92,4 @@ EOF
 EOF
             )
     );
-
 }
