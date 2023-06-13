@@ -61,6 +61,7 @@ jobs:
           options: -v ${{ github.workspace }}:/work -w /work -e "BUILD_PHP_VERSION=${{ env.BUILD_PHP_VERSION }}"
           run: |
             bash ./make.sh curl
+            bash ./make.sh imagemagick
             bash ./make.sh config
             bash ./make.sh build
             bash ./make.sh archive
