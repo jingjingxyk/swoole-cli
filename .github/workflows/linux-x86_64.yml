@@ -40,28 +40,30 @@ jobs:
         run: |
           set -x
           bash sapi/download-box/download-box-get-archive-from-container.sh
+
       - name: Prepare
         uses: addnab/docker-run-action@v3
         with:
-          image: docker.io/jingjingxyk/build-swoole-cli:native-php-all-dependencies-alpine-php-7.4-x86_64-20230504T124927Z
-          options: -v ${{ github.workspace }}:/work -w /work
+          image: docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-1.7.1-x86_64-20230611T164740Z
+          # image: docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-swoole-cli-x86_64-20230505T120137Z
+          # image: docker.io/phpswoole/swoole-cli-builder:all-dependencies-alpine-swoole-cli-x86_64-20230505T120137Z
+          options: -v ${{ github.workspace }}:/work -w /work -e BUILD_PHP_VERSION=${{ env.BUILD_PHP_VERSION }}
           run: |
             set -eux
             # export PATH=/work/bin/runtime:$PATH  # 容器已经内置 php 和 composer 容器
 
             # composer update --no-dev  --optimize-autoloader
             composer update   --optimize-autoloader
-            php prepare.php    --with-global-prefix=/usr  +inotify +apcu +ds +xlswriter +ssh2
+            php prepare.php    +inotify +apcu +ds +xlswriter +ssh2
 
 
       - name: Build
         uses: addnab/docker-run-action@v3
         with:
-          image: docker.io/jingjingxyk/build-swoole-cli:native-php-all-dependencies-alpine-php-7.4-x86_64-20230504T124927Z
-          options: -v ${{ github.workspace }}:/work -w /work -e "BUILD_PHP_VERSION=${{ env.BUILD_PHP_VERSION }}"
+          image: docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-1.7.1-x86_64-20230611T164740Z
+          options: -v ${{ github.workspace }}:/work -w /work -e BUILD_PHP_VERSION=${{ env.BUILD_PHP_VERSION }}
           run: |
             bash ./make.sh curl
-            bash ./make.sh imagemagick
             bash ./make.sh config
             bash ./make.sh build
             ./php-src/sapi/cli/php -v
