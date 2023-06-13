@@ -8,8 +8,9 @@ return function (Preprocessor $p) {
     $depends = ['curl', 'openssl', 'cares', 'zlib'];
 
     $options = ' --enable-swoole --enable-sockets --enable-mysqlnd --enable-swoole-curl --enable-cares ';
-    $options .= ' --enable-swoole-json ';
     $options .= ' --enable-http2 ';
+    $options .= ' --enable-swoole-json ';
+    $options .= ' --with-openssl-dir=' . OPENSSL_PREFIX;
 
     $ext = (new Extension('swoole'))
         ->withHomePage('https://github.com/swoole/swoole-src')
