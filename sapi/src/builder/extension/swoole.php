@@ -8,13 +8,9 @@ return function (Preprocessor $p) {
     $depends = ['curl', 'openssl', 'cares', 'zlib'];
 
     $options = ' --enable-swoole --enable-sockets --enable-mysqlnd --enable-swoole-curl --enable-cares ';
-
-    $options .= ' --enable-brotli ';
     $options .= ' --enable-http2 ';
     $options .= ' --enable-swoole-json ';
     $options .= ' --with-openssl-dir=' . OPENSSL_PREFIX;
-    $options .= ' --with-brotli-dir=' . BROTLI_PREFIX;
-    $options .= ' --enable-http2 ';
 
     $ext = (new Extension('swoole'))
         ->withHomePage('https://github.com/swoole/swoole-src')
