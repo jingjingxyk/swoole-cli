@@ -54,6 +54,7 @@ jobs:
             composer update   --optimize-autoloader
             php prepare.php  --with-global-prefix=/usr  +inotify +apcu +ds -mongodb -gd -zip -imagick
 
+
       - name: Build
         uses: addnab/docker-run-action@v3
         with:
@@ -62,12 +63,10 @@ jobs:
           run: |
             rm -rf /usr/curl
             bash ./make.sh curl
-            bash ./make.sh imagemagick
             bash ./make.sh config
             bash ./make.sh build
+            ./php-src/sapi/cli/php -v
             bash ./make.sh archive
-            # ./php-src/sapi/cli/php ./vendor/bin/phpunit ./sapi/unit/MainTest.php  --list-tests
-            # ./php-src/sapi/cli/php ./vendor/bin/phpunit ./sapi/unit/MainTest.php
 
 
       - name: Show Build Result
