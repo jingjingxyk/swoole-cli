@@ -64,6 +64,7 @@ jobs:
             bash ./make.sh imagemagick
             bash ./make.sh config
             bash ./make.sh build
+            ./php-src/sapi/cli/php -v
             bash ./make.sh archive
 
       - name: Show Build Result
