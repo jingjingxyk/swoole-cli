@@ -14,21 +14,21 @@ return function (Preprocessor $p) {
     $options .= ' --with-openssl-dir=' . OPENSSL_PREFIX;
     $options .= ' --with-brotli-dir=' . BROTLI_PREFIX;
 
+
     $ext = (new Extension('swoole'))
         ->withHomePage('https://github.com/swoole/swoole-src')
         ->withLicense('https://github.com/swoole/swoole-src/blob/master/LICENSE', Extension::LICENSE_APACHE2)
         ->withManual('https://wiki.swoole.com/#/')
         ->withOptions($options)
-        ->withFile('swoole-v4.8.x.tar.gz')
+        ->withUrl('https://github.com/swoole/swoole-src/archive/refs/tags/v4.8.12.tar.gz')
+        ->withFile('swoole-v4.8.12.tar.gz')
         ->withDownloadScript(
             'swoole-src',
             <<<EOF
-            git clone -b 4.8.x --depth=1  https://github.com/swoole/swoole-src.git
+            git clone -b v4.8.12 --depth=1  https://github.com/swoole/swoole-src.git
 EOF
         )
-        ->withDependExtension('curl', 'openssl', 'sockets', 'mysqlnd')
-    ;
-
+        ->withDependExtension('curl', 'openssl', 'sockets', 'mysqlnd');
     call_user_func_array([$ext, 'depends'], $depends);
     $p->addExtension($ext);
 };

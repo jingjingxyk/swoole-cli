@@ -34,6 +34,7 @@ set -x
 
 cd ${__PROJECT__}
 
+
 ## 借助 download-box 获得已经准备好的 依赖库源码 ，缩减下载时间  存放于 var目录
 bash sapi/download-box/download-box-get-archive-from-server.sh
 
@@ -58,6 +59,7 @@ cd ${__PROJECT__}/var
 
 
 GIT_BRANCH=build_php_7.3
+
 test -d swoole-cli && rm -rf swoole-cli
 git clone -b ${GIT_BRANCH} --depth=1  --recursive https://github.com/jingjingxyk/swoole-cli.git
 
@@ -76,6 +78,6 @@ cd ${__PROJECT__}/var/swoole-cli
 export COMPOSER_ALLOW_SUPERUSER=1
 composer update --no-dev --optimize-autoloader
 
-php prepare.php --with-build-type=dev --with-dependency-graph=1 +apcu +ds +inotify --without-docker
+php prepare.php --with-build-type=dev --with-dependency-graph=1 --with-swoole-pgsql=1  +apcu +ds +inotify --without-docker
 
 cd ${__PROJECT__}/

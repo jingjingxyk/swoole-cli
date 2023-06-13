@@ -225,7 +225,7 @@ EOF
             --without-pango \
             --without-x \
             --without-modules \
-            --without-magick-plus-plus \
+            --with-magick-plus-plus \
             --without-utilities \
             --without-gvc \
             --without-autotrace \
@@ -234,7 +234,6 @@ EOF
             --without-flif \
             --without-fpx \
             --without-gslib \
-            --without-ltdl \
             --without-perl \
             --without-raqm \
             --without-wmf
@@ -247,6 +246,8 @@ EOF
             ->withPkgName('MagickCore')
             ->withPkgName('MagickWand-7.Q16HDRI')
             ->withPkgName('MagickWand')
+            ->withPkgName('Magick++-7.Q16HDRI')
+            ->withPkgName('Magick++')
             ->withBinPath($imagemagick_prefix . '/bin/')
             ->depends(
                 'libxml2',

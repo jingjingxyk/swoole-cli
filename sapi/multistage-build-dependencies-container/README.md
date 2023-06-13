@@ -32,7 +32,7 @@ bash sapi/multistage-build-dependencies-container/all-dependencies-build-init.sh
 
 bash  sapi/multistage-build-dependencies-container/all-dependencies-build-container.sh
 
-## composer 使用阿里运镜像
+## composer 使用阿里云镜像
 bash  sapi/multistage-build-dependencies-container/all-dependencies-build-container.sh  --composer_mirror
 
 ```
@@ -71,6 +71,7 @@ sh make.sh build
 
 cd var
 
+<<<<<<< HEAD
 docker save -o "all-dependencies-container-image-php-7.3.33-$(uname -m).tar" $(cat swoole-cli-build-all-dependencies-container.txt)
 
 
@@ -83,6 +84,20 @@ xz -d -T$(nproc) -k "all-dependencies-container-image-php-7.3.33-$(uname -m).tar
 # 从文件导入容器镜像
 
 docker load -i  "all-dependencies-container-image-php-7.3.33-$(uname -m).tar"
+=======
+docker save -o "all-dependencies-container-image-php-7.4-$(uname -m).tar" $(cat swoole-cli-build-all-dependencies-container.txt)
+
+
+# xz 并行压缩 -T cpu核数 -k 保持源文件
+xz -9 -T$(nproc) -k "all-dependencies-container-image-php-7.4-$(uname -m).tar"
+
+# xz 解压
+xz -d -T$(nproc) -k "all-dependencies-container-image-php-7.4-$(uname -m).tar.xz"
+
+# 从文件导入容器镜像
+
+docker load -i  "all-dependencies-container-image-php-7.4-$(uname -m).tar"
+>>>>>>> build_php_7.4
 
 
 ```

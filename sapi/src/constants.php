@@ -56,6 +56,7 @@ define("LIBGD_PREFIX", $p->getGlobalPrefix() . '/libgd');
 
 
 define("PGSQL_PREFIX", $p->getGlobalPrefix() . '/pgsql');
+
 define("UNIX_ODBC_PREFIX", $p->getGlobalPrefix() . '/unixODBC');
 define("ZOOKEEPER_PREFIX", $p->getGlobalPrefix() . '/zookeeper');
 define("LIBEVENT_PREFIX", $p->getGlobalPrefix() . '/libevent');

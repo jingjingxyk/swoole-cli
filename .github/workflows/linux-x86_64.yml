@@ -3,11 +3,7 @@ name: build-php-cli-linux-x86_64
 on: [ push, pull_request ]
 
 env:
-<<<<<<< HEAD
   BUILD_PHP_VERSION: 7.3.33
-=======
-  BUILD_PHP_VERSION: 8.2.4
->>>>>>> build_native_php
 
 jobs:
   linux-x86_64:
@@ -29,16 +25,22 @@ jobs:
           uname -s
           uname -m
           uname -r
-<<<<<<< HEAD
+
           # echo "BUILD_PHP_VERSION=7.3.33" >> "$GITHUB_ENV"
-=======
-          # echo "BUILD_PHP_VERSION=8.2.4" >> "$GITHUB_ENV"
->>>>>>> build_native_php
+
+          export IPV6=$(ip -6 address show  | grep inet6 | awk '{print $2}' | cut -d'/' -f1 | sed -n '2p')
+          export IPV4=$(ip -4 address show  | grep inet | grep -v 127.0.0 | awk '{print $2}' | cut -d'/' -f1 | sed -n '1p')
+          echo $IPV4
+          echo $IPV6
+          echo "X_IPV6=${IPV6}" >> $GITHUB_ENV
+          echo "X_IPV4=${IPV4}" >> $GITHUB_ENV
+
+          # git submodule update --init
+
       - name: Prepare Libraries and Extensions
         uses: addnab/docker-run-action@v3
         with:
-          #image: docker.io/jingjingxyk/build-swoole-cli:download-box-nginx-alpine-20230429T061856Z
-          image: docker.io/jingjingxyk/build-swoole-cli:download-box-nginx-alpine-20230505T112517Z
+          image: docker.io/jingjingxyk/build-swoole-cli:download-box-nginx-alpine-20230429T061856Z
           options: -v ${{ github.workspace }}:/work -w /work
           run: |
             set -x
@@ -50,46 +52,38 @@ jobs:
       - name: Prepare
         uses: addnab/docker-run-action@v3
         with:
-<<<<<<< HEAD
           image: docker.io/jingjingxyk/build-swoole-cli:native-php-all-dependencies-alpine-php-7.4-x86_64-20230504T124927Z
-=======
-          image: docker.io/jingjingxyk/build-swoole-cli:native-php-all-dependencies-alpine-php-8.2.4-x86_64-20230504T141620Z
-          #image: docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-swoole-cli-x86_64-20230505T120137Z
->>>>>>> build_native_php
-          options: -v ${{ github.workspace }}:/work -w /work
+          options: -v ${{ github.workspace }}:/work -w /work -e "BUILD_PHP_VERSION=${{ env.BUILD_PHP_VERSION }}"
           run: |
             set -eux
             # export PATH=/work/bin/runtime:$PATH  # 容器已经内置 php 和 composer 容器
-            composer update --no-dev  --optimize-autoloader
-<<<<<<< HEAD
-            php prepare.php  +inotify +apcu +ds -gd -zip -imagick --with-global-prefix=/usr
-=======
-            php prepare.php  +inotify +apcu +ds -mongodb --with-global-prefix=/usr
->>>>>>> build_native_php
+            composer update --optimize-autoloader
+            php prepare.php  +inotify +apcu +ds -mongodb --with-global-prefix=/usr -gd -zip -imagick
+
             chmod a+x make.sh
       - name: Build
         uses: addnab/docker-run-action@v3
         with:
-<<<<<<< HEAD
           image: docker.io/jingjingxyk/build-swoole-cli:native-php-all-dependencies-alpine-php-7.4-x86_64-20230504T124927Z
-=======
-          image: docker.io/jingjingxyk/build-swoole-cli:native-php-all-dependencies-alpine-php-8.2.4-x86_64-20230504T141620Z
-          # image: docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-swoole-cli-x86_64-20230505T120137Z
->>>>>>> build_native_php
-          options: -v ${{ github.workspace }}:/work -w /work -e "BUILD_PHP_VERSION=${{ env.BUILD_PHP_VERSION }}"
+          options: -v ${{ github.workspace }}:/work -w /work
           run: |
             rm -rf /usr/curl
             bash ./make.sh curl
             ./make.sh config
             ./make.sh build
             ./make.sh archive
+
       - name: Show Build Result
         run: |
           ./php-src/sapi/cli/php -v
+          ./php-src/sapi/cli/php -m
+          ./php-src/sapi/cli/php --ri swoole
           ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -v
           file ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
           readelf -h ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
           ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -r "echo PHP_VERSION;"
+          # ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/unit/MainTest.php  --list-tests
+          # ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/unit/MainTest.php
 
       - name: production artifacts
         uses: actions/upload-artifact@v3
@@ -97,18 +91,9 @@ jobs:
           name: php-cli-linux-x64-${{ env.BUILD_PHP_VERSION }}
           retention-days: 7
           path: ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-<<<<<<< HEAD
-=======
-
->>>>>>> build_native_php
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-<<<<<<< HEAD
           files:  php-cli-v${{ env.BUILD_PHP_VERSION }}-linux-x64.tar.xz
 
-=======
-          files: |
-            php-cli-v${{ env.BUILD_PHP_VERSION }}-linux-x64.tar.xz
->>>>>>> build_native_php
