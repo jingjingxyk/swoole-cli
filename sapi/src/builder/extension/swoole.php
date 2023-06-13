@@ -9,6 +9,7 @@ return function (Preprocessor $p) {
 
     $options = ' --enable-swoole --enable-sockets --enable-mysqlnd --enable-swoole-curl --enable-cares ';
     $options .= ' --enable-swoole-json ';
+    $options .= ' --enable-http2 ';
 
     $ext = (new Extension('swoole'))
         ->withHomePage('https://github.com/swoole/swoole-src')
