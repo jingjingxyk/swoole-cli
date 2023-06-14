@@ -42,6 +42,8 @@ jobs:
         run: |
           set -x
           bash sapi/download-box/download-box-get-archive-from-container.sh
+          bash sapi/quickstart/setup-php-runtime.sh
+          export PATH=${GITHUB_WORKSPACE}/bin/runtime:$PATH
 
       - name: Prepare
         uses: addnab/docker-run-action@v3
