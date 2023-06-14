@@ -56,11 +56,13 @@ done
 
 cd ${__PROJECT__}/var
 
+if [[ -f /.dockerenv ]]; then
+  git config --global --add safe.directory ${__PROJECT__}
+fi
 
 GIT_BRANCH=build_php_8.2
 test -d swoole-cli && rm -rf swoole-cli
-git clone -b ${GIT_BRANCH} --depth=1  --recursive https://github.com/jingjingxyk/swoole-cli.git
-
+git clone -b ${GIT_BRANCH} --depth=1 --recursive https://github.com/jingjingxyk/swoole-cli.git
 
 cd ${__PROJECT__}/var/swoole-cli
 
@@ -77,6 +79,6 @@ cd ${__PROJECT__}/var/swoole-cli
 export COMPOSER_ALLOW_SUPERUSER=1
 composer update --no-dev --optimize-autoloader
 
-php prepare.php --with-build-type=dev --with-dependency-graph=1 --with-swoole-pgsql=1  +apcu +ds +inotify --without-docker
+php prepare.php --with-build-type=dev --with-dependency-graph=1 --with-swoole-pgsql=1 +apcu +ds +inotify +pgsql +pdo_pgsql --without-docker
 
 cd ${__PROJECT__}/
