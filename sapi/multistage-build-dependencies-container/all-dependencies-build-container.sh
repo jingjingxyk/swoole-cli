@@ -26,8 +26,8 @@ TIME=$(date -u '+%Y%m%dT%H%M%SZ')
 VERSION="1.0.0"
 TAG="all-dependencies-alpine-3.17-php7-v${VERSION}-${ARCH}-${TIME}"
 
-IMAGE="docker.io/phpswoole/swoole-cli-builder:${TAG}"
 IMAGE="docker.io/jingjingxyk/build-swoole-cli:${TAG}"
+IMAGE="docker.io/phpswoole/swoole-cli-builder:${TAG}"
 
 USE_COMPOSER_MIRROR=0
 
@@ -53,6 +53,6 @@ docker build -t ${IMAGE} -f ./Dockerfile-all-dependencies-alpine . --progress=pl
 
 cd ${__PROJECT__}/var
 
-echo ${IMAGE} >swoole-cli-build-all-dependencies-container.txt
+echo ${IMAGE} >all-dependencies-container.txt
 
 docker push ${IMAGE}
