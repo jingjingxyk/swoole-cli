@@ -10,6 +10,11 @@ __PROJECT__=$(
   pwd
 )
 
+if [[ -f /.dockerenv ]]; then
+  echo 'not in docker'
+  exit 0
+fi
+
 mkdir -p ${__PROJECT__}/var
 
 # export DOCKER_BUILDKIT=1
@@ -18,8 +23,10 @@ ARCH=$(uname -m)
 
 TIME=$(date -u '+%Y%m%dT%H%M%SZ')
 
-VERSION="1.7"
-TAG="native-php-all-dependencies-alpine-php-7.3.33-${VERSION}-${ARCH}-${TIME}"
+VERSION="1.0.0"
+TAG="all-dependencies-alpine-3.17-php7-v${VERSION}-${ARCH}-${TIME}"
+
+IMAGE="docker.io/phpswoole/swoole-cli-builder:${TAG}"
 IMAGE="docker.io/jingjingxyk/build-swoole-cli:${TAG}"
 
 USE_COMPOSER_MIRROR=0
@@ -46,6 +53,6 @@ docker build -t ${IMAGE} -f ./Dockerfile-all-dependencies-alpine . --progress=pl
 
 cd ${__PROJECT__}/var
 
-echo ${IMAGE} >swoole-cli-build-all-dependencies-container.txt
+echo ${IMAGE} >all-dependencies-container.txt
 
 docker push ${IMAGE}
