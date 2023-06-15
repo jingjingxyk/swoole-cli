@@ -23,6 +23,7 @@ return function (Preprocessor $p) {
             'swoole-src',
             <<<EOF
             git clone -b v4.8.12 --depth=1  https://github.com/swoole/swoole-src.git
+
 EOF
         )
         ->withDependentExtensions('curl', 'openssl', 'sockets', 'mysqlnd');
