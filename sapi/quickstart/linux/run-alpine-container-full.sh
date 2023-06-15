@@ -21,7 +21,7 @@ cd ${__DIR__}
 
 IMAGE=alpine:3.16
 
-:<<'EOF'
+: <<'EOF'
    启动此容器
 
    已经内置了 php 、composer 、 编译好的依赖库
@@ -34,18 +34,16 @@ ARCH=$(uname -m)
 
 case $ARCH in
 'x86_64')
-  IMAGE=docker.io/jingjingxyk/build-swoole-cli:native-php-all-dependencies-alpine-php-7.4-1.7.1-x86_64-20230613T195242Z
+  IMAGE=docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-3.17-php7-v1.0.0-x86_64-20230614T154836Z
   ;;
 'aarch64')
-  IMAGE=docker.io/phpswoole/swoole-cli-builder:1.7-arm64
+  IMAGE=docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-3.17-php7-v1.0.0-aarch64-20230614T155341Z
   ;;
 *)
   echo "此 ${ARCH} 架构的容器 容器未配置"
   exit 0
   ;;
 esac
-
-
 
 cd ${__DIR__}
 docker run --rm --name swoole-cli-dev -d -v ${__PROJECT__}:/work -w /work $IMAGE tail -f /dev/null
