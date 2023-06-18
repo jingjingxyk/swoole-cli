@@ -10,7 +10,7 @@ return function (Preprocessor $p) {
         (new Extension('zip'))
             ->withHomePage('https://www.php.net/zip')
             ->withOptions('--enable-zip --with-libzip=' . ZIP_PREFIX)
-            ->depends('libzip')
+            ->withDependentLibraries('libzip')
     );
 
 };

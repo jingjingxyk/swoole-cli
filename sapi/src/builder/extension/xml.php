@@ -15,6 +15,6 @@ return function (Preprocessor $p) {
         (new Extension('xml'))
             ->withHomePage('https://www.php.net/xml')
             ->withOptions($options)
-            ->depends('libxml2')
+            ->withDependentLibraries('libxml2')
     );
 };

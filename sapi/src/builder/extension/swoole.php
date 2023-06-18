@@ -23,9 +23,11 @@ return function (Preprocessor $p) {
             'swoole-src',
             <<<EOF
             git clone -b v4.8.12 --depth=1  https://github.com/swoole/swoole-src.git
+
 EOF
         )
-        ->withDependExtension('curl', 'openssl', 'sockets', 'mysqlnd');
-    call_user_func_array([$ext, 'depends'], $depends);
+        ->withDependentExtensions('curl', 'openssl', 'sockets', 'mysqlnd');
+    call_user_func_array([$ext, 'withDependentLibraries'], $depends);
+
     $p->addExtension($ext);
 };

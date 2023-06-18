@@ -18,7 +18,7 @@ return function (Preprocessor $p) {
         (new Extension('gd'))
             ->withHomePage('https://www.php.net/manual/zh/book.image.php')
             ->withOptions($options)
-            ->depends('libjpeg', 'freetype', 'libwebp', 'libpng', 'libgif', 'libgd2')
+            ->withDependentLibraries('libjpeg', 'freetype', 'libwebp', 'libpng', 'libgif', 'libgd2')
     );
     $p->setExtHook('gd', function (Preprocessor $p) {
         //  屏蔽 xpm 检测，替换相关行

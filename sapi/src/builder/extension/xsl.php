@@ -13,6 +13,6 @@ return function (Preprocessor $p) {
         (new Extension('xsl'))
             ->withHomePage('https://www.php.net/xsl')
             ->withOptions('--with-xsl=' . LIBXSLT_PREFIX)
-            ->depends('libxslt')
+            ->withDependentLibraries('libxslt')
     );
 };
