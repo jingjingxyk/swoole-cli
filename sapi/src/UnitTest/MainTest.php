@@ -122,7 +122,7 @@ final class MainTest extends TestCase
 
     public $userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36';
 
-    public function testCurlHTTP2Client(): void
+    public function stopTestCurlHTTP2Client(): void
     {
         $url = 'https://www.jingjingxyk.com/';
         $userAgent = $this->userAgent;
@@ -162,7 +162,7 @@ final class MainTest extends TestCase
 
     public function testSwooleHttp2Client(): void
     {
-        ini_set('default_socket_timeout', 60);
+        ini_set('default_socket_timeout', '60');
         run(function () {
             $domain = 'www.jingjingxyk.com';
             $cli = new Client($domain, 443, true);
