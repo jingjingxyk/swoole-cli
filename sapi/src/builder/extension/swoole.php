@@ -26,7 +26,7 @@ return function (Preprocessor $p) {
 
 EOF
         )
-        ->withDependentExtensions('curl', 'openssl', 'sockets', 'mysqlnd');
+        ->withDependentExtensions('curl', 'openssl', 'sockets', 'mysqlnd', 'pdo');
     call_user_func_array([$ext, 'withDependentLibraries'], $depends);
 
     $p->addExtension($ext);
