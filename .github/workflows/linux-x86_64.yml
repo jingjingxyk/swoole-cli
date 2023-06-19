@@ -98,6 +98,7 @@ jobs:
           image: docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-3.17-php7-v1.0.0-x86_64-20230614T154836Z
           options: -v ${{ github.workspace }}:/work -w /work -e BUILD_PHP_VERSION=${{ env.BUILD_PHP_VERSION }}
           run: |
+            bash ./make.sh pgsql
             bash ./make.sh config
             bash ./make.sh build
             ./php-src/sapi/cli/php -v
