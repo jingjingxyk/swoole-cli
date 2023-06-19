@@ -1,6 +1,43 @@
 name: build-php-cli-linux-x86_64
 
-on: [ push, pull_request ]
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      build_latest_swoole_or_swow:
+        required: true
+        description: "定制构建选项: 构建最新版的 swoole 或者 swow （此二者扩展不能同时启用）"
+        default: ' '
+        type: choice
+        options:
+          - ' '
+          - '-swoole +swoole_latest'
+          - '-swoole +swow_latest'
+          - '-swoole +swow'
+      php_verson:
+        required: true
+        description: "定制构建选项: 指定 PHP 版本(版本号大于8)"
+        default: '--with-php-version=8.2.7'
+        type: choice
+        options:
+          - '--with-php-version=8.0.29'
+          - '--with-php-version=8.1.20'
+          - '--with-php-version=8.2.7'
+      build_type:
+        required: true
+        description: "定制构建选项: 指定构建类型"
+        default: '--with-build-type=release'
+        type: choice
+        options:
+          - '--with-build-type=release'
+          - '--with-build-type=dev'
+      build_options:
+        required: false
+        description: "定制构建选项: 请查看 docs/options.md"
+        default: ' '
+        type: string
+
 
 env:
   BUILD_PHP_VERSION: 8.2.4
@@ -13,7 +50,6 @@ jobs:
       - uses: actions/checkout@v3
       - name: Prepare Source Code
         run: |
-          lscpu
           echo $PATH
           env
           docker info
@@ -28,6 +64,12 @@ jobs:
 
           # echo "BUILD_PHP_VERSION=8.2.4" >> "$GITHUB_ENV"
 
+          cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c
+          cat /proc/cpuinfo| grep "physical id"| sort| uniq| wc -l
+          cat /proc/cpuinfo | grep "cpu cores" | uniq
+          cat /proc/cpuinfo| grep "processor"| wc -l
+          lscpu
+
           export IPV6=$(ip -6 address show  | grep inet6 | awk '{print $2}' | cut -d'/' -f1 | sed -n '2p')
           export IPV4=$(ip -4 address show  | grep inet | grep -v 127.0.0 | awk '{print $2}' | cut -d'/' -f1 | sed -n '1p')
           echo $IPV4
@@ -37,52 +79,41 @@ jobs:
 
           # git submodule update --init
 
+          # 准备数据库容器
+          bash sapi/src/UnitTest/scripts/database/start.sh
+
       - name: Prepare Libraries and Extensions
-        uses: addnab/docker-run-action@v3
-        with:
-          #image: docker.io/jingjingxyk/build-swoole-cli:download-box-nginx-alpine-20230429T061856Z
-          image: docker.io/jingjingxyk/build-swoole-cli:download-box-nginx-alpine-20230505T112517Z
-          options: -v ${{ github.workspace }}:/work -w /work
-          run: |
-            set -x
-            mkdir -p pool/lib
-            mkdir -p pool/ext
-            mkdir -p ext
-            cp -rf /usr/share/nginx/html/extensions/* pool/ext
-            cp -rf /usr/share/nginx/html/libraries/* pool/lib
+        run: |
+          set -x
+          bash sapi/download-box/download-box-get-archive-from-container.sh
+
       - name: Prepare
         uses: addnab/docker-run-action@v3
         with:
-          image: docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-1.7.1-x86_64-20230611T164740Z
-          # image: docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-swoole-cli-x86_64-20230505T120137Z
-          # image: docker.io/phpswoole/swoole-cli-builder:all-dependencies-alpine-swoole-cli-x86_64-20230505T120137Z
-          options: -v ${{ github.workspace }}:/work -w /work
+          image: docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-3.17-php8-v1.0.0-x86_64-20230614T150918Z
+          options: -v ${{ github.workspace }}:/work -w /work -e BUILD_PHP_VERSION=${{ env.BUILD_PHP_VERSION }}
           run: |
             set -eux
             # export PATH=/work/bin/runtime:$PATH  # 容器已经内置 php 和 composer 容器
 
             # composer update --no-dev  --optimize-autoloader
             composer update   --optimize-autoloader
-            php prepare.php   --with-swoole-pgsql=1  +inotify +apcu +ds +xlswriter +ssh2 +pgsql +pdo_pgsql -mongodb
+
+            php prepare.php  +inotify +apcu +ds +xlswriter +ssh2  +pgsql +pdo_pgsql -mongodb --with-swoole-pgsql=1 ${{ inputs.build_type }} ${{ inputs.build_options }}
 
             chmod a+x make.sh
             head -n 20 make.sh
-            php ./vendor/bin/phpunit ./sapi/unit/MainTest.php  --list-tests
-            php ./vendor/bin/phpunit ./sapi/unit/MainTest.php
 
       - name: Build
         uses: addnab/docker-run-action@v3
         with:
-          image: docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-1.7.1-x86_64-20230611T164740Z
-          options: -v ${{ github.workspace }}:/work -w /work
+          image: docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-3.17-php8-v1.0.0-x86_64-20230614T150918Z
+          options: -v ${{ github.workspace }}:/work -w /work -e BUILD_PHP_VERSION=${{ env.BUILD_PHP_VERSION }}
           run: |
             bash ./make.sh config
             bash ./make.sh build
             ./php-src/sapi/cli/php -v
             bash ./make.sh archive
-
-            # ./php-src/sapi/cli/php ./vendor/bin/phpunit ./sapi/unit/MainTest.php  --list-tests
-            # ./php-src/sapi/cli/php ./vendor/bin/phpunit ./sapi/unit/MainTest.php
 
       - name: Show Build Result
         run: |
