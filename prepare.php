@@ -24,6 +24,7 @@ if ($p->getInputOption('with-php-version')) {
 
 define('BUILD_PHP_VERSION', $version);
 
+
 // Compile directly on the host machine, not in the docker container
 if ($p->getInputOption('without-docker') || ($p->getOsType() == 'macos')) {
     $p->setWorkDir(__DIR__);
