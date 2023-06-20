@@ -13,5 +13,6 @@ return function (Preprocessor $p) {
             ->withUrl('https://github.com/php/php-src.git ')
             ->withOptions('./configure --with-pdo-odbc=unixODBC,' . $unixODBC_prefix)
             ->withDependentLibraries('unixodbc')
+            ->withDependentExtensions('pdo')
     );
 };

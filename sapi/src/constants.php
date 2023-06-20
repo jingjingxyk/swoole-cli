@@ -63,4 +63,3 @@ define("LIBEVENT_PREFIX", $p->getGlobalPrefix() . '/libevent');
 
 define("SNAPPY_PREFIX", $p->getGlobalPrefix() . '/snappy');
 define("LIBSASL_PREFIX", $p->getGlobalPrefix() . '/sasl');
-
