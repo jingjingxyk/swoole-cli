@@ -55,7 +55,7 @@ abstract class Project
         return $this;
     }
 
-    public function depends(string ...$libs): static
+    public function withDependentLibraries(string ...$libs): static
     {
         $this->deps += $libs;
         return $this;
