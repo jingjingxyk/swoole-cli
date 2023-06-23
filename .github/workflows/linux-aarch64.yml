@@ -50,7 +50,7 @@ jobs:
 
             # composer update --no-dev  --optimize-autoloader
             composer update   --optimize-autoloader
-            ls -lh /usr/local/swoole
+            ls -lh /usr/local/swoole-cli
 
             php prepare.php  +inotify +apcu +ds +xlswriter +ssh2 +pgsql +pdo_pgsql -mongodb --with-swoole-pgsql=1
 
