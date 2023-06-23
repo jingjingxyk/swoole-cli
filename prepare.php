@@ -43,10 +43,10 @@ if ($p->getInputOption('with-global-prefix')) {
     $p->setGlobalPrefix($p->getInputOption('with-global-prefix'));
 }
 
-$buildType= $p->getBuildType();
+$buildType = $p->getBuildType();
 
 if ($p->getInputOption('with-build-type')) {
-    $buildType=$p->getInputOption('with-build-type');
+    $buildType = $p->getInputOption('with-build-type');
     $p->setBuildType($buildType);
 }
 
