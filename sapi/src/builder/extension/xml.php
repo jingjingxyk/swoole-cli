@@ -14,7 +14,6 @@ return function (Preprocessor $p) {
             ->withDependentLibraries('libxml2')
     );
     $options = ' --enable-xml ';
-
     $p->addExtension(
         (new Extension('xml'))
             ->withHomePage('https://www.php.net/xml')
