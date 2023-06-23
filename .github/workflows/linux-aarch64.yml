@@ -62,6 +62,7 @@ jobs:
           image: docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-3.17-php7-v1.0.0-aarch64-20230614T155341Z
           options: -v ${{ github.workspace }}:/work -w /work
           run: |
+            bash ./make.sh pgsql
             bash ./make.sh config
             bash ./make.sh build
             bash ./make.sh archive

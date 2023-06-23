@@ -61,6 +61,7 @@ jobs:
 
             chmod a+x make.sh
             bash ./make.sh all-library
+            bash ./make.sh pgsql
             bash ./make.sh config
             bash ./make.sh build
             ./php-src/sapi/cli/php -v
