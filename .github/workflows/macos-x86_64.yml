@@ -97,6 +97,7 @@ jobs:
       - name: Build
         run: |
           export PATH=${GITHUB_WORKSPACE}/bin/runtime:$PATH
+          bash ./make.sh pgsql
           bash ./make.sh config
           bash ./make.sh build
           bash ./make.sh archive
