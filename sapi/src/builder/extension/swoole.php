@@ -17,7 +17,6 @@ return function (Preprocessor $p) {
         ->withLicense('https://github.com/swoole/swoole-src/blob/master/LICENSE', Extension::LICENSE_APACHE2)
         ->withManual('https://wiki.swoole.com/#/')
         ->withOptions($options)
-        ->withUrl('https://github.com/swoole/swoole-src/archive/refs/tags/v4.8.12.tar.gz')
         ->withFile('swoole-v4.8.12.tar.gz')
         ->withDownloadScript(
             'swoole-src',
