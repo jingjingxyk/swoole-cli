@@ -15,6 +15,8 @@ return function (Preprocessor $p) {
         ->withManual('https://wiki.swoole.com/#/')
         ->withUrl('https://github.com/Yurunsoft/php-tdengine/archive/refs/tags/v1.0.6.tar.gz')
         ->withFile('tdengine-v1.0.6.tar.gz')
-        ->withDependentExtensions('swoole');
+        ->withDependentExtensions('swoole')
+        ->withDependentLibraries('libtdengine')
+    ;
     $p->addExtension($ext);
 };

@@ -13,12 +13,6 @@ return function (Preprocessor $p) {
             ->withUrl('https://github.com/taosdata/TDengine/archive/refs/tags/ver-3.0.5.1.tar.gz')
             ->withPrefix($tdengine_prefix)
             ->withFile('TDengine-ver-3.0.5.1.tar.gz')
-            ->withDownloadScript(
-                'TDengine',
-                <<<EOF
-        git clone it clone --recurse -b ver-3.0.5.1 --depth=1 https://github.com/taosdata/TDengine.git
-EOF
-            )
             ->withBuildScript(
                 <<<EOF
               mkdir -p build
