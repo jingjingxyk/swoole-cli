@@ -5,6 +5,7 @@ use SwooleCli\Preprocessor;
 use SwooleCli\Extension;
 
 return function (Preprocessor $p) {
+
     $options = ' --enable-libxml ';
     $options .= ' --with-libxml-dir=' . LIBXML2_PREFIX;
     $p->addExtension(
