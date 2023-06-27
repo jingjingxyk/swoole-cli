@@ -23,19 +23,26 @@ return function (Preprocessor $p) {
 
 
     $options = ' --enable-mongodb ';
-    $options .= ' --with-mongodb-system-libs=no ';
+    $options .= ' --with-mongodb-system-libs=yes ';
     $options .= ' --with-mongodb-ssl=openssl ';
     $options .= ' --with-mongodb-sasl=no ';
     $options .= ' --with-mongodb-icu=yes ';
+
+    $options .= ' --with-mongodb-snappy=no '; # v1.16 add parameter  https://github.com/mongodb/mongo-php-driver/issues/1427
+    $options .= ' --with-mongodb-zlib=yes ';  # v1.16 add parameter
+    $options .= ' --with-mongodb-zstd=yes ';  # v1.16 add parameter
+    $options .= ' --with-mongodb-sasl=no ';   # v1.16 add parameter
 
     $ext = new Extension('mongodb');
 
     $ext->withHomePage('https://www.php.net/mongodb')
         ->withHomePage('https://www.mongodb.com/docs/drivers/php/')
         ->withOptions($options)
-        ->withPeclVersion('1.15.3');
+        ->withPeclVersion('1.16.1')
+        ->withDependentExtensions('openssl')
+    ;
 
-    $depends = ['icu', 'openssl', 'zlib', 'libzstd'];
+    $depends = ['icu', 'openssl', 'zlib', 'libzstd','bison','mongo_c_driver'];
 
     //$depends[] = 'libsasl';
     //$depends[] = 'snappy';
