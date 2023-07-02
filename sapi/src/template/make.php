@@ -9,7 +9,6 @@ use SwooleCli\Preprocessor;
 ?>
 #!/usr/bin/env bash
 set -x
-if [[ -z $PKG_CONFIG_PATH ]];then export PKG_CONFIG_PATH=' ';fi
 SRC=<?= $this->phpSrcDir . PHP_EOL ?>
 ROOT=<?= $this->getRootDir() . PHP_EOL ?>
 PREPARE_ARGS="<?= implode(' ', $this->getPrepareArgs())?>"
@@ -26,6 +25,7 @@ OPTIONS="--disable-all \
 --enable-shared=no \
 --enable-static=yes \
 --enable-json \
+--without-valgrind \
 --enable-cli  \
 --disable-phpdbg \
 <?php foreach ($this->extensionList as $item) : ?>
