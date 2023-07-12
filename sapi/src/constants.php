@@ -59,3 +59,12 @@ define("SNAPPY_PREFIX", $p->getGlobalPrefix() . '/snappy');
 define("LIBSASL_PREFIX", $p->getGlobalPrefix() . '/sasl');
 
 define("TDENGINE_PREFIX", $p->getGlobalPrefix() . '/tdengine');
+define("TAOSADAPTER_PREFIX", $p->getGlobalPrefix() . '/taosadapter');
+define("TAOS_TOOLS_PREFIX", $p->getGlobalPrefix() . '/taos_tools');
+define("ROCKSDB_PREFIX", $p->getGlobalPrefix() . '/rocksdb');
+define("GEOS_PREFIX", $p->getGlobalPrefix() . '/geos');
+define("LIBUV_PREFIX", $p->getGlobalPrefix() . '/libuv');
+define("CJSON_PREFIX", $p->getGlobalPrefix() . '/cjson');
+define("GFLAGS_PREFIX", $p->getGlobalPrefix() . '/gflags');
+define("LIBURING_PREFIX", $p->getGlobalPrefix() . '/liburing');
+define("JANSSON_PREFIX", $p->getGlobalPrefix() . '/jansson');
