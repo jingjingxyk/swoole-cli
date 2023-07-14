@@ -81,6 +81,16 @@ if ($p->getOsType() == 'macos') {
     $p->setLogicalProcessors('$(nproc 2> /dev/null)');
 }
 
+putenv('SWOOLE_CLI_WITH_C_COMPILER=gcc');
+if ($p->getInputOption('with-c-compiler')) {
+    $c_compiler = $p->getInputOption('with-c-compiler');
+    if ($c_compiler == 'gcc') {
+        $p->set_C_COMPILER('gcc');
+        $p->set_CXX_COMPILER('g++');
+        $p->setLinker('ld');
+    }
+}
+
 $p->setExtraCflags('-Os');
 
 
