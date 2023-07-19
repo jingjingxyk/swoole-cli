@@ -89,7 +89,8 @@ jobs:
         with:
           name: php-micro-linux-aarch64-${{ env.BUILD_PHP_VERSION }}
           retention-days: 7
-          path: ./bin/micro.sfx
+          path: ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/micro.sfx
+
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')

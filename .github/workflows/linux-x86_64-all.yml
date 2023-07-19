@@ -63,27 +63,20 @@ jobs:
             bash ./make.sh all-library
             bash ./make.sh config
             bash ./make.sh build
-            ./php-src/sapi/cli/php -v
             bash ./make.sh archive
 
       - name: Show Build Result
         run: |
-          ./php-src/sapi/cli/php -v
-          ./php-src/sapi/cli/php -m
-          ./php-src/sapi/cli/php --ri swoole
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -v
-          file ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-          readelf -h ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -r "echo PHP_VERSION;"
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php  --list-tests
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php
+          file ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/micro.sfx
+          readelf -h ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/micro.sfx
 
       - name: production artifacts
         uses: actions/upload-artifact@v3
         with:
           name: swoole-cli
           retention-days: 7
-          path: ./bin/swoole-cli
+          path: ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/micro.sfx
+
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
