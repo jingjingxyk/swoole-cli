@@ -30,6 +30,10 @@ if ($p->getInputOption('with-php-version')) {
                 git clone -b build_php_7.3  https://github.com/jingjingxyk/swoole-cli/
 
 EOF;
+
+            if (is_file(__DIR__ . '/' . 'make.sh')) {
+                unlink(__DIR__ . '/' . 'make.sh');
+            }
             die;
         }
     }
