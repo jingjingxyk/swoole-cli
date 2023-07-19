@@ -19,11 +19,11 @@ if ($p->getInputOption('with-php-version')) {
         if (intval($match[1]) == 7) {
             $version = $match[0];
         } else {
-            echo '此分支只支持7.4 系列版本';
+            echo '此分支只支持7.3 系列版本';
             die;
         }
     } else {
-        echo '此分支只支持7.4 系列版本';
+        echo '此分支只支持7.3 系列版本';
         die;
     }
 }
