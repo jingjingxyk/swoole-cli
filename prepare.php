@@ -17,7 +17,7 @@ if ($p->getInputOption('with-php-version')) {
     $pattern = '/(\d{1,2})\.\d{1,2}\.\d{1,2}/';
     $notice = 0;
     if (preg_match($pattern, $subject, $match)) {
-        if (intval($match[1]) == 7) {
+        if ((intval($match[1]) == 7) && (intval($match[1])==4)) {
             $version = $match[0];
         } else {
             $notice = 1;
