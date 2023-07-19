@@ -15,15 +15,21 @@ $version = '7.4.33';
 if ($p->getInputOption('with-php-version')) {
     $subject = $p->getInputOption('with-php-version');
     $pattern = '/(\d{1,2})\.\d{1,2}\.\d{1,2}/';
+    $notice=0;
     if (preg_match($pattern, $subject, $match)) {
         if (intval($match[1]) == 7) {
             $version = $match[0];
         } else {
-            echo '此分支只支持7.4 系列版本';
-            die;
         }
     } else {
+        $notice = 1;
+    }
+    if ($notice == 1) {
         echo '此分支只支持7.4 系列版本';
+        echo PHP_EOL;
+        if (is_file(__DIR__ . '/' . 'make.sh')) {
+            unlink(__DIR__ . '/' . 'make.sh');
+        }
         die;
     }
 }
