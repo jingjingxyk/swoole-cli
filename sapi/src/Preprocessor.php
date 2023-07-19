@@ -111,7 +111,7 @@ class Preprocessor
         'phar',
         'mysqlnd',
         'mysqli',
-        'intl',
+        //'intl', //有报错等待解决
         'fileinfo',
         'pdo_mysql',
         'pdo_sqlite',
@@ -316,6 +316,7 @@ class Preprocessor
     {
         $this->installLibraryCached = $installLibraryCached;
     }
+
     /**
      * make -j {$n}
      * @param string $n
