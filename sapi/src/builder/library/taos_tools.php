@@ -8,6 +8,7 @@ return function (Preprocessor $p) {
     $jansson_prefix = JANSSON_PREFIX;
     $zlib_prefix = ZLIB_PREFIX;
     $liblzma_prefix = LIBLZMA_PREFIX;
+    $snappy_prefix = SNAPPY_PREFIX;
     $p->addLibrary(
         (new Library('taos_tools'))
             ->withHomePage('https://github.com/taosdata/taos-tools.git')
@@ -31,15 +32,17 @@ EOF
                 -DCMAKE_POLICY_DEFAULT_CMP0074=NEW \
                 -DBUILD_SHARED_LIBS=OFF \
                 -DBUILD_STATIC_LIBS=ON \
-                -DCMAKE_DISABLE_FIND_PACKAGE_snappy=ON \
                 -DJANSSON_ROOT={$jansson_prefix} \
                 -DZLIB_ROOT={$zlib_prefix} \
                 -DLZMA_ROOT={$liblzma_prefix} \
+                -Dsnappy_ROOT={$snappy_prefix} \
                 -DZLIB_LIBRARY={$zlib_prefix}/lib/libz.a \
                 -DZLIB_INCLUDE_DIR={$zlib_prefix}/zlib/include
 
+                # -DCMAKE_DISABLE_FIND_PACKAGE_snappy=ON \
+
 EOF
             )
-            ->withDependentLibraries('zlib', 'liblzma', 'jansson', 'cjson')
+            ->withDependentLibraries('snappy', 'zlib', 'liblzma', 'jansson', 'cjson')
     );
 };
