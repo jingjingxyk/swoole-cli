@@ -27,6 +27,7 @@ EOF
             ->withBuildLibraryCached(false)
             ->withConfigure(
                 <<<EOF
+                sed -i.backup "57s/-S/-S -DBUILD_SHARED_LIBS=OFF/" deps/CMakeLists.txt
                 mkdir -p build
                 cd build
                 cmake .. \
@@ -45,6 +46,8 @@ EOF
                 -DSNAPPY_INCLUDE_DIR={$snappy_prefix}/include/ \
                 -DCUNIT_DISABLE_EXAMPLES=ON \
                 -DCUNIT_DISABLE_TESTS=ON \
+                -DTOOLS_BUILD_TYPE=Release \
+
 
                 # -DCMAKE_DISABLE_FIND_PACKAGE_PkgConfig=ON
                 # -DCMAKE_DISABLE_FIND_PACKAGE_snappy=ON \
