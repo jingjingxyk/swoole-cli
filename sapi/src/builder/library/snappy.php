@@ -10,8 +10,17 @@ return function (Preprocessor $p) {
             ->withHomePage('https://github.com/google/snappy')
             ->withManual('https://github.com/google/snappy/blob/main/README.md')
             ->withLicense('https://github.com/google/snappy/blob/main/COPYING', Library::LICENSE_BSD)
-            ->withUrl('https://github.com/google/snappy/archive/refs/tags/1.1.10.tar.gz')
-            ->withFile('snappy-1.1.10.tar.gz')
+            //->withUrl('https://github.com/google/snappy/archive/refs/tags/1.1.10.tar.gz')
+            //->withFile('snappy-1.1.10.tar.gz')
+            ->withFile('snappy-latest.tar.gz')
+            ->withDownloadScript(
+                'snappy',
+                <<<EOF
+                # 等待这个问题 https://github.com/google/snappy/commit/27f34a580be4a3becf5f8c0cba13433f53c21337
+                # 发版，以后就可以指定版本了
+                git clone -b main https://github.com/google/snappy.git
+EOF
+            )
             ->withPrefix($snappy_prefix)
             ->withConfigure(
                 <<<EOF
@@ -34,5 +43,4 @@ EOF
     $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . SNAPPY_PREFIX . '/include');
     $p->withVariable('LDFLAGS', '$LDFLAGS -L' . SNAPPY_PREFIX . '/lib');
     $p->withVariable('LIBS', '$LIBS -liconv');
-
 };
