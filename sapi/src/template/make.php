@@ -7,7 +7,6 @@ use SwooleCli\Library;
 use SwooleCli\Preprocessor;
 
 ?>
-#!/usr/bin/env bash
 set -x
 SRC=<?= $this->phpSrcDir . PHP_EOL ?>
 ROOT=<?= $this->getRootDir() . PHP_EOL ?>
@@ -485,6 +484,7 @@ elif [ "$1" = "list-extension" ] ;then
     exit 0
 elif [ "$1" = "clean" ] ;then
     make_clean
+    exit 0
 elif [ "$1" = "sync" ] ;then
   echo "sync"
   # ZendVM
