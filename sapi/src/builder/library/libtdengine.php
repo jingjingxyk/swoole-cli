@@ -39,7 +39,17 @@ return function (Preprocessor $p) {
               make -j \${LOGICAL_PROCESSORS}
 EOF
             )
-            ->withDependentLibraries('zlib', 'liblz4', 'geos', 'libuv', 'cjson', 'rocksdb') //'taosadapter', 'taos_tools'
+            ->withDependentLibraries(
+                'zlib',
+                'liblz4',
+                'geos',
+                'libuv',
+                'cjson',
+                'rocksdb',
+                'libiconv',
+                'taos_tools',
+                'taosadapter'
+            )
     /*
     Creating directories for 'lz4'
     [  2%] Creating directories for 'rocksdb'
