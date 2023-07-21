@@ -27,7 +27,7 @@ EOF
             ->withBuildLibraryCached(false)
             ->withConfigure(
                 <<<EOF
-                sed -i.backup "57s/-S/-S -DBUILD_SHARED_LIBS=OFF/" deps/CMakeLists.txt
+                sed -i.backup "57s/-S/-DBUILD_SHARED_LIBS=OFF -S/" deps/CMakeLists.txt
                 mkdir -p build
                 cd build
                 cmake .. \
