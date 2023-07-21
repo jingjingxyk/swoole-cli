@@ -54,6 +54,12 @@ EOF
 
 EOF
             )
-            ->withDependentLibraries('snappy', 'zlib', 'liblzma', 'jansson', 'cjson')
+            ->withDependentLibraries(
+                'snappy',
+                'zlib',
+                'liblzma',
+                'jansson',
+                'cjson'
+            )
     );
 };
