@@ -31,7 +31,7 @@ EOF
                 -DCMAKE_POLICY_DEFAULT_CMP0074=NEW \
                 -DBUILD_SHARED_LIBS=OFF \
                 -DBUILD_STATIC_LIBS=ON \
-                -DCMAKE_DISABLE_FIND_PACKAGE_snappy=OFF \
+                -DCMAKE_DISABLE_FIND_PACKAGE_snappy=ON \
                 -DJANSSON_ROOT={$jansson_prefix} \
                 -DZLIB_ROOT={$zlib_prefix} \
                 -DLZMA_ROOT={$liblzma_prefix}
