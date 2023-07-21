@@ -22,6 +22,9 @@ return function (Preprocessor $p) {
                 git clone -b 3.0 https://github.com/taosdata/taos-tools.git
 EOF
             )
+            ->withCleanBuildDirectory()
+            ->withCleanPreInstallDirectory($taos_tools_prefix)
+            ->withBuildLibraryCached(false)
             ->withConfigure(
                 <<<EOF
                 mkdir -p build
@@ -32,9 +35,9 @@ EOF
                 -DCMAKE_POLICY_DEFAULT_CMP0074=NEW \
                 -DBUILD_SHARED_LIBS=OFF \
                 -DBUILD_STATIC_LIBS=ON \
-                -DJANSSON_DIR={$jansson_prefix} \
+                -DJANSSON_ROOT={$jansson_prefix} \
                 -DZLIB_DIR={$zlib_prefix} \
-                -DLZMA_DIR={$liblzma_prefix} \
+                -DLZMA_ROOT={$liblzma_prefix} \
                 -DSNAPPY_DIR={$snappy_prefix} \
                 -DZLIB_LIBRARY={$zlib_prefix}/lib/libz.a \
                 -DZLIB_INCLUDE_DIR={$zlib_prefix}/include/ \
