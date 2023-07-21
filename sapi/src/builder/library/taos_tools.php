@@ -35,11 +35,11 @@ EOF
                 -DJANSSON_ROOT={$jansson_prefix} \
                 -DZLIB_ROOT={$zlib_prefix} \
                 -DLZMA_ROOT={$liblzma_prefix} \
-                -DSNAPPY_ROOT={$snappy_prefix} \
+                -DLIBSNAPPY_ROOT={$snappy_prefix} \
                 -DZLIB_LIBRARY={$zlib_prefix}/lib/libz.a \
                 -DZLIB_INCLUDE_DIR={$zlib_prefix}/zlib/include \
-                -DSNAPPY_LIBRARY={$snappy_prefix}/lib/libsnappy.a \
-                -DSNAPPY_INCLUDE_DIR={$snappy_prefix}/zlib/include \
+                -DLIBSNAPPY_LIBRARY={$snappy_prefix}/lib/libsnappy.a \
+                -DLIBSNAPPY_INCLUDE_DIR={$snappy_prefix}/zlib/include \
                 -DCMAKE_DISABLE_FIND_PACKAGE_snappy=ON \
                 -DCMAKE_DISABLE_FIND_PACKAGE_zlib=ON
 
