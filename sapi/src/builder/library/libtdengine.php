@@ -33,7 +33,8 @@ return function (Preprocessor $p) {
                 -DBUILD_HTTP=OFF \
                 -DJEMALLOC_ENABLED=true \
                 -DBUILD_WITH_ICONV=ON \
-                -DBUILD_DOCS=OFF
+                -DBUILD_DOCS=OFF \
+                -DBUILD_HTTP=false
 
 
               make -j \${LOGICAL_PROCESSORS}
@@ -47,8 +48,8 @@ EOF
                 'cjson',
                 'rocksdb',
                 'libiconv',
-                'taos_tools',
-                'taosadapter'
+                //'taos_tools',
+                //'taosadapter'
             )
     /*
     Creating directories for 'lz4'
