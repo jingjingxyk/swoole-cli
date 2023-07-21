@@ -32,18 +32,18 @@ EOF
                 -DCMAKE_POLICY_DEFAULT_CMP0074=NEW \
                 -DBUILD_SHARED_LIBS=OFF \
                 -DBUILD_STATIC_LIBS=ON \
-                -DJANSSON_ROOT={$jansson_prefix} \
-                -DZLIB_ROOT={$zlib_prefix} \
-                -DLZMA_ROOT={$liblzma_prefix} \
-                -DSNAPPY_ROOT={$snappy_prefix} \
+                -DJANSSON_DIR={$jansson_prefix} \
+                -DZLIB_DIR={$zlib_prefix} \
+                -DLZMA_DIR={$liblzma_prefix} \
+                -DSNAPPY_DIR={$snappy_prefix} \
                 -DZLIB_LIBRARY={$zlib_prefix}/lib/libz.a \
                 -DZLIB_INCLUDE_DIR={$zlib_prefix}/include/ \
                 -DSNAPPY_LIBRARY={$snappy_prefix}/lib/libsnappy.a \
                 -DSNAPPY_INCLUDE_DIR={$snappy_prefix}/include/ \
                 -DCUNIT_DISABLE_EXAMPLES=ON \
                 -DCUNIT_DISABLE_TESTS=ON \
-                -DCMAKE_DISABLE_FIND_PACKAGE_PkgConfig=ON
 
+                # -DCMAKE_DISABLE_FIND_PACKAGE_PkgConfig=ON
                 # -DCMAKE_DISABLE_FIND_PACKAGE_snappy=ON \
                 # -DCMAKE_DISABLE_FIND_PACKAGE_zlib=ON
 
