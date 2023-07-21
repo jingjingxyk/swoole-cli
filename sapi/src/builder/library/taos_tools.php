@@ -41,7 +41,9 @@ EOF
                 -DSNAPPY_LIBRARY={$snappy_prefix}/lib/libsnappy.a \
                 -DSNAPPY_INCLUDE_DIR={$snappy_prefix}/include/ \
                 -DCUNIT_DISABLE_EXAMPLES=ON \
-                -DCUNIT_DISABLE_TESTS=ON
+                -DCUNIT_DISABLE_TESTS=ON \
+                -DCMAKE_DISABLE_FIND_PACKAGE_PkgConfig=ON
+
                 # -DCMAKE_DISABLE_FIND_PACKAGE_snappy=ON \
                 # -DCMAKE_DISABLE_FIND_PACKAGE_zlib=ON
 
