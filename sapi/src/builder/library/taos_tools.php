@@ -34,7 +34,9 @@ EOF
                 -DCMAKE_DISABLE_FIND_PACKAGE_snappy=ON \
                 -DJANSSON_ROOT={$jansson_prefix} \
                 -DZLIB_ROOT={$zlib_prefix} \
-                -DLZMA_ROOT={$liblzma_prefix}
+                -DLZMA_ROOT={$liblzma_prefix} \
+                -DZLIB_LIBRARY={$zlib_prefix}/lib/libz.a \
+                -DZLIB_INCLUDE_DIR={$zlib_prefix}/zlib/include
 
 EOF
             )
