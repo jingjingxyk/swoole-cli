@@ -27,7 +27,6 @@ EOF
                 mkdir -p build
                 cd build
                 cmake .. \
-                -Wsign-compare \
                 -DCMAKE_INSTALL_PREFIX={$snappy_prefix} \
                 -DCMAKE_INSTALL_LIBDIR={$snappy_prefix}/lib \
                 -DCMAKE_INSTALL_INCLUDEDIR={$snappy_prefix}/include \
