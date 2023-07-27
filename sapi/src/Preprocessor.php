@@ -1078,7 +1078,11 @@ EOF;
         if (!empty($this->varables) || !empty($packagesArr)) {
             $this->withExportVariable('CPPFLAGS', '$CPPFLAGS');
             $this->withExportVariable('LDFLAGS', '$LDFLAGS');
-            $this->withExportVariable('LIBS', '$LIBS');
+            $linker='';
+            if (!empty($this->getLibrary('brotli'))) {
+                $linker =' -lbrotli  -lbrotlicommon   -lbrotlidec  -lbrotlienc ';
+            }
+            $this->withExportVariable('LIBS', $linker . '$LIBS');
         }
         $this->binPaths[] = '$PATH';
         $this->binPaths = array_filter(array_unique($this->binPaths));
