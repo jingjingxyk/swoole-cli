@@ -78,7 +78,7 @@ jobs:
           set -x
           bash sapi/download-box/download-box-get-archive-from-container.sh
 
-      - name: Prepare and Build all-library and Build
+      - name: Prepare and  Build all-library and  Build
         uses: addnab/docker-run-action@v3
         with:
           image: docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-3.17-php7-v1.0.0-x86_64-20230614T154836Z
@@ -97,6 +97,7 @@ jobs:
 
             bash sapi/quickstart/mark-install-library-cached.sh
             bash ./make.sh all-library
+
             bash ./make.sh config
             bash ./make.sh build
 
