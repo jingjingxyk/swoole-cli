@@ -129,11 +129,8 @@ if ($p->getOsType() == 'macos') {
     $p->setLogicalProcessors('$(nproc 2> /dev/null)');
 }
 
-<<<<<<< HEAD
 putenv('SWOOLE_CLI_WITH_C_COMPILER=gcc');
-=======
 
->>>>>>> build_php_7.4
 if ($p->getInputOption('with-c-compiler')) {
     $c_compiler = $p->getInputOption('with-c-compiler');
     if ($c_compiler == 'gcc') {
