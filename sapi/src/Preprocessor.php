@@ -1080,7 +1080,7 @@ EOF;
             $this->withExportVariable('LDFLAGS', '$LDFLAGS');
             $linker='';
             if (!empty($this->getLibrary('brotli'))) {
-                $linker =' -lbrotli  -lbrotlicommon   -lbrotlidec  -lbrotlienc ';
+                //$linker =' -lbrotli  -lbrotlicommon   -lbrotlidec  -lbrotlienc ';
             }
             $this->withExportVariable('LIBS', $linker . '$LIBS');
         }

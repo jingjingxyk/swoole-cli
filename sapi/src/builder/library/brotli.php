@@ -47,9 +47,9 @@ EOF
             ->withPkgName('libbrotlienc')
             ->withBinPath($brotli_prefix . '/bin/')
     );
-    //$p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $brotli_prefix . '/include');
-    //$p->withVariable('LDFLAGS', '$LDFLAGS -L' . $brotli_prefix . '/lib');
-    //$p->withVariable('LIBS', '$LIBS -lbrotli  -lbrotlicommon   -lbrotlidec  -lbrotlienc');
+    $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $brotli_prefix . '/include');
+    $p->withVariable('LDFLAGS', '$LDFLAGS -L' . $brotli_prefix . '/lib');
+    $p->withVariable('LIBS', '$LIBS -lbrotli  -lbrotlicommon   -lbrotlidec  -lbrotlienc');
 };
 // libbrotlicommon.a 应该优先被链接
 // 链接顺序问题
