@@ -1124,5 +1124,24 @@ EOF;
         foreach ($this->libraryList as $item) {
             echo "{$item->name}\n";
         }
+
+        system('clear');
+        echo PHP_EOL ;
+        if ($this->getInputOption('with-show-pkgs')) {
+            $library_name=$this->getInputOption('with-show-library-pkgs');
+            $pkgs=[];
+            $this->getLibraryDependenciesByName($library_name, $pkgs);
+            $data=[];
+            foreach ($pkgs as $item) {
+                if (count($data)>=4) {
+                    echo implode(' ', $data) .PHP_EOL ;
+                    $data=[];
+                } else {
+                    $data[]=$item;
+                }
+            }
+            echo implode(' ', $data) .PHP_EOL ;
+            echo PHP_EOL ;
+        }
     }
 }

@@ -101,6 +101,5 @@ if ($p->getOsType() == 'macos') {
 $p->setExtraCflags('-fno-ident -Os');
 
 
-
 // Generate make.sh
 $p->execute();
