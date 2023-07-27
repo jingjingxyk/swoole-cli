@@ -30,7 +30,7 @@ EOF;
             ->withFile('dav1d-1.1.0.tar.gz')
             ->withManual('https://code.videolan.org/videolan/dav1d')
             ->withPrefix($dav1d_prefix)
-            ->withBuildLibraryCached(false)
+            ->withBuildLibraryCached(true)
             ->withCleanBuildDirectory()
             ->withCleanPreInstallDirectory($dav1d_prefix)
             ->withPreInstallCommand($pre_install)
