@@ -21,7 +21,6 @@ return function (Preprocessor $p) {
     $p->withExportVariable('PHP_MONGODB_ZLIB_CFLAGS', '$(pkg-config --cflags --static zlib)');
     $p->withExportVariable('PHP_MONGODB_ZLIB_LIBS', '$(pkg-config   --libs   --static zlib)');
 
-
     $options = ' --enable-mongodb ';
     $options .= ' --with-mongodb-system-libs=no ';
     $options .= ' --with-mongodb-ssl=openssl ';
