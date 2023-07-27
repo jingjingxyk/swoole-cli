@@ -1133,7 +1133,7 @@ EOF;
             $this->getLibraryDependenciesByName($library_name, $pkgs);
             $data=[];
             foreach ($pkgs as $item) {
-                if (count($data)>=4) {
+                if (count($data)>=10) {
                     echo implode(' ', $data) .PHP_EOL ;
                     $data=[];
                 } else {
