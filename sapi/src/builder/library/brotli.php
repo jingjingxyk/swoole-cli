@@ -26,8 +26,6 @@ return function (Preprocessor $p) {
             -DBROTLI_DISABLE_TESTS=OFF \
             -DBROTLI_BUNDLED_MODE=ON
 
-            cmake --build . --config Release
-
             cmake --build . --config Release --target install
 EOF
             )
