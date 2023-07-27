@@ -98,7 +98,7 @@ if ($p->getOsType() == 'macos') {
     $p->setLogicalProcessors('$(nproc 2> /dev/null)');
 }
 
-$p->setExtraCflags('-fno-ident -Os');
+$p->setExtraCflags('-fno-ident -Os'); // -Wl,-Bstatic
 
 
 // Generate make.sh
