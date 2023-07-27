@@ -186,8 +186,8 @@ make_ext_hook() {
 export_variables() {
     CPPFLAGS=""
     CFLAGS=""
-    LDFLAGS=" -Wl,--start-group "
-    LIBS=""
+    LDFLAGS=""
+    LIBS=" -Wl,--start-group "
 <?php foreach ($this->variables as $name => $value) : ?>
     <?= key($value) ?>="<?= current($value) ?>"
 <?php endforeach; ?>
