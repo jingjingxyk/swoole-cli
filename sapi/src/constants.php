@@ -71,3 +71,4 @@ define("LCMS2_PREFIX", $p->getGlobalPrefix() . '/lcms2');
 
 define("ABSL_PREFIX", $p->getGlobalPrefix() . '/absl');
 define("RAV1E_PREFIX", $p->getGlobalPrefix() . '/rav1e');
+define("SDL2_PREFIX", $p->getGlobalPrefix() . '/sdl2');
