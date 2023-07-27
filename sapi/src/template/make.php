@@ -199,9 +199,9 @@ export_variables() {
 <?php endforeach; ?>
     # export  LIBS=" $LIBS -Wl,--end-group -Wl,--no-whole-archive "
     # export  LIBS=" $LIBS -Wl,--end-group  "
-    export  LDFLAGS=" $LDFLAGS -Wl,--end-group  "
+    export  LDFLAGS=" $LDFLAGS $LIBS -Wl,--end-group  "
 
-    export EXTRA_LIBS='<?= BROTLI_PREFIX ?>/lib/libbrotli.a <?= BROTLI_PREFIX ?>/lib/libbrotlicommon.a <?= BROTLI_PREFIX ?>/lib/libbrotlidec.a <?= BROTLI_PREFIX ?>/lib/libbrotlienc.a'
+    # export EXTRA_LIBS='<?= BROTLI_PREFIX ?>/lib/libbrotli.a <?= BROTLI_PREFIX ?>/lib/libbrotlicommon.a <?= BROTLI_PREFIX ?>/lib/libbrotlidec.a <?= BROTLI_PREFIX ?>/lib/libbrotlienc.a'
 
 # 链接顺序问题
 # 搜索 静态库的链接顺序
