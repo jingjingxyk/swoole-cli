@@ -232,6 +232,7 @@ make_build() {
     <?php endif ;?>
     export LDFLAGS="$LDFLAGS   <?= $this->extraLdflags ?>"
     export EXTRA_CFLAGS='<?= $this->extraCflags ?>'
+    export EXTRA_LIBS='<?= BROTLI_PREFIX ?>/libbrotlicommon.a <?= BROTLI_PREFIX ?>/libbrotlidec.a <?= BROTLI_PREFIX ?>/libbrotlienc.a'
     make -j <?= $this->maxJob ?> ;
 
 <?php if ($this->osType == 'macos') : ?>
