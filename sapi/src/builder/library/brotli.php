@@ -51,3 +51,7 @@ EOF
     $p->withVariable('LDFLAGS', '$LDFLAGS -L' . $brotli_prefix . '/lib');
     $p->withVariable('LIBS', '$LIBS -lbrotli  -lbrotlicommon ');
 };
+
+// 链接顺序问题
+// Library order in static linking
+// https://eli.thegreenplace.net/2013/07/09/library-order-in-static-linking
