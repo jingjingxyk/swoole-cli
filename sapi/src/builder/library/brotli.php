@@ -47,11 +47,14 @@ EOF
             ->withPkgName('libbrotlienc')
             ->withBinPath($brotli_prefix . '/bin/')
     );
-    $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $brotli_prefix . '/include');
-    $p->withVariable('LDFLAGS', '$LDFLAGS -L' . $brotli_prefix . '/lib');
-    $p->withVariable('LIBS', '$LIBS -lbrotli  -lbrotlicommon   -lbrotlidec  -lbrotlienc');
+    //$p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $brotli_prefix . '/include');
+    //$p->withVariable('LDFLAGS', '$LDFLAGS -L' . $brotli_prefix . '/lib');
+    //$p->withVariable('LIBS', '$LIBS -lbrotli  -lbrotlicommon   -lbrotlidec  -lbrotlienc');
 };
 // libbrotlicommon.a 应该优先被链接
 // 链接顺序问题
 // Library order in static linking
 // https://eli.thegreenplace.net/2013/07/09/library-order-in-static-linking
+# 参考 https://bbs.huaweicloud.com/blogs/373470
+
+//  -Wl,–whole-archive -Wl,–start-group a.o b.o c.o main.o -lf -ld -le -L./ -lc -Wl,–end-group -Wl,-no-whole-archive

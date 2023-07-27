@@ -186,20 +186,21 @@ make_ext_hook() {
 export_variables() {
     CPPFLAGS=""
     CFLAGS=""
-    LDFLAGS=""
-    LIBS=" -Wl,--start-group "
+    LDFLAGS=" -Wl,--start-group "
+    LIBS=" "
 <?php foreach ($this->variables as $name => $value) : ?>
     <?= key($value) ?>="<?= current($value) ?>"
 <?php endforeach; ?>
 <?php foreach ($this->exportVariables as $value) : ?>
     export  <?= key($value) ?>="<?= current($value) ?>"
 <?php endforeach; ?>
-    export  LIBS = "$LIBS -Wl,--end-group "
+    export  LDFLAGS = "$LIBS -Wl,--end-group "
 
     # export EXTRA_LIBS='<?= BROTLI_PREFIX ?>/lib/libbrotli.a <?= BROTLI_PREFIX ?>/lib/libbrotlicommon.a <?= BROTLI_PREFIX ?>/lib/libbrotlidec.a <?= BROTLI_PREFIX ?>/lib/libbrotlienc.a'
 
 # 链接顺序问题
-
+# 搜索 静态库的链接顺序
+# 参考 https://bbs.huaweicloud.com/blogs/373470
     result_code=$?
     [[ $result_code -ne 0 ]] &&  echo " [ export_variables  FAILURE]" && exit  $result_code;
     return 0
