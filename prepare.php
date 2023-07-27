@@ -9,6 +9,17 @@ $homeDir = getenv('HOME');
 $p = Preprocessor::getInstance();
 $p->parseArguments($argc, $argv);
 
+# clean
+if (file_exists(__DIR__ . '/make.sh')) {
+    unlink(__DIR__ . '/make.sh');
+}
+if (file_exists(__DIR__ . '/make-install-deps.sh')) {
+    unlink(__DIR__ . '/make-install-deps.sh');
+}
+if (file_exists(__DIR__ . '/make-download-box.sh')) {
+    unlink(__DIR__ . '/make-download-box.sh');
+}
+
 # PHP 默认版本
 $version = '8.2.4';
 
@@ -58,6 +69,7 @@ if ($p->getInputOption('without-docker') || ($p->getOsType() == 'macos')) {
     $p->setBuildDir(__DIR__ . '/thirdparty');
 }
 
+
 $p->setRootDir(__DIR__);
 
 // Sync code from php-src
@@ -66,6 +78,10 @@ $p->setPhpSrcDir($p->getRootDir() . '/php-src');
 
 //设置PHP 安装目录
 define("BUILD_PHP_INSTALL_PREFIX", $p->getRootDir() . '/bin/php-' . BUILD_PHP_VERSION);
+
+if ($p->getInputOption('with-override-default-enabled-ext')) {
+    $p->setExtEnabled([]);
+}
 
 if ($p->getInputOption('with-global-prefix')) {
     $p->setGlobalPrefix($p->getInputOption('with-global-prefix'));
@@ -96,7 +112,6 @@ define('SWOOLE_CLI_GLOBAL_PREFIX', $p->getGlobalPrefix());
 
 if ($p->getInputOption('with-http-proxy')) {
     $http_proxy = $p->getInputOption('with-http-proxy');
-    define('PHP_CLI_HTTP_PROXY_URL', $http_proxy);
     $proxyConfig = <<<EOF
 export HTTP_PROXY={$http_proxy}
 export HTTPS_PROXY={$http_proxy}
@@ -109,7 +124,7 @@ export NO_PROXY="\${NO_PROXY},archive.ubuntu.com,security.ubuntu.com"
 export NO_PROXY="\${NO_PROXY},pypi.python.org,bootstrap.pypa.io"
 
 EOF;
-    $p->setProxyConfig($proxyConfig);
+    $p->setProxyConfig($proxyConfig, $http_proxy);
 }
 
 if ($p->getInputOption('with-install-library-cached')) {
