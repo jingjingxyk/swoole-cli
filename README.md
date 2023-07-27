@@ -45,15 +45,17 @@
 - [quickstart](sapi/quickstart/README.md)
 - [构建 原生 `php-cli` 版本 使用build_native_php分支](https://github.com/swoole/swoole-cli/tree/build_native_php)
 
-## build_native_php 分支与主分支的区别
+## build_php_8.2 分支与主分支的区别
 
-> 继承 experiment 分支的功能
+> 继承 build_php_8.2 分支的功能
 
 > 构建原生 PHP 版本
 
+> PHP 版本固定为 php 8.2 系列
+
 > 可指定 C 编译器 为GCC
 
-> 可编译包含 swow扩展的 PHP二进制可执行文件
+> 可编译包含 swow 扩展的 PHP二进制可执行文件
 
 > 可禁用编译缓存
 
