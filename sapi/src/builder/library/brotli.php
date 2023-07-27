@@ -49,9 +49,9 @@ EOF
     );
     $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $brotli_prefix . '/include');
     $p->withVariable('LDFLAGS', '$LDFLAGS -L' . $brotli_prefix . '/lib');
-    $p->withVariable('LIBS', '$LIBS -lbrotli  -lbrotlicommon ');
+    $p->withVariable('LIBS', '$LIBS -lbrotli  -lbrotlicommon   -lbrotlidec  -lbrotlienc');
 };
-
+// libbrotlicommon.a 应该优先被链接
 // 链接顺序问题
 // Library order in static linking
 // https://eli.thegreenplace.net/2013/07/09/library-order-in-static-linking
