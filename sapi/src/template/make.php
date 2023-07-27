@@ -189,8 +189,8 @@ export_variables() {
     LDFLAGS=""
     LIBS=""
     # LIBS=" $LIBS -Wl,--whole-archive -Wl,--start-group "
-    # LIBS=" $LIBS  -Wl,--start-group "
-     LDFLAGS=" $LDFLAGS  -Wl,--start-group "
+    LIBS=" -Wl,--start-group $LIBS "
+
 <?php foreach ($this->variables as $name => $value) : ?>
     <?= key($value) ?>="<?= current($value) ?>"
 <?php endforeach; ?>
@@ -198,8 +198,8 @@ export_variables() {
     export  <?= key($value) ?>="<?= current($value) ?>"
 <?php endforeach; ?>
     # export  LIBS=" $LIBS -Wl,--end-group -Wl,--no-whole-archive "
-    # export  LIBS=" $LIBS -Wl,--end-group  "
-    export  LDFLAGS=" $LDFLAGS $LIBS -Wl,--end-group  "
+    export  LIBS=" $LIBS -Wl,--end-group  "
+
 
     # export EXTRA_LIBS='<?= BROTLI_PREFIX ?>/lib/libbrotli.a <?= BROTLI_PREFIX ?>/lib/libbrotlicommon.a <?= BROTLI_PREFIX ?>/lib/libbrotlidec.a <?= BROTLI_PREFIX ?>/lib/libbrotlienc.a'
 
