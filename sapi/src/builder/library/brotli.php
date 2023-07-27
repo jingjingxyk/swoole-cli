@@ -43,8 +43,8 @@ EOF
 EOF
             )
             ->withPkgName('libbrotlicommon')
-            ->withPkgName('libbrotlidec')
             ->withPkgName('libbrotlienc')
+            ->withPkgName('libbrotlidec')
             ->withBinPath($brotli_prefix . '/bin/')
     );
     //$p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $brotli_prefix . '/include');
