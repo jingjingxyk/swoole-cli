@@ -38,15 +38,14 @@ return function (Preprocessor $p) {
             -Dsvt_ROOT={$svt_av1_prefix} \
             -Daom_ROOT={$aom_prefix} \
             -Ddav1d_ROOT={$dav1d_prefix} \
-            -Dlibgav1_ROOT={$libgav1_prefix} \
             -DAVIF_CODEC_AOM=ON \
             -DAVIF_CODEC_DAV1D=ON \
-            -DAVIF_CODEC_LIBGAV1=ON \
+            -DAVIF_CODEC_LIBGAV1=OFF \
             -DAVIF_CODEC_RAV1E=OFF \
             -DAVIF_CODEC_SVT=ON
 
 
-            #
+            # -Dlibgav1_ROOT={$libgav1_prefix} \
             # -Dlibyuv_ROOT={$libyuv_prefix} \
             # -DLIBYUV_INCLUDE_DIR={$libyuv_prefix}/include \
             # -DLIBYUV_LIBRARY={$libyuv_prefix}/lib
