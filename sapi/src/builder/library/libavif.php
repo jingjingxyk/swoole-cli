@@ -59,7 +59,8 @@ EOF
             ->withDependentLibraries(
                 'aom',
                 'svt_av1',
-                'dav1d'
-            ) #   // 'libgav1' 'libyuv',  'libsharpyuv','rav1e'
+                'dav1d',
+                'libgav1'
+            ) #   //  'libyuv',  'libsharpyuv','rav1e'
     );
 };
