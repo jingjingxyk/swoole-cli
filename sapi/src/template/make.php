@@ -195,7 +195,7 @@ export_variables() {
 <?php foreach ($this->exportVariables as $value) : ?>
     export  <?= key($value) ?>="<?= current($value) ?>"
 <?php endforeach; ?>
-    export  LIBS="$LDFLAGS $LIBS -Wl,--end-group -Wl,--no-whole-archive "
+    export  LIBS=" $LIBS -Wl,--end-group -Wl,--no-whole-archive "
 
     # export EXTRA_LIBS='<?= BROTLI_PREFIX ?>/lib/libbrotli.a <?= BROTLI_PREFIX ?>/lib/libbrotlicommon.a <?= BROTLI_PREFIX ?>/lib/libbrotlidec.a <?= BROTLI_PREFIX ?>/lib/libbrotlienc.a'
 
