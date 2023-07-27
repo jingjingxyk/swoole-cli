@@ -186,15 +186,15 @@ make_ext_hook() {
 export_variables() {
     CPPFLAGS=""
     CFLAGS=""
-    LDFLAGS=" -Wl,--whole-archive -Wl,--start-group  "
-    LIBS="  "
+    LDFLAGS=""
+    LIBS=" -Wl,--whole-archive -Wl,--start-group "
 <?php foreach ($this->variables as $name => $value) : ?>
     <?= key($value) ?>="<?= current($value) ?>"
 <?php endforeach; ?>
 <?php foreach ($this->exportVariables as $value) : ?>
     export  <?= key($value) ?>="<?= current($value) ?>"
 <?php endforeach; ?>
-    export  LDFLAGS="$LDFLAGS $LIBS -Wl,--end-group -Wl,--no-whole-archive "
+    export  LIBS="$LDFLAGS $LIBS -Wl,--end-group -Wl,--no-whole-archive "
 
     # export EXTRA_LIBS='<?= BROTLI_PREFIX ?>/lib/libbrotli.a <?= BROTLI_PREFIX ?>/lib/libbrotlicommon.a <?= BROTLI_PREFIX ?>/lib/libbrotlidec.a <?= BROTLI_PREFIX ?>/lib/libbrotlienc.a'
 
