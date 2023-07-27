@@ -47,7 +47,7 @@
 
 ## build_php_8.2 分支与主分支的区别
 
-> 继承 build_php_8.2 分支的功能
+> 继承 build_native_php 分支的功能
 
 > 构建原生 PHP 版本
 
