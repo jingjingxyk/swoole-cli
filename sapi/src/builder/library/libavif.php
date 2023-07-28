@@ -38,12 +38,13 @@ return function (Preprocessor $p) {
             -Dsvt_ROOT={$svt_av1_prefix} \
             -Daom_ROOT={$aom_prefix} \
             -Dlibgav1_ROOT={$libgav1_prefix} \
+            -Ddav1d_ROOT={$dav1d_prefix} \
             -DAVIF_CODEC_AOM=ON \
-            -DAVIF_CODEC_DAV1D=OFF \
+            -DAVIF_CODEC_DAV1D=ON \
             -DAVIF_CODEC_LIBGAV1=ON \
             -DAVIF_CODEC_RAV1E=OFF \
             -DAVIF_CODEC_SVT=ON
-            # -Ddav1d_ROOT={$dav1d_prefix} \
+
             # -Dlibyuv_ROOT={$libyuv_prefix} \
             # -DLIBYUV_INCLUDE_DIR={$libyuv_prefix}/include \
             # -DLIBYUV_LIBRARY={$libyuv_prefix}/lib
@@ -57,9 +58,10 @@ EOF
             ->withDependentLibraries(
                 'aom',
                 'svt_av1',
-                'libgav1'
+                'libgav1',
+                'dav1d',
             )
-        #    'dav1d', 'libyuv',  'libsharpyuv','rav1e'
+        #     'libyuv',  'libsharpyuv','rav1e'
         #   'libgav1' 依赖 absl
     );
 };
