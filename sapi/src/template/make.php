@@ -413,6 +413,7 @@ elif [ "$1" = "switch-swoole-branch" ] ;then
     SWOOLE_BRANCH=$2
     git checkout $SWOOLE_BRANCH
 elif [ "$1" = "check-lib-pkg" ] ;then
+    set +x
 <?php foreach ($this->libraryList as $item) : ?>
     <?php if (!empty($item->pkgNames)) : ?>
     echo "[<?= $item->name ?>] pkg-config : <?= implode(' ', $item->pkgNames) ?>" ;
