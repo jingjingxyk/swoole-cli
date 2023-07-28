@@ -27,8 +27,8 @@ return function (Preprocessor $p) {
             LIBS="$(pkg-config     --libs-only-l   --static \$PACKAGES)" \
             ./configure \
             --prefix={$freetype_prefix} \
-            --enable-static \
-            --disable-shared \
+            --enable-shared=no \
+            --enable-static=yes \
             --with-zlib=yes \
             --with-bzip2=yes \
             --with-png=yes \
