@@ -50,7 +50,7 @@ EOF
     $ld=" {$brotli_prefix}/lib/libbrotli.a {$brotli_prefix}/lib/libbrotlicommon.a {$brotli_prefix}/lib/libbrotlidec.a {$brotli_prefix}/lib/libbrotlienc.a ";
     $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $brotli_prefix . '/include');
     $p->withVariable('LDFLAGS', '$LDFLAGS -L' . $brotli_prefix . '/lib ' . $ld);
-    $p->withVariable('LIBS', '$LIBS  -lbrotlicommon -lbrotlienc  -lbrotlidec  ');
+    $p->withVariable('LIBS', '$LIBS -lbrotli -lbrotlicommon -lbrotlienc  -lbrotlidec  ');
 };
 // libbrotlicommon.a 应该优先被链接
 // 链接顺序问题
