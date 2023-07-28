@@ -18,8 +18,8 @@ return function (Preprocessor $p) {
                 'libgav1',
                 <<<EOF
                 git clone -b main --depth 1  https://chromium.googlesource.com/codecs/libgav1
-                # mkdir -p libgav1/third_party/abseil-cpp
-                # git clone -b 20220623.0 --depth 1 https://github.com/abseil/abseil-cpp.git libgav1/third_party/abseil-cpp
+                mkdir -p libgav1/third_party/abseil-cpp
+                git clone -b 20220623.0 --depth 1 https://github.com/abseil/abseil-cpp.git libgav1/third_party/abseil-cpp
 EOF
             )
             ->withPrefix($libgav1_prefix)
@@ -35,8 +35,6 @@ EOF
                 -DBUILD_SHARED_LIBS=OFF  \
                 -DBUILD_STATIC_LIBS=ON \
                 -DLIBGAV1_ENABLE_TESTS=OFF \
-                -DABSL_ENABLE_INSTALL=OFF \
-                -DBUILD_TESTING=OFF \
                 -DLIBGAV1_ENABLE_EXAMPLES=OFF \
                 -DLIBGAV1_THREADPOOL_USE_STD_MUTEX=1
 
