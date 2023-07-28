@@ -271,6 +271,7 @@ make_clean() {
 }
 
 show_lib_pkg() {
+    set +x
 <?php foreach ($this->libraryList as $item) : ?>
     <?php if (!empty($item->pkgNames)) : ?>
         echo -e "[<?= $item->name ?>] pkg-config : \n<?= implode(' ', $item->pkgNames) ?>" ;
@@ -283,6 +284,7 @@ show_lib_pkg() {
 }
 
 show_lib_dependent_pkg() {
+    set +x
     declare -A array_name
 <?php foreach ($this->libraryList as $item) :?>
     <?php
@@ -305,6 +307,7 @@ show_lib_dependent_pkg() {
 }
 
 help() {
+    set +x
     echo "./make.sh docker-build"
     echo "./make.sh docker-bash"
     echo "./make.sh docker-commit"
