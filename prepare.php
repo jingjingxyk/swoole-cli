@@ -31,9 +31,15 @@ if ($p->getInputOption('without-docker') || ($p->getOsType() == 'macos')) {
     $p->setBuildDir(__DIR__ . '/thirdparty');
 }
 
-if ($p->getInputOption('with-override-default-enabled-ext')) {
-    $p->setExtEnabled([]);
+$ext=$p->getInputOption('with-override-default-enabled-ext');
+if (!empty($ext)) {
+    $data = [];
+    if (is_string($ext)) {
+        $data=explode(',', $ext);
+    }
+    $p->setExtEnabled($data);
 }
+
 
 if ($p->getInputOption('with-global-prefix')) {
     $p->setGlobalPrefix($p->getInputOption('with-global-prefix'));
