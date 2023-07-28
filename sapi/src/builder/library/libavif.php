@@ -19,7 +19,7 @@ return function (Preprocessor $p) {
             ->withUrl('https://github.com/AOMediaCodec/libavif/archive/refs/tags/v0.11.1.tar.gz')
             ->withFile('libavif-v0.11.1.tar.gz')
             ->withPrefix($libavif_prefix)
-            ->withBuildLibraryCached(false)
+            ->withBuildLibraryCached(true)
             ->withCleanBuildDirectory()
             ->withCleanPreInstallDirectory($libavif_prefix)
             ->withConfigure(
