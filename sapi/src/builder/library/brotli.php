@@ -55,7 +55,8 @@ EOF
 // libbrotlicommon.a 应该优先被链接
 // 链接顺序问题
 // Library order in static linking
-// https://eli.thegreenplace.net/2013/07/09/library-order-in-static-linking
+// 参考  https://eli.thegreenplace.net/2013/07/09/library-order-in-static-linking
 # 参考 https://bbs.huaweicloud.com/blogs/373470
+#参考   https://ftp.gnu.org/old-gnu/Manuals/ld-2.9.1/html_node/ld_3.html
 
 //  -Wl,–whole-archive -Wl,–start-group a.o b.o c.o main.o -lf -ld -le -L./ -lc -Wl,–end-group -Wl,-no-whole-archive
