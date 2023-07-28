@@ -12,14 +12,14 @@ return function (Preprocessor $p) {
                 'https://chromium.googlesource.com/codecs/libgav1/+/refs/heads/main/LICENSE',
                 Library::LICENSE_APACHE2
             )
-            ->withFile('libgav1.tar.gz')
+            ->withFile('libgav1-latest.tar.gz')
             ->withManual('https://chromium.googlesource.com/codecs/libgav1/+/refs/heads/main')
             ->withDownloadScript(
                 'libgav1',
                 <<<EOF
-                git clone --depth 1  https://chromium.googlesource.com/codecs/libgav1
-                mkdir -p libgav1/third_party/abseil-cpp
-                git clone -b 20220623.0 --depth 1 https://github.com/abseil/abseil-cpp.git libgav1/third_party/abseil-cpp
+                git clone -b main --depth 1  https://chromium.googlesource.com/codecs/libgav1
+                # mkdir -p libgav1/third_party/abseil-cpp
+                # git clone -b 20220623.0 --depth 1 https://github.com/abseil/abseil-cpp.git libgav1/third_party/abseil-cpp
 EOF
             )
             ->withPrefix($libgav1_prefix)
@@ -38,11 +38,12 @@ EOF
                 -DABSL_ENABLE_INSTALL=OFF \
                 -DBUILD_TESTING=OFF \
                 -DLIBGAV1_ENABLE_EXAMPLES=OFF \
+                -DLIBGAV1_THREADPOOL_USE_STD_MUTEX=1
 
 EOF
             )
             ->withPkgName('libgav1')
             ->withBinPath($libgav1_prefix . '/bin/')
-            ->withDependentLibraries('absl')
+        //->withDependentLibraries('absl') //测试需要它，更多请查看文档
     );
 };
