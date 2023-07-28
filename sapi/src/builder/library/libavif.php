@@ -59,8 +59,9 @@ EOF
                 'aom',
                 'svt_av1',
                 'dav1d',
-
-            ) #   // 'libgav1'  'libyuv',  'libsharpyuv','rav1e'
-    # 'libgav1' 依赖 absl
+                'libgav1'
+            )
+        #   'libyuv',  'libsharpyuv','rav1e'
+        #   'libgav1' 依赖 absl
     );
 };
