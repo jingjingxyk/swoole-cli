@@ -667,11 +667,12 @@ EOF;
                     $this->deleteDirectoryIfExists($dst_dir);
                 }
                 $this->mkdirIfNotExists($dst_dir, 0777, true);
-                $cached=$dst_dir . '/..completed';
+                $cached=$dst_dir . '/.completed';
                 if (file_exists($cached) && $ext->enableBuildLibraryCached) {
                     echo 'ext/'.$ext_name . ' cached ';
                 } else {
                     echo `tar --strip-components=1 -C $dst_dir -xf {$ext->path}`;
+                    touch($cached);
                 }
             }
         }
