@@ -92,6 +92,7 @@ class Preprocessor
      * @var array|string[]
      */
     protected array $extEnabled = [
+        'swoole',
         'opcache',
         'curl',
         'iconv',
@@ -126,7 +127,6 @@ class Preprocessor
         'xml',
         'gd',
         'redis',
-        'swoole',
         'yaml',
         'imagick',
         'mongodb',
