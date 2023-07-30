@@ -92,7 +92,6 @@ class Preprocessor
      * @var array|string[]
      */
     protected array $extEnabled = [
-        'swoole',
         'opcache',
         'curl',
         'iconv',
@@ -130,6 +129,7 @@ class Preprocessor
         'yaml',
         'imagick',
         'mongodb',
+        'swoole',
     ];
     protected array $extEnabledBuff = [];
     protected array $endCallbacks = [];

@@ -194,7 +194,7 @@ export_variables() {
     LDFLAGS=""
     LIBS=""
     # LIBS=" $LIBS -Wl,--whole-archive -Wl,--start-group "
-    # LIBS=" -Wl,--start-group  "
+    LIBS=" -Wl,--start-group  "
     # LDFLAGS=" -Wl,--start-group  "
 
 <?php foreach ($this->variables as $name => $value) : ?>
@@ -204,7 +204,7 @@ export_variables() {
     export  <?= key($value) ?>="<?= current($value) ?>"
 <?php endforeach; ?>
     # export  LIBS=" $LIBS -Wl,--end-group -Wl,--no-whole-archive "
-    # export  LIBS=" $LIBS -Wl,--end-group   "
+    export  LIBS=" $LIBS -Wl,--end-group   "
     # export  LDFLAGS="$LDFLAGS $LIBS -Wl,--end-group  "
 
 
