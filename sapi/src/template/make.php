@@ -236,6 +236,7 @@ make_config() {
     export_variables
     echo $LDFLAGS > ldflags.log
     echo $CPPFLAGS > cppflags.log
+    echo $LIBS > LIBS.log
 
     ./configure $OPTIONS
 }
