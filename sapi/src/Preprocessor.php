@@ -662,7 +662,7 @@ EOF;
                 }
                 if (($ext->enableLatestTarball || !$ext->enableBuildLibraryCached)
                     &&
-                    (!empty($ext->peclVersion) ||$ext->enableDownloadScript ||!empty($ext->url))
+                    (!empty($ext->peclVersion) || $ext->enableDownloadScript ||!empty($ext->url))
                 ) {
                     $this->deleteDirectoryIfExists($dst_dir);
                 }
