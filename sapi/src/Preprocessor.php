@@ -143,7 +143,7 @@ class Preprocessor
 
     protected string $proxyConfig = '';
 
-    protected string $httpProxy= '';
+    protected string $httpProxy = '';
 
     protected bool $installLibraryCached = false;
 
@@ -362,7 +362,7 @@ class Preprocessor
     public function setProxyConfig(string $shell = '', string $httpProxy = ''): static
     {
         $this->proxyConfig = $shell;
-        $this->httpProxy=$httpProxy;
+        $this->httpProxy = $httpProxy;
         return $this;
     }
 
@@ -379,7 +379,7 @@ class Preprocessor
 
     public function setExtEnabled(array $extEnabled = []): static
     {
-        $this->extEnabled=array_merge($this->extEnabledBuff, $extEnabled);
+        $this->extEnabled = array_merge($this->extEnabledBuff, $extEnabled);
         return $this;
     }
 
@@ -434,7 +434,8 @@ class Preprocessor
         string $file,
         string $md5sum,
         string $downloadScript,
-    ): void {
+    ): void
+    {
         echo PHP_EOL;
         echo $downloadScript;
         echo PHP_EOL;
@@ -588,7 +589,7 @@ EOF;
                 if (empty($ext->file)) {
                     $ext->file = $ext->name . '.tgz';
                 }
-                $ext->url='';
+                $ext->url = '';
             }
             $ext->path = $this->extensionDir . '/' . $ext->file;
 
@@ -616,7 +617,7 @@ EOF;
                 if (!file_exists($ext->path)) {
                     $httpProxyConfig = $this->getProxyConfig();
                     if (!$ext->enableHttpProxy) {
-                        $httpProxyConfig='';
+                        $httpProxyConfig = '';
                     }
                     if ($ext->enableDownloadScript && !$ext->enableDownloadWithMirrorURL) {
                         if (!empty($ext->downloadScript) && !empty($ext->downloadDirName)) {
@@ -655,21 +656,21 @@ EOF;
                 }
 
                 $dst_dir = "{$this->rootDir}/ext/{$ext->name}";
-                $ext_name=$ext->name;
+                $ext_name = $ext->name;
                 if (!empty($ext->aliasName)) {
                     $dst_dir = "{$this->rootDir}/ext/{$ext->aliasName}";
-                    $ext_name=$ext->aliasName;
+                    $ext_name = $ext->aliasName;
                 }
                 if (($ext->enableLatestTarball || !$ext->enableBuildLibraryCached)
                     &&
-                    (!empty($ext->peclVersion) || $ext->enableDownloadScript ||!empty($ext->url))
+                    (!empty($ext->peclVersion) || $ext->enableDownloadScript || !empty($ext->url))
                 ) {
                     $this->deleteDirectoryIfExists($dst_dir);
                 }
                 $this->mkdirIfNotExists($dst_dir, 0777, true);
-                $cached=$dst_dir . '/.completed';
+                $cached = $dst_dir . '/.completed';
                 if (file_exists($cached) && $ext->enableBuildLibraryCached) {
-                    echo 'ext/'.$ext_name . ' cached ';
+                    echo 'ext/' . $ext_name . ' cached ';
                 } else {
                     echo `tar --strip-components=1 -C $dst_dir -xf {$ext->path}`;
                     if ($ext->enableBuildLibraryCached) {
@@ -920,7 +921,7 @@ EOF;
                     }
                     if ($fileinfo->islink()) {
                         throw new Exception(
-                            'file is '. $fileinfo->getPathname() .' link ; The real path is '.$fileinfo->getRealPath()
+                            'file is ' . $fileinfo->getPathname() . ' link ; The real path is ' . $fileinfo->getRealPath()
                         );
                     }
                     if ($fileinfo->isFile()) {
