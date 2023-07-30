@@ -11,13 +11,21 @@ class Library extends Project
     public string $ldflags = '';
 
     public string $buildScript = '';
+
     public string $makeOptions = '';
+
     public string $makeVariables = '';
+
     public string $makeInstallCommand = 'install';
+
     public string $makeInstallOptions = '';
+
     public string $beforeInstallScript = '';
+
     public string $afterInstallScript = '';
+
     public string $pkgConfig = '';
+
     public array $pkgNames = [];
 
     public string $prefix = '/usr';
@@ -33,6 +41,8 @@ class Library extends Project
     public bool $enableBuildLibraryCached = true;
 
     public string $preInstallCommand = '';
+
+    public bool $enableBuildLibraryHttpProxy = false;
 
     public function withMirrorUrl(string $url): static
     {
@@ -150,15 +160,15 @@ class Library extends Project
         return $this;
     }
 
-    public function withBuildLibraryCached(bool $enableBuildLibraryCached): static
-    {
-        $this->enableBuildLibraryCached = $enableBuildLibraryCached;
-        return $this;
-    }
-
     public function withPreInstallCommand(string $preInstallCommand): static
     {
         $this->preInstallCommand = $preInstallCommand;
+        return $this;
+    }
+
+    public function withBuildLibraryHttpProxy(bool $enableBuildLibraryHttpProxy = true): static
+    {
+        $this->enableBuildLibraryHttpProxy = $enableBuildLibraryHttpProxy;
         return $this;
     }
 }
