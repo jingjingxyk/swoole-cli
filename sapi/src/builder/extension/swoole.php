@@ -12,6 +12,8 @@ return function (Preprocessor $p) {
     $options .= ' --with-nghttp2-dir=' . NGHTTP2_PREFIX;
 
     if ($p->getInputOption('with-swoole-pgsql')) {
+        $p->withExportVariable('LIBPQ_CFLAGS', '$(pkg-config  --cflags --static libpq)');
+        $p->withExportVariable('LIBPQ_LIBS', '$(pkg-config    --libs   --static libpq)');
         $options .= ' --enable-swoole-pgsql';
         $depends[] = 'pgsql';
     }
