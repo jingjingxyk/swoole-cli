@@ -211,6 +211,12 @@ export_variables() {
 # 链接顺序问题
 # 搜索 静态库的链接顺序
 # 参考 https://bbs.huaweicloud.com/blogs/373470
+
+<?php if (isset($this->libraryMap['pgsql'])) : ?>
+    export LIBPQ_CFLAGS=$(pkg-config  --cflags --static libpq);
+    export LIBPQ_LIBS=$(pkg-config    --libs   --static libpq);
+<?php endif;?>
+
     result_code=$?
     [[ $result_code -ne 0 ]] &&  echo " [ export_variables  FAILURE]" && exit  $result_code;
     return 0
