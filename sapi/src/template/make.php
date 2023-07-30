@@ -443,11 +443,13 @@ elif [ "$1" = "show-lib-dependent-pkg" ] ;then
     show_lib_dependent_pkgs "$2"
     exit 0
 elif [ "$1" = "list-library" ] ;then
+    set +x
 <?php foreach ($this->libraryList as $item) : ?>
     echo "<?= $item->name ?>"
 <?php endforeach; ?>
     exit 0
 elif [ "$1" = "list-extension" ] ;then
+    set +x
 <?php foreach ($this->extensionList as $item) : ?>
     echo "<?= $item->name ?>"
 <?php endforeach; ?>
