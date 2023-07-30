@@ -672,7 +672,9 @@ EOF;
                     echo 'ext/'.$ext_name . ' cached ';
                 } else {
                     echo `tar --strip-components=1 -C $dst_dir -xf {$ext->path}`;
-                    touch($cached);
+                    if ($ext->enableBuildLibraryCached) {
+                        touch($cached);
+                    }
                 }
             }
         }
