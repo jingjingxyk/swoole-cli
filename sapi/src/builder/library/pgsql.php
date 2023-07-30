@@ -71,10 +71,10 @@ return function (Preprocessor $p) {
 
             make -C  src/common install
 
-            make -C  src/backend/port install
+            # make -C  src/backend/port install
             make -C  src/port install
 
-            make -C  src/backend/libpq install
+            # make -C  src/backend/libpq install
             make -C  src/interfaces/libpq install
 
 EOF
