@@ -658,7 +658,7 @@ EOF;
                 if (!empty($ext->aliasName)) {
                     $dst_dir = "{$this->rootDir}/ext/{$ext->aliasName}";
                 }
-                if ($ext->enableLatestTarball
+                if (($ext->enableLatestTarball || !$ext->enableBuildLibraryCached)
                     &&
                     (!empty($ext->peclVersion) ||$ext->enableDownloadScript ||!empty($ext->url))
                 ) {

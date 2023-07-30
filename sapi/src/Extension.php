@@ -9,6 +9,8 @@ class Extension extends Project
 
     public array $dependentExtensions = [];
 
+    public bool $enableBuildLibraryCached = true;
+
     public function withOptions(string $options): static
     {
         $this->options = $options;
@@ -24,6 +26,12 @@ class Extension extends Project
     public function withDependentExtensions(string ...$extensions): static
     {
         $this->dependentExtensions += $extensions;
+        return $this;
+    }
+
+    public function withBuildLibraryCached(bool $enableBuildLibraryCached): static
+    {
+        $this->enableBuildLibraryCached = $enableBuildLibraryCached;
         return $this;
     }
 }
