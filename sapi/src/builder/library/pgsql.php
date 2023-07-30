@@ -79,7 +79,7 @@ return function (Preprocessor $p) {
 
 EOF
             )
-            ->withBuildLibraryCached(false)
+            //->withBuildLibraryCached(false)
             ->withBuildScript(
                 <<<EOF
 
