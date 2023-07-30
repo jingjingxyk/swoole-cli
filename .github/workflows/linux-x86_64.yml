@@ -107,7 +107,7 @@ jobs:
 
           ./bin/swoole-cli ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php  --list-tests
           ./bin/swoole-cli ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php
-          # ./bin/swoole-cli ./vendor/bin/phpunit ./sapi/src/UnitTest/SwoolePGSQLTest.php
+          ./bin/swoole-cli ./vendor/bin/phpunit ./sapi/src/UnitTest/SwoolePGSQLTest.php
 
       - name: production artifacts
         uses: actions/upload-artifact@v3
