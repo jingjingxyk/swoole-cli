@@ -68,3 +68,20 @@ define("CJSON_PREFIX", $p->getGlobalPrefix() . '/cjson');
 define("GFLAGS_PREFIX", $p->getGlobalPrefix() . '/gflags');
 define("LIBURING_PREFIX", $p->getGlobalPrefix() . '/liburing');
 define("JANSSON_PREFIX", $p->getGlobalPrefix() . '/jansson');
+
+define("LIBEXPAT_PREFIX", $p->getGlobalPrefix() . '/libexpat');
+
+define("LIBAVIF_PREFIX", $p->getGlobalPrefix() . '/libavif');
+define("LIBYUV_PREFIX", $p->getGlobalPrefix() . '/libyuv');
+define("DAV1D_PREFIX", $p->getGlobalPrefix() . '/dav1d');
+define("LIBGAV1_PREFIX", $p->getGlobalPrefix() . '/libgav1');
+define("AOM_PREFIX", $p->getGlobalPrefix() . '/aom');
+define("SVT_AV1_PREFIX", $p->getGlobalPrefix() . '/svt_av1');
+define("LIBSHARPYUV_PREFIX", $p->getGlobalPrefix() . '/libsharpyuv');
+define("LIBTIFF_PREFIX", $p->getGlobalPrefix() . '/libtiff');
+define("LIBRAW_PREFIX", $p->getGlobalPrefix() . '/libraw');
+define("LCMS2_PREFIX", $p->getGlobalPrefix() . '/lcms2');
+
+define("ABSL_PREFIX", $p->getGlobalPrefix() . '/absl');
+define("RAV1E_PREFIX", $p->getGlobalPrefix() . '/rav1e');
+define("SDL2_PREFIX", $p->getGlobalPrefix() . '/sdl2');
