@@ -335,6 +335,11 @@ class Preprocessor
         return $this;
     }
 
+    public function getMaxJob(): string
+    {
+        return $this->maxJob;
+    }
+
     /**
      * set CPU  logical processors
      * @param string $logicalProcessors
@@ -433,8 +438,7 @@ class Preprocessor
         string $file,
         string $md5sum,
         string $downloadScript,
-    ): void
-    {
+    ): void {
         echo PHP_EOL;
         echo $downloadScript;
         echo PHP_EOL;
@@ -475,7 +479,6 @@ class Preprocessor
      */
     public function addLibrary(Library $lib): void
     {
-
         if ($lib->enableDownloadScript || !empty($lib->url)) {
             if (empty($lib->file)) {
                 if ($lib->enableDownloadScript) {
@@ -656,11 +659,12 @@ EOF;
                 }
 
                 $dst_dir = "{$this->rootDir}/ext/{$ext->name}";
-
+                $ext_name = $ext->name;
                 if (!empty($ext->aliasName)) {
                     $dst_dir = "{$this->rootDir}/ext/{$ext->aliasName}";
+                    $ext_name = $ext->aliasName;
                 }
-                if ($ext->enableLatestTarball
+                if (($ext->enableLatestTarball || !$ext->enableBuildLibraryCached)
                     &&
                     (!empty($ext->peclVersion) || $ext->enableDownloadScript || !empty($ext->url))
                 ) {
@@ -668,7 +672,15 @@ EOF;
                 }
 
                 $this->mkdirIfNotExists($dst_dir, 0777, true);
-                echo `tar --strip-components=1 -C $dst_dir -xf {$ext->path}`;
+                $cached = $dst_dir . '/.completed';
+                if (file_exists($cached) && $ext->enableBuildLibraryCached) {
+                    echo 'ext/' . $ext_name . ' cached ';
+                } else {
+                    echo `tar --strip-components=1 -C $dst_dir -xf {$ext->path}`;
+                    if ($ext->enableBuildLibraryCached) {
+                        touch($cached);
+                    }
+                }
             }
         }
         $this->extensionList[] = $ext;
@@ -1095,6 +1107,7 @@ EOF;
 
         $this->generateFile(__DIR__ . '/template/make-install-deps.php', $this->rootDir . '/make-install-deps.sh');
         $this->generateFile(__DIR__ . '/template/make.php', $this->rootDir . '/make.sh');
+        $this->generateFile(__DIR__ . '/template/make-env.php', $this->rootDir . '/make-env.sh');
         $this->mkdirIfNotExists($this->rootDir . '/bin');
         $this->generateFile(__DIR__ . '/template/license.php', $this->rootDir . '/bin/LICENSE');
         $this->generateFile(__DIR__ . '/template/credits.php', $this->rootDir . '/bin/credits.html');
