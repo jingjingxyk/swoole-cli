@@ -80,7 +80,7 @@ jobs:
           # composer update --no-dev  --optimize-autoloader
           composer update  --optimize-autoloader
 
-          php prepare.php --without-docker=1  +ds +apcu  +xlswriter +ssh2 +pgsql +pdo_pgsql -mongodb --with-build-type=release --with-swoole-pgsql=1 --with-install-library-cached=1
+          php prepare.php --without-docker=1  +ds +apcu  +xlswriter +ssh2 +pgsql +pdo_pgsql -mongodb --with-build-type=release --with-swoole-pgsql=1 --with-install-library-cached=1 --with-libavif=1
 
       - name: Cache all-library
         uses: actions/cache@v3
@@ -93,7 +93,12 @@ jobs:
         # if: ${{ steps.all-library-cache.outputs.cache-hit != 'true' }}
         run: |
           export PATH=${GITHUB_WORKSPACE}/bin/runtime:$PATH
+          bash make-install-deps.sh
+
           bash sapi/quickstart/mark-install-library-cached.sh
+          rm -rf /usr/local/swoole-cli/pgsql
+          rm -rf /usr/local/swoole-cli/freetype
+
           bash ./make.sh all-library
 
       - name: Build
