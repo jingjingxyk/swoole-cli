@@ -492,8 +492,10 @@ class Preprocessor
             }
 
             if (!empty($this->getInputOption('with-download-mirror-url'))) {
-                $lib->url = $this->getInputOption('with-download-mirror-url') . '/libraries/' . $lib->file;
-                $lib->enableDownloadWithMirrorURL = true;
+                if ($lib->enableDownloadWithOriginURL === false) {
+                    $lib->url = $this->getInputOption('with-download-mirror-url') . '/libraries/' . $lib->file;
+                    $lib->enableDownloadWithMirrorURL = true;
+                }
             }
             $lib->path = $this->libraryDir . '/' . $lib->file;
 
@@ -608,8 +610,10 @@ EOF;
             $ext->path = $this->extensionDir . '/' . $ext->file;
 
             if (!empty($this->getInputOption('with-download-mirror-url'))) {
-                $ext->url = $this->getInputOption('with-download-mirror-url') . '/extensions/' . $ext->file;
-                $ext->enableDownloadWithMirrorURL = true;
+                if ($ext->enableDownloadWithOriginURL === false) {
+                    $ext->url = $this->getInputOption('with-download-mirror-url') . '/extensions/' . $ext->file;
+                    $ext->enableDownloadWithMirrorURL = true;
+                }
             }
 
             // 检查文件的 MD5，若不一致删除后重新下载
