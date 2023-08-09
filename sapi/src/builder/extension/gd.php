@@ -26,9 +26,10 @@ return function (Preprocessor $p) {
 
         $cmd = <<<EOF
                 cd {$p->getPhpSrcDir()}/
-                if [[ ! -f ext/gd/config.m4.backup ]] ;then
-                   sed -i.backup "180c test -f ext/gd/config.m4" ext/gd/config.m4
-                fi
+
+            sed -i "s/-DHAVE_XPM/ /g" ext/gd/config.m4
+            sed -i "s/#define HAVE_GD_XPM 1/ /g" main/php_config.h
+
 
 EOF;
 

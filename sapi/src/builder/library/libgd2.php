@@ -50,28 +50,11 @@ return function (Preprocessor $p) {
 
 
 
-:<<'_EOF_'
-
-        ./configure --help
-        # freetype2 libbrotlicommon libbrotlidec  libbrotlienc
-        PACKAGES='zlib libpng  libjpeg  libturbojpeg libwebp  libwebpdecoder  libwebpdemux  libwebpmux libtiff-4 libavif '
-        CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$PACKAGES ) " \
-        LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES ) " \
-        LIBS="$(pkg-config      --libs-only-l    --static \$PACKAGES ) " \
-        ./configure \
-        --prefix={$libgd_prefix} \
-        --enable-shared=no \
-        --enable-static=yes \
-        --with-libiconv-prefix={$libiconv_prefix} \
-        --with-freetype={$freetype_prefix} \
-
-_EOF_
-
 EOF
         )
         ->withBinPath($libgd_prefix . '/bin/')
         ->withPkgName('gdlib')
-        ->depends('zlib', 'libwebp', 'libiconv', 'libjpeg', 'freetype')
+        ->withDependentLibraries('zlib', 'libwebp', 'libiconv', 'libjpeg', 'freetype')
     ;
 
     $p->addLibrary($lib);

@@ -285,18 +285,14 @@ make_config() {
     make_ext
     make_ext_hook
 
-:<<'EOF'
-    # 替换指定行
-    test -f ./configure &&  rm ./configure
-    sed -i.bak '244s/PHP_GD_XPM/ /' ext/gd/config.m4
-    sed -i.bak '313s/PHP_GD_XPM/ /' ext/gd/config.m4
-    sed -i.bak 's@$PHP_FREETYPE_DIR /usr/local@$PHP_FREETYPE_DIR <?= FREETYPE_PREFIX ?>@' ext/gd/config.m4
-    sed -i.bak '157,182d'   ext/gd/config.m4
-EOF
      cd <?= $this->phpSrcDir . PHP_EOL ?>
      echo $OPTIONS
     ./buildconf --force
 
+<?php if (isset($this->extensionMap['gd'])) : ?>
+    sed -i "s/-DHAVE_XPM/ /g" ext/gd/config.m4
+    sed -i "s/\#define HAVE_GD_XPM 1/ /g" main/php_config.h
+<?php endif;?>
     ./configure --help
 
      export_variables

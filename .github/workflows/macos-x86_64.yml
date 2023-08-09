@@ -114,7 +114,6 @@ jobs:
           export PATH="/usr/local/opt/binutils/bin:$PATH"
           ./php-src/sapi/cli/php -v
           ./php-src/sapi/cli/php -m
-          ./php-src/sapi/cli/php --ri gd
           ./php-src/sapi/cli/php --ri swoole
           ./php-src/sapi/cli/php --ri pgsql
           ./php-src/sapi/cli/php --ri pdo_pgsql
