@@ -28,7 +28,9 @@ return function (Preprocessor $p) {
                 cd {$p->getPhpSrcDir()}/
 
             sed -i "s/-DHAVE_XPM/ /g" ext/gd/config.m4
-            sed -i "s/#define HAVE_GD_XPM 1/ /g" main/php_config.h
+
+            # sed -i '221d' ext/gd/config.m4
+            # sed -i '287d' ext/gd/config.m4
 
 
 EOF;

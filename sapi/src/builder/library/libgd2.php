@@ -20,6 +20,7 @@ return function (Preprocessor $p) {
         ->withPrefix($libgd_prefix)
         ->withCleanBuildDirectory()
         ->withCleanPreInstallDirectory($libgd_prefix)
+        //->withBuildLibraryCached(false)
         ->withConfigure(
             <<<EOF
         mkdir -p build

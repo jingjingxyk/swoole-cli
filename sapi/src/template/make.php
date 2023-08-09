@@ -290,7 +290,6 @@ make_config() {
     ./buildconf --force
 
 <?php if (isset($this->extensionMap['gd'])) : ?>
-    sed -i "s/-DHAVE_XPM/ /g" ext/gd/config.m4
     sed -i "s/\#define HAVE_GD_XPM 1/ /g" main/php_config.h
 <?php endif;?>
     ./configure --help
