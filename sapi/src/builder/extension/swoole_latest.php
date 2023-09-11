@@ -14,11 +14,7 @@ return function (Preprocessor $p) {
     $options .= ' --with-openssl-dir=' . OPENSSL_PREFIX;
     $options .= ' --with-brotli-dir=' . BROTLI_PREFIX;
     $options .= ' --with-nghttp2-dir=' . NGHTTP2_PREFIX;
-    $options .= ' --enable-swoole-pgsql ';
     $options .= ' --with-swoole-odbc=unixODBC,' . UNIX_ODBC_PREFIX . ' ';
-    if ($p->getInputOption('with-swoole-pgsql')) {
-        $options .= ' ';
-    }
 
     $ext = (new Extension('swoole_latest'))
         ->withAliasName('swoole')
@@ -33,7 +29,9 @@ return function (Preprocessor $p) {
             <<<EOF
             git clone -b master --depth=1 https://github.com/swoole/swoole-src.git
 EOF
-        );
+        )
+        ->withDependentExtensions('curl', 'openssl', 'sockets', 'mysqlnd', 'pdo')
+    ;
     call_user_func_array([$ext, 'withDependentLibraries'], $depends);
     $p->addExtension($ext);
 };
