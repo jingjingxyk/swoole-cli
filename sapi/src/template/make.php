@@ -58,6 +58,10 @@ make_<?=$item->name?>() {
             cd <?= $this->workDir ?>/
             return 0
         fi
+    <?php else : ?>
+        if [ -d <?=$this->getBuildDir()?>/<?=$item->name?>/ ]; then
+        rm -rf <?=$this->getBuildDir()?>/<?=$item->name?>/
+        fi
     <?php endif; ?>
 
     <?php if ($item->cleanBuildDirectory) : ?>
@@ -88,6 +92,9 @@ make_<?=$item->name?>() {
 
     <?php if ($item->enableBuildLibraryHttpProxy) : ?>
         <?= $this->getProxyConfig() . PHP_EOL ?>
+        <?php if ($item->enableBuildLibraryGitProxy) :?>
+            <?= $this->getGitProxyConfig() . PHP_EOL ?>
+        <?php endif;?>
     <?php endif;?>
 
     # use build script replace  configure、make、make install
@@ -141,6 +148,9 @@ __EOF__
         unset HTTP_PROXY
         unset HTTPS_PROXY
         unset NO_PROXY
+        <?php if ($item->enableBuildLibraryGitProxy) :?>
+        unset GIT_PROXY_COMMAND
+        <?php endif;?>
     <?php endif;?>
 
     <?php if ($item->enableBuildLibraryCached) : ?>
@@ -312,7 +322,7 @@ make_config() {
 
     # more info https://stackoverflow.com/questions/19456518/error-when-using-sed-with-find-command-on-os-x-invalid-command-code
 <?php if ($this->getOsType()=='linux') : ?>
-     sed -i.backup 's/-export-dynamic/-all-static/g' Makefile
+    sed -i.backup 's/-export-dynamic/-all-static/g' Makefile
 <?php endif ; ?>
 
 }
@@ -336,6 +346,10 @@ make_build() {
     # make install
     mkdir -p <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/
     cp -f <?= $this->phpSrcDir  ?>/sapi/cli/php <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/
+    echo "<?= $this->phpSrcDir  ?>/sapi/cli/php -v"
+    <?= $this->phpSrcDir  ?>/sapi/cli/php -v
+    echo "<?= BUILD_PHP_INSTALL_PREFIX ?>/bin/php -v"
+    <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/php -v
 
     # elfedit --output-osabi linux sapi/cli/php
 }
