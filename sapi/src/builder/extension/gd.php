@@ -13,6 +13,7 @@ return function (Preprocessor $p) {
     $options .= ' --with-freetype-dir=' . FREETYPE_PREFIX;
     $options .= ' --with-xpm-dir=no';
 
+
     //$options .= ' --with-gettext=' ;
     $p->addExtension(
         (new Extension('gd'))
@@ -32,9 +33,12 @@ return function (Preprocessor $p) {
             # sed -i '221d' ext/gd/config.m4
             # sed -i '287d' ext/gd/config.m4
 
-
 EOF;
 
         return $cmd;
     });
+
+    $p->withExportVariable('FREETYPE2_CFLAGS', '$(pkg-config  --cflags --static  libbrotlicommon libbrotlidec libbrotlienc freetype2 zlib libpng)');
+    $p->withExportVariable('FREETYPE2_LIBS', '$(pkg-config    --libs   --static  libbrotlicommon libbrotlidec libbrotlienc freetype2 zlib libpng)');
+
 };
