@@ -70,8 +70,8 @@ jobs:
       - name: Show Build Result
         uses: addnab/docker-run-action@v3
         with:
-          image: docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-3.17-php7-v1.0.0-aarch64-20230614T155341Z
-          options: -v ${{ github.workspace }}:/work -w /work
+          image: docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-3.17-php7-v1.0.0-aarch64-20230917T133332Z
+          options: -v ${{ github.workspace }}:/work -w /work -e BUILD_PHP_VERSION=${{ env.BUILD_PHP_VERSION }}
           run: |
             ./php-src/sapi/cli/php -v
             ./php-src/sapi/cli/php -m
