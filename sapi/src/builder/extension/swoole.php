@@ -17,11 +17,11 @@ return function (Preprocessor $p) {
         ->withLicense('https://github.com/swoole/swoole-src/blob/master/LICENSE', Extension::LICENSE_APACHE2)
         ->withManual('https://wiki.swoole.com/#/')
         ->withOptions($options)
-        ->withFile('swoole-v4.8.x.tar.gz')
+        ->withFile('swoole-4.8.x.tar.gz')
         ->withDownloadScript(
             'swoole-src',
             <<<EOF
-            git clone -b v4.8.x --depth=1  https://github.com/swoole/swoole-src.git
+            git clone -b 4.8.x --depth=1  https://github.com/swoole/swoole-src.git
 
 EOF
         )
