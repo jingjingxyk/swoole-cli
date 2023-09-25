@@ -92,6 +92,7 @@ jobs:
         # if: ${{ steps.all-library-cache.outputs.cache-hit != 'true' }}
         run: |
           export PATH=${GITHUB_WORKSPACE}/bin/runtime:$PATH
+          sh sapi/quickstart/clean-no-match-library-for-php.sh
           bash make-install-deps.sh
 
           # bash sapi/quickstart/mark-install-library-cached.sh
