@@ -75,8 +75,6 @@ EOF
                 'brotli',
                 'libzstd',
                 'nghttp2',
-                'nghttp3',
-                'ngtcp2',
                 'libssh2'
             ) # 'libidn2',
     );
