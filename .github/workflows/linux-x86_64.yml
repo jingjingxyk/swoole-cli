@@ -96,7 +96,7 @@ jobs:
             head -n 20 make.sh
 
             bash make-install-deps.sh
-            sh sapi/quickstart/clean-no-match-library-for-php.sh
+
             # bash sapi/quickstart/mark-install-library-cached.sh
 
             bash ./make.sh all-library
