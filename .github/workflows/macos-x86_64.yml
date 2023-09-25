@@ -79,7 +79,7 @@ jobs:
 
           composer update --no-dev  --optimize-autoloader
 
-          php prepare.php --without-docker=1 +apcu +ds +xlswriter +ssh2 +pgsql +pdo_pgsql -mongodb -gd -zip -imagick --with-build-type=release --with-swoole-pgsql=1 --with-install-library-cached=1
+          php prepare.php --without-docker=1 +apcu +ds +xlswriter +ssh2 +pgsql +pdo_pgsql  -gd -zip -imagick --with-build-type=release  --with-install-library-cached=1
 
       - name: Cache all-library
         uses: actions/cache@v3
@@ -118,8 +118,6 @@ jobs:
           otool -L ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
           # greadelf -h ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
           ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -r "echo PHP_VERSION;"
-          # ./php-src/sapi/cli/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php  --list-tests
-          # ./php-src/sapi/cli/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php
 
       - name: Archive production artifacts
         uses: actions/upload-artifact@v3

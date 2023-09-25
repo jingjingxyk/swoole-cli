@@ -87,15 +87,16 @@ jobs:
             set -eux
             # export PATH=/work/bin/runtime:$PATH  # 容器已经内置 php 和 composer 容器
             sh  sapi/quickstart/linux/alpine-init.sh --mirror ""
+
             composer update --no-dev  --optimize-autoloader
 
-            php prepare.php  +inotify +apcu +ds +xlswriter +ssh2  +pgsql +pdo_pgsql -mongodb -gd -zip -imagick --with-swoole-pgsql=1 ${{ inputs.build_type }} ${{ inputs.build_options }} --with-php-version=${{ env.BUILD_PHP_VERSION }} --with-install-library-cached=1
+            php prepare.php  +inotify +apcu +ds +xlswriter +ssh2  +pgsql +pdo_pgsql  -gd -zip -imagick ${{ inputs.build_type }} ${{ inputs.build_options }} --with-php-version=${{ env.BUILD_PHP_VERSION }} --with-install-library-cached=1
 
             chmod a+x make.sh
             head -n 20 make.sh
 
             bash make-install-deps.sh
-
+            sh sapi/quickstart/clean-no-match-library-for-php.sh
             # bash sapi/quickstart/mark-install-library-cached.sh
 
             bash ./make.sh all-library
@@ -116,9 +117,6 @@ jobs:
           file ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
           readelf -h ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
           ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -r "echo PHP_VERSION;"
-
-          # ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php  --list-tests
-          # ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php
 
       - name: production artifacts
         uses: actions/upload-artifact@v3
