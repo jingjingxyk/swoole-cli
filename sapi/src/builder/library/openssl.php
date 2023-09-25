@@ -12,7 +12,7 @@ return function (Preprocessor $p) {
             ->withHomePage('https://www.openssl.org/')
             ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
             ->withManual('https://www.openssl.org/docs/')
-            ->withUrl('https://github.com/openssl/openssl/releases/download/OpenSSL_1_1_1w/openssl-1.1.1w.tar.gz')
+            ->withUrl('https://github.com/quictls/openssl/archive/refs/tags/openssl-3.0.8-quic1.tar.gz')
             ->withPrefix($openssl_prefix)
             ->withConfigure(
                 <<<EOF
@@ -23,6 +23,7 @@ return function (Preprocessor $p) {
 
 EOF
             )
+            ->withMakeOptions('build_sw')
             ->withMakeInstallCommand('install_sw')
             ->withPkgName('libcrypto')
             ->withPkgName('libssl')
