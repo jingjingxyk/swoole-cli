@@ -102,7 +102,7 @@ jobs:
 
             composer update --no-dev  --optimize-autoloader
 
-            php prepare.php  +inotify +apcu +ds +xlswriter +ssh2 +pgsql +pdo_pgsql +mongodb --with-swoole-pgsql=1 ${{ inputs.build_type }} ${{ inputs.build_options }} --with-php-version=${{ env.BUILD_PHP_VERSION }} --with-install-library-cached=1 --with-libavif=1
+            php prepare.php  +inotify +apcu +ds +xlswriter +ssh2 +pgsql +pdo_pgsql -swoole --with-swoole-pgsql=1 ${{ inputs.build_type }} ${{ inputs.build_options }} --with-php-version=${{ env.BUILD_PHP_VERSION }} --with-install-library-cached=1
 
             chmod a+x make.sh
             head -n 20 make.sh
@@ -122,7 +122,6 @@ jobs:
           ./php-src/sapi/cli/php -v
           ./php-src/sapi/cli/php -m
           ./php-src/sapi/cli/php --ri gd
-          ./php-src/sapi/cli/php --ri swoole
           ./php-src/sapi/cli/php --ri pgsql
           ./php-src/sapi/cli/php --ri pdo_pgsql
           ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -v
@@ -131,7 +130,6 @@ jobs:
           ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -r "echo PHP_VERSION;"
           ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php  --list-tests
           ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/SwoolePGSQLTest.php
 
       - name: production artifacts
         uses: actions/upload-artifact@v3
