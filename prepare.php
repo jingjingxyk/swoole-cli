@@ -22,11 +22,14 @@ $p = Preprocessor::getInstance();
 $p->parseArguments($argc, $argv);
 
 # PHP 默认版本
-$version = '7.3.33';
+
+$php_version = '7.3.33';
+$php_version_id = 703033;
+$php_version_tag = 'php-7.3.33';
 
 if ($p->getInputOption('with-php-version')) {
     $subject = $p->getInputOption('with-php-version');
-    $pattern = '/(\d{1,2})\.(\d{1,2})\.\d{1,2}/';
+    $pattern = '/(\d{1,2})\.(\d{1,2})\.(\d{1,})\w*/';
     $notice = 0;
     if (preg_match($pattern, $subject, $match)) {
         if ((intval($match[1]) == 7) && (intval($match[2]) == 3)) {
@@ -41,15 +44,13 @@ if ($p->getInputOption('with-php-version')) {
         echo PHP_EOL;
         echo '此分支只支持 PHP 7.3 系列版本';
         echo PHP_EOL;
-        echo PHP_EOL;
-        if (is_file(__DIR__ . '/' . 'make.sh')) {
-            unlink(__DIR__ . '/' . 'make.sh');
-        }
         die;
     }
 }
 
-define('BUILD_PHP_VERSION', $version);
+define('BUILD_PHP_VERSION', $php_version);
+define('BUILD_PHP_VERSION_ID', $php_version_id);
+define('BUILD_PHP_VERSION_TAG', $php_version_tag);
 
 
 // Compile directly on the host machine, not in the docker container
