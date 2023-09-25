@@ -3,7 +3,7 @@ name: build-php-cli-linux-aarch64
 on: [ push, pull_request ]
 
 env:
-  BUILD_PHP_VERSION: 8.2.4
+  BUILD_PHP_VERSION: 8.2.7
 
 jobs:
   linux-aarch64:
@@ -51,7 +51,7 @@ jobs:
 
             composer update --no-dev  --optimize-autoloader
 
-            php prepare.php +inotify +apcu +ds +xlswriter +ssh2 +pgsql +pdo_pgsql -mongodb --with-swoole-pgsql=1 --with-install-library-cached=1
+            php prepare.php +inotify +apcu +ds +xlswriter +ssh2 +pgsql +pdo_pgsql  --with-swoole-pgsql=1 --with-install-library-cached=1 --with-libavif=1
 
             chmod a+x make.sh
             head -n 20 make.sh
