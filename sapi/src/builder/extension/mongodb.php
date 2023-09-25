@@ -10,7 +10,6 @@ return function (Preprocessor $p) {
     $p->withExportVariable('PHP_MONGODB_SSL_CFLAGS', '$(pkg-config --cflags --static libcrypto libssl  openssl)');
     $p->withExportVariable('PHP_MONGODB_SSL_LIBS', '$(pkg-config   --libs   --static libcrypto libssl  openssl)');
 
-
     $p->withExportVariable('PHP_MONGODB_ICU', 'yes');
     $p->withExportVariable('PHP_MONGODB_ICU_CFLAGS', '$(pkg-config --cflags --static icu-i18n  icu-io  icu-uc)');
     $p->withExportVariable('PHP_MONGODB_ICU_LIBS', '$(pkg-config   --libs   --static icu-i18n  icu-io  icu-uc)');
@@ -30,7 +29,6 @@ return function (Preprocessor $p) {
     $options .= ' --with-mongodb-client-side-encryption=no ';
     $options .= ' --with-mongodb-snappy=no ';
 
-
     $ext = new Extension('mongodb');
 
     $ext->withHomePage('https://www.php.net/mongodb')
@@ -38,10 +36,6 @@ return function (Preprocessor $p) {
         ->withOptions($options)
         ->withPeclVersion('1.15.3');
     $depends = ['icu', 'openssl', 'zlib', 'libzstd'];
-
-    //$depends[] = 'libsasl';
-    //$depends[] = 'snappy';
-
     call_user_func_array([$ext, 'withDependentLibraries'], $depends);
 
     $p->addExtension($ext);
