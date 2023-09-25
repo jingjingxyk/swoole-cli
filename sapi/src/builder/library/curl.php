@@ -21,7 +21,7 @@ return function (Preprocessor $p) {
             ./configure --help
 
             PACKAGES='zlib openssl libcares libbrotlicommon libbrotlidec libbrotlienc libzstd libnghttp2 '
-            PACKAGES="\$PACKAGES  libssh2 libnghttp3 libngtcp2  libngtcp2_crypto_quictls" # libidn2 libngtcp2_crypto_openssl
+            PACKAGES="\$PACKAGES  libssh2 " # libnghttp3 libngtcp2  libngtcp2_crypto_quictls libidn2 libngtcp2_crypto_openssl
 
             CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$PACKAGES)" \
             LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES)" \
@@ -52,8 +52,8 @@ return function (Preprocessor $p) {
             --with-zlib={$zlib_prefix} \
             --enable-ares={$cares_prefix} \
             --with-nghttp2 \
-            --with-ngtcp2 \
-            --with-nghttp3 \
+            --without-ngtcp2 \
+            --without-nghttp3 \
             --without-libidn2 \
             --with-libssh2 \
             --with-openssl  \
