@@ -35,9 +35,12 @@ OPTIONS="--disable-all \
 <?php endforeach; ?>
 <?=$this->extraOptions?>
 "
-set +x
+
 <?php foreach ($this->libraryList as $item) : ?>
 make_<?=$item->name?>() {
+    <?php if (in_array($this->buildType, ['dev', 'debug'])) : ?>
+    set -x
+    <?php endif ;?>
     echo "build <?=$item->name?>"
 
     <?php if ($item->enableBuildLibraryCached) : ?>
@@ -195,27 +198,25 @@ make_ext() {
     cd <?= $this->getPhpSrcDir() . PHP_EOL ?>
     PHP_SRC_DIR=<?= $this->getPhpSrcDir() . PHP_EOL ?>
     EXT_DIR=$PHP_SRC_DIR/ext/
-    TMP_EXT_DIR=$PHP_SRC_DIR/php-tmp-ext-dir/
-    mkdir -p $TMP_EXT_DIR
+    EXT_TMP_DIR=$PHP_SRC_DIR/ext-tmp/
+    test -d $EXT_TMP_DIR && rm -rf $EXT_TMP_DIR
+    mkdir -p $EXT_TMP_DIR
 <?php
 if ($this->buildType == 'dev') {
-    echo <<<EOF
+    echo <<<'EOF'
+    cd $EXT_DIR
 
-    test -d \$TMP_EXT_DIR && rm -rf \$TMP_EXT_DIR
-    mkdir -p \$TMP_EXT_DIR
-    cd \$EXT_DIR
-
-    cp -rf date \$TMP_EXT_DIR
-    test -d hash && cp -rf hash \$TMP_EXT_DIR
-    test -d json && cp -rf json \$TMP_EXT_DIR
-    cp -rf pcre \$TMP_EXT_DIR
-    test -d random && cp -rf random \$TMP_EXT_DIR
-    cp -rf reflection \$TMP_EXT_DIR
-    cp -rf session \$TMP_EXT_DIR
-    cp -rf spl \$TMP_EXT_DIR
-    cp -rf standard \$TMP_EXT_DIR
-    cp -rf date \$TMP_EXT_DIR
-    cp -rf phar \$TMP_EXT_DIR
+    cp -rf date $EXT_TMP_DIR
+    test -d hash && cp -rf hash $EXT_TMP_DIR
+    test -d json && cp -rf json $EXT_TMP_DIR
+    cp -rf pcre $EXT_TMP_DIR
+    test -d random && cp -rf random $EXT_TMP_DIR
+    cp -rf reflection $EXT_TMP_DIR
+    cp -rf session $EXT_TMP_DIR
+    cp -rf spl $EXT_TMP_DIR
+    cp -rf standard $EXT_TMP_DIR
+    cp -rf date $EXT_TMP_DIR
+    cp -rf phar $EXT_TMP_DIR
 
 EOF;
 }
@@ -227,27 +228,31 @@ foreach ($this->extensionMap as $extension) {
     }
     if (!empty($extension->peclVersion) || $extension->enableDownloadScript || !empty($extension->url)) {
         echo <<<EOF
-    cp -rf {$this->getRootDir()}/ext/{$name} \$TMP_EXT_DIR
+    cp -rf {$this->getRootDir()}/ext/{$name} \$EXT_TMP_DIR
 EOF;
         echo PHP_EOL;
     } else {
         if ($this->buildType == 'dev') {
             echo <<<EOF
-    cp -rf \$EXT_DIR/{$name} \$TMP_EXT_DIR
+    cp -rf \$EXT_DIR/{$name} \$EXT_TMP_DIR
 EOF;
             echo PHP_EOL;
         }
     }
 }
 if ($this->buildType == 'dev') {
-    echo <<<EOF
-    mv \$EXT_DIR/ \$PHP_SRC_DIR/del-ext/
-    mv \$TMP_EXT_DIR \$PHP_SRC_DIR/ext/
+    echo <<<'EOF'
+    mv $EXT_DIR/ $PHP_SRC_DIR/ext-del/
+    mv $EXT_TMP_DIR $EXT_DIR
 EOF;
     echo PHP_EOL;
 } else {
-    echo <<<EOF
-    cp -rf \$TMP_EXT_DIR/* \$PHP_SRC_DIR/ext/
+    echo <<<'EOF'
+    NUM=$(ls $EXT_TMP_DIR/ | wc -l )
+    if [ $NUM -gt 0 ] ; then
+        cp -rf ${EXT_TMP_DIR}/* $EXT_DIR
+    fi
+
 EOF;
 }
     echo PHP_EOL;
@@ -267,6 +272,7 @@ make_ext_hook() {
 }
 
 export_variables() {
+    set -x
     # -all-static | -static | -static-libtool-libs
     CPPFLAGS=""
     CFLAGS=""
@@ -307,7 +313,6 @@ make_config() {
 
     fi
 <?php endif ;?>
-    echo $OPTIONS
 
     test -f ./configure &&  rm ./configure
     ./buildconf --force
@@ -329,6 +334,7 @@ make_config() {
     echo $CPPFLAGS > <?= $this->getRootDir() ?>/cppflags.log
     echo $LIBS > <?= $this->getRootDir() ?>/libs.log
 
+    echo $OPTIONS
     ./configure $OPTIONS
 
     # more info https://stackoverflow.com/questions/19456518/error-when-using-sed-with-find-command-on-os-x-invalid-command-code
@@ -384,7 +390,6 @@ show_export_var() {
     export_variables
 }
 show_lib_pkg() {
-    set +x
 <?php foreach ($this->libraryList as $item) : ?>
     <?php if (!empty($item->pkgNames)) : ?>
         echo -e "[<?= $item->name ?>] pkg-config : \n<?= implode(' ', $item->pkgNames) ?>" ;
@@ -397,7 +402,6 @@ show_lib_pkg() {
 }
 
 show_lib_dep_pkg() {
-    set +x
     declare -A array_name
 <?php foreach ($this->libraryList as $item) :?>
     <?php
@@ -420,7 +424,6 @@ show_lib_dep_pkg() {
 }
 
 help() {
-    set +x
     echo "./make.sh docker-build"
     echo "./make.sh docker-bash"
     echo "./make.sh docker-commit"
