@@ -27,7 +27,7 @@ return function (Preprocessor $p) {
     $options .= ' --with-mongodb-icu=yes ';
 
     $options .= ' --with-mongodb-client-side-encryption=no ';
-    $options .= ' --with-mongodb-snappy=no ';
+    # $options .= ' --with-mongodb-snappy=no ';
 
     $ext = new Extension('mongodb');
 
