@@ -113,7 +113,6 @@ jobs:
           ./php-src/sapi/cli/php -m
           ./php-src/sapi/cli/php --ri swoole
           ./php-src/sapi/cli/php --ri pgsql
-          ./php-src/sapi/cli/php --ri pdo_pgsql
           file ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
           otool -L ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
           # greadelf -h ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php

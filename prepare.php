@@ -23,35 +23,38 @@ $p->parseArguments($argc, $argv);
 
 # PHP 默认版本
 
+
 $php_version = '7.3.33';
-$php_version_id = 703033;
+$php_version_id = '703033';
 $php_version_tag = 'php-7.3.33';
+
 
 if ($p->getInputOption('with-php-version')) {
     $subject = $p->getInputOption('with-php-version');
     $pattern = '/(\d{1,2})\.(\d{1,2})\.(\d{1,})\w*/';
     $notice = 0;
     if (preg_match($pattern, $subject, $match)) {
-        if ((intval($match[1]) == 7) && (intval($match[2]) == 3)) {
-            $version = $match[0];
-        } else {
-            $notice = 1;
+        if (intval($match[1]) == 7 && intval($match[2]) == 3) {
+            $php_version = $match[0];
+            $php_version_id =
+                str_pad($match[1], 2, '0') .
+                str_pad($match[2], 2, '0') .
+                sprintf('%02d', $match[3]);
+            $php_version_tag = 'php-' . $match[0];
         }
-    } else {
-        $notice = 1;
-    }
-    if ($notice == 1) {
-        echo PHP_EOL;
-        echo '此分支只支持 PHP 7.3 系列版本';
-        echo PHP_EOL;
-        die;
     }
 }
 
 define('BUILD_PHP_VERSION', $php_version);
-define('BUILD_PHP_VERSION_ID', $php_version_id);
+define('BUILD_PHP_VERSION_ID', intval($php_version_id));
 define('BUILD_PHP_VERSION_TAG', $php_version_tag);
+define('BUILD_CUSTOM_PHP_VERSION_ID', intval(substr($php_version_id, 0, 4))); //取主版本号和次版本号
 
+echo "PHP_VERSION: " . BUILD_PHP_VERSION . PHP_EOL;
+echo "PHP_VERSION_ID: " . BUILD_PHP_VERSION_ID . PHP_EOL;
+echo "PHP_VERSION_TAG: " . BUILD_PHP_VERSION_TAG . PHP_EOL;
+echo "CUSTOM_PHP_VERSION_ID: " . BUILD_CUSTOM_PHP_VERSION_ID . PHP_EOL;
+echo PHP_EOL;
 
 // Compile directly on the host machine, not in the docker container
 if ($p->getInputOption('without-docker') || ($p->getOsType() == 'macos')) {
@@ -108,8 +111,10 @@ EOF;
 }
 
 if ($p->getInputOption('with-install-library-cached')) {
-    $p->setInstallLibraryCached(true);
+    # 默认启用构建安装缓存
+    echo PHP_EOL;
 }
+$p->setInstallLibraryCached(true);
 
 if ($p->getOsType() == 'macos') {
     $p->setExtraLdflags('-undefined dynamic_lookup');

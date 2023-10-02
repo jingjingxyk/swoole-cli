@@ -125,7 +125,7 @@ class Preprocessor
         //'intl', //有报错等待解决
         'fileinfo',
         'pdo_mysql',
-        'pdo_sqlite',
+        //'pdo_sqlite',
         'soap',
         'xsl',
         'gmp',
