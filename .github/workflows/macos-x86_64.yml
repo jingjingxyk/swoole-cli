@@ -3,11 +3,7 @@ name: build-php-cli-macos-x86_64
 on: [ push, pull_request ]
 
 env:
-<<<<<<< HEAD
   BUILD_PHP_VERSION: 7.4.33
-=======
-  BUILD_PHP_VERSION: 8.2.7
->>>>>>> build_php_8.0
 
 jobs:
   macos-x86_64:
