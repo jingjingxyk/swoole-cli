@@ -306,23 +306,9 @@ make_config() {
     make_ext
     make_ext_hook
 
-<<<<<<< HEAD
-     cd <?= $this->phpSrcDir . PHP_EOL ?>
-     echo $OPTIONS
-=======
     cd <?= $this->phpSrcDir . PHP_EOL ?>
-<?php if ($this->getInputOption('with-swoole-cli-sfx')) : ?>
-    PHP_VERSION=$(cat main/php_version.h | grep 'PHP_VERSION_ID' | grep -E -o "[0-9]+")
-    if [[ $PHP_VERSION -lt 80000 ]] ; then
-        echo "only support PHP >= 8.0 "
-    else
-        # 请把这个做成 patch  https://github.com/swoole/swoole-cli/pull/55/files
-
-    fi
-<?php endif ;?>
 
     test -f ./configure &&  rm ./configure
->>>>>>> build_php_7.4
     ./buildconf --force
 
 <?php if (isset($this->extensionMap['gd'])) : ?>
