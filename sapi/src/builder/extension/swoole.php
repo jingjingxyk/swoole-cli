@@ -11,7 +11,8 @@ return function (Preprocessor $p) {
     $dependent_extensions = ['curl', 'openssl', 'sockets', 'mysqlnd', 'pdo'];
     $options = ' --enable-swoole --enable-sockets --enable-mysqlnd --enable-swoole-curl --enable-cares ';
     $options .= ' --with-brotli-dir=' . BROTLI_PREFIX;
-    $options .= ' --enable-swoole-json  ';
+    $options .= ' --enable-http2 ';
+    $options .= ' --enable-swoole-json ';
 
     $ext = (new Extension('swoole'))
         ->withHomePage('https://github.com/swoole/swoole-src')
