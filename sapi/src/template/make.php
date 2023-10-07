@@ -29,6 +29,8 @@ OPTIONS="--disable-all \
 --without-valgrind \
 --enable-cli  \
 --disable-phpdbg \
+--enable-json \
+--enable-hash \
 <?php foreach ($this->extensionList as $item) : ?>
     <?=$item->options?> \
 <?php endforeach; ?>
