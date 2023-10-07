@@ -55,7 +55,7 @@ php prepare.php \
   --with-global-prefix=/usr/local/swoole-cli \
   --with-install-library-cached=1 \
   +inotify +apcu +ds +xlswriter +ssh2 +pgsql +pdo_pgsql \
-  --with-swoole-pgsql=1 --with-libavif=1
+  --with-swoole-pgsql=1
 
 
 bash make-install-deps.sh

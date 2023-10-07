@@ -21,7 +21,7 @@ cd ${__DIR__}
 
 IMAGE=alpine:3.16
 
-:<<'EOF'
+: <<'EOF'
    启动此容器
 
    已经内置了 php 、composer 、 编译好的依赖库
@@ -45,17 +45,18 @@ done
 
 case $ARCH in
 'x86_64')
-  IMAGE=docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-3.17-php8-v1.0.0-x86_64-20230917T123120Z
-  if [ "$MIRROR" = 'china' ] ; then
-    IMAGE=registry.cn-beijing.aliyuncs.com/jingjingxyk-public/app:all-dependencies-alpine-3.17-php8-v1.0.0-x86_64-20230917T123120Z
-  fi
-  ;;
-'aarch64')
-  IMAGE=docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-3.17-php8-v1.0.0-aarch64-20230917T124401Z
+  IMAGE=docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-3.17-php7-v1.0.0-x86_64-20230917T133301Z
     if [ "$MIRROR" = 'china' ] ; then
-      IMAGE=registry.cn-hangzhou.aliyuncs.com/jingjingxyk-public/app:all-dependencies-alpine-3.17-php8-v1.0.0-aarch64-20230917T124401Z
+      IMAGE=registry.cn-beijing.aliyuncs.com/jingjingxyk-public/app:all-dependencies-alpine-3.17-php7-v1.0.0-x86_64-20230917T133301Z
     fi
   ;;
+'aarch64')
+  IMAGE=docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-3.17-php7-v1.0.0-aarch64-20230917T133332Z
+   if [ "$MIRROR" = 'china' ] ; then
+      IMAGE=registry.cn-hangzhou.aliyuncs.com/jingjingxyk-public/app:all-dependencies-alpine-3.17-php7-v1.0.0-aarch64-20230917T133332Z
+    fi
+  ;;
+
 *)
   echo "此 ${ARCH} 架构的容器 容器未配置"
   exit 0

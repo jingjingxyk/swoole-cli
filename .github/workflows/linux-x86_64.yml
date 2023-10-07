@@ -58,7 +58,7 @@ jobs:
       - name: Prepare and  Build all-library and  Build
         uses: addnab/docker-run-action@v3
         with:
-          image: docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-3.17-php8-v1.0.0-x86_64-20230917T123120Z
+          image: docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-3.17-php7-v1.0.0-x86_64-20230917T133301Z
           options: -v ${{ github.workspace }}:/work -w /work -e BUILD_PHP_VERSION=${{ env.BUILD_PHP_VERSION }}
           run: |
             set -eux
@@ -67,19 +67,21 @@ jobs:
 
             composer update --no-dev  --optimize-autoloader
 
-            php prepare.php  +inotify +apcu +ds +xlswriter +ssh2 +pgsql --pdo_pgsql -swoole --with-swoole-pgsql=1 ${{ inputs.build_type }} ${{ inputs.build_options }} --with-php-version=${{ env.BUILD_PHP_VERSION }}
+            php prepare.php  +inotify +apcu +ds +xlswriter +ssh2 +pgsql +pdo_pgsql -swoole --with-swoole-pgsql=1  --with-php-version=${{ env.BUILD_PHP_VERSION }}
 
             chmod a+x make.sh
             head -n 20 make.sh
 
             bash make-install-deps.sh
-            sh sapi/quickstart/clean-no-match-library-for-php.sh
+
+            # bash sapi/quickstart/clean-no-match-library-for-php.sh
             # bash sapi/quickstart/mark-install-library-cached.sh
 
             bash ./make.sh all-library
 
             bash ./make.sh config
             bash ./make.sh build
+
             bash ./make.sh archive
 
       - name: Show Build Result
@@ -101,7 +103,6 @@ jobs:
           name: php-cli-linux-x64-${{ env.BUILD_PHP_VERSION }}
           retention-days: 7
           path: ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')

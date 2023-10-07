@@ -7,7 +7,7 @@ env:
 
 jobs:
   macos-x86_64:
-    if: 1
+    if: 0
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
@@ -80,7 +80,7 @@ jobs:
 
           composer update --no-dev  --optimize-autoloader
 
-          php prepare.php --without-docker=1  +ds +apcu  +xlswriter +ssh2 +pgsql +pdo_pgsql -mongodb -swoole  --with-build-type=release
+          php prepare.php --without-docker=1  +ds +apcu  +xlswriter +ssh2 +pgsql +pdo_pgsql  -swoole  --with-build-type=release
 
       - name: Cache all-library
         uses: actions/cache@v3
@@ -94,17 +94,18 @@ jobs:
         run: |
           export PATH=${GITHUB_WORKSPACE}/bin/runtime:$PATH
 
-          sh sapi/quickstart/clean-no-match-library-for-php.sh
+          # sh sapi/quickstart/clean-no-match-library-for-php.sh
 
           bash make-install-deps.sh
 
-          # bash sapi/quickstart/mark-install-library-cached.sh
+          bash sapi/quickstart/mark-install-library-cached.sh
 
           bash ./make.sh all-library
 
       - name: Build
         run: |
           export PATH=${GITHUB_WORKSPACE}/bin/runtime:$PATH
+          bash ./make.sh pgsql
           bash ./make.sh config
           bash ./make.sh build
           bash ./make.sh archive

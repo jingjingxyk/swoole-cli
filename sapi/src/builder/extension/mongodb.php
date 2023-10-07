@@ -36,13 +36,7 @@ return function (Preprocessor $p) {
     $ext->withHomePage('https://www.php.net/mongodb')
         ->withHomePage('https://www.mongodb.com/docs/drivers/php/')
         ->withOptions($options)
-        ->withFile("mongodb-{$mongodb_version}.tgz")
-        ->withDownloadScript(
-            'mongo-php-driver',
-            <<<EOF
-        git clone -b {$mongodb_version} --depth=1 --recursive https://github.com/mongodb/mongo-php-driver.git
-EOF
-        );
+        ->withPeclVersion('1.15.3');
     $depends = ['icu', 'openssl', 'zlib', 'libzstd'];
     call_user_func_array([$ext, 'withDependentLibraries'], $depends);
 
