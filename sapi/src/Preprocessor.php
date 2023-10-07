@@ -157,7 +157,6 @@ class Preprocessor
 
     protected string $gitProxyConfig = '';
 
-    protected bool $installLibraryCached = false;
 
     protected function __construct()
     {
@@ -325,11 +324,6 @@ class Preprocessor
     public function setExtraOptions(string $options)
     {
         $this->extraOptions = $options;
-    }
-
-    public function setInstallLibraryCached(bool $installLibraryCached): void
-    {
-        $this->installLibraryCached = $installLibraryCached;
     }
 
     /**

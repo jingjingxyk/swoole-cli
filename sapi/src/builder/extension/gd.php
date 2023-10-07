@@ -18,6 +18,7 @@ return function (Preprocessor $p) {
 
     $dependent_libraries = ['libjpeg', 'freetype', 'libwebp', 'libpng', 'libgif', 'libgd2'];
 
+
     $ext = (new Extension('gd'))
         ->withHomePage('https://www.php.net/manual/zh/book.image.php')
         ->withOptions($options);

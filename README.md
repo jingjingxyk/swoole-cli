@@ -47,7 +47,7 @@
 
 ## build_php_7.3 分支与主分支的区别
 
-> 继承 experiment 分支的功能
+> 继承 build_native_php 分支的功能
 
 > 构建原生 PHP 版本
 
@@ -55,7 +55,8 @@
 
 > 可指定 C 编译器 为GCC
 
-> 可编译包含 swoole 扩展的 PHP二进制可执行文件
+> 可编译包含 swow 扩展的 PHP二进制可执行文件
+
 
 > 可禁用编译缓存
 
