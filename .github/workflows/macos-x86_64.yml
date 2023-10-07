@@ -89,23 +89,18 @@ jobs:
           path: /usr/local/swoole-cli
           key: ${{ runner.os }}-build-native-php-build-all-library
 
-      - name: Build all-library
+      - name: Build
         # if: ${{ steps.all-library-cache.outputs.cache-hit != 'true' }}
         run: |
           export PATH=${GITHUB_WORKSPACE}/bin/runtime:$PATH
 
-          # sh sapi/quickstart/clean-no-match-library-for-php.sh
-
           bash make-install-deps.sh
 
+          # sh sapi/quickstart/clean-no-match-library-for-php.sh
           # bash sapi/quickstart/mark-install-library-cached.sh
 
           bash ./make.sh all-library
 
-      - name: Build
-        run: |
-          export PATH=${GITHUB_WORKSPACE}/bin/runtime:$PATH
-          bash ./make.sh pgsql
           bash ./make.sh config
           bash ./make.sh build
           bash ./make.sh archive
