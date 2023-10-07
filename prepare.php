@@ -22,7 +22,6 @@ $p = Preprocessor::getInstance();
 $p->parseArguments($argc, $argv);
 
 # PHP 默认版本
-
 $php_version = '7.4.33';
 $php_version_id = '704033';
 $php_version_tag = 'php-7.4.33';
@@ -32,7 +31,7 @@ if ($p->getInputOption('with-php-version')) {
     $pattern = '/(\d{1,2})\.(\d{1,2})\.(\d{1,})\w*/';
     $notice = 0;
     if (preg_match($pattern, $subject, $match)) {
-        if (intval($match[1]) == 7 && intval($match[2]) == 4) {
+        if (intval($match[1]) == 8 && intval($match[2]) == 0) {
             $php_version = $match[0];
             $php_version_id =
                 str_pad($match[1], 2, '0') .
