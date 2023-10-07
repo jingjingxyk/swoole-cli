@@ -98,7 +98,7 @@ jobs:
 
           bash make-install-deps.sh
 
-          bash sapi/quickstart/mark-install-library-cached.sh
+          # bash sapi/quickstart/mark-install-library-cached.sh
 
           bash ./make.sh all-library
 
