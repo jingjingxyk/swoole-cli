@@ -38,27 +38,7 @@ if ($p->getInputOption('with-php-version')) {
                 sprintf('%02d', $match[3]);
             $php_version_tag = 'php-' . $match[0];
         } else {
-            echo <<<EOF
-
-    extra support PHP8.0  PHP7.4  PHP7.3  PHP8.2-micro
-
-    php-8-micro:  (https://github.com/dixyes/phpmicro.git）
-
-        git clone -b build_native_php_sfx_micro  https://github.com/jingjingxyk/swoole-cli/
-
-    php-8.0
-
-        git clone -b build_php_8.0  https://github.com/jingjingxyk/swoole-cli/
-
-    php-7.4:
-
-        git clone -b build_php_7.4  https://github.com/jingjingxyk/swoole-cli/
-
-    php-7.3:
-
-        git clone -b build_php_7.3  https://github.com/jingjingxyk/swoole-cli/
-
-EOF;
+            echo " no support PHP version " ;
             echo PHP_EOL;
             die;
         }
