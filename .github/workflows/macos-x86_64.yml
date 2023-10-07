@@ -3,7 +3,7 @@ name: build-php-cli-macos-x86_64
 on: [ push, pull_request ]
 
 env:
-  BUILD_PHP_VERSION: 8.1.24
+  BUILD_PHP_VERSION: 7.4.33
 
 jobs:
   macos-x86_64:
@@ -80,7 +80,7 @@ jobs:
 
           composer update --no-dev  --optimize-autoloader
 
-          php prepare.php --without-docker=1  +ds +apcu  +xlswriter +ssh2 +pgsql +pdo_pgsql  -swoole  --with-build-type=release
+          php prepare.php --without-docker=1  +ds +apcu  +xlswriter +ssh2 +pgsql +pdo_pgsql  --with-build-type=release
 
       - name: Cache all-library
         uses: actions/cache@v3

@@ -3,7 +3,7 @@ name: build-php-cli-linux-aarch64
 on: [ push, pull_request ]
 
 env:
-  BUILD_PHP_VERSION: 8.1.24
+  BUILD_PHP_VERSION: 7.4.33
 
 jobs:
   linux-aarch64:
@@ -51,7 +51,7 @@ jobs:
 
             composer update --no-dev  --optimize-autoloader
 
-            php prepare.php  +inotify +apcu +ds +xlswriter +ssh2  +pgsql +pdo_pgsql -swoole --with-php-version=${{ env.BUILD_PHP_VERSION }}
+            php prepare.php  +inotify +apcu +ds +xlswriter +ssh2  +pgsql +pdo_pgsql --with-php-version=${{ env.BUILD_PHP_VERSION }}
 
             chmod a+x make.sh
             head -n 20 make.sh
