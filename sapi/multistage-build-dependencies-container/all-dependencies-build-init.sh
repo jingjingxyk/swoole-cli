@@ -75,7 +75,6 @@ export COMPOSER_ALLOW_SUPERUSER=1
 export PATH="${__PROJECT__}/bin/runtime:$PATH"
 alias php="php -d curl.cainfo=${__PROJECT__}/bin/runtime/cacert.pem -d openssl.cafile=${__PROJECT__}/bin/runtime/cacert.pem"
 
-
 case "$COMPOSER_MIRROR" in
   aliyun)
   # shellcheck disable=SC2034
