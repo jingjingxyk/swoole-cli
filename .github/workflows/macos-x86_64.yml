@@ -3,7 +3,7 @@ name: build-php-cli-macos-x86_64
 on: [ push, pull_request ]
 
 env:
-  BUILD_PHP_VERSION: 8.2.7
+  BUILD_PHP_VERSION: 8.1.24
 
 jobs:
   macos-x86_64:
@@ -73,13 +73,14 @@ jobs:
           bash  sapi/quickstart/setup-php-runtime.sh
           export PATH=${GITHUB_WORKSPACE}/bin/runtime:$PATH
           bash sapi/download-box/download-box-get-archive-from-server.sh
+
       - name: prepare
         run: |
           export PATH=${GITHUB_WORKSPACE}/bin/runtime:$PATH
 
           composer update --no-dev  --optimize-autoloader
 
-          php prepare.php --without-docker=1  +ds +apcu  +xlswriter +ssh2 +pgsql +pdo_pgsql -mongodb -swoole  --with-build-type=release -swoole --with-install-library-cached=1
+          php prepare.php --without-docker=1  +ds +apcu  +xlswriter +ssh2 +pgsql +pdo_pgsql -mongodb -swoole  --with-build-type=release
 
       - name: Cache all-library
         uses: actions/cache@v3
@@ -92,7 +93,9 @@ jobs:
         # if: ${{ steps.all-library-cache.outputs.cache-hit != 'true' }}
         run: |
           export PATH=${GITHUB_WORKSPACE}/bin/runtime:$PATH
+
           sh sapi/quickstart/clean-no-match-library-for-php.sh
+
           bash make-install-deps.sh
 
           # bash sapi/quickstart/mark-install-library-cached.sh

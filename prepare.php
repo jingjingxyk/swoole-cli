@@ -22,9 +22,9 @@ $p = Preprocessor::getInstance();
 $p->parseArguments($argc, $argv);
 
 # PHP 默认版本
-$php_version = '8.2.7';
-$php_version_id = '802007';
-$php_version_tag = 'php-8.2.7';
+$php_version = '8.1.24';
+$php_version_id = '801024';
+$php_version_tag = 'php-8.1.24';
 
 if ($p->getInputOption('with-php-version')) {
     $subject = $p->getInputOption('with-php-version');
@@ -130,12 +130,6 @@ export NO_PROXY="\${NO_PROXY},pypi.python.org,bootstrap.pypa.io"
 EOF;
     $p->setProxyConfig($proxyConfig, $http_proxy);
 }
-
-if ($p->getInputOption('with-install-library-cached')) {
-    # 默认启用构建安装缓存
-    echo PHP_EOL;
-}
-$p->setInstallLibraryCached(true);
 
 if ($p->getOsType() == 'macos') {
     $p->setExtraLdflags('-undefined dynamic_lookup');
