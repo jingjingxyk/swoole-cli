@@ -3,7 +3,7 @@ name: build-php-cli-linux-aarch64
 on: [ push, pull_request ]
 
 env:
-  BUILD_PHP_VERSION: 8.1.24
+  BUILD_PHP_VERSION: 8.0.30
 
 jobs:
   linux-aarch64:
