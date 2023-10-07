@@ -22,10 +22,10 @@ $p = Preprocessor::getInstance();
 $p->parseArguments($argc, $argv);
 
 # PHP 默认版本
-
 $php_version = '8.1.24';
 $php_version_id = '801024';
 $php_version_tag = 'php-8.1.24';
+
 
 if ($p->getInputOption('with-php-version')) {
     $subject = $p->getInputOption('with-php-version');

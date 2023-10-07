@@ -69,9 +69,6 @@ jobs:
 
             php prepare.php  +inotify +apcu +ds +xlswriter +ssh2 +pgsql +pdo_pgsql -swoole  --with-php-version=${{ env.BUILD_PHP_VERSION }}
 
-            chmod a+x make.sh
-            head -n 20 make.sh
-
             bash make-install-deps.sh
 
             # bash sapi/quickstart/clean-no-match-library-for-php.sh
