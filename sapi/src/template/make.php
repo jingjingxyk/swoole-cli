@@ -3,14 +3,12 @@
  * @var $this SwooleCli\Preprocessor
  */
 
-use SwooleCli\Library;
 use SwooleCli\Preprocessor;
 
 ?>
 #!/usr/bin/env bash
-<?php if (in_array($this->buildType, ['dev','debug'])) : ?>
-set -x
-<?php  endif; ?>
+__PROJECT_DIR__=$(cd "$(dirname "$0")"; pwd)
+
 SRC=<?= $this->phpSrcDir . PHP_EOL ?>
 ROOT=<?= $this->getRootDir() . PHP_EOL ?>
 PREPARE_ARGS="<?= implode(' ', $this->getPrepareArgs())?>"
@@ -20,6 +18,7 @@ export CMAKE_BUILD_PARALLEL_LEVEL=<?= $this->maxJob. PHP_EOL ?>
 export CC=<?= $this->cCompiler . PHP_EOL ?>
 export CXX=<?= $this->cppCompiler . PHP_EOL ?>
 export LD=<?= $this->lld . PHP_EOL ?>
+
 export PKG_CONFIG_PATH=<?= implode(':', $this->pkgConfigPaths) . PHP_EOL ?>
 export PATH=<?= implode(':', $this->binPaths) . PHP_EOL ?>
 OPTIONS="--disable-all \
@@ -37,12 +36,13 @@ OPTIONS="--disable-all \
 
 <?php foreach ($this->libraryList as $item) : ?>
 make_<?=$item->name?>() {
-    <?php if (in_array($this->buildType, ['dev', 'debug'])) : ?>
-    set -x
-    <?php endif ;?>
     echo "build <?=$item->name?>"
 
-    <?php if ($item->enableBuildLibraryCached) : ?>
+    <?php if (in_array($this->buildType, ['dev', 'debug'])) : ?>
+        set -x
+    <?php endif ;?>
+
+    <?php if ($item->enableInstallCached) : ?>
     if [ -f <?= $this->getGlobalPrefix() . '/'.  $item->name ?>/.completed ] ;then
         echo "[<?=$item->name?>]  library cached , skip.."
         return 0
@@ -50,9 +50,11 @@ make_<?=$item->name?>() {
 
     <?php endif; ?>
 
+    <?php if ($item->cleanBuildDirectory) : ?>
     if [ -d <?=$this->getBuildDir()?>/<?=$item->name?>/ ]; then
         rm -rf <?=$this->getBuildDir()?>/<?=$item->name?>/
     fi
+    <?php endif; ?>
 
     # If the source code directory does not exist, create a directory and decompress the source code archive
     if [ ! -d <?= $this->getBuildDir() ?>/<?= $item->name ?> ]; then
@@ -136,12 +138,14 @@ ___<?=$item->name?>__EOF___
         <?php endif;?>
     <?php endif;?>
 
-    <?php if ($item->enableBuildLibraryCached) : ?>
+    <?php if ($item->enableInstallCached) : ?>
     if [ -d <?= $this->getGlobalPrefix() . '/'.  $item->name ?>/ ] ;then
         touch <?= $this->getGlobalPrefix() . '/'.  $item->name ?>/.completed
     fi
     <?php endif; ?>
-
+    <?php if (in_array($this->buildType, ['dev', 'debug'])) : ?>
+        set +x
+    <?php endif ;?>
     cd <?= $this->workDir . PHP_EOL ?>
     return 0
 }
@@ -282,7 +286,6 @@ export_variables() {
 
 
 make_config() {
-    make_php_src
     make_ext
     make_ext_hook
 
@@ -299,11 +302,10 @@ make_config() {
 
     test -f ./configure &&  rm ./configure
     ./buildconf --force
-    ./configure --help
 
-<?php if ($this->osType == 'macos') : ?>
+<?php if ($this->osType === 'macos') : ?>
     <?php if (isset($this->libraryMap['pgsql'])) : ?>
-    sed -i.backup "s/ac_cv_func_explicit_bzero\" = xyes/ac_cv_func_explicit_bzero\" = x_fake_yes/" ./configure
+        sed -i.backup "s/ac_cv_func_explicit_bzero\" = xyes/ac_cv_func_explicit_bzero\" = x_fake_yes/" ./configure
     <?php endif;?>
 <?php endif; ?>
 
@@ -324,7 +326,7 @@ make_config() {
 make_build() {
     cd <?= $this->phpSrcDir . PHP_EOL ?>
     export_variables
-    <?php if ($this->getOsType()=='linux') : ?>
+    <?php if ($this->getOsType() == 'linux') : ?>
     export LDFLAGS="$LDFLAGS  -static -all-static "
     <?php endif ;?>
     export LDFLAGS="$LDFLAGS   <?= $this->extraLdflags ?>"
@@ -362,11 +364,8 @@ make_clean() {
     rm -f libs.log ldflags.log cppflags.log
 }
 
-show_export_var() {
-    set -x
-    export_variables
-}
-show_lib_pkg() {
+lib_pkg() {
+    set +x
 <?php foreach ($this->libraryList as $item) : ?>
     <?php if (!empty($item->pkgNames)) : ?>
         echo -e "[<?= $item->name ?>] pkg-config : \n<?= implode(' ', $item->pkgNames) ?>" ;
@@ -378,12 +377,14 @@ show_lib_pkg() {
     exit 0
 }
 
-show_lib_dep_pkg() {
+lib_dep_pkg() {
+    set +x
     declare -A array_name
 <?php foreach ($this->libraryList as $item) :?>
     <?php
     $pkgs=[];
     $this->getLibraryDependenciesByName($item->name, $pkgs);
+    $pkgs = array_unique($pkgs);
     $res=implode(' ', $pkgs);
     ?>
     array_name[<?= $item->name ?>]="<?= $res?>"
@@ -401,10 +402,11 @@ show_lib_dep_pkg() {
 }
 
 help() {
-    echo "./make.sh docker-build"
+    echo "./make.sh docker-build [china|ustc|tuna]"
     echo "./make.sh docker-bash"
     echo "./make.sh docker-commit"
     echo "./make.sh docker-push"
+    echo "./make.sh docker-stop"
     echo "./make.sh config"
     echo "./make.sh build"
     echo "./make.sh test"
@@ -417,9 +419,8 @@ help() {
     echo "./make.sh clean-all-library-cached"
     echo "./make.sh sync"
     echo "./make.sh pkg-check"
-    echo "./make.sh show-lib-pkg"
-    echo "./make.sh show-lib-dep-pkg"
-    echo "./make.sh show-export-var"
+    echo "./make.sh lib-pkg"
+    echo "./make.sh lib-dep-pkg"
     echo "./make.sh list-swoole-branch"
     echo "./make.sh switch-swoole-branch"
     echo "./make.sh [library-name]"
@@ -429,37 +430,49 @@ help() {
 }
 
 if [ "$1" = "docker-build" ] ;then
-    cd <?=$this->getRootDir()?>/sapi/docker
-    docker build -t <?= Preprocessor::IMAGE_NAME ?>:<?= $this->getBaseImageTag() ?> -f <?= $this->getBaseImageDockerFile() ?>  .
+    MIRROR=""
+    if [ -n "$2" ]; then
+        MIRROR=$2
+    fi
+    cd ${__PROJECT_DIR__}/sapi/docker
+    docker build -t <?= Preprocessor::IMAGE_NAME ?>:<?= $this->getBaseImageTag() ?> -f <?= $this->getBaseImageDockerFile() ?>  . --build-arg="MIRROR=${MIRROR}"
     exit 0
 elif [ "$1" = "docker-bash" ] ;then
     container=$(docker ps -a -f name=<?= Preprocessor::CONTAINER_NAME ?> | tail -n +2 2> /dev/null)
     base_image=$(docker images <?= Preprocessor::IMAGE_NAME ?>:<?= $this->getBaseImageTag() ?> | tail -n +2 2> /dev/null)
     image=$(docker images <?= Preprocessor::IMAGE_NAME ?>:<?= $this->getImageTag() ?> | tail -n +2 2> /dev/null)
+    CONTAINER_STATE=$(docker inspect -f {{.State.Running}} <?= Preprocessor::CONTAINER_NAME ?> 2> /dev/null)
+    if [[ "${CONTAINER_STATE}" != "true" ]]; then
+        bash ./make.sh docker-stop
+        container=''
+    fi
 
     if [[ -z ${container} ]] ;then
         if [[ ! -z ${image} ]] ;then
             echo "swoole-cli-builder container does not exist, try to create with image[<?= Preprocessor::IMAGE_NAME ?>:<?= $this->getImageTag() ?>]"
-            docker run -it --name <?= Preprocessor::CONTAINER_NAME ?> -v ${ROOT}:<?=$this->getWorkDir()?> <?= Preprocessor::IMAGE_NAME ?>:<?= $this->getImageTag() ?> /bin/bash
+            docker run -d --name <?= Preprocessor::CONTAINER_NAME ?> -v  ${__PROJECT_DIR__}:/work <?= Preprocessor::IMAGE_NAME ?>:<?= $this->getImageTag() ?> tini -- tail -f /dev/null
         elif [[ ! -z ${base_image} ]] ;then
             echo "swoole-cli-builder container does not exist, try to create with image[<?= Preprocessor::IMAGE_NAME ?>:<?= $this->getBaseImageTag() ?>]"
-            docker run -it --name <?= Preprocessor::CONTAINER_NAME ?> -v ${ROOT}:<?=$this->getWorkDir()?> <?= Preprocessor::IMAGE_NAME ?>:<?= $this->getBaseImageTag() ?> /bin/bash
+            docker run -d --name <?= Preprocessor::CONTAINER_NAME ?> -v  ${__PROJECT_DIR__}:/work  <?= Preprocessor::IMAGE_NAME ?>:<?= $this->getBaseImageTag() ?> tini -- tail -f /dev/null
         else
             echo "<?= Preprocessor::IMAGE_NAME ?>:<?= $this->getImageTag() ?> image does not exist, try to pull"
             echo "create container with <?= Preprocessor::IMAGE_NAME ?>:<?= $this->getImageTag() ?> image"
-            docker run -it --name <?= Preprocessor::CONTAINER_NAME ?> -v ${ROOT}:<?=$this->getWorkDir()?> <?= Preprocessor::IMAGE_NAME ?>:<?= $this->getImageTag() ?> /bin/bash
+            docker run -d --name <?= Preprocessor::CONTAINER_NAME ?> -v  ${__PROJECT_DIR__}:/work  <?= Preprocessor::IMAGE_NAME ?>:<?= $this->getImageTag() ?> tini -- tail -f /dev/null
         fi
-    else
-        if [[ "${container}" =~ "Exited" ]]; then
-            docker start <?= Preprocessor::CONTAINER_NAME ?> ;
-        fi
-        docker exec -it <?= Preprocessor::CONTAINER_NAME ?> /bin/bash
     fi
+    docker exec -it <?= Preprocessor::CONTAINER_NAME ?> /bin/bash
     exit 0
 elif [ "$1" = "docker-commit" ] ;then
     docker commit <?= Preprocessor::CONTAINER_NAME ?> <?= Preprocessor::IMAGE_NAME ?>:<?= $this->getImageTag() ?> && exit 0
-elif [ "$1" = "docker-commit" ] ;then
+elif [ "$1" = "docker-push" ] ;then
     docker push <?= Preprocessor::IMAGE_NAME ?>:<?= $this->getImageTag() ?> && exit 0
+elif [ "$1" = "docker-stop" ] ;then
+    {
+        docker stop <?= Preprocessor::CONTAINER_NAME ?><?= PHP_EOL ?>
+        docker rm <?= Preprocessor::CONTAINER_NAME ?><?= PHP_EOL ?>
+    } || {
+        echo $?
+    }
 elif [ "$1" = "all-library" ] ;then
     make_all_library
 <?php foreach ($this->libraryList as $item) : ?>
@@ -522,14 +535,11 @@ elif [ "$1" = "pkg-check" ] ;then
 
 <?php endforeach; ?>
     exit 0
-elif [ "$1" = "show-lib-pkg" ] ;then
-    show_lib_pkg
+elif [ "$1" = "lib-pkg" ] ;then
+    lib_pkg
     exit 0
-elif [ "$1" = "show-lib-dep-pkg" ] ;then
-    show_lib_dep_pkg "$2"
-    exit 0
-elif [ "$1" = "show-export-var" ] ;then
-    show_export_var
+elif [ "$1" = "lib-dep-pkg" ] ;then
+    lib_dep_pkg "$2"
     exit 0
 elif [ "$1" = "list-library" ] ;then
 <?php foreach ($this->libraryList as $item) : ?>

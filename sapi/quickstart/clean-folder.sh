@@ -24,7 +24,7 @@ GIT_BRANCH=$(git branch | grep '* ' | awk '{print $2}')
 echo $GIT_BRANCH
 ACTION="none"
 case $GIT_BRANCH in
-'build_native_php')
+'build_native_php' | 'build_native_php_t' )
   ACTION="delete"
   ;;
 'build_php_8.2' | 'build_php_8.1' | 'build_php_8.0' | 'build_php_7.4' | 'build_php_7.3' )
@@ -41,7 +41,7 @@ esac
 
 if [[ $ACTION = "delete" ]]; then
   cd ${__PROJECT__}
-  test -d ext/ && rm -rf ext
+  test -d ext/ && rm -rf ext/*
 
   test -d Zend/ && rm -rf Zend/
   test -d build && rm -rf build
@@ -68,5 +68,5 @@ if [[ $ACTION = "delete" ]]; then
   test -f conftest.c && rm -rf conftest.c
   test -d scripts && rm -rf scripts
   test -d sapi/cli && rm -rf sapi/cli/
-
+  echo $?
 fi
