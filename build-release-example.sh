@@ -137,7 +137,7 @@ composer config -g --unset repos.packagist
 # --with-skip-download=1
 # --with-http-proxy=http://192.168.3.26:8015
 # --with-override-default-enabled-ext=0
-# --with-php-version=8.0.11
+# --with-php-version=7.4.33
 # --with-c-compiler=[gcc|clang] 默认clang
 
 
