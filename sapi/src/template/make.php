@@ -426,7 +426,6 @@ help() {
     echo "./make.sh build"
     echo "./make.sh test"
     echo "./make.sh archive"
-    echo "./make.sh archive-sfx-micro"
     echo "./make.sh all-library"
     echo "./make.sh list-library"
     echo "./make.sh list-extension"
@@ -508,6 +507,7 @@ elif [ "$1" = "build" ] ;then
 elif [ "$1" = "test" ] ;then
     <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/php vendor/bin/phpunit
 elif [ "$1" = "archive" ] ;then
+    set -x
     cd <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/
     PHP_VERSION=<?= BUILD_PHP_VERSION ?>
     PHP_CLI_FILE=php-micro-v${PHP_VERSION}-<?=$this->getOsType()?>-<?=$this->getSystemArch()?>.tar.xz
