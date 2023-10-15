@@ -350,6 +350,7 @@ make_build() {
     <?php endif ;?>
     export LDFLAGS="$LDFLAGS   <?= $this->extraLdflags ?>"
     export EXTRA_CFLAGS='<?= $this->extraCflags ?>'
+    sed -i.backup "s/\$(POST_MICRO_BUILD_COMMANDS)/ /g" Makefile
     make -j <?= $this->maxJob ?> micro;
 
 <?php if ($this->osType == 'macos') : ?>
