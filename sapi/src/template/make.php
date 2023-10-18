@@ -278,6 +278,8 @@ export_variables() {
 <?php endforeach; ?>
     result_code=$?
     [[ $result_code -ne 0 ]] &&  echo " [ export_variables  FAILURE ]" && exit  $result_code;
+
+    echo "export variables"
 <?php foreach ($this->exportVariables as $value) : ?>
     export  <?= key($value) ?>="<?= current($value) ?>"
 <?php endforeach; ?>
@@ -413,7 +415,6 @@ help() {
     echo "./make.sh build"
     echo "./make.sh test"
     echo "./make.sh archive"
-    echo "./make.sh archive-sfx-micro"
     echo "./make.sh all-library"
     echo "./make.sh list-library"
     echo "./make.sh list-extension"
@@ -495,6 +496,7 @@ elif [ "$1" = "build" ] ;then
 elif [ "$1" = "test" ] ;then
     <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/php vendor/bin/phpunit
 elif [ "$1" = "archive" ] ;then
+    set -x
     cd <?= BUILD_PHP_INSTALL_PREFIX ?>/bin
     PHP_VERSION=$(./php -r "echo PHP_VERSION;")
     PHP_CLI_FILE=php-cli-v${PHP_VERSION}-<?=$this->getOsType()?>-<?=$this->getSystemArch()?>.tar.xz
