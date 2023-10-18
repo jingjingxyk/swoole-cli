@@ -11,13 +11,13 @@ __PROJECT__=$(
 )
 
 if [[ -f /.dockerenv ]]; then
-  echo 'not in docker'
+  echo 'not support in docker'
   exit 0
 fi
 
+
 cd ${__PROJECT__}
 
-mkdir -p ${__PROJECT__}/var
 
 # export DOCKER_BUILDKIT=1
 
@@ -38,11 +38,9 @@ while [ $# -gt 0 ]; do
   case "$1" in
   --composer_mirror)
     COMPOSER_MIRROR="$2"  # "aliyun"  "tencent"
-    shift
     ;;
   --mirror)
     MIRROR="$2" # "ustc"  "tuna"
-    shift
     ;;
   --*)
     echo "Illegal option $1"
@@ -62,8 +60,17 @@ docker build -t ${IMAGE} -f ./Dockerfile-all-dependencies-alpine . \
 --build-arg="MIRROR=${MIRROR}"
 
 
+mkdir -p ${__PROJECT__}/var
 cd ${__PROJECT__}/
 
-echo ${IMAGE} >${__PROJECT__}/var/all-dependencies-container.txt
 
-docker push ${IMAGE}
+echo ${IMAGE} > ${__PROJECT__}/var/all-dependencies-container.txt
+
+
+# docker push ${IMAGE}
+
+
+# 例子：
+# bash build-release-example.sh --mirror china  --all_dependencies
+# bash sapi/multistage-build-dependencies-container/all-dependencies-build-container.sh --composer_mirror tencent --mirror ustc
+# bash sapi/multistage-build-dependencies-container/download-box-server-run-test.sh
