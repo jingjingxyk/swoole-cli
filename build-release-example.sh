@@ -40,6 +40,7 @@ WITH_DOWNLOAD_BOX=0
 WITH_BUILD_CONTAINER=0
 WITH_WEB_UI=0
 WITH_HTTP_PROXY=0
+WITH_PHP_COMPOSER=1
 
 # 配置系统仓库  china mirror
 WITH_MIRROR='china'
@@ -90,7 +91,6 @@ done
 if [ "$OS" = 'linux' ] ; then
     if [ -f /.dockerenv ]; then
         WITH_DOCKER=1
-        OPTIONS="${OPTIONS}  --without-docker=1  "
         number=$(which flex  | wc -l)
         if test $number -eq 0 ;then
         {
@@ -141,19 +141,20 @@ alias php="php -d curl.cainfo=${__PROJECT__}/bin/runtime/cacert.pem -d openssl.c
 
 php -v
 
-export COMPOSER_ALLOW_SUPERUSER=1
-# composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
-# composer config -g repos.packagist composer https://packagist.org
-if [ "$WITH_MIRROR" = 'china' ]; then
-    composer config -g repos.packagist composer https://mirrors.cloud.tencent.com/composer/
+if [ ${WITH_PHP_COMPOSER} -eq 1 ] ; then
+      export COMPOSER_ALLOW_SUPERUSER=1
+      # composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
+      # composer config -g repos.packagist composer https://packagist.org
+      if [ "$WITH_MIRROR" = 'china' ]; then
+          composer config -g repos.packagist composer https://mirrors.cloud.tencent.com/composer/
+      fi
+
+      # composer suggests --all
+      # composer dump-autoload
+
+      composer update  --optimize-autoloader
+      composer config -g --unset repos.packagist
 fi
-
-# composer suggests --all
-# composer dump-autoload
-
-composer update  --optimize-autoloader
-composer config -g --unset repos.packagist
-
 
 # 可用配置参数
 # --with-swoole-pgsql=1
@@ -179,9 +180,13 @@ if [ ${WITH_HTTP_PROXY} -eq 1 ] ; then
   unset NO_PROXY
 fi
 
+
+
 if [ "$OS" = 'linux' ] ; then
    OPTIONS="${OPTIONS} +inotify  "
 fi
+
+
 
 
 php prepare.php ${OPTIONS}  +apcu +ds +xlswriter +ssh2 +pgsql  --with-swoole-pgsql=1 --with-libavif=1
