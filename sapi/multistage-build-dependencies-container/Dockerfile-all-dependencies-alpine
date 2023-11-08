@@ -25,10 +25,16 @@ ADD ./bin/runtime/composer  /usr/local/bin/
 ADD ./bin/runtime/cacert.pem  /etc/ssl/certs/
 
 ADD ./php.ini  /usr/local/swoole-cli/etc/
+
 ADD ./  /work
 
 RUN chmod a+x /usr/local/bin/php
 RUN chmod a+x /usr/local/bin/composer
+
+
+RUN chmod a+x /usr/local/bin/php
+RUN chmod a+x /usr/local/bin/composer
+
 
 ENV CERT_FILE=/etc/ssl/certs/cacert.pem
 # ENV CERT_FILE=/etc/ssl/certs/ca-certificates.crt
@@ -51,11 +57,10 @@ RUN composer config -g --unset repos.packagist
 
 
 RUN php prepare.php  --with-swoole-pgsql=1
-# RUN php prepare.php  --with-swoole-pgsql=1 --with-libavif=1
 
-# RUN bash make-install-deps.sh
 
 RUN bash make.sh all-library
+
 
 
 FROM alpine:3.17
@@ -89,7 +94,9 @@ RUN chmod a+x /usr/local/bin/composer
 
 ENV CERT_FILE=/etc/ssl/certs/cacert.pem
 # ENV CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+
 ENV PHP_INI=/usr/local/swoole-cli/etc/php.ini
+
 
 RUN alias php='php -d curl.cainfo="${CERT_FILE}" -d openssl.cafile="${CERT_FILE}"'
 
