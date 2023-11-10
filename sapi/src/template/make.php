@@ -261,6 +261,7 @@ before_configure_script() {
 
 export_variables() {
     set -x
+    # -all-static | -static | -static-libtool-libs
     CPPFLAGS=""
     CFLAGS=""
 <?php if ($this->cCompiler=='clang') : ?>
