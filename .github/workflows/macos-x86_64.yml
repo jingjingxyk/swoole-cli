@@ -84,14 +84,14 @@ jobs:
         id: dependency-cache
         with:
           path: ${{ github.workspace }}/pool/
-          key: ${{ runner.os }}-x86_64-pool
+          key: ${{ github.head_ref || github.ref_name }}-${{ runner.os }}-x86_64-pool
 
       - name: Cache all-library
         uses: actions/cache@v3
         id: all-library-cache
         with:
           path: /usr/local/swoole-cli
-          key: ${{ runner.os }}-x86_64-all-library
+          key: ${{ github.head_ref || github.ref_name }}-${{ runner.os }}-x86_64-all-library
 
       - name: Prepare Runtime and Libraries and Extensions
         run: |
@@ -102,9 +102,12 @@ jobs:
           if [ ! -f bin/runtime/php ] ; then
               bash  sapi/quickstart/setup-php-runtime.sh
           fi
+
           if test $(ls -A pool/lib/ | wc -l) -le 49 ; then
               bash sapi/download-box/download-box-get-archive-from-server.sh
           fi
+          ls -A pool/lib/
+          ls -A /usr/local/swoole-cli/
 
       - name: prepare
         run: |
@@ -113,7 +116,7 @@ jobs:
 
           composer update   --optimize-autoloader
 
-          php prepare.php --without-docker=1  +ds +apcu  +xlswriter +ssh2 +pgsql -mongodb  --with-build-type=release --with-swoole-pgsql=1  --with-libavif=1
+          php prepare.php --without-docker=1  +ds +apcu  +xlswriter +ssh2 +pgsql -mongodb  --with-build-type=release --with-swoole-pgsql=1  --with-libavif=1 --with-download-mirror-url=https://php-cli-usa.jingjingxyk.com/
 
       - name: Build
         run: |
