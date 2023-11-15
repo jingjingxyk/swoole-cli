@@ -141,7 +141,6 @@ jobs:
 
             php prepare.php  +inotify +apcu +ds +xlswriter +ssh2  +pgsql +pdo_pgsql  -gd -zip -imagick  --with-php-version=${{ env.BUILD_PHP_VERSION }}
 
-
             bash make-install-deps.sh
 
             bash ./make.sh all-library

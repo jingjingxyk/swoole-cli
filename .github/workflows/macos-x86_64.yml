@@ -116,7 +116,7 @@ jobs:
 
           composer update   --optimize-autoloader
 
-          php prepare.php --without-docker=1  +ds +apcu  +xlswriter +ssh2 +pgsql  --with-build-type=release
+          php prepare.php --without-docker=1  +ds +apcu  +xlswriter +ssh2 +pgsql +pdo_pgsql  --with-build-type=release
 
       - name: Build
         run: |
