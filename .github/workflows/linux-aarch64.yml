@@ -120,7 +120,7 @@ jobs:
 
             composer update  --optimize-autoloader
 
-            php prepare.php  +inotify +apcu +ds +xlswriter +ssh2  +pgsql +pdo_pgsql -swoole  --with-php-version=${{ env.BUILD_PHP_VERSION }} --with-download-mirror-url=https://php-cli-usa.jingjingxyk.com/
+            php prepare.php  +inotify +apcu +ds +xlswriter +ssh2  +pgsql +pdo_pgsql -swoole  --with-php-version=${{ env.BUILD_PHP_VERSION }}
 
             bash make-install-deps.sh
 
