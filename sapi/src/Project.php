@@ -58,7 +58,6 @@ abstract class Project
 
     public bool $enableInstallCached = true;
 
-
     public function __construct(string $name)
     {
         $this->name = $name;
@@ -125,6 +124,7 @@ abstract class Project
     {
         $this->enableLatestTarball = $enableLatestTarball;
         $this->enableBuildCached = false;
+        $this->enableInstallCached = false;
         return $this;
     }
 
