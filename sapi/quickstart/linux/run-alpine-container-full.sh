@@ -19,7 +19,7 @@ cd ${__DIR__}
 }
 cd ${__DIR__}
 
-IMAGE=alpine:3.16
+IMAGE=alpine:3.18
 
 : <<'EOF'
    启动此容器
@@ -34,14 +34,14 @@ ARCH=$(uname -m)
 
 MIRROR=""
 DEV_SHM=0
+
 while [ $# -gt 0 ]; do
   case "$1" in
   --mirror)
     MIRROR="$2"
     ;;
-    --dev-shm)
-      DEV_SHM=1
-      shift
+  --dev-shm)
+    DEV_SHM=1
     ;;
   esac
   shift $(($# > 0 ? 1 : 0))
@@ -49,24 +49,24 @@ done
 
 case $ARCH in
 'x86_64')
-  IMAGE=docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-3.17-php7-v1.0.0-x86_64-20230917T133301Z
-    if [ "$MIRROR" = 'china' ] ; then
-      IMAGE=registry.cn-beijing.aliyuncs.com/jingjingxyk-public/app:all-dependencies-alpine-3.17-php7-v1.0.0-x86_64-20230917T133301Z
-    fi
+  TAG=all-dependencies-alpine-3.17-php8-v1.0.0-x86_64-20231113T125520Z
+  IMAGE=docker.io/jingjingxyk/build-swoole-cli:${TAG}
+  if [ "$MIRROR" = 'china' ] ; then
+    IMAGE=registry.cn-beijing.aliyuncs.com/jingjingxyk-public/app:${TAG}
+  fi
   ;;
 'aarch64')
-  IMAGE=docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-3.17-php7-v1.0.0-aarch64-20230917T133332Z
-   if [ "$MIRROR" = 'china' ] ; then
-      IMAGE=registry.cn-hangzhou.aliyuncs.com/jingjingxyk-public/app:all-dependencies-alpine-3.17-php7-v1.0.0-aarch64-20230917T133332Z
+  TAG=all-dependencies-alpine-3.17-php8-v1.0.0-aarch64-20231113T121401Z
+  IMAGE=docker.io/jingjingxyk/build-swoole-cli:${TAG}
+    if [ "$MIRROR" = 'china' ] ; then
+      IMAGE=registry.cn-hangzhou.aliyuncs.com/jingjingxyk-public/app:${TAG}
     fi
   ;;
-
 *)
   echo "此 ${ARCH} 架构的容器 容器未配置"
   exit 0
   ;;
 esac
-
 
 
 cd ${__DIR__}
