@@ -14,7 +14,9 @@ fi
 
 cd ${__PROJECT__}
 
+
 set -x
+
 # shellcheck disable=SC2034
 OS=$(uname -s)
 # shellcheck disable=SC2034
@@ -40,10 +42,11 @@ WITH_DOWNLOAD_BOX=0
 WITH_BUILD_CONTAINER=0
 WITH_WEB_UI=0
 WITH_HTTP_PROXY=0
+WITH_PHP_COMPOSER=1
 
 # 配置系统仓库  china mirror
-WITH_MIRROR='china'
-WITH_MIRROR=''
+MIRROR='china'
+MIRROR=''
 
 
 OPTIONS=''
@@ -56,16 +59,20 @@ while [ $# -gt 0 ]; do
   --proxy)
     export HTTP_PROXY="$2"
     export HTTPS_PROXY="$2"
-    NO_PROXY="127.0.0.0/8,10.0.0.0/8,100.64.0.0/10,172.16.0.0/12,192.168.0.0/16,198.18.0.0/15,169.254.0.0/16"
+    NO_PROXY="127.0.0.0/8,10.0.0.0/8,100.64.0.0/10,172.16.0.0/12,192.168.0.0/16"
     NO_PROXY="${NO_PROXY},127.0.0.1,localhost"
     NO_PROXY="${NO_PROXY},.aliyuncs.com,.aliyun.com"
-    export NO_PROXY="${NO_PROXY},.tsinghua.edu.cn,.ustc.edu.cn,.npmmirror.com,.tencent.com"
+    NO_PROXY="${NO_PROXY},.tsinghua.edu.cn,.ustc.edu.cn"
+    NO_PROXY="${NO_PROXY},.tencent.com"
+    NO_PROXY="${NO_PROXY},.sourceforge.net"
+    export NO_PROXY="${NO_PROXY},.npmmirror.com"
+
     WITH_HTTP_PROXY=1
-    OPTIONS="${OPTIONS} --with-http-proxy=${2}  "
+    OPTIONS="${OPTIONS} --with-http-proxy=${HTTP_PROXY}  "
     ;;
   --download-box)
     WITH_DOWNLOAD_BOX=1
-    OPTIONS="${OPTIONS} --without-docker=1 --with-skip-download=1 --with-dependency-graph=1  "
+    OPTIONS="${OPTIONS} --without-docker=1 --skip-download=1 --with-dependency-graph=1  "
     ;;
   --build-contianer)
     WITH_BUILD_CONTAINER=1
@@ -73,7 +80,11 @@ while [ $# -gt 0 ]; do
     ;;
   --webui)
     WITH_WEB_UI=1
-    OPTIONS="${OPTIONS}  --without-docker=1 --with-skip-download=1  --with-web-ui=1 "
+    OPTIONS="${OPTIONS}  --without-docker=1 --skip-download=1  --with-web-ui=1 "
+    ;;
+  --debug)
+    set -x
+    OPTIONS="${OPTIONS}  --with-build-type=debug "
     ;;
   --*)
     echo "Illegal option $1"
@@ -110,12 +121,12 @@ fi
 
 if [ "$OS" = 'macos' ] ; then
   number=$(which flex  | wc -l)
-  if test $number -eq 0 -o -f sapi/quickstart/macos/homebrew-init.sh ;then
+  if test $number -eq 0 ; then
   {
         if [ "$MIRROR" = 'china' ] ; then
-            bash sapi/quickstart/macos/homebrew-init.sh --mirror china
+            bash sapi/quickstart/macos/macos-init.sh --mirror china
         else
-            bash sapi/quickstart/macos/homebrew-init.sh
+            bash sapi/quickstart/macos/macos-init.sh
         fi
   }
   fi
@@ -136,18 +147,21 @@ alias php="php -d curl.cainfo=${__PROJECT__}/bin/runtime/cacert.pem -d openssl.c
 
 php -v
 
-export COMPOSER_ALLOW_SUPERUSER=1
-# composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
-# composer config -g repos.packagist composer https://packagist.org
-if [ "$MIRROR" = 'china' ]; then
-    composer config -g repos.packagist composer https://mirrors.cloud.tencent.com/composer/
+
+if [ ${WITH_PHP_COMPOSER} -eq 1 ] ; then
+    export COMPOSER_ALLOW_SUPERUSER=1
+    if [ "$MIRROR" = 'china' ]; then
+        composer config -g repos.packagist composer https://mirrors.cloud.tencent.com/composer/
+        # composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
+    else
+        composer config -g repos.packagist composer https://packagist.org
+    fi
+    # composer suggests --all
+    # composer dump-autoload
+
+    composer update  --optimize-autoloader
+    composer config -g --unset repos.packagist
 fi
-
-# composer suggests --all
-# composer dump-autoload
-
-composer update  --optimize-autoloader
-composer config -g --unset repos.packagist
 
 
 # 可用配置参数
@@ -157,8 +171,9 @@ composer config -g --unset repos.packagist
 # --conf-path="./conf.d.extra"
 # --without-docker=1
 # @macos
+# --with-parallel-jobs=8
 # --with-build-type=dev
-# --with-skip-download=1
+# --skip-download=1
 # --with-http-proxy=http://192.168.3.26:8015
 # --with-override-default-enabled-ext=0
 # --with-php-version=7.4.33
@@ -166,39 +181,41 @@ composer config -g --unset repos.packagist
 
 
 
-if [ ${WITH_HTTP_PROXY} -eq 1 ] ; then
-  unset HTTP_PROXY
-  unset HTTPS_PROXY
-  unset NO_PROXY
-fi
+
+# 定制构建选项
+OPTIONS='+apcu +ds +xlswriter +ssh2'
+OPTIONS="${OPTIONS} --with-swoole-pgsql=1"
+OPTIONS="${OPTIONS} --with-libavif=1"
+
 
 
 if [ ${IN_DOCKER} -eq 1 ] ; then
 {
 # 容器中
-
-  php prepare.php +inotify +apcu +ds +xlswriter +ssh2 +pgsql ${OPTIONS} --with-swoole-pgsql=1 --with-libavif=1
-
+  php prepare.php +inotify ${OPTIONS}
 
 } else {
 # 容器外
-
-  php prepare.php --without-docker=1 +inotify +apcu +ds +xlswriter +ssh2 +pgsql ${OPTIONS} --with-swoole-pgsql=1 --with-libavif=1
+  php prepare.php ${OPTIONS}
 
 }
 fi
 
 
-
 if [ ${WITH_DOWNLOAD_BOX} -eq 1 ] ; then
     echo " please exec script: "
+    echo " bash sapi/download-box/download-box-batch-downloader.sh "
     echo " bash sapi/download-box/download-box-init.sh "
     exit 0
 fi
 
 if [ ${WITH_BUILD_CONTAINER} -eq 1 ] ; then
     echo " please exec script: "
-    echo " bash sapi/multistage-build-dependencies-container/all-dependencies-build-container.sh --composer_mirror tencent --mirror ustc "
+        if [ "$MIRROR" = 'china' ]; then
+            echo " bash sapi/multistage-build-dependencies-container/all-dependencies-build-container.sh --composer_mirror tencent --mirror ustc "
+        else
+            echo " bash sapi/multistage-build-dependencies-container/all-dependencies-build-container.sh "
+        fi
     exit 0
 fi
 
@@ -215,8 +232,6 @@ if [ "$OS" = 'linux'  ] && [ ${IN_DOCKER} -eq 0 ] ; then
    exit 0
 fi
 
-
-
 bash make-install-deps.sh
 
 # 兼容上一版本已构建完毕的依赖库
@@ -230,20 +245,25 @@ bash make.sh build
 
 bash make.sh archive
 
-
+exit 0
 
 # 例子
-# bash build-release-example.sh --mirror china
+# bash build-release.sh --mirror china
+# bash build-release.sh --mirror china --debug
 
 # 例子  download-box
-# bash build-release-example.sh --mirror china  --download-box
+# bash build-release.sh --mirror china  --download-box
 # bash sapi/download-box/download-box-init.sh --proxy http://192.168.3.26:8015
 
-# 例子  all_dependencies
-# bash build-release-example.sh --mirror china  --build-contianer
+# 例子  build-contianer
+# bash build-release.sh --mirror china  --build-contianer
 # bash sapi/multistage-build-dependencies-container/all-dependencies-build-container.sh --composer_mirror tencent --mirror ustc
 
 # 例子  web ui
-# bash build-release-example.sh --mirror china  --webui
+# bash build-release.sh --mirror china  --webui
 # bash sapi/webUI/webui-init-data.sh
 # php sapi/webUI/bootstrap.php
+
+
+
+

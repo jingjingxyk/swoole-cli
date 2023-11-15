@@ -29,7 +29,7 @@ return function (Preprocessor $p) {
     $p->withExportVariable('FREETYPE2_CFLAGS', '$(pkg-config  --cflags --static  libbrotlicommon libbrotlidec libbrotlienc freetype2 zlib libpng)');
     $p->withExportVariable('FREETYPE2_LIBS', '$(pkg-config    --libs   --static  libbrotlicommon libbrotlidec libbrotlienc freetype2 zlib libpng)');
 
-    $p->setExtHook('gd', function (Preprocessor $p) {
+    $p->withBeforeConfigureScript('gd', function (Preprocessor $p) {
         //  屏蔽 xpm 检测，替换相关行
         $workdir = $p->getWorkDir();
 

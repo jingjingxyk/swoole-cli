@@ -18,7 +18,7 @@ cd ${__DIR__}
   echo $?
 }
 cd ${__DIR__}
-IMAGE=alpine:3.17
+IMAGE=alpine:3.18
 
 
 ARCH=$(uname -m)

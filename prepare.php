@@ -5,6 +5,12 @@ require __DIR__ . '/vendor/autoload.php';
 use SwooleCli\Preprocessor;
 use SwooleCli\Library;
 
+
+
+$homeDir = getenv('HOME');
+$p = Preprocessor::getInstance();
+$p->parseArguments($argc, $argv);
+
 # clean old make.sh
 if (file_exists(__DIR__ . '/make.sh')) {
     unlink(__DIR__ . '/make.sh');
@@ -16,10 +22,6 @@ if (file_exists(__DIR__ . '/make.sh')) {
 if (file_exists(__DIR__ . '/make-download-box.sh')) {
     unlink(__DIR__ . '/make-download-box.sh');
 }
-
-$homeDir = getenv('HOME');
-$p = Preprocessor::getInstance();
-$p->parseArguments($argc, $argv);
 
 # PHP 默认版本
 $php_version = '7.3.33';
@@ -101,17 +103,21 @@ export HTTPS_PROXY={$http_proxy}
 EOF;
     $proxyConfig .= PHP_EOL;
     $proxyConfig .= <<<'EOF'
-export NO_PROXY="127.0.0.0/8,10.0.0.0/8,100.64.0.0/10,172.16.0.0/12,192.168.0.0/16,198.18.0.0/15,169.254.0.0/16"
+export NO_PROXY="127.0.0.0/8,10.0.0.0/8,100.64.0.0/10,172.16.0.0/12,192.168.0.0/16"
 export NO_PROXY="${NO_PROXY},127.0.0.1,localhost"
-export NO_PROXY="${NO_PROXY},.aliyuncs.com,.aliyun.com"
+export NO_PROXY="${NO_PROXY},.aliyuncs.com,.aliyun.com,.tencent.com"
 export NO_PROXY="${NO_PROXY},.tsinghua.edu.cn,.ustc.edu.cn,.npmmirror.com"
-export NO_PROXY="${NO_PROXY},dl-cdn.alpinelinux.org,deb.debian.org,security.debian.org"
+export NO_PROXY="${NO_PROXY},dl-cdn.alpinelinux.org"
+export NO_PROXY="${NO_PROXY},deb.debian.org,security.debian.org"
 export NO_PROXY="${NO_PROXY},archive.ubuntu.com,security.ubuntu.com"
 export NO_PROXY="${NO_PROXY},pypi.python.org,bootstrap.pypa.io"
+export NO_PROXY="${NO_PROXY},.sourceforge.net"
+export NO_PROXY="${NO_PROXY},.gitee.com"
 
 EOF;
     $p->setProxyConfig($proxyConfig, $http_proxy);
 }
+
 
 if ($p->getOsType() == 'macos') {
     $p->setExtraLdflags('-undefined dynamic_lookup');

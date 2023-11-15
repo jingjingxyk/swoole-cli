@@ -145,7 +145,7 @@ class Preprocessor
     protected array $endCallbacks = [];
     protected array $extCallbacks = [];
 
-    protected array $extHooks = [];
+    protected array $beforeConfigure = [];
 
     protected string $configureVarables;
 
@@ -545,7 +545,7 @@ __GIT_PROXY_CONFIG_EOF;
                 unlink($lib->path);
             }
 
-            if (!$this->getInputOption('with-skip-download')) {
+            if (!$this->getInputOption('skip-download')) {
                 if (file_exists($lib->path)) {
                     echo "[Library] file cached: " . $lib->file . PHP_EOL;
                 } else {
@@ -664,7 +664,7 @@ EOF;
                 unlink($ext->path);
             }
 
-            if (!$this->getInputOption('with-skip-download')) {
+            if (!$this->getInputOption('skip-download')) {
                 if (!file_exists($ext->path)) {
                     $httpProxyConfig = $this->getProxyConfig();
                     if ($ext->enableGitProxy) {
@@ -875,12 +875,12 @@ EOF;
         $this->extCallbacks[$name] = $fn;
     }
 
-    public function setExtHook($name, $fn)
+    public function withBeforeConfigureScript($name, $fn): void
     {
-        $this->extHooks[$name] = $fn;
+        $this->beforeConfigure[$name] = $fn;
     }
 
-    public function parseArguments(int $argc, array $argv)
+    public function parseArguments(int $argc, array $argv): void
     {
         $this->prepareArgs = $argv;
         // parse the parameters passed in by the user
@@ -1157,9 +1157,8 @@ EOF;
         $this->sortLibrary();
         $this->setExtensionDependency();
 
-        if ($this->getInputOption('with-skip-download')) {
+        if ($this->getInputOption('skip-download')) {
             $this->generateLibraryDownloadLinks();
-            $this->generateFile(__DIR__ . '/template/make-download-box.php', $this->rootDir . '/make-download-box.sh');
         }
 
         $this->generateFile(__DIR__ . '/template/make-install-deps.php', $this->rootDir . '/make-install-deps.sh');
