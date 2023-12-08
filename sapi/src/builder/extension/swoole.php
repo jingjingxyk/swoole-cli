@@ -8,14 +8,13 @@ return function (Preprocessor $p) {
     $php_version_id = BUILD_CUSTOM_PHP_VERSION_ID;
     $dependent_libraries = ['curl', 'openssl', 'cares', 'zlib'];
 
-    $dependent_extensions = ['curl', 'openssl', 'sockets', 'mysqlnd', 'pdo'];
+    $dependentExtensions = ['curl', 'openssl', 'sockets', 'mysqlnd', 'pdo'];
     $options = '--enable-swoole --enable-sockets --enable-mysqlnd --enable-swoole-curl --enable-cares ';
 
-
     if ($php_version_id >= 8010) {
-        $swoole_tag = 'v5.1.0';
+        $swoole_tag = 'v5.1.1';
 
-        $dependent_libraries = array_merge($dependent_libraries, [
+        $dependentLibraries = array_merge($dependent_libraries, [
             'brotli',
             'nghttp2',
             'sqlite3',
@@ -53,11 +52,10 @@ return function (Preprocessor $p) {
             git clone -b {$swoole_tag} --depth=1 https://github.com/swoole/swoole-src.git
 EOF
         )
-        ->withBuildCached(false)
-    ;
+        ->withBuildCached(false);
 
-    call_user_func_array([$ext, 'withDependentLibraries'], $dependent_libraries);
-    call_user_func_array([$ext, 'withDependentExtensions'], $dependent_extensions);
+    call_user_func_array([$ext, 'withDependentLibraries'], $dependentLibraries);
+    call_user_func_array([$ext, 'withDependentExtensions'], $dependentExtensions);
 
     $p->addExtension($ext);
 };
