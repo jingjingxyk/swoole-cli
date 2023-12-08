@@ -4,13 +4,16 @@ use SwooleCli\Preprocessor;
 use SwooleCli\Extension;
 
 return function (Preprocessor $p) {
+
     $swoole_tag = '4.8.x';
+
     $file = "swoole-{$swoole_tag}.tar.gz";
 
-    $dependent_libraries = ['curl', 'openssl', 'cares', 'zlib', 'brotli'];
+    $dependentLibraries = ['curl', 'openssl', 'cares', 'zlib', 'brotli'];
     $url = "https://github.com/swoole/swoole-src/archive/refs/tags/{$swoole_tag}.tar.gz";
 
-    $dependent_extensions = ['curl', 'openssl', 'sockets', 'mysqlnd', 'pdo'];
+    $dependentExtensions = ['curl', 'openssl', 'sockets', 'mysqlnd', 'pdo'];
+
     $options = ' --enable-swoole --enable-sockets --enable-mysqlnd --enable-swoole-curl --enable-cares ';
     $options .= ' --with-brotli-dir=' . BROTLI_PREFIX;
 
@@ -30,8 +33,8 @@ EOF
         ->withBuildCached(false)
     ;
 
-    call_user_func_array([$ext, 'withDependentLibraries'], $dependent_libraries);
-    call_user_func_array([$ext, 'withDependentExtensions'], $dependent_extensions);
+    call_user_func_array([$ext, 'withDependentLibraries'], $dependentLibraries);
+    call_user_func_array([$ext, 'withDependentExtensions'], $dependentExtensions);
 
     $p->addExtension($ext);
 };
