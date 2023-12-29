@@ -110,11 +110,7 @@ jobs:
 
           composer update   --optimize-autoloader
 
-<<<<<<< HEAD
-          php prepare.php --without-docker=1  +ds +apcu  +xlswriter +ssh2 +pgsql -swoole --with-build-type=release --with-swoole-pgsql=1  --with-libavif=1
-=======
-          php prepare.php --without-docker=1  +ds +apcu  +xlswriter +ssh2 +pgsql -mongodb  --with-build-type=release --with-swoole-pgsql=1  --with-libavif=1 --with-php-version=${{ env.BUILD_PHP_VERSION }}
->>>>>>> build_native_php
+          php prepare.php --without-docker=1  +ds +apcu  +xlswriter +ssh2 +pgsql -swoole --with-build-type=release --with-swoole-pgsql=1  --with-libavif=1 --with-php-version=${{ env.BUILD_PHP_VERSION }}
 
       - name: Build
         run: |
