@@ -45,6 +45,7 @@ jobs:
       - name: Install re2c
         shell: bash
         run: |
+          pwd
           bash ./sapi/scripts/cygwin/install-re2c.sh
 
       - name: Prepare
