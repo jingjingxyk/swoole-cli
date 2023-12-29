@@ -22,6 +22,7 @@ jobs:
           pwd
           # ipconfig /all
 
+      - uses: actions/checkout@v3
       - name: Prepare submodule
         run: |
           ipconfig /all
@@ -45,42 +46,31 @@ jobs:
       - name: Install re2c
         shell: C:\cygwin\bin\bash.exe --login '{0}'
         run: |
-          cd ${{ github.workspace }}
           bash ./sapi/scripts/cygwin/install-re2c.sh
 
       - name: Prepare
-        shell: C:\cygwin\bin\bash.exe --login '{0}'
         run: |
-          cd ${{ github.workspace }}
           # git config --global --add safe.directory /cygdrive/d/a/swoole-cli/swoole-cli
           # git submodule update --init
           bash ./sapi/scripts/cygwin/cygwin-config-ext.sh --php-version ${{ env.BUILD_PHP_VERSION }}
 
       - name: Configure
-        shell: C:\cygwin\bin\bash.exe --login '{0}'
         run: |
-          cd ${{ github.workspace }}
           bash ./sapi/scripts/cygwin/cygwin-config.sh
 
       - name: Build
-        shell: C:\cygwin\bin\bash.exe --login '{0}'
         run: |
-          cd ${{ github.workspace }}
           bash ./sapi/scripts/cygwin/cygwin-build.sh
 
       - name: Show Build Result
-        shell: C:\cygwin\bin\bash.exe --login '{0}'
         run: |
-          cd ${{ github.workspace }}
           ./bin/php-cli.exe -v
           ./bin/php-cli.exe -m
           ./bin/php-cli.exe --ri pdo_pgsql
           ./bin/php-cli.exe --ri swoole
 
       - name: Archive
-        shell: C:\cygwin\bin\bash.exe --login '{0}'
         run: |
-          cd ${{ github.workspace }}
           bash ./sapi/scripts/cygwin/cygwin-archive.sh
 
       - name: production artifacts
