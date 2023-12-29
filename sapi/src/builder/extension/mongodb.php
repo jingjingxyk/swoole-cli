@@ -31,7 +31,6 @@ return function (Preprocessor $p) {
     $options .= ' --with-mongodb-sasl=no ';
     $options .= ' --with-mongodb-icu=yes ';
 
-
     $php_version_id = BUILD_CUSTOM_PHP_VERSION_ID;
     $file = '';
     $url = '';
@@ -43,7 +42,7 @@ return function (Preprocessor $p) {
     if ($php_version_id < 7040) {
         $pecl_version = '1.7.4';
     } else {
-        $mongodb_version = '1.16.2';
+        $mongodb_version = '1.17.2';
         $file = "mongodb-{$mongodb_version}.tgz";
         $download_dir_name = 'mongo-php-driver';
         $download_script = <<<EOF

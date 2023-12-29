@@ -5,7 +5,7 @@ use SwooleCli\Extension;
 
 return function (Preprocessor $p) {
     $php_version_id = BUILD_CUSTOM_PHP_VERSION_ID;
-    $pecl_version = '5.3.7';
+    $pecl_version = '6.0.2';
     if ($php_version_id < 7040) {
         $pecl_version = '4.2.0';
     }

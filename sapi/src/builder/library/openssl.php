@@ -10,7 +10,7 @@ return function (Preprocessor $p) {
     $make_options = '';
 
     if ($php_version_id >= 8010) {
-        $url = 'https://github.com/quictls/openssl/archive/refs/tags/openssl-3.0.10-quic1.tar.gz';
+        $url = 'https://github.com/quictls/openssl/archive/refs/tags/openssl-3.1.4-quic1.tar.gz';
         $make_options = 'build_sw';
     } else {
         $url = 'https://github.com/openssl/openssl/releases/download/OpenSSL_1_1_1w/openssl-1.1.1w.tar.gz';
