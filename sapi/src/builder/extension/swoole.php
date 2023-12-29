@@ -14,7 +14,7 @@ return function (Preprocessor $p) {
 
     $dependentExtensions = ['curl', 'openssl', 'sockets', 'mysqlnd', 'pdo'];
 
-    $options = ' --enable-swoole --enable-sockets --enable-mysqlnd --enable-swoole-curl --enable-cares ';
+    $options = ' --enable-swoole --enable-sockets --enable-mysqlnd  --enable-cares '; # --enable-swoole-curl
     $options .= ' --with-brotli-dir=' . BROTLI_PREFIX;
 
 
