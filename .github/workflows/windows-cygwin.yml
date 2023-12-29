@@ -5,7 +5,7 @@ on:
   pull_request:
 
 env:
-  BUILD_PHP_VERSION: 8.0.30
+  BUILD_PHP_VERSION: 7.4.33
 
 jobs:
   windows-cygwin:
