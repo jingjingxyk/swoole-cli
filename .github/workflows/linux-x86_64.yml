@@ -4,14 +4,18 @@ on:
   push:
   pull_request:
 
-
 env:
-  BUILD_PHP_VERSION: 8.2.11
+  BUILD_PHP_VERSION: 8.2.13
 
 jobs:
   linux-x86_64:
     if: 1
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version:
+          - "8.2.13"
+
     steps:
       - uses: actions/checkout@v3
       - name: Prepare Source Code
@@ -42,6 +46,8 @@ jobs:
           echo $IPV6
           echo "X_IPV6=${IPV6}" >> $GITHUB_ENV
           echo "X_IPV4=${IPV4}" >> $GITHUB_ENV
+
+          echo "BUILD_PHP_VERSION=${{ matrix.php-version }}" >> $GITHUB_ENV
 
           echo ${{ github.actor }}
           echo ${{ github.repository }}
@@ -161,7 +167,7 @@ jobs:
       - name: production artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: php-micro-linux-x64-${{ env.BUILD_PHP_VERSION }}
+          name: php-micro-v${{ env.BUILD_PHP_VERSION }}-linux-x64
           retention-days: 7
           path: ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/micro.sfx
 
