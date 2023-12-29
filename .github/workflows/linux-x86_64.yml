@@ -4,7 +4,6 @@ on:
   push:
   pull_request:
 
-
 env:
   BUILD_PHP_VERSION: 7.4.33
 
@@ -167,7 +166,7 @@ jobs:
       - name: production artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: php-cli-linux-x64-${{ env.BUILD_PHP_VERSION }}
+          name: php-cli-v${{ env.BUILD_PHP_VERSION }}-linux-x64
           retention-days: 7
           path: ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
 
