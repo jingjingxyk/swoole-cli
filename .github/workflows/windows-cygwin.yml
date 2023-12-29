@@ -9,7 +9,7 @@ env:
 
 jobs:
   windows-cygwin:
-    if: 1
+    if: 0
     runs-on: windows-latest
     steps:
       - name: Prepare git
@@ -21,13 +21,6 @@ jobs:
           uname -a
           pwd
           # ipconfig /all
-
-      - uses: actions/checkout@v3
-      - name: set php version
-        shell: bash   # # https://docs.github.com/zh/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsshell
-        run: |
-          echo "BUILD_PHP_VERSION=${{ matrix.php-version }}" >> $GITHUB_ENV
-          # https://docs.github.com/zh/actions/using-workflows/workflow-commands-for-github-actions#setting-an-environment-variable
 
       - name: Prepare submodule
         run: |
