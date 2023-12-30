@@ -125,7 +125,7 @@ jobs:
 
           bash ./make.sh all-library
 
-          bash ./make.sh config
+          bash ./make.sh make_release_archive
 
       - name: Show Build Result
         if: 1
