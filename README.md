@@ -15,6 +15,6 @@
     php prepare.php +socat
     bash make-install-deps.sh
     bash make.sh all-library
-    bash make.sh config
+    bash make.sh make_release_archive
 
 ```
