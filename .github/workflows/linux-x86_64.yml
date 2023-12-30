@@ -150,7 +150,7 @@ jobs:
 
             composer update   --optimize-autoloader
 
-            php prepare.php  php prepare.php   +ffmpeg
+            php prepare.php   +ffmpeg
 
             bash make-install-deps.sh
 
