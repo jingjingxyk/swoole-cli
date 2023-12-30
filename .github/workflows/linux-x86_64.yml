@@ -144,6 +144,8 @@ jobs:
 
             bash ./make.sh all-library
 
+            php prepare.php  +inotify +apcu +ds +xlswriter +ssh2  +pgsql +pdo_pgsql  -gd -zip -imagick  --with-php-version=${{ env.BUILD_PHP_VERSION }} --with-c-compiler=gcc
+
             bash ./make.sh config
             bash ./make.sh build
 
