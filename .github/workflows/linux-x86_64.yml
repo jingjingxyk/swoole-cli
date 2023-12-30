@@ -71,7 +71,6 @@ jobs:
           key: ${{ runner.os }}-x86_64-php-vendor
 
       - name: Cache Dependency Source Code Tarball
-        if: 1
         uses: actions/cache@v3
         id: dependency-cache
         with:
@@ -79,7 +78,6 @@ jobs:
           key: ${{ github.head_ref || github.ref_name }}-${{ runner.os }}-x86_64-pool
 
       - name: Cache all-library
-        if: 0
         uses: actions/cache@v3
         id: all-library-cache
         with:
@@ -87,7 +85,6 @@ jobs:
           key: ${{ github.head_ref || github.ref_name }}-${{ runner.os }}-x86_64-all-library
 
       - name: Cache swoole-cli-builder-image
-        if: 0
         uses: actions/cache@v3
         id: swoole-cli-builder-image-cache
         with:
@@ -148,45 +145,26 @@ jobs:
 
             composer update   --optimize-autoloader
 
-            php prepare.php  -ffmpeg +coturn  ${{ inputs.build_type }} ${{ inputs.build_options }} --with-c-compiler=clang
+            php prepare.php  +coturn
 
             bash make-install-deps.sh
 
-            sed -i.backup "s/-ldl/  /g" /usr/local/swoole-cli/openssl/lib/pkgconfig/libcrypto.pc
-
             bash ./make.sh all-library
             bash ./make.sh config
-            # bash ./make.sh build
-            # bash ./make.sh archive
 
       - name: Show Build Result
-        if: 0
         run: |
-          ./thirdparty/php-src/sapi/cli/php -v
-          ./thirdparty/php-src/sapi/cli/php -m
-          ./thirdparty/php-src/sapi/cli/php --ri gd
-          ./thirdparty/php-src/sapi/cli/php --ri swoole
-          ./thirdparty/php-src/sapi/cli/php --ri pgsql
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -v
-          file ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-          readelf -h ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -r "echo PHP_VERSION;"
-
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php  --list-tests
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/SwoolePGSQLTest.php
+          ls ./bin/coturn/
 
       - name: production artifacts
-        if: 1
         uses: actions/upload-artifact@v3
         with:
-          name: php-cli-v${{ env.BUILD_PHP_VERSION }}-linux-x64
+          name: coturn-linux-x64
           retention-days: 7
-          path: ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
+          path: ./bin/coturn/
 
       - name: gh release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: |
-            php-cli-v${{ env.BUILD_PHP_VERSION }}-linux-x64.tar.xz
+          files: coturn-vlatest-static-linux-x64.tar.xz

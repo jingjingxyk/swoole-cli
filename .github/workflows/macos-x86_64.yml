@@ -9,14 +9,8 @@ env:
 
 jobs:
   macos-x86_64:
-    if: 0
+    if: 1
     runs-on: macos-latest
-    strategy:
-      matrix:
-        php-version:
-          - "8.2.13"
-    #          - "8.1.27"
-    #          - "8.3.1"
     steps:
       - uses: actions/checkout@v3
       - name: Prepare build environment
@@ -53,12 +47,9 @@ jobs:
           echo "X_IPV6=${IPV6}" >> $GITHUB_ENV
           echo "X_IPV4=${IPV4}" >> $GITHUB_ENV
 
-          echo "BUILD_PHP_VERSION=${{ matrix.php-version }}" >> $GITHUB_ENV
 
           export PATH=/usr/local/opt/bison/bin:/usr/local/opt/llvm/bin:$PATH
           # brew bison --debug
-
-          curl https://detect-ip.xiaoshuogeng.com/ip/json  | jq
 
           echo ${{ env.BRANCH_NAME }}
           echo ${{ github.actor }}
@@ -72,8 +63,6 @@ jobs:
           sudo mkdir -p /usr/local/swoole-cli
 
           CURRENT_USER=$(whoami) && sudo chown -R ${CURRENT_USER}:staff /usr/local/swoole-cli
-
-          # git submodule update --init
 
       - name: Cache PHP Runtime
         uses: actions/cache@v3
@@ -90,7 +79,6 @@ jobs:
           key: ${{ runner.os }}-x86_64-php-vendor
 
       - name: Cache Dependency Source Code Tarball
-        if: 0
         uses: actions/cache@v3
         id: dependency-cache
         with:
@@ -98,7 +86,6 @@ jobs:
           key: ${{ github.head_ref || github.ref_name }}-${{ runner.os }}-x86_64-pool
 
       - name: Cache all-library
-        if: 0
         uses: actions/cache@v3
         id: all-library-cache
         with:
@@ -137,36 +124,21 @@ jobs:
           bash make-install-deps.sh
 
           bash ./make.sh all-library
-
           bash ./make.sh config
-          # bash ./make.sh build
-          # bash ./make.sh archive
 
       - name: Show Build Result
-        if: 0
         run: |
-          export PATH="/usr/local/opt/binutils/bin:$PATH"
-
-          ./thirdparty/php-src/sapi/cli/php -v
-          file ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-          otool -L ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-          # greadelf -h ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -r "echo PHP_VERSION;"
-
-          ./thirdparty/php-src/sapi/cli/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php  --list-tests
-          ./thirdparty/php-src/sapi/cli/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php
-
+          ls ./bin/coturn/
 
       - name: Archive production artifacts
-        if: 0
         uses: actions/upload-artifact@v3
         with:
-          name: php-cli-v${{ env.BUILD_PHP_VERSION }}-macos-x64
+          name: coturn-macos-x64
           retention-days: 7
-          path: ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
+          path: ./bin/coturn/
 
       - name: gh release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: php-cli-v${{ env.BUILD_PHP_VERSION }}-macos-x64.tar.xz
+          files: coturn-vlatest-static-macos-x64.tar.xz
