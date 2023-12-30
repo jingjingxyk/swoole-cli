@@ -9,11 +9,11 @@ return function (Preprocessor $p) {
     $lib->withHomePage('https://chromium.googlesource.com/webm/libvpx')
         ->withLicense('https://chromium.googlesource.com/webm/libvpx/+/refs/heads/main/LICENSE', Library::LICENSE_SPEC)
         ->withManual('https://chromium.googlesource.com/webm/libvpx/+/refs/heads/main')
-        ->withFile('libvpx-v1.13.0.tar.gz')
+        ->withFile('libvpx-v1.13.1.tar.gz')
         ->withDownloadScript(
             'libvpx',
             <<<EOF
-            git clone -b v1.13.0  --depth=1  https://chromium.googlesource.com/webm/libvpx
+            git clone -b v1.13.1  --depth=1  https://chromium.googlesource.com/webm/libvpx
 EOF
         )
         ->withPreInstallCommand(
@@ -46,15 +46,22 @@ EOF
             --enable-vp9 \
             --enable-pic \
             --disable-examples \
-            --disable-tools \
+            --enable-tools \
             --disable-docs \
             --disable-unit-tests \
-            --enable-vp9-highbitdepth
+            --enable-vp9-highbitdepth \
+            --enable-libyuv \
+            --enable-internal-stats \
+            --enable-postproc \
+            --enable-vp9-temporal-denoising \
+            --enable-webm-io
 
 EOF
         )
         ->withPkgName('vpx')
-        ->withBinPath($libvpx_prefix . '/bin/');
+        ->withBinPath($libvpx_prefix . '/bin/')
+        ->withDependentLibraries('libwebp')
+    ;
 
     $p->addLibrary($lib);
 };
