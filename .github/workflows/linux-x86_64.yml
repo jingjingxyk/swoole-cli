@@ -155,11 +155,13 @@ jobs:
       - name: Show Build Result
         run: |
           ls ./bin/coturn/
+          COTURN_VERSION=$(./bin/coturn/bin/turnserver --version | tail -n 1)
+          echo "COTURN_VERSION=${SOCAT_VERSION}" >> $GITHUB_ENV
 
       - name: production artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: coturn-linux-x64
+          name: coturn-${{ env.COTURN_VERSION }}-linux-x64
           retention-days: 7
           path: ./bin/coturn/
 
@@ -167,4 +169,4 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: coturn-vlatest-static-linux-x64.tar.xz
+          files: coturn-${{ env.COTURN_VERSION }}-linux-x64
