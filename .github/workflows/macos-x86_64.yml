@@ -145,6 +145,6 @@ jobs:
 
       - name: gh release
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
+        if: 1 && startsWith(github.ref, 'refs/tags/')
         with:
           files: socat-${{ env.SOCAT_VERSION }}-macos-x64.tar.xz
