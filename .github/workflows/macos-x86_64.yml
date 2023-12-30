@@ -1,22 +1,13 @@
-name: build-php-cli-macos-x86_64
+name: build-socat-macos-x86_64
 
 on:
   push:
   pull_request:
 
-env:
-  BUILD_PHP_VERSION: 8.2.13
-
 jobs:
   macos-x86_64:
-    if: 0
+    if: 1
     runs-on: macos-latest
-    strategy:
-      matrix:
-        php-version:
-          - "8.2.13"
-    #          - "8.1.27"
-    #          - "8.3.1"
     steps:
       - uses: actions/checkout@v3
       - name: Prepare build environment
@@ -53,12 +44,8 @@ jobs:
           echo "X_IPV6=${IPV6}" >> $GITHUB_ENV
           echo "X_IPV4=${IPV4}" >> $GITHUB_ENV
 
-          echo "BUILD_PHP_VERSION=${{ matrix.php-version }}" >> $GITHUB_ENV
-
           export PATH=/usr/local/opt/bison/bin:/usr/local/opt/llvm/bin:$PATH
           # brew bison --debug
-
-          curl https://detect-ip.xiaoshuogeng.com/ip/json  | jq
 
           echo ${{ env.BRANCH_NAME }}
           echo ${{ github.actor }}
@@ -90,7 +77,7 @@ jobs:
           key: ${{ runner.os }}-x86_64-php-vendor
 
       - name: Cache Dependency Source Code Tarball
-        if: 0
+        if: 1
         uses: actions/cache@v3
         id: dependency-cache
         with:
@@ -98,7 +85,7 @@ jobs:
           key: ${{ github.head_ref || github.ref_name }}-${{ runner.os }}-x86_64-pool
 
       - name: Cache all-library
-        if: 0
+        if: 1
         uses: actions/cache@v3
         id: all-library-cache
         with:
@@ -128,7 +115,7 @@ jobs:
 
           composer update   --optimize-autoloader
 
-          php prepare.php --without-docker=1  -coturn --with-build-type=release
+          php prepare.php --without-docker=1  +socat --with-build-type=release
 
       - name: Build
         run: |
@@ -139,34 +126,22 @@ jobs:
           bash ./make.sh all-library
 
           bash ./make.sh config
-          # bash ./make.sh build
-          # bash ./make.sh archive
 
       - name: Show Build Result
-        if: 0
+        if: 1
         run: |
-          export PATH="/usr/local/opt/binutils/bin:$PATH"
-
-          ./thirdparty/php-src/sapi/cli/php -v
-          file ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-          otool -L ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-          # greadelf -h ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -r "echo PHP_VERSION;"
-
-          ./thirdparty/php-src/sapi/cli/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php  --list-tests
-          ./thirdparty/php-src/sapi/cli/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php
-
+          ./bin/socat -V
 
       - name: Archive production artifacts
-        if: 0
+        if: 1
         uses: actions/upload-artifact@v3
         with:
-          name: php-cli-v${{ env.BUILD_PHP_VERSION }}-macos-x64
+          name: socat-macos-x64
           retention-days: 7
-          path: ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
+          path: ./bin/socat
 
       - name: gh release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: php-cli-v${{ env.BUILD_PHP_VERSION }}-macos-x64.tar.xz
+          files: socat-vlatest-static-macos-x64.tar.xz
