@@ -73,7 +73,6 @@ jobs:
           key: ${{ runner.os }}-x86_64-php-vendor
 
       - name: Cache Dependency Source Code Tarball
-        if: 1
         uses: actions/cache@v3
         id: dependency-cache
         with:
@@ -81,7 +80,6 @@ jobs:
           key: ${{ github.head_ref || github.ref_name }}-${{ runner.os }}-x86_64-pool
 
       - name: Cache all-library
-        if: 1
         uses: actions/cache@v3
         id: all-library-cache
         with:
@@ -89,7 +87,6 @@ jobs:
           key: ${{ github.head_ref || github.ref_name }}-${{ runner.os }}-x86_64-all-library
 
       - name: Cache swoole-cli-builder-image
-        if: 1
         uses: actions/cache@v3
         id: swoole-cli-builder-image-cache
         with:
@@ -158,13 +155,11 @@ jobs:
             bash ./make.sh make_release_archive
 
       - name: Show Build Result
-        if: 1
         run: |
           ./bin/ffmpeg/bin/ffmpeg -h
           ./bin/ffmpeg/bin/ffmpeg -version
 
       - name: production artifacts
-        if: 1
         uses: actions/upload-artifact@v3
         with:
           name: ffmpeg-vlatest-static-linux-x64
