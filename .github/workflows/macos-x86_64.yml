@@ -132,7 +132,7 @@ jobs:
           ./bin/coturn/bin/turnserver --version
           ./bin/coturn/bin/turnserver --version | tail -n 1
           COTURN_VERSION=$(./bin/coturn/bin/turnserver --version | tail -n 1)
-          echo "COTURN_VERSION=${SOCAT_VERSION}" >> $GITHUB_ENV
+          echo "COTURN_VERSION=${COTURN_VERSION}" >> $GITHUB_ENV
 
       - name: Archive production artifacts
         uses: actions/upload-artifact@v3
