@@ -2,11 +2,11 @@
 
 构建静态 socat
 
-## 实现原理
-
-> 复用 [jingjingxyk/swoole-cli `new_dev`分支](https://github.com/jingjingxyk/swoole-cli/tree/new_dev) 的 静态库构建流程
-
 ## 构建命令
+
+>
+复用 [jingjingxyk/swoole-cli `new_dev`分支](https://github.com/jingjingxyk/swoole-cli/tree/new_dev)
+的 静态库构建流程
 
 ```bash
 
@@ -18,3 +18,7 @@
     bash make.sh config
 
 ```
+
+## socat 源码构建参考
+
+    http://www.dest-unreach.org/socat/
