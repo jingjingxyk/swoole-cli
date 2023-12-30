@@ -1,43 +1,8 @@
-name: build-php-cli-linux-x86_64
+name: build-linux-x86_64
 
 on:
   push:
   pull_request:
-  workflow_dispatch:
-    inputs:
-      build_latest_swoole_or_swow:
-        required: true
-        description: "定制构建选项: 构建最新版的 swoole 或者 swow （此二者扩展不能同时启用）"
-        default: ' '
-        type: choice
-        options:
-          - ' '
-          - '-swoole +swoole_latest'
-          - '-swoole +swow_latest'
-          - '-swoole +swow'
-      php_version:
-        required: true
-        description: "定制构建选项: 指定 PHP 版本(版本号大于等于8.1)"
-        default: '--with-php-version=8.2.13'
-        type: choice
-        options:
-          - '--with-php-version=8.1.27'
-          - '--with-php-version=8.2.13'
-          - '--with-php-version=8.3.1'
-      build_type:
-        required: true
-        description: "定制构建选项: 指定构建类型"
-        default: '--with-build-type=release'
-        type: choice
-        options:
-          - '--with-build-type=release'
-          - '--with-build-type=dev'
-      build_options:
-        required: false
-        description: "定制构建选项: 请查看 docs/options.md"
-        default: ' '
-        type: string
-
 
 env:
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
@@ -45,14 +10,8 @@ env:
 
 jobs:
   linux-x86_64:
-    if: 0
+    if: 1
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php-version:
-          - "8.2.13"
-    #          - "8.1.27"
-    #          - "8.3.1"
     steps:
       - uses: actions/checkout@v3
       - name: Prepare Source Code
@@ -84,9 +43,6 @@ jobs:
           echo "X_IPV6=${IPV6}" >> $GITHUB_ENV
           echo "X_IPV4=${IPV4}" >> $GITHUB_ENV
 
-          sudo apt install -y jq curl
-
-          curl https://detect-ip.xiaoshuogeng.com/ip/json  | jq
 
           echo ${{ env.BRANCH_NAME }}
 
@@ -95,12 +51,6 @@ jobs:
           echo ${{ github.repository_owner }}
           echo ${{ github.head_ref }}
           echo ${{ github.ref_name }}
-
-          # git submodule update --init
-
-          # 准备数据库容器
-
-          # bash sapi/docker/database/start.sh
 
           sudo mkdir -p /usr/local/swoole-cli
           uid=$(id -u) && gid=$(id -g) && sudo chown -R ${uid}:${gid} /usr/local/swoole-cli
@@ -196,32 +146,17 @@ jobs:
 
             composer update   --optimize-autoloader
 
-            php prepare.php  -ffmpeg +coturn  ${{ inputs.build_type }} ${{ inputs.build_options }} --with-c-compiler=clang
+            php prepare.php  +privoxy
 
             bash make-install-deps.sh
 
-            sed -i.backup "s/-ldl/  /g" /usr/local/swoole-cli/openssl/lib/pkgconfig/libcrypto.pc
-
             bash ./make.sh all-library
             bash ./make.sh config
-            # bash ./make.sh build
-            # bash ./make.sh archive
 
       - name: Show Build Result
         run: |
-          ./thirdparty/php-src/sapi/cli/php -v
-          ./thirdparty/php-src/sapi/cli/php -m
-          ./thirdparty/php-src/sapi/cli/php --ri gd
-          ./thirdparty/php-src/sapi/cli/php --ri swoole
-          ./thirdparty/php-src/sapi/cli/php --ri pgsql
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -v
-          file ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-          readelf -h ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -r "echo PHP_VERSION;"
-
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php  --list-tests
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/SwoolePGSQLTest.php
+          ls ./bin/
+          # PRIVOXY_VERSION=$(./bin/privoxy/sbin/privoxy --help | grep 'Privoxy version' | awk '{print $3}')
 
       - name: production artifacts
         uses: actions/upload-artifact@v3
