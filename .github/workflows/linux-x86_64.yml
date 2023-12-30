@@ -156,9 +156,9 @@ jobs:
         if: 1
         run: |
           ./bin/socat -V
-          socat -V | grep 'socat version'
+          ./bin/socat -V -V | grep 'socat version'
           SOCAT_VERSION=$(./bin/socat -V | grep 'socat version' | awk '{ print $3 }')
-          echo "SOCAT_VERSION==${SOCAT_VERSION}" >> $GITHUB_ENV
+          echo "SOCAT_VERSION=${SOCAT_VERSION}" >> $GITHUB_ENV
 
       - name: production artifacts
         if: 1
