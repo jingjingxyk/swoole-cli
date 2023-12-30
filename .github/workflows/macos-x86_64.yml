@@ -129,7 +129,7 @@ jobs:
 
           bash ./make.sh all-library
 
-          bash ./make.sh config
+          bash ./make.sh make_release_archive
           # bash ./make.sh build
           # bash ./make.sh archive
 
