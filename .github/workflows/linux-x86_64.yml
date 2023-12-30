@@ -156,12 +156,15 @@ jobs:
         if: 1
         run: |
           ./bin/socat -V
+          socat -V | grep 'socat version'
+          SOCAT_VERSION=$(./bin/socat -V | grep 'socat version' | awk '{ print $3 }')
+          echo "SOCAT_VERSION==${SOCAT_VERSION}" >> $GITHUB_ENV
 
       - name: production artifacts
         if: 1
         uses: actions/upload-artifact@v3
         with:
-          name: socat-linux-x64
+          name: socat-${{ env.SOCAT_VERSION }}-linux-x64
           retention-days: 7
           path: ./bin/socat
 
@@ -170,4 +173,4 @@ jobs:
         if: 0 && startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            socat-vlatest-static-linux-x64.tar.xz
+            socat-${{ env.SOCAT_VERSION }}-linux-x64.tar.xz
