@@ -159,6 +159,7 @@ jobs:
           ./bin/coturn/bin/turnserver --version | tail -n 1
           COTURN_VERSION=$(./bin/coturn/bin/turnserver --version | tail -n 1)
           echo "COTURN_VERSION=${COTURN_VERSION}" >> $GITHUB_ENV
+          ls -lha .
 
       - name: production artifacts
         uses: actions/upload-artifact@v3
