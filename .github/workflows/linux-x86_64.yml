@@ -155,6 +155,7 @@ jobs:
       - name: Show Build Result
         run: |
           ls ./bin/coturn/
+          ./bin/coturn/bin/turnserver --version
           COTURN_VERSION=$(./bin/coturn/bin/turnserver --version | tail -n 1)
           echo "COTURN_VERSION=${SOCAT_VERSION}" >> $GITHUB_ENV
 

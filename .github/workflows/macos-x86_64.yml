@@ -115,7 +115,7 @@ jobs:
 
           composer update   --optimize-autoloader
 
-          php prepare.php --without-docker=1  -coturn --with-build-type=release
+          php prepare.php --without-docker=1  +coturn --with-build-type=release
 
       - name: Build
         run: |
