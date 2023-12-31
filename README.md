@@ -5,8 +5,12 @@
 ## 构建命令
 
 >
-复用 [jingjingxyk/swoole-cli `new_dev`分支](https://github.com/jingjingxyk/swoole-cli/tree/new_dev)
-的 静态库构建流程
+复用 [jingjingxyk/swoole-cli](https://github.com/jingjingxyk/swoole-cli/tree/new_dev) `new_dev`
+分支 的 静态库构建流程
+
+>
+本项目与[jingjingxyk/swoole-cli](https://github.com/jingjingxyk/swoole-cli/tree/new_dev) `new_dev`
+分支的区别就是 `[.github/workflow](./.github/workflow)` 配置
 
 ```bash
 
