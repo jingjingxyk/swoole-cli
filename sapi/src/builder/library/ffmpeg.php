@@ -52,7 +52,7 @@ EOF
 
 EOF
         )
-        //->withBuildCached(false)
+        ->withBuildCached(false)
         ->withConfigure(
             <<<EOF
 
