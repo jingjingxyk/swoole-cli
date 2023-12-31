@@ -5,6 +5,10 @@ use SwooleCli\Preprocessor;
 
 return function (Preprocessor $p) {
     $privoxy_prefix = PRIVOXY_PREFIX;
+
+    $cflags = $p->getOsType() == 'macos' ? "" : '-static';
+    $options = $p->getOsType() == 'macos' ? "" : '--enable-static-linking';
+
     $p->addLibrary(
         (new Library('privoxy'))
             ->withHomePage('https://www.privoxy.org')
@@ -26,7 +30,7 @@ return function (Preprocessor $p) {
             ->withPrefix($privoxy_prefix)
             ->withCleanBuildDirectory()
             ->withCleanPreInstallDirectory($privoxy_prefix)
-            ->withBuildCached(false)
+            //->withBuildCached(false)
             ->withPreInstallCommand(
                 'alpine',
                 <<<EOF
@@ -45,18 +49,24 @@ EOF
                 PACKAGES="openssl zlib"
                 PACKAGES="\$PACKAGES  libbrotlicommon  libbrotlidec  libbrotlienc "
                 PACKAGES="\$PACKAGES libpcre  libpcre16  libpcre32  libpcrecpp  libpcreposix"
+                CFLAGS=" {$cflags} " \
                 CPPFLAGS="$(pkg-config  --cflags-only-I --static \$PACKAGES )" \
                 LDFLAGS="$(pkg-config   --libs-only-L   --static \$PACKAGES )" \
                 LIBS="$(pkg-config      --libs-only-l   --static \$PACKAGES )" \
                 PCRE_STATIC=YES \
                 ./configure \
                 --prefix={$privoxy_prefix} \
-                --enable-static-linking \
+                 {$options} \
                 --with-openssl \
                 --without-mbedtls \
                 --with-brotli \
                 --with-docbook=yes
  EOF
+            )
+            ->withScriptAfterInstall(
+                <<<EOF
+            cp -rf doc/webserver {$privoxy_prefix}/docs
+EOF
             )
             ->withDependentLibraries('openssl', 'pcre', 'zlib', 'brotli')
     );
