@@ -20,3 +20,7 @@
     bash make.sh config
 
 ```
+
+## ffmpeg 构建参考
+
+    https://github.com/BtbN/FFmpeg-Builds/tree/master/scripts.d
