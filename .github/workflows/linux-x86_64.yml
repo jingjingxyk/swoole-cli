@@ -157,6 +157,7 @@ jobs:
         run: |
           ls ./bin/
           uid=$(id -u) && gid=$(id -g) && sudo chown -R ${uid}:${gid} ./bin/privoxy/
+          uid=$(id -u) && gid=$(id -g) && sudo chown -R ${uid}:${gid} /usr/local/swoole-cli
           PRIVOXY_VERSION=$(./bin/privoxy/sbin/privoxy --help | grep 'Privoxy version' | awk '{print $3}')
           echo "PRIVOXY_VERSION=${PRIVOXY_VERSION}" >> $GITHUB_ENV
 
