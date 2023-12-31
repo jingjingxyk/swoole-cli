@@ -158,17 +158,18 @@ jobs:
         run: |
           ./bin/ffmpeg/bin/ffmpeg -h
           ./bin/ffmpeg/bin/ffmpeg -version
+          FFMPEG_VERSION=$(./bin/ffmpeg/bin/ffmpeg -version | grep 'ffmpeg version' | awk '{print $3}' | cut -d '-' -f 1)
+          echo "FFMPEG_VERSION=${FFMPEG_VERSION}" >> $GITHUB_ENV
 
       - name: production artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: ffmpeg-vlatest-static-linux-x64
+          name: ffmpeg-${{ env.FFMPEG_VERSION }}-linux-x64
           retention-days: 7
-          path: ffmpeg-vlatest-static-linux-x64.tar.xz
+          path: ./bin/ffmpeg/
 
       - name: gh release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: |
-            ffmpeg-vlatest-static-linux-x64.tar.xz
+          files: ffmpeg-${{ env.FFMPEG_VERSION }}-linux-x64.tar.xz
