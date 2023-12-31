@@ -133,7 +133,7 @@ jobs:
         run: |
           ./bin/ffmpeg/bin/ffmpeg -h
           ./bin/ffmpeg/bin/ffmpeg -version
-          FFMPEG_VERSION=$(./bin/ffmpeg/bin/ffmpeg -version | grep 'ffmpeg version' | awk '{print $3}' | cut -d '-' -f 1)
+          FFMPEG_VERSION=$(./bin/ffmpeg/bin/ffmpeg -version | grep 'ffmpeg version' | awk '{print $3}' )
           echo "FFMPEG_VERSION=${FFMPEG_VERSION}" >> $GITHUB_ENV
 
       - name: production artifacts
