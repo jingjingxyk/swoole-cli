@@ -18,8 +18,8 @@ return function (Preprocessor $p) {
     $cflags = $p->getOsType() == 'macos' ? ' ' : ' --static ';
     $libs = $p->getOsType() == 'macos' ? ' -lc++ ' : ' -lstdc++ ';
 
-    $cppflags = $p->getOsType() == 'macos' ? ' ' : " -I/usr/include ";
-    $ldfalgs = $p->getOsType() == 'macos' ? ' ' : " -L/usr/lib ";
+    $cppflags = $p->getOsType() == 'macos' ? ' ' : "  "; # -I/usr/include
+    $ldfalgs = $p->getOsType() == 'macos' ? ' ' : "  "; #-L/usr/lib
 
     $ldexeflags = $p->getOsType() == 'macos' ? ' ' : ' -Bstatic '; # -wl,-Bstatic -ldl
 
@@ -72,7 +72,7 @@ EOF
             PACKAGES="\$PACKAGES aom "
             PACKAGES="\$PACKAGES dav1d "
             PACKAGES="\$PACKAGES lcms2 "
-            PACKAGES="\$PACKAGES x264 "
+            # PACKAGES="\$PACKAGES x264 "
             PACKAGES="\$PACKAGES x265 " # numa
             PACKAGES="\$PACKAGES sdl2 "
             PACKAGES="\$PACKAGES ogg "
@@ -110,7 +110,6 @@ EOF
             --enable-libaom \
             --enable-lcms2 \
             --enable-gmp \
-            --enable-libx264 \
             --enable-libx265 \
             --enable-random \
             --enable-libfreetype \
@@ -133,7 +132,8 @@ EOF
             --extra-ldflags="\${LDFLAGS} " \
             --extra-libs="\${LIBS} " \
             --cc={$p->get_C_COMPILER()} \
-            --cxx={$p->get_CXX_COMPILER()}
+            --cxx={$p->get_CXX_COMPILER()} \
+            --pkg-config-flags="--static"
 
             # libxcb、xlib 是 x11 相关的库
 
@@ -145,7 +145,7 @@ EOF
             # --enable-cross-compile
             # --enable-libspeex
 
-
+            # --enable-libx264 \
 EOF
         )
         ->withPkgName('libavcodec')
@@ -168,7 +168,7 @@ EOF
             'freetype',
             "gmp",
             "lcms2",
-            "libx264",
+           // "libx264",
             "liblzma",
             "libvpx",
             "sdl2",
