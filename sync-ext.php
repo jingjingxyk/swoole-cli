@@ -45,6 +45,7 @@ cd  var/tmp/
   echo "sync"
   # ZendVM
   cp -r $SRC/Zend ./
+
   # Extension
   cp -r $SRC/ext/bcmath/ ./ext
   cp -r $SRC/ext/bz2/ ./ext
@@ -98,14 +99,17 @@ cd  var/tmp/
   cp -r $SRC/ext/xsl/ ./ext
   cp -r $SRC/ext/zip/ ./ext
   cp -r $SRC/ext/zlib/ ./ext
+
   # main
   cp -r $SRC/main ./
   sed -i 's/\/\* start Zend extensions \*\//\/\* start Zend extensions \*\/\n#ifdef PHP_ENABLE_OPCACHE\n\textern zend_extension zend_extension_entry;\n\tzend_register_extension(\&zend_extension_entry, NULL);\n#endif/g' main/main.c
+
   # build
   cp -r $SRC/build ./
   # TSRM
   cp -r ./TSRM/TSRM.h main/TSRM.h
   cp -r $SRC/configure.ac ./
+
   # fpm
   cp -r $SRC/sapi/fpm/fpm ./sapi/cli
   exit 0
