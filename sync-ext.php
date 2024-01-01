@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 
 $php_version_tag = '8.1.12';
-
-$current_dir= __DIR__ ;
-$file = __DIR__ . DIRECTORY_SEPARATOR . 'pool' . DIRECTORY_SEPARATOR . "lib" . DIRECTORY_SEPARATOR . "php-{$php_version_tag}.tar.gz";
+$current_dir = __DIR__;
+$file = $current_dir . "/pool/lib/php-{$php_version_tag}.tar.gz";
 $cmd = "curl -L https://github.com/php/php-src/archive/refs/tags/php-{$php_version_tag}.tar.gz -o $file";
 echo $cmd . PHP_EOL;
 if (!file_exists($file)) {
