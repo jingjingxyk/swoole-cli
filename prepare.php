@@ -4,8 +4,9 @@ require __DIR__ . '/vendor/autoload.php';
 
 use SwooleCli\Preprocessor;
 
-const BUILD_PHP_VERSION = '8.1.12';
+$php_version_tag = trim(file_get_contents(__DIR__ . '/sapi/PHP-VERSION.conf'));
 
+define('BUILD_PHP_VERSION', $php_version_tag);
 
 $homeDir = getenv('HOME');
 $p = Preprocessor::getInstance();
@@ -46,7 +47,7 @@ if ($p->getOsType() == 'macos') {
     $p->setLogicalProcessors('$(nproc 2> /dev/null)');
 }
 
-$p->setExtraCflags('-fno-ident -Os');
+$p->setExtraCflags(' -Os');
 
 // Generate make.sh
 $p->execute();

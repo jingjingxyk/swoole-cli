@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-require __DIR__ . '/php-version.php';
-$php_version_tag = BUILD_PHP_VERSION;
+
+$php_version_tag = trim(file_get_contents(__DIR__ . '/sapi/PHP-VERSION.conf'));
 $project_dir = __DIR__;
 $file = __DIR__ . "/pool/lib/php-{$php_version_tag}.tar.gz";
 $cmd = "curl -L https://github.com/php/php-src/archive/refs/tags/php-{$php_version_tag}.tar.gz -o $file";

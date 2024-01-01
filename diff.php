@@ -1,11 +1,11 @@
 #!/usr/bin/env php
 <?php
-require __DIR__ . '/php-version.php';
+$php_version_tag = trim(file_get_contents(__DIR__ . '/sapi/PHP-VERSION.conf'));
 
 $list_swoole_cli = swoole_string(`./bin/swoole-cli -m | tail -n +2 | head -n -3`)->trim()->lower()->split(PHP_EOL)
     ->remove('core');
 
-$php_source_folder = __DIR__ . '/var/php-' . BUILD_PHP_VERSION . '/ext/';
+$php_source_folder = __DIR__ . '/var/php-' . $php_version_tag . '/ext/';
 $list_php_src = swoole_string(`ls -1 {$php_source_folder}`)->trim()->lower()->split(PHP_EOL)
     ->remove('ext_skel.php')
     ->remove('zend_test');
