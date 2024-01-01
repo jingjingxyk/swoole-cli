@@ -2,27 +2,27 @@
 
 declare(strict_types=1);
 
-
-$php_version_tag = '8.1.12';
-$current_dir = __DIR__;
-$file = $current_dir . "/pool/lib/php-{$php_version_tag}.tar.gz";
+require __DIR__ . '/php-version.php';
+$php_version_tag = BUILD_PHP_VERSION;
+$project_dir = __DIR__;
+$file = __DIR__ . "/pool/lib/php-{$php_version_tag}.tar.gz";
 $cmd = "curl -L https://github.com/php/php-src/archive/refs/tags/php-{$php_version_tag}.tar.gz -o $file";
 echo $cmd . PHP_EOL;
 if (!file_exists($file)) {
     `{$cmd}`;
 }
-$source_folder = __DIR__ . DIRECTORY_SEPARATOR . "var/php-{$php_version_tag}";
+$php_source_folder = __DIR__ . "/var/php-{$php_version_tag}";
 
 # tar -zxvf 文件名.tar.gz --strip-components=1 -C 指定目录 需要解压的文件路径
 
 $cmd = <<<EOF
-    test -d {$source_folder} && rm -rf {$source_folder}
-    mkdir -p {$source_folder}
-    tar -zxvf {$file} --strip-components=1 -C  {$source_folder}
+    test -d {$php_source_folder} && rm -rf {$php_source_folder}
+    mkdir -p {$php_source_folder}
+    tar -zxvf {$file} --strip-components=1 -C  {$php_source_folder}
 
-    SRC={$source_folder}
-    mkdir -p {$current_dir}/var/tmp/ext/
-    cd  var/tmp/
+    SRC={$php_source_folder}
+
+    cd {$project_dir}
 EOF;
 
 $cmd .= <<<'EOF'
