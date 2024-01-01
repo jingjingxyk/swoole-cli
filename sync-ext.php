@@ -113,5 +113,5 @@ cd  var/tmp/
 
 EOF;
 
-
+echo $cmd . PHP_EOL;
 `$cmd`;
