@@ -7,7 +7,6 @@ use Swoole\Coroutine;
 
 $scheduler = new Coroutine\Scheduler();
 
-use function Swoole\Coroutine\run;
 
 $php_version_tag = '8.1.12';
 
