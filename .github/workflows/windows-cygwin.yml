@@ -20,9 +20,16 @@ jobs:
           ipconfig
           uname -a
           pwd
-          # ipconfig /all
+          ipconfig /all
 
       - uses: actions/checkout@v3
+
+      - name: set php version
+        # 参考文档：  https://docs.github.com/zh/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsshell
+        shell: bash
+        run: |
+          echo "BUILD_PHP_VERSION=${{ matrix.php-version }}" >> $GITHUB_ENV
+
       - name: Prepare submodule
         run: |
           ipconfig /all
@@ -36,6 +43,13 @@ jobs:
         with:
           path: C:/cygwin-packages
           key: ${{ runner.os }}-build-${{ env.cache-name }}
+
+      - name: Cache pool
+        id: cache-cygwin-pool
+        uses: actions/cache@v3
+        with:
+          path: "${{ github.workspace }}\\pool\\"
+          key: ${{ runner.os }}-build-pool-cache
 
       - name: Install deps
         uses: cygwin/cygwin-install-action@v4
@@ -64,10 +78,38 @@ jobs:
 
       - name: Show Build Result
         run: |
-          ./bin/php-cli.exe -v
-          ./bin/php-cli.exe -m
-          ./bin/php-cli.exe --ri pdo_pgsql
-          ./bin/php-cli.exe --ri swoole
+          ./bin/php.exe -v
+          ./bin/php.exe -m
+          ./bin/php.exe --ri pdo_pgsql
+          ./bin/php.exe --ri swoole
+          ./bin/php.exe  -r "echo PHP_VERSION;"
+
+      - name: get app version with bash
+        # 参考 https://github.com/marketplace/actions/install-cygwin
+        shell: C:\cygwin\bin\bash.EXE --noprofile --norc -e -o pipefail -o igncr   {0}
+        # shell: C:\cygwin\bin\bash.EXE --login --noprofile --norc -e -o pipefail -o igncr   {0}
+        run: |
+          ./bin/php.exe  -v | awk '{print $2}'
+
+          APP_VERSION=$(./bin/php.exe  -v | head -n 1 | awk '{print $2}')
+          echo $APP_VERSION
+          echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
+
+      - name: get app version with PowerShell
+        run: |
+          ./bin/php.exe  -v
+          $cmdOutput=./bin/php.exe  -v
+          $cmdOutput=$cmdOutput | select -first 1
+          $cmdOutput -match "(\d{1,2}\.\d{1,2}\.\d{1,2})"
+          $CYGWIN_APP_VERSION=$Matches[1]
+          echo $CYGWIN_APP_VERSION
+          echo "CYGWIN_APP_VERSION=$CYGWIN_APP_VERSION" >> $Env:GITHUB_ENV
+
+          # 参考 https://github.com/orgs/community/discussions/26641
+          # echo "APP_VERSION=${APP_VERSION}" >> $Env:GITHUB_ENV
+          # echo "APP_VERSION=$APP_VERSION" | Out-File -FilePath $env:GITHUB_ENV -Append
+          # Add-Content -Path $env:GITHUB_ENV -Value "name=$value"
+          # Add-Content -Path $env:GITHUB_ENV -Value "APP_VERSION=$APP_VERSION"
 
       - name: Archive
         run: |
@@ -76,8 +118,9 @@ jobs:
       - name: production artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: php-cli-v${{ env.BUILD_PHP_VERSION }}-cygwin-x64
-          path: php-cli-v${{ env.BUILD_PHP_VERSION }}-cygwin-x64.zip
+          name: php-cli-v${{ env.APP_VERSION }}-cygwin-x64
+          retention-days: 90
+          path: php-cli-v${{ env.APP_VERSION }}-cygwin-x64.zip
 
       - name: gh release
         uses: softprops/action-gh-release@v1
@@ -85,4 +128,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: php-cli-v${{ env.BUILD_PHP_VERSION }}-cygwin-x64.zip
+          files: php-cli-v${{ env.APP_VERSION }}-cygwin-x64.zip
