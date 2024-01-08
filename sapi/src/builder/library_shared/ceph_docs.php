@@ -44,15 +44,19 @@ EOF
             # 仅支持 ubuntu
 
             if [ -f build-env-ok ] ; then
+                source venv/bin/activate
                 admin/build-doc
+                deactivate
             else
                 bash ./install-deps.sh
 
                 apt-get install -y `cat doc_deps.deb.txt`
+                python3 -m venv venv
+                source venv/bin/activate
                 pip3 install  -r admin/doc-requirements.txt
                 pip3 install  -r admin/doc-python-common-requirements.txt
                 admin/build-doc
-
+                deactivate
                 touch build-env-ok
             fi
 

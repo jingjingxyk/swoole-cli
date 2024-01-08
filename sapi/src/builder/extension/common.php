@@ -107,7 +107,7 @@ return function (Preprocessor $p) {
     $depends = ['opensips'] ;
 
     $depends = ['openldap'] ;
-    $depends = ['libarchive'] ;
+
     $depends = ['pgsql_latest'] ;
 
 
@@ -172,6 +172,10 @@ return function (Preprocessor $p) {
     $depends = ['dahdi_tools'] ;
     $depends = ['libpri'] ;
     $depends = ['asterisk'] ;
+    $depends = ['libarchive'] ;
+    $depends = ['libde265'] ;
+    $depends = ['libheif'] ;
+    $depends = ['webrtc'] ;
 
 
     $ext = (new Extension('common'))

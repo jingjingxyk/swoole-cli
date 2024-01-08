@@ -8,7 +8,7 @@ use SwooleCli\Preprocessor;
 ?>
 #!/usr/bin/env bash
 __PROJECT_DIR__=$(cd "$(dirname "$0")"; pwd)
-
+CLI_BUILD_TYPE=<?= $this->getBuildType() . PHP_EOL ?>
 SRC=<?= $this->phpSrcDir . PHP_EOL ?>
 ROOT=<?= $this->getRootDir() . PHP_EOL ?>
 PREPARE_ARGS="<?= implode(' ', $this->getPrepareArgs())?>"
@@ -339,10 +339,14 @@ make_release_archive() {
 make_config() {
     set -x
 
-    make_release_archive
 
 
     exit 0
+
+    cd <?= $this->phpSrcDir . PHP_EOL ?>
+    # 添加扩展
+    cp -rf ${__PROJECT_DIR__}/ext/*  <?= $this->phpSrcDir ?>/ext/
+
     before_configure_script
 
     export_variables
@@ -357,7 +361,6 @@ make_config() {
     := 是覆盖之前的值
     ?= 是如果没有被赋值过就赋予等号后面的值
     += 是添加等号后面的值
-
 
 
     # GNU C编译器的gnu11和c11 https://www.cnblogs.com/litifeng/p/8328499.html
@@ -489,6 +492,35 @@ make_build_old() {
     <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/php -v
 
     # elfedit --output-osabi linux sapi/cli/php
+}
+
+make_archive() {
+    set -x
+    make_release_archive
+    exit 0
+
+    set -x
+    cd <?= BUILD_PHP_INSTALL_PREFIX ?>/bin
+    cp -f ${__PROJECT_DIR__}/bin/LICENSE .
+
+    PHP_VERSION=$(./php -r "echo PHP_VERSION;")
+    PHP_CLI_FILE_DEBUG=php-cli-v${PHP_VERSION}-<?=$this->getOsType()?>-<?=$this->getSystemArch()?>-debug.tar.xz
+    tar -cJvf ${PHP_CLI_FILE_DEBUG} php LICENSE
+
+
+    mkdir -p <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/dist
+    cp -f php           dist/
+    cp -f LICENSE       dist/
+
+    cd <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/dist
+    strip php
+    PHP_CLI_FILE=php-cli-v${PHP_VERSION}-<?=$this->getOsType()?>-<?=$this->getSystemArch()?>.tar.xz
+    tar -cJvf ${PHP_CLI_FILE} php LICENSE
+
+    mv <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/dist/${PHP_CLI_FILE}  ${__PROJECT_DIR__}/
+    mv <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/${PHP_CLI_FILE_DEBUG} ${__PROJECT_DIR__}/
+
+    cd ${__PROJECT_DIR__}/
 }
 
 make_clean() {
@@ -667,15 +699,8 @@ elif [ "$1" = "test" ] ;then
     <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/php vendor/bin/phpunit
     exit 0
 elif [ "$1" = "archive" ] ;then
-    set -x
-    cd <?= BUILD_PHP_INSTALL_PREFIX ?>/bin
-    PHP_VERSION=$(./php -r "echo PHP_VERSION;")
-    PHP_CLI_FILE=php-cli-v${PHP_VERSION}-<?=$this->getOsType()?>-<?=$this->getSystemArch()?>.tar.xz
-    cp -f php php-dbg
-    strip php
-    tar -cJvf ${PHP_CLI_FILE} php
-    mv ${PHP_CLI_FILE} <?= $this->workDir ?>/
-    cd -
+    make_archive
+    exit 0
 elif [ "$1" = "clean-all-library" ] ;then
 <?php foreach ($this->libraryList as $item) : ?>
     clean_<?=$item->name?> && echo "[SUCCESS] make clean [<?=$item->name?>]"
@@ -735,73 +760,11 @@ elif [ "$1" = "clean" ] ;then
     make_clean
     exit 0
 elif [ "$1" = "sync" ] ;then
-  echo "sync"
-  # ZendVM
-  cp -r $SRC/Zend ./
-  # Extension
-  cp -r $SRC/ext/bcmath/ ./ext
-  cp -r $SRC/ext/bz2/ ./ext
-  cp -r $SRC/ext/calendar/ ./ext
-  cp -r $SRC/ext/ctype/ ./ext
-  cp -r $SRC/ext/curl/ ./ext
-  cp -r $SRC/ext/date/ ./ext
-  cp -r $SRC/ext/dom/ ./ext
-  cp -r $SRC/ext/exif/ ./ext
-  cp -r $SRC/ext/fileinfo/ ./ext
-  cp -r $SRC/ext/filter/ ./ext
-  cp -r $SRC/ext/gd/ ./ext
-  cp -r $SRC/ext/gettext/ ./ext
-  cp -r $SRC/ext/gmp/ ./ext
-  cp -r $SRC/ext/hash/ ./ext
-  cp -r $SRC/ext/iconv/ ./ext
-  cp -r $SRC/ext/intl/ ./ext
-  cp -r $SRC/ext/json/ ./ext
-  cp -r $SRC/ext/libxml/ ./ext
-  cp -r $SRC/ext/mbstring/ ./ext
-  cp -r $SRC/ext/mysqli/ ./ext
-  cp -r $SRC/ext/mysqlnd/ ./ext
-  cp -r $SRC/ext/opcache/ ./ext
-  sed -i 's/ext_shared=yes/ext_shared=no/g' ext/opcache/config.m4 && sed -i 's/shared,,/$ext_shared,,/g' ext/opcache/config.m4
-  sed -i 's/-DZEND_ENABLE_STATIC_TSRMLS_CACHE=1/-DZEND_ENABLE_STATIC_TSRMLS_CACHE=1 -DPHP_ENABLE_OPCACHE/g' ext/opcache/config.m4
-  echo -e '#include "php.h"\n\nextern zend_module_entry opcache_module_entry;\n#define phpext_opcache_ptr  &opcache_module_entry\n' > ext/opcache/php_opcache.h
-  cp -r $SRC/ext/openssl/ ./ext
-  cp -r $SRC/ext/pcntl/ ./ext
-  cp -r $SRC/ext/pcre/ ./ext
-  cp -r $SRC/ext/pdo/ ./ext
-  cp -r $SRC/ext/pdo_mysql/ ./ext
-  cp -r $SRC/ext/pdo_sqlite/ ./ext
-  cp -r $SRC/ext/phar/ ./ext
-  echo -e '\n#include "sapi/cli/sfx/hook_stream.h"' >> ext/phar/phar_internal.h
-  cp -r $SRC/ext/posix/ ./ext
-  cp -r $SRC/ext/readline/ ./ext
-  cp -r $SRC/ext/reflection/ ./ext
-  cp -r $SRC/ext/session/ ./ext
-  cp -r $SRC/ext/simplexml/ ./ext
-  cp -r $SRC/ext/soap/ ./ext
-  cp -r $SRC/ext/sockets/ ./ext
-  cp -r $SRC/ext/sodium/ ./ext
-  cp -r $SRC/ext/spl/ ./ext
-  cp -r $SRC/ext/sqlite3/ ./ext
-  cp -r $SRC/ext/standard/ ./ext
-  cp -r $SRC/ext/sysvshm/ ./ext
-  cp -r $SRC/ext/tokenizer/ ./ext
-  cp -r $SRC/ext/xml/ ./ext
-  cp -r $SRC/ext/xmlreader/ ./ext
-  cp -r $SRC/ext/xmlwriter/ ./ext
-  cp -r $SRC/ext/xsl/ ./ext
-  cp -r $SRC/ext/zip/ ./ext
-  cp -r $SRC/ext/zlib/ ./ext
-  # main
-  cp -r $SRC/main ./
-  sed -i 's/\/\* start Zend extensions \*\//\/\* start Zend extensions \*\/\n#ifdef PHP_ENABLE_OPCACHE\n\textern zend_extension zend_extension_entry;\n\tzend_register_extension(\&zend_extension_entry, NULL);\n#endif/g' main/main.c
-  # build
-  cp -r $SRC/build ./
-  # TSRM
-  cp -r ./TSRM/TSRM.h main/TSRM.h
-  cp -r $SRC/configure.ac ./
-  # fpm
-  cp -r $SRC/sapi/fpm/fpm ./sapi/cli
-  exit 0
+    PHP_CLI=$(which php)
+    test -f ${__PROJECT_DIR__}/bin/runtime/php && PHP_CLI="${__PROJECT_DIR__}/bin/runtime/php -d curl.cainfo=${__PROJECT_DIR__}/bin/runtime/cacert.pem -d openssl.cafile=${__PROJECT_DIR__}/bin/runtime/cacert.pem"
+    $PHP_CLI -v
+    $PHP_CLI sync-source-code.php --action run
+    exit 0
 else
     help
 fi

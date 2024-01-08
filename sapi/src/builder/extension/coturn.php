@@ -27,8 +27,8 @@ return function (Preprocessor $p) {
                 cp -rf {$coturn_prefix}/etc/*  {$workdir}/bin/coturn/etc/
 
                 for f in `ls {$workdir}/bin/coturn/bin/` ; do
-                echo \$f
-                strip {$workdir}/bin/coturn/bin/\$f
+                    echo \$f
+                    strip {$workdir}/bin/coturn/bin/\$f
                 done
 
 
@@ -40,14 +40,14 @@ EOF;
             $cmd .= <<<EOF
             otool -L {$workdir}/bin/coturn/bin/turnserver
             tar -cJvf {$workdir}/coturn-\${COTURN_VERSION}-macos-x64.tar.xz coturn/
-            zip -v  coturn-\${COTURN_VERSION}-macos-x64.tar.xz.zip {$workdir}/coturn-\${COTURN_VERSION}-macos-x64.tar.xz
+            zip -v  {$workdir}/coturn-\${COTURN_VERSION}-macos-x64.tar.xz.zip {$workdir}/coturn-\${COTURN_VERSION}-macos-x64.tar.xz
 EOF;
         } else {
             $cmd .= <<<EOF
             file {$workdir}/bin/coturn/bin/turnserver
             readelf -h {$workdir}/bin/coturn/bin/turnserver
             tar -cJvf {$workdir}/coturn-\${COTURN_VERSION}-linux-x64.tar.xz coturn/
-            zip -v  coturn-\${COTURN_VERSION}-linux-x64.tar.xz.zip {$workdir}/coturn-\${COTURN_VERSION}-linux-x64.tar.xz
+            zip -v  {$workdir}/coturn-\${COTURN_VERSION}-linux-x64.tar.xz.zip {$workdir}/coturn-\${COTURN_VERSION}-linux-x64.tar.xz
 EOF;
         }
         return $cmd;

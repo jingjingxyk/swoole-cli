@@ -159,7 +159,6 @@ class Preprocessor
 
     protected string $gitProxyConfig = '';
 
-
     protected function __construct()
     {
         switch (PHP_OS) {
@@ -591,7 +590,7 @@ EOF;
             }
         } else {
             if ($lib->skipDownload) {
-                echo 'skip download source code !' . PHP_EOL ;
+                echo 'skip download source code !' . PHP_EOL;
             } else {
                 throw new Exception(
                     "[Library] require url OR downloadscript "
@@ -1064,7 +1063,6 @@ EOF;
             $file = realpath(__DIR__ . '/builder/library/' . $library_name . '.php');
             if (BUILD_SHARED_LIBS) {
                 $file = realpath(__DIR__ . '/builder/library_shared/' . $library_name . '.php');
-                echo $file. PHP_EOL;
             }
             if (!is_file($file)) {
                 throw new Exception("The library-$library_name does not exist");
@@ -1110,6 +1108,9 @@ EOF;
         }
         $this->mkdirIfNotExists($this->libraryDir, 0777, true);
         $this->mkdirIfNotExists($this->extensionDir, 0777, true);
+        if (BUILD_SHARED_LIBS) {
+            $this->globalPrefix = '/usr/local/swoole-cli-shared';
+        }
         include __DIR__ . '/constants.php';
         //构建依赖库安装脚本
         //libraries_builder($this);
