@@ -11,6 +11,24 @@ __PROJECT__=$(
 )
 cd ${__PROJECT__}
 
+MIRROR=''
+while [ $# -gt 0 ]; do
+  case "$1" in
+  --mirror)
+    MIRROR="$2"
+    ;;
+  esac
+  shift $(($# > 0 ? 1 : 0))
+done
+
+DOMAIN='https://github.com/jingjingxyk/swoole-cli/actions/runs/7457884107/artifacts/1156042587'
+case "$MIRROR" in
+china)
+  DOMAIN='https://swoole-cli.jingjingxyk.com/'
+  ;;
+esac
+
+
 mkdir -p  pool/lib
 mkdir -p  pool/ext
 
@@ -19,7 +37,6 @@ test -d ${__PROJECT__}/var/download-box/ || mkdir -p ${__PROJECT__}/var/download
 cd ${__PROJECT__}/var/download-box/
 
 
-DOMAIN='https://swoole-cli.jingjingxyk.com/'
 URL="${DOMAIN}/all-archive.zip"
 
 test -f  all-archive.zip || wget -O all-archive.zip ${URL}
