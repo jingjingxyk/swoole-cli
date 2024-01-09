@@ -1,4 +1,4 @@
-name: auto-cached-pool-linux-x86_64
+name: auto-cached-pool
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     - cron: '0 0 */6 * *'
 
 jobs:
-  auto-cached-pool-linux-x86_64:
+  auto-cached-pool:
     if: 1
     runs-on: ubuntu-latest
     steps:
