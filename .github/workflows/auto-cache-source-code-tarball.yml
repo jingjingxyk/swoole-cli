@@ -1,4 +1,4 @@
-name: auto-cached-source-code-tarball
+name: auto-cache-source-code-tarball
 
 on:
   push:
