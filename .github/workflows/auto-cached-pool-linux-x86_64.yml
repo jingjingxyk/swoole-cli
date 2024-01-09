@@ -3,6 +3,8 @@ name: auto-cached-pool-linux-x86_64
 on:
   push:
   pull_request:
+  schedule:
+    - cron: '0 0 */6 * *'
 
 jobs:
   auto-cached-pool-linux-x86_64:
@@ -77,9 +79,9 @@ jobs:
           composer update   --optimize-autoloader
 
           php prepare.php  +inotify +apcu +ds +xlswriter +ssh2 +pgsql --with-swoole-pgsql=1 --with-libavif=1
-          cd pool
-          zip -6 -r all-archive.zip ext lib
-          cd ..
+          cd ${{ github.workspace }}/pool/
+          zip -6 -r ${{ github.workspace }}/all-archive.zip ext lib
+          cd ${{ github.workspace }}
 
       - name: Show Build Result
         run: |
@@ -87,12 +89,12 @@ jobs:
           ls -A pool/ext/
 
       - name: production artifacts
-        if: 0
+        if: 1
         uses: actions/upload-artifact@v3
         with:
           name: pool-cache
           retention-days: 90
-          path: ./pool/
+          path: all-archive.zip
 
       - name: gh release
         uses: softprops/action-gh-release@v1
