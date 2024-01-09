@@ -92,7 +92,7 @@ jobs:
         if: 1
         uses: actions/upload-artifact@v3
         with:
-          name: pool-cache
+          name: cached-all-archive.zip
           retention-days: 90
           path: all-archive.zip
 
