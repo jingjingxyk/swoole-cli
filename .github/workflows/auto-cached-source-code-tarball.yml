@@ -1,4 +1,4 @@
-name: auto-cached-pool
+name: auto-cached-source-code-tarball
 
 on:
   push:
@@ -92,7 +92,7 @@ jobs:
         if: 1
         uses: actions/upload-artifact@v3
         with:
-          name: cached-all-archive.zip
+          name: cached-all-archive
           retention-days: 90
           path: all-archive.zip
 
