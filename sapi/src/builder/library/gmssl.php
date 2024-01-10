@@ -12,8 +12,6 @@ return function (Preprocessor $p) {
         ->withUrl('https://github.com/guanzhi/GmSSL/archive/refs/tags/v3.1.1.tar.gz')
         ->withFile('GmSSL-v3.1.1.tar.gz')
         ->withPrefix($gmssl_prefix)
-
-        /* 使用 cmake 构建 start */
         ->withBuildScript(
             <<<EOF
          mkdir -p build
@@ -28,23 +26,11 @@ return function (Preprocessor $p) {
 
 EOF
         )
-
-
-        /*
-
-        //默认不需要此配置
-
-        ->withScriptAfterInstall(
-            <<<EOF
-            rm -rf {$gmssl_prefix}/lib/*.so.*
-            rm -rf {$gmssl_prefix}/lib/*.so
-            rm -rf {$gmssl_prefix}/lib/*.dylib
-EOF
-        )
-
-        */
-        //->withPkgName('example')
         ->withBinPath($gmssl_prefix . '/bin/')
     ;
     $p->addLibrary($lib);
+
+    $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $gmssl_prefix . '/include');
+    $p->withVariable('LDFLAGS', '$LDFLAGS -L' . $gmssl_prefix . '/lib');
+    $p->withVariable('LIBS', '$LIBS -lgmssl');
 };
