@@ -11,5 +11,6 @@ return function (Preprocessor $p) {
             ->withHomePage('https://gmssl.github.io/GmSSL-PHP/')
             ->withManual('https://github.com/GmSSL/GmSSL-PHP#License-1-ov-file')
             ->withLicense('https://github.com/GmSSL/GmSSL-PHP/blob/main/LICENSE', Extension::LICENSE_PHP)
+            ->withDependentLibraries('gmssl')
     );
 };
