@@ -30,7 +30,7 @@ cd "${DOWNLOAD_BOX_DIR}"
 
 test -f all-archive.zip && rm -rf all-archive.zip
 
-test -d ext && test -d lib && zip -6 -r all-archive.zip ext lib
+test -d ext && test -d lib && zip -9 -r all-archive.zip ext lib
 
 cd "${DOWNLOAD_BOX_DIR}"
 

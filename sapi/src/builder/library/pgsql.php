@@ -11,7 +11,7 @@ return function (Preprocessor $p) {
         (new Library('pgsql'))
             ->withHomePage('https://www.postgresql.org/')
             ->withLicense('https://www.postgresql.org/about/licence/', Library::LICENSE_SPEC)
-            ->withUrl('https://ftp.postgresql.org/pub/source/v16.0/postgresql-16.0.tar.gz')
+            ->withUrl('https://ftp.postgresql.org/pub/source/v16.2/postgresql-16.2.tar.gz')
             ->withManual('https://www.postgresql.org/docs/current/install-procedure.html#CONFIGURE-OPTIONS')
             ->withManual('https://www.postgresql.org/docs/current/install-procedure.html#CONFIGURE-OPTIONS#:~:text=Client-only%20installation')
             ->withPrefix($pgsql_prefix)
