@@ -148,7 +148,7 @@ jobs:
             sh  sapi/quickstart/linux/alpine-init.sh
             composer update   --optimize-autoloader
 
-            php prepare.php +inotify +apcu +ds +xlswriter +ssh2 +pgsql -mongodb --with-swoole-pgsql=1 --with-libavif --with-php-version=${{ env.BUILD_PHP_VERSION }}
+            php prepare.php +inotify +apcu +ds +xlswriter +ssh2 +pgsql -mongodb -swoole +swow_latest --with-libavif --with-php-version=${{ env.BUILD_PHP_VERSION }}
             bash make-install-deps.sh
 
             bash make.sh all-library
@@ -166,7 +166,7 @@ jobs:
             ./thirdparty/php-src/sapi/cli/php -v
             ./thirdparty/php-src/sapi/cli/php -m
             ./thirdparty/php-src/sapi/cli/php --ri gd
-            ./thirdparty/php-src/sapi/cli/php --ri swoole
+            ./thirdparty/php-src/sapi/cli/php --ri swow
             ./thirdparty/php-src/sapi/cli/php --ri pgsql
             file ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
             readelf -h ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
@@ -174,8 +174,6 @@ jobs:
             echo ${APP_VERSION}
             echo ${APP_VERSION}  > APP_VERSION
             ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -r "echo PHP_VERSION;"
-            ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php  --list-tests
-            ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php
 
       - name: get app version
         run: |

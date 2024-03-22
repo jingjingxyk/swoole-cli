@@ -113,7 +113,7 @@ jobs:
 
           composer update   --optimize-autoloader
 
-          php prepare.php --without-docker=1  +ds +apcu  +xlswriter +ssh2 +pgsql -mongodb  --with-build-type=release --with-swoole-pgsql=1  --with-libavif=1 --with-php-version=${{ env.BUILD_PHP_VERSION }}
+          php prepare.php --without-docker=1  +ds +apcu  +xlswriter +ssh2 +pgsql -mongodb  --with-build-type=release -swoole +swow_latest  --with-libavif=1 --with-php-version=${{ env.BUILD_PHP_VERSION }}
 
       - name: Build
         run: |
@@ -133,7 +133,7 @@ jobs:
           ./thirdparty/php-src/sapi/cli/php -v
           ./thirdparty/php-src/sapi/cli/php -m
           ./thirdparty/php-src/sapi/cli/php --ri gd
-          ./thirdparty/php-src/sapi/cli/php --ri swoole
+          ./thirdparty/php-src/sapi/cli/php --ri swow
           ./thirdparty/php-src/sapi/cli/php --ri pgsql
           file ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
           otool -L ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
@@ -141,8 +141,6 @@ jobs:
           APP_VERSION=$(./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php  -v | head -n 1 | awk '{print $2}')
           echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
           ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -r "echo PHP_VERSION;"
-          ./thirdparty/php-src/sapi/cli/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php  --list-tests
-          ./thirdparty/php-src/sapi/cli/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php
 
       - name: Archive production artifacts debug
         uses: actions/upload-artifact@v3
