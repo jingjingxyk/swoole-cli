@@ -8,7 +8,7 @@ env:
   BUILD_PHP_VERSION: 8.2.13
 
 jobs:
-  windows-cygwin:
+  windows:
     if: 0
     runs-on: windows-latest
     strategy:
