@@ -150,7 +150,7 @@ jobs:
             sh  sapi/quickstart/linux/alpine-init.sh --mirror ""
             composer update   --optimize-autoloader
 
-            php prepare.php  +inotify +apcu +ds +xlswriter +ssh2 +pgsql -mongodb -swoole +swow_latest ${{ inputs.build_type }} ${{ inputs.build_options }} --with-php-version=${{ env.BUILD_PHP_VERSION }}  --with-libavif=1
+            php prepare.php  +inotify +apcu +ds +xlswriter +ssh2 +pgsql -mongodb  ${{ inputs.build_type }} ${{ inputs.build_options }} --with-php-version=${{ env.BUILD_PHP_VERSION }}  --with-libavif=1
 
             bash make-install-deps.sh
 
