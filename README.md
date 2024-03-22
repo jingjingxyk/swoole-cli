@@ -4,7 +4,7 @@
 
 ## 说明
 
-`php-cli` 是一个 `PHP`的 运行时 ，默认包含 swoole 扩展
+`php-cli` 是一个 `PHP`的 运行时 ，默认包含 swow 扩展
 
 > 本项目 派生于 [swoole-cli](https://github.com/swoole/swoole-cli/)
 
@@ -18,9 +18,6 @@
 
 > 可指定 PHP 版本 构建原生 PHP 版本
 
-> 可指定 C 编译器 为 musl-gcc、x86_64-linux-musl-gcc 、clang
-
-> 可编译包含 swow 扩展
 
 ## 下载`php-cli`发行版
 
