@@ -91,9 +91,8 @@ jobs:
           path: php-cli-v${{ env.APP_VERSION }}-cygwin-x64.zip
 
       - name: gh release
-        if: 0
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
+        if: 0 && startsWith(github.ref, 'refs/tags/')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
