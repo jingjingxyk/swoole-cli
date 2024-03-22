@@ -9,7 +9,7 @@ env:
 
 jobs:
   windows:
-    if: 0
+    if: 1
     runs-on: windows-latest
     strategy:
       matrix:
@@ -77,10 +77,6 @@ jobs:
           # echo "APP_VERSION=$APP_VERSION" | Out-File -FilePath $env:GITHUB_ENV -Append
           # Add-Content -Path $env:GITHUB_ENV -Value "name=$value"
           # Add-Content -Path $env:GITHUB_ENV -Value "APP_VERSION=$APP_VERSION"
-
-      - name: Archive
-        run: |
-          bash ./sapi/scripts/cygwin/cygwin-archive.sh
 
       - name: production artifacts
         if: 0
