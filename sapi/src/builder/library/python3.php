@@ -38,6 +38,7 @@ return function (Preprocessor $p) {
         PACKAGES="\$PACKAGES readline"
         PACKAGES="\$PACKAGES uuid"
         PACKAGES="\$PACKAGES expat"
+        PACKAGES="\$PACKAGES libmpdec"
 
         # -Wl,–no-export-dynamic
         CFLAGS="-DOPENSSL_THREADS {$ldflags}  "
