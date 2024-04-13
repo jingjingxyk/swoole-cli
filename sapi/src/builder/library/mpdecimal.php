@@ -13,10 +13,8 @@ return function (Preprocessor $p) {
     $lib->withHomePage('https://www.bytereef.org/mpdecimal/')
         ->withLicense('https://www.bytereef.org/mpdecimal/download.html', Library::LICENSE_BSD)
         ->withManual('https://www.bytereef.org/mpdecimal/quickstart.html')
-
         ->withUrl('https://www.bytereef.org/software/mpdecimal/releases/mpdecimal-4.0.0.tar.gz')
         ->withPrefix($mpdecimal_prefix)
-
         ->withConfigure(
             <<<EOF
         ./configure --help
@@ -30,8 +28,7 @@ return function (Preprocessor $p) {
 
 EOF
         )
-        ->withPkgName('libmpdec')
-    ;
+        ->withPkgName('libmpdec');
 
     $p->addLibrary($lib);
 };
