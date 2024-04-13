@@ -75,6 +75,7 @@ define("LIBARGON2_PREFIX", $p->getGlobalPrefix() . '/libargon2');
 
 define("PYTHON3_PREFIX", $p->getGlobalPrefix() . '/python3');
 
+define("LIBUUID_PREFIX", $p->getGlobalPrefix() . '/libuuid');
 define("EXAMPLE_PREFIX", $p->getGlobalPrefix() . '/example');
 
 
