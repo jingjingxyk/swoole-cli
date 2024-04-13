@@ -34,7 +34,7 @@ return function (Preprocessor $p) {
         PACKAGES="\$PACKAGES zlib"
         PACKAGES="\$PACKAGES sqlite3"
         PACKAGES="\$PACKAGES liblzma"
-        PACKAGES="\$PACKAGES ncursesw"
+        PACKAGES="\$PACKAGES ncursesw panelw formw menuw ticw"
         PACKAGES="\$PACKAGES readline"
         PACKAGES="\$PACKAGES uuid"
         PACKAGES="\$PACKAGES expat"
@@ -63,10 +63,10 @@ return function (Preprocessor $p) {
         echo \$LDFLAGS
         echo \$LIBS
 
-        CFLAGS=\$CFLAGS \
+        CFLAGS="\$CFLAGS " \
         CPPFLAGS="\$CPPFLAGS " \
         LDFLAGS="\$LDFLAGS " \
-        LIBS="\$LIBS" \
+        LIBS="\$LIBS " \
         LINKFORSHARED=" " \
         ./configure \
         --prefix={$python3_prefix} \
