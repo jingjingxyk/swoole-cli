@@ -78,6 +78,8 @@ define("PYTHON3_PREFIX", $p->getGlobalPrefix() . '/python3');
 define("LIBUUID_PREFIX", $p->getGlobalPrefix() . '/libuuid');
 define("LIBINTL_PREFIX", $p->getGlobalPrefix() . '/libintl');
 
+define("MPDECIMAL_PREFIX", $p->getGlobalPrefix() . '/mpdecimal');
+
 define("EXAMPLE_PREFIX", $p->getGlobalPrefix() . '/example');
 
 

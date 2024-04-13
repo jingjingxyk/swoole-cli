@@ -25,6 +25,8 @@ return function (Preprocessor $p) {
         ->withBuildScript(
             <<<EOF
 
+        # 配置参考 https://docs.python.org/zh-cn/3.12/using/configure.html
+
         ./configure --help
 
 
@@ -35,6 +37,7 @@ return function (Preprocessor $p) {
         PACKAGES="\$PACKAGES ncursesw"
         PACKAGES="\$PACKAGES readline"
         PACKAGES="\$PACKAGES uuid"
+        PACKAGES="\$PACKAGES expat"
 
         # -Wl,–no-export-dynamic
         CFLAGS="-DOPENSSL_THREADS {$ldflags}  "
@@ -91,7 +94,7 @@ EOF
         ->withPkgName('python3-embed')
         ->withBinPath($python3_prefix . '/bin/')
         //依赖其它静态链接库
-        ->withDependentLibraries('zlib', 'openssl', 'sqlite3', 'bzip2', 'liblzma', 'readline', 'ncurses', 'libuuid', 'libintl');
+        ->withDependentLibraries('zlib', 'openssl', 'sqlite3', 'bzip2', 'liblzma', 'readline', 'ncurses', 'libuuid', 'libintl', 'libexpat', 'mpdecimal');
 
     $p->addLibrary($lib);
 
