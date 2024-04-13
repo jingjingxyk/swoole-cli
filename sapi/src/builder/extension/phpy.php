@@ -10,10 +10,10 @@ return function (Preprocessor $p) {
     $options = '--enable-phpy ';
     $options .= ' --with-python-version=3.12';
     # $options .= ' --with-python-dir=/opt/anaconda3';
-    $options .= ' --with-python-dir=' . $python3_prefix ;
+    $options .= ' --with-python-dir=' . $python3_prefix;
     $options .= ' --with-python-config=' . $python3_prefix . '/bin/python3-config';
 
-    $tag='v1.0.4';
+    $tag = 'v1.0.4';
 
     $ext = (new Extension('phpy'))
         ->withOptions($options)
@@ -29,7 +29,7 @@ return function (Preprocessor $p) {
 EOF
         )
         ->withDependentExtensions('curl', 'openssl', 'sockets', 'mysqlnd', 'pdo')
-        ->withDependentLibraries('curl', 'openssl', 'cares', 'zlib', 'brotli', 'nghttp2','python3');
+        ->withDependentLibraries('curl', 'openssl', 'cares', 'zlib', 'brotli', 'nghttp2', 'python3');
     $p->addExtension($ext);
     $libs = $p->isMacos() ? '-lc++' : ' -lstdc++ ';
     $p->withVariable('LIBS', '$LIBS ' . $libs);
