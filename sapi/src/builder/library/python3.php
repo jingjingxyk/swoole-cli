@@ -5,6 +5,9 @@ use SwooleCli\Preprocessor;
 
 return function (Preprocessor $p) {
     $python3_prefix = PYTHON3_PREFIX;
+    $libintl_prefix = LIBINTL_PREFIX;
+    $libunistring_prefix = LIBUNISTRING_PREFIX;
+    $libiconv_prefix = ICONV_PREFIX;
     $bzip2_prefix = BZIP2_PREFIX;
 
     $ldflags = $p->isMacos() ? '' : ' -static  ';
@@ -35,9 +38,21 @@ return function (Preprocessor $p) {
 
         # -Wl,–no-export-dynamic
         CFLAGS="-DOPENSSL_THREADS {$ldflags}  "
-        CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$PACKAGES) -I{$bzip2_prefix}/include/ {$ldflags}  "
-        LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES) -L{$bzip2_prefix}/lib/  {$ldflags} -DOPENSSL_THREADS  "
-        LIBS="$(pkg-config      --libs-only-l    --static \$PACKAGES) -lbz2 {$libs}"
+        CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$PACKAGES)  {$ldflags}  "
+        LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES)   {$ldflags} -DOPENSSL_THREADS  "
+        LIBS="$(pkg-config      --libs-only-l    --static \$PACKAGES)  {$libs}"
+
+        CPPFLAGS=" \$CPPFLAGS -I{$bzip2_prefix}/include/ "
+        LDFLAGS=" \$LDFLAGS -L{$bzip2_prefix}/lib/ "
+        LIBS=" \$LIBS -lbz2 "
+
+        CPPFLAGS=" \$CPPFLAGS -I{$libintl_prefix}/include/ "
+        LDFLAGS=" \$LDFLAGS -L{$libintl_prefix}/lib/ "
+        LIBS=" \$LIBS -lintl "
+
+        CPPFLAGS=" \$CPPFLAGS -I{$libiconv_prefix}/include/ "
+        LDFLAGS=" \$LDFLAGS -L{$libiconv_prefix}/lib/ "
+        LIBS=" \$LIBS -liconv "
 
         echo \$CFLAGS
         echo \$CPPFLAGS
@@ -76,7 +91,7 @@ EOF
         ->withPkgName('python3-embed')
         ->withBinPath($python3_prefix . '/bin/')
         //依赖其它静态链接库
-        ->withDependentLibraries('zlib', 'openssl', 'sqlite3', 'bzip2', 'liblzma','readline','ncurses','libuuid');
+        ->withDependentLibraries('zlib', 'openssl', 'sqlite3', 'bzip2', 'liblzma', 'readline', 'ncurses', 'libuuid', 'libintl');
 
     $p->addLibrary($lib);
 
