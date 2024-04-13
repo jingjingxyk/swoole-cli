@@ -21,18 +21,13 @@ return function (Preprocessor $p) {
             <<<EOF
         ./configure --help
 
-        # LDFLAGS="\$LDFLAGS -static"
-
-        PACKAGES='openssl  '
-        PACKAGES="\$PACKAGES zlib"
-
-        CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$PACKAGES)" \
-        LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES) " \
-        LIBS="$(pkg-config      --libs-only-l    --static \$PACKAGES)" \
         ./configure \
         --prefix={$mpdecimal_prefix} \
         --enable-shared=no \
-        --enable-static=yes
+        --enable-static=yes \
+        --enable-pc=yes \
+        --enable-doc=no
+
 EOF
         )
 
