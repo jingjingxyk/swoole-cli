@@ -5,10 +5,6 @@ use SwooleCli\Preprocessor;
 
 return function (Preprocessor $p) {
     $mpdecimal_prefix = MPDECIMAL_PREFIX;
-    $mpdecimal_prefix = MPDECIMAL_PREFIX;
-    $openssl_prefix = OPENSSL_PREFIX;
-
-    //文件名称 和 库名称一致
     $lib = new Library('mpdecimal');
     $lib->withHomePage('https://www.bytereef.org/mpdecimal/')
         ->withLicense('https://www.bytereef.org/mpdecimal/download.html', Library::LICENSE_BSD)
