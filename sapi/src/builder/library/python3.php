@@ -63,11 +63,12 @@ return function (Preprocessor $p) {
         echo \$LDFLAGS
         echo \$LIBS
 
-        CFLAGS="\$CFLAGS " \
-        CPPFLAGS="\$CPPFLAGS " \
-        LDFLAGS="\$LDFLAGS " \
-        LIBS="\$LIBS " \
-        LINKFORSHARED=" " \
+        export CFLAGS="\$CFLAGS "
+        export CPPFLAGS="\$CPPFLAGS "
+        export LDFLAGS="\$LDFLAGS "
+        export LIBS="\$LIBS "
+        export LINKFORSHARED=" "
+
         ./configure \
         --prefix={$python3_prefix} \
         --enable-shared=no \
@@ -86,7 +87,8 @@ return function (Preprocessor $p) {
         sed -i.bak "s/^\*shared\*/\*static\*/g" Modules/Setup.stdlib
         cat Modules/Setup.stdlib > Modules/Setup.local
 
-        make -j {$p->getMaxJob()} LDFLAGS="\$LDFLAGS " LINKFORSHARED=" "
+        # make -j {$p->getMaxJob()} LDFLAGS="\$LDFLAGS " LINKFORSHARED=" "
+        make -j {$p->getMaxJob()}
 
         make install
 EOF
