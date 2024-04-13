@@ -30,11 +30,7 @@ return function (Preprocessor $p) {
 
 EOF
         )
-
-        ->withPkgName('example')
-        ->withBinPath($mpdecimal_prefix . '/bin/')
-        //依赖其它静态链接库
-        ->withDependentLibraries('zlib', 'openssl')
+        ->withPkgName('libmpdec')
     ;
 
     $p->addLibrary($lib);
