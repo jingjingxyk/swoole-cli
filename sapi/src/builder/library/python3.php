@@ -78,6 +78,7 @@ return function (Preprocessor $p) {
         --with-system-expat=yes \
         --with-system-libmpdec=yes \
         --with-readline=readline \
+        --with-libs='expat libmpdec '
 
         # --enable-optimizations \
         # --without-system-ffi \
