@@ -68,6 +68,10 @@ return function (Preprocessor $p) {
         export LIBS="\$LIBS "
         export LINKFORSHARED=" "
 
+        export CCSHARED=""
+        export LDSHARED=""
+        export LDCXXSHARED=""
+
         export LIBLZMA_CFLAGS="\$(pkg-config  --cflags --static liblzma)"
         export LIBLZMA_LIBS="\$(pkg-config    --libs   --static liblzma)"
 
@@ -97,8 +101,8 @@ return function (Preprocessor $p) {
         sed -i.bak "s/^\*shared\*/\*static\*/g" Modules/Setup.stdlib
         cat Modules/Setup.stdlib > Modules/Setup.local
 
-        make -j {$p->getMaxJob()} LDFLAGS="\$LDFLAGS " LINKFORSHARED=" " platform
-        # make -j {$p->getMaxJob()}
+        # make -j {$p->getMaxJob()} LDFLAGS="\$LDFLAGS " LINKFORSHARED=" " platform
+        make -j {$p->getMaxJob()}
 
         make install
 EOF
