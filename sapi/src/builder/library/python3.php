@@ -72,7 +72,6 @@ return function (Preprocessor $p) {
         ./configure \
         --prefix={$python3_prefix} \
         --enable-shared=no \
-        --enable-loadable-sqlite-extensions \
         --disable-test-modules \
         --with-static-libpython \
         --with-system-expat=yes \
