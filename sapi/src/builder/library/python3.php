@@ -89,10 +89,10 @@ return function (Preprocessor $p) {
         --with-system-expat=yes \
         --with-system-libmpdec=yes \
         --with-readline=readline \
-        --with-libs='expat libmpdec openssl zlib sqlite3 liblzma ncursesw panelw formw menuw ticw readline uuid rt' \
         --without-valgrind \
         --without-dtrace
 
+        #  --with-libs='expat libmpdec openssl zlib sqlite3 liblzma ncursesw panelw formw menuw ticw readline uuid rt' \
 
         # --enable-optimizations \
         # --without-system-ffi \
