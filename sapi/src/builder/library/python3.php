@@ -76,8 +76,9 @@ return function (Preprocessor $p) {
         --with-static-libpython \
         --with-system-expat=yes \
         --with-system-libmpdec=yes \
-        --with-readline=readline \
-        --with-libs='expat libmpdec '
+        --with-readline=readline
+
+        # --with-libs='expat libmpdec '
 
         # --enable-optimizations \
         # --without-system-ffi \
