@@ -87,6 +87,11 @@ return function (Preprocessor $p) {
         export LIBEXPAT_CFLAGS="\$(pkg-config  --cflags --static expat)"
         export LIBEXPAT_LDFLAGS="\$(pkg-config    --libs   --static expat)"
 
+        export OPENSSL_LDFLAGS="\$(pkg-config     --libs-only-L     --static openssl)"
+        export OPENSSL_LIBS="\$(pkg-config        --libs-only-l     --static openssl)"
+        export OPENSSL_INCLUDES="\$(pkg-config    --cflags-only-I   --static openssl)"
+
+
         ./configure \
         --prefix={$python3_prefix} \
         --enable-shared=no \
