@@ -25,7 +25,6 @@ return function (Preprocessor $p) {
         ->withBuildScript(
             <<<EOF
 
-        # 配置参考 https://docs.python.org/zh-cn/3.12/using/configure.html
 
         ./configure --help
 
@@ -91,14 +90,15 @@ return function (Preprocessor $p) {
 
         # --enable-optimizations \
         # --without-system-ffi \
+        # 配置参考 https://docs.python.org/zh-cn/3.12/using/configure.html
         # 参考文档： https://wiki.python.org/moin/BuildStatically
         # echo '*static*' >> Modules/Setup.local
 
         sed -i.bak "s/^\*shared\*/\*static\*/g" Modules/Setup.stdlib
         cat Modules/Setup.stdlib > Modules/Setup.local
 
-        # make -j {$p->getMaxJob()} LDFLAGS="\$LDFLAGS " LINKFORSHARED=" "
-        make -j {$p->getMaxJob()}
+        make -j {$p->getMaxJob()} LDFLAGS="\$LDFLAGS " LINKFORSHARED=" " platform
+        # make -j {$p->getMaxJob()}
 
         make install
 EOF
