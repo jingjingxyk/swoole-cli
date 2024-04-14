@@ -69,6 +69,15 @@ return function (Preprocessor $p) {
         export LIBS="\$LIBS "
         export LINKFORSHARED=" "
 
+        export LIBLZMA_CFLAGS="\$(pkg-config  --cflags --static liblzma)"
+        export LIBLZMA_LIBS="\$(pkg-config    --libs   --static liblzma)"
+
+        export CURSES_CFLAGS="\$(pkg-config  --cflags --static ncursesw)"
+        export CURSES_LIBS="\$(pkg-config    --libs   --static ncursesw)"
+
+        export PANEL_CFLAGS="\$(pkg-config  --cflags --static panelw)"
+        export PANEL_LIBS="\$(pkg-config    --libs   --static panelw)"
+
         ./configure \
         --prefix={$python3_prefix} \
         --enable-shared=no \
