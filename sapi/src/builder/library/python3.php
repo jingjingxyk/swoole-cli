@@ -81,6 +81,12 @@ return function (Preprocessor $p) {
         export PANEL_CFLAGS="\$(pkg-config  --cflags --static panelw)"
         export PANEL_LIBS="\$(pkg-config    --libs   --static panelw)"
 
+        export LIBMPDEC_CFLAGS="\$(pkg-config  --cflags --static libmpdec)"
+        export LIBMPDEC_LDFLAGS="\$(pkg-config    --libs   --static libmpdec)"
+
+        export LIBEXPAT_CFLAGS="\$(pkg-config  --cflags --static expat)"
+        export LIBEXPAT_LDFLAGS="\$(pkg-config    --libs   --static expat)"
+
         ./configure \
         --prefix={$python3_prefix} \
         --enable-shared=no \
@@ -89,6 +95,7 @@ return function (Preprocessor $p) {
         --with-system-expat=yes \
         --with-system-libmpdec=yes \
         --with-readline=readline \
+        --with-builtin-hashlib-hashes="md5,sha1,sha2,sha3,blake2" \
         --without-valgrind \
         --without-dtrace
 
