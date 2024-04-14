@@ -72,12 +72,12 @@ return function (Preprocessor $p) {
         ./configure \
         --prefix={$python3_prefix} \
         --enable-shared=no \
-        --disable-shared \
+        --enable-loadable-sqlite-extensions \
         --disable-test-modules \
-        --with-static-libpython
-
-        # --without-system-expat \
-        # --without-system-libmpdec \
+        --with-static-libpython \
+        --with-system-expat=yes \
+        --with-system-libmpdec=yes \
+        --with-readline=readline \
 
         # --enable-optimizations \
         # --without-system-ffi \
