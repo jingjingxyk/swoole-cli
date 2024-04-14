@@ -73,11 +73,11 @@ return function (Preprocessor $p) {
         --prefix={$python3_prefix} \
         --enable-shared=no \
         --disable-shared \
-        --without-system-expat \
-        --without-system-libmpdec \
         --disable-test-modules \
         --with-static-libpython
 
+        # --without-system-expat \
+        # --without-system-libmpdec \
 
         # --enable-optimizations \
         # --without-system-ffi \
