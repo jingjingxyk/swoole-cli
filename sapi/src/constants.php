@@ -85,6 +85,8 @@ define("LIBINTL_PREFIX", $p->getGlobalPrefix() . '/libintl');
 define("MPDECIMAL_PREFIX", $p->getGlobalPrefix() . '/mpdecimal');
 define("LIBHACL_PREFIX", $p->getGlobalPrefix() . '/libhacl');
 
+define("LIBB2_PREFIX", $p->getGlobalPrefix() . '/libb2');
+
 define("EXAMPLE_PREFIX", $p->getGlobalPrefix() . '/example');
 
 
