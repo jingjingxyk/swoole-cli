@@ -101,6 +101,7 @@ return function (Preprocessor $p) {
         --with-system-libmpdec=yes \
         --with-readline=readline \
         --with-builtin-hashlib-hashes="md5,sha1,sha2,sha3,blake2" \
+        --with-ssl-default-suites=openssl \
         --without-valgrind \
         --without-dtrace
 
