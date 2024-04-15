@@ -110,7 +110,7 @@ return function (Preprocessor $p) {
         --without-valgrind \
         --without-dtrace
 
-        #  --with-libs='expat libmpdec openssl zlib sqlite3 liblzma ncursesw panelw formw menuw ticw readline uuid rt' \
+        #  --with-libs='expat libmpdec openssl zlib sqlite3 liblzma ncursesw panelw formw menuw ticw readline uuid ' \
 
         # --enable-optimizations \
         # --without-system-ffi \
@@ -131,7 +131,7 @@ EOF
         ->withPkgName('python3-embed')
         ->withBinPath($python3_prefix . '/bin/')
         //依赖其它静态链接库
-        ->withDependentLibraries('zlib', 'openssl', 'sqlite3', 'bzip2', 'liblzma', 'readline', 'ncurses', 'libuuid', 'libintl', 'libexpat', 'mpdecimal','libb2');
+        ->withDependentLibraries('zlib', 'openssl', 'sqlite3', 'bzip2', 'liblzma', 'readline', 'ncurses', 'libuuid', 'libintl', 'libexpat', 'mpdecimal', 'libb2', 'hacl');
 
     $p->addLibrary($lib);
 
