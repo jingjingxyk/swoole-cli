@@ -33,6 +33,10 @@ EOF
     $p->addExtension($ext);
     $libs = $p->isMacos() ? '-lc++' : ' -lstdc++ ';
     $p->withVariable('LIBS', '$LIBS ' . $libs);
+
+    $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $p->getWorkDir() . '/ext/phpy/include');
+
+
 };
 
 # 构建独立版本python

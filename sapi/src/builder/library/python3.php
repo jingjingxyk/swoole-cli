@@ -140,7 +140,8 @@ EOF
 
     $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $python3_prefix . '/python_hacl/');
     $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $python3_prefix . '/python_hacl/include/');
-    $p->withVariable('LDFLAGS', '$LDFLAGS -l:' . $python3_prefix . '/python_hacl/libHacl_Hash_SHA2.a');
-
+    # $p->withVariable('LDFLAGS', '$LDFLAGS -l:' . $python3_prefix . '/python_hacl/libHacl_Hash_SHA2.a');
+    $p->withVariable('LDFLAGS', '$LDFLAGS -L' . $python3_prefix . '/python_hacl/');
+    $p->withVariable('LIBS', '$LIBS -lHacl_Hash_SHA2');
 
 };
