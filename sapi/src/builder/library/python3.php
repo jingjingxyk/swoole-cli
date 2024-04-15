@@ -18,7 +18,6 @@ return function (Preprocessor $p) {
     $lib->withHomePage('https://www.python.org/')
         ->withLicense('https://docs.python.org/3/license.html', Library::LICENSE_LGPL)
         ->withManual('https://www.python.org')
-        //->withUrl('https://www.python.org/ftp/python/3.11.8/Python-3.11.8.tgz')
         ->withUrl('https://www.python.org/ftp/python/3.12.2/Python-3.12.2.tgz')
         ->withPrefix($python3_prefix)
         ->withBuildCached(false)
@@ -26,9 +25,7 @@ return function (Preprocessor $p) {
         ->withBuildScript(
             <<<EOF
 
-
         ./configure --help
-
 
         PACKAGES='openssl  '
         PACKAGES="\$PACKAGES zlib"
@@ -110,24 +107,58 @@ return function (Preprocessor $p) {
         --without-valgrind \
         --without-dtrace
 
-        # --with-libs='expat libmpdec openssl zlib sqlite3 liblzma ncursesw panelw formw menuw ticw readline uuid ' \
-
+        # --with-libs='expat libmpdec openssl zlib sqlite3 liblzma ncursesw panelw formw menuw ticw readline uuid '
         # --enable-optimizations \
         # --without-system-ffi \
-        # 配置参考 https://docs.python.org/zh-cn/3.12/using/configure.html
-        # 参考文档： https://wiki.python.org/moin/BuildStatically
+
         # echo '*static*' >> Modules/Setup.local
 
         sed -i.bak "s/^\*shared\*/\*static\*/g" Modules/Setup.stdlib
         cat Modules/Setup.stdlib > Modules/Setup.local
 
-        # make -j {$p->getMaxJob()} LDFLAGS="\$LDFLAGS " LINKFORSHARED=" " platform
+        # make -j {$p->getMaxJob()} LDFLAGS="\$LDFLAGS " LINKFORSHARED=" "
         make -j {$p->getMaxJob()}
 
         make install
 
+
         mkdir -p {$python3_prefix}/python_hacl
         cp -rf {$p->getBuildDir()}/python3/Modules/_hacl/* {$python3_prefix}/python_hacl/
+
+
+        unset CFLAGS
+        unset CPPFLAGS
+        unset LDFLAGS
+        unset LIBS
+        unset LINKFORSHARED
+
+        unset CCSHARED
+        unset LDSHARED
+        unset LDCXXSHARED
+
+        unset LIBLZMA_CFLAGS
+        unset LIBLZMA_LIBS
+
+        unset CURSES_CFLAGS
+        unset CURSES_LIBS
+
+        unset PANEL_CFLAGS
+        unset PANEL_LIBS
+
+        unset LIBMPDEC_CFLAGS
+        unset LIBMPDEC_LDFLAGS
+
+        unset LIBEXPAT_CFLAGS
+        unset LIBEXPAT_LDFLAGS
+
+        unset OPENSSL_LDFLAGS
+        unset OPENSSL_LIBS
+        unset OPENSSL_INCLUDES
+
+        unset LIBB2_CFLAGS
+        unset LIBB2_LIBS
+
+
 EOF
         )
         ->withPkgName('python3')
@@ -145,3 +176,8 @@ EOF
     $p->withVariable('LIBS', '$LIBS -lHacl_Hash_SHA2');
 
 };
+# 构建独立版本 python 参考
+# https://github.com/indygreg/python-build-standalone.git
+
+# 配置参考 https://docs.python.org/zh-cn/3.12/using/configure.html
+# 参考文档： https://wiki.python.org/moin/BuildStatically

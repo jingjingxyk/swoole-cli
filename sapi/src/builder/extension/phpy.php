@@ -31,13 +31,12 @@ EOF
         ->withDependentExtensions('curl', 'openssl', 'sockets', 'mysqlnd', 'pdo')
         ->withDependentLibraries('curl', 'openssl', 'cares', 'zlib', 'brotli', 'nghttp2', 'python3');
     $p->addExtension($ext);
+
     $libs = $p->isMacos() ? '-lc++' : ' -lstdc++ ';
     $p->withVariable('LIBS', '$LIBS ' . $libs);
-
     $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $p->getPhpSrcDir(). '/ext/phpy/include');
 
 
 };
 
-# 构建独立版本python
-# https://github.com/indygreg/python-build-standalone.git
+
