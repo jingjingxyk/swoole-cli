@@ -4,7 +4,6 @@ use SwooleCli\Library;
 use SwooleCli\Preprocessor;
 
 return function (Preprocessor $p) {
-    $libb2_prefix = EXAMPLE_PREFIX;
     $libb2_prefix = LIBB2_PREFIX;
     $openssl_prefix = OPENSSL_PREFIX;
 
