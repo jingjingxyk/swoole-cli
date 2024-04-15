@@ -93,6 +93,8 @@ return function (Preprocessor $p) {
         export OPENSSL_LIBS="\$(pkg-config        --libs-only-l     --static openssl)"
         export OPENSSL_INCLUDES="\$(pkg-config    --cflags-only-I   --static openssl)"
 
+        export LIBB2_CFLAGS="\$(pkg-config  --cflags --static libb2)"
+        export LIBB2_LIBS="\$(pkg-config    --libs   --static libb2)"
 
         ./configure \
         --prefix={$python3_prefix} \
