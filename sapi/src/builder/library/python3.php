@@ -110,7 +110,7 @@ return function (Preprocessor $p) {
         --without-valgrind \
         --without-dtrace
 
-        #  --with-libs='expat libmpdec openssl zlib sqlite3 liblzma ncursesw panelw formw menuw ticw readline uuid ' \
+        # --with-libs='expat libmpdec openssl zlib sqlite3 liblzma ncursesw panelw formw menuw ticw readline uuid ' \
 
         # --enable-optimizations \
         # --without-system-ffi \
