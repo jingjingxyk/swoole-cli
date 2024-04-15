@@ -30,8 +30,8 @@ EOF
         --enable-shared=no \
         --enable-static=yes
 EOF
-        )//->withPkgName('example')
-    ;
+        )
+        ->withPkgName('libb2');
 
     $p->addLibrary($lib);
 };
