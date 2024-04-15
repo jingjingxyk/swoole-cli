@@ -125,14 +125,22 @@ return function (Preprocessor $p) {
         make -j {$p->getMaxJob()}
 
         make install
+
+        mkdir -p {$python3_prefix}/python_hacl
+        cp -rf {$p->getBuildDir()}/python3/Modules/_hacl/* {$python3_prefix}/python_hacl/
 EOF
         )
         ->withPkgName('python3')
         ->withPkgName('python3-embed')
         ->withBinPath($python3_prefix . '/bin/')
         //依赖其它静态链接库
-        ->withDependentLibraries('zlib', 'openssl', 'sqlite3', 'bzip2', 'liblzma', 'readline', 'ncurses', 'libuuid', 'libintl', 'libexpat', 'mpdecimal', 'libb2', 'hacl');
+        ->withDependentLibraries('zlib', 'openssl', 'sqlite3', 'bzip2', 'liblzma', 'readline', 'ncurses', 'libuuid', 'libintl', 'libexpat', 'mpdecimal', 'libb2');
 
     $p->addLibrary($lib);
+
+    $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $python3_prefix . '/python_hacl/');
+    $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $python3_prefix . '/python_hacl/include/');
+    $p->withVariable('LDFLAGS', '$LDFLAGS ' . $python3_prefix . '/python_hacl/libHacl_Hash_SHA2.a');
+
 
 };
