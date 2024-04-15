@@ -5,6 +5,7 @@ use SwooleCli\Preprocessor;
 
 return function (Preprocessor $p) {
     $python3_prefix = PYTHON3_PREFIX;
+    $openssl_prefix = OPENSSL_PREFIX;;
     $libintl_prefix = LIBINTL_PREFIX;
     $libunistring_prefix = LIBUNISTRING_PREFIX;
     $libiconv_prefix = ICONV_PREFIX;
@@ -101,6 +102,7 @@ return function (Preprocessor $p) {
         --with-system-libmpdec=yes \
         --with-readline=readline \
         --with-builtin-hashlib-hashes="md5,sha1,sha2,sha3,blake2" \
+        --with-openssl={$openssl_prefix} \
         --with-ssl-default-suites=openssl \
         --without-valgrind \
         --without-dtrace
