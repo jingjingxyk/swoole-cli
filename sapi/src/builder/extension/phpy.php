@@ -37,7 +37,7 @@ EOF
 
     $python3_prefix = PYTHON3_PREFIX;
     $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $python3_prefix. '/include');
-    $p->withVariable('LDFLAGS', '$LDFLAGS -I' . $python3_prefix. '/lib/');
+    $p->withVariable('LDFLAGS', '$LDFLAGS -L' . $python3_prefix. '/lib/');
     $p->withVariable('LIBS', '$LIBS -lpython3.12');
 
 
