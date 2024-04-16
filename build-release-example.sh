@@ -161,7 +161,7 @@ if [ ${WITH_PHP_COMPOSER} -eq 1 ] ; then
 
     # composer update --no-interaction --optimize-autoloader
     # composer install --no-interaction --optimize-autoloader
-    composer install --no-dev --no-interaction --no-autoloader --no-scripts
+    composer install  --no-interaction --no-autoloader --no-scripts # --no-dev
     composer dump-autoload --optimize --profile
     composer config -g --unset repos.packagist
 fi
