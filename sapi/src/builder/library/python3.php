@@ -124,6 +124,9 @@ return function (Preprocessor $p) {
         {$python3_prefix}/bin/python3 -E -c 'import sys ; from sysconfig import get_platform ; print("%s-%d.%d" % (get_platform(), *sys.version_info[:2])) ; '
         {$python3_prefix}/bin/python3 -E -c 'import sys ; print(sys.modules) ; '
         {$python3_prefix}/bin/python3 -E -c 'import sys ; print(dir(sys)) ; '
+        {$python3_prefix}/bin/python3-config --cflags
+        {$python3_prefix}/bin/python3-config --ldflags
+        {$python3_prefix}/bin/python3-config --libs
 
 
         mkdir -p {$python3_prefix}/python_hacl
@@ -167,7 +170,7 @@ EOF
         )
         ->withPkgName('python3')
         ->withPkgName('python3-embed')
-        ->withBinPath($python3_prefix . '/bin/')
+        //->withBinPath($python3_prefix . '/bin/')
         //依赖其它静态链接库
         ->withDependentLibraries('zlib', 'openssl', 'sqlite3', 'bzip2', 'liblzma', 'readline', 'ncurses', 'libuuid', 'libintl', 'libexpat', 'mpdecimal', 'libb2');
 
