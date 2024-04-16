@@ -34,6 +34,10 @@ EOF
     $libs = $p->isMacos() ? '-lc++' : ' -lstdc++ ';
     $p->withVariable('LIBS', '$LIBS ' . $libs);
     $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $p->getPhpSrcDir(). '/ext/phpy/include');
+
+    $python3_prefix = PYTHON3_PREFIX;
+    $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $python3_prefix. '/include');
+    $p->withVariable('LDFLAGS', '$LDFLAGS -I' . $python3_prefix. '/lib/');
     $p->withVariable('LIBS', '$LIBS -lpython3.12');
 
 
