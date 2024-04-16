@@ -158,6 +158,7 @@ if [ ${WITH_PHP_COMPOSER} -eq 1 ] ; then
     fi
     # composer suggests --all
     # composer dump-autoload
+    # composer fund
 
     # composer update --no-interaction --optimize-autoloader
     # composer install --no-interaction --optimize-autoloader
