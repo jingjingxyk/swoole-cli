@@ -28,8 +28,7 @@ return function (Preprocessor $p) {
             git clone -b main --depth=1 https://github.com/swoole/phpy.git
 EOF
         )
-        ->withDependentExtensions('curl', 'openssl', 'sockets', 'mysqlnd', 'pdo')
-        ->withDependentLibraries('curl', 'openssl', 'cares', 'zlib', 'brotli', 'nghttp2', 'python3');
+        ->withDependentLibraries('python3');
     $p->addExtension($ext);
 
     $libs = $p->isMacos() ? '-lc++' : ' -lstdc++ ';
