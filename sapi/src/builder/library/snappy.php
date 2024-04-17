@@ -29,7 +29,6 @@ return function (Preprocessor $p) {
                 -DSNAPPY_BUILD_BENCHMARKS=OFF
 EOF
             )
-            ->withBinPath($snappy_prefix . '/bin/')
     );
     $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . SNAPPY_PREFIX . '/include');
     $p->withVariable('LDFLAGS', '$LDFLAGS -L' . SNAPPY_PREFIX . '/lib');
