@@ -32,7 +32,7 @@ return function (Preprocessor $p) {
     $options .= ' --with-mongodb-icu=yes ';
 
     $options .= ' --with-mongodb-client-side-encryption=no ';
-    $options .= ' --with-mongodb-snappy=no ';
+    $options .= ' --with-mongodb-snappy=yes ';
 
     $mongodb_version = '1.18.1';
     $depends = ['icu', 'openssl', 'zlib', 'libzstd', 'snappy'];
