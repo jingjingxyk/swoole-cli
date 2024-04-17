@@ -10,8 +10,8 @@ return function (Preprocessor $p) {
             ->withHomePage('https://github.com/google/snappy')
             ->withManual('https://github.com/google/snappy/blob/main/README.md')
             ->withLicense('https://github.com/google/snappy/blob/main/COPYING', Library::LICENSE_BSD)
-            ->withUrl('https://github.com/google/snappy/archive/refs/tags/1.1.10.tar.gz')
-            ->withFile('snappy-1.1.10.tar.gz')
+            ->withUrl('https://github.com/google/snappy/archive/refs/tags/1.2.0.tar.gz')
+            ->withFile('snappy-1.2.0.tar.gz')
             ->withPrefix($snappy_prefix)
             ->withConfigure(
                 <<<EOF
