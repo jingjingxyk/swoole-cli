@@ -30,8 +30,8 @@ return function (Preprocessor $p) {
 EOF
             )
     );
-    $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . SNAPPY_PREFIX . '/include');
-    $p->withVariable('LDFLAGS', '$LDFLAGS -L' . SNAPPY_PREFIX . '/lib');
+    $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $snappy_prefix . '/include');
+    $p->withVariable('LDFLAGS', '$LDFLAGS -L' . $snappy_prefix . '/lib');
     $p->withVariable('LIBS', '$LIBS -lsnappy');
 
 };
