@@ -13,7 +13,7 @@ return function (Preprocessor $p) {
 
     //文件名称 和 库名称一致
     $lib = new Library('grpc');
-    $lib->withLicense('https://github.com/grpc/grpc/blob/master/src/php/ext/grpc/LICENSE', Extension::LICENSE_APACHE2)
+    $lib->withLicense('https://github.com/grpc/grpc/blob/master/src/php/ext/grpc/LICENSE', Library::LICENSE_APACHE2)
         ->withHomePage('grpc.io')
         ->withManual('https://github.com/grpc/grpc/tree/master/src/php/ext')
         ->withFile('grpc-latest.tar.gz')
