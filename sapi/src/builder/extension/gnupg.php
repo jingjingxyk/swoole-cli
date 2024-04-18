@@ -11,7 +11,7 @@ return function (Preprocessor $p) {
     $ext = (new Extension('gnupg'))
         ->withLicense('https://github.com/php-gnupg/php-gnupg/blob/master/LICENSE', Extension::LICENSE_PHP)
         ->withHomePage('https://pecl.php.net/package/gnupg')
-        ->withManual('https://github.com/php-gnupg/php-gnupgt')
+        ->withManual('https://github.com/php-gnupg/php-gnupg.git')
         ->withOptions($options)
         ->withPeclVersion('1.5.1')
         ->withDependentExtensions(...$depends);
