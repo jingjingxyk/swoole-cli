@@ -32,6 +32,7 @@ EOF
          # EXTRA_DEFINES=GRPC_POSIX_FORK_ALLOW_PTHREAD_ATFORK make
 
          mkdir -p build
+         cd build
 
          cmake .. \
         -DCMAKE_INSTALL_PREFIX={$grpc_prefix} \
