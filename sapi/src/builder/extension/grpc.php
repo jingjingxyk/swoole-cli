@@ -19,6 +19,8 @@ return function (Preprocessor $p) {
             mv grpc/src/php/ext/grpc  grpc
 
 EOF
-        );
+        )
+        ->withDependentLibraries('abseil_cpp')
+    ;
     $p->addExtension($ext);
 };
