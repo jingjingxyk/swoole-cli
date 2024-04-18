@@ -14,6 +14,6 @@ return function (Preprocessor $p) {
         ->withManual('https://github.com/php/pecl-networking-uuid.git')
         ->withOptions($options)
         ->withPeclVersion('1.2.0')
-        ->withDependentExtensions(...$depends);
+        ->withDependentLibraries(...$depends);
     $p->addExtension($ext);
 };
