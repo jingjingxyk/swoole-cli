@@ -23,6 +23,7 @@ EOF
         ->withDependentLibraries('abseil_cpp')
     ;
     $p->addExtension($ext);
+    $p->withExportVariable('GRPC_LIB_SUBDIR', GRPC_PREFIX . '/lib/');
 
     $libs = $p->isMacos() ? '-lc++' : ' -lstdc++ ';
     $p->withVariable('LIBS', '$LIBS ' . $libs);

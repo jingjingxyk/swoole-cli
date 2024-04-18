@@ -85,6 +85,8 @@ define("LIBB2_PREFIX", $p->getGlobalPrefix() . '/libb2');
 define("LIBUNISTRING_PREFIX", $p->getGlobalPrefix() . '/libunistring');
 
 define("ABSL_CPP_PREFIX", $p->getGlobalPrefix() . '/abseil_cpp');
+define("GRPC_PREFIX", $p->getGlobalPrefix() . '/grpc');
+
 define("EXAMPLE_PREFIX", $p->getGlobalPrefix() . '/example');
 
 
