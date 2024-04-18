@@ -5,6 +5,7 @@ use SwooleCli\Preprocessor;
 use SwooleCli\Extension;
 
 return function (Preprocessor $p) {
+    return null;//待改进
     $depends = ['libgnupg'];
     $options = '--with-gnupg' . EXAMPLE_PREFIX;
 

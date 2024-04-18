@@ -5,6 +5,7 @@ use SwooleCli\Preprocessor;
 use SwooleCli\Extension;
 
 return function (Preprocessor $p) {
+    return null;//待改进
     $options = ' --enable-grpc ';
     $ext = (new Extension('grpc'))
         ->withOptions($options)

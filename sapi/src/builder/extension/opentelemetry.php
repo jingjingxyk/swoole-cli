@@ -5,6 +5,7 @@ use SwooleCli\Preprocessor;
 use SwooleCli\Extension;
 
 return function (Preprocessor $p) {
+    return null;//待改进
     //PHP 构建选项
     $options = ' --enable-opentelemetry ';
 
