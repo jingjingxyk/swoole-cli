@@ -5,7 +5,7 @@ use SwooleCli\Preprocessor;
 use SwooleCli\Extension;
 
 return function (Preprocessor $p) {
-    $depends = ['libuuid'];
+    $depends = ['libuuid', 'libintl'];
     $options = '--with-uuid=' . LIBUUID_PREFIX;
 
     $ext = (new Extension('uuid'))
