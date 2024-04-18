@@ -45,7 +45,7 @@ EOF
 
 EOF
         )
-        ->withDependentLibraries('zlib','')
+        ->withDependentLibraries('zlib','cares','openssl','abseil_cpp')
     ;
 
     $p->addLibrary($lib);
