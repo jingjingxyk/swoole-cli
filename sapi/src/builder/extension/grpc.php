@@ -23,5 +23,7 @@ EOF
         ->withDependentLibraries('abseil_cpp')
     ;
     $p->addExtension($ext);
-    $p->withVariable('LDFLAGS', '$LDFLAGS  -std=c++17 ');
+
+    $libs = $p->isMacos() ? '-lc++' : ' -lstdc++ ';
+    $p->withVariable('LIBS', '$LIBS ' . $libs);
 };
