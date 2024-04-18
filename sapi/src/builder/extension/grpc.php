@@ -20,7 +20,7 @@ return function (Preprocessor $p) {
 
 EOF
         )
-        ->withDependentLibraries('abseil_cpp')
+        ->withDependentLibraries('abseil_cpp','grpc')
     ;
     $p->addExtension($ext);
     $p->withExportVariable('GRPC_LIB_SUBDIR', GRPC_PREFIX . '/lib/');
