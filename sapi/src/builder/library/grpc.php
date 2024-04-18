@@ -4,7 +4,7 @@ use SwooleCli\Library;
 use SwooleCli\Preprocessor;
 
 return function (Preprocessor $p) {
-    $example_prefix = EXAMPLE_PREFIX;
+    $grpc_prefix = EXAMPLE_PREFIX;
     $grpc_prefix = GRPC_PREFIX;
     $openssl_prefix = OPENSSL_PREFIX;
     $zlib_prefix =ZLIB_PREFIX;
@@ -24,15 +24,17 @@ return function (Preprocessor $p) {
 
 EOF
         )
-        ->withPrefix($example_prefix)
+        ->withPrefix($grpc_prefix)
 
         ->withBuildScript(
             <<<EOF
 
          # EXTRA_DEFINES=GRPC_POSIX_FORK_ALLOW_PTHREAD_ATFORK make
+
          mkdir -p build
+
          cmake .. \
-        -DCMAKE_INSTALL_PREFIX={$example_prefix} \
+        -DCMAKE_INSTALL_PREFIX={$grpc_prefix} \
         -DCMAKE_POLICY_DEFAULT_CMP0074=NEW \
         -DCMAKE_BUILD_TYPE=Release  \
         -DBUILD_SHARED_LIBS=OFF  \
