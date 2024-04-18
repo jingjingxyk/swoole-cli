@@ -10,14 +10,16 @@ return function (Preprocessor $p) {
 
     $ext = (new Extension('opentelemetry'))
         ->withOptions($options)
-        ->withLicense('https://github.com/open-telemetry/opentelemetry-php-instrumentation/blob/main/LICENSE', Extension::LICENSE_APACHE2)
-        ->withHomePage('https://github.com/open-telemetry/opentelemetry-php-instrumentation.git')
+        ->withHomePage('https://opentelemetry.io/')
         ->withManual('https://github.com/open-telemetry/opentelemetry-php-instrumentation.git')
+        ->withLicense('https://github.com/open-telemetry/opentelemetry-php-instrumentation/blob/main/LICENSE', Extension::LICENSE_APACHE2)
         ->withFile('opentelemetry-latest.tar.gz')
         ->withDownloadScript(
-            'opentelemetry-php-instrumentation', # 待打包目录名称
+            'ext', # 待打包目录名称
             <<<EOF
             git clone -b main --depth=1 https://github.com/open-telemetry/opentelemetry-php-instrumentation.git
+
+            mv opentelemetry-php-instrumentation/ext  ext
 
 EOF
         );
