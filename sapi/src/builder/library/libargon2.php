@@ -39,4 +39,8 @@ EOF
         ->withPkgConfig($libargon2_lib_path . "/pkgconfig");
 
     $p->addLibrary($lib);
+
+    $p->withExportVariable('ARGON2_CFLAGS', '$(pkg-config  --cflags --static libargon2)');
+    $p->withExportVariable('ARGON2_LIBS', '$(pkg-config    --libs   --static libargon2)');
+
 };
