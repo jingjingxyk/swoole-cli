@@ -16,7 +16,7 @@ return function (Preprocessor $p) {
     $tag = 'v1.0.4';
 
     if (BUILD_PHP_VERSION_ID < 803000) {
-        throw new \RuntimeException("Only supports 8.3.0 or higher");
+        throw new \RuntimeException(" PHPY extension Only supports PHP 8.3.0 or higher");
     }
 
     $ext = (new Extension('phpy'))
