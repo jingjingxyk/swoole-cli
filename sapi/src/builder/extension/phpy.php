@@ -15,6 +15,10 @@ return function (Preprocessor $p) {
 
     $tag = 'v1.0.4';
 
+    if (BUILD_PHP_VERSION_ID < 803000) {
+        throw new \RuntimeException("Only supports 8.3.0 or higher");
+    }
+
     $ext = (new Extension('phpy'))
         ->withOptions($options)
         ->withLicense('https://github.com/swoole/phpy/blob/main/LICENSE', Extension::LICENSE_APACHE2)
@@ -33,11 +37,11 @@ EOF
 
     $libs = $p->isMacos() ? '-lc++' : ' -lstdc++ ';
     $p->withVariable('LIBS', '$LIBS ' . $libs);
-    $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $p->getPhpSrcDir(). '/ext/phpy/include');
+    $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $p->getPhpSrcDir() . '/ext/phpy/include');
 
     $python3_prefix = PYTHON3_PREFIX;
-    $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $python3_prefix. '/include');
-    $p->withVariable('LDFLAGS', '$LDFLAGS -L' . $python3_prefix. '/lib/');
+    $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $python3_prefix . '/include');
+    $p->withVariable('LDFLAGS', '$LDFLAGS -L' . $python3_prefix . '/lib/');
     $p->withVariable('LIBS', '$LIBS -lpython3.12');
 
 
