@@ -119,6 +119,7 @@ jobs:
           export PATH="/opt/homebrew/opt/flex/bin:$PATH"
           export PATH="/opt/homebrew/opt/binutils/bin:$PATH"
           export PATH="/opt/homebrew/opt/libtool/libexec/gnubin:$PATH"
+          echo $PATH
 
           bash ./make.sh all-library
 
