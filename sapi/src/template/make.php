@@ -7,7 +7,6 @@ use SwooleCli\Library;
 use SwooleCli\Preprocessor;
 
 ?>
-set -x
 __PROJECT_DIR__=$(cd "$(dirname "$0")"; pwd)
 CLI_BUILD_TYPE=<?= $this->getBuildType() . PHP_EOL ?>
 SRC=<?= $this->phpSrcDir . PHP_EOL ?>
@@ -21,7 +20,7 @@ export CXX=<?= $this->cppCompiler . PHP_EOL ?>
 export LD=<?= $this->lld . PHP_EOL ?>
 export PKG_CONFIG_PATH=<?= implode(':', $this->pkgConfigPaths) . PHP_EOL ?>
 export PATH=<?= implode(':', $this->binPaths) . PHP_EOL ?>
-echo $PATH
+
 OPTIONS="--disable-all \
 --enable-shared=no \
 --enable-static=yes \
@@ -30,7 +29,6 @@ OPTIONS="--disable-all \
 <?php endforeach; ?>
 <?=$this->extraOptions?>
 "
-set +x
 
 <?php foreach ($this->libraryList as $item) : ?>
 make_<?=$item->name?>() {

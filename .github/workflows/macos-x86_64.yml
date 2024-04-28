@@ -49,7 +49,6 @@ jobs:
           ln -sf /opt/homebrew/opt/libtool/libexec/gnubin/glibtool /usr/local/bin/libtool
           ln -sf /opt/homebrew/opt/libtool/libexec/gnubin/glibtoolize /usr/local/bin/libtoolize
 
-          ls -lha  /usr/local/bin/
           ls -lha  /opt/homebrew/bin/
           ls -lha  /opt/homebrew/opt/libtool/libexec/gnubin
 
