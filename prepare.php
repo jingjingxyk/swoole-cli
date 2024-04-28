@@ -42,10 +42,10 @@ if ($p->getInputOption('with-parallel-jobs')) {
 
 if ($p->isMacos()) {
     $p->setExtraLdflags('-undefined dynamic_lookup');
-    if (is_file('/usr/local/opt/llvm/bin/lld')) {
-        $p->withBinPath('/usr/local/opt/llvm/bin')->setLinker('lld');
+    if (is_file('/usr/local/opt/llvm/bin/ld64.lld')) {
+        $p->withBinPath('/usr/local/opt/llvm/bin')->setLinker('ld64.lld');
     }elseif(is_file('/opt/homebrew/opt/llvm/bin/lld')){
-        $p->withBinPath('/opt/homebrew/opt/llvm/bin/')->setLinker('lld');
+        $p->withBinPath('/opt/homebrew/opt/llvm/bin/')->setLinker('ld64.lld');
     }else{
         $p->setLinker('ld');
     }
