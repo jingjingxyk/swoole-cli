@@ -108,6 +108,8 @@ jobs:
           mkdir -p pool/lib
           mkdir -p pool/ext
           mkdir -p bin/runtime
+          uname -s
+          uname -m
           if [ ! -f bin/runtime/php ] ; then
               bash  sapi/quickstart/setup-php-runtime.sh
           fi
