@@ -162,6 +162,15 @@ with-parallel-jobs
 php ./prepare.php --with-parallel-jobs=8
 ```
 
+with-build-type
+----
+构建过程 指定构建类型<br/>
+构建类型，默认是 release
+可选项： release debug dev
+debug 调试版本 （构建过程显示，正在执行的构建命令）<br/>
+dev 开发版本 （便于调试单个扩展）<br/>
+release 默认版本<br/>
+
 with-http-proxy
 ----
 使用HTTP代理下载扩展和扩展依赖库<br/>
@@ -179,14 +188,6 @@ with-c-compiler
 ```shell
 php ./prepare.php --with-c-compiler=gcc
 ```
-
-with-build-type
-----
-构建过程 指定构建类型<br/>
-
-debug 调试版本 （构建过程显示，正在执行的构建命令）<br/>
-dev 开发版本 （便于调试单个扩展）<br/>
-release 默认版本<br/>
 
 ```shell
 php ./prepare.php  --with-build-type=dev
@@ -208,3 +209,8 @@ GD 库支持 AVIF 图片
 ```shell
 php ./prepare.php --with-libavif=1
 ```
+
+show-tarball-hash
+---
+计算并显示已下载的源码包 HASH 值
+

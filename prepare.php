@@ -6,7 +6,6 @@ use SwooleCli\Preprocessor;
 use SwooleCli\Library;
 
 
-
 $homeDir = getenv('HOME');
 $p = Preprocessor::getInstance();
 $p->parseArguments($argc, $argv);
@@ -23,7 +22,7 @@ if (file_exists(__DIR__ . '/make-download-box.sh')) {
     unlink(__DIR__ . '/make-download-box.sh');
 }
 
-# PHP 默认版本
+# PHP 默认版本 （此文件配置 /sapi/PHP-VERSION.conf 在 build_native_php分支 和 衍生分支 无效）
 $php_version = '8.2.13';
 $php_version_id = '802013';
 $php_version_tag = 'php-8.2.13';
@@ -40,7 +39,7 @@ if ($p->getInputOption('with-php-version')) {
                 sprintf('%02d', $match[3]);
             $php_version_tag = 'php-' . $match[0];
         } else {
-            echo " no support PHP version " ;
+            echo " no support PHP version ";
             echo PHP_EOL;
             die;
         }
@@ -59,8 +58,9 @@ echo "PHP_VERSION_TAG: " . BUILD_PHP_VERSION_TAG . PHP_EOL;
 echo "CUSTOM_PHP_VERSION_ID: " . BUILD_CUSTOM_PHP_VERSION_ID . PHP_EOL;
 echo PHP_EOL;
 
+
 // Compile directly on the host machine, not in the docker container
-if ($p->getInputOption('without-docker') || ($p->getOsType() == 'macos')) {
+if ($p->getInputOption('without-docker') || ($p->isMacos())) {
     $p->setWorkDir(__DIR__);
     $p->setBuildDir(__DIR__ . '/thirdparty');
 }
@@ -76,6 +76,7 @@ if ($p->getInputOption('with-php-src')) {
 
 //设置PHP 安装目录
 define("BUILD_PHP_INSTALL_PREFIX", $p->getRootDir() . '/bin/php-' . BUILD_PHP_VERSION);
+
 
 if ($p->getInputOption('with-override-default-enabled-ext')) {
     $p->setExtEnabled([]);
@@ -123,11 +124,14 @@ EOF;
 }
 
 
-if ($p->getOsType() == 'macos') {
+if ($p->isMacos()) {
     $p->setExtraLdflags('-undefined dynamic_lookup');
-    $p->setLinker('ld');
     if (is_file('/usr/local/opt/llvm/bin/ld64.lld')) {
         $p->withBinPath('/usr/local/opt/llvm/bin')->setLinker('ld64.lld');
+    } elseif (is_file('/opt/homebrew/opt/llvm/bin/ld64.lld')) { //兼容 github action
+        $p->withBinPath('/opt/homebrew/opt/llvm/bin/')->setLinker('ld64.lld');
+    } else {
+        $p->setLinker('lld');
     }
     $p->setLogicalProcessors('$(sysctl -n hw.ncpu)');
 } else {
@@ -136,14 +140,21 @@ if ($p->getOsType() == 'macos') {
 }
 
 
-if ($p->getInputOption('with-c-compiler')) {
-    $c_compiler = $p->getInputOption('with-c-compiler');
-    if ($c_compiler == 'gcc') {
-        $p->set_C_COMPILER('gcc');
-        $p->set_CXX_COMPILER('g++');
-        $p->setLinker('ld');
-    }
+$c_compiler = $p->getInputOption('with-c-compiler');
+if ($c_compiler == 'musl-gcc') {
+    $p->set_C_COMPILER('musl-gcc');
+    $p->set_CXX_COMPILER('g++');
+    $p->setLinker('ld');
+} elseif ($c_compiler == 'gcc') {
+    $p->set_C_COMPILER('gcc');
+    $p->set_CXX_COMPILER('g++');
+    $p->setLinker('ld');
+} elseif ($c_compiler == 'x86_64-linux-musl-gcc') {
+    $p->set_C_COMPILER('x86_64-linux-musl-gcc');
+    $p->set_CXX_COMPILER('x86_64-linux-musl-g++');
+    $p->setLinker('ld');
 }
+
 
 $p->setExtraCflags(' -Os');
 

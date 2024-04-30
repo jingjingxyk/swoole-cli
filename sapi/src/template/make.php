@@ -8,7 +8,7 @@ use SwooleCli\Preprocessor;
 ?>
 #!/usr/bin/env bash
 __PROJECT_DIR__=$(cd "$(dirname "$0")"; pwd)
-
+CLI_BUILD_TYPE=<?= $this->getBuildType() . PHP_EOL ?>
 SRC=<?= $this->phpSrcDir . PHP_EOL ?>
 ROOT=<?= $this->getRootDir() . PHP_EOL ?>
 PREPARE_ARGS="<?= implode(' ', $this->getPrepareArgs())?>"
@@ -21,6 +21,7 @@ export LD=<?= $this->lld . PHP_EOL ?>
 
 export PKG_CONFIG_PATH=<?= implode(':', $this->pkgConfigPaths) . PHP_EOL ?>
 export PATH=<?= implode(':', $this->binPaths) . PHP_EOL ?>
+
 OPTIONS="--disable-all \
 --disable-cgi  \
 --enable-shared=no \
@@ -174,77 +175,16 @@ clean_<?=$item->name?>_cached() {
 <?php endforeach; ?>
 
 make_all_library() {
+<?php if ($this->inVirtualMachine): ?>
+    if [! -d <?= $this->getGlobalPrefix() ?>/sources ] ;then
+        mkdir -p <?= $this->getGlobalPrefix() ?>/sources
+        rm -rf <?= $this->getBuildDir() . PHP_EOL ?>
+        ln -s <?= $this->getGlobalPrefix() ?>/sources <?= $this->getBuildDir() . PHP_EOL ?>
+    fi
+<?php endif; ?>
 <?php foreach ($this->libraryList as $item) : ?>
     make_<?=$item->name?> && echo "[SUCCESS] make <?=$item->name?>"
 <?php endforeach; ?>
-    return 0
-}
-
-
-make_tmp_ext_dir() {
-    cd <?= $this->getPhpSrcDir() . PHP_EOL ?>
-    PHP_SRC_DIR=<?= $this->getPhpSrcDir() . PHP_EOL ?>
-    EXT_DIR=$PHP_SRC_DIR/ext/
-    EXT_TMP_DIR=$PHP_SRC_DIR/ext-tmp/
-    test -d $EXT_TMP_DIR && rm -rf $EXT_TMP_DIR
-    mkdir -p $EXT_TMP_DIR
-<?php
-if ($this->buildType == 'dev') {
-    echo <<<'EOF'
-    cd $EXT_DIR
-
-    cp -rf date $EXT_TMP_DIR
-    test -d hash && cp -rf hash $EXT_TMP_DIR
-    test -d json && cp -rf json $EXT_TMP_DIR
-    cp -rf pcre $EXT_TMP_DIR
-    test -d random && cp -rf random $EXT_TMP_DIR
-    cp -rf reflection $EXT_TMP_DIR
-    cp -rf session $EXT_TMP_DIR
-    cp -rf spl $EXT_TMP_DIR
-    cp -rf standard $EXT_TMP_DIR
-    cp -rf date $EXT_TMP_DIR
-    cp -rf phar $EXT_TMP_DIR
-
-EOF;
-}
-
-foreach ($this->extensionMap as $extension) {
-    $name = $extension->name;
-    if ($extension->aliasName) {
-        $name = $extension->aliasName;
-    }
-    if (!empty($extension->peclVersion) || $extension->enableDownloadScript || !empty($extension->url)) {
-        echo <<<EOF
-    cp -rf {$this->getRootDir()}/ext/{$name} \$EXT_TMP_DIR
-EOF;
-        echo PHP_EOL;
-    } else {
-        if ($this->buildType == 'dev') {
-            echo <<<EOF
-    cp -rf \$EXT_DIR/{$name} \$EXT_TMP_DIR
-EOF;
-            echo PHP_EOL;
-        }
-    }
-}
-if ($this->buildType == 'dev') {
-    echo <<<'EOF'
-    mv $EXT_DIR/ $PHP_SRC_DIR/ext-del/
-    mv $EXT_TMP_DIR $EXT_DIR
-EOF;
-    echo PHP_EOL;
-} else {
-    echo <<<'EOF'
-    NUM=$(ls $EXT_TMP_DIR/ | wc -l )
-    if [ $NUM -gt 0 ] ; then
-        cp -rf ${EXT_TMP_DIR}/* $EXT_DIR
-    fi
-
-EOF;
-}
-    echo PHP_EOL;
-?>
-    cd <?= $this->getPhpSrcDir() ?>/
     return 0
 }
 
@@ -261,15 +201,10 @@ before_configure_script() {
 
 export_variables() {
     set -x
-    # -all-static | -static | -static-libtool-libs
-    CPPFLAGS=""
-    CFLAGS=""
-<?php if ($this->cCompiler=='clang') : ?>
-    LDFLAGS="-static"
-<?php else :?>
-    LDFLAGS="-static-libgcc -static-libstdc++"
-<?php endif ;?>
 
+    CPPFLAGS=""
+    CXXFLAGS=""
+    CFLAGS=""
     LDFLAGS=""
     LIBS=""
 <?php foreach ($this->variables as $name => $value) : ?>
@@ -279,8 +214,26 @@ export_variables() {
     [[ $result_code -ne 0 ]] &&  echo " [ export_variables  FAILURE ]" && exit  $result_code;
     echo "export variables"
 <?php foreach ($this->exportVariables as $value) : ?>
-    export  <?= key($value) ?>="<?= current($value) ?>"
+    export <?= key($value) ?>="<?= current($value) ?>"
 <?php endforeach; ?>
+
+<?php if ($this->hasExtension('opcache')):?>
+    export CFLAGS="$CFLAGS -DPHP_ENABLE_OPCACHE"
+    export CPPFLAGS="$CPPFLAGS -DPHP_ENABLE_OPCACHE"
+<?php endif; ?>
+    export CPPFLAGS=$(echo $CPPFLAGS | tr ' ' '\n' | sort | uniq | tr '\n' ' ')
+    export CXXFLAGS=$(echo $CXXFLAGS | tr ' ' '\n' | sort | uniq | tr '\n' ' ')
+    export CFLAGS=$(echo $CFLAGS | tr ' ' '\n' | sort | uniq | tr '\n' ' ')
+    export LDFLAGS=$(echo $LDFLAGS | tr ' ' '\n' | sort | uniq | tr '\n' ' ')
+    export LIBS=$(echo $LIBS | tr ' ' '\n' | sort | uniq | tr '\n' ' ')
+<?php if ($this->isLinux() && ($this->get_C_COMPILER() == 'musl-gcc')) : ?>
+    ln -sf /usr/include/linux/ /usr/include/x86_64-linux-musl/linux
+    ln -sf /usr/include/x86_64-linux-gnu/asm/ /usr/include/x86_64-linux-musl/asm
+    ln -sf /usr/include/asm-generic/ /usr/include/x86_64-linux-musl/asm-generic
+
+    export LDFLAGS="${LDFLAGS} -static -L/usr/lib/x86_64-linux-musl "
+
+<?php endif ;?>
     result_code=$?
     [[ $result_code -ne 0 ]] &&  echo " [ export_variables  FAILURE ]" && exit  $result_code;
     set +x
@@ -290,7 +243,11 @@ export_variables() {
 
 make_config() {
     cd <?= $this->phpSrcDir . PHP_EOL ?>
-    make_tmp_ext_dir
+    # 添加扩展
+    if [ ! -z  "$(ls -A ${__PROJECT_DIR__}/ext/)" ] ;then
+        cp -rf ${__PROJECT_DIR__}/ext/*  <?= $this->phpSrcDir ?>/ext/
+    fi
+    # 对扩展源代码执行预处理
     before_configure_script
 
     PHP_VERSION=$(cat main/php_version.h | grep 'PHP_VERSION_ID' | grep -E -o "[0-9]+")
@@ -315,9 +272,9 @@ make_config() {
     test -f ./configure &&  rm ./configure
     ./buildconf --force
 
-<?php if ($this->osType == 'macos') : ?>
-    <?php if (isset($this->libraryMap['pgsql'])) : ?>
-        sed -i.backup "s/ac_cv_func_explicit_bzero\" = xyes/ac_cv_func_explicit_bzero\" = x_fake_yes/" ./configure
+<?php if ($this->isMacos()) : ?>
+    <?php if ($this->hasLibrary('pgsql')) : ?>
+    sed -i.backup "s/ac_cv_func_explicit_bzero\" = xyes/ac_cv_func_explicit_bzero\" = x_fake_yes/" ./configure
     <?php endif;?>
 <?php endif; ?>
 
@@ -326,11 +283,13 @@ make_config() {
     echo $CPPFLAGS > <?= $this->getRootDir() ?>/cppflags.log
     echo $LIBS > <?= $this->getRootDir() ?>/libs.log
 
+    ./configure --help
+
     ./configure $OPTIONS
 
     # more info https://stackoverflow.com/questions/19456518/error-when-using-sed-with-find-command-on-os-x-invalid-command-code
 
-<?php if ($this->getOsType()=='linux') : ?>
+<?php if ($this->isLinux()) : ?>
     sed -i.backup 's/-export-dynamic/-all-static/g' Makefile
 <?php endif ; ?>
 
@@ -339,16 +298,25 @@ make_config() {
 make_build() {
     cd <?= $this->phpSrcDir . PHP_EOL ?>
     export_variables
-    <?php if ($this->getOsType() == 'linux') : ?>
+    <?php if ($this->isLinux()) : ?>
     export LDFLAGS="$LDFLAGS  -static -all-static "
     <?php endif ;?>
     export LDFLAGS="$LDFLAGS   <?= $this->extraLdflags ?>"
     export EXTRA_CFLAGS='<?= $this->extraCflags ?>'
     sed -i.backup "s/\$(POST_MICRO_BUILD_COMMANDS)/ /g" Makefile
-    make -j <?= $this->maxJob ?> micro;
 
-<?php if ($this->osType == 'macos') : ?>
-    otool -L <?= $this->phpSrcDir ?>/sapi/micro/micro.sfx
+    <?php if(!empty($this->httpProxy)) : ?>
+    <?= $this->getProxyConfig() . PHP_EOL ?>
+    <?php endif ;?>
+    make -j <?= $this->maxJob ?>  micro
+    <?php if(!empty($this->httpProxy)) : ?>
+    unset HTTP_PROXY
+    unset HTTPS_PROXY
+    unset NO_PROXY
+    <?php endif ;?>
+
+<?php if ($this->isMacos()) : ?>
+    otool -L <?= $this->phpSrcDir  ?>/sapi/micro/micro.sfx
 <?php else : ?>
     file <?= $this->phpSrcDir ?>/sapi/micro/micro.sfx
     readelf -h <?= $this->phpSrcDir ?>/sapi/micro/micro.sfx
@@ -358,6 +326,31 @@ make_build() {
     cp -f <?= $this->phpSrcDir ?>/sapi/micro/micro.sfx <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/
 
    # elfedit --output-osabi linux sapi/cli/php
+}
+
+make_archive() {
+    set -x
+    cd <?= BUILD_PHP_INSTALL_PREFIX ?>/bin
+    cp -f ${__PROJECT_DIR__}/bin/LICENSE .
+
+    PHP_VERSION=<?= BUILD_PHP_VERSION ?>
+    PHP_CLI_FILE_DEBUG=php-micro-v${PHP_VERSION}-<?=$this->getOsType()?>-<?=$this->getSystemArch()?>-debug.tar.xz
+    tar -cJvf ${PHP_CLI_FILE_DEBUG} micro.sfx LICENSE
+
+
+    mkdir -p <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/dist
+    cp -f micro.sfx     dist/
+    cp -f LICENSE       dist/
+
+    cd <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/dist
+    strip micro.sfx
+    PHP_CLI_FILE=php-micro-v${PHP_VERSION}-<?=$this->getOsType()?>-<?=$this->getSystemArch()?>.tar.xz
+    tar -cJvf ${PHP_CLI_FILE_DEBUG} micro.sfx LICENSE
+
+    mv <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/dist/${PHP_CLI_FILE}  ${__PROJECT_DIR__}/
+    mv <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/${PHP_CLI_FILE_DEBUG} ${__PROJECT_DIR__}/
+
+    cd ${__PROJECT_DIR__}/
 }
 
 make_clean() {
@@ -392,10 +385,10 @@ lib_dep_pkg() {
     declare -A array_name
 <?php foreach ($this->libraryList as $item) :?>
     <?php
-    $pkgs=[];
+    $pkgs = [];
     $this->getLibraryDependenciesByName($item->name, $pkgs);
     $pkgs = array_unique($pkgs);
-    $res=implode(' ', $pkgs);
+    $res = implode(' ', $pkgs);
     ?>
     array_name[<?= $item->name ?>]="<?= $res?>"
 <?php endforeach ;?>
@@ -430,6 +423,7 @@ help() {
     echo "./make.sh pkg-check"
     echo "./make.sh lib-pkg"
     echo "./make.sh lib-dep-pkg"
+    echo "./make.sh variables"
     echo "./make.sh list-swoole-branch"
     echo "./make.sh switch-swoole-branch"
     echo "./make.sh [library-name]"
@@ -502,15 +496,8 @@ elif [ "$1" = "build" ] ;then
 elif [ "$1" = "test" ] ;then
     <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/php vendor/bin/phpunit
 elif [ "$1" = "archive" ] ;then
-    set -x
-    cd <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/
-    PHP_VERSION=<?= BUILD_PHP_VERSION ?>
-    PHP_CLI_FILE=php-micro-v${PHP_VERSION}-<?=$this->getOsType()?>-<?=$this->getSystemArch()?>.tar.xz
-    cp -f micro.sfx  micro-dbg.sfx
-    strip micro.sfx
-    tar -cJvf ${PHP_CLI_FILE} micro.sfx
-    mv ${PHP_CLI_FILE} <?= $this->workDir ?>/
-    cd -
+    make_archive
+    exit 0
 elif [ "$1" = "clean-all-library" ] ;then
 <?php foreach ($this->libraryList as $item) : ?>
     clean_<?=$item->name?> && echo "[SUCCESS] make clean [<?=$item->name?>]"
@@ -566,75 +553,22 @@ elif [ "$1" = "list-extension" ] ;then
 elif [ "$1" = "clean" ] ;then
     make_clean
     exit 0
+elif [ "$1" = "variables" ] ;then
+    export_variables
+    echo "===========================[CPPFLAGS]================================"
+	echo $CPPFLAGS
+    echo "===========================[CFLAGS]================================"
+	echo $CFLAGS
+    echo "===========================[LDFLAGS]================================"
+	echo $LDFLAGS
+    echo "===========================[LIBS]================================"
+	echo $LIBS
 elif [ "$1" = "sync" ] ;then
-  echo "sync"
-  # ZendVM
-  cp -r $SRC/Zend ./
-  # Extension
-  cp -r $SRC/ext/bcmath/ ./ext
-  cp -r $SRC/ext/bz2/ ./ext
-  cp -r $SRC/ext/calendar/ ./ext
-  cp -r $SRC/ext/ctype/ ./ext
-  cp -r $SRC/ext/curl/ ./ext
-  cp -r $SRC/ext/date/ ./ext
-  cp -r $SRC/ext/dom/ ./ext
-  cp -r $SRC/ext/exif/ ./ext
-  cp -r $SRC/ext/fileinfo/ ./ext
-  cp -r $SRC/ext/filter/ ./ext
-  cp -r $SRC/ext/gd/ ./ext
-  cp -r $SRC/ext/gettext/ ./ext
-  cp -r $SRC/ext/gmp/ ./ext
-  cp -r $SRC/ext/hash/ ./ext
-  cp -r $SRC/ext/iconv/ ./ext
-  cp -r $SRC/ext/intl/ ./ext
-  cp -r $SRC/ext/json/ ./ext
-  cp -r $SRC/ext/libxml/ ./ext
-  cp -r $SRC/ext/mbstring/ ./ext
-  cp -r $SRC/ext/mysqli/ ./ext
-  cp -r $SRC/ext/mysqlnd/ ./ext
-  cp -r $SRC/ext/opcache/ ./ext
-  sed -i 's/ext_shared=yes/ext_shared=no/g' ext/opcache/config.m4 && sed -i 's/shared,,/$ext_shared,,/g' ext/opcache/config.m4
-  sed -i 's/-DZEND_ENABLE_STATIC_TSRMLS_CACHE=1/-DZEND_ENABLE_STATIC_TSRMLS_CACHE=1 -DPHP_ENABLE_OPCACHE/g' ext/opcache/config.m4
-  echo -e '#include "php.h"\n\nextern zend_module_entry opcache_module_entry;\n#define phpext_opcache_ptr  &opcache_module_entry\n' > ext/opcache/php_opcache.h
-  cp -r $SRC/ext/openssl/ ./ext
-  cp -r $SRC/ext/pcntl/ ./ext
-  cp -r $SRC/ext/pcre/ ./ext
-  cp -r $SRC/ext/pdo/ ./ext
-  cp -r $SRC/ext/pdo_mysql/ ./ext
-  cp -r $SRC/ext/pdo_sqlite/ ./ext
-  cp -r $SRC/ext/phar/ ./ext
-  echo -e '\n#include "sapi/cli/sfx/hook_stream.h"' >> ext/phar/phar_internal.h
-  cp -r $SRC/ext/posix/ ./ext
-  cp -r $SRC/ext/readline/ ./ext
-  cp -r $SRC/ext/reflection/ ./ext
-  cp -r $SRC/ext/session/ ./ext
-  cp -r $SRC/ext/simplexml/ ./ext
-  cp -r $SRC/ext/soap/ ./ext
-  cp -r $SRC/ext/sockets/ ./ext
-  cp -r $SRC/ext/sodium/ ./ext
-  cp -r $SRC/ext/spl/ ./ext
-  cp -r $SRC/ext/sqlite3/ ./ext
-  cp -r $SRC/ext/standard/ ./ext
-  cp -r $SRC/ext/sysvshm/ ./ext
-  cp -r $SRC/ext/tokenizer/ ./ext
-  cp -r $SRC/ext/xml/ ./ext
-  cp -r $SRC/ext/xmlreader/ ./ext
-  cp -r $SRC/ext/xmlwriter/ ./ext
-  cp -r $SRC/ext/xsl/ ./ext
-  cp -r $SRC/ext/zip/ ./ext
-  cp -r $SRC/ext/zlib/ ./ext
-  # main
-  cp -r $SRC/main ./
-  sed -i 's/\/\* start Zend extensions \*\//\/\* start Zend extensions \*\/\n#ifdef PHP_ENABLE_OPCACHE\n\textern zend_extension zend_extension_entry;\n\tzend_register_extension(\&zend_extension_entry, NULL);\n#endif/g' main/main.c
-  # build
-  cp -r $SRC/build ./
-  # TSRM
-  cp -r ./TSRM/TSRM.h main/TSRM.h
-  cp -r $SRC/configure.ac ./
-  # fpm
-  cp -r $SRC/sapi/fpm/fpm ./sapi/cli
-  exit 0
+    PHP_CLI=$(which php)
+    test -f ${__PROJECT_DIR__}/bin/runtime/php && PHP_CLI="${__PROJECT_DIR__}/bin/runtime/php -d curl.cainfo=${__PROJECT_DIR__}/bin/runtime/cacert.pem -d openssl.cafile=${__PROJECT_DIR__}/bin/runtime/cacert.pem"
+    $PHP_CLI -v
+    $PHP_CLI sync-source-code.php --action run
+    exit 0
 else
     help
 fi
-

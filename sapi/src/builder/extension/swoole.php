@@ -4,7 +4,8 @@ use SwooleCli\Preprocessor;
 use SwooleCli\Extension;
 
 return function (Preprocessor $p) {
-    $swoole_tag = 'v5.1.1';
+
+    $swoole_tag = 'v5.1.2';
     $file = "swoole-{$swoole_tag}.tar.gz";
 
     $url = "https://github.com/swoole/swoole-src/archive/refs/tags/{$swoole_tag}.tar.gz";
@@ -12,10 +13,12 @@ return function (Preprocessor $p) {
     $dependentLibraries = ['curl', 'openssl', 'cares', 'zlib', 'brotli', 'nghttp2', 'sqlite3', 'unix_odbc', 'pgsql'];
     $dependentExtensions = ['curl', 'openssl', 'sockets', 'mysqlnd', 'pdo'];
     $options = ' --enable-swoole --enable-sockets --enable-mysqlnd --enable-swoole-curl --enable-cares ';
-    $options .= ' --enable-swoole-coro-time --enable-thread-context ';
+    $options .= ' --enable-swoole-coro-time ';
+    $options .= ' --enable-thread-context ';
     $options .= ' --with-brotli-dir=' . BROTLI_PREFIX;
     $options .= ' --with-nghttp2-dir=' . NGHTTP2_PREFIX;
-    $options .= ' --enable-swoole-sqlite --enable-swoole-pgsql ';
+    $options .= ' --enable-swoole-pgsql ';
+    $options .= ' --enable-swoole-sqlite ';
     $options .= ' --with-swoole-odbc=unixODBC,' . UNIX_ODBC_PREFIX . ' ';
 
 
@@ -32,10 +35,15 @@ return function (Preprocessor $p) {
 EOF
         )
         ->withBuildCached(false)
+        ->withDependentLibraries(...$dependentLibraries)
+        ->withDependentExtensions(...$dependentExtensions)
     ;
 
-    call_user_func_array([$ext, 'withDependentLibraries'], $dependentLibraries);
-    call_user_func_array([$ext, 'withDependentExtensions'], $dependentExtensions);
+    //call_user_func_array([$ext, 'withDependentLibraries'], $dependentLibraries);
+    //call_user_func_array([$ext, 'withDependentExtensions'], $dependentExtensions);
 
     $p->addExtension($ext);
+
+    $libs = $p->isMacos() ? '-lc++' : ' -lstdc++ ';
+    $p->withVariable('LIBS', '$LIBS ' . $libs);
 };
