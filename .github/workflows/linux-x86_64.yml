@@ -171,7 +171,7 @@ jobs:
       - name: production artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: php-micro-v${{ env.APP_VERSION }}-linux-x64
+          name: php-micro-v${{ env.BUILD_PHP_VERSION }}-linux-x64
           retention-days: 90
           path: ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/dist/micro.sfx
 
