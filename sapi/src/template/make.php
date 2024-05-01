@@ -247,6 +247,11 @@ export_variables() {
 
 make_config() {
     cd <?= $this->phpSrcDir . PHP_EOL ?>
+    # 添加扩展
+    if [ ! -z  "$(ls -A ${__PROJECT_DIR__}/ext/)" ] ;then
+    cp -rf ${__PROJECT_DIR__}/ext/*  <?= $this->phpSrcDir ?>/ext/
+    fi
+    # 对扩展源代码执行预处理
     before_configure_script
 
     cd <?= $this->getPhpSrcDir() ?>/
