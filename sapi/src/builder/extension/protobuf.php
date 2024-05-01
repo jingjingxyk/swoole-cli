@@ -7,7 +7,6 @@ return function (Preprocessor $p) {
     $p->addExtension(
         (new Extension('protobuf'))
             ->withOptions('--enable-protobuf')
-            ->withPeclVersion('3.21.6')
             ->withPeclVersion('3.23.2')
             ->withHomePage('https://developers.google.com/protocol-buffers')
             ->withManual('https://protobuf.dev/reference/php/php-generated/')
@@ -16,8 +15,9 @@ return function (Preprocessor $p) {
 
     $p->withBeforeConfigureScript('protobuf', function (Preprocessor $p) {
         // compatible with redis
-        $workdir= $p->getphpSrcDir();
-        if ($p->getOsType() === 'macos') {
+
+        $workdir = $p->getWorkDir();
+        if ($p->isMacos()) {
             $cmd = <<<EOF
                 cd {$workdir}
                 sed -i '.bak' 's/arginfo_void,/arginfo_void_protobuf,/g' ext/protobuf/*.c ext/protobuf/*.h ext/protobuf/*.inc
@@ -29,7 +29,6 @@ EOF;
                 sed -i 's/arginfo_void,/arginfo_void_protobuf,/g' ext/protobuf/*.c ext/protobuf/*.h ext/protobuf/*.inc
 EOF;
         }
-        return '';
         return $cmd;
     });
 };
