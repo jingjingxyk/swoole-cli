@@ -22,6 +22,7 @@ export LD=<?= $this->lld . PHP_EOL ?>
 
 export PKG_CONFIG_PATH=<?= implode(':', $this->pkgConfigPaths) . PHP_EOL ?>
 export PATH=<?= implode(':', $this->binPaths) . PHP_EOL ?>
+
 OPTIONS="--disable-all \
 --disable-cgi  \
 --enable-shared=no \
@@ -178,77 +179,16 @@ clean_<?=$item->name?>_cached() {
 <?php endforeach; ?>
 
 make_all_library() {
+<?php if ($this->inVirtualMachine): ?>
+    if [! -d <?= $this->getGlobalPrefix() ?>/sources ] ;then
+        mkdir -p <?= $this->getGlobalPrefix() ?>/sources
+        rm -rf <?= $this->getBuildDir() . PHP_EOL ?>
+        ln -s <?= $this->getGlobalPrefix() ?>/sources <?= $this->getBuildDir() . PHP_EOL ?>
+    fi
+<?php endif; ?>
 <?php foreach ($this->libraryList as $item) : ?>
     make_<?=$item->name?> && echo "[SUCCESS] make <?=$item->name?>"
 <?php endforeach; ?>
-    return 0
-}
-
-
-make_tmp_ext_dir() {
-    cd <?= $this->getPhpSrcDir() . PHP_EOL ?>
-    PHP_SRC_DIR=<?= $this->getPhpSrcDir() . PHP_EOL ?>
-    EXT_DIR=$PHP_SRC_DIR/ext/
-    EXT_TMP_DIR=$PHP_SRC_DIR/ext-tmp/
-    test -d $EXT_TMP_DIR && rm -rf $EXT_TMP_DIR
-    mkdir -p $EXT_TMP_DIR
-<?php
-if ($this->buildType == 'dev') {
-    echo <<<'EOF'
-    cd $EXT_DIR
-
-    cp -rf date $EXT_TMP_DIR
-    test -d hash && cp -rf hash $EXT_TMP_DIR
-    test -d json && cp -rf json $EXT_TMP_DIR
-    cp -rf pcre $EXT_TMP_DIR
-    test -d random && cp -rf random $EXT_TMP_DIR
-    cp -rf reflection $EXT_TMP_DIR
-    cp -rf session $EXT_TMP_DIR
-    cp -rf spl $EXT_TMP_DIR
-    cp -rf standard $EXT_TMP_DIR
-    cp -rf date $EXT_TMP_DIR
-    cp -rf phar $EXT_TMP_DIR
-
-EOF;
-}
-
-foreach ($this->extensionMap as $extension) {
-    $name = $extension->name;
-    if ($extension->aliasName) {
-        $name = $extension->aliasName;
-    }
-    if (!empty($extension->peclVersion) || $extension->enableDownloadScript || !empty($extension->url)) {
-        echo <<<EOF
-    cp -rf {$this->getRootDir()}/ext/{$name} \$EXT_TMP_DIR
-EOF;
-        echo PHP_EOL;
-    } else {
-        if ($this->buildType == 'dev') {
-            echo <<<EOF
-    cp -rf \$EXT_DIR/{$name} \$EXT_TMP_DIR
-EOF;
-            echo PHP_EOL;
-        }
-    }
-}
-if ($this->buildType == 'dev') {
-    echo <<<'EOF'
-    mv $EXT_DIR/ $PHP_SRC_DIR/ext-del/
-    mv $EXT_TMP_DIR $EXT_DIR
-EOF;
-    echo PHP_EOL;
-} else {
-    echo <<<'EOF'
-    NUM=$(ls $EXT_TMP_DIR/ | wc -l )
-    if [ $NUM -gt 0 ] ; then
-        cp -rf ${EXT_TMP_DIR}/* $EXT_DIR
-    fi
-
-EOF;
-}
-    echo PHP_EOL;
-?>
-    cd <?= $this->getPhpSrcDir() ?>/
     return 0
 }
 
@@ -265,15 +205,10 @@ before_configure_script() {
 
 export_variables() {
     set -x
-    # -all-static | -static | -static-libtool-libs
-    CPPFLAGS=""
-    CFLAGS=""
-<?php if ($this->cCompiler == 'clang') : ?>
-    LDFLAGS="-static"
-<?php else :?>
-    LDFLAGS="-static-libgcc -static-libstdc++"
-<?php endif ;?>
 
+    CPPFLAGS=""
+    CXXFLAGS=""
+    CFLAGS=""
     LDFLAGS=""
     LIBS=""
 <?php foreach ($this->variables as $name => $value) : ?>
@@ -283,8 +218,26 @@ export_variables() {
     [[ $result_code -ne 0 ]] &&  echo " [ export_variables  FAILURE ]" && exit  $result_code;
     echo "export variables"
 <?php foreach ($this->exportVariables as $value) : ?>
-    export  <?= key($value) ?>="<?= current($value) ?>"
+    export <?= key($value) ?>="<?= current($value) ?>"
 <?php endforeach; ?>
+
+<?php if ($this->hasExtension('opcache')):?>
+    export CFLAGS="$CFLAGS -DPHP_ENABLE_OPCACHE"
+    export CPPFLAGS="$CPPFLAGS -DPHP_ENABLE_OPCACHE"
+<?php endif; ?>
+    export CPPFLAGS=$(echo $CPPFLAGS | tr ' ' '\n' | sort | uniq | tr '\n' ' ')
+    export CXXFLAGS=$(echo $CXXFLAGS | tr ' ' '\n' | sort | uniq | tr '\n' ' ')
+    export CFLAGS=$(echo $CFLAGS | tr ' ' '\n' | sort | uniq | tr '\n' ' ')
+    export LDFLAGS=$(echo $LDFLAGS | tr ' ' '\n' | sort | uniq | tr '\n' ' ')
+    export LIBS=$(echo $LIBS | tr ' ' '\n' | sort | uniq | tr '\n' ' ')
+<?php if ($this->isLinux() && ($this->get_C_COMPILER() == 'musl-gcc')) : ?>
+    ln -sf /usr/include/linux/ /usr/include/x86_64-linux-musl/linux
+    ln -sf /usr/include/x86_64-linux-gnu/asm/ /usr/include/x86_64-linux-musl/asm
+    ln -sf /usr/include/asm-generic/ /usr/include/x86_64-linux-musl/asm-generic
+
+    export LDFLAGS="${LDFLAGS} -static -L/usr/lib/x86_64-linux-musl "
+
+<?php endif ;?>
     result_code=$?
     [[ $result_code -ne 0 ]] &&  echo " [ export_variables  FAILURE ]" && exit  $result_code;
     set +x
@@ -294,19 +247,15 @@ export_variables() {
 
 make_config() {
     cd <?= $this->phpSrcDir . PHP_EOL ?>
-
-    make_tmp_ext_dir
     before_configure_script
 
     cd <?= $this->getPhpSrcDir() ?>/
     test -f ./configure &&  rm ./configure
     ./buildconf --force
 
-    ./configure --help
-
-<?php if ($this->osType == 'macos') : ?>
-    <?php if (isset($this->libraryMap['pgsql'])) : ?>
-        sed -i.backup "s/ac_cv_func_explicit_bzero\" = xyes/ac_cv_func_explicit_bzero\" = x_fake_yes/" ./configure
+<?php if ($this->isMacos()) : ?>
+    <?php if ($this->hasLibrary('pgsql')) : ?>
+    sed -i.backup "s/ac_cv_func_explicit_bzero\" = xyes/ac_cv_func_explicit_bzero\" = x_fake_yes/" ./configure
     <?php endif;?>
 <?php endif; ?>
 
@@ -315,11 +264,13 @@ make_config() {
     echo $CPPFLAGS > <?= $this->getRootDir() ?>/cppflags.log
     echo $LIBS > <?= $this->getRootDir() ?>/libs.log
 
+    ./configure --help
+
     ./configure $OPTIONS
 
     # more info https://stackoverflow.com/questions/19456518/error-when-using-sed-with-find-command-on-os-x-invalid-command-code
 
-<?php if ($this->getOsType() == 'linux') : ?>
+<?php if ($this->isLinux()) : ?>
     sed -i.backup 's/-export-dynamic/-all-static/g' Makefile
 <?php endif ; ?>
 
@@ -328,14 +279,22 @@ make_config() {
 make_build() {
     cd <?= $this->phpSrcDir . PHP_EOL ?>
     export_variables
-    <?php if ($this->getOsType() == 'linux') : ?>
+    <?php if ($this->isLinux()) : ?>
     export LDFLAGS="$LDFLAGS  -static -all-static "
     <?php endif ;?>
     export LDFLAGS="$LDFLAGS   <?= $this->extraLdflags ?>"
     export EXTRA_CFLAGS='<?= $this->extraCflags ?>'
+    <?php if(!empty($this->httpProxy)) : ?>
+    <?= $this->getProxyConfig() . PHP_EOL ?>
+    <?php endif ;?>
     make -j <?= $this->maxJob ?> ;
+    <?php if(!empty($this->httpProxy)) : ?>
+    unset HTTP_PROXY
+    unset HTTPS_PROXY
+    unset NO_PROXY
+    <?php endif ;?>
 
-<?php if ($this->osType == 'macos') : ?>
+<?php if ($this->isMacos()) : ?>
     otool -L <?= $this->phpSrcDir  ?>/sapi/cli/php
 <?php else : ?>
     file <?= $this->phpSrcDir  ?>/sapi/cli/php
@@ -355,25 +314,24 @@ make_build() {
 make_archive() {
     set -x
     cd <?= BUILD_PHP_INSTALL_PREFIX ?>/bin
+    cp -f ${__PROJECT_DIR__}/bin/LICENSE .
+
     PHP_VERSION=$(./php -r "echo PHP_VERSION;")
-    PHP_CLI_FILE=php-cli-v${PHP_VERSION}-<?=$this->getOsType()?>-<?=$this->getSystemArch()?>.tar.xz
+    PHP_CLI_FILE_DEBUG=php-cli-v${PHP_VERSION}-<?=$this->getOsType()?>-<?=$this->getSystemArch()?>-debug.tar.xz
+    tar -cJvf ${PHP_CLI_FILE_DEBUG} php LICENSE
+
 
     mkdir -p <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/dist
     cp -f php           dist/
-    cp -f ${__PROJECT_DIR__}/bin/LICENSE       dist/
-
-    if test $CLI_BUILD_TYPE = 'release' ; then
-        strip dist/php
-    fi
+    cp -f LICENSE       dist/
 
     cd <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/dist
-
+    strip php
+    PHP_CLI_FILE=php-cli-v${PHP_VERSION}-<?=$this->getOsType()?>-<?=$this->getSystemArch()?>.tar.xz
     tar -cJvf ${PHP_CLI_FILE} php LICENSE
-    mv ${PHP_CLI_FILE} ${__PROJECT_DIR__}/
 
-    if [[ -d <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/dist &&  $CLI_BUILD_TYPE = 'release' ]] ; then
-        rm -rf <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/dist
-    fi
+    mv <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/dist/${PHP_CLI_FILE}  ${__PROJECT_DIR__}/
+    mv <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/${PHP_CLI_FILE_DEBUG} ${__PROJECT_DIR__}/
 
     cd ${__PROJECT_DIR__}/
 }
@@ -448,6 +406,7 @@ help() {
     echo "./make.sh pkg-check"
     echo "./make.sh lib-pkg"
     echo "./make.sh lib-dep-pkg"
+    echo "./make.sh variables"
     echo "./make.sh list-swoole-branch"
     echo "./make.sh switch-swoole-branch"
     echo "./make.sh [library-name]"
@@ -577,6 +536,16 @@ elif [ "$1" = "list-extension" ] ;then
 elif [ "$1" = "clean" ] ;then
     make_clean
     exit 0
+elif [ "$1" = "variables" ] ;then
+    export_variables
+    echo "===========================[CPPFLAGS]================================"
+	echo $CPPFLAGS
+    echo "===========================[CFLAGS]================================"
+	echo $CFLAGS
+    echo "===========================[LDFLAGS]================================"
+	echo $LDFLAGS
+    echo "===========================[LIBS]================================"
+	echo $LIBS
 elif [ "$1" = "sync" ] ;then
     PHP_CLI=$(which php)
     test -f ${__PROJECT_DIR__}/bin/runtime/php && PHP_CLI="${__PROJECT_DIR__}/bin/runtime/php -d curl.cainfo=${__PROJECT_DIR__}/bin/runtime/cacert.pem -d openssl.cafile=${__PROJECT_DIR__}/bin/runtime/cacert.pem"
@@ -586,4 +555,3 @@ elif [ "$1" = "sync" ] ;then
 else
     help
 fi
-

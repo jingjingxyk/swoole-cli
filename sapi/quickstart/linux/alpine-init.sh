@@ -56,6 +56,8 @@ apk add diffutils
 apk add netcat-openbsd
 apk add python3-dev
 apk add mercurial
+apk add gettext-dev
+apk add pigz parallel
 
 case "$MIRROR" in
 china | tuna | ustc)
@@ -70,5 +72,3 @@ esac
 
 # pip3 install meson
 apk add meson
-
-

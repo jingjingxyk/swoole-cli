@@ -4,7 +4,6 @@ use SwooleCli\Preprocessor;
 use SwooleCli\Extension;
 
 return function (Preprocessor $p) {
-
     $swoole_tag = '4.8.x';
 
     $file = "swoole-{$swoole_tag}.tar.gz";
@@ -19,7 +18,6 @@ return function (Preprocessor $p) {
     $options .= ' --enable-http2 ';
     $options .= ' --enable-swoole-json ';
 
-
     $ext = (new Extension('swoole'))
         ->withHomePage('https://github.com/swoole/swoole-src')
         ->withLicense('https://github.com/swoole/swoole-src/blob/master/LICENSE', Extension::LICENSE_APACHE2)
@@ -33,10 +31,15 @@ return function (Preprocessor $p) {
 EOF
         )
         ->withBuildCached(false)
+        ->withDependentLibraries(...$dependentLibraries)
+        ->withDependentExtensions(...$dependentExtensions)
     ;
 
-    call_user_func_array([$ext, 'withDependentLibraries'], $dependentLibraries);
-    call_user_func_array([$ext, 'withDependentExtensions'], $dependentExtensions);
+    //call_user_func_array([$ext, 'withDependentLibraries'], $dependentLibraries);
+    //call_user_func_array([$ext, 'withDependentExtensions'], $dependentExtensions);
 
     $p->addExtension($ext);
+
+    $libs = $p->isMacos() ? '-lc++' : ' -lstdc++ ';
+    $p->withVariable('LIBS', '$LIBS ' . $libs);
 };

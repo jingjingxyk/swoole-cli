@@ -1,18 +1,21 @@
 <?php
 
 use SwooleCli\Preprocessor;
-use SwooleCli\Library;
 use SwooleCli\Extension;
 
 return function (Preprocessor $p) {
 
-    $p->withExportVariable('PHP_MONGODB_SSL', 'yes');
+    $snappy_prefix = SNAPPY_PREFIX;
+
     $p->withExportVariable('PHP_MONGODB_SSL_CFLAGS', '$(pkg-config --cflags --static libcrypto libssl  openssl)');
     $p->withExportVariable('PHP_MONGODB_SSL_LIBS', '$(pkg-config   --libs   --static libcrypto libssl  openssl)');
 
     $p->withExportVariable('PHP_MONGODB_ICU', 'yes');
     $p->withExportVariable('PHP_MONGODB_ICU_CFLAGS', '$(pkg-config --cflags --static icu-i18n  icu-io  icu-uc)');
     $p->withExportVariable('PHP_MONGODB_ICU_LIBS', '$(pkg-config   --libs   --static icu-i18n  icu-io  icu-uc)');
+
+    $p->withExportVariable('PHP_MONGODB_SNAPPY_CFLAGS', '-I' . $snappy_prefix . '/include');
+    $p->withExportVariable('PHP_MONGODB_SNAPPY_LIBS', '-L' . $snappy_prefix . '/lib -lsnappy');
 
     $p->withExportVariable('PHP_MONGODB_ZSTD_CFLAGS', '$(pkg-config --cflags --static libzstd)');
     $p->withExportVariable('PHP_MONGODB_ZSTD_LIBS', '$(pkg-config   --libs   --static libzstd)');
@@ -22,15 +25,10 @@ return function (Preprocessor $p) {
 
     $options = ' --enable-mongodb ';
     $options .= ' --with-mongodb-system-libs=no ';
-    $options .= ' --with-mongodb-ssl=openssl ';
-    $options .= ' --with-mongodb-sasl=no ';
-    $options .= ' --with-mongodb-icu=yes ';
-
     $options .= ' --with-mongodb-client-side-encryption=no ';
     # $options .= ' --with-mongodb-snappy=no ';
 
     # $mongodb_version = '1.15.3';
-
 
     $ext = new Extension('mongodb');
 
@@ -41,6 +39,4 @@ return function (Preprocessor $p) {
 
     $depends = ['icu', 'openssl', 'zlib', 'libzstd'];
     call_user_func_array([$ext, 'withDependentLibraries'], $depends);
-
-    $p->addExtension($ext);
 };

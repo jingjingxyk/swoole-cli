@@ -5,7 +5,26 @@ use SwooleCli\Preprocessor;
 
 return function (Preprocessor $p) {
     $openssl_prefix = OPENSSL_PREFIX;
-    $static = $p->getOsType() === 'macos' ? '' : ' -static --static';
+    $static = $p->isMacos() ? '' : ' -static --static';
+
+    $cc = '';
+    if ($p->isLinux() && ($p->get_C_COMPILER() === 'musl-gcc')) {
+
+        # 参考 https://github.com/openssl/openssl/issues/7207#issuecomment-880121450
+        # -idirafter /usr/include/ -idirafter /usr/include/x86_64-linux-gnu/"
+
+        /*
+
+        ln -sf /usr/include/linux/ /usr/include/x86_64-linux-musl/linux
+        ln -sf /usr/include/x86_64-linux-gnu/asm/ /usr/include/x86_64-linux-musl/asm
+        ln -sf /usr/include/asm-generic/ /usr/include/x86_64-linux-musl/asm-generic
+
+        */
+        $custom_include = '/usr/include/x86_64-linux-musl/';
+        $cc = 'CC="${CC} -idirafter /usr/include/ -idirafter ' . $custom_include . '"';
+
+    }
+
 
     $p->addLibrary(
         (new Library('openssl'))
@@ -16,12 +35,13 @@ return function (Preprocessor $p) {
             ->withPrefix($openssl_prefix)
             ->withConfigure(
                 <<<EOF
-                 # ./Configure LIST
-               ./config {$static} no-shared  enable-tls1_3 --release \
+                # Fix openssl error, "-ldl" should not be added when compiling statically
+                sed -i.backup 's/add("-ldl", threads("-pthread"))/add(threads("-pthread"))/g' ./Configurations/10-main.conf
+                # ./Configure LIST
+               {$cc} ./config {$static} no-shared  enable-tls1_3 --release \
                --prefix={$openssl_prefix} \
                --libdir={$openssl_prefix}/lib \
                --openssldir=/etc/ssl
-
 
 EOF
             )
