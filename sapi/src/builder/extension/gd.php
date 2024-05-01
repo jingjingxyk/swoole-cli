@@ -6,7 +6,7 @@ use SwooleCli\Extension;
 
 return function (Preprocessor $p) {
     $options = '--enable-gd --with-jpeg --with-freetype --with-webp ';
-    $dependent_libraries =['libjpeg', 'freetype', 'libwebp', 'libpng', 'libgif'];
+    $dependent_libraries = ['libjpeg', 'freetype', 'libwebp', 'libpng', 'libgif'];
 
     $ext = (new Extension('gd'))
         ->withHomePage('https://www.php.net/manual/zh/book.image.php')

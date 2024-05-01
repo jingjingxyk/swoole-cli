@@ -302,7 +302,7 @@ tmp-php.ini
 /pool/
 /vendor
 /thirdparty
-/usr
+/var
 /ext/redis
 /ext/memcached
 /ext/imagick
@@ -315,7 +315,6 @@ tmp-php.ini
 /ext/xlswriter
 /.phpunit.result.cache
 /samples/sfx/*.phar
-composer.lock
 .php-cs-fixer.cache
 
 /packages
