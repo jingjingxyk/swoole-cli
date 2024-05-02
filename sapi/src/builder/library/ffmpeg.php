@@ -49,7 +49,7 @@ EOF
 EOF
         )
         ->withBuildCached(false)
-        ->withInstallCached(false)
+        //->withInstallCached(false)
         ->withConfigure(
             <<<EOF
 
@@ -175,9 +175,15 @@ EOF
             'fdk_aac',
             'libfribidi',
             'rabbitmq_c',
+<<<<<<< HEAD
             "libx265"
             //'speex' //被opus 取代
             //   'libssh2',
+=======
+            "libx265",
+            //'speex', //被opus 取代
+            //'libssh2',
+>>>>>>> new_dev
         );
 
     $p->addLibrary($lib);

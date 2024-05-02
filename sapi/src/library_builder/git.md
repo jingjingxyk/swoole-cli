@@ -131,3 +131,18 @@ git rm -rf .
 ```bash
 git merge  --allow-unrelated-histories
 ```
+
+## 查看提交日志
+```bash
+
+git log --oneline
+
+```
+
+```bash
+
+GITVERSION="git --git-dir $(pwd)/.git rev-parse --short HEAD"
+GITTAG="git --git-dir $(pwd)/.git describe --all --always --dirty"
+GITBRANCH="git --git-dir $(pwd)/.git name-rev --name-only HEAD"
+
+```

@@ -17,16 +17,15 @@ return function (Preprocessor $p) {
             ->withManual('https://github.com/DPDK/dpdk.git')
             ->withManual('http://core.dpdk.org/doc/')
             ->withManual('https://core.dpdk.org/doc/quick-start/')
-            ->withFile('dpdk-v22.11.3.tar.gz')
+            ->withFile('dpdk-v23.11.tar.gz')
             ->withDownloadScript(
                 'dpdk-stable',
                 <<<EOF
                 # https://git.dpdk.org/dpdk-stable/refs
 
-                git clone -b v22.11.3 --depth=1 https://dpdk.org/git/dpdk-stable
+                git clone -b v23.11 --depth=1 https://dpdk.org/git/dpdk-stable
 EOF
             )
-
             ->withPreInstallCommand(
                 'alpine',
                 <<<EOF
@@ -43,9 +42,36 @@ EOF
 EOF
             )
             ->withPreInstallCommand(
-                'debian',
+                'ubuntu',
                 <<<EOF
-            apt install python3-pyelftools
+            apt install -y python3-pyelftools
+            apt install -y zlib1g-dev
+            apt install -y libjansson-dev
+            apt install -y nettle-dev
+            apt install -y libhogweed6
+            apt install -y libnuma-dev
+            apt install -y liblz4-dev
+            apt install -y libzstd-dev
+            apt install -y libarchive-dev
+            apt install -y libnl-3-dev libnl-genl-3-dev libnl-nf-3-dev libnl-xfrm-3-dev libnl-route-3-dev libnl-idiag-3-dev
+            apt install -y libibumad-dev
+            apt install -y librdmacm-dev
+            apt install -y libibnetdisc-dev
+            apt install -y libibverbs-dev
+            apt install -y libibmad-dev
+            apt install -y libbsd-dev
+            apt install -y libpcap-dev
+            apt install -y libelf-dev
+            apt install -y libxdp-dev
+            apt install -y libbpf-dev
+            apt install -y libipsec-mb-dev libipsec-mb1 librte-crypto-ipsec-mb23
+            apt install -y libdlpack-dev
+            apt install -y libdmlc-dev  #  分布式机器学习库
+            apt install -y libfdt-dev
+            apt install -y libisal-dev # Intel(R) Intelligent Storage Acceleration Library
+
+            apt install -y python3-sphinx
+            apt install -y doxygen
 EOF
             )
             ->withCleanBuildDirectory()
@@ -59,10 +85,10 @@ EOF
             # meson configure -h
 
             PACKAGES=" jansson  openssl libxml-2.0  nettle hogweed gmp  "
-            # PACKAGES="\$PACKAGES numa "
+            PACKAGES="\$PACKAGES numa "
             PACKAGES="\$PACKAGES zlib  liblzma liblz4 libzstd "
             # PACKAGES="\$PACKAGES  liblzma  "
-            # PACKAGES="\$PACKAGES libarchive "
+            PACKAGES="\$PACKAGES libarchive "
             # PACKAGES="\$PACKAGES libpcap "
             # PACKAGES="\$PACKAGES  libbpf "
             PACKAGES="\$PACKAGES libmlx4 libibverbs libmlx5 libefa libibmad libibnetdisc libibumad libmana librdmacm  "
@@ -74,8 +100,8 @@ EOF
             LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES) "
             LIBS="$(pkg-config      --libs-only-l    --static \$PACKAGES) "
 
-            CPPFLAGS="\$CPPFLAGS -I{$libiconv_prefix}/include -I{$bzip2_prefix}/include  " # -I{$libarchive_prefix}/include
-            LDFLAGS="\$LDFLAGS -L{$libiconv_prefix}/lib -L{$bzip2_prefix}/lib " # -L{$libarchive_prefix}/lib
+            # CPPFLAGS="\$CPPFLAGS -I{$libiconv_prefix}/include -I{$bzip2_prefix}/include  " # -I{$libarchive_prefix}/include
+            # LDFLAGS="\$LDFLAGS -L{$libiconv_prefix}/lib -L{$bzip2_prefix}/lib " # -L{$libarchive_prefix}/lib
             LIBS="\$LIBS  -liconv -lbz2 "
 
             CPPFLAGS="\$CPPFLAGS" \
@@ -85,19 +111,9 @@ EOF
             -Dprefix={$dpdk_prefix} \
             -Dbackend=ninja \
             -Dbuildtype=release \
-            -Ddefault_library=static \
-            -Db_staticpic=true \
             -Db_pie=true \
-            -Dprefer_static=true \
-            -Dibverbs_link=static \
             -Dtests=false \
-            -Dibverbs_link=static \
-            -Dexamples='cmdline' \
-            -Denable_apps='dumpcap,pdump,proc-info' \
-            -Dcheck_includes=true
-
-            # -Dexamples=all
-            # -Dexamples=''
+            -Dexamples=all
 
 
             ninja -C build
@@ -108,6 +124,7 @@ EOF
 EOF
             )
             ->withBinPath($dpdk_prefix . '/bin/')
+            /*
             ->withDependentLibraries(
                 'jansson',
                 'zlib',
@@ -123,25 +140,18 @@ EOF
                 'bzip2',
                 'libxml2',
                 'libiconv',
-                'gmp'
-                //'libarchive',
-                //'numa',
-                //'libpcap',
-                //'libxdp',
-                //'libbpf',
-                //'libbsd',
+                'gmp',
+                'libarchive',
+                'numa',
+                'libpcap',
+                'libxdp',
+                'libbpf',
+                'libbsd',
 
             )
-            ->withScriptAfterInstall(
-                <<<EOF
-            rm -rf {$dpdk_prefix}/lib/*.so.*
-            rm -rf {$dpdk_prefix}/lib/*.so
-            rm -rf {$dpdk_prefix}/lib/*.dylib
-            rm -rf {$dpdk_prefix}/lib/dpdk/
-EOF
-            )
-        ->withPkgName('libdpdk-libs')
-        ->withPkgName('libdpdk')
+            */
+            ->withPkgName('libdpdk-libs')
+            ->withPkgName('libdpdk')
     );
 };
 
@@ -155,7 +165,7 @@ PMD（Poll Mode Driver）
 
 UIO（Userspace I/O）
 
-Zero Copy、无系统调用的好处
+Zero Copy、无系统调用的好处  零拷贝
 
 
 https://cloud.tencent.com/developer/article/1198333
