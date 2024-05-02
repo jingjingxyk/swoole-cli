@@ -26,8 +26,13 @@ EOF
         --prefix={$libx264_prefix} \
         --enable-static \
         --enable-pic \
-        --enable-lto \
-        --enable-strip
+        --disable-cli \
+        --disable-avs \
+        --disable-swscale \
+        --disable-lavf \
+        --disable-ffms \
+        --disable-gpac \
+        --disable-lsmash
 
 EOF
         )

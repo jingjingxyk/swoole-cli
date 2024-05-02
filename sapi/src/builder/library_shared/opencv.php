@@ -53,12 +53,16 @@ EOF
         apt install -y python3-flake8
         apt install -y libgflags-dev
         apt install -y libva-dev
-        apt install -y libgtk-3-dev
-        apt install -y libgtk-4-dev
+        # apt install -y libgtk-3-dev
+        # apt install -y libgtk-4-dev
         apt install -y libdc1394-25
         apt install -y ccache python3-dev binaryen
 
-        pip3 install numpy setuptools utils-misc  gapi  utils lxml beautifulsoup4 graphviz pylint flake8
+        apt install -y python3-numpy python3-setuptools utils-misc gapi
+        apt install -y python3-lxml python3-graphviz python3-flake8
+        apt install -y  python3-hgapi
+        apt install -y python3-python-utils
+        # pip3 install beautifulsoup4 pylint
 EOF
         )
         ->withPrefix($opencv_prefix)
@@ -88,7 +92,7 @@ EOF
         -DBUILD_PERF_TESTS=OFF \
         -DBUILD_EXAMPLES=OFF \
         -DBUILD_opencv_apps=ON \
-        -DBUILD_opencv_js=OFF \
+        -DBUILD_opencv_js=ON \
         -DBUILD_JAVA=OFF \
         -DBUILD_CUDA_STUBS=OFF  \
         -DBUILD_FAT_JAVA_LIB=OFF  \
@@ -100,7 +104,7 @@ EOF
         -DBUILD_DOCS=ON \
         -DOPENCV_ENABLE_NONFREE=ON \
         -DWITH_AVIF=ON \
-        -DWITH_GTK=ON \
+        -DWITH_GTK=OFF \
         -DWITH_CUDA=OFF \
 
         ninja

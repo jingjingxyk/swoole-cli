@@ -47,7 +47,7 @@ return function (Preprocessor $p) {
     $CMAKE_PREFIX_PATH .= "{$png_prefix};";
     $CMAKE_PREFIX_PATH .= "{$libwebp_prefix};";
     $CMAKE_PREFIX_PATH .= "{$freetype_prefix};";
-    # $CMAKE_PREFIX_PATH .= "{$libtiff_prefix};";
+    $CMAKE_PREFIX_PATH .= "{$libtiff_prefix};";
 
     $CMAKE_PREFIX_PATH .= "{$gmp_prefix};";
 
@@ -59,7 +59,7 @@ return function (Preprocessor $p) {
     $CMAKE_PREFIX_PATH .= "{$openblas_prefix};";
     $CMAKE_PREFIX_PATH .= "{$blas_prefix};";
     $CMAKE_PREFIX_PATH .= "{$lapack_prefix};";
-    # $CMAKE_PREFIX_PATH .= "{$libeigen_prefix};";
+    $CMAKE_PREFIX_PATH .= "{$libeigen_prefix};";
     $CMAKE_PREFIX_PATH .= "{$glog_prefix};";
     # $CMAKE_PREFIX_PATH .= "{$vtk_prefix};";
     $CMAKE_PREFIX_PATH .= "{$ffmpeg_prefix};";
@@ -117,6 +117,7 @@ EOF
         ->withBuildCached(false)
         ->withBuildScript(
             <<<EOF
+
         PACKAGES='openssl  '
         PACKAGES="\$PACKAGES  zlib"
         PACKAGES="\$PACKAGES  libxml-2.0"
@@ -125,11 +126,14 @@ EOF
         PACKAGES="\$PACKAGES  libpng libpng16 libjpeg libturbojpeg SvtAv1Enc SvtAv1Dec "
         PACKAGES="\$PACKAGES  libsharpyuv  libwebp  libwebpdecoder  libwebpdemux  libwebpmux"
 
-        PACKAGES="\$PACKAGES  dav1d sdl2 aom freetype2  gmp lcms2 " # libtiff-4
+        PACKAGES="\$PACKAGES  dav1d sdl2 aom freetype2  gmp lcms2 " #
+        PACKAGES="\$PACKAGES  libtiff-4 "
+        PACKAGES="\$PACKAGES  libavif " #
         PACKAGES="\$PACKAGES  libbrotlicommon libbrotlidec libbrotlienc"
         PACKAGES="\$PACKAGES  x264 vpx ogg opus openh264 libpcap fdk-aac fribidi librabbitmq x265 gflags "
         PACKAGES="\$PACKAGES  fftw3q  Imath  libglog openblas blas64  lapack64 blas"
         PACKAGES="\$PACKAGES   harfbuzz harfbuzz-icu"
+        PACKAGES="\$PACKAGES   libarchive"
 
         CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$PACKAGES)"
         LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES) "
@@ -181,13 +185,20 @@ EOF
         -DBUILD_OBJC=OFF \
         -DBUILD_KOTLIN_EXTENSIONS=OFF \
         -DINSTALL_C_EXAMPLES=ON \
-        -DINSTALL_PYTHON_EXAMPLES=ON \
+        -DINSTALL_PYTHON_EXAMPLES=OFF \
         -DBUILD_DOCS=ON \
         -DOPENCV_ENABLE_NONFREE=ON \
         -DWITH_AVIF=ON \
         -DWITH_GTK=OFF \
         -DWITH_CUDA=OFF \
+        -DENABLE_PYLINT=OFF \
+        -DENABLE_FLAKE8=OFF \
+        -DBUILD_opencv_python3=OFF \
         -DCMAKE_EXE_LINKER_FLAGS="  -Wl,--no-dynamic-linker -Wl,--as-needed -Wl,--no-undefined  \${REQUIRED_LIBRARIES} " \
+
+
+
+
 
 
         # -DCMAKE_EXE_LINKER_FLAGS=" \${REQUIRED_LIBRARIES} " \
@@ -215,7 +226,7 @@ EOF
         # -DCMAKE_STATIC_LINKER_FLAGS="-Wl,--no-dynamic-linker -Wl,-Bstatic \${LIBS} "
 
 
-        #  -DENABLE_BUILD_HARDENING=ON \
+        # -DENABLE_BUILD_HARDENING=ON \
 
         # -DINCLUDE_DIRECTORIES
 
@@ -223,15 +234,13 @@ EOF
 
 
         # -DCMAKE_STATIC_LINKER_FLAGS="{$liblzma_prefix}/lib/liblzma.a {$libzstd_prefix}/lib/libzstd.a {$liblz4_prefix}/lib/liblz4.a"
-
-
         # -DCMAKE_STATIC_LINKER_FLAGS="-L{$liblzma_prefix}/lib/ -L{$libzstd_prefix}/lib/ -L{$liblz4_prefix}/lib/ -llzma  -lzstd  -llz4"
 
         # -DLINK_LIBRARIES="{$liblzma_prefix}/lib/liblzma.a {$libzstd_prefix}/lib/libzstd.a {$liblz4_prefix}/lib/liblz4.a " \
         # -DLINK_DIRECTORIES="{$liblzma_prefix}/lib/:{$libzstd_prefix}/lib/:{$liblz4_prefix}/lib/"
 
         # -DTARGET_LINK_LIBRARIES="-llzma  -lzstd  -llz4 "
-        #  -DCMAKE_TARGET_LINK_LIBRARIES="-llzma  -lzstd  -llz4 "
+        # -DCMAKE_TARGET_LINK_LIBRARIES="-llzma  -lzstd  -llz4 "
 
         # -DLINK_LIBRARIES="lzma  zstd  lz4"
         # -DCMAKE_EXE_LINKER_FLAGS_INIT='\${LIBS}'
@@ -259,26 +268,28 @@ EOF
             'libwebp',
             'libpng',
             'freetype',
-            //'libtiff',
+            'libtiff',
             "gmp",
             'liblzma',
             'gflags',
             'fftw3', //快速傅立叶变换库
             'openblas', //基础线性代数程序集
             'lapack', //线性代数计算库
-            // 'harfbuzz',
             //'openexr',
             //'openjpeg',
             //'vtk',
             //'opencl',
-            //'libdc1394'
+            //'libdc1394',
             'imath',
             'gflags',
             'glog',
             //'libeigen', //线性运算代数库 (依赖待完善）
             //'suitesparse',
-            'harfbuzz'
-        )   //   HDR
+            'harfbuzz',
+            //   HDR ,
+            'libarchive',
+            'libavif'
+        )
         ->withBinPath($opencv_prefix . '/bin/')
         ->withLdflags(" -L" . $opencv_prefix . '/lib/opencv5/3rdparty/ ')
     ;
