@@ -175,15 +175,9 @@ EOF
             'fdk_aac',
             'libfribidi',
             'rabbitmq_c',
-<<<<<<< HEAD
-            "libx265"
-            //'speex' //被opus 取代
-            //   'libssh2',
-=======
             "libx265",
-            //'speex', //被opus 取代
-            //'libssh2',
->>>>>>> new_dev
+        //'speex', //被opus 取代
+        //'libssh2',
         );
 
     $p->addLibrary($lib);
