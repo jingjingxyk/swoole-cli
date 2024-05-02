@@ -176,6 +176,10 @@ return function (Preprocessor $p) {
     $depends = ['libde265'] ;
     $depends = ['libheif'] ;
     $depends = ['webrtc'] ;
+    $depends = ['strongswan'] ;
+    $depends = ['musl_cross_make'] ;
+    $depends = ['libuuid'] ;
+    $depends = ['python3'] ;
 
 
     $ext = (new Extension('common'))

@@ -15,7 +15,6 @@ define("PNG_PREFIX", $p->getGlobalPrefix() . '/libpng');
 define("WEBP_PREFIX", $p->getGlobalPrefix() . '/libwebp');
 
 
-
 define("CURL_PREFIX", $p->getGlobalPrefix() . '/curl');
 define("CARES_PREFIX", $p->getGlobalPrefix() . '/cares');
 define("OPENSSL_PREFIX", $p->getGlobalPrefix() . '/openssl');
@@ -73,7 +72,6 @@ define("LIBGD_PREFIX", $p->getGlobalPrefix() . '/libgd');
 define("RAV1E_PREFIX", $p->getGlobalPrefix() . '/rav1e');
 
 
-
 define("DEPOT_TOOLS_PREFIX", $p->getGlobalPrefix() . '/depot_tools');
 
 
@@ -125,18 +123,17 @@ define("XORGPROTO_PREFIX", $p->getGlobalPrefix() . '/xorgproto');
 define("LIBX11_PREFIX", $p->getGlobalPrefix() . '/libX11');
 define("LIBXPM_PREFIX", $p->getGlobalPrefix() . '/libXpm');
 define("GRAPHVIZ_PREFIX", $p->getGlobalPrefix() . '/graphviz');
-define("MUSL_LIBC_PREFIX", $p->getGlobalPrefix() . '/musl_libc');
-define("MUSL_CROSS_MAKE_PREFIX", $p->getGlobalPrefix() . '/musl_cross_make');
+
 define('LIBRSVG_PREFIX', $p->getGlobalPrefix() . '/librsvg');
 
 define('GETTEXT_PREFIX', $p->getGlobalPrefix() . '/gettext');
-define('LIBINTL_PREFIX', $p->getGlobalPrefix() . '/gettext');
-
-
-define("LIBUNISTRING_PREFIX", $p->getGlobalPrefix() . '/libunistring');
 
 define("PGSQL_PREFIX", $p->getGlobalPrefix() . '/pgsql');
 define("UNIX_ODBC_PREFIX", $p->getGlobalPrefix() . '/unix_odbc');
+define("LIBUUID_PREFIX", $p->getGlobalPrefix() . '/libuuid');
+define("LIBINTL_PREFIX", $p->getGlobalPrefix() . '/libintl');
+define("LIBUNISTRING_PREFIX", $p->getGlobalPrefix() . '/libunistring');
+
 define("ZOOKEEPER_PREFIX", $p->getGlobalPrefix() . '/zookeeper');
 
 define("LIBEVENT_PREFIX", $p->getGlobalPrefix() . '/libevent');
@@ -156,8 +153,6 @@ define("DPDK_PREFIX", $p->getGlobalPrefix() . '/dpdk');
 define("COTURN_PREFIX", $p->getGlobalPrefix() . '/coturn');
 define("HIREDIS_PREFIX", $p->getGlobalPrefix() . '/hiredis');
 define("LIBMICROHTTP_PREFIX", $p->getGlobalPrefix() . '/libmicrohttp');
-
-define("ABSL_CPP_PREFIX", $p->getGlobalPrefix() . '/abseil_cpp');
 
 define("VTK_PREFIX", $p->getGlobalPrefix() . '/vtk');
 define("JEMALLOC_PREFIX", $p->getGlobalPrefix() . '/jemalloc');
@@ -201,7 +196,6 @@ define("LIBPCAP_PREFIX", $p->getGlobalPrefix() . '/libpcap');
 define("PORTAUDIO_PREFIX", $p->getGlobalPrefix() . '/portaudio');
 define("LIBKS_PREFIX", $p->getGlobalPrefix() . '/libks');
 define("UTIL_LINUX_PREFIX", $p->getGlobalPrefix() . '/util_linux');
-define("LIBUUID_PREFIX", $p->getGlobalPrefix() . '/libuuid');
 define("LIBATOMIC_PREFIX", $p->getGlobalPrefix() . '/libatomic');
 define("UPNP_PREFIX", $p->getGlobalPrefix() . '/upnp');
 
@@ -240,8 +234,6 @@ define("LIBRAW_PREFIX", $p->getGlobalPrefix() . '/libraw');
 define("LCMS2_PREFIX", $p->getGlobalPrefix() . '/lcms2');
 
 
-
-
 define("LIBARGON2_PREFIX", $p->getGlobalPrefix() . '/libargon2');
 define("FFTW3_PREFIX", $p->getGlobalPrefix() . '/fftw3');
 define("LIBSAMPLERATE_PREFIX", $p->getGlobalPrefix() . '/libsamplerate');
@@ -269,6 +261,10 @@ define("GLOG_PREFIX", $p->getGlobalPrefix() . '/glog');
 define("LIBUNWIND_PREFIX", $p->getGlobalPrefix() . '/libunwind');
 define("GFLAGS_PREFIX", $p->getGlobalPrefix() . '/gflags');
 define("LEVELDB_PREFIX", $p->getGlobalPrefix() . '/leveldb');
+
+define("PYTHON3_PREFIX", $p->getGlobalPrefix() . '/python3');
+define("MPDECIMAL_PREFIX", $p->getGlobalPrefix() . '/mpdecimal');
+define("LIBB2_PREFIX", $p->getGlobalPrefix() . '/libb2');
 
 define("LIBOPENCC_PREFIX", $p->getGlobalPrefix() . '/libopencc');
 define("LIBYAML_CPP_PREFIX", $p->getGlobalPrefix() . '/libyaml_cpp');
@@ -323,6 +319,17 @@ define("DAHDI_TOOLS_PREFIX", $p->getGlobalPrefix() . '/dahdi_tools');
 define("ASTERISK_PREFIX", $p->getGlobalPrefix() . '/asterisk');
 define("PJPROJECT_PREFIX", $p->getGlobalPrefix() . '/pjproject');
 define("QEMU_PREFIX", $p->getGlobalPrefix() . '/qemu');
+
+define("STRONGSWAN_PREFIX", $p->getGlobalPrefix() . '/strongswan');
+
+define("MUSL_CROSS_MAKE_PREFIX", $p->getGlobalPrefix() . '/musl_cross_make');
+define("MUSL_LIBC_PREFIX", $p->getGlobalPrefix() . '/musl_libc');
+
+
+define("ABSL_PREFIX", $p->getGlobalPrefix() . '/absl');
+
+define("GRPC_PREFIX", $p->getGlobalPrefix() . '/grpc');
+define("RE2_PREFIX", $p->getGlobalPrefix() . '/re2');
 
 define("EXAMPLE_PREFIX", $p->getGlobalPrefix() . '/example');
 

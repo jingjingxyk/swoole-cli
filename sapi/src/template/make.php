@@ -270,6 +270,13 @@ clean_<?=$item->name?>_cached() {
 <?php endforeach; ?>
 
 make_all_library() {
+<?php if ($this->inVirtualMachine): ?>
+    if [! -d <?= $this->getGlobalPrefix() ?>/sources ] ;then
+        mkdir -p <?= $this->getGlobalPrefix() ?>/sources
+        rm -rf <?= $this->getBuildDir() . PHP_EOL ?>
+        ln -s <?= $this->getGlobalPrefix() ?>/sources <?= $this->getBuildDir() . PHP_EOL ?>
+    fi
+<?php endif; ?>
 <?php foreach ($this->libraryList as $item) : ?>
     make_<?= $item->name ?> && [[ $? -eq 0 ]] && echo "[SUCCESS] make <?= $item->name ?>"
 <?php endforeach; ?>
@@ -289,15 +296,10 @@ before_configure_script() {
 
 export_variables() {
     set -x
-    # -all-static | -static | -static-libtool-libs
-    CPPFLAGS=""
-    CFLAGS=""
-<?php if ($this->cCompiler == 'clang') : ?>
-    LDFLAGS="-static"
-<?php else :?>
-    LDFLAGS="-static-libgcc -static-libstdc++"
-<?php endif ;?>
 
+    CPPFLAGS=""
+    CXXFLAGS=""
+    CFLAGS=""
     LDFLAGS=""
     LIBS=""
     <?php if ($this->getOsType() == 'macos') :?>
@@ -317,8 +319,29 @@ export_variables() {
     [[ $result_code -ne 0 ]] &&  echo " [ export_variables  FAILURE ]" && exit  $result_code;
     echo "export variables"
 <?php foreach ($this->exportVariables as $value) : ?>
-    export  <?= key($value) ?>="<?= current($value) ?>"
+    export <?= key($value) ?>="<?= current($value) ?>"
 <?php endforeach; ?>
+
+<?php if ($this->hasExtension('opcache')):?>
+    export CFLAGS="$CFLAGS -DPHP_ENABLE_OPCACHE"
+    export CPPFLAGS="$CPPFLAGS -DPHP_ENABLE_OPCACHE"
+<?php endif; ?>
+<?php if ($this->hasExtension('phpy')):?>
+    CPPFLAGS="$CPPFLAGS -I<?= $this->getWorkDir() ?>/ext/phpy/include "
+<?php endif; ?>
+    export CPPFLAGS=$(echo $CPPFLAGS | tr ' ' '\n' | sort | uniq | tr '\n' ' ')
+    export CXXFLAGS=$(echo $CXXFLAGS | tr ' ' '\n' | sort | uniq | tr '\n' ' ')
+    export CFLAGS=$(echo $CFLAGS | tr ' ' '\n' | sort | uniq | tr '\n' ' ')
+    export LDFLAGS=$(echo $LDFLAGS | tr ' ' '\n' | sort | uniq | tr '\n' ' ')
+    export LIBS=$(echo $LIBS | tr ' ' '\n' | sort | uniq | tr '\n' ' ')
+<?php if ($this->isLinux() && ($this->get_C_COMPILER() == 'musl-gcc')) : ?>
+    ln -sf /usr/include/linux/ /usr/include/x86_64-linux-musl/linux
+    ln -sf /usr/include/x86_64-linux-gnu/asm/ /usr/include/x86_64-linux-musl/asm
+    ln -sf /usr/include/asm-generic/ /usr/include/x86_64-linux-musl/asm-generic
+
+    export LDFLAGS="${LDFLAGS} -static -L/usr/lib/x86_64-linux-musl "
+
+<?php endif ;?>
     result_code=$?
     [[ $result_code -ne 0 ]] &&  echo " [ export_variables  FAILURE ]" && exit  $result_code;
     set +x
@@ -345,8 +368,10 @@ make_config() {
 
     cd <?= $this->phpSrcDir . PHP_EOL ?>
     # 添加扩展
-    cp -rf ${__PROJECT_DIR__}/ext/*  <?= $this->phpSrcDir ?>/ext/
-
+    if [ ! -z  "$(ls -A ${__PROJECT_DIR__}/ext/)" ] ;then
+        cp -rf ${__PROJECT_DIR__}/ext/*  <?= $this->phpSrcDir ?>/ext/
+    fi
+    # 对扩展源代码执行预处理
     before_configure_script
 
     export_variables
@@ -354,14 +379,15 @@ make_config() {
     echo $CPPFLAGS > <?= $this->getRootDir() ?>/cppflags.log
     echo $LIBS > <?= $this->getRootDir() ?>/libs.log
 
-    exit 0
+    ./configure --help
+
+    ./configure $OPTIONS
 
 :<<'_____EO_____'
     = 是最基本的赋值
     := 是覆盖之前的值
     ?= 是如果没有被赋值过就赋予等号后面的值
     += 是添加等号后面的值
-
 
     # GNU C编译器的gnu11和c11 https://www.cnblogs.com/litifeng/p/8328499.html
     # -g是生成调试信息
@@ -412,6 +438,11 @@ make_config() {
     #  /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib
     #  ll /Library/Developer/CommandLineTools/
     #  /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
+
+    export_variables
+    echo $LDFLAGS > <?= $this->getRootDir() ?>/ldflags.log
+    echo $CPPFLAGS > <?= $this->getRootDir() ?>/cppflags.log
+    echo $LIBS > <?= $this->getRootDir() ?>/libs.log
 
     ./configure --help
     ./configure --help | grep -e '--enable'
@@ -470,14 +501,22 @@ _____EO_____
 make_build_old() {
     cd <?= $this->phpSrcDir . PHP_EOL ?>
     export_variables
-    <?php if ($this->getOsType() == 'linux') : ?>
+    <?php if ($this->isLinux()) : ?>
     export LDFLAGS="$LDFLAGS  -static -all-static "
     <?php endif ;?>
     export LDFLAGS="$LDFLAGS   <?= $this->extraLdflags ?>"
     export EXTRA_CFLAGS='<?= $this->extraCflags ?>'
+    <?php if(!empty($this->httpProxy)) : ?>
+    <?= $this->getProxyConfig() . PHP_EOL ?>
+    <?php endif ;?>
     make -j <?= $this->maxJob ?> ;
+    <?php if(!empty($this->httpProxy)) : ?>
+    unset HTTP_PROXY
+    unset HTTPS_PROXY
+    unset NO_PROXY
+    <?php endif ;?>
 
-<?php if ($this->osType == 'macos') : ?>
+<?php if ($this->isMacos()) : ?>
     otool -L <?= $this->phpSrcDir  ?>/sapi/cli/php
 <?php else : ?>
     file <?= $this->phpSrcDir  ?>/sapi/cli/php
@@ -626,6 +665,7 @@ help() {
     echo "./make.sh lib-pkg"
     echo "./make.sh lib-dep-pkg"
     echo "./make.sh lib-dep"
+    echo "./make.sh variables"
     echo "./make.sh list-swoole-branch"
     echo "./make.sh switch-swoole-branch"
     echo "./make.sh [library-name]"
@@ -759,6 +799,16 @@ elif [ "$1" = "list-extension" ] ;then
 elif [ "$1" = "clean" ] ;then
     make_clean
     exit 0
+elif [ "$1" = "variables" ] ;then
+    export_variables
+    echo "===========================[CPPFLAGS]================================"
+	echo $CPPFLAGS
+    echo "===========================[CFLAGS]================================"
+	echo $CFLAGS
+    echo "===========================[LDFLAGS]================================"
+	echo $LDFLAGS
+    echo "===========================[LIBS]================================"
+	echo $LIBS
 elif [ "$1" = "sync" ] ;then
     PHP_CLI=$(which php)
     test -f ${__PROJECT_DIR__}/bin/runtime/php && PHP_CLI="${__PROJECT_DIR__}/bin/runtime/php -d curl.cainfo=${__PROJECT_DIR__}/bin/runtime/cacert.pem -d openssl.cafile=${__PROJECT_DIR__}/bin/runtime/cacert.pem"
@@ -768,4 +818,3 @@ elif [ "$1" = "sync" ] ;then
 else
     help
 fi
-

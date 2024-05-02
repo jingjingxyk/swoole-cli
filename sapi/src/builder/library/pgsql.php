@@ -5,9 +5,8 @@ use SwooleCli\Preprocessor;
 
 return function (Preprocessor $p) {
     $pgsql_prefix = PGSQL_PREFIX;
-    $ldflags = $p->getOsType() == 'macos' ? '' : ' -static  ';
-    $libs = $p->getOsType() == 'macos' ? '-lc++' : ' -lstdc++ ';
-
+    $ldflags = $p->isMacos() ? '' : ' -static  ';
+    $libs = $p->isMacos() ? '-lc++' : ' -lstdc++ ';
     $p->addLibrary(
         (new Library('pgsql'))
             ->withHomePage('https://www.postgresql.org/')
@@ -17,6 +16,7 @@ return function (Preprocessor $p) {
             ->withManual('https://www.postgresql.org/download/')
             ->withManual('https://git.postgresql.org/gitweb/?p=postgresql.git;a=summary')
             ->withManual('https://www.postgresql.org/docs/current/install-procedure.html#CONFIGURE-OPTIONS#:~:text=Client-only%20installation')
+            ->withFileHash('md5', '30baf5fda60a34230d89c1451119ff91')
             ->withPrefix($pgsql_prefix)
             /*
                 https://git.postgresql.org/gitweb/
