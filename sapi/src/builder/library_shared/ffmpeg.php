@@ -12,13 +12,9 @@ return function (Preprocessor $p) {
 
     $ffmpeg_prefix = FFMPEG_PREFIX;
 
-    $ldflags = $p->getOsType() == 'macos' ? ' ' : ' -static ';
-    $cflags = $p->getOsType() == 'macos' ? ' ' : ' --static ';
+
+    $cflags = $p->getOsType() == 'macos' ? ' ' : '';
     $libs = $p->getOsType() == 'macos' ? ' -lc++ ' : ' -lstdc++ ';
-
-    $cppflags = $p->getOsType() == 'macos' ? ' ' : " -I/usr/include ";
-    $ldfalgs = $p->getOsType() == 'macos' ? ' ' : "-L/usr/lib/x86_64-linux-gnu  -L/usr/lib ";
-
 
     $lib = new Library('ffmpeg');
     $lib->withHomePage('https://ffmpeg.org/')
@@ -60,6 +56,10 @@ EOF
         apt install -y libx265-dev
         apt install -y libwebp-dev libwebpdemux2 libwebpmux3  libyuv-dev
         apt install -y libgmp-dev
+        apt install -y liblzma-dev
+        apt install -y libdav1d-dev libaom-dev libogg-dev
+        apt install -y libfribidi-dev
+        apt install -y libfreetype-dev
 
 
 EOF
@@ -91,9 +91,9 @@ EOF
             LDFLAGS="$(pkg-config   --libs-only-L     \$PACKAGES) "
             LIBS="$(pkg-config      --libs-only-l     \$PACKAGES) "
 
-            CPPFLAGS="\$CPPFLAGS  {$cppflags} "
+            CPPFLAGS="\$CPPFLAGS   "
 
-            LDFLAGS="\$LDFLAGS  {$ldfalgs} "
+            LDFLAGS="\$LDFLAGS   "
 
             LIBS="\$LIBS  {$libs} "
 
@@ -121,15 +121,16 @@ EOF
             --enable-libfdk-aac \
             --enable-libfribidi \
             --enable-librabbitmq \
-            --enable-random \
+            --enable-lcms2 \
+            --enable-libsvtav1 \
+            --enable-shared \
+            --disable-static \
             --cc={$p->get_C_COMPILER()} \
             --cxx={$p->get_CXX_COMPILER()} \
             --extra-cflags="\${CPPFLAGS} " \
             --extra-ldflags="\${LDFLAGS} " \
             --extra-libs="\${LIBS} " \
 
-            #    --enable-lcms2 \
-            #             --enable-libsvtav1 \
 EOF
         )
         ->withPkgName('libavcodec')

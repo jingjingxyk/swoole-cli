@@ -71,7 +71,7 @@ https://github.com/coin-or/ADOL-C.git
        *    位置无关的可执行文件
        *    直接编译可执行文件 -fPIE
        *    直接编译成库      -fPIC
-
+       地址无关代码（Position Independent Code, PIC）
 
 BPF CO-RE (Compile Once – Run Everywhere)
 https://github.com/libbpf/libbpf#bpf-co-re-compile-once--run-everywhere
@@ -79,3 +79,18 @@ https://github.com/libbpf/libbpf#bpf-co-re-compile-once--run-everywhere
 
 # static-pie
 # 位置无关的可执行文件(PIE)。PIE 是启用地址空间布局随机化 (ASLR) 的先决条件
+
+
+## macos 库支持静态编译， 二进制程序不支持静态编译
+    LIBS='-framework CoreFoundation -framework CoreServices -framework SystemConfiguration"
+
+
+
+MIPS架构  龙芯处理器
+s390x    IBMSystemz系列大型机硬件平台
+ppc64le  基于Power架构
+
+
+clang with MUSL
+
+clang hello.c  -I /usr/include/x86_64-linux-musl --target=x86_64-unknown-linux-musl  -nostdlib

@@ -18,6 +18,8 @@
     bash make-install-deps.sh
     bash make.sh all-library
     bash make.sh config
+    bash make.sh build
+    bash make.sh archive
 
 ```
 
