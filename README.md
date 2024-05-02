@@ -1,6 +1,6 @@
-# build static php-cli runtime
+# build static php-cli micro runtime
 
-构建静态 原生 php-cli 运行时
+构建静态 原生 php-cli micro 运行时
 
 ## 说明
 
@@ -46,11 +46,11 @@
 
 ```shell
 
-git clone -b main https://github.com/swoole/build-static-php.git
+git clone -b main https://github.com/swoole/build-php-sfx-micro .git
 
 # 或者
 
-git clone --recursive -b build_native_php  https://github.com/swoole/swoole-cli.git
+git clone --recursive -b build_native_php_sfx_micro  https://github.com/jingjingxyk/swoole-cli.git
 
 ```
 
