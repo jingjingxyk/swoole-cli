@@ -13,6 +13,7 @@ return function (Preprocessor $p) {
     $bzip2_prefix = BZIP2_PREFIX;
     $icu_prefix = ICU_PREFIX;
     $libbson_prefix = LIBBSON_PREFIX;
+    $snappy_prefix  = SNAPPY_PREFIX ;
     $p->addLibrary(
         (new Library('libmongoc'))
             ->withHomePage('https://www.mongodb.com/docs/drivers/c/')
@@ -21,25 +22,24 @@ return function (Preprocessor $p) {
             ->withManual('https://mongoc.org/libmongoc/current/installing.html')
             //->withUrl('https://github.com/mongodb/mongo-c-driver/releases/download/1.24.3/mongo-c-driver-1.24.3.tar.gz')
             //->withFile('mongo-c-driver-1.24.4.tar.gz')
-            //->withFile('mongo-c-driver-1.24.4.tar.gz')
             ->withFile('mongo-c-driver-master.tar.gz')
             ->withDownloadScript(
                 'mongo-c-driver',
                 <<<EOF
-                # git clone -b 1.24.4 --depth=1   https://github.com/mongodb/mongo-c-driver.git
+
                 # git clone -b master --depth=1   https://github.com/mongodb/mongo-c-driver.git
-                git clone -b fix_static_build --depth=1   https://github.com/jingjingxyk/mongo-c-driver.git
+                git clone -b static-build --depth=1   https://github.com/jingjingxyk/mongo-c-driver.git
+
 EOF
             )
             ->withPrefix($libmongoc_prefix)
-            ->withAutoUpdateFile()
-            //->withBuildCached(false)
-            ->withCleanBuildDirectory()
-            ->withCleanPreInstallDirectory($libmongoc_prefix)
+            //->withAutoUpdateFile()
+            ->withBuildCached(false)
+            ->withInstallCached(false)
             ->withBuildScript(
                 <<<EOF
-             mkdir -p cmake-build
-            cd cmake-build
+             mkdir -p build-dir
+            cd build-dir
 
             cmake .. \
             -DCMAKE_INSTALL_PREFIX={$libmongoc_prefix} \
@@ -68,16 +68,12 @@ EOF
             -DMONGOC_ENABLE_STATIC_BUILD=ON \
             -DMONGOC_ENABLE_STATIC_INSTALL=ON \
             -DENABLE_ICU=ON \
-            -DICU_ROOT=ON \
-            -DICU_ROOT={$icu_prefix} \
-            -DCMAKE_PREFIX_PATH="{$openssl_prefix}"
+            -DCMAKE_PREFIX_PATH="{$openssl_prefix};{$snappy_prefix};{$icu_prefix};" \
+            -DENABLE_MAN_PAGES=OFF \
+            -DENABLE_HTML_DOCS=OFF
 
 
-            {
-                cmake --build . --config Release --target install
-            } || {
-                echo $?
-            }
+            cmake --build . --config Release --target install
 
 EOF
             )
@@ -97,8 +93,8 @@ EOF
                 'zlib',
                 'libzstd',
                 'icu',
-                // 'libsasl',
-                // 'snappy'
+            // 'libsasl',
+               'snappy'
             ) //'libbson'
     );
 };
