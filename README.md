@@ -111,7 +111,7 @@ bash sapi/quickstart/macos/macos-init.sh --mirror china
 ```
 
 > 打包成功后会生成 `coturn-{version}-{os}-{arch}.tar.xz`
-> 压缩包，包含 `php` 可执行文件、`LICENSE` 授权协议文件。
+> 压缩包，包含 `turnserver` 可执行文件、`LICENSE` 授权协议文件。
 
 ## 授权协议
 
