@@ -51,7 +51,7 @@ git clone --recursive -b build_native_php  https://github.com/swoole/swoole-cli.
 cd swoole-cli
 
 bash setup-php-runtime.sh
-# 或者
+# 或者使用镜像
 bash setup-php-runtime.sh --mirror china
 
 ```
@@ -90,7 +90,7 @@ bash sapi/quickstart/macos/macos-init.sh --mirror china
 
 ```
 
-### 一条命令执行整个构建流程
+## 一条命令执行整个构建流程
 
 ```bash
 
@@ -170,13 +170,13 @@ bash make-install-deps.sh
 ```
 
 > 打包成功后会生成 `php-cli-{version}-{os}-{arch}.tar.xz`
-> 压缩包，包含 `swoole-cli` 可执行文件、`LICENSE` 授权协议文件。
+> 压缩包，包含 `php` 可执行文件、`LICENSE` 授权协议文件。
 
 ## 授权协议
 
-* `swoole-cli` 使用了多个其他开源项目，请认真阅读自动生成的 `bin/LICENSE`
+* `php-cli` 使用了多个其他开源项目，请认真阅读自动生成的 `bin/LICENSE`
   文件中版权协议，遵守对应开源项目的 `LICENSE`
-* `swoole-cli`
+* `php-cli`
   本身的软件源代码、文档等内容以 `Apache 2.0 LICENSE`+`SWOOLE-CLI LICENSE`
   作为双重授权协议，用户需要同时遵守 `Apache 2.0 LICENSE`和`SWOOLE-CLI LICENSE`
   所规定的条款
