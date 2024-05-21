@@ -21,7 +21,7 @@
 
 ## 下载`php-cli`发行版
 
-- [https://github.com/swoole/build-static-php/releases](https://github.com/swoole/build-static-php/releases)
+- [https://github.com/jingjingxyk/build-swow-cli/releases](https://github.com/jingjingxyk/build-swow-cli/releases)
 
 ## `php-cli`构建文档
 
@@ -37,11 +37,11 @@
 
 ```shell
 
-git clone -b main https://github.com/swoole/build-static-php.git
+git clone -b main https://github.com/jingjingxyk/build-swow-cli.git
 
 # 或者
 
-git clone --recursive -b build_native_php  https://github.com/swoole/swoole-cli.git
+git clone --recursive -b build-swow-cli  https://github.com/jingjingxyk/swoole-cli.git
 
 ```
 
