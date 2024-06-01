@@ -253,8 +253,10 @@ make_config() {
     PHP_VERSION=$(cat main/php_version.h | grep 'PHP_VERSION_ID' | grep -E -o "[0-9]+")
     PHP_VERSION=<?= BUILD_CUSTOM_PHP_VERSION_ID . PHP_EOL  ?>
     if [[ $PHP_VERSION -lt 8000 ]] ; then
-        echo "only support PHP >= 8.0 "
+        echo "only support PHP >= 8.1 "
     else
+        # swoole 支持 micro 需要如下设置 https://github.com/swoole/swoole-src/pull/5340/files
+        # swoole need sapi_module.name=micro
         make_php_patch_sfx_micro
         cd <?= $this->phpSrcDir . PHP_EOL ?>
         if [[ ! -f php-sfx-micro.cached ]] ;then
