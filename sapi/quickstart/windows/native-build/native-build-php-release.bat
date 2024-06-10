@@ -45,7 +45,7 @@ rem $(BUILD_DIR)\php.exe: generated_files $(DEPS_CLI) $(PHP_GLOBAL_OBJS) $(CLI_G
 rem		"$(LINK)" /nologo $(PHP_GLOBAL_OBJS_RESP) $(CLI_GLOBAL_OBJS_RESP) $(STATIC_EXT_OBJS_RESP) $(STATIC_EXT_LIBS) $(ASM_OBJS) $(LIBS) $(LIBS_CLI) $(BUILD_DIR)\php.exe.res /out:$(BUILD_DIR)\php.exe $(LDFLAGS) $(LDFLAGS_CLI) /ltcg /nodefaultlib:msvcrt /nodefaultlib:msvcrtd /ignore:4286
 
 rem echo 	^@"$(LINK)" ^/nologo $(PHP_GLOBAL_OBJS) $(PHP_GLOBAL_OBJS_RESP) $(CLI_GLOBAL_OBJS) $(CLI_GLOBAL_OBJS_RESP)  $(STATIC_EXT_OBJS_RESP)  $(STATIC_EXT_OBJS)  $(ASM_OBJS) $(LIBS) $(LIBS_CLI) $(BUILD_DIR)^\php.exe.res /out:$(BUILD_DIR)^\php.exe $(LDFLAGS) $(LDFLAGS_CLI)    >> %x_makefile%
-echo 	^@"$(LINK)" ^/nologo ^/MT $(PHP_GLOBAL_OBJS_RESP) $(PHP_GLOBAL_OBJS_RESP) $(CLI_GLOBAL_OBJS_RESP) $(STATIC_EXT_OBJS_RESP)  $(ASM_OBJS) $(LIBS) $(LIBS_CLI) $(STATIC_EXT_LIBS)  $(BUILD_DIR)^\php.exe.res /out:$(BUILD_DIR)^\php.exe $(LDFLAGS) $(LDFLAGS_CLI)  >> %x_makefile%
+echo 	^@"$(LINK)" ^/nologo ^/MT $(PHP_GLOBAL_OBJS_RESP) $(PHP_GLOBAL_OBJS_RESP) $(CLI_GLOBAL_OBJS_RESP) $(STATIC_EXT_OBJS_RESP)  $(ASM_OBJS) $(LIBS) $(LIBS_CLI) $(STATIC_EXT_LIBS) msvcrt.lib msvcrtd.lib $(BUILD_DIR)^\php.exe.res /out:$(BUILD_DIR)^\php.exe $(LDFLAGS) $(LDFLAGS_CLI) no argument specified with option '/MT' >> %x_makefile%
 rem echo 	-@$(_VC_MANIFEST_EMBED_EXE)   >> %x_makefile%
 rem echo 	^@echo SAPI sapi\cli build complete  >> %x_makefile%
 echo 	^@if exist php.exe.manifest $(MT) -nologo -manifest php.exe.manifest -outputresource:php.exe    >> %x_makefile%
