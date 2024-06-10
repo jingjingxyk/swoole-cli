@@ -15,17 +15,7 @@ bash sapi/quickstart/windows/native-build/msys2/msys2-download-vs-2019.sh
 # 调用 CMD 窗口 安装  vc 运行时
 bash sapi/quickstart/windows/native-build/msys2/msys2-install-vc-runtime.sh
 
-```
-
-```bat
-
-# 打开 CMD 窗口 安装  vc 运行时
-sapi\quickstart\windows\native-build\install-vc-runtime.bat
-
-```
-
-```bash
-# 准备 PHP 运行时 (需要 vc 运行时）
+# 准备 PHP 运行时
 bash sapi/quickstart/windows/native-build/msys2/msys2-download-php-runtime.sh
 
 # 提前准备下载依赖库
