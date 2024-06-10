@@ -48,7 +48,7 @@ rem echo 	^@"$(LINK)" ^/nologo $(PHP_GLOBAL_OBJS) $(PHP_GLOBAL_OBJS_RESP) $(CLI_
 echo 	^@"$(LINK)" ^/nologo $(PHP_GLOBAL_OBJS_RESP) $(PHP_GLOBAL_OBJS_RESP) $(CLI_GLOBAL_OBJS_RESP) $(STATIC_EXT_OBJS_RESP)  $(ASM_OBJS) $(LIBS) $(LIBS_CLI) $(STATIC_EXT_LIBS)  $(BUILD_DIR)^\php.exe.res /out:$(BUILD_DIR)^\php.exe $(LDFLAGS) $(LDFLAGS_CLI)    >> %x_makefile%
 rem echo 	-@$(_VC_MANIFEST_EMBED_EXE)   >> %x_makefile%
 rem echo 	^@echo SAPI sapi\cli build complete  >> %x_makefile%
-echo 	^@if exist php.exe.manifest $(MT) -nologo -manifest php.exe.manifest -outputresource:php.exe
+echo 	^@if exist php.exe.manifest $(MT) -nologo -manifest php.exe.manifest -outputresource:php.exe    >> %x_makefile%
 
 :x-release-php-end
 
