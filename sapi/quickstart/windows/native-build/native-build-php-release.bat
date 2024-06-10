@@ -41,7 +41,7 @@ echo #custom build static link php library  >> %x_makefile%
 echo x-build-php-lib^: generated_files  $(PHP_GLOBAL_OBJS) $(CLI_GLOBAL_OBJS) $(STATIC_EXT_OBJS)  $(ASM_OBJS) $(MCFILE) >> %x_makefile%
 echo #custom build php.exe  >> %x_makefile%
 echo x-release-php^: $(DEPS_CLI) $(CLI_GLOBAL_OBJS) x-build-php-lib $(PHP_GLOBAL_OBJS) $(CLI_GLOBAL_OBJS) $(STATIC_EXT_OBJS) $(ASM_OBJS) $(BUILD_DIR)^\php.exe.res $(BUILD_DIR)^\php.exe.manifest  >> %x_makefile%
-echo 	^@"$(LINK)" ^/nologo  $(PHP_GLOBAL_OBJS_RESP) $(CLI_GLOBAL_OBJS_RESP)  $(STATIC_EXT_OBJS_RESP)  $(ASM_OBJS_RESP) $(LIBS_CLI) $(BUILD_DIR)^\php.exe.res /out:$(BUILD_DIR)^\php.exe $(LDFLAGS) $(LDFLAGS_CLI) $(STATIC_EXT_LIBS)   >> %x_makefile%
+rem echo 	^@"$(LINK)" ^/nologo  $(PHP_GLOBAL_OBJS_RESP) $(CLI_GLOBAL_OBJS_RESP)  $(STATIC_EXT_OBJS_RESP)  $(ASM_OBJS_RESP) $(LIBS_CLI) $(BUILD_DIR)^\php.exe.res /out:$(BUILD_DIR)^\php.exe $(LDFLAGS) $(LDFLAGS_CLI) $(STATIC_EXT_LIBS)   >> %x_makefile%
 rem echo 	-@$(_VC_MANIFEST_EMBED_EXE)   >> %x_makefile%
 rem echo 	^@echo SAPI sapi\cli build complete  >> %x_makefile%
 rem echo 	if exist php.exe.manifest "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22000.0\x64\mt.exe" -nologo -manifest php.exe.manifest -outputresource:php.exe;1
