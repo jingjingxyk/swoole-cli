@@ -59,6 +59,8 @@ echo 	^@echo BUILD_DIR\PHPLIB: $(BUILD_DIR)\$(PHPLIB) >> %x_makefile%
 echo 	^@echo ==================  >> %x_makefile%
 echo 	^@echo CLI_GLOBAL_OBJS_RESP: $(CLI_GLOBAL_OBJS_RESP)  >> %x_makefile%
 echo 	^@echo ================== >> %x_makefile%
+echo 	^@echo PHP_LDFLAGS: $(PHP_LDFLAGS) >> %x_makefile%
+echo 	^@echo ================== >> %x_makefile%
 echo 	^@echo LIBS: $(LIBS) >> %x_makefile%
 echo 	^@echo ================== >> %x_makefile%
 echo 	^@echo LIBS_CLI: $(LIBS_CLI) >> %x_makefile%
