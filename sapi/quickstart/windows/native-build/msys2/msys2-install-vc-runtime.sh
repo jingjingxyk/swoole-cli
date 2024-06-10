@@ -11,5 +11,5 @@ __PROJECT__=$(
 )
 cd ${__PROJECT__}
 
-start cmd /c "sapi\quickstart\windows\native-build\install-vc-runtime.bat"
+start cmd /k "cd .\ && sapi\quickstart\windows\native-build\install-vc-runtime.bat"
 
