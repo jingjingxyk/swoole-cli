@@ -53,7 +53,8 @@ rem echo 	if exist php.exe.manifest "C:\Program Files (x86)\Windows Kits\10\bin\
 
 
 rem nmake show-variable
-nmake x-release-php
+rem nmake x-release-php
+nmake x-build-php-lib
 
 rem nmake install
 
