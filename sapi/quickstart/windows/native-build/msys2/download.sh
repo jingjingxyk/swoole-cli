@@ -28,4 +28,4 @@ bash sapi/quickstart/windows/native-build/msys2/msys2-download-php-and-php-sdk.s
 # 构建库准备环境依赖
 bash sapi/quickstart/windows/native-build/msys2/msys2-download-deps-soft.sh
 
-start  "cmd"  " /c sapi\quickstart\windows\native-build\install-deps-soft.bat"
+# start  "cmd"  " /c sapi\quickstart\windows\native-build\install-deps-soft.bat"
