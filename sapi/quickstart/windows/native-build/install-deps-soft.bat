@@ -2,6 +2,8 @@
 
 rem chcp 65001
 
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64
+
 setlocal
 rem show current file location
 echo %~dp0
