@@ -23,7 +23,7 @@ echo %PATH%
 
 powershell "add-appxpackage .\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
 
-
+winget install nasm -i
 
 
 perl -v
