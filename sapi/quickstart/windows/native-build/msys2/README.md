@@ -6,6 +6,14 @@
 
 ```bash
 
+bash sapi/quickstart/windows/native-build/msys2/prepare.sh
+
+bash sapi/quickstart/windows/native-build/msys2/download.sh
+
+```
+
+```bash
+
 # msys2 下载安装  git curl wget openssl zip unzip xz  lzip 软件包
 bash sapi/quickstart/windows/native-build/msys2/msys2-install-soft.sh
 
