@@ -11,6 +11,7 @@ __PROJECT__=$(
 )
 cd ${__PROJECT__}
 
+# https://learn.microsoft.com/en-us/vcpkg/examples/installing-and-using-packages
 test -d vcpkg || git clone -b master --depth=1 https://github.com/microsoft/vcpkg
 
 test -f Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle ||  curl -Lo Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle https://github.com/microsoft/winget-cli/releases/download/v1.7.11261/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
