@@ -163,6 +163,7 @@ https://aka.ms/vs/17/release/vc_redist.x64.exe
 ## 参考文档
 
 1. [通过命令行使用 MSVC 工具集](https://learn.microsoft.com/zh-cn/cpp/build/building-on-the-command-line?view=msvc-170)
+1. [从命令行使用 Microsoft C++ 工具集](https://learn.microsoft.com/en-us/cpp/build/building-on-the-command-line?view=msvc-170#download-and-install-the-tools)
 1. [通过命令行使用 MSBuild](https://learn.microsoft.com/zh-cn/cpp/build/msbuild-visual-cpp?view=msvc-1700)
 1. [Microsoft Visual C++ 最新运行时库](https://learn.microsoft.com/zh-cn/cpp/windows/latest-supported-vc-redist?view=msvc-170)
 1. [Visual Studio 生成工具组件目录](https://learn.microsoft.com/zh-cn/visualstudio/install/workload-component-id-vs-build-tools?view=vs-2022)
@@ -181,3 +182,4 @@ https://aka.ms/vs/17/release/vc_redist.x64.exe
 1. [MSVC Mt.exe](https://learn.microsoft.com/en-us/windows/win32/sbscs/mt-exe?redirectedfrom=MSDN)
 1. [Install PowerShell on Windows, Linux, and macOS](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.4)
 1. [Sysinternals Utilities Index](https://learn.microsoft.com/en-us/sysinternals/downloads/)
+
