@@ -172,7 +172,7 @@ return function (Preprocessor $p) {
     $depends = ['dahdi_tools'] ;
     $depends = ['libpri'] ;
     $depends = ['asterisk'] ;
-    $depends = ['libarchive'] ;
+
     $depends = ['libde265'] ;
     $depends = ['libheif'] ;
     $depends = ['webrtc'] ;
@@ -180,6 +180,12 @@ return function (Preprocessor $p) {
     $depends = ['musl_cross_make'] ;
     $depends = ['libuuid'] ;
     $depends = ['python3'] ;
+    $depends = ['libarchive'] ;
+    $depends = ['gpac'] ;
+    $depends = ['libx264'] ;
+    $depends = ['libmongoc'] ;
+    $depends = ['ovn'] ;
+    $depends = ['liburing'] ;
 
 
     $ext = (new Extension('common'))

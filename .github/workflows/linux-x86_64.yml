@@ -143,7 +143,7 @@ jobs:
             composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
             composer dump-autoload --optimize --profile --no-dev
 
-            php prepare.php  +socat
+            php prepare.php  +socat --with-build-type=release
 
             bash make-install-deps.sh
 

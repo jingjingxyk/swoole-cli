@@ -189,14 +189,18 @@ class Preprocessor
 
     public function getSystemArch(): string
     {
-        $uname = \posix_uname();
-        switch ($uname['machine']) {
-            case 'x86_64':
-                return 'x64';
-            case 'aarch64':
-                return 'arm64';
-            default:
-                return $uname['machine'];
+        if (function_exists('posix_uname')) {
+            $uname = \posix_uname();
+            switch ($uname['machine']) {
+                case 'x86_64':
+                    return 'x64';
+                case 'aarch64':
+                    return 'arm64';
+                default:
+                    return $uname['machine'];
+            }
+        } else {
+            return 'x64';
         }
     }
 
@@ -986,10 +990,15 @@ EOF;
         }
     }
 
+    /**
+     * 递归删除目录
+     * @param $path
+     * @return bool
+     */
     protected function deleteDirectoryIfExists($path): bool
     {
         try {
-            if (file_exists($path)) {
+            if (is_dir($path)) {
                 $iterator = new \DirectoryIterator($path);
                 foreach ($iterator as $fileinfo) {
                     if ($fileinfo->isDot()) {
@@ -1199,7 +1208,7 @@ EOF;
         $this->binPaths = array_filter(array_unique($this->binPaths));
 
         if ($this->getInputOption('skip-download')) {
-            $this->generateLibraryDownloadLinks();
+            $this->generateDownloadLinks();
         }
 
         $this->generateFile(__DIR__ . '/template/make-install-deps.php', $this->rootDir . '/make-install-deps.sh');
@@ -1274,5 +1283,14 @@ EOF;
     public function hasExtension(string $ext): bool
     {
         return isset($this->extensionMap[$ext]);
+    }
+
+    public function cleanFile(string $file): bool
+    {
+        if (is_file($file)) {
+            unlink($file);
+            return true;
+        }
+        return false;
     }
 }
