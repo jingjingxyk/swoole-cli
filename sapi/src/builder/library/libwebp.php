@@ -20,6 +20,7 @@ return function (Preprocessor $p) {
             ->withFile('libwebp-v1.3.2.tar.gz')
             ->withFileHash('md5','827d510b73c73fca3343140556dd2943')
             ->withPrefix($libwebp_prefix)
+            /*
             ->withBuildScript(
                 <<<EOF
             mkdir -p build
@@ -53,6 +54,7 @@ return function (Preprocessor $p) {
 
 EOF
             )
+            */
             ->withConfigure(
                 <<<EOF
 
@@ -82,7 +84,7 @@ EOF
                 'libpng',
                 'libjpeg',
                 'libgif',
-                'sdl2'
+                //'sdl2'
             )
     );
 };
