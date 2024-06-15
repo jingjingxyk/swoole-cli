@@ -145,7 +145,7 @@ jobs:
             composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
             composer dump-autoload --optimize --profile --no-dev
 
-            php prepare.php  +privoxy
+            php prepare.php  +privoxy --with-build-type=release
 
             bash make-install-deps.sh
 
