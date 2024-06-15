@@ -4,15 +4,14 @@
 
 ## 构建命令
 
-> 复用
-> [jingjingxyk/swoole-cli](https://github.com/jingjingxyk/swoole-cli/tree/new_dev)
+> 派生于 [jingjingxyk/swoole-cli](https://github.com/jingjingxyk/swoole-cli/tree/new_dev)
 > 项目的 `new_dev`分支的静态库构建流程
 
 > 本项目 只需要关注 `.github/workflow` 目录里配置文件的变更
 
-## 下载`php-cli`发行版
+## 下载`build static ffmpeg `发行版
 
-- [https://github.com/swoole/build-static-php/releases](https://github.com/swoole/build-static-php/releases)
+- [https://github.com/jingjingxyk/build-static-ffmpeg.git](https://github.com/jingjingxyk/build-static-ffmpeg.git)
 
 ## 构建文档
 
@@ -30,7 +29,7 @@ git clone -b main https://github.com/jingjingxyk/build-static-ffmpeg.git
 
 # 或者
 
-git clone --recursive -b ffmpeg  https://github.com/swoole/swoole-cli.git
+git clone --recursive -b ffmpeg  https://github.com/jingjingxyk/swoole-cli.git
 
 ```
 
@@ -78,10 +77,6 @@ bash build-release.sh
 
 ## SWOOLE-CLI LICENSE
 
-* 对 `swoole-cli` 代码进行使用、修改、发布的新项目必须含有 `SWOOLE-CLI LICENSE`
-  的全部内容
-* 使用 `swoole-cli`
-  代码重新发布为新项目或者产品时，项目或产品名称不得包含 `swoole` 单词
-
-
+* 对 `swoole-cli` 代码进行使用、修改、发布的新项目必须含有 `SWOOLE-CLI LICENSE`的全部内容
+* 使用 `swoole-cli`代码重新发布为新项目或者产品时，项目或产品名称不得包含 `swoole` 单词
 
