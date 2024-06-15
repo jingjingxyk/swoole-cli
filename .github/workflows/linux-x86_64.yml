@@ -169,13 +169,6 @@ jobs:
           retention-days: 7
           path: ./bin/privoxy/
 
-      - name: production artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: php-cli-v${{ env.APP_VERSION }}-linux-x64
-          retention-days: 90
-          path: ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/dist/php
-
       - name: gh release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
