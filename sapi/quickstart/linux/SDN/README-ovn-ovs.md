@@ -11,6 +11,8 @@ SDN网络有3大特征, 分别是[6]:
 「逻辑上的集中控制」。
 「控制平面与转发平面之间提供可编程接口」。
 
+管理平面  控制平面  数据平面
+
 ## IPSEC over geneve
 1. GENEVE 代表“通用网络虚拟化封装”
 2. MAC-in-IP 封装 mac in udp
@@ -100,6 +102,16 @@ bash install-ovn-ovs.sh --proxy http://127.0.0.1:8016  --mirror china
     OVN 南向数据库端口，默认为 6642
 
     ovn-controller 节点 Geneve协议使用 6081 端口
+
+    mac in UDP
+
+    geneve  UDP port 6081
+    VXLAN   UDP port 4789
+    STT     UDP port 7471
+
+
+    northbound databases  TCP ports 6641
+    southbound databases  TCP ports 6642
 
 ```bash
 ovn-nbctl ls-list
