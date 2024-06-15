@@ -16,10 +16,8 @@
 
 - [linux 版构建文档](docs/linux.md)
 - [macOS 版构建文档](docs/macOS.md)
-- [windows Cygwin 版构建文档](docs/Cygwin.md)
-- [windows WSL 版构建文档](docs/wsl.md)
-- [php-cli 构建选项文档](docs/options.md)
-- [php-cli 搭建依赖库镜像服务](sapi/download-box/README.md)
+- [构建选项文档](docs/options.md)
+- [搭建依赖库镜像服务](sapi/download-box/README.md)
 - [quickstart](sapi/quickstart/README.md)
 
 ## Clone
@@ -34,84 +32,23 @@ git clone --recursive -b coturn  https://github.com/jingjingxyk/swoole-cli.git
 
 ```
 
-## 快速准备 PHP 运行时
+## 构建命令
 
-```shell
+```bash
+
 cd swoole-cli
-
-bash setup-php-runtime.sh
-# 或者
-bash setup-php-runtime.sh --mirror china
-
-```
-
-## 快速准备运行环境
-
-### linux
-
-如容器已经安装，可跳过执行安装 docker 命令
-
-```bash
-
-sh sapi/quickstart/linux/install-docker.sh
-sh sapi/quickstart/linux/run-alpine-container.sh
-sh sapi/quickstart/linux/connection-swoole-cli-alpine.sh
-sh sapi/quickstart/linux/alpine-init.sh
-
-# 使用镜像源安装
-sh sapi/quickstart/linux/install-docker.sh --mirror china
-sh sapi/quickstart/linux/alpine-init.sh --mirror china
+php prepare.php +coturn
+bash make-install-deps.sh
+bash make.sh all-library
+bash make.sh config
+bash make.sh build
+bash make.sh archive
 
 ```
 
-### macos
+## 构建参考
 
-如 homebrew 已安装，可跳过执行安装 homebrew 命令
-
-```bash
-
-bash sapi/quickstart/macos/install-homebrew.sh
-bash sapi/quickstart/macos/macos-init.sh
-
-# 使用镜像源安装
-bash sapi/quickstart/macos/install-homebrew.sh --mirror china
-bash sapi/quickstart/macos/macos-init.sh --mirror china
-
-```
-
-## 一条命令执行整个构建流程
-
-> > > > > > > new_dev
-
-```bash
-
-    git clone -b new_dev https://github.com/jingjingxyk/swoole-cli/
-    cd swoole-cli
-    php prepare.php +coturn
-    bash make-install-deps.sh
-    bash make.sh all-library
-    bash make.sh config
-    bash make.sh build
-    bash make.sh archive
-
-```
-
-## 构建 static-coturn
-
-```shell
-./make.sh build
-```
-
-> 编译成功后会生成`bin/coturn/turnserver`
-
-## 打包
-
-```shell
-./make.sh archive
-```
-
-> 打包成功后会生成 `coturn-{version}-{os}-{arch}.tar.xz`
-> 压缩包，包含 `turnserver` 可执行文件、`LICENSE` 授权协议文件。
+    https://github.com/coturn/coturn.git
 
 ## 授权协议
 
@@ -122,11 +59,7 @@ bash sapi/quickstart/macos/macos-init.sh --mirror china
   作为双重授权协议，用户需要同时遵守 `Apache 2.0 LICENSE`和`SWOOLE-CLI LICENSE`
   所规定的条款
 
-  https://github.com/coturn/coturn.git
-
 ## SWOOLE-CLI LICENSE
 
-* 对 `swoole-cli` 代码进行使用、修改、发布的新项目必须含有 `SWOOLE-CLI LICENSE`
-  的全部内容
-* 使用 `swoole-cli`
-  代码重新发布为新项目或者产品时，项目或产品名称不得包含 `swoole` 单词
+* 对 `swoole-cli` 代码进行使用、修改、发布的新项目必须含有 `SWOOLE-CLI LICENSE`的全部内容
+* 使用 `swoole-cli`代码重新发布为新项目或者产品时，项目或产品名称不得包含 `swoole` 单词
