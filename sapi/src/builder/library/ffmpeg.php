@@ -72,7 +72,7 @@ EOF
             PACKAGES="\$PACKAGES lcms2 "
             PACKAGES="\$PACKAGES x264 "
             PACKAGES="\$PACKAGES x265 " # numa
-            PACKAGES="\$PACKAGES sdl2 "
+            # PACKAGES="\$PACKAGES sdl2 "
             PACKAGES="\$PACKAGES ogg "
             PACKAGES="\$PACKAGES opus "
             PACKAGES="\$PACKAGES openh264 "
@@ -113,7 +113,6 @@ EOF
             --enable-gmp \
             --enable-libfreetype \
             --enable-libvpx \
-            --enable-sdl2 \
             --enable-libdav1d \
             --enable-libopus \
             --enable-libopenh264 \
@@ -142,6 +141,7 @@ EOF
             # --enable-libssh
             # --enable-cross-compile
             # --enable-libspeex
+            # --enable-sdl2 \
 
             # --enable-random \  # 需要外部组件
 EOF
@@ -169,7 +169,7 @@ EOF
             "libx264",
             "liblzma",
             "libvpx",
-            "sdl2",
+            //"sdl2",
             'libogg',
             'libopus',
             'openh264',
