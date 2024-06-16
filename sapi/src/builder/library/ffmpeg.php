@@ -48,8 +48,8 @@ EOF
             apk add yasm nasm
 EOF
         )
-        //->withBuildCached(false)
-        //->withInstallCached(false)
+        ->withBuildCached(false)
+        ->withInstallCached(false)
         ->withConfigure(
             <<<EOF
 
