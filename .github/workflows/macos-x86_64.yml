@@ -176,3 +176,4 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: coturn-${{ env.COTURN_VERSION }}-macos-x64.tar.xz
+
