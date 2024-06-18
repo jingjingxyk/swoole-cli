@@ -14,6 +14,9 @@ fi
 
 cd ${__PROJECT__}
 
+if [ ! -d ext/swoole/.git ] ; then
+  git submodule update --init --recursive
+fi
 
 set -x
 
@@ -48,8 +51,10 @@ WITH_PHP_COMPOSER=1
 MIRROR='china'
 MIRROR=''
 
-
+# 依赖库默认安装目录
+LIBRARY_INSTALL_PREFIX=/usr/local/swoole-cli
 OPTIONS=''
+
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -60,11 +65,14 @@ while [ $# -gt 0 ]; do
     export HTTP_PROXY="$2"
     export HTTPS_PROXY="$2"
     NO_PROXY="127.0.0.0/8,10.0.0.0/8,100.64.0.0/10,172.16.0.0/12,192.168.0.0/16"
-    NO_PROXY="${NO_PROXY},127.0.0.1,localhost"
+    NO_PROXY="${NO_PROXY},::1/128,fe80::/10,fd00::/8,ff00::/8"
+    NO_PROXY="${NO_PROXY},localhost"
     NO_PROXY="${NO_PROXY},.aliyuncs.com,.aliyun.com"
     NO_PROXY="${NO_PROXY},.tsinghua.edu.cn,.ustc.edu.cn"
     NO_PROXY="${NO_PROXY},.tencent.com"
-    NO_PROXY="${NO_PROXY},.sourceforge.net"
+    NO_PROXY="${NO_PROXY},ftpmirror.gnu.org"
+    NO_PROXY="${NO_PROXY},gitee.com,gitcode.com"
+    NO_PROXY="${NO_PROXY},.myqcloud.com,.swoole.com"
     export NO_PROXY="${NO_PROXY},.npmmirror.com"
 
     WITH_HTTP_PROXY=1
@@ -93,14 +101,32 @@ while [ $# -gt 0 ]; do
   shift $(($# > 0 ? 1 : 0))
 done
 
+if [ "$OS" = 'linux' ] ; then
+  if [ ! "$BASH_VERSION" ] ; then
+      echo "Please  use bash to run this script ($0) " 1>&2
+      echo "fix : " 1>&2
+      echo "apk add bash'  or  sh sapi/quickstart/linux/alpine-init.sh " 1>&2
+      exit 1
+  fi
+fi
+
+# 构建环境依赖检查
+CMDS_NUMS=0
+CMDS=("flex" "pkg-config" "cmake" "re2c" "bison" "curl" "automake" "libtool" "clang" "xz" "zip" "unzip" "autoconf")
+CMDS_LEN=${#CMDS[@]}
+for cmd in "${CMDS[@]}"; do
+    if command -v "$cmd" >/dev/null 2>&1; then
+        # echo "$cmd exists"
+        ((CMDS_NUMS++))
+    fi
+done
 
 if [ "$OS" = 'linux' ] ; then
     OS_RELEASE=$(awk -F= '/^ID=/{print $2}' /etc/os-release |tr -d '\n' | tr -d '\"')
 
     if [ -f /.dockerenv ]; then
         IN_DOCKER=1
-        number=$(which flex  | wc -l)
-        if test $number -eq 0 ;then
+        if test $CMDS_LEN -ne $CMDS_NUMS ;then
         {
             if [ "$MIRROR" = 'china' ] ; then
                 if [ "$OS_RELEASE" = 'alpine' ]; then
@@ -136,8 +162,7 @@ if [ "$OS" = 'linux' ] ; then
 fi
 
 if [ "$OS" = 'macos' ] ; then
-  number=$(which flex  | wc -l)
-  if test $number -eq 0 ; then
+  if test $CMDS_LEN -ne $CMDS_NUMS ; then
   {
         if [ "$MIRROR" = 'china' ] ; then
             bash sapi/quickstart/macos/macos-init.sh --mirror china
@@ -146,6 +171,15 @@ if [ "$OS" = 'macos' ] ; then
         fi
   }
   fi
+  OWNER=$(stat -f "%Su" "${LIBRARY_INSTALL_PREFIX}")
+  CURRENT_USER=$(whoami)
+  if test "${OWNER}" != "${CURRENT_USER}" ; then
+    id -u ${CURRENT_USER}
+    echo "创建目录： ${LIBRARY_INSTALL_PREFIX} ，并修改所属者为： ${CURRENT_USER} "
+    sudo mkdir -p ${LIBRARY_INSTALL_PREFIX}
+    CURRENT_USER=$(whoami) && sudo chown -R ${CURRENT_USER}:staff ${LIBRARY_INSTALL_PREFIX}
+  fi
+
 fi
 
 bash sapi/quickstart/clean-folder.sh
@@ -207,16 +241,18 @@ fi
 
 
 # 定制构建选项
-OPTIONS='+apcu +ds +xlswriter +ssh2'
+OPTIONS="${OPTIONS} +apcu +ds +xlswriter +ssh2 +uuid "
 OPTIONS="${OPTIONS} "
 OPTIONS="${OPTIONS} --with-libavif=1"
+OPTIONS="${OPTIONS} --with-global-prefix=${LIBRARY_INSTALL_PREFIX}"
 # OPTIONS="${OPTIONS} @macos"
 
 
 if [ ${IN_DOCKER} -eq 1 ] ; then
 {
 # 容器中
-  php prepare.php +inotify ${OPTIONS}
+
+  php prepare.php +inotify  ${OPTIONS}
 
 } else {
 # 容器外
