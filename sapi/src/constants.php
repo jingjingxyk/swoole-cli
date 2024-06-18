@@ -186,7 +186,7 @@ define("SOFIA_SIP_PREFIX", $p->getGlobalPrefix() . '/sofia_sip');
 define("AUDIOFILE_PREFIX", $p->getGlobalPrefix() . '/audiofile');
 define("FLAC_PREFIX", $p->getGlobalPrefix() . '/flac');
 define("LIBOGG_PREFIX", $p->getGlobalPrefix() . '/libogg');
-define("ALSA_PREFIX", $p->getGlobalPrefix() . '/alsa');
+define("ALSA_AUDIO_PREFIX", $p->getGlobalPrefix() . '/alsa_audio');
 define("LIBOPUS_PREFIX", $p->getGlobalPrefix() . '/libopus');
 define("LIBOPUSENC_PREFIX", $p->getGlobalPrefix() . '/libopusenc');
 define("LIBOPUSFILE_PREFIX", $p->getGlobalPrefix() . '/libopusfile');
@@ -199,9 +199,6 @@ define("LIBKS_PREFIX", $p->getGlobalPrefix() . '/libks');
 define("UTIL_LINUX_PREFIX", $p->getGlobalPrefix() . '/util_linux');
 define("LIBATOMIC_PREFIX", $p->getGlobalPrefix() . '/libatomic');
 define("UPNP_PREFIX", $p->getGlobalPrefix() . '/upnp');
-
-
-define("LIBURING_PREFIX", $p->getGlobalPrefix() . '/liburing');
 
 define("USRSCTP_PREFIX", $p->getGlobalPrefix() . '/usrsctp');
 define("RABBITMQ_C_PREFIX", $p->getGlobalPrefix() . '/rabbitmq_c');
@@ -333,6 +330,13 @@ define("GRPC_PREFIX", $p->getGlobalPrefix() . '/grpc');
 define("RE2_PREFIX", $p->getGlobalPrefix() . '/re2');
 
 define("GPAC_PREFIX", $p->getGlobalPrefix() . '/gpac');
+
+define("SNDIO_AUDIO_PREFIX", $p->getGlobalPrefix() . '/sndio_audio');
+define("JACK_AUDIO_PREFIX", $p->getGlobalPrefix() . '/jack_audio');
+define("OPEN_SOUND_AUDIO_PREFIX", $p->getGlobalPrefix() . '/opensound_audio');
+define("PULSE_AUDIO_PREFIX", $p->getGlobalPrefix() . '/pulse_audio');
+
+define("V4L_UTILS_PREFIX", $p->getGlobalPrefix() . '/v4l_utils');
 define("EXAMPLE_PREFIX", $p->getGlobalPrefix() . '/example');
 
 
