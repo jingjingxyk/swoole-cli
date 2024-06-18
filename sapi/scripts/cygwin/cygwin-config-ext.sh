@@ -13,8 +13,8 @@ cd ${__PROJECT__}
 
 ROOT=${__PROJECT__}
 
-PHP_VERSION='8.2.13'
-SWOOLE_VERSION=v5.1.1
+PHP_VERSION='8.0.30'
+SWOOLE_VERSION="v4.8.13"
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -30,7 +30,6 @@ while [ $# -gt 0 ]; do
   esac
   shift $(($# > 0 ? 1 : 0))
 done
-
 
 REDIS_VERSION=6.0.2
 MONGODB_VERSION=1.17.2

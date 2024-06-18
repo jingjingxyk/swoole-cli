@@ -139,7 +139,7 @@ class Preprocessor
         'xml',
         //'gd',
         'redis',
-        'swoole',
+        //'swoole',
         'yaml',
         //'imagick',
         'mongodb',
@@ -962,10 +962,15 @@ EOF;
         }
     }
 
+    /**
+     * 递归删除目录
+     * @param $path
+     * @return bool
+     */
     protected function deleteDirectoryIfExists($path): bool
     {
         try {
-            if (file_exists($path)) {
+            if (is_dir($path)) {
                 $iterator = new \DirectoryIterator($path);
                 foreach ($iterator as $fileinfo) {
                     if ($fileinfo->isDot()) {
@@ -1226,5 +1231,14 @@ EOF;
     public function hasExtension(string $ext): bool
     {
         return isset($this->extensionMap[$ext]);
+    }
+
+    public function cleanFile(string $file): bool
+    {
+        if (is_file($file)) {
+            unlink($file);
+            return true;
+        }
+        return false;
     }
 }
