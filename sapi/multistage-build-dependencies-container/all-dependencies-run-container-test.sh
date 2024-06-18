@@ -26,3 +26,4 @@ if test -f $IMAGE_FILE; then
 else
   echo 'no  container image'
 fi
+

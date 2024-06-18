@@ -20,8 +20,8 @@ return function (Preprocessor $p) {
                 <<<EOF
             ./configure --help
 
-            PACKAGES='zlib openssl libcares libbrotlicommon libbrotlidec libbrotlienc libzstd libnghttp2 '
-            PACKAGES="\$PACKAGES  libssh2 libnghttp3 libngtcp2  libngtcp2_crypto_quictls" # libidn2 libngtcp2_crypto_openssl
+            PACKAGES='zlib openssl libcares libbrotlicommon libbrotlidec libbrotlienc libzstd '
+            PACKAGES="\$PACKAGES  libssh2 " # libidn2
 
             CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$PACKAGES)" \
             LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES)" \
@@ -51,9 +51,9 @@ return function (Preprocessor $p) {
             --enable-optimize \
             --with-zlib={$zlib_prefix} \
             --enable-ares={$cares_prefix} \
-            --with-nghttp2 \
-            --with-ngtcp2 \
-            --with-nghttp3 \
+            --without-nghttp2 \
+            --without-ngtcp2 \
+            --without-nghttp3 \
             --without-libidn2 \
             --with-libssh2 \
             --with-openssl  \
@@ -74,9 +74,6 @@ EOF
                 'zlib',
                 'brotli',
                 'libzstd',
-                'nghttp2',
-                'nghttp3',
-                'ngtcp2',
                 'libssh2'
             ) # 'libidn2',
     );

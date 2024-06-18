@@ -21,7 +21,7 @@ cd ${__DIR__}
 
 IMAGE=alpine:3.18
 
-:<<'EOF'
+: <<'EOF'
    启动此容器
 
    已经内置了 php 、composer 、 编译好的依赖库
@@ -56,7 +56,7 @@ case $ARCH in
   fi
   ;;
 'aarch64')
-  TAG=all-dependencies-alpine-3.18-php8-v1.0.0-aarch64-20240106T114724Z
+  TAG=all-dependencies-alpine-3.18-php7-v1.0.0-aarch64-20240106T123157Z
   IMAGE=docker.io/jingjingxyk/build-swoole-cli:${TAG}
     if [ "$MIRROR" = 'china' ] ; then
       IMAGE=registry.cn-shanghai.aliyuncs.com/jingjingxyk-public/app:${TAG}

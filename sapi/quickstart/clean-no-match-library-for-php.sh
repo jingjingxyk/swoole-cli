@@ -47,4 +47,3 @@ test -d ${GLOBAL_PREFIX}/libzip && rm -rf ${GLOBAL_PREFIX}/libzip
 test -d ${BUILD_DIR}/libzip && rm -rf ${BUILD_DIR}/libzip
 
 echo $?
-

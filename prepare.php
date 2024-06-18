@@ -23,47 +23,23 @@ $p->cleanFile(__DIR__ . '/configure.backup');
 
 
 # PHP 默认版本 （此文件配置 /sapi/PHP-VERSION.conf 在 build_native_php分支 和 衍生分支 无效）
-$php_version = '8.2.13';
-$php_version_id = '802013';
-$php_version_tag = 'php-8.2.13';
+$php_version = '7.4.33';
+$php_version_id = '704033';
+$php_version_tag = 'php-7.4.33';
 
 if ($p->getInputOption('with-php-version')) {
     $subject = $p->getInputOption('with-php-version');
     $pattern = '/(\d{1,2})\.(\d{1,2})\.(\d{1,})\w*/';
+    $notice = 0;
     if (preg_match($pattern, $subject, $match)) {
-        if (intval($match[1]) >= 8 && intval($match[2]) >= 1) {
+        if (intval($match[1]) == 7 && intval($match[2]) == 4) {
             $php_version = $match[0];
             $php_version_id =
                 str_pad($match[1], 2, '0') .
                 str_pad($match[2], 2, '0') .
                 sprintf('%02d', $match[3]);
             $php_version_tag = 'php-' . $match[0];
-        } else {
-            echo <<<EOF
-
-    extra support PHP8.0  PHP7.4  PHP7.3  PHP8.2-micro
-
-    php-8-micro:  (https://github.com/dixyes/phpmicro.git）
-
-        git clone -b build_native_php_sfx_micro  https://github.com/jingjingxyk/swoole-cli/
-
-    php-8.0
-
-        git clone -b build_php_8.0  https://github.com/jingjingxyk/swoole-cli/
-
-    php-7.4:
-
-        git clone -b build_php_7.4  https://github.com/jingjingxyk/swoole-cli/
-
-    php-7.3:
-
-        git clone -b build_php_7.3  https://github.com/jingjingxyk/swoole-cli/
-
-EOF;
-            echo PHP_EOL;
-            die;
         }
-        echo PHP_EOL;
     }
 }
 

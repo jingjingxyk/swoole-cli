@@ -109,20 +109,19 @@ final class MainTest extends TestCase
         $this->assertEquals('Yes', trim($matches[1]), 'library: zlib no found');
         preg_match('/^SSL (?:=>)?(.*)$/m', $output, $matches);
         $this->assertEquals('Yes', trim($matches[1]), 'library: openssl no found');
-        preg_match('/^HTTP2 (?:=>)?(.*)$/m', $output, $matches);
-        $this->assertEquals('Yes', trim($matches[1]), 'library: nghttp2 no found');
+        # preg_match('/^HTTP2 (?:=>)?(.*)$/m', $output, $matches);
+        # $this->assertEquals('Yes', trim($matches[1]), 'library: nghttp2 no found');
         preg_match('/^BROTLI (?:=>)?(.*)$/m', $output, $matches);
         $this->assertEquals('Yes', trim($matches[1]), 'library: brotli no found');
         preg_match('/^libSSH (?:Version =>)?(.*)$/m', $output, $matches);
         $this->assertTrue((strpos(trim($matches[1]), 'libssh2') !== false), 'library: libSSH no found');
         preg_match('/^ZLib (?:Version =>)?(.*)$/m', $output, $matches);
         $this->assertNotEmpty(trim($matches[1]), 'library: ZLib no found');
-
     }
 
     public $userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36';
 
-    public function testCurlHTTP2Client(): void
+    public function stopTestCurlHTTP2Client(): void
     {
         $url = 'https://www.jingjingxyk.com/';
         $userAgent = $this->userAgent;
@@ -162,7 +161,7 @@ final class MainTest extends TestCase
 
     public function testSwooleHttp2Client(): void
     {
-        ini_set('default_socket_timeout', 60);
+        ini_set('default_socket_timeout', '60');
         run(function () {
             $domain = 'www.jingjingxyk.com';
             $cli = new Client($domain, 443, true);

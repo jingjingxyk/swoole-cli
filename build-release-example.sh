@@ -223,8 +223,6 @@ fi
 
 
 # 可用配置参数
-# --with-swoole-pgsql=1
-# --with-libavif=1
 # --with-global-prefix=/usr/local/swoole-cli
 # --with-dependency-graph=1
 # --with-web-ui
@@ -236,9 +234,9 @@ fi
 # --skip-download=1
 # --with-http-proxy=http://192.168.3.26:8015
 # --with-override-default-enabled-ext=0
-# --with-php-version=8.3.4
+# --with-php-version=7.4.33
 # --with-c-compiler=[gcc|clang] 默认clang
-# --with-download-mirror-url=https://php-cli.jingjingxyk.com/
+
 
 
 

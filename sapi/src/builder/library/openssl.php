@@ -31,8 +31,7 @@ return function (Preprocessor $p) {
             ->withHomePage('https://www.openssl.org/')
             ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
             ->withManual('https://www.openssl.org/docs/')
-            ->withUrl('https://github.com/quictls/openssl/archive/refs/tags/openssl-3.1.4-quic1.tar.gz')
-            ->withFileHash('md5','ba2d8774a51a38f2481aad43d05aea57')
+            ->withUrl('https://github.com/openssl/openssl/releases/download/OpenSSL_1_1_1w/openssl-1.1.1w.tar.gz')
             ->withPrefix($openssl_prefix)
             ->withConfigure(
                 <<<EOF
@@ -45,7 +44,6 @@ return function (Preprocessor $p) {
                --openssldir=/etc/ssl
 EOF
             )
-            ->withMakeOptions('build_sw')
             ->withMakeInstallCommand('install_sw')
             ->withScriptAfterInstall(
                 <<<EOF

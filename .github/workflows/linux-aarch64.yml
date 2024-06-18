@@ -3,18 +3,12 @@ name: build-php-cli-linux-aarch64
 on: [ push, pull_request ]
 
 env:
-  BUILD_PHP_VERSION: 8.2.13
+  BUILD_PHP_VERSION: 7.4.33
 
 jobs:
   linux-aarch64:
     if: 1
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php-version:
-          - "8.2.13"
-          - "8.1.27"
-          - "8.3.3"
     steps:
       - uses: actions/checkout@v4
       - name: Prepare Source Code
@@ -109,7 +103,7 @@ jobs:
       - name: prepare pre-built library
         uses: addnab/docker-run-action@v3
         with:
-          image: docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-3.18-php8-v1.0.0-aarch64-20240106T114724Z
+          image: docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-3.18-php7-v1.0.0-aarch64-20240106T123157Z
           options: -v ${{ github.workspace }}:/work -w /work  -v /usr/local/swoole-cli/:/usr/local/tmp/
           run: |
             for i in `ls /usr/local/swoole-cli/`
@@ -131,7 +125,6 @@ jobs:
             if [ ! -f bin/runtime/php ] ; then
               bash  setup-php-runtime.sh
             fi
-
             export PATH=/work/bin/runtime:$PATH  # 容器已经内置 php 和 composer
             alias php="php -d curl.cainfo=/work/bin/runtime/cacert.pem -d openssl.cafile=/work/bin/runtime/cacert.pem"
 
@@ -143,9 +136,11 @@ jobs:
             composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
             composer dump-autoload --optimize --profile --no-dev
 
-            php prepare.php +inotify +apcu +ds +xlswriter +ssh2 +pgsql +uuid +mongodb --with-build-type=release --with-libavif=1 --with-php-version=${{ env.BUILD_PHP_VERSION }}
+            php prepare.php  +inotify +apcu +ds +xlswriter +ssh2  +pgsql +pdo_pgsql +uuid --with-php-version=${{ env.BUILD_PHP_VERSION }}
 
             bash make-install-deps.sh
+
+            # bash sapi/quickstart/clean-no-match-library-for-php.sh
 
             bash make.sh all-library
 

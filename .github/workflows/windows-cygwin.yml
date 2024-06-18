@@ -5,18 +5,12 @@ on:
   pull_request:
 
 env:
-  BUILD_PHP_VERSION: 8.2.13
+  BUILD_PHP_VERSION: 7.4.33
 
 jobs:
   windows-cygwin:
     if: 0
     runs-on: windows-latest
-    strategy:
-      matrix:
-        php-version:
-          - "8.2.13"
-        #  - "8.1.27"
-        #  - "8.3.3"
     steps:
       - name: Prepare git
         run: |
@@ -73,6 +67,7 @@ jobs:
           bash ./sapi/scripts/cygwin/install-cygwin.sh
 
       - name: Install re2c
+        # shell: C:\cygwin\bin\bash.exe --login '{0}'
         run: |
           bash ./sapi/scripts/cygwin/install-re2c.sh
 

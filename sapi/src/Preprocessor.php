@@ -127,7 +127,7 @@ class Preprocessor
         'intl',
         'fileinfo',
         'pdo_mysql',
-        //'pdo_sqlite',
+        'pdo_sqlite',
         'soap',
         'xsl',
         'gmp',
@@ -140,7 +140,7 @@ class Preprocessor
         //'swoole',
         'yaml',
         'imagick',
-        //'mongodb', //php8.2 需要处理依赖库问题 more info ： https://github.com/mongodb/mongo-php-driver/issues/1445
+        'mongodb',
         'gd',
     ];
     protected array $extEnabledBuff = [];

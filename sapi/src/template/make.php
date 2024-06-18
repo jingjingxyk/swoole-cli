@@ -29,6 +29,8 @@ OPTIONS="--disable-all \
 --without-valgrind \
 --enable-fpm \
 --disable-phpdbg \
+--enable-json \
+--enable-hash \
 <?php foreach ($this->extensionList as $item) : ?>
     <?=$item->options?> \
 <?php endforeach; ?>
@@ -48,6 +50,7 @@ make_<?=$item->name?>() {
         echo "[<?=$item->name?>]  library cached , skip.."
         return 0
     fi
+
     <?php endif; ?>
 
     <?php if ($item->cleanBuildDirectory || ! $item->enableBuildCached) : ?>
