@@ -7,7 +7,7 @@ env:
 
 jobs:
   macos-aarch64:
-    if: 0
+    if: 1
     runs-on: macos-14
     # macos-latest (macos-14)  变更了 CPU 架构，由 x86_64 变更为 arm64
     # macos-14 CPU 架构 arm64
@@ -53,7 +53,7 @@ jobs:
           echo "X_IPV6=${IPV6}" >> $GITHUB_ENV
           echo "X_IPV4=${IPV4}" >> $GITHUB_ENV
 
-          echo "BUILD_PHP_VERSION=${{ matrix.php-version }}" >> $GITHUB_ENV
+          # echo "BUILD_PHP_VERSION=${{ matrix.php-version }}" >> $GITHUB_ENV
 
           export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
           export PATH="/opt/homebrew/opt/flex/bin:$PATH"
