@@ -3,11 +3,11 @@ name: build-php-cli-macos-aarch64
 on: [ push, pull_request ]
 
 env:
-  BUILD_PHP_VERSION: 8.0.30
+  BUILD_PHP_VERSION: 7.4.33
 
 jobs:
   macos-aarch64:
-    if: 0
+    if: 1
     runs-on: macos-14
     # macos-latest (macos-14)  变更了 CPU 架构，由 x86_64 变更为 arm64
     # macos-14 CPU 架构 arm64
@@ -124,7 +124,7 @@ jobs:
           composer install  --no-interaction --no-autoloader --no-scripts --profile
           composer dump-autoload --optimize --profile
 
-          php prepare.php --without-docker=1  +ds +apcu  +xlswriter +ssh2 +pgsql --with-build-type=release --with-libavif=1 --with-php-version=${{ env.BUILD_PHP_VERSION }}
+          php prepare.php --without-docker=1  +ds +apcu  +xlswriter +ssh2 +pgsql +pdo_pgsql +uuid --with-build-type=release --with-php-version=${{ env.BUILD_PHP_VERSION }}
 
       - name: Build
         run: |

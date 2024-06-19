@@ -138,7 +138,11 @@ jobs:
             composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
             composer dump-autoload --optimize --profile --no-dev
 
+<<<<<<< HEAD
             php prepare.php  +inotify +apcu +ds +xlswriter +ssh2 +pgsql --with-php-version=${{ env.BUILD_PHP_VERSION }}
+=======
+            php prepare.php  +inotify +apcu +ds +xlswriter +ssh2 +pgsql +pdo_pgsql +uuid ${{ inputs.build_type }} ${{ inputs.build_options }} --with-php-version=${{ env.BUILD_PHP_VERSION }}
+>>>>>>> build_php_8.0
 
             bash make-install-deps.sh
 
