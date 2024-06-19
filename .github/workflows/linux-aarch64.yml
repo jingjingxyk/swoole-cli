@@ -31,7 +31,7 @@ jobs:
           echo "X_IPV6=${IPV6}" >> $GITHUB_ENV
           echo "X_IPV4=${IPV4}" >> $GITHUB_ENV
 
-          echo "BUILD_PHP_VERSION=${{ matrix.php-version }}" >> $GITHUB_ENV
+          # echo "BUILD_PHP_VERSION=${{ matrix.php-version }}" >> $GITHUB_ENV
 
           # git submodule update --init
 
@@ -136,7 +136,7 @@ jobs:
             composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
             composer dump-autoload --optimize --profile --no-dev
 
-            php prepare.php  +inotify +apcu +ds +xlswriter +ssh2  +pgsql +pdo_pgsql +uuid --with-php-version=${{ env.BUILD_PHP_VERSION }}
+            php prepare.php  +inotify +apcu +ds +xlswriter +ssh2 +pgsql +pdo_pgsql --with-php-version=${{ env.BUILD_PHP_VERSION }}
 
             bash make-install-deps.sh
 

@@ -137,7 +137,7 @@ class Preprocessor
         'readline',
         'xml',
         'redis',
-        //'swoole',
+        'swoole',
         'yaml',
         'imagick',
         'mongodb',
