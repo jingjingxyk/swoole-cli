@@ -20,12 +20,16 @@ php prepare.php  +inotify +apcu +ds +xlswriter +ssh2 +uuid
 bash ./make.sh docker-build
 bash ./make.sh docker-bash
 
+# 准备bash 命令
+sh sapi/quickstart/linux/alpine-init-minimal.sh
+
 bash sapi/quickstart/linux/alpine-init.sh
 
 # 进入容器后需要再一次执行此命令
 php prepare.php  +inotify +apcu +ds +xlswriter +ssh2 +uuid
 
 bash make-install-deps.sh
+
 bash ./make.sh all-library
 bash ./make.sh config
 bash ./make.sh build
@@ -134,4 +138,12 @@ fix slow alpine apk installations
 
 bash sapi/quickstart/linux/alpine-init.sh --mirror china
 
+```
+
+show file info
+----
+
+```bash
+    file ./bin/php-8.2.4/bin/php
+    readelf -h ./bin/php-8.2.4/bin/php
 ```
