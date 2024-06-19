@@ -23,7 +23,6 @@ test -d thirdparty/curl    && rm -rf thirdparty/curl
 test -d thirdparty/icu    && rm -rf thirdparty/icu
 test -d thirdparty/php_src && rm -rf thirdparty/php_src
 
-ln -s /usr/include/locale.h /usr/include/xlocale.h
 
 sh make.sh openssl
 sh make.sh libssh2
