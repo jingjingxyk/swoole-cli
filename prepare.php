@@ -138,7 +138,7 @@ if ($p->isMacos()) {
     $p->setLogicalProcessors('$(nproc 2> /dev/null)');
 }
 
-putenv('SWOOLE_CLI_WITH_C_COMPILER=gcc');
+# putenv('SWOOLE_CLI_WITH_C_COMPILER=gcc');
 
 $c_compiler = $p->getInputOption('with-c-compiler');
 if ($c_compiler == 'musl-gcc') {
