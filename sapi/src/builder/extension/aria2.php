@@ -17,6 +17,7 @@ return function (Preprocessor $p) {
 
         $workdir = $p->getWorkDir();
         $builddir = $p->getBuildDir();
+        $system_arch=$p->getSystemArch();
 
         $cmd = <<<EOF
                 mkdir -p {$workdir}/bin/
@@ -29,15 +30,16 @@ return function (Preprocessor $p) {
 EOF;
         if ($p->getOsType() == 'macos') {
             $cmd .= <<<EOF
+            xattr -cr {$workdir}/bin/aria2c
             otool -L {$workdir}/bin/aria2c
-            tar -cJvf {$workdir}/aria2c-\${ARIA2_VERSION}-macos-x64.tar.xz aria2c
+            tar -cJvf {$workdir}/aria2c-\${ARIA2_VERSION}-macos-{$system_arch}.tar.xz aria2c
 
 EOF;
         } else {
             $cmd .= <<<EOF
               file {$workdir}/bin/aria2c
               readelf -h {$workdir}/bin/aria2c
-              tar -cJvf {$workdir}/aria2c-\${ARIA2_VERSION}-linux-x64.tar.xz aria2c
+              tar -cJvf {$workdir}/aria2c-\${ARIA2_VERSION}-linux-{$system_arch}.tar.xz aria2c
 
 EOF;
         }
