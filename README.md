@@ -1,6 +1,6 @@
-# build static php-cli runtime
+# build static aria2
 
-构建静态 原生 php-cli 运行时
+构建静态 原生 aria2 运行时
 
 ## 说明
 
@@ -22,7 +22,7 @@
 
 > 可编译包含 swow 扩展
 
-## 下载`php-cli`发行版
+## 下载`aria2`发行版
 
 - [https://github.com/swoole/build-static-php/releases](https://github.com/swoole/build-static-php/releases)
 
@@ -175,9 +175,9 @@ bash make-install-deps.sh
 
 ## 授权协议
 
-* `php-cli` 使用了多个其他开源项目，请认真阅读自动生成的 `bin/LICENSE`
+* `build-static-aria2` 使用了多个其他开源项目，请认真阅读自动生成的 `bin/LICENSE`
   文件中版权协议，遵守对应开源项目的 `LICENSE`
-* `php-cli`本身的软件源代码、文档等内容以 `Apache 2.0 LICENSE`+`SWOOLE-CLI LICENSE`
+* `build-static-aria2`本身的软件源代码、文档等内容以 `Apache 2.0 LICENSE`+`SWOOLE-CLI LICENSE`
   作为双重授权协议，用户需要同时遵守 `Apache 2.0 LICENSE`和`SWOOLE-CLI LICENSE`
   所规定的条款
 

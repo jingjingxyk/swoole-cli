@@ -45,14 +45,8 @@ env:
 
 jobs:
   linux-x86_64:
-    if: 0
+    if: 1
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php-version:
-          - "8.2.13"
-          - "8.1.27"
-        #  - "8.3.3"
     steps:
       - uses: actions/checkout@v4
       - name: Prepare Source Code
@@ -194,54 +188,32 @@ jobs:
             composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
             composer dump-autoload --optimize --profile --no-dev
 
-            php prepare.php  -ffmpeg +coturn  --with-build-type=release ${{ inputs.build_type }} ${{ inputs.build_options }} --with-c-compiler=clang
+            php prepare.php  +aria2  --with-build-type=release
 
             bash make-install-deps.sh
 
-            sed -i.backup "s/-ldl/  /g" /usr/local/swoole-cli/openssl/lib/pkgconfig/libcrypto.pc
-
             bash ./make.sh all-library
             bash ./make.sh config
-            # bash ./make.sh build
-            # bash ./make.sh archive
+            bash ./make.sh build
+            bash ./make.sh archive
 
       - name: Show Build Result
         run: |
-          ./thirdparty/php-src/sapi/cli/php -v
-          ./thirdparty/php-src/sapi/cli/php -m
-          ./thirdparty/php-src/sapi/cli/php --ri gd
-          ./thirdparty/php-src/sapi/cli/php --ri swoole
-          ./thirdparty/php-src/sapi/cli/php --ri pgsql
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -v
-          file ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-          readelf -h ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-          APP_VERSION=$(./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php  -v | head -n 1 | awk '{print $2}')
+          ./bin/aria2c -v
+          ./bin/aria2c -v | head -n 1 | awk '{print $3}'
+          readelf -h ./bin/aria2c
+          APP_VERSION=$(./bin/aria2c -v | head -n 1 | awk '{print $3}')
           echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
-
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -r "echo PHP_VERSION;"
-
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php  --list-tests
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/SwoolePGSQLTest.php
-
-      - name: production artifacts debug
-        uses: actions/upload-artifact@v4
-        with:
-          name: php-cli-v${{ env.APP_VERSION }}-linux-x64-debug
-          retention-days: 90
-          path: ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
 
       - name: production artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: php-cli-v${{ env.APP_VERSION }}-linux-x64
+          name: aria2-${{ env.APP_VERSION }}-linux-x64
           retention-days: 90
-          path: ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/dist/php
+          path: ./bin/aria2c
 
       - name: gh release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: |
-            php-cli-v${{ env.APP_VERSION }}-linux-x64.tar.xz
-            php-cli-v${{ env.APP_VERSION }}-linux-x64-debug.tar.xz
+          files: aria2c-${{ env.APP_VERSION }}-linux-x64.tar.xz

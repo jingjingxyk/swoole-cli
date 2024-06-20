@@ -16,14 +16,6 @@ jobs:
     # macos-13 CPU 架构 x86_64
     # macos-12 CPU 架构 x86_64
     # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#choosing-github-hosted-runners
-
-    strategy:
-      matrix:
-        php-version:
-          - "8.2.13"
-          - "8.1.27"
-        #  - "8.3.3"
-
     steps:
       - uses: actions/checkout@v4
       - name: Prepare build environment
@@ -146,7 +138,7 @@ jobs:
           composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
           composer dump-autoload --optimize --profile --no-dev
 
-          php prepare.php --without-docker=1  -coturn --with-build-type=release
+          php prepare.php --without-docker=1 +aria2 --with-build-type=release
 
       - name: Build
         run: |
@@ -161,40 +153,27 @@ jobs:
           bash ./make.sh all-library
 
           bash ./make.sh config
-          # bash ./make.sh build
-          # bash ./make.sh archive
+          bash ./make.sh build
+          bash ./make.sh archive
 
       - name: Show Build Result
         run: |
-          ./thirdparty/php-src/sapi/cli/php -v
-          file ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-          otool -L ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-          # greadelf -h ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-          APP_VERSION=$(./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php  -v | head -n 1 | awk '{print $2}')
+          ./bin/aria2c -v
+          ./bin/aria2c -v | head -n 1 | awk '{print $3}'
+          file ./bin/aria2c
+          otool -L ./bin/aria2c
+          APP_VERSION=$(./bin/aria2c -v | head -n 1 | awk '{print $3}')
           echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -r "echo PHP_VERSION;"
 
-          ./thirdparty/php-src/sapi/cli/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php  --list-tests
-          ./thirdparty/php-src/sapi/cli/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php
-
-      - name: Archive production artifacts debug
+      - name: production artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: php-cli-v${{ env.BUILD_PHP_VERSION }}-macos-x64-debug
+          name: aria2-${{ env.APP_VERSION }}-macos-x64
           retention-days: 90
-          path: ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-
-      - name: Archive production artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: php-cli-v${{ env.BUILD_PHP_VERSION }}-macos-x64
-          retention-days: 90
-          path: ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/dist/php
+          path: ./bin/aria2c
 
       - name: gh release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: |
-            php-cli-v${{ env.BUILD_PHP_VERSION }}-macos-x64.tar.xz
-            php-cli-v${{ env.BUILD_PHP_VERSION }}-macos-x64-debug.tar.xz
+          files: aria2c-${{ env.APP_VERSION }}-macos-x64.tar.xz
