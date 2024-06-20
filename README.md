@@ -4,23 +4,11 @@
 
 ## 说明
 
-`php-cli` 是一个 `PHP`的 运行时 ，默认包含 swoole 扩展
+> 复用
+> [jingjingxyk/swoole-cli](https://github.com/jingjingxyk/swoole-cli/tree/new_dev)
+> 项目的 `new_dev`分支的静态库构建流程
 
-> 本项目 派生于 [swoole-cli](https://github.com/swoole/swoole-cli/)
-
-> 代码与 swoole-cli 项目的 build_native_php 分支的代码 保持一致
-
-> 构建流程 与 swoole-cli 构建流程一致
-
-> 项目继承 `swoole_cli` 项目的 `main` 分支、`experiment` 分支的构建功能
-
-> 未对 PHP 源码 执行 裁剪、优化、添加新功能等操作
-
-> 可指定 PHP 版本 构建原生 PHP 版本
-
-> 可指定 C 编译器 为 musl-gcc、x86_64-linux-musl-gcc 、clang
-
-> 可编译包含 swow 扩展
+> 本项目 只需要关注 `.github/workflow` 目录里配置文件的变更
 
 ## 下载`aria2`发行版
 
@@ -38,56 +26,27 @@
 
 ```shell
 
-git clone -b main https://github.com/swoole/build-static-php.git
+git clone -b build-static-aria2 https://github.com/jingjingxyk/swoole-cli.git
 
 # 或者
 
-git clone --recursive -b build_native_php  https://github.com/swoole/swoole-cli.git
+git clone -b main  https://github.com/jingjingxyk/build-static-aria2.git
 
 ```
 
-## 快速准备 PHP 运行时
 
-```shell
+## 构建命令
+
+```bash
+
 cd swoole-cli
-
 bash setup-php-runtime.sh
-# 或者使用镜像
-bash setup-php-runtime.sh --mirror china
-
-```
-
-## 快速准备运行环境
-
-### linux
-
-如容器已经安装，可跳过执行安装 docker 命令
-
-```bash
-
-sh sapi/quickstart/linux/install-docker.sh
-sh sapi/quickstart/linux/run-alpine-container.sh
-sh sapi/quickstart/linux/connection-swoole-cli-alpine.sh
-sh sapi/quickstart/linux/alpine-init.sh
-
-# 使用镜像源安装
-sh sapi/quickstart/linux/install-docker.sh --mirror china
-sh sapi/quickstart/linux/alpine-init.sh --mirror china
-
-```
-
-### macos
-
-如 homebrew 已安装，可跳过执行安装 homebrew 命令
-
-```bash
-
-bash sapi/quickstart/macos/install-homebrew.sh
-bash sapi/quickstart/macos/macos-init.sh
-
-# 使用镜像源安装
-bash sapi/quickstart/macos/install-homebrew.sh --mirror china
-bash sapi/quickstart/macos/macos-init.sh --mirror china
+php prepare.php +aria2
+bash make-install-deps.sh
+bash make.sh all-library
+bash make.sh config
+bash make.sh build
+bash make.sh archive
 
 ```
 
@@ -97,7 +56,7 @@ bash sapi/quickstart/macos/macos-init.sh --mirror china
 
 cp build-release-example.sh build-release.sh
 
-# 按你的需求修改配置  OPTIONS="${OPTIONS} --with-libavif=1 "
+# 按你的需求修改配置  OPTIONS=" +aria2"
 vi build-release.sh
 
 # 执行构建流程
@@ -106,72 +65,6 @@ bash build-release.sh
 
 ```
 
-## 生成构建脚本
-
-```shell
-
-composer update
-php prepare.php
-
-# 指定PHP 版本
-php prepare.php +inotify +mongodb -mysqli --with-php-version=8.2.13
-
-# 使用镜像站下载依赖库
-php prepare.php +inotify +mongodb -mysqli --with-download-mirror-url=https://php-cli.jingjingxyk.com/
-
-# 使用代理下载依赖库
-php prepare.php +inotify +mongodb -mysqli --with-http-proxy=socks5h://192.168.3.26:2000
-
-# 只编译单个扩展（swoole)
-php prepare.php +swoole --with-override-default-enabled-ext=1
-
-# 编译最新版 swoole
-php prepare.php -swoole +swoole_latest
-
-# 编译最新版 swow
-php prepare.php -swoole +swow_latest
-
-```
-
-* 脚本会自动下载相关的`C/C++`库以及`PECL`扩展
-* 可使用`+{ext}`或者`-{ext}`增减扩展
-
-## 构建库之前安装 库依赖 构建环境
-
-```shell
-
-bash make-install-deps.sh
-
-```
-
-## 构建 `C/C++` 依赖库
-
-```shell
-./make.sh all-library
-```
-
-## 编译配置
-
-```shell
-./make.sh config
-```
-
-## 构建 php-cli
-
-```shell
-./make.sh build
-```
-
-> 编译成功后会生成`bin/php-{version}/bin/php`
-
-## 打包
-
-```shell
-./make.sh archive
-```
-
-> 打包成功后会生成 `php-cli-{version}-{os}-{arch}.tar.xz`
-> 压缩包，包含 `php` 可执行文件、`LICENSE` 授权协议文件。
 
 ## 授权协议
 
