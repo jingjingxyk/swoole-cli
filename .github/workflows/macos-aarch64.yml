@@ -53,7 +53,7 @@ jobs:
           echo "X_IPV6=${IPV6}" >> $GITHUB_ENV
           echo "X_IPV4=${IPV4}" >> $GITHUB_ENV
 
-          echo "BUILD_PHP_VERSION=${{ matrix.php-version }}" >> $GITHUB_ENV
+          # echo "BUILD_PHP_VERSION=${{ matrix.php-version }}" >> $GITHUB_ENV
 
           export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
           export PATH="/opt/homebrew/opt/flex/bin:$PATH"
@@ -124,7 +124,7 @@ jobs:
           composer install  --no-interaction --no-autoloader --no-scripts --profile
           composer dump-autoload --optimize --profile
 
-          php prepare.php --without-docker=1  +ds +apcu  +xlswriter +ssh2 +pgsql +uuid -mongodb --with-build-type=release --with-libavif=1 --with-php-version=${{ env.BUILD_PHP_VERSION }}
+          php prepare.php --without-docker=1 +aria2 --with-build-type=release
 
       - name: Build
         run: |
