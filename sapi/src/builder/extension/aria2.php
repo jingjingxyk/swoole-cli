@@ -25,21 +25,21 @@ return function (Preprocessor $p) {
                 cp -f aria2c {$workdir}/bin/
                 strip {$workdir}/bin/aria2c
                 cd {$workdir}/bin/
-                ARIA2_VERSION=\$({$workdir}/bin/aria2c -v | head -n 1 | awk '{print $3}')
+                APP_VERSION=\$({$workdir}/bin/aria2c -v | head -n 1 | awk '{print $3}')
 
 EOF;
         if ($p->getOsType() == 'macos') {
             $cmd .= <<<EOF
             xattr -cr {$workdir}/bin/aria2c
             otool -L {$workdir}/bin/aria2c
-            tar -cJvf {$workdir}/aria2c-\${ARIA2_VERSION}-macos-{$system_arch}.tar.xz aria2c
+            tar -cJvf {$workdir}/aria2c-\${APP_VERSION}-macos-{$system_arch}.tar.xz aria2c
 
 EOF;
         } else {
             $cmd .= <<<EOF
               file {$workdir}/bin/aria2c
               readelf -h {$workdir}/bin/aria2c
-              tar -cJvf {$workdir}/aria2c-\${ARIA2_VERSION}-linux-{$system_arch}.tar.xz aria2c
+              tar -cJvf {$workdir}/aria2c-\${APP_VERSION}-linux-{$system_arch}.tar.xz aria2c
 
 EOF;
         }
