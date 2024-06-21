@@ -101,6 +101,7 @@ EOF
        */
 
         ->withUntarArchiveCommand('tar')
+        # ->withUntarArchiveCommand('unzip')
         # 构建源码可以使用cmake 、 autoconfig 、 meson 构建等
 
 
@@ -163,8 +164,6 @@ EOF
 
         cmake --build . --config Release
 
-
-
         cmake --build . --config Release --target install
 
 
@@ -184,6 +183,7 @@ EOF
         CPPFLAGS="-I{$gettext_prefix}/include" \
         LDFLAGS="-L{$gettext_prefix}/lib" \
         LIBS=" -lintl " \
+
         meson setup  build \
         -Dprefix={$example_prefix} \
         -Dlibdir={$example_prefix}/lib \
@@ -199,7 +199,7 @@ EOF
         # -Dexamples=disabled
         # -Dc_args=-fmax-errors=10 \
         # -Dcpp_args=-DMAGIC=123
-
+        # LIBRARY_PATH={$gettext_prefix}/lib \
 
         # meson compile -C build
         # meson install -C build
@@ -256,9 +256,6 @@ EOF
         )
         /** 使用GN 构建 end **/
 
-
-        ->withPkgName('example')
-        ->withBinPath($example_prefix . '/bin/')
         /*
 
         //默认不需要此配置

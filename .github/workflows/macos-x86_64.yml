@@ -1,4 +1,4 @@
-name: build-socat-macos-x86_64
+name: build-macos-x86_64
 
 on:
   push:

@@ -1,4 +1,4 @@
-name: build-php-cli-linux-aarch64
+name: build-linux-aarch64
 
 on: [ push, pull_request ]
 
@@ -7,7 +7,7 @@ env:
 
 jobs:
   linux-aarch64:
-    if: 0
+    if: 1
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -115,7 +115,7 @@ jobs:
       - name: prepare pre-built library
         uses: addnab/docker-run-action@v3
         with:
-          image: docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-3.18-php8-v1.0.0-aarch64-20240106T114724Z
+          image: docker.io/jingjingxyk/build-swoole-cli:all-dependencies-alpine-3.18-php8-v1.0.0-aarch64-20240618T091126Z
           options: -v ${{ github.workspace }}:/work -w /work  -v /usr/local/swoole-cli/:/usr/local/tmp/
           run: |
             for i in `ls /usr/local/swoole-cli/`
@@ -165,13 +165,11 @@ jobs:
           image: swoole-cli-builder:latest
           options: -v ${{ github.workspace }}:/work -w /work
           run: |
-            ./thirdparty/php-src/sapi/cli/php -v
-            file ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-            readelf -h ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-            APP_VERSION=$(./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php  -v | head -n 1 | awk '{print $2}')
+            ./bin/socat -V
+            ./bin/socat -V | grep 'socat version'
+            APP_VERSION=$(./bin/socat -V | grep 'socat version' | awk '{ print $3 }')
             echo ${APP_VERSION}
             echo ${APP_VERSION}  > APP_VERSION
-            ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -r "echo PHP_VERSION;"
 
       - name: get app version
         run: |
@@ -182,21 +180,13 @@ jobs:
       - name: production artifacts debug
         uses: actions/upload-artifact@v4
         with:
-          name: php-cli-v${{ env.APP_VERSION }}-linux-arm64-debug
-          retention-days: 90
-          path: ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-
-      - name: production artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: php-cli-v${{ env.APP_VERSION }}-linux-arm64
-          retention-days: 90
-          path: ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/dist/php
+          name: socat-${{ env.SOCAT_VERSION }}-linux-x64
+          retention-days: 7
+          path: ./bin/socat
 
       - name: gh release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            php-cli-v${{ env.APP_VERSION }}-linux-arm64.tar.xz
-            php-cli-v${{ env.APP_VERSION }}-linux-arm64-debug.tar.xz
+            socat-${{ env.SOCAT_VERSION }}-linux-arm64.tar.xz
