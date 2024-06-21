@@ -26,7 +26,7 @@
 
 ```shell
 
-git clone -b build-static-aria2 https://github.com/jingjingxyk/swoole-cli.git
+git clone -b build-static-aria2 https://github.com/jingjingxyk/swoole-cli.git build-static-aria2
 
 # 或者
 
@@ -39,7 +39,7 @@ git clone -b main  https://github.com/jingjingxyk/build-static-aria2.git
 
 ```bash
 
-cd swoole-cli
+cd build-static-aria2
 bash setup-php-runtime.sh
 php prepare.php +aria2
 bash make-install-deps.sh
@@ -56,7 +56,7 @@ bash make.sh archive
 
 cp build-release-example.sh build-release.sh
 
-# 按你的需求修改配置  OPTIONS=" +aria2"
+# 按你的需求修改配置  OPTIONS=" +aria2 "
 vi build-release.sh
 
 # 执行构建流程
