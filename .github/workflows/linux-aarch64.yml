@@ -176,6 +176,7 @@ jobs:
           APP_VERSION=$(cat ./APP_VERSION)
           echo $APP_VERSION
           echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
+          echo "SOCAT_VERSION=${APP_VERSION}" >> $GITHUB_ENV
 
       - name: production artifacts debug
         uses: actions/upload-artifact@v4
