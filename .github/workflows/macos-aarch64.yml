@@ -1,4 +1,4 @@
-name: build-php-cli-macos-aarch64
+name: build-macos-aarch64
 
 on: [ push, pull_request ]
 
@@ -110,7 +110,7 @@ jobs:
           mkdir -p pool/ext
           mkdir -p bin/runtime
           if [ ! -f bin/runtime/php ] ; then
-              bash  sapi/quickstart/setup-php-runtime.sh --mirror china
+              bash  sapi/quickstart/setup-php-runtime.sh
           fi
           bash sapi/download-box/download-box-get-archive-from-server.sh
           ls -A pool/lib/
