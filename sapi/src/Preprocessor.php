@@ -128,7 +128,7 @@ class Preprocessor
         'fileinfo',
         'pdo_mysql',
         'pdo_pgsql',
-        'pdo_odbc',
+        //'pdo_odbc',
         'pdo_sqlite',
         'pgsql',
         'soap',
