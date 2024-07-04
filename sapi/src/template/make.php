@@ -253,27 +253,27 @@ filter_extension() {
     test -d hash && cp -rf hash $PHP_SRC_EXT_DIR
     test -d json && cp -rf json $PHP_SRC_EXT_DIR
     test -d pcre && cp -rf pcre $PHP_SRC_EXT_DIR
-    test -d standard && cp -rf standard $PHP_SRC_EXT_DIR
+    test -d standard   && cp -rf standard $PHP_SRC_EXT_DIR
     test -d reflection && cp -rf reflection $PHP_SRC_EXT_DIR
-    test -d spl && cp -rf spl $PHP_SRC_EXT_DIR
-    test -d tokenizer && cp -rf tokenizer $PHP_SRC_EXT_DIR
-    test -d session && cp -rf session $PHP_SRC_EXT_DIR
-    test -d random && cp -rf random $PHP_SRC_EXT_DIR
-    test -d phar && cp -rf phar $PHP_SRC_EXT_DIR
-    <?php foreach ($this->extensionList as $value) : ?>
-        test -d <?= $value->name ?> && cp -rf <?= $value->name ?> $PHP_SRC_EXT_DIR
-    <?php endforeach; ?>
+    test -d spl        && cp -rf spl $PHP_SRC_EXT_DIR
+    test -d tokenizer  && cp -rf tokenizer $PHP_SRC_EXT_DIR
+    test -d session    && cp -rf session $PHP_SRC_EXT_DIR
+    test -d random     && cp -rf random $PHP_SRC_EXT_DIR
+    test -d phar       && cp -rf phar $PHP_SRC_EXT_DIR
+<?php foreach ($this->extensionList as $value) : ?>
+    test -d <?= $value->name ?> && cp -rf <?= $value->name ?> $PHP_SRC_EXT_DIR
+<?php endforeach; ?>
     cd <?= $this->phpSrcDir ?>/
 }
 
 make_config() {
     cd <?= $this->phpSrcDir ?>/
-
 <?php if (in_array($this->buildType, ['dev'])) : ?>
     # dev 环境 过滤扩展，便于调试单个扩展编译
     filter_extension
 <?php endif ;?>
 
+    cd <?= $this->phpSrcDir ?>/
     # 添加扩展
     if [ ! -z  "$(ls -A ${__PROJECT_DIR__}/ext/)" ] ;then
         cp -rf ${__PROJECT_DIR__}/ext/*  <?= $this->phpSrcDir ?>/ext/
