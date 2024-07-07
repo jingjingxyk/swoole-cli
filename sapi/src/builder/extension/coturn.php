@@ -18,7 +18,7 @@ return function (Preprocessor $p) {
         $workdir = $p->getWorkDir();
         $builddir = $p->getBuildDir();
         $coturn_prefix = COTURN_PREFIX;
-        $system_arch=$p->getSystemArch();
+        $system_arch = $p->getSystemArch();
         $cmd = <<<EOF
                 mkdir -p {$workdir}/bin/coturn/bin/
                 mkdir -p {$workdir}/bin/coturn/etc/
