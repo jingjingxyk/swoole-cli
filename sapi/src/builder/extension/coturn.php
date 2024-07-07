@@ -29,7 +29,7 @@ return function (Preprocessor $p) {
 
                 for f in `ls {$workdir}/bin/coturn/bin/` ; do
                     echo \$f
-                    strip {$workdir}/bin/coturn/bin/\$f
+                    # strip {$workdir}/bin/coturn/bin/\$f
                 done
 
 
