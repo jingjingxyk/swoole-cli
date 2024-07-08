@@ -105,7 +105,7 @@ if [ "$OS" = 'linux' ] ; then
   if [ ! "$BASH_VERSION" ] ; then
       echo "Please  use bash to run this script ($0) " 1>&2
       echo "fix : " 1>&2
-      echo "apk add bash  OR sh sapi/quickstart/linux/alpine-init-mini.sh " 1>&2
+      echo "apk add bash  OR sh sapi/quickstart/linux/alpine-init-minimal.sh " 1>&2
       exit 1
       # reconfigure  #
       # dpkg-reconfigure dash
@@ -214,6 +214,7 @@ if [ ${WITH_PHP_COMPOSER} -eq 1 ] ; then
 
     # composer update  --optimize-autoloader
     # composer update  --optimize-autoloader --no-dev
+    # composer update --profile --prefer-dist --no-dev --optimize-autoloader
 
     # composer update --no-interaction --optimize-autoloader
     # composer install --no-interaction --optimize-autoloader
@@ -247,8 +248,6 @@ fi
 
 # 定制构建选项
 OPTIONS="${OPTIONS} +apcu +ds +xlswriter +ssh2 +uuid "
-OPTIONS="${OPTIONS} "
-OPTIONS="${OPTIONS} --with-libavif=1"
 OPTIONS="${OPTIONS} --with-global-prefix=${LIBRARY_INSTALL_PREFIX}"
 # OPTIONS="${OPTIONS} @macos"
 
