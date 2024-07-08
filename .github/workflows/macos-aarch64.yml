@@ -1,4 +1,4 @@
-name: build-php-cli-macos-aarch64
+name: build-macos-aarch64
 
 on: [ push, pull_request ]
 
@@ -116,7 +116,7 @@ jobs:
           mkdir -p pool/ext
           mkdir -p bin/runtime
           if [ ! -f bin/runtime/php ] ; then
-              bash  sapi/quickstart/setup-php-runtime.sh --mirror china
+              bash  sapi/quickstart/setup-php-runtime.sh
           fi
           bash sapi/download-box/download-box-get-archive-from-server.sh
           ls -A pool/lib/
@@ -130,7 +130,7 @@ jobs:
           composer install  --no-interaction --no-autoloader --no-scripts --profile
           composer dump-autoload --optimize --profile
 
-          php prepare.php --without-docker=1  +ds +apcu  +xlswriter +ssh2 +pgsql --with-build-type=release --with-libavif=1 --with-php-version=${{ env.BUILD_PHP_VERSION }}
+          php prepare.php --without-docker=1  +ds +apcu  +xlswriter +ssh2 +pgsql +uuid -mongodb --with-build-type=release --with-libavif=1 --with-php-version=${{ env.BUILD_PHP_VERSION }}
 
       - name: Build
         run: |

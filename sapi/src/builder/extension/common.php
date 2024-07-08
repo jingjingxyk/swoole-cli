@@ -186,6 +186,13 @@ return function (Preprocessor $p) {
     $depends = ['libmongoc'] ;
     $depends = ['ovn'] ;
     $depends = ['liburing'] ;
+    $depends = ['sdl2'] ;
+    $depends = ['sndio_audio'] ;
+    $depends = ['pulse_audio'] ;
+    $depends = ['opensound_audio'] ;
+    $depends = ['dav1d'] ;
+    $depends = ['sdl2'] ;
+    $depends = ['v4l_utils'] ;
 
 
     $ext = (new Extension('common'))

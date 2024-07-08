@@ -8,7 +8,7 @@ __DIR__=$(
 cd ${__DIR__}
 
 # use china mirror
-# sh sapi/quickstart/linux/alpine-init.sh --mirror [ china | ustc | tuna | tencentyun | huaweicloud ]
+# sh sapi/quickstart/linux/alpine-init-mini.sh --mirror [ china | ustc | tuna | tencentyun | huaweicloud ]
 
 
 MIRROR=''
@@ -41,34 +41,4 @@ esac
 
 apk update
 
-apk add vim alpine-sdk xz autoconf automake linux-headers clang-dev clang lld libtool cmake bison re2c gettext coreutils gcc g++
-apk add bash zip unzip flex pkgconf ca-certificates
-apk add tar gzip zip unzip bzip2
-
-apk add bash 7zip
-# apk add bash p7zip
-
-apk add wget git curl
-apk add libc++-static libltdl-static
-apk add yasm nasm
-apk add ninja python3 py3-pip
-apk add diffutils
-apk add netcat-openbsd socat
-apk add python3-dev
-apk add mercurial
-apk add gettext-dev
-apk add pigz parallel
-
-case "$MIRROR" in
-china | tuna | ustc)
-  pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
-  test "$MIRROR" = "ustc" && pip3 config set global.index-url https://mirrors.ustc.edu.cn/pypi/web/simple
-  ;;
-tencentyun | huaweicloud)
-  test "$MIRROR" = "tencentyun" && pip3 config set global.index-url https://mirrors.tencentyun.com/pypi/simple/
-  test "$MIRROR" = "huaweicloud" && pip3 config set global.index-url https://repo.huaweicloud.com/pypi/simple/
-esac
-
-
-# pip3 install meson
-apk add meson
+apk add bash git curl wget  xz zip unzip  ca-certificates
