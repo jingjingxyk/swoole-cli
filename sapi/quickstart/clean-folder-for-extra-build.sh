@@ -19,7 +19,7 @@ if [ $GIT_BRANCH = 'new_dev' ] ;then
   exit 0
 fi
 
-echo '正在执行删除无关的文件或者文件建'
+echo '正在执行删除无关的文件或者文件夹'
 
 cd ${__DIR__}/linux/
 
@@ -81,7 +81,12 @@ test -f setup-privoxy-runtime.sh  && rm -rf setup-privoxy-runtime.sh
 test -f setup-socat-runtime.sh    && rm -rf setup-socat-runtime.sh
 test -f setup-webBenchmark-runtime.sh    && rm -rf setup-webBenchmark-runtime.sh
 test -f setup-socat-runtime.sh    && rm -rf setup-socat-runtime.sh
+test -f setup-swoole-cli-pre-runtime.sh    && rm -rf setup-swoole-cli-pre-runtime.sh
+test -f setup-supervisord.sh && rm -rf setup-supervisord.sh
+
 
 cd ${__PROJECT__}
 
 echo '删除完毕'
+
+
