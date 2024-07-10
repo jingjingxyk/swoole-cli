@@ -5,3 +5,5 @@
 ./public/ajax/
 ./public/data/
 ./package-lock.json
+./var/
+./bin/
