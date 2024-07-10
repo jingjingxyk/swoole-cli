@@ -122,6 +122,7 @@ else
   else
       test -f ${APP_RUNTIME}.tar.xz || curl -LSo ${APP_RUNTIME}.tar.xz ${APP_DOWNLOAD_URL}
       test -f ${APP_RUNTIME}.tar || xz -d -k ${APP_RUNTIME}.tar.xz
+      test -d ${APP_RUNTIME} || tar -xvf ${APP_RUNTIME}.tar
   fi
   test -d ${__PROJECT__}/bin/runtime/node && rm -rf {__PROJECT__}/bin/runtime/node
   mv ${APP_RUNTIME} ${__PROJECT__}/bin/runtime/node
