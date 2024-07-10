@@ -136,9 +136,9 @@ set +x
 echo " "
 echo " USE PHP RUNTIME :"
 echo " "
-echo " export PATH=\"${__PROJECT__}/bin/runtime/node/:\$PATH\" "
+echo " export PATH=\"${__PROJECT__}/bin/runtime/node/bin/:\$PATH\" "
 echo " "
-export PATH="${__PROJECT__}/bin/runtime/node/:$PATH"
+export PATH="${__PROJECT__}/bin/runtime/node/bin/:$PATH"
 node -v
 npm -v
 npx -v
