@@ -5,8 +5,10 @@ __DIR__=$(
   cd "$(dirname "$0")"
   pwd
 )
-__PROJECT__=${__DIR__}
-
+__PROJECT__=$(
+  cd ${__DIR__}/../../
+  pwd
+)
 cd ${__PROJECT__}
 
 OS=$(uname -s)
