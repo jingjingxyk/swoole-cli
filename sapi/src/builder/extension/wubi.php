@@ -24,7 +24,7 @@ EOF
         )
         ->withBuildCached(false);
         */
-
+    ;
     $p->addExtension($ext);
 
 };
