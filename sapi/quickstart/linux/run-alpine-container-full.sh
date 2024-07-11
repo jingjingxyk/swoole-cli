@@ -47,7 +47,6 @@ while [ $# -gt 0 ]; do
   shift $(($# > 0 ? 1 : 0))
 done
 
-
 case $ARCH in
 'x86_64')
   TAG=all-dependencies-alpine-3.17-php8-v1.0.0-x86_64-20231113T125520Z
