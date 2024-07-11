@@ -47,7 +47,6 @@ while [ $# -gt 0 ]; do
   shift $(($# > 0 ? 1 : 0))
 done
 
-
 case $ARCH in
 'x86_64')
   TAG=all-dependencies-alpine-swoole-cli-x86_64-20230505T120137Z
