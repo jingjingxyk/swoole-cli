@@ -1,6 +1,6 @@
-# build static php-cli runtime  and php-fpm
+# build static php-cli runtime
 
-构建静态 原生 php-cli 运行时 和 fastcgi 进程管理器 php-fpm
+构建静态 原生 php-cli 运行时
 
 ## 说明
 
