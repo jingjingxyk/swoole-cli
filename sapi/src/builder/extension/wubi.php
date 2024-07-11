@@ -11,6 +11,7 @@ return function (Preprocessor $p) {
         ->withLicense('https://www.php.net/license/3_01.txt', Extension::LICENSE_PHP)
         ->withHomePage('https://github.com/jingjingxyk/wubi-src')
         ->withManual('https://wubii.jingjingxyk.com/#/')
+        /*
         ->withFile('wubi-latest.tar.gz')
         ->withAutoUpdateFile()
         ->withDownloadScript(
@@ -22,6 +23,7 @@ return function (Preprocessor $p) {
 EOF
         )
         ->withBuildCached(false);
+        */
 
     $p->addExtension($ext);
 
