@@ -5,7 +5,8 @@ use SwooleCli\Preprocessor;
 use SwooleCli\Extension;
 
 return function (Preprocessor $p) {
-    $ext_dir = $p->getWorkDir();
+    $workDir = $p->getWorkDir();
+    $workExtDir = $p->getWorkExtDir();
     $options = ' --enable-wubi  ';
     $ext = (new Extension('wubi'))
         ->withOptions($options)
@@ -17,9 +18,9 @@ return function (Preprocessor $p) {
         ->withDownloadScript(
             'wubi',
             <<<EOF
-
-        mkdir -p wubi
-        cp -rf /tmp/wubi/*  ./wubi
+        cd {$workDir}/
+        test -d var/wubi || mkdir -p var/wubi
+        cd var
 EOF
         )
         ->withBuildCached(false);
