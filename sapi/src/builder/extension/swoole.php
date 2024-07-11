@@ -13,11 +13,17 @@ return function (Preprocessor $p) {
     $options .= ' --enable-http2  --enable-brotli  ';
     $options .= ' --with-openssl-dir=' . OPENSSL_PREFIX;
     $options .= ' --with-brotli-dir=' . BROTLI_PREFIX;
+
     $options .= ' --enable-http2 ';
     $options .= ' --enable-swoole-json ';
 
-    $ext = (new Extension('swoole_v4080'))
-        ->withAliasName('swoole')
+    if (in_array($p->getBuildType(), ['dev', 'debug'])) {
+        $options .= ' --enable-debug ';
+        $options .= ' --enable-debug-log ';
+        $options .= ' --enable-trace-log ';
+    }
+
+    $ext = (new Extension('swoole'))
         ->withHomePage('https://github.com/swoole/swoole-src')
         ->withLicense('https://github.com/swoole/swoole-src/blob/master/LICENSE', Extension::LICENSE_APACHE2)
         ->withManual('https://wiki.swoole.com/#/')
