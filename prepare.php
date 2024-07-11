@@ -10,6 +10,13 @@ $homeDir = getenv('HOME');
 $p = Preprocessor::getInstance();
 $p->parseArguments($argc, $argv);
 
+$buildType = $p->getBuildType();
+if ($p->getInputOption('with-build-type')) {
+    $buildType = $p->getInputOption('with-build-type');
+    $p->setBuildType($buildType);
+}
+
+# clean
 # clean old make.sh
 $p->cleanFile(__DIR__ . '/make.sh');
 $p->cleanFile(__DIR__ . '/make-install-deps.sh');
@@ -58,6 +65,8 @@ echo "PHP_VERSION_TAG: " . BUILD_PHP_VERSION_TAG . PHP_EOL;
 echo "CUSTOM_PHP_VERSION_ID: " . BUILD_CUSTOM_PHP_VERSION_ID . PHP_EOL;
 echo PHP_EOL;
 
+// Sync code from php-src
+$p->setPhpSrcDir($p->getWorkDir() . '/var/php-' . BUILD_PHP_VERSION);
 
 // Compile directly on the host machine, not in the docker container
 if ($p->getInputOption('without-docker') || ($p->isMacos())) {
@@ -81,6 +90,7 @@ define("BUILD_PHP_INSTALL_PREFIX", $p->getRootDir() . '/bin/php-' . BUILD_PHP_VE
 if ($p->getInputOption('with-override-default-enabled-ext')) {
     $p->setExtEnabled([]);
 }
+
 
 if ($p->getInputOption('with-global-prefix')) {
     $p->setGlobalPrefix($p->getInputOption('with-global-prefix'));
@@ -180,7 +190,7 @@ function install_libraries(Preprocessor $p): void
             ->withDownloadScript(
                 'phpmicro',
                 <<<EOF
-                        git clone -b master --depth=1 https://github.com/dixyes/phpmicro.git
+                git clone -b master --depth=1 https://github.com/dixyes/phpmicro.git
 EOF
             )
             ->withBuildScript('return 0')
