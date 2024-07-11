@@ -181,8 +181,9 @@ EOF
                 'hiredis',
                 //'libsctp',
                 'libmongoc',
-            // 'prometheus_client_c'
-            //'libsctp'
+                // 'prometheus_client_c'
+                //'libsctp',
+                //'liboauth2'
             )
     );
 };
