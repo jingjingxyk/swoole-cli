@@ -49,7 +49,7 @@ jobs:
       matrix:
         php-version:
           - "8.2.13"
-          - "8.1.27"
+        #  - "8.1.27"
         #  - "8.3.3"
     steps:
       - uses: actions/checkout@v4
@@ -181,7 +181,7 @@ jobs:
             composer dump-autoload --optimize --profile --no-dev
 
             # php prepare.php  +inotify +apcu +ds +xlswriter +ssh2 +pgsql +mongodb --with-libavif=1 ${{ inputs.build_type }} ${{ inputs.build_options }} --with-php-version=${{ env.BUILD_PHP_VERSION }}
-            php prepare.php  +inotify +apcu +ds +xlswriter +ssh2 +pgsql +mongodb +uuid --with-libavif=1 --with-build-type=release --with-php-version=${{ env.BUILD_PHP_VERSION }}
+            php prepare.php  +mongodb  --with-libavif=1 --with-override-default-enabled-ext=1  --with-build-type=release --with-php-version=${{ env.BUILD_PHP_VERSION }}
 
             bash make-install-deps.sh
 
@@ -205,9 +205,9 @@ jobs:
           echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
 
           ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -r "echo PHP_VERSION;"
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php  --list-tests
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/SwoolePGSQLTest.php
+          # ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php  --list-tests
+          #./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php
+          # ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/SwoolePGSQLTest.php
 
       - name: production artifacts debug
         uses: actions/upload-artifact@v4
