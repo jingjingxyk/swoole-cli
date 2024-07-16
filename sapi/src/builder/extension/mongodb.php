@@ -23,9 +23,11 @@ return function (Preprocessor $p) {
     $p->withExportVariable('PHP_MONGODB_ZLIB_CFLAGS', '$(pkg-config --cflags --static zlib)');
     $p->withExportVariable('PHP_MONGODB_ZLIB_LIBS', '$(pkg-config   --libs   --static zlib)');
 
+    /*
     if ($p->isMacos()) {
         throw new \RuntimeException("macos 暂不支持，等待改进");
     }
+    */
     # PHP 8.2 以上 使用clang 编译
     # 需要解决这个问题 https://github.com/mongodb/mongo-php-driver/issues/1445
     # fix PR https://github.com/mongodb/mongo-php-driver/releases/tag/1.16.2
