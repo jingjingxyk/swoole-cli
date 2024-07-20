@@ -31,10 +31,10 @@ return function (Preprocessor $p) {
                 'coturn',
                 <<<EOF
                 # git clone -b 4.6.2 --depth=1 https://github.com/coturn/coturn.git
-                git clone -b master --depth=1 https://github.com/coturn/coturn.git
+                # git clone -b master --depth=1 https://github.com/coturn/coturn.git
                 # git clone -b test --depth=1 https://github.com/jingjingxyk/coturn.git
                 # git clone -b fix_openssl_no_threads --depth=1 https://github.com/jingjingxyk/coturn.git
-                # git clone -b t --depth=1 https://github.com/jingjingxyk/coturn.git
+                git clone -b dev --depth=1 https://github.com/jingjingxyk/coturn.git
 
                 # 代码变更 https://github.com/coturn/coturn/pull/1282/files
 
@@ -42,7 +42,7 @@ EOF
             )
             ->withAutoUpdateFile()
             ->withPrefix($coturn_prefix)
-            //->withAutoUpdateFile()
+            ->withAutoUpdateFile()
             ->withBuildCached(false)
             ->withInstallCached(false)
             /*
@@ -141,7 +141,7 @@ EOF
             export CPPFLAGS="$(pkg-config  --cflags-only-I --static  \$PACKAGES)  -I{$snappy_prefix}/include"
             export LDFLAGS="$(pkg-config   --libs-only-L   --static  \$PACKAGES)  -L{$snappy_prefix}/lib/ {$ldflags} "
             export LIBS="$(pkg-config      --libs-only-l   --static    \$PACKAGES)  {$libcpp} -lm -lsnappy -pthread -lsocket -lrt "
-            export CFLAGS="-O3  -g  -std=gnu11 -Wall {$cflags} -DOPENSSL_THREADS "
+            export CFLAGS="  -g  -std=gnu11 -Wall {$cflags}  " # -DOPENSSL_THREADS
 
             export DBCFLAGS="$(pkg-config  --cflags --static libpq sqlite3 hiredis libbson-static-1.0 libmongoc-ssl-1.0 libmongoc-static-1.0     )"
             export DBLIBS="$(pkg-config     --libs  --static libpq sqlite3 hiredis libbson-static-1.0 libmongoc-ssl-1.0 libmongoc-static-1.0     )"

@@ -73,6 +73,7 @@ define("RAV1E_PREFIX", $p->getGlobalPrefix() . '/rav1e');
 
 
 define("DEPOT_TOOLS_PREFIX", $p->getGlobalPrefix() . '/depot_tools');
+define("GN_PREFIX", $p->getGlobalPrefix() . '/gn');
 
 
 define("HARFBUZZ_PREFIX", $p->getGlobalPrefix() . '/harfbuzz');
@@ -339,5 +340,6 @@ define("PULSE_AUDIO_PREFIX", $p->getGlobalPrefix() . '/pulse_audio');
 define("V4L_UTILS_PREFIX", $p->getGlobalPrefix() . '/v4l_utils');
 define("LIBOAUTH2_PREFIX", $p->getGlobalPrefix() . '/liboauth2');
 define("CJOSE_PREFIX", $p->getGlobalPrefix() . '/cjose');
+define("LIBYUV_PREFIX", $p->getGlobalPrefix() . '/libyuv');
 define("EXAMPLE_PREFIX", $p->getGlobalPrefix() . '/example');
 

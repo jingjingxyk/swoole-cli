@@ -47,6 +47,8 @@ OPTIONS="--disable-all \
 <?php endforeach; ?>
 <?=$this->extraOptions?>
 "
+# --with-config-file-scan-dir=<?= $this->getGlobalPrefix() ?>/etc/php/conf.d/ \
+# --with-config-file-path=<?= $this->getGlobalPrefix() ?>/etc/php/ \
 
 <?php foreach ($this->libraryList as $item) : ?>
 make_<?=$item->name?>() {
@@ -396,10 +398,12 @@ make_config() {
 <?php endif ;?>
 
     cd <?= $this->phpSrcDir ?>/
-    # 添加扩展
+    # 添加非内置扩展
     if [ ! -z  "$(ls -A ${__PROJECT_DIR__}/ext/)" ] ;then
         cp -rf ${__PROJECT_DIR__}/ext/*  <?= $this->phpSrcDir ?>/ext/
     fi
+
+    cd <?= $this->phpSrcDir ?>/
     # 对扩展源代码执行预处理
     before_configure_script
 
