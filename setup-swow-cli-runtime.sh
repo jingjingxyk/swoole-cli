@@ -39,7 +39,7 @@ case $ARCH in
 'x86_64')
   ARCH="x64"
   ;;
-'aarch64' | 'arm64' )
+'aarch64' | 'arm64')
   ARCH="arm64"
   ;;
 *)
@@ -49,20 +49,20 @@ case $ARCH in
 esac
 
 APP_VERSION='v8.2.13'
-APP_NAME='php-fpm'
-VERSION='php-fpm-v0.0.1'
+APP_NAME='php-cli'
+VERSION='v1.2.0'
 
 mkdir -p bin/runtime
 mkdir -p var/runtime
 
 cd ${__PROJECT__}/var/runtime
 
-APP_DOWNLOAD_URL="https://github.com/swoole/build-static-php/releases/download/${VERSION}/${APP_NAME}-${APP_VERSION}-${OS}-${ARCH}.tar.xz"
+APP_DOWNLOAD_URL="https://github.com/jingjingxyk/build-swow-cli/releases/download/${VERSION}/${APP_NAME}-${APP_VERSION}-${OS}-${ARCH}.tar.xz"
 COMPOSER_DOWNLOAD_URL="https://getcomposer.org/download/latest-stable/composer.phar"
 CACERT_DOWNLOAD_URL="https://curl.se/ca/cacert.pem"
 
 if [ $OS = 'windows' ]; then
-  APP_DOWNLOAD_URL="https://github.com/swoole/build-static-php/releases/download/${VERSION}/${APP_NAME}-${APP_VERSION}-vs2022-${ARCH}.zip"
+  APP_DOWNLOAD_URL="https://github.com/jingjingxyk/build-swow-cli/releases/download/${VERSION}/${APP_NAME}-${APP_VERSION}-cygwin-${ARCH}.zip"
 fi
 
 MIRROR=''
@@ -70,6 +70,7 @@ while [ $# -gt 0 ]; do
   case "$1" in
   --mirror)
     MIRROR="$2"
+    MIRROR="" # 暂无镜像
     ;;
   --proxy)
     export HTTP_PROXY="$2"
@@ -108,7 +109,7 @@ APP_RUNTIME="${APP_NAME}-${APP_VERSION}-${OS}-${ARCH}"
 
 if [ $OS = 'windows' ]; then
   {
-    APP_RUNTIME="${APP_NAME}-${APP_VERSION}-vs2022-${ARCH}"
+    APP_RUNTIME="${APP_NAME}-${APP_VERSION}-cygwin-${ARCH}"
     test -f ${APP_RUNTIME}.zip || curl -LSo ${APP_RUNTIME}.zip ${APP_DOWNLOAD_URL}
     test -d ${APP_RUNTIME} && rm -rf ${APP_RUNTIME}
     unzip "${APP_RUNTIME}.zip"
@@ -132,13 +133,6 @@ cat >${__PROJECT__}/bin/runtime/php.ini <<EOF
 curl.cainfo="${__PROJECT__}/bin/runtime/cacert.pem"
 openssl.cafile="${__PROJECT__}/bin/runtime/cacert.pem"
 swoole.use_shortname=off
-display_errors = On
-error_reporting = E_ALL
-
-upload_max_filesize="128M"
-post_max_size="128M"
-memory_limit="1G"
-date.timezone="UTC"
 
 EOF
 
@@ -147,10 +141,14 @@ cd ${__PROJECT__}/
 set +x
 
 echo " "
-echo " USE PHP-FPM :"
+echo " USE PHP-CLI RUNTIME :"
 echo " "
-echo " export PATH=\"${__PROJECT__}/runtime/:\$PATH\" "
+echo " export PATH=\"${__PROJECT__}/bin/runtime:\$PATH\" "
 echo " "
-echo " enable start php-fpm ${APP_VERSION}"
+echo " alias php='php -d curl.cainfo=${__PROJECT__}/bin/runtime/cacert.pem -d openssl.cafile=${__PROJECT__}/bin/runtime/cacert.pem' "
+echo " OR "
+echo " alias php='php -c ${__PROJECT__}/bin/runtime/php.ini' "
 echo " "
-echo " ${__PROJECT__}/bin/runtime/php-fpm -c ${__PROJECT__}/bin/runtime/php.ini --fpm-config ${__PROJECT__}/runtime/php-fpm.conf "
+echo " PHP VERSION  ${APP_VERSION}"
+echo " "
+export PATH="${__PROJECT__}/bin/runtime:$PATH"
