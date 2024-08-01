@@ -13,10 +13,6 @@ cd ${__PROJECT__}
 
 ROOT=${__PROJECT__}
 
-
-
-
-
 while [ $# -gt 0 ]; do
   case "$1" in
   --swoole-version)
@@ -30,7 +26,7 @@ while [ $# -gt 0 ]; do
 done
 
 PHP_VERSION=$(cat ${__PROJECT__}/sapi/PHP-VERSION.conf)
-SWOOLE_VERSION=v5.1.2
+SWOOLE_VERSION=master
 REDIS_VERSION=5.3.7
 MONGODB_VERSION=1.14.2
 YAML_VERSION=2.2.2
@@ -76,7 +72,11 @@ fi
 
 if [ ! -d $ROOT/ext/swoole ]; then
   if [ ! -f swoole-${SWOOLE_VERSION}.tgz ]; then
-    wget -O swoole-${SWOOLE_VERSION}.tgz https://github.com/swoole/swoole-src/archive/refs/tags/${SWOOLE_VERSION}.tar.gz
+    test -d /tmp/swoole && rm -rf /tmp/swoole
+    git clone -b ${SWOOLE_VERSION} https://github.com/swoole/swoole-src.git /tmp/swoole
+    cd /tmp/swoole
+    tar -czvf $ROOT/pool/ext/swoole-${SWOOLE_VERSION}.tgz .
+    cd $ROOT/pool/ext/
   fi
   mkdir -p swoole-${SWOOLE_VERSION}
   tar --strip-components=1 -C swoole-${SWOOLE_VERSION} -xf swoole-${SWOOLE_VERSION}.tgz
@@ -92,7 +92,7 @@ fi
 
 test -d php-src && rm -rf php-src
 mkdir -p php-src
-tar --strip-components=1 -C  php-src -xf php-${PHP_VERSION}.tar.gz
+tar --strip-components=1 -C php-src -xf php-${PHP_VERSION}.tar.gz
 
 cd $ROOT
 
