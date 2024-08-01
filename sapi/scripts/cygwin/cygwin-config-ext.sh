@@ -88,7 +88,6 @@ cd $ROOT
 if [ ! -f php-${PHP_VERSION}.tar.gz ]; then
   curl -fSLo php-${PHP_VERSION}.tar.gz https://github.com/php/php-src/archive/refs/tags/php-${PHP_VERSION}.tar.gz
 fi
-
 test -d php-src && rm -rf php-src
 mkdir -p php-src
 tar --strip-components=1 -C php-src -xf php-${PHP_VERSION}.tar.gz
