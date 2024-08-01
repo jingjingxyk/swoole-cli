@@ -35,7 +35,6 @@ IMAGICK_VERSION=3.7.0
 if [ ! -d pool/ext ]; then
   mkdir -p pool/ext
 fi
-
 cd pool/ext
 
 if [ ! -d $ROOT/ext/redis ]; then
