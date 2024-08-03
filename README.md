@@ -22,9 +22,17 @@
 
 ## 下载`php-fpm`发行版
 
-- [https://github.com/swoole/build-static-php/releases](https://github.com/swoole/build-static-php/releases)
+- [https://github.com/jingjingxyk/swoole-cli/releases/tag/php-fpm-7.4-v1.1.0](https://github.com/jingjingxyk/swoole-cli/releases/tag/php-fpm-7.4-v1.1.0)
 
-## `php-fpm`构建文档
+## 立即使用 php-fpm
+
+```shell
+
+curl -fSL https://github.com/jingjingxyk/swoole-cli/blob/php-fpm-7.4/setup-php-fpm-runtime.sh?raw=true | bash
+
+```
+
+## 构建文档
 
 - [linux 版构建文档](docs/linux.md)
 - [macOS 版构建文档](docs/macOS.md)
