@@ -6,11 +6,22 @@
 
 > 本项目 派生于 [swoole-cli](https://github.com/jingjingxyk/swoole-cli/)
 
-> 代码与 swoole-cli 项目的 new_dev 分支的代码 保持一致
+> 代码与 jingjing/swoole-cli 项目的 new_dev 分支的代码 保持一致
 
 ## 下载`static-coturn`发行版
 
 - [https://github.com/jingjingxyk/build-static-coturn/releases](https://github.com/jingjingxyk/build-static-coturn/releases)
+
+## 快速使用 静态编译的 coturn
+
+```shell
+curl -fSL https://github.com/jingjingxyk/swoole-cli/blob/new_dev/setup-coturn-runtime.sh?raw=true | bash
+
+cp -f ./bin/runtime/coturn/etc/turnserver.conf.default ./bin/runtime/coturn/etc/turnserver.conf
+
+./bin/runtime/coturn/bin/turnserver -c ./bin/runtime/coturn/etc/turnserver.conf
+
+```
 
 ## `static-coturn`构建文档
 
@@ -28,7 +39,7 @@ git clone -b main https://github.com/jingjingxyk/build-static-coturn.git
 
 # 或者
 
-git clone --recursive -b coturn  https://github.com/jingjingxyk/swoole-cli.git
+git clone --recursive -b build-static-coturn  https://github.com/jingjingxyk/swoole-cli.git
 
 ```
 
