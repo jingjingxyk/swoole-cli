@@ -18,10 +18,23 @@
 
 > 可指定 PHP 版本 构建原生 PHP 版本
 
-
 ## 下载`php-cli`发行版
 
 - [https://github.com/jingjingxyk/build-swow-cli/releases](https://github.com/jingjingxyk/build-swow-cli/releases)
+
+## 快速使用 包含 swow 扩展的 php-cli
+
+```shell
+
+curl -fSL   https://github.com/jingjingxyk/build-swow-cli/blob/main/setup-swow-cli-runtime.sh?raw=true | bash
+
+curl -fSL   https://github.com/jingjingxyk/swoole-cli/blob/build-swow-cli/setup-swow-cli-runtime.sh?raw=true | bash
+
+curl -fSL   https://gitee.com/jingjingxyk/swoole-cli/raw/build-swow-cli/setup-swow-cli-runtime.sh | bash
+
+
+
+```
 
 ## `php-cli`构建文档
 
