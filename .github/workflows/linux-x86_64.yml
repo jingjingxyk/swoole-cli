@@ -151,7 +151,9 @@ jobs:
       - name: Start Database
         run: |
           # 准备数据库容器
+          export PATH=/usr/libexec/docker/cli-plugins/:$PATH
           docker-compose version
+          docker container ls -a
           bash sapi/src/UnitTest/scripts/database/start.sh
 
       - name: Show Build Result
@@ -168,8 +170,6 @@ jobs:
           echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
 
           ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -r "echo PHP_VERSION;"
-          # ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php  --list-tests
-          # ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php
 
       - name: production artifacts debug
         uses: actions/upload-artifact@v4
