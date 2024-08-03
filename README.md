@@ -1,6 +1,6 @@
 # build static php-cli runtime
 
-构建静态 原生 php-cli 运行时
+构建静态 包含 swow 扩展的原生 php-cli 运行时
 
 ## 说明
 
@@ -32,11 +32,9 @@ curl -fSL   https://github.com/jingjingxyk/swoole-cli/blob/build-swow-cli/setup-
 
 curl -fSL   https://gitee.com/jingjingxyk/swoole-cli/raw/build-swow-cli/setup-swow-cli-runtime.sh | bash
 
-
-
 ```
 
-## `php-cli`构建文档
+## 构建文档
 
 - [linux 版构建文档](docs/linux.md)
 - [macOS 版构建文档](docs/macOS.md)
