@@ -6,7 +6,7 @@
 
 > 本项目 派生于 [swoole-cli](https://github.com/jingjingxyk/swoole-cli/)
 
-> 代码与 jingjing/swoole-cli 项目的 new_dev 分支的代码 保持一致
+> 代码与 jingjingxyk/swoole-cli 项目的 new_dev 分支的代码 保持一致
 
 ## 下载`static-coturn`发行版
 
