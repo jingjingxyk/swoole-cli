@@ -47,6 +47,8 @@ OPTIONS="--disable-all \
 <?php endforeach; ?>
 <?=$this->extraOptions?>
 "
+# --with-config-file-scan-dir=<?= $this->getGlobalPrefix() ?>/etc/php/conf.d/ \
+# --with-config-file-path=<?= $this->getGlobalPrefix() ?>/etc/php/ \
 
 <?php foreach ($this->libraryList as $item) : ?>
 make_<?=$item->name?>() {
@@ -359,18 +361,49 @@ make_release_archive() {
     return 0
 }
 
+filter_extension() {
+    cd <?= $this->phpSrcDir ?>/
+
+    PHP_SRC_EXT_DIR=<?= $this->phpSrcDir ?>/ext/
+
+    test -d /tmp/php-src-ext && rm -rf /tmp/php-src-ext
+    mv $PHP_SRC_EXT_DIR /tmp/php-src-ext
+    mkdir -p $PHP_SRC_EXT_DIR
+    cd /tmp/php-src-ext
+    test -d date && cp -rf date $PHP_SRC_EXT_DIR
+    test -d hash && cp -rf hash $PHP_SRC_EXT_DIR
+    test -d json && cp -rf json $PHP_SRC_EXT_DIR
+    test -d pcre && cp -rf pcre $PHP_SRC_EXT_DIR
+    test -d standard   && cp -rf standard $PHP_SRC_EXT_DIR
+    test -d reflection && cp -rf reflection $PHP_SRC_EXT_DIR
+    test -d spl        && cp -rf spl $PHP_SRC_EXT_DIR
+    test -d tokenizer  && cp -rf tokenizer $PHP_SRC_EXT_DIR
+    test -d session    && cp -rf session $PHP_SRC_EXT_DIR
+    test -d random     && cp -rf random $PHP_SRC_EXT_DIR
+    test -d phar       && cp -rf phar $PHP_SRC_EXT_DIR
+<?php foreach ($this->extensionList as $value) : ?>
+    test -d <?= $value->name ?> && cp -rf <?= $value->name ?> $PHP_SRC_EXT_DIR
+<?php endforeach; ?>
+    cd <?= $this->phpSrcDir ?>/
+}
+
 make_config() {
-    set -x
-
-
 
     exit 0
 
-    cd <?= $this->phpSrcDir . PHP_EOL ?>
-    # 添加扩展
+    cd <?= $this->phpSrcDir ?>/
+<?php if (in_array($this->buildType, ['dev'])) : ?>
+    # dev 环境 过滤扩展，便于调试单个扩展编译
+    filter_extension
+<?php endif ;?>
+
+    cd <?= $this->phpSrcDir ?>/
+    # 添加非内置扩展
     if [ ! -z  "$(ls -A ${__PROJECT_DIR__}/ext/)" ] ;then
         cp -rf ${__PROJECT_DIR__}/ext/*  <?= $this->phpSrcDir ?>/ext/
     fi
+
+    cd <?= $this->phpSrcDir ?>/
     # 对扩展源代码执行预处理
     before_configure_script
 
@@ -475,9 +508,8 @@ _____EO_____
 
 make_build() {
 
+    exit 0
 
-
-   exit 0
    # export EXTRA_LDFLAGS="$(pkg-config   --libs-only-L   --static openssl libraw_r )"
    # export EXTRA_LDFLAGS_PROGRAM=""
    # EXTRA_LDFLAGS_PROGRAM='-all-static -fno-ident '
@@ -537,6 +569,7 @@ make_build_old() {
 make_archive() {
     set -x
     make_release_archive
+
     exit 0
 
     set -x
@@ -647,7 +680,8 @@ lib_dep() {
 
 
 help() {
-    echo "./make.sh docker-build [china|ustc|tuna]"
+    set +x
+    echo "./make.sh docker-build [ china | ustc | tuna ]"
     echo "./make.sh docker-bash"
     echo "./make.sh docker-commit"
     echo "./make.sh docker-push"
@@ -677,17 +711,25 @@ help() {
 
 if [ "$1" = "docker-build" ] ;then
     MIRROR=""
+    CONTAINER_BASE_IMAGE='docker.io/library/alpine:3.18'
     if [ -n "$2" ]; then
         MIRROR=$2
+        case "$MIRROR" in
+        china | openatom | ustc | tuna)
+            CONTAINER_BASE_IMAGE="hub.atomgit.com/library/alpine:3.18"
+        ;;
+        esac
     fi
     cd ${__PROJECT_DIR__}/sapi/docker
-    docker build -t <?= Preprocessor::IMAGE_NAME ?>:<?= $this->getBaseImageTag() ?> -f <?= $this->getBaseImageDockerFile() ?>  . --build-arg="MIRROR=${MIRROR}"
+    echo "MIRROR=${MIRROR}"
+    echo "BASE_IMAGE=${CONTAINER_BASE_IMAGE}"
+    docker build --no-cache -t <?= Preprocessor::IMAGE_NAME ?>:<?= $this->getBaseImageTag() ?> -f Dockerfile  . --build-arg="MIRROR=${MIRROR}" --build-arg="BASE_IMAGE=${CONTAINER_BASE_IMAGE}"
     exit 0
 elif [ "$1" = "docker-bash" ] ;then
     container=$(docker ps -a -f name=<?= Preprocessor::CONTAINER_NAME ?> | tail -n +2 2> /dev/null)
     base_image=$(docker images <?= Preprocessor::IMAGE_NAME ?>:<?= $this->getBaseImageTag() ?> | tail -n +2 2> /dev/null)
     image=$(docker images <?= Preprocessor::IMAGE_NAME ?>:<?= $this->getImageTag() ?> | tail -n +2 2> /dev/null)
-    CONTAINER_STATE=$(docker inspect -f {{.State.Running}} <?= Preprocessor::CONTAINER_NAME ?> 2> /dev/null)
+    CONTAINER_STATE=$(docker inspect -f "{{.State.Running}}" <?= Preprocessor::CONTAINER_NAME ?> 2> /dev/null)
     if [[ "${CONTAINER_STATE}" != "true" ]]; then
         bash ./make.sh docker-stop
         container=''
@@ -703,6 +745,9 @@ elif [ "$1" = "docker-bash" ] ;then
         else
             echo "<?= Preprocessor::IMAGE_NAME ?>:<?= $this->getImageTag() ?> image does not exist, try to pull"
             echo "create container with <?= Preprocessor::IMAGE_NAME ?>:<?= $this->getImageTag() ?> image"
+            # check container image exists
+            # curl -fsSlL --head https://hub.docker.com/v2/repositories/$1/tags/$2/ > /dev/null && echo "exist" || echo "not exists"
+            # curl -fsSlL --head https://hub.docker.com/v2/repositories/<?= Preprocessor::IMAGE_NAME ?>/tags/<?= $this->getImageTag() ?>/ > /dev/null && echo "container image exist" || echo "container image  not exists"
             docker run -d --name <?= Preprocessor::CONTAINER_NAME ?> -v  ${__PROJECT_DIR__}:/work  <?= Preprocessor::IMAGE_NAME ?>:<?= $this->getImageTag() ?> tini -- tail -f /dev/null
         fi
     fi
@@ -812,7 +857,7 @@ elif [ "$1" = "variables" ] ;then
 	echo $LIBS
 elif [ "$1" = "sync" ] ;then
     PHP_CLI=$(which php)
-    test -f ${__PROJECT_DIR__}/bin/runtime/php && PHP_CLI="${__PROJECT_DIR__}/bin/runtime/php -d curl.cainfo=${__PROJECT_DIR__}/bin/runtime/cacert.pem -d openssl.cafile=${__PROJECT_DIR__}/bin/runtime/cacert.pem"
+    test -f ${__PROJECT_DIR__}/bin/runtime/php && PHP_CLI="${__PROJECT_DIR__}/bin/runtime/php -c ${__PROJECT_DIR__}/bin/runtime/php.ini -d curl.cainfo=${__PROJECT_DIR__}/bin/runtime/cacert.pem -d openssl.cafile=${__PROJECT_DIR__}/bin/runtime/cacert.pem"
     $PHP_CLI -v
     $PHP_CLI sync-source-code.php --action run
     exit 0

@@ -10,6 +10,13 @@ $homeDir = getenv('HOME');
 $p = Preprocessor::getInstance();
 $p->parseArguments($argc, $argv);
 
+$buildType = $p->getBuildType();
+if ($p->getInputOption('with-build-type')) {
+    $buildType = $p->getInputOption('with-build-type');
+    $p->setBuildType($buildType);
+}
+
+# clean
 # clean old make.sh
 $p->cleanFile(__DIR__ . '/make.sh');
 $p->cleanFile(__DIR__ . '/make-install-deps.sh');
@@ -48,6 +55,9 @@ define('BUILD_PHP_VERSION_TAG', $php_version_tag);
 define('BUILD_CUSTOM_PHP_VERSION_ID', intval(substr($php_version_id, 0, 4))); //取主版本号和次版本号
 
 
+// Sync code from php-src
+$p->setPhpSrcDir($p->getWorkDir() . '/var/php-' . BUILD_PHP_VERSION);
+
 // Compile directly on the host machine, not in the docker container
 if ($p->getInputOption('without-docker') || ($p->isMacos())) {
     $p->setWorkDir(__DIR__);
@@ -70,6 +80,7 @@ define("BUILD_PHP_INSTALL_PREFIX", $p->getRootDir() . '/bin/php-' . BUILD_PHP_VE
 if ($p->getInputOption('with-override-default-enabled-ext')) {
     $p->setExtEnabled([]);
 }
+
 
 if ($p->getInputOption('with-global-prefix')) {
     $p->setGlobalPrefix($p->getInputOption('with-global-prefix'));
@@ -128,9 +139,23 @@ if ($p->isMacos()) {
 
     $p->setExtraLdflags('-undefined dynamic_lookup');
     if (is_file('/usr/local/opt/llvm/bin/ld64.lld')) {
-        $p->withBinPath('/usr/local/opt/llvm/bin')->setLinker('ld64.lld');
-    } elseif (is_file('/opt/homebrew/opt/llvm/bin/ld64.lld')) { //兼容 github action
-        $p->withBinPath('/opt/homebrew/opt/llvm/bin/')->setLinker('ld64.lld');
+        $p->withBinPath('/usr/local/opt/llvm/bin')
+            ->withBinPath('/usr/local/opt/flex/bin')
+            ->withBinPath('/usr/local/opt/bison/bin')
+            ->withBinPath('/usr/local/opt/libtool/bin')
+            ->withBinPath('/usr/local/opt/m4/bin')
+            ->withBinPath('/usr/local/opt/automake/bin/')
+            ->withBinPath('/usr/local/opt/autoconf/bin/')
+            ->setLinker('ld64.lld');
+    } elseif (is_file('/opt/homebrew/opt/llvm/bin/ld64.lld')) { //兼容 macos arm64
+        $p->withBinPath('/opt/homebrew/opt/llvm/bin/')
+            ->withBinPath('/opt/homebrew/opt/flex/bin')
+            ->withBinPath('/opt/homebrew/opt/bison/bin')
+            ->withBinPath('/opt/homebrew/opt/libtool/bin')
+            ->withBinPath('/opt/homebrew/opt/m4/bin')
+            ->withBinPath('/opt/homebrew/opt/automake/bin/')
+            ->withBinPath('/opt/homebrew/opt/autoconf/bin/')
+            ->setLinker('ld64.lld');
     } else {
         $p->setLinker('lld');
     }

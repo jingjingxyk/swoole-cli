@@ -11,7 +11,13 @@
 
 ## 下载`build-static-socat`发行版
 
-- [https://github.com/jingjingxyk/build-static-socat/releases](https://github.com/jingjingxyk/build-static-socat/releases)
+## 立即使用 socat
+
+```shell
+
+curl -fSL https://github.com/jingjingxyk/swoole-cli/blob/new_dev/setup-socat-runtime.sh?raw=true | bash
+
+```
 
 ## 构建文档
 
