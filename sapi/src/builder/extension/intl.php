@@ -17,7 +17,7 @@ return function (Preprocessor $p) {
     );
     //解决 ICU 多重定义BUG https://bugs.php.net/bug.php?id=80425
 
-    $p->setExtHook('intl', function (Preprocessor $p) {
+    $p->withBeforeConfigureScript('intl', function (Preprocessor $p) {
         // compatible with redis
         $workdir = $p->getWorkDir();
 
