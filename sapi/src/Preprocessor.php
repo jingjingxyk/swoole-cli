@@ -125,7 +125,7 @@ class Preprocessor
         'phar',
         'mysqlnd',
         'mysqli',
-        //'intl', //有报错等待解决
+        'intl', //有报错等待解决
         'fileinfo',
         'pdo_mysql',
         'pdo_sqlite',
