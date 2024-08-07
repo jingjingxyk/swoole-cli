@@ -120,7 +120,7 @@ jobs:
           composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
           composer dump-autoload --optimize --profile --no-dev
 
-          php prepare.php --without-docker=1  +ds +apcu  +xlswriter +ssh2 +pgsql +pdo_pgsql --with-build-type=release --with-php-version=${{ env.BUILD_PHP_VERSION }}  --with-c-compiler=gcc
+          php prepare.php --without-docker=1  +ds +apcu  +xlswriter +ssh2 +pgsql +pdo_pgsql --with-build-type=release --with-php-version=${{ env.BUILD_PHP_VERSION }}
 
       - name: Build
         run: |
