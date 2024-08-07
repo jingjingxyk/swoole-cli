@@ -16,6 +16,7 @@ return function (Preprocessor $p) {
             //->withUrl('https://github.com/unicode-org/icu/releases/download/release-73-2/icu4c-73_2-src.tgz')
             //->withFileHash('md5', 'b8a4b8cf77f2e2f6e1341eac0aab2fc4')
             ->withUrl('https://github.com/unicode-org/icu/releases/download/release-57-1/icu4c-57_1-src.tgz')
+            ->withFileHash('md5', '976734806026a4ef8bdd17937c8898b9')
             ->withManual('https://unicode-org.github.io/icu/userguide/icu_data/#overview')
             ->withPrefix($icu_prefix)
             ->withConfigure(
