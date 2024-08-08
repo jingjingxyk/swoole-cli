@@ -46,4 +46,7 @@ test -d ${BUILD_DIR}/imagemagick && rm -rf ${BUILD_DIR}/imagemagick
 test -d ${GLOBAL_PREFIX}/libzip && rm -rf ${GLOBAL_PREFIX}/libzip
 test -d ${BUILD_DIR}/libzip && rm -rf ${BUILD_DIR}/libzip
 
+test -d ${GLOBAL_PREFIX}/libssh2 && rm -rf ${GLOBAL_PREFIX}/libssh2
+test -d ${BUILD_DIR}/libssh2 && rm -rf ${BUILD_DIR}/libssh2
+
 echo $?

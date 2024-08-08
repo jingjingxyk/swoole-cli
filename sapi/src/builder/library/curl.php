@@ -55,7 +55,7 @@ return function (Preprocessor $p) {
             --without-ngtcp2 \
             --without-nghttp3 \
             --without-libidn2 \
-            --with-libssh2 \
+            --without-libssh2 \
             --with-openssl  \
             --with-default-ssl-backend=openssl \
             --without-gnutls \
@@ -75,6 +75,7 @@ EOF
                 'brotli',
                 'libzstd',
                 'libssh2'
-            ) # 'libidn2',
+            ) #  'libidn2',
+
     );
 };
