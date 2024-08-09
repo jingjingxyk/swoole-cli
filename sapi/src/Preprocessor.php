@@ -105,7 +105,7 @@ class Preprocessor
      * @var array|string[]
      */
     protected array $extEnabled = [
-        //'opcache', //需要修改源码才能实现
+        'opcache', //需要修改源码才能实现
         'curl',
         'iconv',
         'bz2',
@@ -299,6 +299,11 @@ class Preprocessor
         return $this->workDir;
     }
 
+    public function getWorkExtDir(): string
+    {
+        return $this->workDir . '/ext/';
+    }
+
     public function setExtraLdflags(string $flags)
     {
         $this->extraLdflags = $flags;
@@ -459,7 +464,7 @@ __GIT_PROXY_CONFIG_EOF;
     /**
      * @param string $url
      * @param string $file
-     * @param object|null $project
+     * @param object|null $project [ $lib or $ext ]
      * @param string $httpProxyConfig
      * @return void
      */

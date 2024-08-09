@@ -19,7 +19,7 @@ if [ $GIT_BRANCH = 'new_dev' ] ;then
   exit 0
 fi
 
-echo '正在执行删除无关的文件或者文件建'
+echo '正在执行删除无关的文件或者文件夹'
 
 cd ${__DIR__}/linux/
 
@@ -28,6 +28,9 @@ test -d kubernetes && rm -rf kubernetes
 test -d qemu && rm -rf qemu
 test -d SDN && rm -rf SDN
 
+cd ${__PROJECT__}/sapi/
+
+test -d tools && rm -rf tools
 
 cd ${__PROJECT__}/sapi/src/builder/
 
@@ -68,21 +71,33 @@ test -f kubernetes.yml  && rm -rf kubernetes.yml
 test -f ovn.yml  && rm -rf ovn.yml
 test -f ovn.yml  && rm -rf ovn.yml
 
+cd ${__PROJECT__}/sapi/quickstart
+test -d swoole-install && rm -rf swoole-install
 
 cd ${__PROJECT__}
 test -f setup-aria2-runtime.sh    && rm -rf setup-aria2-runtime.sh
-test -f setup-ffmpeg-runtime.sh   && rm -rf setup-ffmpeg-runtime.sh
-test -f setup-php-cli-runtime.sh  && rm -rf setup-php-cli-runtime.sh
-test -f setup-supervisord.sh      && rm -rf setup-supervisord.sh
 test -f setup-coturn-runtime.sh   && rm -rf setup-coturn-runtime.sh
+test -f setup-ffmpeg-runtime.sh   && rm -rf setup-ffmpeg-runtime.sh
+test -f setup-go-runtime.sh && rm -rf setup-go-runtime.sh
 test -f setup-nginx-runtime.sh    && rm -rf setup-nginx-runtime.sh
+test -f setup-nodejs-runtime.sh    && rm -rf setup-nodejs-runtime.sh
+test -f setup-php-cli-runtime.sh  && rm -rf setup-php-cli-runtime.sh
 test -f setup-php-fpm-runtime.sh  && rm -rf setup-php-fpm-runtime.sh
 test -f setup-privoxy-runtime.sh  && rm -rf setup-privoxy-runtime.sh
 test -f setup-socat-runtime.sh    && rm -rf setup-socat-runtime.sh
-test -f setup-webBenchmark-runtime.sh    && rm -rf setup-webBenchmark-runtime.sh
-test -f setup-socat-runtime.sh    && rm -rf setup-socat-runtime.sh
+test -f setup-supervisord.sh      && rm -rf setup-supervisord.sh
 test -f setup-swoole-cli-pre-runtime.sh    && rm -rf setup-swoole-cli-pre-runtime.sh
+test -f setup-webBenchmark-runtime.sh    && rm -rf setup-webBenchmark-runtime.sh
+test -f setup-swow-cli-runtime.sh    && rm -rf setup-swow-cli-runtime.sh
+test -f setup-php-fpm-7.4-runtime.sh    && rm -rf setup-php-fpm-7.4-runtime.sh
+test -f setup-swoole-cli-runtime.sh    && rm -rf setup-swoole-cli-runtime.sh
+test -f setup-php-cli-7.4-runtime.sh   && rm -rf setup-php-cli-7.4-runtime.sh
+test -f setup-php-cli-7.3-runtime.sh   && rm -rf setup-php-cli-7.3-runtime.sh
+
 
 cd ${__PROJECT__}
 
 echo '删除完毕'
+echo ''
+
+

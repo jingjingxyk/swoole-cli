@@ -13,6 +13,14 @@
 
 - [https://github.com/jingjingxyk/build-static-privoxy/releases](https://github.com/jingjingxyk/build-static-privoxy/releases)
 
+## 立即使用 static privoxy
+
+```shell
+
+curl -fSL https://github.com/jingjingxyk/swoole-cli/blob/new_dev/setup-coturn-runtime.sh?raw=true | bash
+
+```
+
 ## 构建文档
 
 - [linux 版构建文档](docs/linux.md)
