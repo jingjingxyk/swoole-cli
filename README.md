@@ -23,7 +23,7 @@ cp -f ./bin/runtime/coturn/etc/turnserver.conf.default ./bin/runtime/coturn/etc/
 
 ```
 
-## `static-coturn`构建文档
+## 构建文档
 
 - [linux 版构建文档](docs/linux.md)
 - [macOS 版构建文档](docs/macOS.md)
