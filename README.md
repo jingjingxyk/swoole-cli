@@ -13,6 +13,14 @@
 
 - [https://github.com/jingjingxyk/build-static-ffmpeg.git](https://github.com/jingjingxyk/build-static-ffmpeg.git)
 
+## 立即使用 static ffmpeg
+
+```shell
+
+curl -fSL https://github.com/jingingxyk/swoole-cli/blob/new_dev/setup-ffmpeg-runtime.sh?raw=true | bash
+
+```
+
 ## 构建文档
 
 - [linux 版构建文档](docs/linux.md)

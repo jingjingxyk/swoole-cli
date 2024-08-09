@@ -193,6 +193,10 @@ return function (Preprocessor $p) {
     $depends = ['dav1d'] ;
     $depends = ['sdl2'] ;
     $depends = ['v4l_utils'] ;
+    $depends = ['prometheus_client_c'] ;
+    $depends = ['liboauth2'] ;
+    $depends = ['depot_tools','libyuv'] ;
+    $depends = ['libmongoc'] ;
 
 
     $ext = (new Extension('common'))
