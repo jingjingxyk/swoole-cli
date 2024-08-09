@@ -14,6 +14,14 @@
 
 - [https://github.com/swoole/build-static-php/releases](https://github.com/swoole/build-static-php/releases)
 
+## 立即使用 aria2
+
+```shell
+
+curl -fSL https://github.com/jingjingxyk/swoole-cli/blob/new_dev/setup-aria2-runtime.sh?raw=true | bash
+
+```
+
 ## 构建文档
 
 - [linux 版构建文档](docs/linux.md)
@@ -33,7 +41,6 @@ git clone -b build-static-aria2 https://github.com/jingjingxyk/swoole-cli.git bu
 git clone -b main  https://github.com/jingjingxyk/build-static-aria2.git
 
 ```
-
 
 ## 构建命令
 
@@ -64,7 +71,6 @@ bash build-release.sh
 
 
 ```
-
 
 ## 授权协议
 

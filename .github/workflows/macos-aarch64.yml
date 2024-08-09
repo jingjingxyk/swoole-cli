@@ -55,13 +55,7 @@ jobs:
 
           # echo "BUILD_PHP_VERSION=${{ matrix.php-version }}" >> $GITHUB_ENV
 
-          export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
-          export PATH="/opt/homebrew/opt/flex/bin:$PATH"
-          export PATH="/opt/homebrew/opt/bison/bin:$PATH"
           export PATH="/opt/homebrew/opt/libtool/bin:$PATH"
-
-          ln -sf /opt/homebrew/opt/libtool/bin/glibtool /opt/homebrew/opt/libtool/bin/libtool
-          ln -sf /opt/homebrew/opt/libtool/bin/glibtoolize /opt/homebrew/opt/libtool/bin/libtoolize
           ls -lha /opt/homebrew/opt/libtool/bin/
           libtoolize --version
           libtool --help-all
@@ -110,7 +104,7 @@ jobs:
           mkdir -p pool/ext
           mkdir -p bin/runtime
           if [ ! -f bin/runtime/php ] ; then
-              bash  sapi/quickstart/setup-php-runtime.sh --mirror china
+              bash  sapi/quickstart/setup-php-runtime.sh
           fi
           bash sapi/download-box/download-box-get-archive-from-server.sh
           ls -A pool/lib/
@@ -129,10 +123,6 @@ jobs:
       - name: Build
         run: |
           export PATH=${{ github.workspace }}/bin/runtime:$PATH
-          export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
-          export PATH="/opt/homebrew/opt/flex/bin:$PATH"
-          export PATH="/opt/homebrew/opt/bison/bin:$PATH"
-          export PATH="/opt/homebrew/opt/libtool/bin:$PATH"
 
           bash make-install-deps.sh
 

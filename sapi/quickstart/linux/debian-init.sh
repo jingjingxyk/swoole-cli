@@ -6,6 +6,8 @@ __DIR__=$(
   pwd
 )
 
+# debian mirror site : https://www.debian.org/mirror/list.zh-cn.html
+
 # use china mirror
 # bash sapi/quickstart/linux/debian-init.sh --mirror [ china | ustc | tuna | aliyuncs | tencentyun | huaweicloud ]
 
@@ -122,7 +124,8 @@ apt install -y musl-dev musl-tools
 apt install -y python3 python3-pip ninja-build  diffutils
 apt install -y yasm nasm
 apt install -y meson
-apt install -y netcat-openbsd
+apt install -y netcat-openbsd  socat
+apt install -y gnupg
 
 case "$MIRROR" in
 china | tuna | ustc)
