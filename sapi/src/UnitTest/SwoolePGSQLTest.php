@@ -52,7 +52,7 @@ CREATE DATABASE user_center
     CONNECTION LIMIT = -1
     IS_TEMPLATE = False
 EOF;
-
+            echo $sql . PHP_EOL;
             $pg->query($sql);
             $this->assertEquals(0, $pg->errCode, 'create database user_center  sucess' . $pg->error);
         }
@@ -102,6 +102,7 @@ CACHE 1;
 alter table users alter column id set default nextval('users_id_seq');
 
 EOF;
+            echo $table . PHP_EOL;
             $pg->query($table);
             $this->assertEquals(0, $pg->errCode, 'create table users sucess' . $pg->error);
         }
@@ -147,10 +148,9 @@ EOF;
             ]
         ];
 
-        echo $sql;
+        echo $sql . PHP_EOL;
 
         $stmt = $this->pg->prepare($sql);
-
         $i = 100;
         while ($i >= 1) {
             foreach ($list as $data) {
@@ -159,7 +159,6 @@ EOF;
             $i--;
         }
         $this->assertGreaterThanOrEqual(1, $stmt->affectedRows(), 'insert data sucess' . $this->pg->error);
-        var_dump($stmt->affectedRows());
     }
 
     public function selectTableData()
@@ -170,7 +169,7 @@ ORDER BY id ASC
 
 EOF;
 
-        echo $sql;
+        echo $sql . PHP_EOL;
 
         $stmt = $this->pg->query($sql);
         $list = $stmt->fetchAll();
@@ -185,7 +184,7 @@ WHERE username=$1
 
 EOF;
 
-        echo $sql;
+        echo $sql . PHP_EOL;
 
         $stmt = $this->pg->prepare($sql);
 
@@ -198,13 +197,14 @@ EOF;
     {
         $sql = <<<'EOF'
 
-DROP TABLE users ;
-DROP SEQUENCE users_id_seq ;
+DROP TABLE  IF EXISTS  users ;
+DROP SEQUENCE  IF EXISTS users_id_seq ;
 EOF;
 
-        echo $sql;
+        echo $sql . PHP_EOL;
 
-        $this->pg->query($sql);
+        $stmt = $this->pg->query($sql);
+        var_dump($stmt->error);
         $this->assertEquals(0, $this->pg->errCode, 'drop table users' . $this->pg->error);
     }
 
@@ -216,9 +216,11 @@ DROP DATABASE IF EXISTS user_center
 EOF;
 
         echo $sql;
-
+        $this->pg = null;
         $this->pg_master->query($sql);
-        echo PHP_EOL . $this->pg->error . PHP_EOL;
+
+        echo PHP_EOL . $this->pg_master->error . PHP_EOL;
         $this->assertEquals(0, $this->pg_master->errCode, 'drop database user_center' . $this->pg_master->error);
+        $this->pg_master = null;
     }
 }
