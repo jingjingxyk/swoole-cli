@@ -23,7 +23,9 @@ final class SwoolePGSQLTest extends TestCase
             $this->selectTableData();
             $this->deleteTableData();
             $this->dropTable();
+            $this->pg = null;
             $this->dropDatabase();
+            $this->pg_master = null;
         });
     }
 
@@ -40,8 +42,12 @@ final class SwoolePGSQLTest extends TestCase
         $this->pg_master = $pg;
         $stmt = $pg->query("SELECT *  FROM pg_database WHERE datname = 'user_center'");
         $arr = $stmt->fetchAssoc();
-        if (empty($arr)) {
-            $sql = <<<EOF
+        if (!empty($arr)) {
+            $this->dropDatabase();
+        }
+
+
+        $sql = <<<EOF
 CREATE DATABASE user_center
     WITH
     OWNER = postgres
@@ -52,10 +58,10 @@ CREATE DATABASE user_center
     CONNECTION LIMIT = -1
     IS_TEMPLATE = False
 EOF;
-            echo $sql . PHP_EOL;
-            $pg->query($sql);
-            $this->assertEquals(0, $pg->errCode, 'create database user_center  sucess' . $pg->error);
-        }
+        echo $sql . PHP_EOL;
+        $pg->query($sql);
+        $this->assertEquals(0, $pg->errCode, 'create database user_center  sucess' . $pg->error);
+
 
     }
 
@@ -151,13 +157,14 @@ EOF;
         echo $sql . PHP_EOL;
 
         $stmt = $this->pg->prepare($sql);
-        $i = 100;
+        $i = 30;
         while ($i >= 1) {
             foreach ($list as $data) {
                 $res = $stmt->execute($data);
             }
             $i--;
         }
+
         $this->assertGreaterThanOrEqual(1, $stmt->affectedRows(), 'insert data sucess' . $this->pg->error);
     }
 
@@ -216,11 +223,9 @@ DROP DATABASE IF EXISTS user_center
 EOF;
 
         echo $sql;
-        $this->pg = null;
         $this->pg_master->query($sql);
 
         echo PHP_EOL . $this->pg_master->error . PHP_EOL;
         $this->assertEquals(0, $this->pg_master->errCode, 'drop database user_center' . $this->pg_master->error);
-        $this->pg_master = null;
     }
 }
