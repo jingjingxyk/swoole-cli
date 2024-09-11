@@ -46,7 +46,7 @@ EOF
         # $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $libmemcached_awesome_prefix . '/include/libmemcached/');
         # $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $libmemcached_awesome_prefix . '/include/libmemcached-1.0/');
         $p->withVariable('LDFLAGS', '$LDFLAGS -L' . $libmemcached_awesome_prefix . '/lib');
-        $p->withVariable('LIBS', '$LIBS  -l:hashkit ');
+        $p->withVariable('LIBS', '$LIBS  -lhashkit ');
     }
 
 };
