@@ -39,6 +39,7 @@ EOF
         ->withPkgName('libmemcached');
 
     $p->addLibrary($lib);
+    $p->withVariable('LDFLAGS', '$LDFLAGS -L' . $libmemcached_awesome_prefix . '/lib');
     $p->withVariable('LIBS', '$LIBS -lhashkit ');
 
 };
