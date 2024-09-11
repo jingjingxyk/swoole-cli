@@ -40,13 +40,13 @@ EOF
 
     $p->addLibrary($lib);
     if ($p->isLinux()) {
-        $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $libmemcached_awesome_prefix . '/include/');
-        $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $libmemcached_awesome_prefix . '/include/libhashkit/');
+        # $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $libmemcached_awesome_prefix . '/include/');
+        # $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $libmemcached_awesome_prefix . '/include/libhashkit/');
         # $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $libmemcached_awesome_prefix . '/include/libhashkit-1.0/');
-        $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $libmemcached_awesome_prefix . '/include/libmemcached/');
+        # $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $libmemcached_awesome_prefix . '/include/libmemcached/');
         # $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $libmemcached_awesome_prefix . '/include/libmemcached-1.0/');
         $p->withVariable('LDFLAGS', '$LDFLAGS -L' . $libmemcached_awesome_prefix . '/lib');
-        $p->withVariable('LIBS', '$LIBS -lhashkit ');
+        $p->withVariable('LIBS', '$LIBS  -l:hashkit ');
     }
 
 };
