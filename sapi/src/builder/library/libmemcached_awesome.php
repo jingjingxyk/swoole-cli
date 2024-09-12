@@ -38,15 +38,25 @@ EOF
         )
         ->withPkgName('libmemcached');
 
-    $p->addLibrary($lib);
+
     if ($p->isLinux()) {
+
+        $lib->withScriptAfterInstall(
+            <<<EOF
+            sed -i.bak 's/lib -lmemcached -lmemcachedutil/lib -lmemcached -lmemcachedutil -lhashkit/' {$libmemcached_awesome_prefix}/lib/pkgconfig/libmemcached.pc
+
+EOF
+        );
+
+
         # $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $libmemcached_awesome_prefix . '/include/');
         # $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $libmemcached_awesome_prefix . '/include/libhashkit/');
         # $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $libmemcached_awesome_prefix . '/include/libhashkit-1.0/');
         # $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $libmemcached_awesome_prefix . '/include/libmemcached/');
         # $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $libmemcached_awesome_prefix . '/include/libmemcached-1.0/');
-        $p->withVariable('LDFLAGS', '$LDFLAGS -L' . $libmemcached_awesome_prefix . '/lib');
-        $p->withVariable('LIBS', '$LIBS  -llibhashkit ');
-    }
+        # $p->withVariable('LDFLAGS', '$LDFLAGS -L' . $libmemcached_awesome_prefix . '/lib');
+        # $p->withVariable('LIBS', '$LIBS  -llibhashkit ');
 
+    }
+    $p->addLibrary($lib);
 };
