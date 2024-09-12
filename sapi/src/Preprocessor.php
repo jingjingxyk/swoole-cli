@@ -104,47 +104,10 @@ class Preprocessor
      * Extensions enabled by default
      * @var array|string[]
      */
-    protected array $extEnabled = [
-        //'opcache', //需要修改源码才能实现
-        'curl',
-        'iconv',
-        'bz2',
-        'bcmath',
-        'pcntl',
-        'filter',
-        'session',
-        'tokenizer',
-        'mbstring',
-        'ctype',
-        'zlib',
-        //'zip',
-        'posix',
-        'sockets',
-        'pdo',
-        'sqlite3',
-        'phar',
-        'mysqlnd',
-        'mysqli',
-        'intl', //有报错等待解决
-        'fileinfo',
-        'pdo_mysql',
-        'pdo_sqlite',
-        'soap',
-        'xsl',
-        'gmp',
-        'exif',
-        'sodium',
-        'openssl',
-        'readline',
-        'xml',
-        //'gd',
-        'redis',
-        'swoole',
-        'yaml',
-        //'imagick',
-        'mongodb',
-    ];
+    protected array $extEnabled;
+
     protected array $extEnabledBuff = [];
+
     protected array $endCallbacks = [];
     protected array $extCallbacks = [];
     protected array $beforeConfigure = [];
@@ -161,6 +124,7 @@ class Preprocessor
     protected function __construct()
     {
         $this->setOsType($this->getRealOsType());
+        $this->extEnabled = require __DIR__ . '/builder/enabled_extensions.php';
     }
 
     public function setLinker(string $ld): static
@@ -627,7 +591,11 @@ EOF;
         }
 
         if (!empty($lib->binPath)) {
-            $this->binPaths[] = $lib->binPath;
+            if (is_array($lib->binPath)) {
+                $this->binPaths = array_merge($this->binPaths, $lib->binPath);
+            } else {
+                $this->binPaths[] = $lib->binPath;
+            }
         }
 
         if (empty($lib->license)) {
@@ -763,7 +731,8 @@ EOF;
                         echo '[ext/' . $ext_name . '] cached ' . PHP_EOL;
                     }
                 } else {
-                    echo $cmd = "tar --strip-components=1 -C $dst_dir -xf {$ext->path}";
+                    $cmd = "tar --strip-components=1 -C $dst_dir -xf {$ext->path}";
+                    echo "[Extension] " . $cmd;
                     echo PHP_EOL;
                     echo `$cmd`;
                     echo PHP_EOL;
@@ -1124,6 +1093,7 @@ EOF;
         }
         $this->mkdirIfNotExists($this->libraryDir, 0777, true);
         $this->mkdirIfNotExists($this->extensionDir, 0777, true);
+        $this->deleteDirectoryIfExists($this->getWorkExtDir());
         include __DIR__ . '/constants.php';
 
         $extAvailabled = [];
@@ -1154,7 +1124,7 @@ EOF;
         if ($this->isMacos()) {
             if (is_file('/usr/local/opt/bison/bin/bison')) {
                 $this->withBinPath('/usr/local/opt/bison/bin');
-            } elseif (is_file('/opt/homebrew/opt/bison/bin/bison')) { //兼容 github action
+            } elseif (is_file('/opt/homebrew/opt/bison/bin/bison')) { //兼容 arm64
                 $this->withBinPath('/opt/homebrew/opt/bison/bin/');
             } else {
                 $this->loadDependentLibrary("bison");
@@ -1239,6 +1209,7 @@ EOF;
             echo "{$item->name}\n";
         }
     }
+
 
     public function getRealOsType(): string
     {

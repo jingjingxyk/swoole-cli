@@ -56,8 +56,9 @@ define("LIBGD_PREFIX", $p->getGlobalPrefix() . '/libgd');
 
 define("PGSQL_PREFIX", $p->getGlobalPrefix() . '/pgsql');
 define("UNIX_ODBC_PREFIX", $p->getGlobalPrefix() . '/unix_odbc');
-define("LIBUUID_PREFIX", $p->getGlobalPrefix() . '/libuuid');
-define("LIBINTL_PREFIX", $p->getGlobalPrefix() . '/libintl');
+
+define("UTIL_LINUX_PREFIX", $p->getGlobalPrefix() . '/util_linux');
+define("GETTEXT_PREFIX", $p->getGlobalPrefix() . '/gettext');
 define("LIBUNISTRING_PREFIX", $p->getGlobalPrefix() . '/libunistring');
 define("LIBURING_PREFIX", $p->getGlobalPrefix() . '/liburing');
 
@@ -94,6 +95,8 @@ define("GRPC_PREFIX", $p->getGlobalPrefix() . '/grpc');
 define("RE2_PREFIX", $p->getGlobalPrefix() . '/re2');
 define("LIBFFI_PREFIX", $p->getGlobalPrefix() . '/libffi');
 
+define("LIBMEMCACHED_PREFIX", $p->getGlobalPrefix() . '/libmemcached');
+define("LIBMEMCACHED_AWESOME_PREFIX", $p->getGlobalPrefix() . '/libmemcached_awesome');
 
 define("EXAMPLE_PREFIX", $p->getGlobalPrefix() . '/example');
 

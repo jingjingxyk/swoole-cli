@@ -38,7 +38,7 @@ EOF
             ->withPkgName('icu-i18n')
             ->withPkgName('icu-io')
             ->withPkgName('icu-uc')
-            ->withBinPath($icu_prefix . '/bin/:' . $icu_prefix . "/sbin")
+            ->withBinPath([$icu_prefix . '/bin', $icu_prefix . '/sbin',])
     );
     $p->withExportVariable('ICU_CFLAGS', '$(pkg-config  --cflags --static icu-i18n  icu-io   icu-uc)');
     $p->withExportVariable('ICU_LIBS', '$(pkg-config    --libs   --static icu-i18n  icu-io   icu-uc)');
