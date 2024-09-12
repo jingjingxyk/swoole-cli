@@ -32,7 +32,7 @@ return [
     'xml',
     'gd',
     'redis',
-    'swoole',
+    //'swoole', //php 8.0 静态编译 swoole 报错
     'yaml',
     'imagick',
     //'mongodb',//php8.2 需要处理依赖库问题 more info ： https://github.com/mongodb/mongo-php-driver/issues/1445
