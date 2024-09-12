@@ -59,4 +59,7 @@ EOF
 
     }
     $p->addLibrary($lib);
+
+    $libs = $p->isMacos() ? '-lc++' : ' -lstdc++ ';
+    $p->withVariable('LIBS', '$LIBS ' . $libs);
 };
