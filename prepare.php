@@ -16,6 +16,7 @@ if ($p->getInputOption('with-build-type')) {
     $p->setBuildType($buildType);
 }
 
+
 # clean
 # clean old make.sh
 $p->cleanFile(__DIR__ . '/make.sh');
@@ -182,3 +183,4 @@ function install_libraries(Preprocessor $p): void
 {
     $p->loadDependentLibrary('php');
 }
+
