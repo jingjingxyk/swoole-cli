@@ -26,6 +26,13 @@ return function (Preprocessor $p) {
         ->withHomePage('https://github.com/swoole/swoole-src')
         ->withLicense('https://github.com/swoole/swoole-src/blob/master/LICENSE', Extension::LICENSE_APACHE2)
         ->withManual('https://wiki.swoole.com/#/')
+        ->withDownloadScript(
+            'swoole-src',
+            <<<EOF
+            git clone -b {$swoole_tag} --depth=1 https://github.com/swoole/swoole-src.git
+EOF
+        )
+        ->withFile($file)
         ->withOptions(implode(' ', $options))
         ->withBuildCached(false)
         ->withDependentLibraries(...$dependentLibraries)
