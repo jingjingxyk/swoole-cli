@@ -5,9 +5,6 @@ use SwooleCli\Preprocessor;
 use SwooleCli\Extension;
 
 return function (Preprocessor $p) {
-    $p->withExportVariable('ICU_CFLAGS', '$(pkg-config  --cflags --static icu-i18n  icu-io   icu-uc)');
-    $p->withExportVariable('ICU_LIBS', '$(pkg-config    --libs   --static icu-i18n  icu-io   icu-uc)');
-
 
     $p->addExtension(
         (new Extension('intl'))
@@ -15,7 +12,6 @@ return function (Preprocessor $p) {
             ->withOptions('--enable-intl')
             ->withDependentLibraries('icu')
     );
-    //解决 ICU 多重定义BUG https://bugs.php.net/bug.php?id=80425
 
     $p->withBeforeConfigureScript('intl', function (Preprocessor $p) {
         // compatible with redis
@@ -28,9 +24,12 @@ return function (Preprocessor $p) {
                    echo "ok"
                 fi
 
-
 EOF;
 
         return $cmd;
     });
+
+    $p->withExportVariable('ICU_CFLAGS', '$(pkg-config  --cflags --static icu-i18n  icu-io   icu-uc)');
+    $p->withExportVariable('ICU_LIBS', '$(pkg-config    --libs   --static icu-i18n  icu-io   icu-uc)');
+
 };

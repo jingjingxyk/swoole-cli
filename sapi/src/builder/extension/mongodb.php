@@ -26,10 +26,12 @@ return function (Preprocessor $p) {
     $options = ' --enable-mongodb ';
     $options .= ' --with-mongodb-system-libs=no ';
     $options .= ' --with-mongodb-client-side-encryption=no ';
+    $options .= ' --with-mongodb-sasl=no ';
+    $options .= ' --with-mongodb-ssl=openssl ';
 
 
     //$mongodb_version = '1.19.4';
-    //$depends = ['icu', 'openssl', 'zlib', 'libzstd', 'snappy'];
+
 
     $ext = new Extension('mongodb');
 
