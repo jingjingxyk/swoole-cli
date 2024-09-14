@@ -33,8 +33,8 @@ return function (Preprocessor $p) {
     $ext->withHomePage('https://www.php.net/mongodb')
         ->withHomePage('https://www.mongodb.com/docs/drivers/php/')
         ->withOptions($options)
-        ->withPeclVersion('1.7.4');
-
+        ->withPeclVersion('1.15.3');
+    $p->addExtension($ext);
     $depends = ['icu', 'openssl', 'zlib', 'libzstd'];
     call_user_func_array([$ext, 'withDependentLibraries'], $depends);
 };

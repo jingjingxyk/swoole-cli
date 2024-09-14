@@ -39,6 +39,7 @@ EOF
         ->withBuildCached(false)
         ->withDependentLibraries(...$dependentLibraries)
         ->withDependentExtensions(...$dependentExtensions);
+    $p->addExtension($ext);
 
     $p->addExtension($ext);
 
