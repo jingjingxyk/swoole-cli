@@ -23,23 +23,14 @@ export PKG_CONFIG_PATH=<?= implode(':', $this->pkgConfigPaths) . PHP_EOL ?>
 export PATH=<?= implode(':', $this->binPaths) . PHP_EOL ?>
 
 OPTIONS="--disable-all \
-<<<<<<< HEAD
---disable-cgi  \
---enable-shared=no \
---enable-static=yes \
---without-valgrind \
---enable-cli  \
---disable-phpdbg \
---enable-json \
---enable-hash \
-=======
     --enable-shared=no \
     --enable-static=yes \
     --without-valgrind \
     --disable-cgi  \
     --enable-cli  \
     --disable-phpdbg \
->>>>>>> build_php_8.0
+    --enable-json \
+    --enable-hash \
 <?php foreach ($this->extensionList as $item) : ?>
     <?=$item->options?> \
 <?php endforeach; ?>
