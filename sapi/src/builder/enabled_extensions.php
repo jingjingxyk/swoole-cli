@@ -20,6 +20,9 @@ return [
     'phar',
     'mysqlnd',
     'mysqli',
+    'gettext',
+    'intl',
+    'uuid',
     'fileinfo',
     'pdo_mysql',
     'soap',
@@ -36,4 +39,6 @@ return [
     'yaml',
     'imagick',
     'mongodb',//php8.2 需要处理依赖库问题 more info ： https://github.com/mongodb/mongo-php-driver/issues/1445
+    'gettext',
+    'uuid'
 ];
