@@ -40,6 +40,8 @@ EOF
         ->withDependentLibraries(...$dependentLibraries)
         ->withDependentExtensions(...$dependentExtensions);
 
+    $p->addExtension($ext);
+
     $p->withVariable('LIBS', '$LIBS ' . ($p->isMacos() ? '-lc++' : '-lstdc++'));
 
     $p->withExportVariable('CARES_CFLAGS', '$(pkg-config  --cflags --static  libcares)');
