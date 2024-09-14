@@ -9,8 +9,8 @@ return function (Preprocessor $p) {
     $p->addExtension(
         (new Extension('zip'))
             ->withHomePage('https://www.php.net/zip')
-            ->withOptions('--enable-zip --with-zlib-dir=' . ZIP_PREFIX)
-            ->withDependentLibraries('libzip')
+            ->withOptions('--enable-zip --with-zlib-dir=' . ZLIB_PREFIX)
+            ->withDependentLibraries('libzip', 'zlib')
     );
 
 };
