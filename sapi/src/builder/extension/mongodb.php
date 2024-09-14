@@ -26,7 +26,6 @@ return function (Preprocessor $p) {
     $options = ' --enable-mongodb ';
     $options .= ' --with-mongodb-system-libs=no ';
     $options .= ' --with-mongodb-client-side-encryption=no ';
-    $options .= ' --with-mongodb-snappy=no ';
 
 
     //$mongodb_version = '1.19.4';
@@ -39,6 +38,6 @@ return function (Preprocessor $p) {
         ->withOptions($options)
         ->withPeclVersion('1.15.3');
     $p->addExtension($ext);
-    $depends = ['icu', 'openssl', 'zlib', 'libzstd'];
+    $depends = ['icu', 'openssl', 'zlib', 'libzstd', 'snappy'];
     call_user_func_array([$ext, 'withDependentLibraries'], $depends);
 };
