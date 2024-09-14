@@ -35,6 +35,6 @@ return function (Preprocessor $p) {
         ->withOptions($options)
         ->withPeclVersion('1.15.3');
     $p->addExtension($ext);
-    $depends = ['icu', 'openssl', 'zlib', 'libzstd'];
+    $depends = ['icu', 'openssl', 'zlib', 'libzstd', 'snappy'];
     call_user_func_array([$ext, 'withDependentLibraries'], $depends);
 };
