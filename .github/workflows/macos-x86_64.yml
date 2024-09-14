@@ -9,7 +9,7 @@ env:
 
 jobs:
   macos-x86_64:
-    if: 0
+    if: 1
     runs-on: macos-12
     # macos-latest (macos-14)  变更了 CPU 架构，由 x86_64 变更为 arm64
     # macos-14 CPU 架构 arm64
@@ -147,6 +147,7 @@ jobs:
           ./thirdparty/php-src/sapi/cli/php -m
           ./thirdparty/php-src/sapi/cli/php --ri swoole
           ./thirdparty/php-src/sapi/cli/php --ri pgsql
+          ./thirdparty/php-src/sapi/cli/php --ri mongodb
 
           file ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
           otool -L ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
