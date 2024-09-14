@@ -12,7 +12,7 @@ return [
     'mbstring',
     'ctype',
     'zlib',
-    //'zip',
+    'zip',
     'posix',
     'sockets',
     'pdo',
