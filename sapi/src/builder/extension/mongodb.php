@@ -26,9 +26,12 @@ return function (Preprocessor $p) {
     $options = ' --enable-mongodb ';
     $options .= ' --with-mongodb-system-libs=no ';
     $options .= ' --with-mongodb-client-side-encryption=no ';
-    $options .= ' --with-mongodb-snappy=no ';
+    $options .= ' --with-mongodb-sasl=no ';
+    $options .= ' --with-mongodb-ssl=openssl ';
 
-    $mongodb_version = '1.15.3';
+
+    //$mongodb_version = '1.19.4';
+
 
     $ext = new Extension('mongodb');
 
@@ -36,6 +39,7 @@ return function (Preprocessor $p) {
         ->withHomePage('https://www.mongodb.com/docs/drivers/php/')
         ->withOptions($options)
         ->withPeclVersion('1.15.3');
-    $depends = ['icu', 'openssl', 'zlib', 'libzstd'];
+    $p->addExtension($ext);
+    $depends = ['icu', 'openssl', 'zlib', 'libzstd', 'snappy'];
     call_user_func_array([$ext, 'withDependentLibraries'], $depends);
 };

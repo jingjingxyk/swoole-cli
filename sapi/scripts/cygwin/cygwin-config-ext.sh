@@ -103,3 +103,13 @@ mkdir -p php-src
 tar --strip-components=1 -C php-src -xf php-${PHP_VERSION}.tar.gz
 
 cd $ROOT
+
+if [ ! -d $ROOT/ext/pgsql ]; then
+  mv $ROOT/php-src/ext/pgsql $ROOT/ext/pgsql
+fi
+
+cd $ROOT
+
+ls -lh $ROOT
+ls -lh $ROOT/ext/
+cd $ROOT
