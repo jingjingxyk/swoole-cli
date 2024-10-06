@@ -26,9 +26,6 @@
 #include "zend_interfaces.h"
 
 #include "ext/reflection/php_reflection.h"
-#include "ext/swoole/include/swoole_version.h"
-
-extern void swoole_cli_self_update(void);
 
 #include "SAPI.h"
 
@@ -94,8 +91,6 @@ extern void swoole_cli_self_update(void);
 # include "openssl/applink.c"
 #endif
 
-#include "sfx/hook_cli.h"
-
 PHPAPI extern char *php_ini_opened_path;
 PHPAPI extern char *php_ini_scanned_path;
 PHPAPI extern char *php_ini_scanned_files;
@@ -154,19 +149,15 @@ const opt_struct OPTIONS[] = {
 	{'l', 0, "syntax-check"},
 	{'m', 0, "modules"},
 	{'n', 0, "no-php-ini"},
-	{'P', 0, "fpm"},
-    {'U', 0, "self-update"},
 	{'q', 0, "no-header"}, /* for compatibility with CGI (do not generate HTTP headers) */
 	{'R', 1, "process-code"},
 	{'H', 0, "hide-args"},
 	{'r', 1, "run"},
 	{'s', 0, "syntax-highlight"},
 	{'s', 0, "syntax-highlighting"},
-	{'S', 1, "cli-web-server"},
+	{'S', 1, "server"},
 	{'t', 1, "docroot"},
 	{'w', 0, "strip"},
-    {'W', 1, "worker-num"},
-    {'o', 1, "log-file"},
 	{'?', 0, "usage"},/* help alias (both '?' and 'usage') */
 	{'v', 0, "version"},
 	{'z', 1, "zend-extension"},
@@ -184,7 +175,6 @@ const opt_struct OPTIONS[] = {
 	/* Internal testing option -- may be changed or removed without notice,
 	 * including in patch releases. */
 	{16,  1, "repeat"},
-	{127, 0, "self"},
 	{'-', 0, NULL} /* end of args */
 };
 
@@ -472,6 +462,7 @@ static sapi_module_struct cli_sapi_module = {
 /* }}} */
 
 static const zend_function_entry additional_functions[] = {
+	ZEND_FE(dl, arginfo_dl)
 	PHP_FE(cli_set_process_title,        arginfo_cli_set_process_title)
 	PHP_FE(cli_get_process_title,        arginfo_cli_get_process_title)
 	PHP_FE_END
@@ -486,21 +477,18 @@ static void php_cli_usage(char *argv0)
 	if (prog) {
 		prog++;
 	} else {
-		prog = "swoole-cli";
+		prog = "php";
 	}
 
 	printf( "Usage: %s [options] [-f] <file> [--] [args...]\n"
 				"   %s [options] -r <code> [--] [args...]\n"
 				"   %s [options] [-B <begin_code>] -R <code> [-E <end_code>] [--] [args...]\n"
 				"   %s [options] [-B <begin_code>] -F <file> [-E <end_code>] [--] [args...]\n"
-	            "   %s [options] -P --fpm-config <file>\n"
 				"   %s [options] -S <addr>:<port> [-t docroot] [router]\n"
 				"   %s [options] -- [args...]\n"
 				"   %s [options] -a\n"
 				"\n"
 				"  -a               Run as interactive shell (requires readline extension)\n"
-	            "  -P               Run with fpm\n"
-	            "  -S <addr>:<port> Run with built-in web server.\n"
 				"  -c <path>|<file> Look for php.ini file in this directory\n"
 				"  -n               No configuration (ini) files will be used\n"
 				"  -d foo[=bar]     Define INI entry foo with value 'bar'\n"
@@ -516,10 +504,8 @@ static void php_cli_usage(char *argv0)
 				"  -F <file>        Parse and execute <file> for every input line\n"
 				"  -E <end_code>    Run PHP <end_code> after processing all input lines\n"
 				"  -H               Hide any passed arguments from external tools.\n"
-                "  -U               Update swoole-cli to the latest version\n"
+				"  -S <addr>:<port> Run with built-in web server.\n"
 				"  -t <docroot>     Specify document root <docroot> for built-in web server.\n"
-	            "  -W <worker_num>  Specify number of workers <worker_num> for built-in web server.\n"
-                "  -o <log_file>    Specify log file path <log_file> for built-in web server.\n"
 				"  -s               Output HTML syntax highlighted source.\n"
 				"  -v               Version number\n"
 				"  -w               Output source with stripped comments and whitespace.\n"
@@ -535,9 +521,8 @@ static void php_cli_usage(char *argv0)
 				"  --re <name>      Show information about extension <name>.\n"
 				"  --rz <name>      Show information about Zend extension <name>.\n"
 				"  --ri <name>      Show configuration for extension <name>.\n"
-				"  --self           Parse and execute self file.\n"
 				"\n"
-				, prog, prog, prog, prog, prog, prog, prog, prog);
+				, prog, prog, prog, prog, prog, prog, prog);
 }
 /* }}} */
 
@@ -614,29 +599,6 @@ BOOL WINAPI php_cli_win32_ctrl_handler(DWORD sig)
 #endif
 /*}}}*/
 
-void show_swoole_version(void) {
-    php_printf("Swoole %s (%s) (built: %s %s) (%s)\n",
-        SWOOLE_VERSION, cli_sapi_module.name, __DATE__, __TIME__,
-#ifdef ZTS
-        "ZTS"
-#else
-        "NTS"
-#endif
-#ifdef PHP_BUILD_COMPILER
-        " " PHP_BUILD_COMPILER
-#endif
-#ifdef PHP_BUILD_ARCH
-        " " PHP_BUILD_ARCH
-#endif
-#if ZEND_DEBUG
-        " DEBUG"
-#endif
-#ifdef HAVE_GCOV
-        " GCOV"
-#endif
-    );
-}
-
 static int do_cli(int argc, char **argv) /* {{{ */
 {
 	int c;
@@ -649,7 +611,6 @@ static int do_cli(int argc, char **argv) /* {{{ */
 	char *exec_direct=NULL, *exec_run=NULL, *exec_begin=NULL, *exec_end=NULL;
 	char *arg_free=NULL, **arg_excp=&arg_free;
 	char *script_file=NULL, *translated_path = NULL;
-	bool exec_self = 0;
 	int interactive=0;
 	const char *param_error=NULL;
 	int hide_argv = 0;
@@ -675,8 +636,29 @@ static int do_cli(int argc, char **argv) /* {{{ */
 				EG(exit_status) = (c == '?' && argc > 1 && !strchr(argv[1],  c));
 				goto out;
 
-			case 'v': /* show swoole version & quit */
-			    show_swoole_version();
+			case 'v': /* show php version & quit */
+				php_printf("PHP %s (%s) (built: %s %s) (%s)\nCopyright (c) The PHP Group\n%s",
+					PHP_VERSION, cli_sapi_module.name, __DATE__, __TIME__,
+#ifdef ZTS
+					"ZTS"
+#else
+					"NTS"
+#endif
+#ifdef PHP_BUILD_COMPILER
+					" " PHP_BUILD_COMPILER
+#endif
+#ifdef PHP_BUILD_ARCH
+					" " PHP_BUILD_ARCH
+#endif
+#if ZEND_DEBUG
+					" DEBUG"
+#endif
+#ifdef HAVE_GCOV
+					" GCOV"
+#endif
+					,
+					get_zend_version()
+				);
 				sapi_deactivate();
 				goto out;
 
@@ -693,16 +675,6 @@ static int do_cli(int argc, char **argv) /* {{{ */
 				php_output_end_all();
 				EG(exit_status) = 0;
 				goto out;
-
-			case 'U': /* self update */
-                if (php_request_startup()==FAILURE) {
-                    goto err;
-                }
-                request_started = 1;
-                swoole_cli_self_update();
-                php_output_end_all();
-                EG(exit_status) = 0;
-                goto out;
 
 			default:
 				break;
@@ -876,9 +848,6 @@ static int do_cli(int argc, char **argv) /* {{{ */
 			case 16:
 				num_repeats = atoi(php_optarg);
 				break;
-			case 127:
-				exec_self = 1;
-				break;
 			default:
 				break;
 			}
@@ -925,34 +894,12 @@ do_repeat:
 			script_file=argv[php_optind];
 			php_optind++;
 		}
-		if (exec_self) {
-			if (PG(php_binary)) {
-				if (script_file) {
-					--php_optind;
-				}
-				script_file = PG(php_binary);
-			} else {
-				php_printf("Could not get PHP_BINARY.\n");
-				exit(1);
-			}
-		} else if(script_file && PG(php_binary) && 0 == strcmp(script_file, PG(php_binary))) {
-			exec_self = 1;
-		}
 		if (script_file) {
 			virtual_cwd_activate();
-			if (exec_self) {
-				if (swoole_cli_seek_file_self_begin(&file_handle, script_file) != SUCCESS) {
-					goto swoole_cli_seek_failed1;
-				} else {
-					goto swoole_cli_seek_success1;
-				}
-			}
 			if (cli_seek_file_begin(&file_handle, script_file) != SUCCESS) {
-swoole_cli_seek_failed1:
 				goto err;
 			} else {
 				char real_path[MAXPATHLEN];
-swoole_cli_seek_success1:
 				if (VCWD_REALPATH(script_file, real_path)) {
 					translated_path = strdup(real_path);
 				}
@@ -993,11 +940,6 @@ swoole_cli_seek_success1:
 			ZEND_STRL("PHP_CLI_PROCESS_TITLE"),
 			is_ps_title_available() == PS_TITLE_SUCCESS,
 			CONST_CS, 0);
-
-        zend_register_bool_constant(
-            ZEND_STRL("SWOOLE_CLI"),
-            1,
-            CONST_CS, 0);
 
 		*arg_excp = arg_free; /* reconstruct argv */
 
@@ -1082,18 +1024,9 @@ swoole_cli_seek_success1:
 						zend_eval_string_ex(exec_run, NULL, "Command line run code", 1);
 					} else {
 						if (script_file) {
-							if (exec_self) {
-								if (swoole_cli_seek_file_self_begin(&file_handle, script_file) != SUCCESS) {
-									goto swoole_cli_seek_failed2;
-								} else {
-									goto swoole_cli_seek_success2;
-								}
-							}
 							if (cli_seek_file_begin(&file_handle, script_file) != SUCCESS) {
-swoole_cli_seek_failed2:
 								EG(exit_status) = 1;
 							} else {
-swoole_cli_seek_success2:
 								CG(skip_shebang) = 1;
 								php_execute_script(&file_handle);
 							}
@@ -1219,8 +1152,6 @@ err:
 }
 /* }}} */
 
-extern int fpm_main(int argc, char *argv[]);
-
 /* {{{ main */
 #ifdef PHP_CLI_WIN32_NO_CONSOLE
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
@@ -1247,20 +1178,8 @@ int main(int argc, char *argv[])
 	char *ini_path_override = NULL;
 	char *ini_entries = NULL;
 	size_t ini_entries_len = 0;
-	int ini_ignore = 1;
+	int ini_ignore = 0;
 	sapi_module_struct *sapi_module = &cli_sapi_module;
-
-    while ((c = php_getopt(argc, argv, OPTIONS, &php_optarg, &php_optind, 1, 2))!=-1) {
-        switch (c) {
-            case 'P':
-                return fpm_main(argc, argv);
-            default:
-                break;
-        }
-    }
-
-    php_optarg = NULL;
-    php_optind = 1;
 
 	/*
 	 * Do not move this initialization. It needs to happen before argv is used
