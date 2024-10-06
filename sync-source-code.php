@@ -5,6 +5,7 @@ declare(strict_types=1);
 $project_dir = __DIR__;
 $php_source_folder = require_once __DIR__ . '/sapi/scripts/download-php-src-archive.php';
 $sync_dest_dir = $project_dir . '/var/sync-source-code-tmp';
+
 $scanned_directory_source = array_diff(scandir($php_source_folder . '/ext/'), array('..', '.'));
 $scanned_directory_destination = array_diff(scandir($project_dir . '/ext/'), array('..', '.'));
 
@@ -153,8 +154,6 @@ PHP_OPCACHE_H_EOF
 
     # 在sed命令中，常见的需要转义的字符有：\、/、$、&、.、*、[、]等
     #                                反斜杠、正斜杠、美元符号、引用符号、点号、星号、方括号等
-
-
 
 
     # fpm
