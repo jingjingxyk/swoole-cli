@@ -33,7 +33,7 @@ return [
     'xml',
     'gd',
     'redis',
-    'swoole',
+    //'swoole',
     'yaml',
     'imagick',
     'mongodb',
