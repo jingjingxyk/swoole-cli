@@ -164,6 +164,7 @@ PHP_OPCACHE_H_EOF
 
 
     # cli
+    cp -rf $SRC/sapi/cli/ ./sapi/cli
     cp -rf $SRC/sapi/cli/ps_title.c ./sapi/cli
     cp -rf $SRC/sapi/cli/generate_mime_type_map.php ./sapi/cli
     cp -rf $SRC/sapi/cli/php.1.in ./sapi/cli
