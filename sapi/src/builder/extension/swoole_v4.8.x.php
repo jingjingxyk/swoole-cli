@@ -4,22 +4,11 @@ use SwooleCli\Preprocessor;
 use SwooleCli\Extension;
 
 return function (Preprocessor $p) {
-    $swoole_tag = 'v4.8.13';
+    $swoole_tag = '4.8.x';
     $file = "swoole-v{$swoole_tag}.tar.gz";
-<<<<<<< HEAD
-    $dependentLibraries = ['curl', 'openssl', 'cares', 'zlib', 'brotli'];
-    $dependentExtensions = ['curl', 'openssl', 'sockets', 'mysqlnd', 'pdo'];
-
-=======
->>>>>>> build_php_7.4
     $options = [];
 
-<<<<<<< HEAD
-
-    if (in_array($p->getBuildType(), ['dev', 'debug'])) {
-=======
     if ($p->getBuildType() === 'debug') {
->>>>>>> build_php_7.4
         $options[] = ' --enable-debug ';
         $options[] = ' --enable-debug-log ';
         $options[] = ' --enable-swoole-coro-time  ';
@@ -40,7 +29,8 @@ return function (Preprocessor $p) {
     $options[] = '--enable-swoole-json';
 
 
-    $ext = (new Extension('swoole'))
+    $ext = (new Extension('swoole_v4.8.x'))
+        ->withAliasName('swoole')
         ->withHomePage('https://github.com/swoole/swoole-src')
         ->withLicense('https://github.com/swoole/swoole-src/blob/master/LICENSE', Extension::LICENSE_APACHE2)
         ->withManual('https://wiki.swoole.com/#/')
@@ -57,12 +47,6 @@ EOF
         ->withDependentExtensions(...$dependentExtensions);
     $p->addExtension($ext);
 
-<<<<<<< HEAD
-    $p->addExtension($ext);
-
-    $p->withVariable('LIBS', '$LIBS ' . ($p->isMacos() ? '-lc++' : '-lstdc++'));
-=======
->>>>>>> build_php_7.4
 
     $p->withVariable('LIBS', '$LIBS ' . ($p->isMacos() ? '-lc++' : '-lstdc++'));
     $p->withExportVariable('CARES_CFLAGS', '$(pkg-config  --cflags --static  libcares)');
