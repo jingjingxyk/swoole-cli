@@ -14,8 +14,8 @@ return function (Preprocessor $p) {
     $p->withExportVariable('PHP_MONGODB_ICU_CFLAGS', '$(pkg-config --cflags --static icu-i18n  icu-io  icu-uc)');
     $p->withExportVariable('PHP_MONGODB_ICU_LIBS', '$(pkg-config   --libs   --static icu-i18n  icu-io  icu-uc)');
 
-    $p->withExportVariable('PHP_MONGODB_SNAPPY_CFLAGS', '-I' . $snappy_prefix . '/include');
-    $p->withExportVariable('PHP_MONGODB_SNAPPY_LIBS', '-L' . $snappy_prefix . '/lib -lsnappy');
+    //$p->withExportVariable('PHP_MONGODB_SNAPPY_CFLAGS', '-I' . $snappy_prefix . '/include');
+    //$p->withExportVariable('PHP_MONGODB_SNAPPY_LIBS', '-L' . $snappy_prefix . '/lib -lsnappy');
 
     $p->withExportVariable('PHP_MONGODB_ZSTD_CFLAGS', '$(pkg-config --cflags --static libzstd)');
     $p->withExportVariable('PHP_MONGODB_ZSTD_LIBS', '$(pkg-config   --libs   --static libzstd)');
@@ -23,23 +23,36 @@ return function (Preprocessor $p) {
     $p->withExportVariable('PHP_MONGODB_ZLIB_CFLAGS', '$(pkg-config --cflags --static zlib)');
     $p->withExportVariable('PHP_MONGODB_ZLIB_LIBS', '$(pkg-config   --libs   --static zlib)');
 
-    $options = ' --enable-mongodb ';
-    $options .= ' --with-mongodb-system-libs=no ';
-    $options .= ' --with-mongodb-client-side-encryption=no ';
-    $options .= ' --with-mongodb-sasl=no ';
-    $options .= ' --with-mongodb-ssl=openssl ';
+
+    $mongodb_version = '1.19.4';
+
+    $options = [];
+    $options[] = ' --enable-mongodb ';
+    $options[] = ' --with-mongodb-system-libs=no ';
+    $options[] = ' --with-mongodb-client-side-encryption=no ';
+    $options[] = ' --with-mongodb-ssl=openssl ';
+    $options[] = ' --with-mongodb-snappy=no ';
+    $options[] = ' --with-mongodb-zlib=yes ';
+    $options[] = ' --with-mongodb-zstd=yes ';
+    $options[] = ' --with-mongodb-sasl=no ';
+    $options[] = ' --enable-mongodb-crypto-system-profile=no ';
+    $options[] = ' --with-mongodb-utf8proc=bundled ';
+    $options[] = ' --with-openssl-dir=' . OPENSSL_PREFIX;
 
 
-    //$mongodb_version = '1.19.4';
-
+    $dependentLibraries = ['icu', 'openssl', 'zlib', 'libzstd'];
+    //$dependentLibraries[] = 'libsasl';
+    //$dependentLibraries[] = 'snappy';
 
     $ext = new Extension('mongodb');
 
-    $ext->withHomePage('https://www.php.net/mongodb')
+    $ext->withManual('https://www.php.net/mongodb')
         ->withHomePage('https://www.mongodb.com/docs/drivers/php/')
-        ->withOptions($options)
-        ->withPeclVersion('1.15.3');
+        ->withPeclVersion('1.19.4')
+        ->withOptions(implode(' ', $options))
+        ->withBuildCached(false)
+        ->withDependentLibraries(...$dependentLibraries);
     $p->addExtension($ext);
-    $depends = ['icu', 'openssl', 'zlib', 'libzstd', 'snappy'];
-    call_user_func_array([$ext, 'withDependentLibraries'], $depends);
+
+    $p->withVariable('LIBS', '$LIBS ' . ($p->isMacos() ? '-lc++' : '-lstdc++'));
 };

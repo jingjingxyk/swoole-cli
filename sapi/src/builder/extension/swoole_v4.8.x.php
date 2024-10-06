@@ -4,7 +4,7 @@ use SwooleCli\Preprocessor;
 use SwooleCli\Extension;
 
 return function (Preprocessor $p) {
-    $swoole_tag = 'v4.8.13';
+    $swoole_tag = '4.8.x';
     $file = "swoole-v{$swoole_tag}.tar.gz";
     $options = [];
 
@@ -29,7 +29,8 @@ return function (Preprocessor $p) {
     $options[] = '--enable-swoole-json';
 
 
-    $ext = (new Extension('swoole'))
+    $ext = (new Extension('swoole_v4.8.x'))
+        ->withAliasName('swoole')
         ->withHomePage('https://github.com/swoole/swoole-src')
         ->withLicense('https://github.com/swoole/swoole-src/blob/master/LICENSE', Extension::LICENSE_APACHE2)
         ->withManual('https://wiki.swoole.com/#/')
