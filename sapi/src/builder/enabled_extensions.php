@@ -31,7 +31,7 @@ return [
     'openssl',
     'readline',
     'xml',
-    //'gd',
+    'gd',
     'redis',
     'swoole',
     'yaml',
