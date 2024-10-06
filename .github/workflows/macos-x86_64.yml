@@ -133,7 +133,7 @@ jobs:
 
           bash ./make.sh all-library
 
-          php prepare.php --without-docker=1  +ds +apcu  +xlswriter +ssh2 +pgsql +pdo_pgsql -gd  -imagick --with-build-type=release --with-php-version=${{ env.BUILD_PHP_VERSION }} --with-c-compiler=gcc
+          php prepare.php --without-docker=1  --with-php-version=${{ env.BUILD_PHP_VERSION }} --with-c-compiler=gcc
 
           bash ./make.sh config
           bash ./make.sh build
@@ -143,11 +143,6 @@ jobs:
         run: |
           ./thirdparty/php-src/sapi/cli/php -v
           ./thirdparty/php-src/sapi/cli/php -m
-<<<<<<< HEAD
-=======
-          ./thirdparty/php-src/sapi/cli/php --ri mongodb
-          ./thirdparty/php-src/sapi/cli/php --ri gd
->>>>>>> build_php_7.4
           ./thirdparty/php-src/sapi/cli/php --ri swoole
           ./thirdparty/php-src/sapi/cli/php --ri pgsql
           ./thirdparty/php-src/sapi/cli/php --ri mongodb
