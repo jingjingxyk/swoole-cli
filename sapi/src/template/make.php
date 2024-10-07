@@ -269,6 +269,12 @@ filter_extension() {
 }
 
 make_config() {
+    PHP_VERSION=<?= BUILD_PHP_VERSION; ?> ;
+    if [ ! -f "<?= $this->phpSrcDir ?>/X-PHP-VERSION" ] ; then
+        bash make.sh php ;
+    fi
+    test "${PHP_VERSION}" = "$(cat '<?= $this->phpSrcDir ?>/X-PHP-VERSION')" || bash make.sh php ;
+
     cd <?= $this->phpSrcDir ?>/
 <?php if (in_array($this->buildType, ['dev'])) : ?>
     # dev 环境 过滤扩展，便于调试单个扩展编译
@@ -292,8 +298,9 @@ make_config() {
 
 <?php if ($this->isMacos()) : ?>
     <?php if ($this->hasLibrary('pgsql')) : ?>
-    sed -i.backup "s/ac_cv_func_explicit_bzero\" = xyes/ac_cv_func_explicit_bzero\" = x_fake_yes/" ./configure
-    <?php endif;?>
+        sed -i.backup "s/ac_cv_func_explicit_bzero\" = xyes/ac_cv_func_explicit_bzero\" = x_fake_yes/" ./configure
+        test -f ./configure.backup && rm -f ./configure.backup
+    <?php endif; ?>
 <?php endif; ?>
 
     export_variables
@@ -311,7 +318,8 @@ make_config() {
 
 <?php if ($this->isLinux()) : ?>
     sed -i.backup 's/-export-dynamic/-all-static/g' Makefile
-<?php endif ; ?>
+    test -f Makefile.backup && rm -f Makefile.backup
+<?php endif; ?>
 
 }
 
