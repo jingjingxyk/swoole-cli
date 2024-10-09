@@ -20,8 +20,6 @@ return function (Preprocessor $p) {
         ->withManual('https://www.python.org')
         ->withUrl('https://www.python.org/ftp/python/3.12.2/Python-3.12.2.tgz')
         ->withPrefix($python3_prefix)
-        ->withBuildCached(false)
-        ->withInstallCached(false)
         ->withBuildScript(
             <<<EOF
 
@@ -112,7 +110,7 @@ return function (Preprocessor $p) {
         cp -rf {$p->getBuildDir()}/python3/Modules/_hacl/* {$python3_prefix}/python_hacl/
 EOF
         )
-        //->withPkgName('python3')
+        ->withPkgName('python3')
         ->withPkgName('python3-embed')
         ->withDependentLibraries(
             'zlib',
