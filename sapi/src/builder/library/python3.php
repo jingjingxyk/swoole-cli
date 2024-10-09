@@ -133,6 +133,9 @@ EOF
     $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $python3_prefix . '/python_hacl/include/');
     $p->withVariable('LDFLAGS', '$LDFLAGS -L' . $python3_prefix . '/python_hacl/');
     $p->withVariable('LIBS', '$LIBS -lHacl_Hash_SHA2');
+    if ($p->isMacos()) {
+        $p->withVariable('LDFLAGS', '$LDFLAGS -framework CoreFoundation ');
+    }
 
     if ($p->isMacos()) {
         //module  _scproxy needs SystemConfiguration and CoreFoundation framework
