@@ -33,7 +33,7 @@ return function (Preprocessor $p) {
         PACKAGES="\$PACKAGES readline"
         PACKAGES="\$PACKAGES uuid"
         PACKAGES="\$PACKAGES expat"
-        # PACKAGES="\$PACKAGES libmpdec"
+        PACKAGES="\$PACKAGES libmpdec"
         PACKAGES="\$PACKAGES libb2"
 
 
@@ -65,7 +65,7 @@ return function (Preprocessor $p) {
         --disable-test-modules \
         --with-static-libpython \
         --with-system-expat=yes \
-        --with-system-libmpdec=no \
+        --with-system-libmpdec=yes \
         --with-readline=readline \
         --with-builtin-hashlib-hashes="md5,sha1,sha2,sha3,blake2" \
         --with-openssl={$openssl_prefix} \
@@ -123,7 +123,7 @@ EOF
             'util_linux',
             'gettext',
             'libexpat',
-            //'mpdecimal',
+            'mpdecimal',
             'libb2'
         );
 
