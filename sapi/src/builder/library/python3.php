@@ -109,7 +109,7 @@ return function (Preprocessor $p) {
         cp -rf {$p->getBuildDir()}/python3/Modules/_hacl/* {$python3_prefix}/python_hacl/
 EOF
         )
-        //->withPkgName('python3')
+        ->withPkgName('python3')
         //->withPkgName('python3-embed')
         ->withDependentLibraries(
             'zlib',
