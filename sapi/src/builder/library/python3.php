@@ -39,8 +39,8 @@ return function (Preprocessor $p) {
         PACKAGES="\$PACKAGES libmpdec"
         PACKAGES="\$PACKAGES libb2"
 
-        # -Wl,–no-export-dynamic
-        CFLAGS="-DOPENSSL_THREADS {$static_flag} -fPIC "
+
+        CFLAGS="-DOPENSSL_THREADS {$static_flag} "
         CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$PACKAGES)  {$static_flag}  "
         LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES)  {$static_flag} {$ldflags} -DOPENSSL_THREADS  "
         LIBS="$(pkg-config      --libs-only-l    --static \$PACKAGES)  {$libs}"
