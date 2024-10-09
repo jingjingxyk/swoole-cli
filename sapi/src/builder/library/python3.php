@@ -18,6 +18,7 @@ return function (Preprocessor $p) {
     $lib->withHomePage('https://www.python.org/')
         ->withLicense('https://docs.python.org/3/license.html', Library::LICENSE_LGPL)
         ->withManual('https://www.python.org')
+        ->withManual('https://github.com/python/cpython.git')
         ->withUrl('https://www.python.org/ftp/python/3.12.2/Python-3.12.2.tgz')
         ->withPrefix($python3_prefix)
         ->withBuildScript(
@@ -56,7 +57,7 @@ return function (Preprocessor $p) {
         LIBS=" \$LIBS -liconv "
 
         CFLAGS="\$CFLAGS " \
-        CPPFLAGS="\$CPPFLAGS " \
+        CPPFLAGS="\$CPPFLAGS -DMPD_CONFIG_64=1" \
         LDFLAGS="\$LDFLAGS  " \
         LIBS="\$LIBS " \
         ./configure \
