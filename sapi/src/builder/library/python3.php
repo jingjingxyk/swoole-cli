@@ -12,7 +12,7 @@ return function (Preprocessor $p) {
     $bzip2_prefix = BZIP2_PREFIX;
 
     $static_flag = $p->isMacos() ? '' : ' -static  ';
-    $ldflags=$p->isMacos() ? '' : ' -framework SystemConfiguration -framework CoreFoundation ';
+    $ldflags = $p->isMacos() ? ' -framework SystemConfiguration -framework CoreFoundation ' : '';
     $libs = $p->isMacos() ? '-lc++' : ' -lstdc++ ';
 
     $lib = new Library('python3');
