@@ -12,7 +12,6 @@ return function (Preprocessor $p) {
     $bzip2_prefix = BZIP2_PREFIX;
 
     $static_flag = $p->isMacos() ? '' : ' -static  ';
-    $ldflags = $p->isMacos() ? ' -framework SystemConfiguration -framework CoreFoundation ' : '';
     $libs = $p->isMacos() ? '-lc++' : ' -lstdc++ ';
 
     $lib = new Library('python3');
@@ -42,7 +41,7 @@ return function (Preprocessor $p) {
 
         CFLAGS="-DOPENSSL_THREADS {$static_flag} "
         CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$PACKAGES)  {$static_flag}  "
-        LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES)  {$static_flag} {$ldflags} -DOPENSSL_THREADS  "
+        LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES)  {$static_flag}  -DOPENSSL_THREADS  "
         LIBS="$(pkg-config      --libs-only-l    --static \$PACKAGES)  {$libs}"
 
         CPPFLAGS=" \$CPPFLAGS -I{$bzip2_prefix}/include/ "
@@ -76,6 +75,10 @@ return function (Preprocessor $p) {
         --without-valgrind \
         --without-dtrace \
         --with-ensurepip=install
+
+        # 只能动态构建的扩展 请查看 Modules/Setup.stdlib 描述,找到并注释
+        # 注释方法： sed -i 's/^pattern/;\1/' file.txt
+        # \1 表示匹配到的内容
 
         sed -i.backup 's/^_ctypes _ctypes\/_ctypes\.c/#\1/' Modules/Setup.stdlib
         sed -i.backup 's/^_scproxy _scproxy\.c/#\1/' Modules/Setup.stdlib
@@ -130,7 +133,6 @@ EOF
 
     $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $python3_prefix . '/python_hacl/');
     $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $python3_prefix . '/python_hacl/include/');
-    # $p->withVariable('LDFLAGS', '$LDFLAGS -l:' . $python3_prefix . '/python_hacl/libHacl_Hash_SHA2.a');
     $p->withVariable('LDFLAGS', '$LDFLAGS -L' . $python3_prefix . '/python_hacl/');
     $p->withVariable('LIBS', '$LIBS -lHacl_Hash_SHA2');
 
@@ -139,7 +141,7 @@ EOF
     $p->withVariable('LIBS', '$LIBS -lpython3.12');
     if ($p->isMacos()) {
         //module  _scproxy needs SystemConfiguration and CoreFoundation framework
-        $p->withVariable('LDFLAGS', '$LDFLAGS -framework SystemConfiguration -framework CoreFoundation ');
+        //$p->withVariable('LDFLAGS', '$LDFLAGS -framework SystemConfiguration -framework CoreFoundation ');
     }
 
 };
