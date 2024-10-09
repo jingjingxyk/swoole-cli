@@ -79,16 +79,12 @@ return function (Preprocessor $p) {
 
         sed -i.backup 's/^_ctypes _ctypes\/_ctypes\.c/;\1/' Modules/Setup.stdlib
         sed -i.backup 's/^_scproxy _scproxy\.c/;\1/' Modules/Setup.stdlib
+        sed -i.backup 's/^xxlimited xxlimited\.c/;\1/' Modules/Setup.stdlib
+        sed -i.backup 's/^xxlimited_35 xxlimited_35\.c/;\1/' Modules/Setup.stdlib
 
         sed -i.backup "s/^\*shared\*/\*static\*/g" Modules/Setup.stdlib
+
         cp -f Modules/Setup.stdlib  Modules/Setup.local
-
-        exit 3
-
-
-        # 自定义扩展放在这里
-        #  echo '*static*' >> Modules/Setup.local
-        #  Modules/Setup.local
 
          CFLAGS="\$CFLAGS " \
          CPPFLAGS="\$CPPFLAGS " \
