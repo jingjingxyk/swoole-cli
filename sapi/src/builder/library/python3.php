@@ -77,6 +77,9 @@ return function (Preprocessor $p) {
         --without-dtrace \
         --with-ensurepip=install
 
+        sed -i.backup 's/^_ctypes _ctypes\/_ctypes\.c/;\1/' Modules/Setup.stdlib
+        sed -i.backup 's/^_scproxy _scproxy\.c/;\1/' Modules/Setup.stdlib
+
         sed -i.backup "s/^\*shared\*/\*static\*/g" Modules/Setup.stdlib
         cp -f Modules/Setup.stdlib  Modules/Setup.local
 
