@@ -11,7 +11,8 @@ return function (Preprocessor $p) {
     $libiconv_prefix = ICONV_PREFIX;
     $bzip2_prefix = BZIP2_PREFIX;
 
-    $ldflags = $p->isMacos() ? '' : ' -static  ';
+    $static_flag = $p->isMacos() ? '' : ' -static  ';
+    $ldflags=$p->isMacos() ? '' : ' -framework SystemConfiguration -framework CoreFoundation ';
     $libs = $p->isMacos() ? '-lc++' : ' -lstdc++ ';
 
     $lib = new Library('python3');
@@ -39,9 +40,9 @@ return function (Preprocessor $p) {
         PACKAGES="\$PACKAGES libb2"
 
         # -Wl,–no-export-dynamic
-        CFLAGS="-DOPENSSL_THREADS {$ldflags} -fPIC "
-        CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$PACKAGES)  {$ldflags}  "
-        LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES)   {$ldflags} -DOPENSSL_THREADS  "
+        CFLAGS="-DOPENSSL_THREADS {$static_flag} -fPIC "
+        CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$PACKAGES)  {$static_flag}  "
+        LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES)  {$static_flag} {$ldflags} -DOPENSSL_THREADS  "
         LIBS="$(pkg-config      --libs-only-l    --static \$PACKAGES)  {$libs}"
 
         CPPFLAGS=" \$CPPFLAGS -I{$bzip2_prefix}/include/ "
@@ -61,10 +62,6 @@ return function (Preprocessor $p) {
         CPPFLAGS="\$CPPFLAGS " \
         LDFLAGS="\$LDFLAGS  " \
         LIBS="\$LIBS " \
-        LINKFORSHARED=" " \
-        CCSHARED=" " \
-        LDSHARED=" " \
-        LDCXXSHARED=" " \
         ./configure \
         --prefix={$python3_prefix} \
         --enable-shared=no \
@@ -80,15 +77,22 @@ return function (Preprocessor $p) {
         --without-dtrace \
         --with-ensurepip=install
 
+        sed -i.backup "s/^\*shared\*/\*static\*/g" Modules/Setup.stdlib
+        cp -f Modules/Setup.stdlib  Modules/Setup.local
 
-        # echo '*static*' >> Modules/Setup.local
+        exit 3
 
-        sed -i.bak "s/^\*shared\*/\*static\*/g" Modules/Setup.stdlib
-        cat Modules/Setup.stdlib > Modules/Setup.local
 
-        # make -j {$p->getMaxJob()} LDFLAGS="\$LDFLAGS " LINKFORSHARED=" "
+        # 自定义扩展放在这里
+        #  echo '*static*' >> Modules/Setup.local
+        #  Modules/Setup.local
 
-        make -j {$p->getMaxJob()}
+         CFLAGS="\$CFLAGS " \
+         CPPFLAGS="\$CPPFLAGS " \
+         LDFLAGS="\$LDFLAGS  " \
+         LIBS="\$LIBS " \
+         LINKFORSHARED=" "  \
+         make -j {$p->getMaxJob()}
 
         make install
 
@@ -135,7 +139,8 @@ EOF
     $p->withVariable('LDFLAGS', '$LDFLAGS -L' . $python3_prefix . '/lib/');
     $p->withVariable('LIBS', '$LIBS -lpython3.12');
     if ($p->isMacos()) {
-        $p->withVariable('LDFLAGS', '$LDFLAGS -framework CoreFoundation ');
+        //module  _scproxy needs SystemConfiguration and CoreFoundation framework
+        $p->withVariable('LDFLAGS', '$LDFLAGS -framework SystemConfiguration -framework CoreFoundation ');
     }
 
 };

@@ -42,6 +42,7 @@ return function (Preprocessor $p) {
             --prefix={$gettext_prefix} \
             --enable-shared=no \
             --enable-static=yes \
+            --disable-shared \
             --enable-relocatable \
             --enable-year2038 \
             --with-pic \
