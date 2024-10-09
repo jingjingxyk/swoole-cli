@@ -112,8 +112,8 @@ return function (Preprocessor $p) {
         cp -rf {$p->getBuildDir()}/python3/Modules/_hacl/* {$python3_prefix}/python_hacl/
 EOF
         )
-        ->withPkgName('python3')
-        //->withPkgName('python3-embed')
+        //->withPkgName('python3')
+        ->withPkgName('python3-embed')
         ->withDependentLibraries(
             'zlib',
             'openssl',
@@ -136,9 +136,6 @@ EOF
     $p->withVariable('LDFLAGS', '$LDFLAGS -L' . $python3_prefix . '/python_hacl/');
     $p->withVariable('LIBS', '$LIBS -lHacl_Hash_SHA2');
 
-    $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $python3_prefix . '/include/python3.12/');
-    $p->withVariable('LDFLAGS', '$LDFLAGS -L' . $python3_prefix . '/lib/');
-    $p->withVariable('LIBS', '$LIBS -lpython3.12');
     if ($p->isMacos()) {
         //module  _scproxy needs SystemConfiguration and CoreFoundation framework
         //$p->withVariable('LDFLAGS', '$LDFLAGS -framework SystemConfiguration -framework CoreFoundation ');
