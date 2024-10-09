@@ -33,7 +33,7 @@ return function (Preprocessor $p) {
         PACKAGES="\$PACKAGES readline"
         PACKAGES="\$PACKAGES uuid"
         PACKAGES="\$PACKAGES expat"
-        PACKAGES="\$PACKAGES libmpdec"
+        # PACKAGES="\$PACKAGES libmpdec"
         PACKAGES="\$PACKAGES libb2"
 
 
@@ -123,7 +123,7 @@ EOF
             'util_linux',
             'gettext',
             'libexpat',
-            'mpdecimal',
+            //'mpdecimal',
             'libb2'
         );
 
