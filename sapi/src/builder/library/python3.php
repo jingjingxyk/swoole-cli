@@ -21,6 +21,7 @@ return function (Preprocessor $p) {
         ->withManual('https://github.com/python/cpython.git')
         ->withUrl('https://www.python.org/ftp/python/3.12.2/Python-3.12.2.tgz')
         ->withPrefix($python3_prefix)
+        ->withBuildCached(false)
         ->withBuildScript(
             <<<EOF
 
@@ -57,7 +58,7 @@ return function (Preprocessor $p) {
         LIBS=" \$LIBS -liconv "
 
         CFLAGS="\$CFLAGS " \
-        CPPFLAGS="\$CPPFLAGS -DMPD_CONFIG_64=1" \
+        CPPFLAGS="\$CPPFLAGS " \
         LDFLAGS="\$LDFLAGS  " \
         LIBS="\$LIBS " \
         ./configure \
@@ -79,10 +80,11 @@ return function (Preprocessor $p) {
         # 注释方法： sed -i 's/^pattern/;\1/' file.txt
         # \1 表示匹配到的内容
 
-        sed -i.backup 's/^_ctypes _ctypes\/_ctypes\.c/#\1/' Modules/Setup.stdlib
-        sed -i.backup 's/^_scproxy _scproxy\.c/#\1/' Modules/Setup.stdlib
-        sed -i.backup 's/^xxlimited xxlimited\.c/#\1/' Modules/Setup.stdlib
-        sed -i.backup 's/^xxlimited_35 xxlimited_35\.c/#\1/' Modules/Setup.stdlib
+        sed -i.backup 's/^_ctypes _ctypes\/_ctypes\.c/# \1/' Modules/Setup.stdlib
+        sed -i.backup 's/^_scproxy _scproxy\.c/# \1/' Modules/Setup.stdlib
+        sed -i.backup 's/^xxlimited xxlimited\.c/# \1/' Modules/Setup.stdlib
+        sed -i.backup 's/^xxlimited_35 xxlimited_35\.c/# \1/' Modules/Setup.stdlib
+        sed -i.backup 's/^_decimal _decimal\/_decimal\.c/# \1/' Modules/Setup.stdlib
 
         sed -i.backup "s/^\*shared\*/\*static\*/g" Modules/Setup.stdlib
 

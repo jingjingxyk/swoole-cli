@@ -12,6 +12,7 @@ return function (Preprocessor $p) {
         ->withUrl('https://www.bytereef.org/software/mpdecimal/releases/mpdecimal-4.0.0.tar.gz')
         ->withFileHash('sha256', '942445c3245b22730fd41a67a7c5c231d11cb1b9936b9c0f76334fb7d0b4468c')
         ->withPrefix($mpdecimal_prefix)
+        ->withBuildCached(false)
         ->withConfigure(
             <<<EOF
         ./configure --help
@@ -21,7 +22,8 @@ return function (Preprocessor $p) {
         --enable-shared=no \
         --enable-static=yes \
         --enable-pc=yes \
-        --enable-doc=no
+        --enable-doc=no \
+        MACHINE=x64
 
 EOF
         )
