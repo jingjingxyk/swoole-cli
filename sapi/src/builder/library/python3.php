@@ -71,13 +71,15 @@ return function (Preprocessor $p) {
         --with-system-expat=yes \
         --with-system-libmpdec=yes \
         --with-readline=readline \
-        --with-builtin-hashlib-hashes="md5,sha1,sha2,sha3,blake2" \
+        --without-builtin-hashlib-hashes \
+
         --with-openssl={$openssl_prefix} \
         --with-ssl-default-suites=openssl \
         --without-valgrind \
         --without-dtrace \
         --with-ensurepip=install
 
+        # --with-builtin-hashlib-hashes="md5,sha1,sha2,sha3,blake2" \
         # 只能动态构建的扩展 请查看 Modules/Setup.stdlib 描述,找到并注释
         # 注释方法： sed -i 's/^pattern/;\1/' file.txt
         # \1 表示匹配到的内容
