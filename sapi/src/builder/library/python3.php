@@ -89,6 +89,11 @@ return function (Preprocessor $p) {
         sed -i.backup 's/^xxlimited_35 xxlimited_35\.c/# \1/' Modules/Setup.stdlib
         sed -i.backup 's/^_decimal _decimal\/_decimal\.c/# \1/' Modules/Setup.stdlib
 
+        sed -i.backup 's/^_md5 md5module\.c/# \1/' Modules/Setup.stdlib
+        sed -i.backup 's/^_sha1 sha1module\.c/# \1/' Modules/Setup.stdlib
+        sed -i.backup 's/^_sha2 sha2module\.c/# \1/' Modules/Setup.stdlib
+        sed -i.backup 's/^_sha3 sha3module\.c/# \1/' Modules/Setup.stdlib
+
         sed -i.backup "s/^\*shared\*/\*static\*/g" Modules/Setup.stdlib
 
         cp -f Modules/Setup.stdlib  Modules/Setup.local
