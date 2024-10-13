@@ -39,9 +39,9 @@ return function (Preprocessor $p) {
         PACKAGES="\$PACKAGES libb2"
 
 
-        CFLAGS="-DOPENSSL_THREADS {$static_flag} "
+        CFLAGS="-DOPENSSL_THREADS {$static_flag}  -pie -fPIC"
         CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$PACKAGES)  {$static_flag}  "
-        LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES)  {$static_flag}  -DOPENSSL_THREADS  "
+        LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES)  {$static_flag}  "
         LIBS="$(pkg-config      --libs-only-l    --static \$PACKAGES)  {$libs}"
 
         CPPFLAGS=" \$CPPFLAGS -I{$bzip2_prefix}/include/ "
@@ -108,6 +108,10 @@ return function (Preprocessor $p) {
 
         PYTHONPATH=$({$python3_prefix}/bin/python3 -c "import site, os; print(os.path.join(site.USER_BASE, 'lib', 'python', 'site-packages'))")
         echo \${PYTHONPATH}
+
+        # PYTHONPATH={$p->getGlobalPrefix()}/bin/python3/bin/
+        # PYTHONHOME=/custom/output
+
 
         mkdir -p {$python3_prefix}/python_hacl
         cp -rf {$p->getBuildDir()}/python3/Modules/_hacl/* {$python3_prefix}/python_hacl/
