@@ -72,7 +72,6 @@ return function (Preprocessor $p) {
         --with-system-libmpdec=yes \
         --with-readline=readline \
         --without-builtin-hashlib-hashes \
-
         --with-openssl={$openssl_prefix} \
         --with-ssl-default-suites=openssl \
         --without-valgrind \
