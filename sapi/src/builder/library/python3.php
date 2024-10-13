@@ -114,9 +114,6 @@ return function (Preprocessor $p) {
         # PYTHONPATH={$p->getGlobalPrefix()}/bin/python3/bin/
         # PYTHONHOME=/custom/output
 
-
-        mkdir -p {$python3_prefix}/python_hacl
-        cp -rf {$p->getBuildDir()}/python3/Modules/_hacl/* {$python3_prefix}/python_hacl/
 EOF
         )
         ->withPkgName('python3')
@@ -138,10 +135,6 @@ EOF
 
     $p->addLibrary($lib);
 
-    $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $python3_prefix . '/python_hacl/');
-    $p->withVariable('CPPFLAGS', '$CPPFLAGS -I' . $python3_prefix . '/python_hacl/include/');
-    $p->withVariable('LDFLAGS', '$LDFLAGS -L' . $python3_prefix . '/python_hacl/');
-    $p->withVariable('LIBS', '$LIBS -lHacl_Hash_SHA2');
     if ($p->isMacos()) {
         $p->withVariable('LDFLAGS', '$LDFLAGS -framework CoreFoundation ');
     }
