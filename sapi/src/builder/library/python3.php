@@ -61,6 +61,8 @@ return function (Preprocessor $p) {
         CPPFLAGS="\$CPPFLAGS " \
         LDFLAGS="\$LDFLAGS  " \
         LIBS="\$LIBS " \
+        CFLAGSFORSHARED="" CCSHARED="" LDSHARED="" LDCXXSHARED="" LINKFORSHARED="" \
+        MODULE_BUILDTYPE=static \
         ./configure \
         --prefix={$python3_prefix} \
         --enable-shared=no \
@@ -94,7 +96,7 @@ return function (Preprocessor $p) {
          CPPFLAGS="\$CPPFLAGS " \
          LDFLAGS="\$LDFLAGS  " \
          LIBS="\$LIBS " \
-         LINKFORSHARED=" "  \
+         CFLAGSFORSHARED="" CCSHARED="" LDSHARED="" LDCXXSHARED="" LINKFORSHARED="" \
          make -j {$p->getMaxJob()}
 
         make install
@@ -155,3 +157,5 @@ EOF
 
 # 配置参考 https://docs.python.org/zh-cn/3.12/using/configure.html
 # 参考文档： https://wiki.python.org/moin/BuildStatically
+
+# https://github.com/python/cpython
