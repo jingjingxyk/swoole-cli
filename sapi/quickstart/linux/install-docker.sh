@@ -50,14 +50,14 @@ fi
 
 
 case "$MIRROR" in
-china | ustc)
-  sed -i "s@https://mirrors.aliyun.com/docker-ce@https://mirrors.ustc.edu.cn/docker-ce@g" get-docker.sh
+china | tuna)
+  sed -i "s@https://mirrors.aliyun.com/docker-ce@https://mirrors.tuna.tsinghua.edu.cn/docker-ce@g" get-docker.sh
   sed -i "s@Aliyun)@china)@g" get-docker.sh
   sh get-docker.sh --mirror china
   exit 0
   ;;
-tuna)
-  sed -i "s@https://mirrors.aliyun.com/docker-ce@https://mirrors.tuna.tsinghua.edu.cn/docker-ce@g" get-docker.sh
+ustc)
+  sed -i "s@https://mirrors.aliyun.com/docker-ce@https://mirrors.ustc.edu.cn/docker-ce@g" get-docker.sh
   sed -i "s@Aliyun)@china)@g" get-docker.sh
   sh get-docker.sh --mirror china
   exit 0
