@@ -137,9 +137,7 @@ EOF
 
     if ($p->isMacos()) {
         $p->withVariable('LDFLAGS', '$LDFLAGS -framework CoreFoundation ');
-    }
 
-    if ($p->isMacos()) {
         //module  _scproxy needs SystemConfiguration and CoreFoundation framework
         //$p->withVariable('LDFLAGS', '$LDFLAGS -framework SystemConfiguration -framework CoreFoundation ');
     }
