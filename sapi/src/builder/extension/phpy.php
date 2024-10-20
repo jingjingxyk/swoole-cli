@@ -50,7 +50,7 @@ EOF
 
         cd {$php_src}/
         sed -i.backup "s/ -z now/  /g" ext/phpy/config.m4
-        rm -f ext/phpy/config.m4
+        rm -f ext/phpy/config.m4.backup
 EOF;
 
         return $cmd;
