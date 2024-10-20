@@ -54,8 +54,8 @@ EOF
 EOF
             )
             ->withPkgName('openssl')
-            ->withPkgName('libssl')
-            ->withPkgName('libcrypto')
+            //->withPkgName('libssl')
+            //->withPkgName('libcrypto')
             ->withBinPath($openssl_prefix . '/bin/')
     );
 };
