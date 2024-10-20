@@ -22,6 +22,7 @@ return function (Preprocessor $p) {
         ->withUrl('https://www.python.org/ftp/python/3.12.2/Python-3.12.2.tgz')
         ->withPrefix($python3_prefix)
         ->withBuildCached(false)
+        ->withInstallCached(false)
         ->withBuildScript(
             <<<EOF
 
@@ -39,7 +40,7 @@ return function (Preprocessor $p) {
         PACKAGES="\$PACKAGES libb2"
 
 
-        CFLAGS="-DOPENSSL_THREADS {$static_flag}  -pie -fPIC"
+        CFLAGS="-DOPENSSL_THREADS {$static_flag}  -fPIC -DCONFIG_64=1"
         CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$PACKAGES)  {$static_flag}  "
         LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES)  {$static_flag}  "
         LIBS="$(pkg-config      --libs-only-l    --static \$PACKAGES)  {$libs}"
@@ -71,39 +72,34 @@ return function (Preprocessor $p) {
         --with-system-expat=yes \
         --with-system-libmpdec=yes \
         --with-readline=readline \
-        --without-builtin-hashlib-hashes \
         --with-openssl={$openssl_prefix} \
         --with-ssl-default-suites=openssl \
         --without-valgrind \
         --without-dtrace \
         --with-ensurepip=install
 
-        # --with-builtin-hashlib-hashes="md5,sha1,sha2,sha3,blake2" \
+
         # 只能动态构建的扩展 请查看 Modules/Setup.stdlib 描述,找到并注释
         # 注释方法： sed -i 's/^pattern/;\1/' file.txt
         # \1 表示匹配到的内容
 
-        sed -i.backup 's/^_ctypes _ctypes\/_ctypes\.c/# \1/' Modules/Setup.stdlib
-        sed -i.backup 's/^_scproxy _scproxy\.c/# \1/' Modules/Setup.stdlib
+        # sed -i.backup "s/^\*shared\*/\*static\*/g" Modules/Setup.stdlib
+        # sed -i.backup 's/^_ctypes _ctypes\/_ctypes\.c/# \1/' Modules/Setup.stdlib
+        # sed -i.backup 's/^_scproxy _scproxy\.c/# \1/' Modules/Setup.stdlib
+
         sed -i.backup 's/^xxlimited xxlimited\.c/# \1/' Modules/Setup.stdlib
         sed -i.backup 's/^xxlimited_35 xxlimited_35\.c/# \1/' Modules/Setup.stdlib
-        sed -i.backup 's/^_decimal _decimal\/_decimal\.c/# \1/' Modules/Setup.stdlib
 
-        sed -i.backup 's/^_md5 md5module\.c/# \1/' Modules/Setup.stdlib
-        sed -i.backup 's/^_sha1 sha1module\.c/# \1/' Modules/Setup.stdlib
-        sed -i.backup 's/^_sha2 sha2module\.c/# \1/' Modules/Setup.stdlib
-        sed -i.backup 's/^_sha3 sha3module\.c/# \1/' Modules/Setup.stdlib
-
-        sed -i.backup "s/^\*shared\*/\*static\*/g" Modules/Setup.stdlib
 
         cp -f Modules/Setup.stdlib  Modules/Setup.local
 
-         CFLAGS="\$CFLAGS " \
-         CPPFLAGS="\$CPPFLAGS " \
-         LDFLAGS="\$LDFLAGS  " \
-         LIBS="\$LIBS " \
-         CFLAGSFORSHARED="" CCSHARED="" LDSHARED="" LDCXXSHARED="" LINKFORSHARED="" \
-         make -j {$p->getMaxJob()}
+        CFLAGS="\$CFLAGS " \
+        CPPFLAGS="\$CPPFLAGS " \
+        LDFLAGS="\$LDFLAGS  " \
+        LIBS="\$LIBS " \
+        CFLAGSFORSHARED="" CCSHARED="" LDSHARED="" LDCXXSHARED="" LINKFORSHARED="" \
+        MODULE_BUILDTYPE=static \
+        make -j {$p->getMaxJob()}
 
         make install
 
@@ -151,8 +147,11 @@ EOF
 };
 # 构建独立版本 python 参考
 # https://github.com/indygreg/python-build-standalone.git
+# 参考文档： https://wiki.python.org/moin/BuildStatically
+# # https://knazarov.com/posts/statically_linked_python_interpreter/
+
 
 # 配置参考 https://docs.python.org/zh-cn/3.12/using/configure.html
-# 参考文档： https://wiki.python.org/moin/BuildStatically
 
 # https://github.com/python/cpython
+
