@@ -27,7 +27,8 @@ return function (Preprocessor $p) {
 
 EOF
         )
-        ->withPkgName('libmpdec');
+        ->withPkgName('libmpdec')
+        ->withPkgName('libmpdec++');
 
     $p->addLibrary($lib);
 };
