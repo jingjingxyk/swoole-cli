@@ -50,10 +50,9 @@ EOF
             ->withScriptAfterInstall(
                 <<<EOF
             sed -i.backup "s/-ldl/  /g" {$openssl_prefix}/lib/pkgconfig/libcrypto.pc
+            rm -f {$openssl_prefix}/lib/pkgconfig/libcrypto.pc.backup
 EOF
             )
-            ->withPkgName('libcrypto')
-            ->withPkgName('libssl')
             ->withPkgName('openssl')
             ->withBinPath($openssl_prefix . '/bin/')
     );
