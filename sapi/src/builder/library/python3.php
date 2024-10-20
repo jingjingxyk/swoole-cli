@@ -22,7 +22,7 @@ return function (Preprocessor $p) {
         ->withUrl('https://www.python.org/ftp/python/3.12.2/Python-3.12.2.tgz')
         ->withPrefix($python3_prefix)
         ->withBuildCached(false)
-        ->withInstallCached(false)
+        //->withInstallCached(false)
         ->withBuildScript(
             <<<EOF
 
@@ -90,7 +90,6 @@ return function (Preprocessor $p) {
         sed -i.backup 's/^xxlimited xxlimited\.c/# \1/' Modules/Setup.stdlib
         sed -i.backup 's/^xxlimited_35 xxlimited_35\.c/# \1/' Modules/Setup.stdlib
 
-
         cp -f Modules/Setup.stdlib  Modules/Setup.local
 
         CFLAGS="\$CFLAGS " \
@@ -118,7 +117,12 @@ return function (Preprocessor $p) {
 
 EOF
         )
-        ->withPkgName('python3')
+        ->withScriptAfterInstall(
+            <<<EOF
+            sed -i.backup "s/-ldl/  /g" {$python3_prefix}/lib/pkgconfig/python3.pc
+            sed -i.backup "s/-ldl/  /g" {$python3_prefix}/lib/pkgconfig/python3-embed.pc
+EOF
+        )
         ->withPkgName('python3-embed')
         ->withDependentLibraries(
             'zlib',
