@@ -84,7 +84,7 @@ define("LIBARGON2_PREFIX", $p->getGlobalPrefix() . '/libargon2');
 define("MUSL_CROSS_MAKE_PREFIX", $p->getGlobalPrefix() . '/musl_cross_make');
 
 define("PYTHON3_PREFIX", $p->getGlobalPrefix() . '/python3');
-define("MPDECIMAL_PREFIX", $p->getGlobalPrefix() . '/mpdecimal');
+define("LIBMPDECIMAL_PREFIX", $p->getGlobalPrefix() . '/libmpdecimal');
 define("LIBB2_PREFIX", $p->getGlobalPrefix() . '/libb2');
 
 
