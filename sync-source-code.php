@@ -95,6 +95,7 @@ $SYNC_SOURCE_CODE_SHELL .= PHP_EOL . <<<'EOF'
 
     sed -i.backup 's/ext_shared=yes/ext_shared=no/g' ext/opcache/config.m4
     sed -i.backup 's/shared,,/$ext_shared,,/g' ext/opcache/config.m4
+
     # echo '#include "php.h"\n\nextern zend_module_entry opcache_module_entry;\n#define phpext_opcache_ptr  &opcache_module_entry\n' > ext/opcache/php_opcache.h
     cat > ext/opcache/php_opcache.h <<PHP_OPCACHE_H_EOF
 #include "php.h"
@@ -103,6 +104,7 @@ extern zend_module_entry opcache_module_entry;
 #define phpext_opcache_ptr  &opcache_module_entry
 
 PHP_OPCACHE_H_EOF
+
 
     cp -rf $SRC/ext/openssl/ ./ext/openssl
     cp -rf $SRC/ext/pcntl/ ./ext/pcntl
@@ -153,21 +155,24 @@ PHP_OPCACHE_H_EOF
     # 在sed命令中，常见的需要转义的字符有：\、/、$、&、.、*、[、]等
     #                                反斜杠、正斜杠、美元符号、引用符号、点号、星号、方括号等
 
-    test -f main/main.c.backup && rm -f main/main.c.backup
-    test -f ext/opcache/config.m4.backup && rm -f ext/opcache/config.m4.backup
-
 
     # fpm
-    cp -rf $SRC/sapi/fpm/fpm ./sapi/cli/
+    # cp -rf $SRC/sapi/fpm/fpm ./sapi/cli/
     sed -i.backup 's/int main(int argc, char \*argv\[\])/int fpm_main(int argc, char \*argv\[\])/g' ./sapi/cli/fpm/fpm_main.c
-    sed -i.backup 's/{'-', 0, NULL}/{'P', 0, "fpm"},\n	{'-', 0, NULL}/g' ./sapi/cli/fpm/fpm_main.c
+    # sed -i.backup "s/{'-', 0, NULL}/{'P', 0, \"fpm\"},\n	{'-', 0, NULL}/g" ./sapi/cli/fpm/fpm_main.c
 
 
 
     # cli
+    cp -rf $SRC/sapi/cli/ ./sapi/cli
     cp -rf $SRC/sapi/cli/ps_title.c ./sapi/cli
     cp -rf $SRC/sapi/cli/generate_mime_type_map.php ./sapi/cli
     cp -rf $SRC/sapi/cli/php.1.in ./sapi/cli
+
+    # clean file
+    test -f main/main.c.backup && rm -f main/main.c.backup
+    test -f ext/opcache/config.m4.backup && rm -f ext/opcache/config.m4.backup
+    test -f sapi/cli/fpm/fpm_main.c.backup && rm -f sapi/cli/fpm/fpm_main.c.backup
 
 EOF;
 
