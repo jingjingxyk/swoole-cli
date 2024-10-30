@@ -5,7 +5,6 @@ use SwooleCli\Preprocessor;
 use SwooleCli\Extension;
 
 return function (Preprocessor $p) {
-
     $options = '--with-gd=' . LIBGD_PREFIX;
     $options .= ' --with-webp-dir=' . WEBP_PREFIX;
     $options .= ' --with-jpeg-dir=' . JPEG_PREFIX;
