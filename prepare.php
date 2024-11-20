@@ -185,7 +185,7 @@ function install_libraries(Preprocessor $p): void
             ->withLicense('https://github.com/dixyes/phpmicro/blob/master/LICENSE', Library::LICENSE_APACHE2)
             ->withFile('phpmicro-master.tar.gz')
             ->withAutoUpdateFile()
-            ->withCleanBuildDirectory()
+            ->withBuildCached(false)
             ->withDownloadScript(
                 'phpmicro',
                 <<<EOF
