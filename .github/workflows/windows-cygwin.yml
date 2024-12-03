@@ -1,4 +1,4 @@
-name: build-php-cli-windows-cygwin
+name: build-windows-cygwin
 
 on:
   push:
