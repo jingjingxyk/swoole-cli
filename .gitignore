@@ -360,4 +360,4 @@ swoole-cli-*
 php-cli-*
 php-fpm-*
 !sapi/patches
-
+socat
