@@ -46,3 +46,4 @@ done
 
 setup-x86_64.exe --quiet-mode --disable-buggy-antivirus --site $SITE --packages make,git,curl,wget,tar,libtool,bison,gcc-g++,autoconf,automake,openssl,libpcre2-devel,libssl-devel,libcurl-devel,libxml2-devel,libxslt-devel,libgmp-devel,zlib-devel,libbz2-devel,liblz4-devel,liblzma-devel,libzip-devel,libreadline-devel,coreutils,openssl-devel
 setup-x86_64.exe --quiet-mode --disable-buggy-antivirus --site $SITE --packages zip unzip
+setup-x86_64.exe --quiet-mode --disable-buggy-antivirus --site $SITE --packages libwrap-devel
