@@ -28,7 +28,13 @@ test -d kubernetes && rm -rf kubernetes
 test -d qemu && rm -rf qemu
 test -d SDN && rm -rf SDN
 
+cd ${__PROJECT__}/
+
+test -f sync-source-code.php && rm -f sync-source-code.php
+
 cd ${__PROJECT__}/sapi/
+
+test -d build-dependencies-container && rm -rf build-dependencies-container
 
 test -d tools && rm -rf tools
 
