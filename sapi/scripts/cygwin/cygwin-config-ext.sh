@@ -48,6 +48,7 @@ if [ ! -f ${__PROJECT__}/pool/socat-${SOCAT_VERSION}.tar.gz ]; then
   test -d socat && rm -rf socat
   git clone -b tag-1.8.0.1 https://repo.or.cz/socat.git
   cd socat
+  curl -Lo cacert.pem https://curl.se/ca/cacert.pem
   tar -czvf ${__PROJECT__}/pool/socat-${SOCAT_VERSION}.tar.gz .
   cd ${__PROJECT__}
 

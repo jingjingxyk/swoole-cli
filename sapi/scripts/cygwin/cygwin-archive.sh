@@ -27,6 +27,7 @@ ldd ./socat | grep -v '/cygdrive/' | awk '{print $3}' | xargs -I {} cp {} /tmp/$
 cp -f ./COPYING /tmp/${NAME}/
 cp -f ./COPYING.OpenSSL /tmp/${NAME}/
 cp -f ./socat /tmp/${NAME}/
+cp -f ./cacert.pem /tmp/${NAME}/
 
 cd /tmp/
 
