@@ -158,7 +158,7 @@ jobs:
       - name: Archive production artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: socat-${{ env.SOCAT_VERSION }}-macos-x64
+          name: socat-v${{ env.SOCAT_VERSION }}-macos-x64
           retention-days: 7
           path: ./bin/socat
 
@@ -166,4 +166,4 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: 1 && startsWith(github.ref, 'refs/tags/')
         with:
-          files: socat-${{ env.SOCAT_VERSION }}-macos-x64.tar.xz
+          files: socat-v${{ env.SOCAT_VERSION }}-macos-x64.tar.xz

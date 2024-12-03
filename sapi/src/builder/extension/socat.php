@@ -31,13 +31,13 @@ EOF;
         if ($p->getOsType() == 'macos') {
             $cmd .= <<<EOF
             otool -L {$workdir}/bin/socat
-            tar -cJvf {$workdir}/socat-\${SOCAT_VERSION}-macos-{$system_arch}.tar.xz socat
+            tar -cJvf {$workdir}/socat-v\${SOCAT_VERSION}-macos-{$system_arch}.tar.xz socat
 EOF;
         } else {
             $cmd .= <<<EOF
               file {$workdir}/bin/socat
               readelf -h {$workdir}/bin/socat
-              tar -cJvf {$workdir}/socat-\${SOCAT_VERSION}-linux-{$system_arch}.tar.xz socat
+              tar -cJvf {$workdir}/socat-v\${SOCAT_VERSION}-linux-{$system_arch}.tar.xz socat
 
 EOF;
         }
