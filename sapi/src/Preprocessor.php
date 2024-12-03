@@ -104,47 +104,13 @@ class Preprocessor
      * Extensions enabled by default
      * @var array|string[]
      */
-    protected array $extEnabled = [
-        'opcache', //需要修改源码才能实现
-        'curl',
-        'iconv',
-        'bz2',
-        'bcmath',
-        'pcntl',
-        'filter',
-        'session',
-        'tokenizer',
-        'mbstring',
-        'ctype',
-        'zlib',
-        'zip',
-        'posix',
-        'sockets',
-        'pdo',
-        'sqlite3',
-        'phar',
-        'mysqlnd',
-        'mysqli',
-        'intl',
-        'fileinfo',
-        'pdo_mysql',
-        //'pdo_sqlite',
-        'soap',
-        'xsl',
-        'gmp',
-        'exif',
-        'sodium',
-        'openssl',
-        'readline',
-        'xml',
-        'redis',
-        'swoole',
-        'yaml',
-        'imagick',
-        //'mongodb', //php8.2 需要处理依赖库问题 more info ： https://github.com/mongodb/mongo-php-driver/issues/1445
-        'gd',
-    ];
+    // 'opcache', //需要修改源码才能实现
+    // 'mongodb', //php8.2 需要处理依赖库问题 more info ： https://github.com/mongodb/mongo-php-driver/issues/1445
+
+    protected array $extEnabled;
+
     protected array $extEnabledBuff = [];
+
     protected array $endCallbacks = [];
     protected array $extCallbacks = [];
     protected array $beforeConfigure = [];
@@ -152,6 +118,7 @@ class Preprocessor
     protected array $releaseArchives = [];
 
     protected string $configureVarables;
+
     protected string $buildType = 'release';
     protected bool $inVirtualMachine = false;
 
@@ -166,6 +133,7 @@ class Preprocessor
         //重置默认扩展
         $this->extEnabled = [];
         $this->setOsType($this->getRealOsType());
+        $this->extEnabled = require __DIR__ . '/builder/enabled_extensions.php';
     }
 
 
@@ -221,16 +189,6 @@ class Preprocessor
             return 'base';
         } else {
             return 'base' . '-' . $arch;
-        }
-    }
-
-    public function getBaseImageDockerFile(): string
-    {
-        $arch = $this->getSystemArch();
-        if ($arch == 'x64') {
-            return 'Dockerfile';
-        } else {
-            return 'Dockerfile' . '-' . $arch;
         }
     }
 
@@ -402,7 +360,7 @@ class Preprocessor
             /*
              * sockat 代理例子
              * http://www.dest-unreach.org/socat/doc/socat.html
-             * socat - socks4a:<socks-server>::%h:%p,socksport=2000
+             * socat - socks4a:<socks-server>:%h:%p,socksport=2000
              * socat - proxy:<proxy-server>:%h:%p,proxyport=2000
              */
 
@@ -468,8 +426,7 @@ __GIT_PROXY_CONFIG_EOF;
      * @param string $httpProxyConfig
      * @return void
      */
-
-    protected function downloadFile(string $url, string $file, object $project = null, string $httpProxyConfig = ''): void
+    protected function downloadFile(string $url, string $file, ?object $project = null, string $httpProxyConfig = ''): void
     {
         # $userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36';
         # echo `curl --user-agent '{$userAgent}' --connect-timeout 15 --retry 5 --retry-delay 5  -Lo '{$file}' '{$url}' `;
@@ -636,7 +593,11 @@ EOF;
         }
 
         if (!empty($lib->binPath)) {
-            $this->binPaths[] = $lib->binPath;
+            if (is_array($lib->binPath)) {
+                $this->binPaths = array_merge($this->binPaths, $lib->binPath);
+            } else {
+                $this->binPaths[] = $lib->binPath;
+            }
         }
 
         if (empty($lib->license)) {
@@ -772,7 +733,8 @@ EOF;
                         echo '[ext/' . $ext_name . '] cached ' . PHP_EOL;
                     }
                 } else {
-                    echo $cmd = "tar --strip-components=1 -C $dst_dir -xf {$ext->path}";
+                    $cmd = "tar --strip-components=1 -C $dst_dir -xf {$ext->path}";
+                    echo "[Extension] " . $cmd;
                     echo PHP_EOL;
                     echo `$cmd`;
                     echo PHP_EOL;
@@ -1155,9 +1117,13 @@ EOF;
         }
         $this->mkdirIfNotExists($this->libraryDir, 0777, true);
         $this->mkdirIfNotExists($this->extensionDir, 0777, true);
+
         if (BUILD_SHARED_LIBS) {
             $this->globalPrefix = '/usr/local/swoole-cli-shared';
         }
+
+        $this->deleteDirectoryIfExists($this->getWorkExtDir());
+
         include __DIR__ . '/constants.php';
         //构建依赖库安装脚本
         //libraries_builder($this);
@@ -1184,16 +1150,6 @@ EOF;
             ($extAvailabled[$ext])($this);
             if (isset($this->extCallbacks[$ext])) {
                 ($this->extCallbacks[$ext])($this);
-            }
-        }
-
-        if ($this->isMacos()) {
-            if (is_file('/usr/local/opt/bison/bin/bison')) {
-                $this->withBinPath('/usr/local/opt/bison/bin');
-            } elseif (is_file('/opt/homebrew/opt/bison/bin/bison')) { //兼容 github action
-                $this->withBinPath('/opt/homebrew/opt/bison/bin/');
-            } else {
-                $this->loadDependentLibrary("bison");
             }
         }
 
@@ -1259,6 +1215,7 @@ EOF;
             $this->rootDir . '/make-export-variables.sh'
         );
 
+        shell_exec('chmod a+x ' . $this->rootDir . '/make.sh');
         $this->mkdirIfNotExists($this->rootDir . '/bin');
         $this->generateFile(__DIR__ . '/template/license.php', $this->rootDir . '/bin/LICENSE');
         $this->generateFile(__DIR__ . '/template/credits.php', $this->rootDir . '/bin/credits.html');
@@ -1291,6 +1248,7 @@ EOF;
             echo "{$item->name}\n";
         }
     }
+
 
     public function getRealOsType(): string
     {

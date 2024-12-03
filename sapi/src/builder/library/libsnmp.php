@@ -13,8 +13,6 @@ return function (Preprocessor $p) {
         ->withManual('http://www.net-snmp.org/docs/INSTALL.html')
         ->withBuildCached(false)
         ->withPrefix($libsnmp_prefix)
-        ->withCleanBuildDirectory()
-        ->withCleanPreInstallDirectory($libsnmp_prefix)
         ->withConfigure(
             <<<EOF
 

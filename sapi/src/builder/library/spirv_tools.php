@@ -20,8 +20,6 @@ return function (Preprocessor $p) {
 EOF
         )
         ->withPrefix($openssl_prefix)
-        ->withCleanBuildDirectory()
-        ->withCleanPreInstallDirectory($openssl_prefix)
         ->withBuildCached(false)
         ->withBuildScript(
             <<<EOF

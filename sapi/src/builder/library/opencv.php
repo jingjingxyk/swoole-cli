@@ -111,8 +111,6 @@ EOF
 EOF
         )
         ->withPrefix($opencv_prefix)
-        ->withCleanBuildDirectory()
-        ->withCleanPreInstallDirectory($opencv_prefix)
         ->withBuildLibraryHttpProxy(true)
         ->withBuildCached(false)
         ->withBuildScript(

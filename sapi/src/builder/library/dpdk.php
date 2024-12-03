@@ -48,7 +48,6 @@ EOF
             apt install python3-pyelftools
 EOF
             )
-            ->withCleanBuildDirectory()
             ->withBuildCached(false)
             ->withBuildScript(
                 <<<EOF

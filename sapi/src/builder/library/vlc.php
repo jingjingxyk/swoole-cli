@@ -24,7 +24,6 @@ EOF
         ->withBuildCached(false)
         //->withUntarArchiveCommand('xz')
         ->withPrefix($vlc_prefix)
-        ->withCleanPreInstallDirectory($vlc_prefix)
         ->withPreInstallCommand(
             'alpine',
             <<<EOF

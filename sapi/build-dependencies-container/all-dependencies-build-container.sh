@@ -29,10 +29,8 @@ TIME=$(date -u '+%Y%m%dT%H%M%SZ')
 
 VERSION="1.0.0"
 TAG="all-dependencies-alpine-3.18-php8-v${VERSION}-${ARCH}-${TIME}"
-ALIYUN_IMAGE="registry.cn-beijing.aliyuncs.com/jingjingxyk-public/app:build-swoole-cli-${TAG}"
-IMAGE="docker.io/phpswoole/swoole-cli-builder:${TAG}"
 IMAGE="docker.io/jingjingxyk/build-swoole-cli:${TAG}"
-
+IMAGE="docker.io/phpswoole/swoole-cli-builder:${TAG}"
 
 
 COMPOSER_MIRROR=""
@@ -94,9 +92,6 @@ cd ${__PROJECT__}/
 echo ${IMAGE} > ${__PROJECT__}/var/all-dependencies-container.txt
 
 
-docker tag ${IMAGE} ${ALIYUN_IMAGE}
-
-# docker push ${ALIYUN_IMAGE}
 # docker push ${IMAGE}
 
 
@@ -105,7 +100,6 @@ docker tag ${IMAGE} ${ALIYUN_IMAGE}
 # bash build-release.sh --mirror china  --build-contianer
 
 # bash sapi/multistage-build-dependencies-container/all-dependencies-build-container.sh --composer_mirror tencent --mirror ustc --platform 'linux/amd64'
-
 # 验证构建结果
 # bash sapi/multistage-build-dependencies-container/all-dependencies-run-container-test.sh
 

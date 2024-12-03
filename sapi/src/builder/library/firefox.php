@@ -21,8 +21,6 @@ EOF
         )
         ->withBuildCached(false)
         ->withPrefix($example_prefix)
-        ->withCleanBuildDirectory()
-        ->withCleanPreInstallDirectory($example_prefix)
         ->withPreInstallCommand(
             'debian',
             <<<EOF

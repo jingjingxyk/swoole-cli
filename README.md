@@ -17,6 +17,9 @@
 
 curl -fSL https://github.com/jingjingxyk/swoole-cli/blob/new_dev/setup-socat-runtime.sh?raw=true | bash
 
+# 指定发布版本
+curl -fSL https://github.com/jingjingxyk/swoole-cli/blob/new_dev/setup-socat-runtime.sh?raw=true | bash -s -- --version  v2.1.0
+
 ```
 
 ## 构建文档
@@ -42,10 +45,50 @@ git clone --recursive -b socat https://github.com/jingjingxyk/swoole-cli.git
 ```bash
 
 cd swoole-cli
+
+bash setup-php-runtime.sh
+# 或者使用镜像
+# 来自 https://www.swoole.com/download
+bash setup-php-runtime.sh --mirror china
+
 php prepare.php +socat
 bash make-install-deps.sh
 bash make.sh all-library
 bash make.sh config
+
+```
+
+## 快速准备运行环境
+
+### linux
+
+如容器已经安装，可跳过执行安装 docker 命令
+
+```bash
+
+sh sapi/quickstart/linux/install-docker.sh
+sh sapi/quickstart/linux/run-alpine-container.sh
+sh sapi/quickstart/linux/connection-swoole-cli-alpine.sh
+sh sapi/quickstart/linux/alpine-init.sh
+
+# 使用镜像源安装
+sh sapi/quickstart/linux/install-docker.sh --mirror china
+sh sapi/quickstart/linux/alpine-init.sh --mirror china
+
+```
+
+### macos
+
+如 homebrew 已安装，可跳过执行安装 homebrew 命令
+
+```bash
+
+bash sapi/quickstart/macos/install-homebrew.sh
+bash sapi/quickstart/macos/macos-init.sh
+
+# 使用镜像源安装
+bash sapi/quickstart/macos/install-homebrew.sh --mirror china
+bash sapi/quickstart/macos/macos-init.sh --mirror china
 
 ```
 
@@ -67,6 +110,19 @@ bash build-release.sh
 ## socat 源码构建参考
 
     http://www.dest-unreach.org/socat/
+
+## Test
+
+```
+$ ./vendor/bin/phpunit sapi/src/tests/
+```
+
+## Code formatting
+
+```
+$ ./vendor/bin/php-cs-fixer fix sapi/src/
+$ ./vendor/bin/php-cs-fixer fix sapi/src/tests/
+```
 
 ## 授权协议
 
