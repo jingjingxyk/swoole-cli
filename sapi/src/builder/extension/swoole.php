@@ -4,24 +4,38 @@ use SwooleCli\Preprocessor;
 use SwooleCli\Extension;
 
 return function (Preprocessor $p) {
+    $options = [];
 
-    $swoole_tag = 'v5.1.4';
+    $dependentLibraries = ['curl', 'openssl', 'cares', 'zlib', 'brotli', 'nghttp2', 'sqlite3', 'unix_odbc', 'pgsql'];
+    $dependentExtensions = ['curl', 'openssl', 'sockets', 'mysqlnd', 'pdo'];
+
+    $swoole_tag = 'v5.1.6';
+    if (BUILD_CUSTOM_PHP_VERSION_ID >= 8040) {
+        // v5.1.x 不支持 PHP 8.4
+        // swoole 支持计划 https://wiki.swoole.com/zh-cn/#/version/supported?id=%e6%94%af%e6%8c%81%e8%ae%a1%e5%88%92
+        $swoole_tag = 'master';
+        $options[] = '--enable-swoole-thread';
+        $options[] = '--enable-zts';
+        $options[] = '--disable-opcache-jit';
+        $options[] = '--enable-brotli';
+        $options[] = '--enable-zstd';
+        $dependentLibraries[] = 'libzstd';
+        $p->withExportVariable('ZSTD_CFLAGS', '$(pkg-config  --cflags --static  libzstd)');
+        $p->withExportVariable('ZSTD_LIBS', '$(pkg-config    --libs   --static  libzstd)');
+    }
     $file = "swoole-{$swoole_tag}.tar.gz";
 
     $url = "https://github.com/swoole/swoole-src/archive/refs/tags/{$swoole_tag}.tar.gz";
-    $options = [];
-    if (in_array($p->getBuildType(), ['dev', 'debug'])) {
+
+    if ($p->getBuildType() === 'debug') {
         $options[] = ' --enable-debug ';
         $options[] = ' --enable-debug-log ';
-        $options[] = ' --enable-trace-log ';
         $options[] = ' --enable-swoole-coro-time  ';
     }
 
     //call_user_func_array([$ext, 'withDependentLibraries'], $dependentLibraries);
     //call_user_func_array([$ext, 'withDependentExtensions'], $dependentExtensions);
 
-    $dependentLibraries = ['curl', 'openssl', 'cares', 'zlib', 'brotli', 'nghttp2', 'sqlite3', 'unix_odbc', 'pgsql'];
-    $dependentExtensions = ['curl', 'openssl', 'sockets', 'mysqlnd', 'pdo'];
 
     $options[] = '--enable-swoole';
     $options[] = '--enable-sockets';
@@ -49,7 +63,6 @@ EOF
         ->withBuildCached(false)
         ->withDependentLibraries(...$dependentLibraries)
         ->withDependentExtensions(...$dependentExtensions));
-
 
     $p->withVariable('LIBS', '$LIBS ' . ($p->isMacos() ? '-lc++' : '-lstdc++'));
     $p->withExportVariable('CARES_CFLAGS', '$(pkg-config  --cflags --static  libcares)');
