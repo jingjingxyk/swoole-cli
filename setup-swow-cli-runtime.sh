@@ -55,7 +55,6 @@ VERSION='v1.5.2'
 mkdir -p bin/runtime
 mkdir -p var/runtime
 
-
 cd ${__PROJECT__}/var/runtime
 
 APP_DOWNLOAD_URL="https://github.com/jingjingxyk/build-swow-cli/releases/download/${VERSION}/${APP_NAME}-${APP_VERSION}-${OS}-${ARCH}.tar.xz"
@@ -163,6 +162,9 @@ else
   test -f php || tar -xvf ${APP_RUNTIME}.tar
   chmod a+x php
   cp -f ${__PROJECT__}/var/runtime/php ${__PROJECT__}/bin/runtime/php
+  test -f php || tar -xvf ${APP_RUNTIME}.tar
+  chmod a+x php
+  cp -f ${__PROJECT__}/var/runtime/php ${__PROJECT__}/bin/runtime/php
 fi
 
 cd ${__PROJECT__}/var/runtime
@@ -204,4 +206,11 @@ echo " alias php='php -d curl.cainfo=${__PROJECT__}/bin/runtime/cacert.pem -d op
 echo " OR "
 echo " alias php='php -c ${__PROJECT__}/bin/runtime/php.ini' "
 echo " "
+
 echo " PHP-CLI VERSION  ${APP_VERSION}"
+
+test $OS="macos" && echo "sudo xattr -d com.apple.quarantine ${__PROJECT__}/bin/runtime/php"
+echo " "
+echo " SWOW VERSION  ${APP_VERSION}"
+export PATH="${__PROJECT__}/bin/runtime:$PATH"
+php -v
