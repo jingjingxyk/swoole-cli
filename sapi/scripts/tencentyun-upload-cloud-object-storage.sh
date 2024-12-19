@@ -89,7 +89,7 @@ fi
 
 COSCLI="${__PROJECT__}/var/upload-release-oss/coscli --config-path ${CLOUD_OBJECT_STORAGE_CONFIG} "
 COS_BUCKET_FOLDER="cos://wenda-1257035567/dist/"
-
+cat ${CLOUD_OBJECT_STORAGE_CONFIG}
 ${COSCLI}  ls ${COS_BUCKET_FOLDER}
 
 if [ "${UPLOAD_TYPE}" = 'single' ]; then
