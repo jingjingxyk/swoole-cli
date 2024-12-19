@@ -116,3 +116,11 @@ jobs:
           files: |
             all-deps.zip
             all-deps.zip.sha256sum
+      - name: upload artifacts to cloud object storage
+        # if: (startsWith(github.ref, 'refs/tags/v')) && (github.repository == 'swoole/swoole-cli')
+        env:
+          SECRET_ID: ${{ secrets.QCLOUD_OSS_SECRET_ID }}
+          SECRET_KEY: ${{ secrets.QCLOUD_OSS_SECRET_KEY }}
+        run: |
+          bash sapi/scripts/generate-artifact-hash.sh --version v6.0.0.0
+          bash sapi/scripts/tencentyun-upload-cloud-object-storage.sh --swoole-cli-version v6.0.0.0 --upload-all
