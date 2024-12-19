@@ -8,10 +8,9 @@ cos:
     cvmrolename: ""
     closeautoswitchhost: "true"
   buckets:
-    - name: "wenda-1252906962"
-      alias: "wenda-1252906962"
-      region: "ap-shanghai"
-      #      endpoint: cos.ap-shanghai.myqcloud.com
-      #      endpoint: wenda-1252906962.cos.accelerate.myqcloud.com
-      endpoint: "cos.accelerate.myqcloud.com"
+    - name: "wenda-1257035567"
+      alias: "wenda-1257035567"
+      region: "ap-beijing"
+      #       endpoint: "cos.accelerate.myqcloud.com"
+      endpoint: "cos.ap-beijing.myqcloud.com"
       ofs: false
