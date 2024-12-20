@@ -48,8 +48,8 @@ case $ARCH in
   ;;
 esac
 
-mkdir -p ${__PROJECT__}/var/upload-release-oss/
-cd ${__PROJECT__}/var/upload-release-oss/
+mkdir -p ${__PROJECT__}/var/tencent-cloud-object-storage/
+cd ${__PROJECT__}/var/tencent-cloud-object-storage/
 
 test -f ${APP_RUNTIME} || curl -fSLo ${APP_RUNTIME} https://github.com/tencentyun/coscli/releases/download/${APP_VERSION}/${APP_RUNTIME}
 
@@ -76,19 +76,20 @@ while [ $# -gt 0 ]; do
   shift $(($# > 0 ? 1 : 0))
 done
 
-# ${__PROJECT__}/var/upload-release-oss/coscli --help
+# ${__PROJECT__}/var/tencent-cloud-object-storage/coscli --help
 
-CLOUD_OBJECT_STORAGE_CONFIG=${__PROJECT__}/var/upload-release-oss/.tencentyun-cloud-object-storage.yaml
+CLOUD_OBJECT_STORAGE_CONFIG=${__PROJECT__}/var/tencent-cloud-object-storage/.tencent-cloud-object-storage.yaml
 if [ ! -f ${CLOUD_OBJECT_STORAGE_CONFIG} ]; then
-  cp -f ${__PROJECT__}/sapi/scripts/tencentyun-cloud-object-storage.yaml ${CLOUD_OBJECT_STORAGE_CONFIG}
+  cp -f ${__PROJECT__}/sapi/scripts/tencent-cloud-object-storage.yaml ${CLOUD_OBJECT_STORAGE_CONFIG}
   if [ -n "${SECRET_ID}" ] && [ -n "${SECRET_KEY}" ]; then
     sed -i.bak "s/\${{ secrets.QCLOUD_OSS_SECRET_ID }}/${SECRET_ID}/" ${CLOUD_OBJECT_STORAGE_CONFIG}
     sed -i.bak "s/\${{ secrets.QCLOUD_OSS_SECRET_KEY }}/${SECRET_KEY}/" ${CLOUD_OBJECT_STORAGE_CONFIG}
   fi
 fi
 
-COSCLI="${__PROJECT__}/var/upload-release-oss/coscli --config-path ${CLOUD_OBJECT_STORAGE_CONFIG} "
+COSCLI="${__PROJECT__}/var/tencent-cloud-object-storage/coscli --config-path ${CLOUD_OBJECT_STORAGE_CONFIG} "
 COS_BUCKET_FOLDER="cos://wenda-1257035567/dist/"
+
 cat ${CLOUD_OBJECT_STORAGE_CONFIG}
 ${COSCLI}  ls ${COS_BUCKET_FOLDER}
 
@@ -103,8 +104,8 @@ if [ "${UPLOAD_TYPE}" = 'all' ]; then
   else
     echo "please download release artifact and upload !"
     echo "bash ${__PROJECT__}/sapi/scripts/generate-artifact-hash.sh --version ${SWOOLE_CLI_VERSION}"
-    echo "bash ${__PROJECT__}/sapi/scripts/tencentyun-upload-cloud-object-storage.sh --swoole-cli-version ${SWOOLE_CLI_VERSION} --upload-all"
-    exit 0
+    echo "bash ${__PROJECT__}/sapi/scripts/tencent-cloud-object-storage.sh --swoole-cli-version ${SWOOLE_CLI_VERSION} --upload-all"
+    exit 3
   fi
 
   cd ${__PROJECT__}/var/artifact-hash/${SWOOLE_CLI_VERSION}

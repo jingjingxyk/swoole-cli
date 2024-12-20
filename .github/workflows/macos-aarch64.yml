@@ -155,4 +155,4 @@ jobs:
           SECRET_ID: ${{ secrets.QCLOUD_OSS_SECRET_ID }}
           SECRET_KEY: ${{ secrets.QCLOUD_OSS_SECRET_KEY }}
         run: |
-          bash sapi/scripts/tencentyun-upload-cloud-object-storage.sh --upload-file ${{ github.workspace }}/swoole-cli-v${{ env.APP_VERSION }}-macos-arm64.tar.xz
+          bash sapi/scripts/tencent-cloud-object-storage.sh --upload-file ${{ github.workspace }}/swoole-cli-v${{ env.APP_VERSION }}-macos-arm64.tar.xz
