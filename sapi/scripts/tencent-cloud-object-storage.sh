@@ -91,8 +91,6 @@ set -u
 chmod a+x ${APP_RUNTIME}
 cp -f ${APP_RUNTIME} coscli
 
-# ${__PROJECT__}/var/tencent-cloud-object-storage/coscli --help
-
 CLOUD_OBJECT_STORAGE_CONFIG=${__PROJECT__}/var/tencent-cloud-object-storage/.tencent-cloud-object-storage.yaml
 if [ ! -f ${CLOUD_OBJECT_STORAGE_CONFIG} ]; then
   cp -f ${__PROJECT__}/sapi/scripts/tencent-cloud-object-storage.yaml ${CLOUD_OBJECT_STORAGE_CONFIG}
@@ -108,7 +106,8 @@ COSCLI="${__PROJECT__}/var/tencent-cloud-object-storage/coscli --config-path ${C
 COS_BUCKET_FOLDER="cos://wenda-1257035567/dist/"
 
 if [ "${UPLOAD_TYPE}" == '' ]; then
-  cat ${CLOUD_OBJECT_STORAGE_CONFIG}
+  # cat ${CLOUD_OBJECT_STORAGE_CONFIG}
+  # ${COSCLI} --help
   ${COSCLI} ls ${COS_BUCKET_FOLDER}
   exit 0
 fi
