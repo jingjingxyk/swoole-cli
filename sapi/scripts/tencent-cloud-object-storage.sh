@@ -107,18 +107,18 @@ fi
 COSCLI="${__PROJECT__}/var/tencent-cloud-object-storage/coscli --config-path ${CLOUD_OBJECT_STORAGE_CONFIG} "
 COS_BUCKET_FOLDER="cos://wenda-1257035567/dist/"
 
-if [ "${UPLOAD_TYPE}" = '' ]; then
+if [ "${UPLOAD_TYPE}" == '' ]; then
   cat ${CLOUD_OBJECT_STORAGE_CONFIG}
   ${COSCLI} ls ${COS_BUCKET_FOLDER}
   exit 0
 fi
 
-if [ "${UPLOAD_TYPE}" = 'single' ]; then
+if [ "${UPLOAD_TYPE}" == 'single' ]; then
   ${COSCLI} sync ${UPLOAD_FILE} ${COS_BUCKET_FOLDER}
   exit 0
 fi
 
-if [ "${UPLOAD_TYPE}" = 'all' ]; then
+if [ "${UPLOAD_TYPE}" == 'all' ]; then
   if [ -d ${__PROJECT__}/var/artifact-hash/${SWOOLE_CLI_VERSION} ]; then
     SWOOLE_VERSION=$(echo ${SWOOLE_CLI_VERSION} | awk -F '.' '{ printf "%s.%s.%s" ,$1,$2,$3 }')
   else
