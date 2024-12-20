@@ -123,4 +123,5 @@ jobs:
           SECRET_KEY: ${{ secrets.QCLOUD_OSS_SECRET_KEY }}
         run: |
           bash sapi/scripts/generate-artifact-hash.sh --version v6.0.0.0
-          bash sapi/scripts/tencent-cloud-object-storage.sh --swoole-cli-version v6.0.0.0 --upload-all
+          bash sapi/scripts/generate-artifact-hash.sh --version v5.1.6.0
+          bash sapi/scripts/tencent-cloud-object-storage.sh --upload-file ${{ github.workspace }}/var/artifact-hash/v5.1.6.0/swoole-cli-v5.1.6-linux-x64.tar.xz
