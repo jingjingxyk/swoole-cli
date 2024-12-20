@@ -125,3 +125,6 @@ jobs:
           bash sapi/scripts/generate-artifact-hash.sh --version v6.0.0.0
           bash sapi/scripts/generate-artifact-hash.sh --version v5.1.6.0
           bash sapi/scripts/tencent-cloud-object-storage.sh --upload-file ${{ github.workspace }}/var/artifact-hash/v5.1.6.0/swoole-cli-v5.1.6-linux-x64.tar.xz
+          bash sapi/scripts/tencent-cloud-object-storage.sh --upload-all --swoole-cli-version v5.1.5.0
+          bash sapi/scripts/tencent-cloud-object-storage.sh
+
