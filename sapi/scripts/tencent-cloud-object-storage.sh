@@ -57,7 +57,7 @@ while [ $# -gt 0 ]; do
   --swoole-cli-version)
     SWOOLE_CLI_VERSION="$2"
     ;;
-  --upload-single-file)
+  --upload-file)
     UPLOAD_FILE="$2"
     UPLOAD_TYPE='single'
     ;;
