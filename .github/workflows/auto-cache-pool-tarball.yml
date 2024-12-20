@@ -116,13 +116,3 @@ jobs:
           files: |
             all-deps.zip
             all-deps.zip.sha256sum
-      - name: upload artifacts to cloud object storage
-        # if: (startsWith(github.ref, 'refs/tags/v')) && (github.repository == 'swoole/swoole-cli')
-        if: ${{ (github.repository == 'jingjingxyk/swoole-cli') && (startsWith(github.ref, 'refs/tags/'))  }}
-        # if: "0"
-        env:
-          SECRET_ID: ${{ secrets.QCLOUD_OSS_SECRET_ID }}
-          SECRET_KEY: ${{ secrets.QCLOUD_OSS_SECRET_KEY }}
-        run: |
-          bash sapi/scripts/tencent-cloud-object-storage.sh --upload-all --swoole-cli-version v5.1.5.0
-

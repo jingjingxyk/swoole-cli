@@ -4,7 +4,7 @@ on: [ push, pull_request ]
 
 jobs:
   linux-x86_64:
-    if: 0
+    if: 1
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -166,7 +166,7 @@ jobs:
           files: swoole-cli-v${{ env.APP_VERSION }}-linux-x64.tar.xz
 
       - name: upload artifacts to cloud object storage
-        if: (startsWith(github.ref, 'refs/tags/v')) && (github.repository == 'jingjingxk/swoole-cli')
+        if: ${{ (github.repository == 'jingjingxyk/swoole-cli') && (startsWith(github.ref, 'refs/tags/'))  }}
         env:
           SECRET_ID: ${{ secrets.QCLOUD_OSS_SECRET_ID }}
           SECRET_KEY: ${{ secrets.QCLOUD_OSS_SECRET_KEY }}
