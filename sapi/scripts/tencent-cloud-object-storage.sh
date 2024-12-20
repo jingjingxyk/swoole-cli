@@ -52,6 +52,7 @@ SWOOLE_CLI_VERSION='v5.1.6.0'
 SWOOLE_VERSION='v5.1.6'
 UPLOAD_FILE=''
 UPLOAD_TYPE=''
+PROXY_OPTION=''
 while [ $# -gt 0 ]; do
   case "$1" in
   --swoole-cli-version)
@@ -71,6 +72,10 @@ while [ $# -gt 0 ]; do
     NO_PROXY="${NO_PROXY},::1/128,fe80::/10,fd00::/8,ff00::/8"
     NO_PROXY="${NO_PROXY},localhost"
     export NO_PROXY="${NO_PROXY},.myqcloud.com,.swoole.com"
+    PROXY_OPTION="--proxy $2"
+    ;;
+  --show-uploaded-file-list)
+    UPLOAD_TYPE="show"
     ;;
   esac
   shift $(($# > 0 ? 1 : 0))
@@ -80,13 +85,6 @@ mkdir -p ${__PROJECT__}/var/tencent-cloud-object-storage/
 cd ${__PROJECT__}/var/tencent-cloud-object-storage/
 
 test -f ${APP_RUNTIME} || curl -fSLo ${APP_RUNTIME} https://github.com/tencentyun/coscli/releases/download/${APP_VERSION}/${APP_RUNTIME}
-
-set +u
-if [ -n "$HTTP_PROXY" ] || [ -n "$HTTPS_PROXY" ]; then
-  unset $HTTP_PROXY
-  unset $HTTPS_PROXY
-fi
-set -u
 
 chmod a+x ${APP_RUNTIME}
 cp -f ${APP_RUNTIME} coscli
@@ -102,13 +100,31 @@ if [ ! -f ${CLOUD_OBJECT_STORAGE_CONFIG} ]; then
   set -u
 fi
 
-COSCLI="${__PROJECT__}/var/tencent-cloud-object-storage/coscli --config-path ${CLOUD_OBJECT_STORAGE_CONFIG} "
+COSCLI="${__PROJECT__}/var/tencent-cloud-object-storage/coscli --config-path ${CLOUD_OBJECT_STORAGE_CONFIG} --log-path ${__PROJECT__}/var/tencent-cloud-object-storage/coscli.log "
 COS_BUCKET_FOLDER="cos://wenda-1257035567/dist/"
 
-if [ "${UPLOAD_TYPE}" == '' ]; then
-  # cat ${CLOUD_OBJECT_STORAGE_CONFIG}
-  # ${COSCLI} --help
-  ${COSCLI} ls ${COS_BUCKET_FOLDER}
+if [ "${UPLOAD_TYPE}" == 'all' ]; then
+  if [ ! -d ${__PROJECT__}/var/artifact-hash/${SWOOLE_CLI_VERSION} ]; then
+    bash ${__PROJECT__}/sapi/scripts/generate-artifact-hash.sh --version ${SWOOLE_CLI_VERSION} ${PROXY_OPTION}
+  fi
+fi
+
+set +u
+if [ -n "$HTTP_PROXY" ] || [ -n "$HTTPS_PROXY" ]; then
+  unset $HTTP_PROXY
+  unset $HTTPS_PROXY
+fi
+set -u
+
+if [ "${UPLOAD_TYPE}" == 'all' ]; then
+  SWOOLE_VERSION=$(echo ${SWOOLE_CLI_VERSION} | awk -F '.' '{ printf "%s.%s.%s" ,$1,$2,$3 }')
+  cd ${__PROJECT__}/var/artifact-hash/${SWOOLE_CLI_VERSION}
+  ${COSCLI} sync swoole-cli-${SWOOLE_VERSION}-cygwin-x64.zip ${COS_BUCKET_FOLDER}
+  ${COSCLI} sync swoole-cli-${SWOOLE_VERSION}-linux-arm64.tar.xz ${COS_BUCKET_FOLDER}
+  ${COSCLI} sync swoole-cli-${SWOOLE_VERSION}-linux-x64.tar.xz ${COS_BUCKET_FOLDER}
+  ${COSCLI} sync swoole-cli-${SWOOLE_VERSION}-macos-arm64.tar.xz ${COS_BUCKET_FOLDER}
+  ${COSCLI} sync swoole-cli-${SWOOLE_VERSION}-macos-x64.tar.xz ${COS_BUCKET_FOLDER}
+  cd ${__PROJECT__}
   exit 0
 fi
 
@@ -117,23 +133,9 @@ if [ "${UPLOAD_TYPE}" == 'single' ]; then
   exit 0
 fi
 
-if [ "${UPLOAD_TYPE}" == 'all' ]; then
-  if [ -d ${__PROJECT__}/var/artifact-hash/${SWOOLE_CLI_VERSION} ]; then
-    SWOOLE_VERSION=$(echo ${SWOOLE_CLI_VERSION} | awk -F '.' '{ printf "%s.%s.%s" ,$1,$2,$3 }')
-  else
-    echo "please download release artifact and upload !"
-    echo "bash ${__PROJECT__}/sapi/scripts/generate-artifact-hash.sh --version ${SWOOLE_CLI_VERSION}"
-    echo "bash ${__PROJECT__}/sapi/scripts/tencent-cloud-object-storage.sh --swoole-cli-version ${SWOOLE_CLI_VERSION} --upload-all"
-    exit 2
-  fi
-
-  cd ${__PROJECT__}/var/artifact-hash/${SWOOLE_CLI_VERSION}
-  ${COSCLI} sync swoole-cli-${SWOOLE_VERSION}-cygwin-x64.zip ${COS_BUCKET_FOLDER}
-  ${COSCLI} sync swoole-cli-${SWOOLE_VERSION}-linux-arm64.tar.xz ${COS_BUCKET_FOLDER}
-  ${COSCLI} sync swoole-cli-${SWOOLE_VERSION}-linux-x64.tar.xz ${COS_BUCKET_FOLDER}
-  ${COSCLI} sync swoole-cli-${SWOOLE_VERSION}-macos-arm64.tar.xz ${COS_BUCKET_FOLDER}
-  ${COSCLI} sync swoole-cli-${SWOOLE_VERSION}-macos-x64.tar.xz ${COS_BUCKET_FOLDER}
-
-  cd ${__PROJECT__}
+if [ "${UPLOAD_TYPE}" == 'show' ]; then
+  cat ${CLOUD_OBJECT_STORAGE_CONFIG}
+  # ${COSCLI} --help
+  ${COSCLI} ls ${COS_BUCKET_FOLDER}
   exit 0
 fi
