@@ -125,7 +125,7 @@ if [ "${UPLOAD_TYPE}" == 'all' ]; then
     echo "please download release artifact and upload !"
     echo "bash ${__PROJECT__}/sapi/scripts/generate-artifact-hash.sh --version ${SWOOLE_CLI_VERSION}"
     echo "bash ${__PROJECT__}/sapi/scripts/tencent-cloud-object-storage.sh --swoole-cli-version ${SWOOLE_CLI_VERSION} --upload-all"
-    exit 0
+    exit 2
   fi
 
   cd ${__PROJECT__}/var/artifact-hash/${SWOOLE_CLI_VERSION}
