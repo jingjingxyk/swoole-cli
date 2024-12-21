@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -exu
+set -xu
 __DIR__=$(
   cd "$(dirname "$0")"
   pwd
@@ -48,22 +48,9 @@ case $ARCH in
   ;;
 esac
 
-APP_VERSION='v5.1.3'
+APP_VERSION='v5.1.5'
 APP_NAME='swoole-cli'
-VERSION='v5.1.3.0'
-
-mkdir -p bin/runtime
-mkdir -p var/runtime
-
-cd ${__PROJECT__}/var/runtime
-
-APP_DOWNLOAD_URL="https://github.com/swoole/swoole-cli/releases/download/${VERSION}/${APP_NAME}-${APP_VERSION}-${OS}-${ARCH}.tar.xz"
-COMPOSER_DOWNLOAD_URL="https://getcomposer.org/download/latest-stable/composer.phar"
-CACERT_DOWNLOAD_URL="https://curl.se/ca/cacert.pem"
-
-if [ $OS = 'windows' ]; then
-  APP_DOWNLOAD_URL="https://github.com/swoole/swoole-cli/releases/download/${VERSION}/${APP_NAME}-${APP_VERSION}-cygwin-${ARCH}.zip"
-fi
+VERSION='v5.1.5.1'
 
 MIRROR=''
 while [ $# -gt 0 ]; do
@@ -81,12 +68,51 @@ while [ $# -gt 0 ]; do
     NO_PROXY="${NO_PROXY},.myqcloud.com,.swoole.com"
     export NO_PROXY="${NO_PROXY},.tsinghua.edu.cn,.ustc.edu.cn,.npmmirror.com"
     ;;
+  --version)
+    # 指定发布 TAG
+    if [ $OS = "macos" ]; then
+      X_VERSION=$(echo "$2" | grep -E '^v\d\.\d{1,2}\.\d{1,2}\.\d{1,2}$')
+      X_APP_VERSION=$(echo "$2" | grep -Eo '^v\d\.\d{1,2}\.\d{1,2}')
+    elif [ $OS = "linux" ]; then
+      OS_RELEASE=$(awk -F= '/^ID=/{print $2}' /etc/os-release | tr -d '\n' | tr -d '\"')
+      if [ "$OS_RELEASE" = 'alpine' ]; then
+        X_VERSION=$(echo "$2" | grep -E '^v\d\.\d{1,2}\.\d{1,2}\.\d{1,2}$')
+        X_APP_VERSION=$(echo "$2" | grep -Eo '^v\d\.\d{1,2}\.\d{1,2}')
+      else
+        X_VERSION=$(echo "$2" | grep -P '^v\d\.\d{1,2}\.\d{1,2}\.\d{1,2}$')
+        X_APP_VERSION=$(echo "$2" | grep -Po '^v\d\.\d{1,2}\.\d{1,2}')
+      fi
+    else
+      X_VERSION=''
+      X_APP_VERSION=''
+    fi
+
+    if [[ -n $X_VERSION ]] && [[ -n $X_APP_VERSION ]]; then
+      {
+        VERSION=$X_VERSION
+        APP_VERSION=$X_APP_VERSION
+      }
+    fi
+    ;;
   --*)
     echo "Illegal option $1"
     ;;
   esac
   shift $(($# > 0 ? 1 : 0))
 done
+
+mkdir -p bin/runtime
+mkdir -p var/runtime
+
+cd ${__PROJECT__}/var/runtime
+
+APP_DOWNLOAD_URL="https://github.com/swoole/swoole-cli/releases/download/${VERSION}/${APP_NAME}-${APP_VERSION}-${OS}-${ARCH}.tar.xz"
+COMPOSER_DOWNLOAD_URL="https://getcomposer.org/download/latest-stable/composer.phar"
+CACERT_DOWNLOAD_URL="https://curl.se/ca/cacert.pem"
+
+if [ $OS = 'windows' ]; then
+  APP_DOWNLOAD_URL="https://github.com/swoole/swoole-cli/releases/download/${VERSION}/${APP_NAME}-${APP_VERSION}-cygwin-${ARCH}.zip"
+fi
 
 case "$MIRROR" in
 china)
@@ -112,6 +138,7 @@ if [ $OS = 'windows' ]; then
     test -f ${APP_RUNTIME}.zip || curl -fSLo ${APP_RUNTIME}.zip ${APP_DOWNLOAD_URL}
     test -d ${APP_RUNTIME} && rm -rf ${APP_RUNTIME}
     unzip "${APP_RUNTIME}.zip"
+    echo
     exit 0
   }
 else
@@ -120,7 +147,7 @@ else
   test -f swoole-cli && rm -f swoole-cli
   tar -xvf ${APP_RUNTIME}.tar
   chmod a+x swoole-cli
-  cp -f ${__PROJECT__}/var/runtime/swoole-cli ${__PROJECT__}/bin/runtime/php
+  cp -f ${__PROJECT__}/var/runtime/swoole-cli ${__PROJECT__}/bin/runtime/swoole-cli
 fi
 
 cd ${__PROJECT__}/var/runtime
@@ -145,9 +172,46 @@ opcache.enable_cli=On
 opcache.jit=1225
 opcache.jit_buffer_size=128M
 
-expose_php=Off
-phar.readonly=0
+; jit 更多配置参考 https://mp.weixin.qq.com/s/Tm-6XVGQSlz0vDENLB3ylA
 
+expose_php=Off
+apc.enable_cli=1
+
+EOF
+
+cat >${__PROJECT__}/bin/runtime/php-fpm.conf <<'EOF'
+; 更多配置参考
+; https://github.com/php/php-src/blob/master/sapi/fpm/www.conf.in
+; https://github.com/php/php-src/blob/master/sapi/fpm/php-fpm.conf.in
+
+[global]
+pid = run/php-fpm.pid
+error_log = log/php-fpm.log
+daemonize = yes
+
+[www]
+user = nobody
+group = nobody
+
+listen = 9001
+;listen = run/php-fpm.sock
+
+slowlog = log/$pool.log.slow
+request_slowlog_timeout = 30s
+
+
+pm = dynamic
+pm.max_children = 5
+pm.start_servers = 2
+pm.min_spare_servers = 1
+pm.max_spare_servers = 3
+
+; MAIN_PID=$(cat var/run/php-fpm.pid)
+; 关闭 php-fpm
+; kill -QUIT $MAIN_PID
+
+; 平滑重启 php-fpm
+; kill -USR2 $MAIN_PID
 
 EOF
 
@@ -156,15 +220,20 @@ cd ${__PROJECT__}/
 set +x
 
 echo " "
-echo " USE PHP RUNTIME :"
+echo " USE PHP-FPM RUNTIME :"
+echo " "
+echo "${__PROJECT__}/bin/runtime/swoole-cli -c ${__PROJECT__}/bin/runtime/php.ini -P --fpm-config ${__PROJECT__}/bin/runtime/php-fpm.conf -p ${__PROJECT__}/runtime/var "
+echo " "
+echo " USE PHP-CLI RUNTIME :"
 echo " "
 echo " export PATH=\"${__PROJECT__}/bin/runtime:\$PATH\" "
 echo " "
-echo " alias php='php -d curl.cainfo=${__PROJECT__}/bin/runtime/cacert.pem -d openssl.cafile=${__PROJECT__}/bin/runtime/cacert.pem' "
+echo " alias swoole-cli='swoole-cli -d curl.cainfo=${__PROJECT__}/bin/runtime/cacert.pem -d openssl.cafile=${__PROJECT__}/bin/runtime/cacert.pem' "
 echo " OR "
-echo " alias php='php -c ${__PROJECT__}/bin/runtime/php.ini' "
+echo " alias swoole-cli='swoole-cli -c ${__PROJECT__}/bin/runtime/php.ini' "
 echo " "
 test $OS="macos" && echo "sudo xattr -d com.apple.quarantine ${__PROJECT__}/bin/runtime/php"
 echo " "
+echo " SWOOLE-CLI VERSION  ${APP_VERSION}"
 export PATH="${__PROJECT__}/bin/runtime:$PATH"
-php -v
+swoole-cli -v
