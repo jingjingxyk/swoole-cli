@@ -48,9 +48,9 @@ case $ARCH in
   ;;
 esac
 
-APP_VERSION='v8.2.25'
+APP_VERSION='v8.2.27'
 APP_NAME='php-cli'
-VERSION='v1.6.0'
+VERSION='v1.3.0'
 
 mkdir -p bin/runtime
 mkdir -p var/runtime
@@ -87,7 +87,12 @@ while [ $# -gt 0 ]; do
     if [ $OS = "macos" ]; then
       X_VERSION=$(echo "$2" | grep -Eo '^v\d\.\d{1,2}\.\d{1,2}$')
     elif [ $OS = "linux" ]; then
-      X_VERSION=$(echo "$2" | grep -Po '^v\d\.\d{1,2}\.\d{1,2}$')
+      OS_RELEASE=$(awk -F= '/^ID=/{print $2}' /etc/os-release | tr -d '\n' | tr -d '\"')
+      if [ "$OS_RELEASE" = 'alpine' ]; then
+        X_VERSION=$(echo "$2" | grep -Eo '^v\d\.\d{1,2}\.\d{1,2}$')
+      else
+        X_VERSION=$(echo "$2" | grep -Po '^v\d\.\d{1,2}\.\d{1,2}$')
+      fi
     else
       X_VERSION=''
     fi
@@ -102,7 +107,12 @@ while [ $# -gt 0 ]; do
     if [ $OS = "macos" ]; then
       X_APP_VERSION=$(echo "$2" | grep -Eo '^v\d\.\d{1,2}\.\d{1,2}$')
     elif [ $OS = "linux" ]; then
-      X_APP_VERSION=$(echo "$2" | grep -Po '^v\d\.\d{1,2}\.\d{1,2}$')
+      OS_RELEASE=$(awk -F= '/^ID=/{print $2}' /etc/os-release | tr -d '\n' | tr -d '\"')
+      if [ "$OS_RELEASE" = 'alpine' ]; then
+        X_APP_VERSION=$(echo "$2" | grep -Eo '^v\d\.\d{1,2}\.\d{1,2}$')
+      else
+        X_APP_VERSION=$(echo "$2" | grep -Po '^v\d\.\d{1,2}\.\d{1,2}$')
+      fi
     else
       X_VERSION=''
     fi
@@ -121,7 +131,7 @@ done
 
 cd ${__PROJECT__}/var/runtime
 
-APP_DOWNLOAD_URL="https://github.com/swoole/build-static-php/releases/download/${VERSION}/${APP_NAME}-${APP_VERSION}-${OS}-${ARCH}.tar.xz"
+APP_DOWNLOAD_URL="https://github.com/jingjingxyk/build-swow-cli/releases/download/${VERSION}/${APP_NAME}-${APP_VERSION}-${OS}-${ARCH}.tar.xz"
 COMPOSER_DOWNLOAD_URL="https://getcomposer.org/download/latest-stable/composer.phar"
 CACERT_DOWNLOAD_URL="https://curl.se/ca/cacert.pem"
 
@@ -140,24 +150,24 @@ china)
 
 esac
 
-test -f composer.phar || curl -LSo composer.phar ${COMPOSER_DOWNLOAD_URL}
+test -f composer.phar || curl -fSLo composer.phar ${COMPOSER_DOWNLOAD_URL}
 chmod a+x composer.phar
 
-test -f cacert.pem || curl -LSo cacert.pem ${CACERT_DOWNLOAD_URL}
+test -f cacert.pem || curl -fSLo cacert.pem ${CACERT_DOWNLOAD_URL}
 
 APP_RUNTIME="${APP_NAME}-${APP_VERSION}-${OS}-${ARCH}"
 
 if [ $OS = 'windows' ]; then
   {
     APP_RUNTIME="${APP_NAME}-${APP_VERSION}-cygwin-${ARCH}"
-    test -f ${APP_RUNTIME}.zip || curl -LSo ${APP_RUNTIME}.zip ${APP_DOWNLOAD_URL}
+    test -f ${APP_RUNTIME}.zip || curl -fSLo ${APP_RUNTIME}.zip ${APP_DOWNLOAD_URL}
     test -d ${APP_RUNTIME} && rm -rf ${APP_RUNTIME}
     unzip "${APP_RUNTIME}.zip"
     echo
     exit 0
   }
 else
-  test -f ${APP_RUNTIME}.tar.xz || curl -LSo ${APP_RUNTIME}.tar.xz ${APP_DOWNLOAD_URL}
+  test -f ${APP_RUNTIME}.tar.xz || curl -fSLo ${APP_RUNTIME}.tar.xz ${APP_DOWNLOAD_URL}
   test -f ${APP_RUNTIME}.tar || xz -d -k ${APP_RUNTIME}.tar.xz
   test -f php || tar -xvf ${APP_RUNTIME}.tar
   chmod a+x php

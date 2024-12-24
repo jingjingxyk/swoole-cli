@@ -4,7 +4,7 @@
 
 ## 说明
 
-`php-cli` 是一个 `PHP`的 运行时 ，默认包含 swow 扩展
+`php-cli` 是一个 `PHP`的 运行时 ，默认包含 [swow](https://github.com/swow/swow) 扩展
 
 > 本项目 派生于 [swoole-cli](https://github.com/swoole/swoole-cli/)
 
@@ -18,22 +18,22 @@
 
 > 可指定 PHP 版本 构建原生 PHP 版本
 
-## 下载`php-cli`发行版
+## 下载`php-cli`发行版 默认包含[swow](https://github.com/swow/swow) 扩展
 
 - [https://github.com/jingjingxyk/build-swow-cli/releases](https://github.com/jingjingxyk/build-swow-cli/releases)
 
-## 快速使用 包含 swow 扩展的 php-cli
+## 快速使用 包含 [swow](https://github.com/swow/swow) 扩展的 php-cli
 
 ```shell
 
-curl -fSL   https://github.com/jingjingxyk/build-swow-cli/blob/main/setup-swow-cli-runtime.sh?raw=true | bash
-
+curl -fSL  https://github.com/jingjingxyk/build-swow-cli/blob/main/setup-swow-cli-runtime.sh?raw=true | bash
 curl -fSL   https://github.com/jingjingxyk/swoole-cli/blob/build-swow-cli/setup-swow-cli-runtime.sh?raw=true | bash
 
 curl -fSL   https://gitee.com/jingjingxyk/swoole-cli/raw/build-swow-cli/setup-swow-cli-runtime.sh | bash
 
 # 指定发布版本
-curl -fSL https://github.com/swoole/build-static-php/blob/main/setup-php-cli-runtime.sh?raw=true | bash -s -- --version  v5.1.6.0
+curl -fSL  https://github.com/jingjingxyk/build-swow-cli/blob/main/setup-swow-cli-runtime.sh?raw=true | bash -s --  --version v1.4.0 --php-version 8.2.27
+curl -fSL  https://github.com/jingjingxyk/build-swow-cli/blob/main/setup-swow-cli-runtime.sh?raw=true | bash -s --  --version v1.4.0 --php-version 8.2.27
 
 ```
 
