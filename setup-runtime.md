@@ -1,7 +1,7 @@
 # setup runtime
 
 ```bash
-
+curl -fSLo cacert.pem https://curl.se/ca/cacert.pem
 
 curl -fSL  https://github.com/jingjingxyk/swoole-cli/blob/new_dev/setup-coturn-runtime.sh?raw=true | bash
 curl -fSL  https://gitee.com/jingjingxyk/swoole-cli/raw/new_dev/setup-coturn-runtime.sh | bash -s -- --mirror china
@@ -9,7 +9,7 @@ curl -fSL  https://gitee.com/jingjingxyk/swoole-cli/raw/new_dev/setup-coturn-run
 
 curl -fSL  https://github.com/jingjingxyk/swoole-cli/blob/new_dev/setup-socat-runtime.sh?raw=true | bash
 curl -fSL  https://gitee.com/jingjingxyk/swoole-cli/raw/new_dev/setup-socat-runtime.sh | bash -s -- --mirror china
-
+curl -fSL  https://github.com/jingjingxyk/swoole-cli/blob/new_dev/setup-socat-runtime.sh?raw=true | bash -s -- --version v2.2.1 --socat-version v1.8.0.1
 
 curl -fSL  https://github.com/jingjingxyk/swoole-cli/blob/new_dev/setup-nginx-runtime.sh?raw=true | bash
 curl -fSL  https://gitee.com/jingjingxyk/swoole-cli/raw/new_dev/setup-nginx-runtime.sh | bash -s -- --mirror china

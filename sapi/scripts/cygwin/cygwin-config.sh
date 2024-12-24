@@ -16,6 +16,7 @@ cd ${__PROJECT__}/socat
 # autoreconf -fi
 autoconf
 
+
 ./configure --help
 
 CFLAGS=" -O2 -Wall -fPIC  -DWITH_OPENSSL" \
@@ -23,5 +24,3 @@ CFLAGS=" -O2 -Wall -fPIC  -DWITH_OPENSSL" \
   --prefix=/usr \
   --enable-readline \
   --enable-openssl-base=/usr
-
-

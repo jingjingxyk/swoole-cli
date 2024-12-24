@@ -3,7 +3,7 @@ name: build-macos-aarch64
 on: [ push, pull_request ]
 
 env:
-  BUILD_PHP_VERSION: 8.2.25
+  BUILD_PHP_VERSION: 8.2.27
 
 jobs:
   macos-aarch64:
@@ -143,3 +143,4 @@ jobs:
         if: 1 && startsWith(github.ref, 'refs/tags/')
         with:
           files: socat-v${{ env.SOCAT_VERSION }}-macos-arm64.tar.xz
+

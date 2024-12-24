@@ -3,7 +3,7 @@ name: build-linux-aarch64
 on: [ push, pull_request ]
 
 env:
-  BUILD_PHP_VERSION: 8.2.25
+  BUILD_PHP_VERSION: 8.2.27
 
 jobs:
   linux-aarch64:
