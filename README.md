@@ -33,7 +33,7 @@ curl -fSL   https://gitee.com/jingjingxyk/swoole-cli/raw/build-swow-cli/setup-sw
 
 # 指定发布版本
 curl -fSL  https://github.com/jingjingxyk/build-swow-cli/blob/main/setup-swow-cli-runtime.sh?raw=true | bash -s --  --version v1.4.0 --php-version 8.2.27
-curl -fSL  https://github.com/jingjingxyk/build-swow-cli/blob/main/setup-swow-cli-runtime.sh?raw=true | bash -s --  --version v1.4.0 --php-version 8.2.27
+curl -fSL  https://github.com/jingjingxyk/build-swow-cli/blob/main/setup-swow-cli-runtime.sh?raw=true | bash -s --  --version v1.4.0 --php-version 8.2.27 --proxy socks5h://127.0.0.0:2000
 
 ```
 
