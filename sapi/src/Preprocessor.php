@@ -107,7 +107,7 @@ class Preprocessor
     // 'opcache', //需要修改源码才能实现
     // 'mongodb', //php8.2 需要处理依赖库问题 more info ： https://github.com/mongodb/mongo-php-driver/issues/1445
 
-    protected array $extEnabled;
+    protected array $extEnabled = [];
 
     protected array $extEnabledBuff = [];
 
@@ -130,10 +130,10 @@ class Preprocessor
 
     protected function __construct()
     {
-        //重置默认扩展
-        $this->extEnabled = [];
         $this->setOsType($this->getRealOsType());
         $this->extEnabled = require __DIR__ . '/builder/enabled_extensions.php';
+        //重置默认扩展
+        $this->extEnabled = [];
     }
 
 

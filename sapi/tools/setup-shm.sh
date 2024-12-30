@@ -19,14 +19,9 @@ cd ${__PROJECT__}
 # du -h -d 1 /dev/shm
 # df -h  /dev/shm
 
-
 exit 0
-for dir in `ls -d ${__PROJECT__}`
-do
-    for file in `ls -R $dir`
-    do
-        echo $file
-    done
+for dir in $(ls -d ${__PROJECT__}); do
+  for file in $(ls -R $dir); do
+    echo $file
+  done
 done
-
-

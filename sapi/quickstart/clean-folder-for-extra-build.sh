@@ -26,8 +26,12 @@ test -d kubernetes && rm -rf kubernetes
 test -d qemu && rm -rf qemu
 test -d SDN && rm -rf SDN
 
+cd ${__PROJECT__}/sapi/
+test -d build-dependencies-container && rm -rf build-dependencies-container
+
 cd ${__PROJECT__}/
 test -f sync-source-code.php && rm -f sync-source-code.php
+test -f setup-runtime.md && rm -rf setup-runtime.md
 
 cd ${__PROJECT__}/sapi/
 test -d build-dependencies-container && rm -rf build-dependencies-container
@@ -38,6 +42,7 @@ test -d library_shared && rm -rf library_shared
 
 cd ${__PROJECT__}/sapi/src/
 test -d library_builder && rm -rf library_builder
+test -d UnitTest && rm -rf UnitTest
 
 cd ${__PROJECT__}/sapi/docker/
 test -d database && rm -rf database
@@ -62,9 +67,17 @@ test -f download-webrtc.yml && rm -rf download-webrtc.yml
 test -f windows-native-2022.yml && rm -rf windows-native-2022.yml
 test -f windows-native-vs2019.ymll && rm -rf windows-native-vs2019.yml
 test -f windows-native-vs2022.yml && rm -rf windows-native-vs2022.yml
+test -f artifact-hash.yml && rm -rf artifact-hash.yml
+test -f auto-cache-pool-tarball.yml && rm -rf auto-cache-pool-tarball.yml
+test -f linux-mips64le.yaml && rm -rf linux-mips64le.yaml
+test -f linux-riscv64.yml && rm -rf linux-riscv64.yml
+test -f runner-images.md && rm -rf runner-images.md
 
 cd ${__PROJECT__}/sapi/quickstart
 test -d swoole-install && rm -rf swoole-install
+test -f build-native-php-example.sh && rm -rf build-native-php-example.sh
+test -f clean-no-match-library-for-php.sh && rm -rf clean-no-match-library-for-php.sh
+test -f mark-install-library-cached.sh && rm -rf mark-install-library-cached.sh
 
 cd ${__PROJECT__}/sapi/quickstart/windows/
 test -d msys2-build && rm -rf msys2-build
