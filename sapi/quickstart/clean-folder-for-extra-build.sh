@@ -65,7 +65,7 @@ test -f ovn.yml && rm -rf ovn.yml
 test -f build-debian-builder-container.sh && rm -rf build-debian-builder-container.sh
 test -f download-webrtc.yml && rm -rf download-webrtc.yml
 test -f windows-native-2022.yml && rm -rf windows-native-2022.yml
-test -f windows-native-vs2019.ymll && rm -rf windows-native-vs2019.yml
+test -f windows-native-vs2019.yml && rm -rf windows-native-vs2019.yml
 test -f windows-native-vs2022.yml && rm -rf windows-native-vs2022.yml
 test -f artifact-hash.yml && rm -rf artifact-hash.yml
 test -f auto-cache-pool-tarball.yml && rm -rf auto-cache-pool-tarball.yml
