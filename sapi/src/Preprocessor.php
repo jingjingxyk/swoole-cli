@@ -104,54 +104,21 @@ class Preprocessor
      * Extensions enabled by default
      * @var array|string[]
      */
-    protected array $extEnabled = [
-        'opcache', //需要修改源码才能实现
-        'curl',
-        'iconv',
-        'bz2',
-        'bcmath',
-        'pcntl',
-        'filter',
-        'session',
-        'tokenizer',
-        'mbstring',
-        'ctype',
-        'zlib',
-        'zip',
-        'posix',
-        'sockets',
-        'pdo',
-        'sqlite3',
-        'phar',
-        'mysqlnd',
-        'mysqli',
-        'intl',
-        'fileinfo',
-        'pdo_mysql',
-        //'pdo_sqlite',
-        'soap',
-        'xsl',
-        'gmp',
-        'exif',
-        'sodium',
-        'openssl',
-        'readline',
-        'xml',
-        'redis',
-        'swoole',
-        'yaml',
-        'imagick',
-        //'mongodb', //php8.2 需要处理依赖库问题 more info ： https://github.com/mongodb/mongo-php-driver/issues/1445
-        'gd',
-    ];
+    // 'opcache', //需要修改源码才能实现
+    // 'mongodb', //php8.2 需要处理依赖库问题 more info ： https://github.com/mongodb/mongo-php-driver/issues/1445
+
+    protected array $extEnabled;
+
     protected array $extEnabledBuff = [];
+
     protected array $endCallbacks = [];
     protected array $extCallbacks = [];
     protected array $beforeConfigure = [];
 
     protected array $releaseArchives = [];
 
-    protected string $configureVarables;
+    protected string $configureVariables;
+
     protected string $buildType = 'release';
     protected bool $inVirtualMachine = false;
 
@@ -166,6 +133,7 @@ class Preprocessor
         //重置默认扩展
         $this->extEnabled = [];
         $this->setOsType($this->getRealOsType());
+        $this->extEnabled = require __DIR__ . '/builder/enabled_extensions.php';
     }
 
 
@@ -221,16 +189,6 @@ class Preprocessor
             return 'base';
         } else {
             return 'base' . '-' . $arch;
-        }
-    }
-
-    public function getBaseImageDockerFile(): string
-    {
-        $arch = $this->getSystemArch();
-        if ($arch == 'x64') {
-            return 'Dockerfile';
-        } else {
-            return 'Dockerfile' . '-' . $arch;
         }
     }
 
@@ -314,12 +272,12 @@ class Preprocessor
         $this->extraCflags = $flags;
     }
 
-    public function setConfigureVarables(string $varables)
+    public function setConfigureVariables(string $variables): void
     {
-        $this->configureVarables = $varables;
+        $this->configureVariables = $variables;
     }
 
-    public function setExtraOptions(string $options)
+    public function setExtraOptions(string $options): void
     {
         $this->extraOptions = $options;
     }
@@ -402,7 +360,7 @@ class Preprocessor
             /*
              * sockat 代理例子
              * http://www.dest-unreach.org/socat/doc/socat.html
-             * socat - socks4a:<socks-server>::%h:%p,socksport=2000
+             * socat - socks4a:<socks-server>:%h:%p,socksport=2000
              * socat - proxy:<proxy-server>:%h:%p,proxyport=2000
              */
 
@@ -455,7 +413,8 @@ __GIT_PROXY_CONFIG_EOF;
         return $this;
     }
 
-    public function donotInstallLibrary(): void
+
+    public function doNotInstallLibrary(): void
     {
         $this->installLibrary = false;
     }
@@ -468,8 +427,7 @@ __GIT_PROXY_CONFIG_EOF;
      * @param string $httpProxyConfig
      * @return void
      */
-
-    protected function downloadFile(string $url, string $file, object $project = null, string $httpProxyConfig = ''): void
+    protected function downloadFile(string $url, string $file, ?object $project = null, string $httpProxyConfig = ''): void
     {
         # $userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36';
         # echo `curl --user-agent '{$userAgent}' --connect-timeout 15 --retry 5 --retry-delay 5  -Lo '{$file}' '{$url}' `;
@@ -482,7 +440,7 @@ __GIT_PROXY_CONFIG_EOF;
         if ($this->getInputOption('with-downloader') === 'wget') {
             $cmd = "wget   {$url}  -O {$file}  -t {$retry_number} --wait={$wait_retry} -T {$connect_timeout} ";
         } else {
-            $cmd = "curl  --connect-timeout {$connect_timeout} --retry {$retry_number}  --retry-delay {$wait_retry}  -Lo '{$file}' '{$url}' ";
+            $cmd = "curl  --connect-timeout {$connect_timeout} --retry {$retry_number}  --retry-delay {$wait_retry}  -fSLo '{$file}' '{$url}' ";
         }
         $cmd = $httpProxyConfig . PHP_EOL . $cmd;
         echo $cmd;
@@ -636,7 +594,11 @@ EOF;
         }
 
         if (!empty($lib->binPath)) {
-            $this->binPaths[] = $lib->binPath;
+            if (is_array($lib->binPath)) {
+                $this->binPaths = array_merge($this->binPaths, $lib->binPath);
+            } else {
+                $this->binPaths[] = $lib->binPath;
+            }
         }
 
         if (empty($lib->license)) {
@@ -772,7 +734,8 @@ EOF;
                         echo '[ext/' . $ext_name . '] cached ' . PHP_EOL;
                     }
                 } else {
-                    echo $cmd = "tar --strip-components=1 -C $dst_dir -xf {$ext->path}";
+                    $cmd = "tar --strip-components=1 -C $dst_dir -xf {$ext->path}";
+                    echo "[Extension] " . $cmd;
                     echo PHP_EOL;
                     echo `$cmd`;
                     echo PHP_EOL;
@@ -1068,7 +1031,7 @@ EOF;
     /**
      * Scan and load config files in directory
      */
-    protected function scanConfigFiles(string $dir, array &$extAvailabled)
+    protected function scanConfigFiles(string $dir, array &$extAvailable): void
     {
         $files = scandir($dir);
         foreach ($files as $f) {
@@ -1077,14 +1040,14 @@ EOF;
             }
             $path = $dir . '/' . $f;
             if (is_dir($path)) {
-                $this->scanConfigFiles($path, $extAvailabled);
+                $this->scanConfigFiles($path, $extAvailable);
             } else {
-                $extAvailabled[basename($f, '.php')] = require $path;
+                $extAvailable[basename($f, '.php')] = require $path;
             }
         }
     }
 
-    public function loadDependentExtension($extension_name)
+    public function loadDependentExtension($extension_name): void
     {
         if (!isset($this->extensionMap[$extension_name])) {
             $file = realpath(__DIR__ . '/builder/extension/' . $extension_name . '.php');
@@ -1155,14 +1118,20 @@ EOF;
         }
         $this->mkdirIfNotExists($this->libraryDir, 0777, true);
         $this->mkdirIfNotExists($this->extensionDir, 0777, true);
+
+
         if (BUILD_SHARED_LIBS) {
             $this->globalPrefix = '/usr/local/swoole-cli-shared';
         }
+
+        $this->deleteDirectoryIfExists($this->getWorkExtDir());
+
         include __DIR__ . '/constants.php';
         //构建依赖库安装脚本
         //libraries_builder($this);
-        $extAvailabled = [];
-        $this->scanConfigFiles(__DIR__ . '/builder/extension', $extAvailabled);
+        $extAvailable = [];
+        $this->scanConfigFiles(__DIR__ . '/builder/extension', $extAvailable);
+
         $confPath = $this->getInputOption('conf-path');
         if ($confPath) {
             $confDirList = explode(':', $confPath);
@@ -1170,30 +1139,20 @@ EOF;
                 if (!is_dir($dir)) {
                     continue;
                 }
-                $this->scanConfigFiles($dir, $extAvailabled);
+                $this->scanConfigFiles($dir, $extAvailable);
             }
         }
         install_libraries($this);
         $this->extEnabled = array_unique($this->extEnabled);
 
         foreach ($this->extEnabled as $ext) {
-            if (!isset($extAvailabled[$ext])) {
+            if (!isset($extAvailable[$ext])) {
                 echo "unsupported extension[$ext]\n";
                 continue;
             }
-            ($extAvailabled[$ext])($this);
+            ($extAvailable[$ext])($this);
             if (isset($this->extCallbacks[$ext])) {
                 ($this->extCallbacks[$ext])($this);
-            }
-        }
-
-        if ($this->isMacos()) {
-            if (is_file('/usr/local/opt/bison/bin/bison')) {
-                $this->withBinPath('/usr/local/opt/bison/bin');
-            } elseif (is_file('/opt/homebrew/opt/bison/bin/bison')) { //兼容 github action
-                $this->withBinPath('/opt/homebrew/opt/bison/bin/');
-            } else {
-                $this->loadDependentLibrary("bison");
             }
         }
 
@@ -1253,12 +1212,14 @@ EOF;
 
         $this->generateFile(__DIR__ . '/template/make-install-deps.php', $this->rootDir . '/make-install-deps.sh');
         $this->generateFile(__DIR__ . '/template/make.php', $this->rootDir . '/make.sh');
+
         $this->generateFile(__DIR__ . '/template/make-env.php', $this->rootDir . '/make-env.sh');
         $this->generateFile(
             __DIR__ . '/template/make-export-variables.php',
             $this->rootDir . '/make-export-variables.sh'
         );
 
+        shell_exec('chmod a+x ' . $this->rootDir . '/make.sh');
         $this->mkdirIfNotExists($this->rootDir . '/bin');
         $this->generateFile(__DIR__ . '/template/license.php', $this->rootDir . '/bin/LICENSE');
         $this->generateFile(__DIR__ . '/template/credits.php', $this->rootDir . '/bin/credits.html');
@@ -1267,7 +1228,7 @@ EOF;
 
         if ($this->getInputOption('with-dependency-graph')) {
             $this->generateFile(
-                __DIR__ . '/template/extension-dependency-graph.php',
+                __DIR__ . '/template/extension_dependency_graph.php',
                 $this->rootDir . '/bin/ext-dependency-graph.graphviz.dot'
             );
         }
@@ -1291,6 +1252,7 @@ EOF;
             echo "{$item->name}\n";
         }
     }
+
 
     public function getRealOsType(): string
     {

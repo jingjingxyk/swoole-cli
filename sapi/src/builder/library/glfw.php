@@ -20,8 +20,6 @@ return function (Preprocessor $p) {
 EOF
         )
         ->withPrefix($glfw_prefix)
-        ->withCleanBuildDirectory()
-        ->withCleanPreInstallDirectory($glfw_prefix)
         ->withBuildScript(
             <<<EOF
              mkdir -p build

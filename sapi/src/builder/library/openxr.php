@@ -13,8 +13,6 @@ return function (Preprocessor $p) {
         ->withManual('https://github.com/KhronosGroup/OpenXR-SDK.git')
         ->withBuildCached(false)
         ->withPrefix($OpenXR_prefix)
-        ->withCleanBuildDirectory()
-        ->withCleanPreInstallDirectory($OpenXR_prefix)
         ->withBuildScript(
             <<<EOF
             mkdir -p build

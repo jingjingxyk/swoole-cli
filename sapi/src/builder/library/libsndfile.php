@@ -25,8 +25,6 @@ EOF
         )
         ->withUntarArchiveCommand('xz')
         ->withPrefix($example_prefix)
-        ->withCleanBuildDirectory()
-        ->withCleanPreInstallDirectory($example_prefix)
         ->withBuildScript(
             <<<EOF
 test -f /etc/apt/apt.conf.d/proxy.conf && rm -rf /etc/apt/apt.conf.d/proxy.conf

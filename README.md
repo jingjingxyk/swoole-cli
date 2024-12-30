@@ -1,6 +1,6 @@
 # static-privoxy
 
-构建静态 privoxy
+构建静态 [privoxy](https://www.privoxy.org/)
 
 ## 构建命令
 
@@ -17,7 +17,10 @@
 
 ```shell
 
-curl -fSL https://github.com/jingjingxyk/swoole-cli/blob/new_dev/setup-coturn-runtime.sh?raw=true | bash
+curl -fSL https://github.com/jingjingxyk/swoole-cli/blob/new_dev/setup-privoxy-runtime.sh?raw=true | bash
+
+# 指定发布版本
+curl -fSL https://github.com/swoole/build-static-php/blob/main/setup-privoxy-runtime.sh?raw=true | bash -s -- --version  v5.1.6.0
 
 ```
 
@@ -46,12 +49,18 @@ git clone --recursive -b privoxy  https://github.com/jingjingxyk/swoole-cli.git
 ```bash
 
 cd swoole-cli
+bash setup-php-runtime.sh
+# 或者使用镜像
+# 来自 https://www.swoole.com/download
+bash setup-php-runtime.sh --mirror china
+
 php prepare.php +privoxy
 bash make-install-deps.sh
 bash make.sh all-library
 bash make.sh config
 bash make.sh build
 bash make.sh archive
+
 
 ```
 

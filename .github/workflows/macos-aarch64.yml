@@ -3,7 +3,7 @@ name: build-macos-aarch64
 on: [ push, pull_request ]
 
 env:
-  BUILD_PHP_VERSION: 8.2.13
+  BUILD_PHP_VERSION: 8.2.27
 
 jobs:
   macos-aarch64:
@@ -17,13 +17,14 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - "8.2.13"
-          - "8.1.27"
-        #  - "8.3.3"
+          - "8.2.27"
+          - "8.1.31"
+          - "8.3.15"
+          - "8.4.2"
 
     steps:
       - uses: actions/checkout@v4
-      - name: Prepare build environment
+      - name: Show Environment Info
         run: |
           set -x
           uname -s
@@ -32,24 +33,12 @@ jobs:
           sysctl -n hw.ncpu
           env
           echo $HOME
+          sw_vers
+          xcodebuild -version
           brew config
-
-          bash sapi/quickstart/macos/macos-init.sh
-
-          # sudo rm -rf /Library/Developer/CommandLineTools
-          # xcode-select --install
-
-          # sudo xcode-select --reset
-          # sudo xcode-select -switch /Library/Developer/CommandLineTools
-
-          # softwareupdate --list --verbose
-          # softwareupdate --install -a
-          # xcode-select --install
-
-          # export SDKROOT=$(xcrun --show-sdk-path)
+          xcrun --show-sdk-path
           ls -lh $(xcrun --show-sdk-path)
-          # sudo  xcode-select --switch /Applications/Xcode.app
-          # export MACOSX_DEPLOYMENT_TARGET=12.6
+          clang --version
 
           ifconfig
           export IPV6=$(ifconfig en0  | grep "inet6 " | grep -v "inet6 fe80:" | awk '{print $2}' | cut -d'/' -f1 | sed -n '2p')
@@ -60,6 +49,10 @@ jobs:
           echo "X_IPV4=${IPV4}" >> $GITHUB_ENV
 
           echo "BUILD_PHP_VERSION=${{ matrix.php-version }}" >> $GITHUB_ENV
+
+      - name: Prepare Build Environment
+        run: |
+          bash sapi/quickstart/macos/macos-init.sh
 
           export PATH="/opt/homebrew/opt/libtool/bin:$PATH"
           ls -lha /opt/homebrew/opt/libtool/bin/
@@ -124,7 +117,7 @@ jobs:
           composer install  --no-interaction --no-autoloader --no-scripts --profile
           composer dump-autoload --optimize --profile
 
-          php prepare.php --without-docker=1  +ds +apcu  +xlswriter +ssh2 +pgsql +uuid -mongodb --with-build-type=release --with-libavif=1 --with-php-version=${{ env.BUILD_PHP_VERSION }}
+          php prepare.php --without-docker=1  --with-php-version=${{ env.BUILD_PHP_VERSION }}
 
       - name: Build
         run: |
@@ -142,6 +135,7 @@ jobs:
         run: |
           ./thirdparty/php-src/sapi/cli/php -v
           ./thirdparty/php-src/sapi/cli/php -m
+          ./thirdparty/php-src/sapi/cli/php --ri mongodb
           ./thirdparty/php-src/sapi/cli/php --ri gd
           ./thirdparty/php-src/sapi/cli/php --ri swoole
           ./thirdparty/php-src/sapi/cli/php --ri pgsql
@@ -175,3 +169,13 @@ jobs:
           files: |
             php-cli-v${{ env.BUILD_PHP_VERSION }}-macos-arm64.tar.xz
             php-cli-v${{ env.BUILD_PHP_VERSION }}-macos-arm64-debug.tar.xz
+
+      - name: upload artifacts to cloud object storage
+        if: ${{ 0 && (github.repository == 'swoole/swoole-cli') && (startsWith(github.ref, 'refs/tags/'))  }}
+        env:
+          OSS_SECRET_ID: ${{ secrets.QCLOUD_OSS_SECRET_ID }}
+          OSS_SECRET_KEY: ${{ secrets.QCLOUD_OSS_SECRET_KEY }}
+          OSS_BUCKET: ${{ vars.QCLOUD_OSS_BUCKET }}
+          OSS_REGION: ${{ vars.QCLOUD_OSS_REGION }}
+        run: |
+          bash sapi/scripts/tencent-cloud-object-storage.sh --upload-file ${{ github.workspace }}/swoole-cli-v${{ env.APP_VERSION }}-macos-arm64.tar.xz

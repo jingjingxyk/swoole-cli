@@ -13,8 +13,6 @@ return function (Preprocessor $p) {
         ->withManual('https://frrouting.org/doc/')
         ->withBuildCached(false)
         ->withPrefix($example_prefix)
-        ->withCleanBuildDirectory()
-        ->withCleanPreInstallDirectory($example_prefix)
         ->withConfigure(
             <<<EOF
             sh ./bootstrap.sh

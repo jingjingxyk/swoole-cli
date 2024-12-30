@@ -21,8 +21,6 @@ EOF
         )
         ->withBuildCached(false)
         ->withPrefix($freetdm_prefix)
-        ->withCleanBuildDirectory()
-        ->withCleanPreInstallDirectory($freetdm_prefix)
         ->withBuildScript(
             <<<EOF
 

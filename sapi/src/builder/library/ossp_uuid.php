@@ -14,8 +14,6 @@ return function (Preprocessor $p) {
         ->withUrl('ftp://ftp.ossp.org/pkg/lib/uuid/uuid-1.6.1.tar.gz')
         ->withHttpProxy(false)
         ->withPrefix($ossp_uuid_prefix)
-        ->withCleanBuildDirectory()
-        ->withCleanPreInstallDirectory($ossp_uuid_prefix)
         ->withBuildCached(false)
         ->withConfigure(
             <<<EOF

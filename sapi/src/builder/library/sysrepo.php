@@ -17,8 +17,6 @@ return function (Preprocessor $p) {
         ->withManual('https://github.com/sysrepo/sysrepo.git')
         ->withBuildCached(false)
         ->withPrefix($example_prefix)
-        ->withCleanBuildDirectory()
-        ->withCleanPreInstallDirectory($example_prefix)
         ->withBuildScript(
             <<<EOF
         mkdir -p build

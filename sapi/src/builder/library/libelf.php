@@ -60,7 +60,6 @@ EOF
             )
             //->withAutoUpdateFile()
             ->withBuildCached(false)
-            //->withCleanPreInstallDirectory($libelf_prefix)
             ->withBuildScript(
                 <<<EOF
             autoreconf -if

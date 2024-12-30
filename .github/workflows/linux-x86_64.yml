@@ -6,17 +6,18 @@ on:
 
 env:
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-  BUILD_PHP_VERSION: 8.2.13
+  BUILD_PHP_VERSION: 8.2.27
 
 jobs:
   linux-x86_64:
     if: 1
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - name: Show Environment Info
         run: |
+          echo "${{ github.event.head_commit.message }}"
+          echo "${{ github.event.workflow_run.head_commit.message }}"
           echo $PATH
           env
           docker info
@@ -187,3 +188,11 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: privoxy-${{ env.PRIVOXY_VERSION }}-linux-x64.tar.xz
+      - name: upload artifacts to cloud object storage
+        if: ${{ 0 && (github.repository == 'swoole/swoole-cli') && (startsWith(github.ref, 'refs/tags/'))  }}
+        env:
+          OSS_SECRET_ID: ${{ secrets.QCLOUD_OSS_SECRET_ID }}
+          OSS_SECRET_KEY: ${{ secrets.QCLOUD_OSS_SECRET_KEY }}
+          OSS_BUCKET: ${{ vars.QCLOUD_OSS_BUCKET }}
+          OSS_REGION: ${{ vars.QCLOUD_OSS_REGION }}
+        run: |

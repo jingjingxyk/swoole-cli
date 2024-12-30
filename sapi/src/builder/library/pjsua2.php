@@ -30,14 +30,6 @@ EOF
          //用于调试
          //当 --with-build_type=dev 时 如下2个配置生效
 
-
-        // 自动清理构建目录
-        ->withCleanBuildDirectory()
-
-        // 自动清理安装目录
-        ->withCleanPreInstallDirectory($example_prefix)
-
-
         //明确申明 不使用构建缓存
         //例子： thirdparty/openssl (每次都解压全新源代码到此目录）
         ->withBuildCached(false)

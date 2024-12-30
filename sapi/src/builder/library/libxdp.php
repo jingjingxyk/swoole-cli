@@ -22,8 +22,6 @@ return function (Preprocessor $p) {
 EOF
         )
         ->withPrefix($libxdp_prefix)
-        ->withBuildCached(false)
-        ->withCleanPreInstallDirectory($libxdp_prefix)
         ->withPreInstallCommand(
             'alpine',
             <<<EOF
