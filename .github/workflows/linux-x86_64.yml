@@ -168,7 +168,7 @@ jobs:
           PRIVOXY_VERSION=$(./bin/privoxy/sbin/privoxy --help | grep 'Privoxy version' | awk '{print $3}')
           echo "PRIVOXY_VERSION=${PRIVOXY_VERSION}" >> $GITHUB_ENV
 
-      - name: production artifacts debug
+      - name: production artifacts
         uses: actions/upload-artifact@v4
         with:
           name: privoxy-${{ env.PRIVOXY_VERSION }}-linux-x64
