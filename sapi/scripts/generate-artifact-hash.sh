@@ -36,9 +36,9 @@ case $OS in
   ;;
 esac
 
-APP_VERSION='v8.3.13'
+APP_VERSION='v8.3.15'
 APP_NAME='php-cli'
-VERSION='v1.6.0'
+VERSION='v1.7.1'
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -142,8 +142,6 @@ WINDOWS_DOWNLOAD_SWOOLE_CLIE_RUNTIME() {
 
   APP_RUNTIME="${APP_NAME}-${APP_VERSION}-cygwin-${ARCH}"
   test -f ${APP_RUNTIME}.zip || curl -fSLo ${APP_RUNTIME}.zip ${APP_DOWNLOAD_URL}
-  test -f all-deps.zip || curl -fSLo all-deps.zip https://github.com/swoole/swoole-cli/releases/download/${VERSION}/all-deps.zip
-
 }
 WINDOWS_DOWNLOAD() {
   WINDOWS_DOWNLOAD_SWOOLE_CLIE_RUNTIME "$1"
@@ -166,6 +164,8 @@ DOWNLOAD() {
   done
 
 }
+
+test -f all-deps.zip || curl -fSLo all-deps.zip https://github.com/swoole/build-static-php/releases/download/${VERSION}/all-deps.zip
 
 DOWNLOAD
 
