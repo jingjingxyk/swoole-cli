@@ -28,7 +28,7 @@ return function (Preprocessor $p) {
             PACKAGES="\$PACKAGES nettle hogweed"
             CPPFLAGS="-I{$libiconv_prefix}/include -I{$libintl_prefix}/include "
             LDFLAGS="-L{$libiconv_prefix}/lib -L{$libintl_prefix}/lib"
-            LIBS="-liconv -lintl {$libs}"
+            LIBS="-liconv  {$libs}"
             CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$PACKAGES) \$CPPFLAGS " \
             LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES) \$LDFLAGS " \
             LIBS="$(pkg-config      --libs-only-l    --static \$PACKAGES) \$LIBS " \
@@ -71,7 +71,6 @@ EOF
                 'libssh2',
                 'gmp',
                 'libexpat',
-                'libintl',
                 'libssh2',
                 'nettle'
             )
