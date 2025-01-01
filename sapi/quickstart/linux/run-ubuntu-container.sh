@@ -20,6 +20,7 @@ cd ${__DIR__}
 cd ${__DIR__}
 IMAGE=ubuntu:22.04
 IMAGE=ubuntu:23.10
+IMAGE=ubuntu:24.04
 
 MIRROR=''
 while [ $# -gt 0 ]; do
@@ -27,9 +28,9 @@ while [ $# -gt 0 ]; do
   --mirror)
     MIRROR="$2"
     case "$MIRROR" in
-      china | openatom)
-        IMAGE="hub.atomgit.com/library/ubuntu:23.10"
-        ;;
+    china | openatom)
+      IMAGE="hub.atomgit.com/library/ubuntu:24.04"
+      ;;
     esac
     ;;
   esac
@@ -37,4 +38,5 @@ while [ $# -gt 0 ]; do
 done
 
 cd ${__DIR__}
-docker run --rm --name swoole-cli-ubuntu-dev -d -v ${__PROJECT__}:/work -w /work -e TZ='Etc/UTC' $IMAGE tail -f /dev/null
+
+docker run --rm --name swoole-cli-ubuntu-dev -d -v ${__PROJECT__}:/work -w /work -e TZ='Etc/UTC' --init $IMAGE tail -f /dev/null

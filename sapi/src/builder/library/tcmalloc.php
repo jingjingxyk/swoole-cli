@@ -13,7 +13,7 @@ return function (Preprocessor $p) {
             ->withFile('tcmalloc.zip')
             ->withPrefix($tcmalloc_preifx)
             ->withUntarArchiveCommand('unzip')
-            ->withCleanBuildDirectory()
+
             ->withConfigure(
                 <<<EOF
                 # apk add bazel

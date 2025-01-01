@@ -3,45 +3,10 @@ name: build-linux-x86_64
 on:
   push:
   pull_request:
-  workflow_dispatch:
-    inputs:
-      build_latest_swoole_or_swow:
-        required: true
-        description: "定制构建选项: 构建最新版的 swoole 或者 swow （此二者扩展不能同时启用）"
-        default: ' '
-        type: choice
-        options:
-          - ' '
-          - '-swoole +swoole_latest'
-          - '-swoole +swow_latest'
-          - '-swoole +swow'
-      php_version:
-        required: true
-        description: "定制构建选项: 指定 PHP 版本(版本号大于等于8.1)"
-        default: '--with-php-version=8.2.13'
-        type: choice
-        options:
-          - '--with-php-version=8.1.27'
-          - '--with-php-version=8.2.13'
-          - '--with-php-version=8.3.1'
-      build_type:
-        required: true
-        description: "定制构建选项: 指定构建类型"
-        default: '--with-build-type=release'
-        type: choice
-        options:
-          - '--with-build-type=release'
-          - '--with-build-type=dev'
-      build_options:
-        required: false
-        description: "定制构建选项: 请查看 docs/options.md"
-        default: ' '
-        type: string
-
 
 env:
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-  BUILD_PHP_VERSION: 8.2.13
+  BUILD_PHP_VERSION: 8.2.27
 
 jobs:
   linux-x86_64:
@@ -51,6 +16,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Show Environment Info
         run: |
+          echo "${{ github.event.head_commit.message }}"
+          echo "${{ github.event.workflow_run.head_commit.message }}"
           echo $PATH
           env
           docker info
@@ -196,14 +163,6 @@ jobs:
             bash ./make.sh build
             bash ./make.sh archive
 
-      - name: Start Database
-        run: |
-          # 准备数据库容器
-          export PATH=/usr/libexec/docker/cli-plugins/:$PATH
-          docker-compose version
-          docker container ls -a
-          # bash sapi/src/UnitTest/scripts/database/start.sh
-
       - name: Show Build Result
         run: |
           ./bin/aria2c -v
@@ -225,3 +184,4 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: aria2c-${{ env.APP_VERSION }}-linux-x64.tar.xz
+

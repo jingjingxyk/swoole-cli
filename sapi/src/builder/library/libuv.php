@@ -19,8 +19,6 @@ return function (Preprocessor $p) {
 EOF
             )
             ->withPrefix($libuv_prefix)
-            ->withCleanBuildDirectory()
-            ->withCleanPreInstallDirectory($libuv_prefix)
             ->withConfigure(
                 <<<EOF
 

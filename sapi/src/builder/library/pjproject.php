@@ -24,8 +24,6 @@ return function (Preprocessor $p) {
 EOF
         )
         ->withPrefix($pjproject_prefix)
-        ->withCleanBuildDirectory()
-        ->withCleanPreInstallDirectory($pjproject_prefix)
         ->withBuildCached(false)
         ->withBuildScript(
             <<<EOF

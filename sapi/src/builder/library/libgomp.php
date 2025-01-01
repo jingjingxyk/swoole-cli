@@ -25,8 +25,6 @@ return function (Preprocessor $p) {
 EOF
         )
         ->withPrefix($libgomp_prefix)
-        ->withCleanBuildDirectory()
-        ->withCleanPreInstallDirectory($libgomp_prefix)
         ->withBuildCached(false)
         ->withBuildScript(
             <<<EOF

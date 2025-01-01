@@ -19,7 +19,6 @@ return function (Preprocessor $p) {
 EOF
         )
         ->withPrefix($opencl_prefix)
-        ->withCleanPreInstallDirectory($opencl_prefix)
         //->withAutoUpdateFile()
         //->withBuildCached(false)
         ->withBuildLibraryHttpProxy()

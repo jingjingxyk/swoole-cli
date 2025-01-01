@@ -21,8 +21,6 @@ EOF
         )
 
         ->withPrefix($example_prefix)
-        ->withCleanBuildDirectory()
-        ->withCleanPreInstallDirectory($example_prefix)
         ->withBuildCached(false)
         ->withConfigure(
             <<<EOF

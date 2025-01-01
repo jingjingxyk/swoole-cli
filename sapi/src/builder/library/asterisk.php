@@ -18,8 +18,6 @@ return function (Preprocessor $p) {
 EOF
         )
         ->withPrefix($asterisk_prefix)
-        ->withCleanBuildDirectory()
-        ->withCleanPreInstallDirectory($asterisk_prefix)
         ->withBuildCached(false)
         ->withConfigure(
             <<<EOF

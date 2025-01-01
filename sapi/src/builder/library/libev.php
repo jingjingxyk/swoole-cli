@@ -12,8 +12,6 @@ return function (Preprocessor $p) {
             ->withUrl('http://dist.schmorp.de/libev/libev-4.33.tar.gz')
             ->withManual('http://cvs.schmorp.de/libev/README')
             ->withPrefix($libev_prefix)
-            ->withCleanBuildDirectory()
-            ->withCleanPreInstallDirectory($libev_prefix)
             ->withConfigure(
                 <<<EOF
             ./configure --help

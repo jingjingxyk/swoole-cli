@@ -13,8 +13,6 @@ return function (Preprocessor $p) {
             ->withFile('fribidi-v1.0.12.tar.gz')
             ->withLabel('library')
             ->withPrefix($libfribidi_prefix)
-            ->withCleanBuildDirectory()
-            ->withCleanPreInstallDirectory($libfribidi_prefix)
             ->withBuildScript(
                 <<<EOF
             meson  -h

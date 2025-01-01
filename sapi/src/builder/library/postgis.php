@@ -18,8 +18,6 @@ EOF
         )
         ->withBuildCached(false)
         ->withPrefix($example_prefix)
-        ->withCleanBuildDirectory()
-        ->withCleanPreInstallDirectory($example_prefix)
         ->withBuildScript(
             <<<EOF
             mkdir -p build

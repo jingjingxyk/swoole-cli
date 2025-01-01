@@ -19,7 +19,7 @@ EOF
         )
         ->withPrefix($libsoup_prefix)
         ->withBuildCached(false)
-        ->withCleanBuildDirectory()
+
         ->withBuildScript(
             <<<EOF
             meson  -h

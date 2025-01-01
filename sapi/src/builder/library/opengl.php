@@ -15,8 +15,6 @@ return function (Preprocessor $p) {
 EOF
         )
         ->withPrefix($opengl_prefix)
-        ->withCleanBuildDirectory()
-        ->withCleanPreInstallDirectory($opengl_prefix)
         ->withBuildScript(
             <<<EOF
 

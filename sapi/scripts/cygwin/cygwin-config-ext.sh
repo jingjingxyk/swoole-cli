@@ -12,13 +12,15 @@ __PROJECT__=$(
 cd ${__PROJECT__}
 ROOT=${__PROJECT__}
 
-PHP_VERSION='8.2.13'
-SWOOLE_VERSION=v5.1.3
+PHP_VERSION='8.2.27'
+SWOOLE_VERSION='v6.0.0'
+X_PHP_VERSION='8.2'
 
 while [ $# -gt 0 ]; do
   case "$1" in
   --php-version)
     PHP_VERSION="$2"
+    X_PHP_VERSION=$(echo ${PHP_VERSION:0:3})
     ;;
   --swoole-version)
     SWOOLE_VERSION="$2"
@@ -30,7 +32,7 @@ while [ $# -gt 0 ]; do
   shift $(($# > 0 ? 1 : 0))
 done
 
-REDIS_VERSION=6.0.2
+REDIS_VERSION=6.1.0
 MONGODB_VERSION=1.17.2
 YAML_VERSION=2.2.2
 IMAGICK_VERSION=3.7.0
@@ -76,6 +78,9 @@ if [ ! -d $ROOT/ext/imagick ]; then
   fi
   tar xvf imagick-${IMAGICK_VERSION}.tgz
   mv imagick-${IMAGICK_VERSION} $ROOT/ext/imagick
+  if [ "$X_PHP_VERSION" = "8.4" ]; then
+    sed -i.backup "s/php_strtolower(/zend_str_tolower(/" $ROOT/ext/imagick/imagick.c
+  fi
 fi
 
 if [ ! -f swoole-${SWOOLE_VERSION}.tgz ]; then
@@ -101,4 +106,14 @@ test -d php-src && rm -rf php-src
 mkdir -p php-src
 tar --strip-components=1 -C php-src -xf php-${PHP_VERSION}.tar.gz
 
+cd $ROOT
+
+if [ ! -d $ROOT/ext/pgsql ]; then
+  mv $ROOT/php-src/ext/pgsql $ROOT/ext/pgsql
+fi
+
+cd $ROOT
+
+ls -lh $ROOT
+ls -lh $ROOT/ext/
 cd $ROOT

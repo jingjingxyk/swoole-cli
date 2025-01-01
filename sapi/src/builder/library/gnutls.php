@@ -21,8 +21,6 @@ return function (Preprocessor $p) {
         ->withManual('https://gitlab.com/gnutls/gnutls.git')
         ->withManual('https://www.gnutls.org/download.html')
         ->withPrefix($gnutls_prefix)
-        ->withCleanBuildDirectory()
-        ->withCleanPreInstallDirectory($gnutls_prefix)
         ->withConfigure(
             <<<EOF
 

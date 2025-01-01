@@ -22,8 +22,6 @@ EOF
 
 
         ->withPrefix($libx11_prefix)
-        ->withCleanBuildDirectory()
-        ->withCleanPreInstallDirectory($libx11_prefix)
         ->withBuildCached(false)
 
         ->withConfigure(

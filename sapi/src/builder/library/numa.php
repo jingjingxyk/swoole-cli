@@ -12,8 +12,6 @@ return function (Preprocessor $p) {
         ->withFile('numa-v2.0.16.tar.gz')
         ->withManual('https://github.com/numactl/numactl/blob/master/INSTALL.md')
         ->withPrefix($numa_prefix)
-        ->withCleanBuildDirectory()
-        ->withCleanPreInstallDirectory($numa_prefix)
         ->withConfigure(
             <<<EOF
             ./autogen.sh

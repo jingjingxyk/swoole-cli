@@ -48,12 +48,51 @@ git clone -b main  https://github.com/jingjingxyk/build-static-aria2.git
 
 cd build-static-aria2
 bash setup-php-runtime.sh
+# 或者使用镜像
+# 来自 https://www.swoole.com/download
+bash setup-php-runtime.sh --mirror china
 php prepare.php +aria2
 bash make-install-deps.sh
 bash make.sh all-library
 bash make.sh config
 bash make.sh build
 bash make.sh archive
+
+
+
+```
+
+## 快速准备运行环境
+
+### linux
+
+如容器已经安装，可跳过执行安装 docker 命令
+
+```bash
+
+sh sapi/quickstart/linux/install-docker.sh
+sh sapi/quickstart/linux/run-alpine-container.sh
+sh sapi/quickstart/linux/connection-swoole-cli-alpine.sh
+sh sapi/quickstart/linux/alpine-init.sh
+
+# 使用镜像源安装
+sh sapi/quickstart/linux/install-docker.sh --mirror china
+sh sapi/quickstart/linux/alpine-init.sh --mirror china
+
+```
+
+### macos
+
+如 homebrew 已安装，可跳过执行安装 homebrew 命令
+
+```bash
+
+bash sapi/quickstart/macos/install-homebrew.sh
+bash sapi/quickstart/macos/macos-init.sh
+
+# 使用镜像源安装
+bash sapi/quickstart/macos/install-homebrew.sh --mirror china
+bash sapi/quickstart/macos/macos-init.sh --mirror china
 
 ```
 

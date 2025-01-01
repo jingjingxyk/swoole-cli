@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -exu
 __DIR__=$(
@@ -8,5 +8,4 @@ __DIR__=$(
 
 cd ${__DIR__}
 
-docker exec -it swoole-cli-alpine-dev sh
-
+docker exec -it woole-cli-builder sh

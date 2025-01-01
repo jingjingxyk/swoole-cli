@@ -18,8 +18,6 @@ EOF
         )
         ->withBuildCached(false)
         ->withPrefix($libfvad_prefix)
-        ->withCleanBuildDirectory()
-        ->withCleanPreInstallDirectory($libfvad_prefix)
         ->withConfigure(
             <<<EOF
         mkdir -p build
