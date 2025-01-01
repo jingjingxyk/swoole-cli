@@ -21,7 +21,6 @@ EOF
         )
         ->withPrefix($libpsl_prefix)
         ->withBuildCached(false)
-        ->withCleanBuildDirectory()
         ->withBuildScript(
             <<<EOF
 

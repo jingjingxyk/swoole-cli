@@ -41,8 +41,7 @@ EOF
             */
 
             /*
-                ->withCleanBuildDirectory()
-                ->withCleanPreInstallDirectory($pgsql_prefix)
+
                 ->withBuildCached(false)
             */
             ->withBuildCached(false)

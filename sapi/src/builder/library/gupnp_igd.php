@@ -13,7 +13,6 @@ return function (Preprocessor $p) {
         ->withUntarArchiveCommand('xz')
         ->withPrefix($GUPnP_prefix)
         ->withBuildCached(false)
-        ->withCleanBuildDirectory()
         ->withBuildScript(
             <<<EOF
              meson  -h

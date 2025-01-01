@@ -12,8 +12,6 @@ return function (Preprocessor $p) {
             ->withUrl('https://www.openssl.org/source/openssl-1.1.1t.tar.gz')
             ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
             ->withPrefix($openssl_prefix)
-            ->withCleanBuildDirectory()
-            ->withCleanPreInstallDirectory($openssl_prefix)
             ->withConfigure(
                 <<<EOF
                 ./config {$static} no-shared --prefix={$openssl_prefix} --libdir={$openssl_prefix}/lib

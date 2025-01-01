@@ -20,7 +20,6 @@ return function (Preprocessor $p) {
         ->withFile('coreutils-9.1.tar.gz')
         ->withHttpProxy(false)
         ->withPrefix($coreutils_prefix)
-        ->withCleanBuildDirectory()
         ->withBuildCached(false)
         ->withConfigure(
             <<<EOF

@@ -26,7 +26,6 @@ EOF
         )
         ->withPrefix($freeswitch_prefix)
         ->withBuildCached(false)
-        ->withCleanBuildDirectory()
         ->withPreInstallCommand(
             'alpine',
             <<<EOF
@@ -44,7 +43,6 @@ EOF
             apt install -y libelf-dev
 EOF
         )
-        ->withCleanBuildDirectory()
         ->withBuildScript(
             <<<EOF
 

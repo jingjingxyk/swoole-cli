@@ -19,11 +19,6 @@ return function (Preprocessor $p) {
 EOF
         )
         ->withPrefix($libmlx5_prefix)
-        /*
-        ->withCleanBuildDirectory()
-        ->withCleanPreInstallDirectory($libmlx5_prefix)
-        ->withBuildCached(false)
-        */
         ->withPreInstallCommand(
             'alpine',
             <<<EOF

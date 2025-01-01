@@ -17,8 +17,6 @@ return function (Preprocessor $p) {
         ->withUrl('https://dlcdn.apache.org//apr/apr-util-1.6.3.tar.gz')
         ->withManual('https://apr.apache.org/compiling_unix.html')
         ->withPrefix($example_prefix)
-        ->withCleanBuildDirectory()
-        ->withCleanPreInstallDirectory($example_prefix)
         ->withBuildCached(false)
         ->withConfigure(
             <<<EOF

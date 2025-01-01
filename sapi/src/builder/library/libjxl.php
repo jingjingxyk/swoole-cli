@@ -12,8 +12,6 @@ return function (Preprocessor $p) {
         ->withManual('https://github.com/libjxl/libjxl/blob/main/BUILDING.md')
         ->withFile('libjpegxl-v0.8.1.tar.gz')
         ->withPrefix($libjxl_prefix)
-        ->withCleanBuildDirectory()
-        ->withCleanPreInstallDirectory($libjxl_prefix)
         ->withBuildScript(
             <<<EOF
 

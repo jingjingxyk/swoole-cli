@@ -14,8 +14,6 @@ return function (Preprocessor $p) {
         ->withFile('rav1e-v0.6.6.tar.gz')
         ->withPrefix($rav1e_prefix)
         ->withBuildCached(false)
-        ->withCleanBuildDirectory()
-        ->withCleanPreInstallDirectory($rav1e_prefix)
         ->withBuildScript(
             <<<EOF
             # export PATH=\$SYSTEM_ORIGIN_PATH

@@ -19,7 +19,6 @@ return function (Preprocessor $p) {
 EOF
             )
             ->withFile('gnulib-latest.tar.gz')
-            ->withCleanBuildDirectory()
             ->withBuildScript(
                 <<<EOF
                 test -d build-dir && rm -rf build-dir
