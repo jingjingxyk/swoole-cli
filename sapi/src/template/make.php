@@ -36,12 +36,14 @@ export SWOOLE_CLI_PATH=$PATH
 # 参考： https://www.php.net/manual/en/install.pecl.static.php
 
 OPTIONS="--disable-all \
---disable-cgi  \
---enable-shared=no \
---enable-static=yes \
---without-valgrind \
---enable-cli  \
---disable-phpdbg \
+    --enable-shared=no \
+    --enable-static=yes \
+    --without-valgrind \
+    --disable-cgi  \
+    --enable-cli  \
+    --disable-phpdbg \
+    --with-config-file-path=<?= $this->getGlobalPrefix() ?>/etc/ \
+    --with-config-file-scan-dir=<?= $this->getGlobalPrefix() ?>/etc/conf.d/ \
 <?php foreach ($this->extensionList as $item) : ?>
     <?=$item->options?> \
 <?php endforeach; ?>
@@ -64,62 +66,54 @@ make_<?=$item->name?>() {
     <?php endif ;?>
 
     <?php if ($item->enableInstallCached) : ?>
-    if [ -f <?= $this->getGlobalPrefix() . '/'.  $item->name ?>/.completed ] ;then
-        echo "[<?=$item->name?>]  library cached , skip.."
+    if [ -f <?= $this->getGlobalPrefix() . '/' . $item->name ?>/.completed ] ;then
+        echo "[<?= $item->name ?>]  library cached , skip.."
         return 0
     fi
     <?php endif; ?>
 
-    # 默认不需要，当需要构建中间库时需要
-    <?php if ($item->enableCompiledCached) : ?>
-    if [ -f <?=$this->getBuildDir()?>/<?=$item->name?>/.completed  ]; then
-        echo "[<?=$item->name?>] compiled, skip.."
-        cd <?= $this->workDir ?>/
-        return 0
-    fi
-    <?php endif; ?>
+    # If the install directory exist, clean the install directory
+    test -d  <?= $this->getGlobalPrefix() . '/' . $item->name ?>/ && rm -rf  <?= $this->getGlobalPrefix() . '/' . $item->name ?>/ ;
 
-    <?php if ($item->cleanBuildDirectory || !$item->enableBuildCached) : ?>
+    <?php if (!$item->enableBuildCached) : ?>
     if [ -d <?=$this->getBuildDir()?>/<?=$item->name?>/ ]; then
         rm -rf <?=$this->getBuildDir()?>/<?=$item->name?>/
     fi
     <?php endif; ?>
 
     # If the source code directory does not exist, create a directory and decompress the source code archive
-    if [ ! -d <?=$this->getBuildDir()?>/<?=$item->name?> ]; then
-        mkdir -p <?=$this->getBuildDir()?>/<?=$item->name . PHP_EOL?>
+    if [ ! -d <?= $this->getBuildDir() ?>/<?= $item->name ?> ]; then
+        mkdir -p <?= $this->getBuildDir() ?>/<?= $item->name . PHP_EOL ?>
+        <?php if ($item->untarArchiveCommand == 'tar') :?>
+        tar --strip-components=1 -C <?= $this->getBuildDir() ?>/<?= $item->name ?> -xf <?= $this->workDir ?>/pool/lib/<?= $item->file ?>;
+        <?php elseif($item->untarArchiveCommand == 'unzip') :?>
+        unzip -d  <?=$this->getBuildDir()?>/<?=$item->name?>   <?=$this->workDir?>/pool/lib/<?=$item->file ?>;
+        <?php elseif ($item->untarArchiveCommand == 'tar-default') :?>
+        tar  -C <?= $this->getBuildDir() ?>/<?= $item->name ?> -xf <?= $this->workDir ?>/pool/lib/<?= $item->file ?>;
+        <?php elseif ($item->untarArchiveCommand == 'xz') :?>
+            xz -f -d -k   <?=$this->workDir?>/pool/lib/<?= $item->file ?>;
+            tar --strip-components=1 -C <?=$this->getBuildDir()?>/<?=$item->name?> -xf <?= rtrim($this->workDir . '/pool/lib/' . $item->file, '.xz') ?>;
+        <?php elseif ($item->untarArchiveCommand == 'cp') :  ?>
+            cp -rfa  <?=$this->workDir?>/pool/lib/<?=$item->file?>/* <?=$this->getBuildDir()?>/<?=$item->name?>/;
+        <?php elseif ($item->untarArchiveCommand == 'mv') :  ?>
+            cp -rfa  <?=$this->workDir?>/pool/lib/<?=$item->file?> <?=$this->getBuildDir()?>/<?=$item->name?>/;
+        <?php endif ; ?>
+        result_code=$?
+        if [ $result_code -ne 0 ]; then
+            echo "[<?=$item->name?>] [configure FAILURE]"
+            rm -rf <?=$this->getBuildDir()?>/<?=$item->name?>/
+            exit  $result_code
+        fi
     fi
 
-    <?php if ($item->untarArchiveCommand == 'tar') : ?>
-    tar --strip-components=1 -C <?=$this->getBuildDir()?>/<?=$item->name?> -xf <?=$this->workDir?>/pool/lib/<?=$item->file . PHP_EOL?>
-    result_code=$?
-    if [ $result_code -ne 0 ]; then
-        echo "[<?=$item->name?>] [configure FAILURE]"
-        rm -rf <?=$this->getBuildDir()?>/<?=$item->name?>/
-        exit  $result_code
-    fi
-    <?php endif ; ?>
-
-    <?php if ($item->untarArchiveCommand == 'unzip') : ?>
-    unzip -d  <?=$this->getBuildDir()?>/<?=$item->name?>   <?=$this->workDir?>/pool/lib/<?=$item->file?> <?= PHP_EOL; ?>
-    <?php endif ; ?>
-    <?php if ($item->untarArchiveCommand == 'xz') :?>
-    xz -f -d -k   <?=$this->workDir?>/pool/lib/<?=$item->file?>    <?= PHP_EOL; ?>
-    tar --strip-components=1 -C <?=$this->getBuildDir()?>/<?=$item->name?> -xf <?= rtrim($this->workDir . '/pool/lib/' . $item->file, '.xz') . PHP_EOL?>
-    <?php endif ; ?>
-    <?php if ($item->untarArchiveCommand == 'cp') :  ?>
-    cp -rfa  <?=$this->workDir?>/pool/lib/<?=$item->file?>/* <?=$this->getBuildDir()?>/<?=$item->name?>/   <?= PHP_EOL; ?>
-    <?php endif ; ?>
-    <?php if ($item->untarArchiveCommand == 'mv') :  ?>
-    cp -rfa  <?=$this->workDir?>/pool/lib/<?=$item->file?> <?=$this->getBuildDir()?>/<?=$item->name?>/    <?= PHP_EOL; ?>
-    <?php endif ; ?>
 
     <?php if ($item->cleanPreInstallDirectory) : ?>
     # If the install directory exist, clean the install directory
     test -d <?=$item->preInstallDirectory?>/ && rm -rf <?=$item->preInstallDirectory?>/ ;
     <?php endif; ?>
 
-    cd <?=$this->getBuildDir()?>/<?=$item->name . PHP_EOL?>
+    cd <?=$this->getBuildDir()?>/<?=$item->name?>/
+
 
     <?php if ($item->enableEnv) : ?>
     if [  -f <?= $this->getWorkDir() ?>/.env ] ; then
@@ -391,6 +385,12 @@ make_config() {
 
     exit 0
 
+    PHP_VERSION=<?= BUILD_PHP_VERSION; ?> ;
+    if [ ! -f "<?= $this->phpSrcDir ?>/X-PHP-VERSION" ] ; then
+        bash make.sh php ;
+    fi
+    test "${PHP_VERSION}" = "$(cat '<?= $this->phpSrcDir ?>/X-PHP-VERSION')" || bash make.sh php ;
+
     cd <?= $this->phpSrcDir ?>/
 <?php if (in_array($this->buildType, ['dev'])) : ?>
     # dev 环境 过滤扩展，便于调试单个扩展编译
@@ -398,8 +398,9 @@ make_config() {
 <?php endif ;?>
 
     cd <?= $this->phpSrcDir ?>/
+    set -x
     # 添加非内置扩展
-    if [ ! -z  "$(ls -A ${__PROJECT_DIR__}/ext/)" ] ;then
+    if [[ -d "${__PROJECT_DIR__}/ext/" ]] && [[ ! -z  "$(ls -A ${__PROJECT_DIR__}/ext/)" ]] ;then
         cp -rf ${__PROJECT_DIR__}/ext/*  <?= $this->phpSrcDir ?>/ext/
     fi
 
@@ -413,6 +414,15 @@ make_config() {
     echo $LIBS > <?= $this->getRootDir() ?>/libs.log
 
     ./configure --help
+
+<?php if ($this->getInputOption('with-swoole-cli-sfx')) : ?>
+    PHP_VERSION=$(cat main/php_version.h | grep 'PHP_VERSION_ID' | grep -E -o "[0-9]+")
+    if [[ $PHP_VERSION -lt 80000 ]] ; then
+    echo "only support PHP >= 8.0 "
+    else
+    # 请把这个做成 patch  https://github.com/swoole/swoole-cli/pull/55/files
+    fi
+<?php endif; ?>
 
     ./configure $OPTIONS
 
@@ -472,10 +482,19 @@ make_config() {
     #  ll /Library/Developer/CommandLineTools/
     #  /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
 
+<?php if ($this->isMacos()) : ?>
+    <?php if ($this->hasLibrary('pgsql')) : ?>
+        sed -i.backup "s/ac_cv_func_explicit_bzero\" = xyes/ac_cv_func_explicit_bzero\" = x_fake_yes/" ./configure
+        test -f ./configure.backup && rm -f ./configure.backup
+    <?php endif; ?>
+<?php endif; ?>
+
     export_variables
-    echo $LDFLAGS > <?= $this->getRootDir() ?>/ldflags.log
-    echo $CPPFLAGS > <?= $this->getRootDir() ?>/cppflags.log
-    echo $LIBS > <?= $this->getRootDir() ?>/libs.log
+    export LDFLAGS="$LDFLAGS <?= $this->extraLdflags ?>"
+    export EXTRA_CFLAGS='<?= $this->extraCflags ?>'
+    echo $LDFLAGS > <?= $this->getWorkDir() ?>/ldflags.log
+    echo $CPPFLAGS > <?= $this->getWorkDir() ?>/cppflags.log
+    echo $LIBS > <?= $this->getWorkDir() ?>/libs.log
 
     ./configure --help
     ./configure --help | grep -e '--enable'
@@ -493,6 +512,11 @@ make_config() {
 # 参考   https://ftp.gnu.org/old-gnu/Manuals/ld-2.9.1/html_node/ld_3.html
 
 //  -Wl,–whole-archive -Wl,–start-group a.o b.o c.o main.o -lf -ld -le -L./ -lc -Wl,–end-group -Wl,-no-whole-archive
+
+<?php if ($this->isLinux()) : ?>
+    sed -i.backup 's/-export-dynamic/-all-static/g' Makefile
+    test -f Makefile.backup && rm -f Makefile.backup
+<?php endif; ?>
 
 
 # LIBS=" $LIBS -Wl,--whole-archive -Wl,--start-group "
@@ -555,11 +579,13 @@ make_build_old() {
     file <?= $this->phpSrcDir  ?>/sapi/cli/php
     readelf -h <?= $this->phpSrcDir  ?>/sapi/cli/php
 <?php endif; ?>
+
     # make install
     mkdir -p <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/
     cp -f <?= $this->phpSrcDir  ?>/sapi/cli/php <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/
     echo "<?= $this->phpSrcDir  ?>/sapi/cli/php -v"
     <?= $this->phpSrcDir  ?>/sapi/cli/php -v
+    <?= $this->phpSrcDir  ?>/sapi/cli/php -m
     echo "<?= BUILD_PHP_INSTALL_PREFIX ?>/bin/php -v"
     <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/php -v
 
@@ -580,6 +606,10 @@ make_archive() {
     PHP_CLI_FILE_DEBUG=php-cli-v${PHP_VERSION}-<?=$this->getOsType()?>-<?=$this->getSystemArch()?>-debug.tar.xz
     tar -cJvf ${PHP_CLI_FILE_DEBUG} php LICENSE
 
+    HASH=$(sha256sum ${PHP_CLI_FILE_DEBUG} | awk '{print $1}')
+    echo " ${PHP_CLI_FILE_DEBUG} sha256sum: ${HASH} "
+    echo -n ${HASH} > ${PHP_CLI_FILE_DEBUG}.sha256sum
+
 
     mkdir -p <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/dist
     cp -f php           dist/
@@ -590,8 +620,15 @@ make_archive() {
     PHP_CLI_FILE=php-cli-v${PHP_VERSION}-<?=$this->getOsType()?>-<?=$this->getSystemArch()?>.tar.xz
     tar -cJvf ${PHP_CLI_FILE} php LICENSE
 
+    HASH=$(sha256sum ${PHP_CLI_FILE} | awk '{print $1}')
+    echo " ${PHP_CLI_FILE} sha256sum: ${HASH} "
+    echo -n ${HASH} > ${PHP_CLI_FILE}.sha256sum
+
+
     mv <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/dist/${PHP_CLI_FILE}  ${__PROJECT_DIR__}/
+    mv <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/dist/${PHP_CLI_FILE}.sha256sum  ${__PROJECT_DIR__}/
     mv <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/${PHP_CLI_FILE_DEBUG} ${__PROJECT_DIR__}/
+    mv <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/${PHP_CLI_FILE_DEBUG}.sha256sum ${__PROJECT_DIR__}/
 
     cd ${__PROJECT_DIR__}/
 }
@@ -639,7 +676,7 @@ lib_dep_pkg() {
     if test -n  "$1"  ;then
       echo -e "[$1] dependent pkgs :\n\n${array_name[$1]} \n"
     else
-      for i in ${!array_name[@]}
+      for i in "${!array_name[@]}"
       do
             echo -e "[${i}] dependent pkgs :\n\n${array_name[$i]} \n"
             echo "=================================================="
@@ -680,7 +717,6 @@ lib_dep() {
 
 
 help() {
-    set +x
     echo "./make.sh docker-build [ china | ustc | tuna ]"
     echo "./make.sh docker-bash"
     echo "./make.sh docker-commit"
@@ -715,15 +751,25 @@ if [ "$1" = "docker-build" ] ;then
     if [ -n "$2" ]; then
         MIRROR=$2
         case "$MIRROR" in
-        china | openatom | ustc | tuna)
+        china | openatom )
             CONTAINER_BASE_IMAGE="hub.atomgit.com/library/alpine:3.18"
         ;;
         esac
     fi
+    PLATFORM=''
+    ARCH=$(uname -m)
+    case $ARCH in
+    'x86_64')
+      PLATFORM='linux/amd64'
+      ;;
+    'aarch64')
+      PLATFORM='linux/arm64'
+      ;;
+    esac
     cd ${__PROJECT_DIR__}/sapi/docker
     echo "MIRROR=${MIRROR}"
     echo "BASE_IMAGE=${CONTAINER_BASE_IMAGE}"
-    docker build --no-cache -t <?= Preprocessor::IMAGE_NAME ?>:<?= $this->getBaseImageTag() ?> -f Dockerfile  . --build-arg="MIRROR=${MIRROR}" --build-arg="BASE_IMAGE=${CONTAINER_BASE_IMAGE}"
+    docker build --no-cache -t <?= Preprocessor::IMAGE_NAME ?>:<?= $this->getBaseImageTag() ?> -f Dockerfile  . --build-arg="MIRROR=${MIRROR}" --platform=${PLATFORM} --build-arg="BASE_IMAGE=${CONTAINER_BASE_IMAGE}"
     exit 0
 elif [ "$1" = "docker-bash" ] ;then
     container=$(docker ps -a -f name=<?= Preprocessor::CONTAINER_NAME ?> | tail -n +2 2> /dev/null)

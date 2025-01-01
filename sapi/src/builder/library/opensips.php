@@ -27,9 +27,6 @@ EOF
         )
 
         ->withPrefix($example_prefix)
-        ->withCleanBuildDirectory()
-        ->withCleanPreInstallDirectory($example_prefix)
-
         ->withConfigure(
             <<<EOF
             libtoolize -ci

@@ -25,12 +25,6 @@ return function (Preprocessor $p) {
                 https://git.postgresql.org/git/postgresql.git
                 ssh://git@git.postgresql.org/postgresql.git
              */
-
-            /*
-            ->withCleanBuildDirectory()
-            ->withCleanPreInstallDirectory($pgsql_prefix)
-            ->withBuildCached(false)
-            */
             ->withBuildScript(
                 <<<EOF
             test -d build_dir && rm -rf build_dir

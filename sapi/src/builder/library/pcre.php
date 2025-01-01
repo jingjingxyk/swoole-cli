@@ -18,8 +18,6 @@ return function (Preprocessor $p) {
             )
             ->withFile('pcre-8.45.tar.gz')
             ->withPrefix($pcre_prefix)
-            ->withCleanBuildDirectory()
-            ->withCleanPreInstallDirectory($pcre_prefix)
             ->withConfigure(
                 <<<EOF
                 ./configure --help

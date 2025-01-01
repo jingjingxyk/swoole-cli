@@ -27,11 +27,6 @@ EOF
             ->withBuildCached(false)
             ->withBuildLibraryHttpProxy()
             ->withPrefix($libzookeeper_prefix)
-            // 自动清理构建目录
-            ->withCleanBuildDirectory()
-
-            // 自动清理安装目录
-            ->withCleanPreInstallDirectory($libzookeeper_prefix)
             ->withConfigure(
                 <<<EOF
 

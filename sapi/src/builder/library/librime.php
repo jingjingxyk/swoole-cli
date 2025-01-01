@@ -29,11 +29,6 @@ return function (Preprocessor $p) {
 EOF
         )
         ->withPrefix($librime_prefix)
-
-        ->withCleanBuildDirectory()
-        // 自动清理安装目录  用于调试
-        ->withCleanPreInstallDirectory($librime_prefix)
-        //明确申明 不使用构建缓存 用于调试
         ->withBuildCached(false)
 
         /** 使用 cmake 构建 start **/

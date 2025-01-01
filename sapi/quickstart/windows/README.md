@@ -1,29 +1,32 @@
-# windows 快速准备构建环境 （2种构建方式）
+# windows 快速准备构建环境
 
     1. 原生构建
     2. cygwin 环境 构建
+    3. msys2 环境 构建
 
-## 一、原生构建
-
-### [windows 原生构建步骤](native-build/README.md)
-
-## 二、cygwin 环境 构建
-
-     cygwin 环境 构建 快速开始，双击如下两个脚本，自动下载cygwin 和 cygwin安装依赖库
+## windows 环境下 git 配置
 
 ```shell
 
-# 自动下载 cygwin
-sapi\quickstart\windows\download-cygwin.bat
-# 自动安装 cygwin
-sapi\quickstart\windows\install-cygwin.bat
-
+git config --global core.autocrlf false
+git config --global core.eol lf
+git config --global core.ignorecase false
+git config core.ignorecase false # 设置 Git 在 Windows 上也区分大小写
 
 ```
 
-### [windows cygwin 构建步骤](../../../docs/Cygwin.md)
+### [windows cygwin 环境 构建步骤](../../../docs/Cygwin.md)
 
-## 三、其它
+### [windows 原生构建步骤](native-build/README.md)
+
+### 构建window  PHP 工具 和 参考
+
+[download windows PHP ](https://windows.php.net/download#php-8.2)
+[windows build php 步骤](https://wiki.php.net/internals/windows/stepbystepbuild)
+[Latest VC++](https://learn.microsoft.com/en-AU/cpp/windows/latest-supported-vc-redist)
+[7zip](https://7-zip.org/)
+[visualstudio](https://visualstudio.microsoft.com/zh-hans/downloads/)
+[windows-sdk](https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/)
 
 ### windows 软连接例子
 
@@ -33,11 +36,9 @@ mklink composer composer.phar
 
 ```
 
-### cygwin mirror
 
-    https://cygwin.com/mirrors.html
 
-### msys2 mirror and  environment
 
-    https://www.msys2.org/dev/mirrors/
-    https://www.msys2.org/docs/environments/
+
+
+

@@ -1,20 +1,20 @@
+# 常见问题
 
+## 快速安装 `PHP` 解释器
 
-## 当环境中没有 PHP 解释器时  可以快速安装 PHP 解释器
+### Alpine
 
 ```bash
-
-# alpine
-
-sh  sapi/quickstart/linux/extra/alpine-php-init.sh
-
-## debian
-
-bash sapi/quickstart/linux/extra/debian-php-init.sh
-
+sh sapi/quickstart/linux/extra/alpine-php-init.sh
 ```
 
-## download composer
+### Debian/Ubuntu
+
+```bash
+bash sapi/quickstart/linux/extra/debian-php-init.sh
+```
+
+## 安装 `Composer`
 
 ```bash
 curl -Lo  /usr/local/bin/composer.phar https://getcomposer.org/download/latest-stable/composer.phar
@@ -22,14 +22,14 @@ curl -Lo  /usr/local/bin/composer.phar https://getcomposer.org/download/latest-s
 ln -sf /usr/local/bin/composer.phar /usr/local/bin/composer
 chmod a+x /usr/local/bin/composer
 
-   wget -O /usr/local/bin/composer https://mirrors.tencent.com/composer/composer.phar
+wget -O /usr/local/bin/composer https://mirrors.tencent.com/composer/composer.phar
 
-   chmod a+x /usr/local/bin/composer
+chmod a+x /usr/local/bin/composer
 
 ```
 
-## c c++编译器 组合
+## `C/C++` 编译器组合
 
-- 组合一 clang clang++
-- 组合二 gcc g++
+- `clang` + `clang++`
+- `gcc` + `g++`
 

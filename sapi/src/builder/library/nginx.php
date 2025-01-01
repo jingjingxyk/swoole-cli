@@ -52,8 +52,6 @@ EOF
 EOF
             )
             ->withPrefix($nginx_prefix)
-            ->withCleanBuildDirectory()
-            ->withCleanPreInstallDirectory($nginx_prefix)
             ->withConfigure(
                 <<<EOF
 

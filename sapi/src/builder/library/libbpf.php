@@ -27,8 +27,6 @@ EOF
                 # apk add libelf-static elfutils-dev
 EOF
             )
-            //->withCleanPreInstallDirectory($libbpf_prefix)
-            //->withBuildCached(false)
             ->withBuildScript(
                 <<<EOF
                 # xdg-open https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next

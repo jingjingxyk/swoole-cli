@@ -22,7 +22,6 @@ EOF
         )
         ->withPrefix($libks_prefix)
         ->withBuildCached(false)
-        ->withCleanBuildDirectory()
         ->withPreInstallCommand(
             'debian',
             <<<EOF

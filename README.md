@@ -1,6 +1,6 @@
 # static-coturn
 
-构建静态 coturn
+构建静态 [coturn](https://github.com/coturn/coturn.git)
 
 ## 构建命令
 
@@ -12,7 +12,7 @@
 
 - [https://github.com/jingjingxyk/build-static-coturn/releases](https://github.com/jingjingxyk/build-static-coturn/releases)
 
-## 快速使用 静态编译的 coturn
+## 快速下载、运行 静态编译的 coturn
 
 ```shell
 curl -fSL https://github.com/jingjingxyk/swoole-cli/blob/new_dev/setup-coturn-runtime.sh?raw=true | bash
@@ -20,6 +20,7 @@ curl -fSL https://github.com/jingjingxyk/swoole-cli/blob/new_dev/setup-coturn-ru
 cp -f ./bin/runtime/coturn/etc/turnserver.conf.default ./bin/runtime/coturn/etc/turnserver.conf
 
 ./bin/runtime/coturn/bin/turnserver -c ./bin/runtime/coturn/etc/turnserver.conf
+
 
 ```
 
@@ -48,7 +49,17 @@ git clone --recursive -b build-static-coturn  https://github.com/jingjingxyk/swo
 ```bash
 
 cd swoole-cli
-php prepare.php +coturn
+
+
+bash setup-php-runtime.sh
+# 或者使用镜像
+# 来自 https://www.swoole.com/download
+bash setup-php-runtime.sh --mirror china
+
+./bin/runtime/php ./bin/runtime/composer update
+
+./bin/runtime/php prepare.php +coturn
+
 bash make-install-deps.sh
 bash make.sh all-library
 bash make.sh config
@@ -57,9 +68,54 @@ bash make.sh archive
 
 ```
 
-## 构建参考
+## 快速准备运行环境
 
-    https://github.com/coturn/coturn.git
+### linux
+
+如容器已经安装，可跳过执行安装 docker 命令
+
+```bash
+
+sh sapi/quickstart/linux/install-docker.sh
+sh sapi/quickstart/linux/run-alpine-container.sh
+sh sapi/quickstart/linux/connection-swoole-cli-alpine.sh
+sh sapi/quickstart/linux/alpine-init.sh
+
+# 使用镜像源安装
+sh sapi/quickstart/linux/install-docker.sh --mirror china
+sh sapi/quickstart/linux/alpine-init.sh --mirror china
+
+```
+
+### macos
+
+如 homebrew 已安装，可跳过执行安装 homebrew 命令
+
+```bash
+
+bash sapi/quickstart/macos/install-homebrew.sh
+bash sapi/quickstart/macos/macos-init.sh
+
+# 使用镜像源安装
+bash sapi/quickstart/macos/install-homebrew.sh --mirror china
+bash sapi/quickstart/macos/macos-init.sh --mirror china
+
+```
+
+## 一条命令执行整个构建流程
+
+```bash
+
+cp build-release-example.sh build-release.sh
+
+# 按你的需求修改配置  OPTIONS="${OPTIONS} +coturn "
+vi build-release.sh
+
+# 执行构建流程
+bash build-release.sh
+
+
+```
 
 ## 授权协议
 

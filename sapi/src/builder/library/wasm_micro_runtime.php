@@ -18,8 +18,6 @@ return function (Preprocessor $p) {
 EOF
         )
         ->withPrefix($example_prefix)
-        ->withCleanBuildDirectory()
-        ->withCleanPreInstallDirectory($example_prefix)
         ->withBuildCached(false)
         ->withBuildScript(
             <<<EOF

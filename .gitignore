@@ -318,6 +318,7 @@ tmp-php.ini
 /ext/loader8
 /ext/ds
 /ext/xlswriter
+/ext/uuid
 /.phpunit.result.cache
 /samples/sfx/*.phar
 .php-cs-fixer.cache
@@ -340,7 +341,6 @@ sapi/quickstart/git-proxy.sh
 .github/workflows/
 !.github/workflows/*.yml
 Makefile.backup
-Dockerfile-all-dependencies-alpine
 php.ini
 sapi/webUI/deploy.sh
 !sapi/webUI/public/data/.gitkeep
@@ -353,3 +353,11 @@ ldflags.log
 cppflags.log
 libs.log
 .env
+ext/apcu/
+ext/ssh2/
+LICENSE
+swoole-cli-*
+php-cli-*
+php-fpm-*
+!sapi/patches
+
