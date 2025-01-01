@@ -29,10 +29,8 @@ cp -f ./COPYING.OpenSSL /tmp/${NAME}/
 cp -f ./socat /tmp/${NAME}/
 cp -f ./cacert.pem /tmp/${NAME}/
 
-cd /tmp/
+cd /tmp/${NAME}/
 
-zip -r ${NAME}.zip ${NAME}
-
-mv ${NAME}.zip ${__PROJECT__}/
+zip -r ${__PROJECT__}/${NAME}.zip .
 
 cd ${__PROJECT__}
