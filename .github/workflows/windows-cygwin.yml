@@ -82,7 +82,7 @@ jobs:
         run: |
           bash ./sapi/scripts/cygwin/install-re2c.sh
 
-      - name: Configure
+      - name: Prepare
         shell: C:\cygwin\bin\bash.EXE --noprofile --norc -e -o pipefail -o igncr   {0}
         run: |
           # git config --global --add safe.directory /cygdrive/d/a/swoole-cli/swoole-cli
