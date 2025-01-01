@@ -71,7 +71,6 @@ EOF
                 'libssh2',
                 'gmp',
                 'libexpat',
-                'libintl',
                 'libssh2',
                 'nettle'
             )
