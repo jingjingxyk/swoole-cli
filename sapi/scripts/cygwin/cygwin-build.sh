@@ -15,5 +15,5 @@ cd ${__PROJECT__}/socat
 make -j $(nproc)
 
 SOCAT_VERSION=$(./socat -V | grep 'socat version' | awk '{ print $3 }')
-echo ${SOCAT_VERSION} > ${__PROJECT__}/socat.version
+echo ${SOCAT_VERSION} >${__PROJECT__}/socat.version
 strip ./socat

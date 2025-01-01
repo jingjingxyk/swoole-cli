@@ -143,4 +143,3 @@ jobs:
         if: 1 && startsWith(github.ref, 'refs/tags/')
         with:
           files: socat-v${{ env.SOCAT_VERSION }}-macos-arm64.tar.xz
-

@@ -107,7 +107,7 @@ class Preprocessor
     // 'opcache', //需要修改源码才能实现
     // 'mongodb', //php8.2 需要处理依赖库问题 more info ： https://github.com/mongodb/mongo-php-driver/issues/1445
 
-    protected array $extEnabled;
+    protected array $extEnabled = [];
 
     protected array $extEnabledBuff = [];
 
@@ -117,7 +117,7 @@ class Preprocessor
 
     protected array $releaseArchives = [];
 
-    protected string $configureVarables;
+    protected string $configureVariables;
 
     protected string $buildType = 'release';
     protected bool $inVirtualMachine = false;
@@ -130,10 +130,10 @@ class Preprocessor
 
     protected function __construct()
     {
-        //重置默认扩展
-        $this->extEnabled = [];
         $this->setOsType($this->getRealOsType());
         $this->extEnabled = require __DIR__ . '/builder/enabled_extensions.php';
+        //重置默认扩展
+        $this->extEnabled = [];
     }
 
 
@@ -272,12 +272,12 @@ class Preprocessor
         $this->extraCflags = $flags;
     }
 
-    public function setConfigureVarables(string $varables)
+    public function setConfigureVariables(string $variables): void
     {
-        $this->configureVarables = $varables;
+        $this->configureVariables = $variables;
     }
 
-    public function setExtraOptions(string $options)
+    public function setExtraOptions(string $options): void
     {
         $this->extraOptions = $options;
     }
@@ -413,7 +413,8 @@ __GIT_PROXY_CONFIG_EOF;
         return $this;
     }
 
-    public function donotInstallLibrary(): void
+
+    public function doNotInstallLibrary(): void
     {
         $this->installLibrary = false;
     }
@@ -439,7 +440,7 @@ __GIT_PROXY_CONFIG_EOF;
         if ($this->getInputOption('with-downloader') === 'wget') {
             $cmd = "wget   {$url}  -O {$file}  -t {$retry_number} --wait={$wait_retry} -T {$connect_timeout} ";
         } else {
-            $cmd = "curl  --connect-timeout {$connect_timeout} --retry {$retry_number}  --retry-delay {$wait_retry}  -Lo '{$file}' '{$url}' ";
+            $cmd = "curl  --connect-timeout {$connect_timeout} --retry {$retry_number}  --retry-delay {$wait_retry}  -fSLo '{$file}' '{$url}' ";
         }
         $cmd = $httpProxyConfig . PHP_EOL . $cmd;
         echo $cmd;
@@ -1030,7 +1031,7 @@ EOF;
     /**
      * Scan and load config files in directory
      */
-    protected function scanConfigFiles(string $dir, array &$extAvailabled)
+    protected function scanConfigFiles(string $dir, array &$extAvailable): void
     {
         $files = scandir($dir);
         foreach ($files as $f) {
@@ -1039,14 +1040,14 @@ EOF;
             }
             $path = $dir . '/' . $f;
             if (is_dir($path)) {
-                $this->scanConfigFiles($path, $extAvailabled);
+                $this->scanConfigFiles($path, $extAvailable);
             } else {
-                $extAvailabled[basename($f, '.php')] = require $path;
+                $extAvailable[basename($f, '.php')] = require $path;
             }
         }
     }
 
-    public function loadDependentExtension($extension_name)
+    public function loadDependentExtension($extension_name): void
     {
         if (!isset($this->extensionMap[$extension_name])) {
             $file = realpath(__DIR__ . '/builder/extension/' . $extension_name . '.php');
@@ -1118,6 +1119,7 @@ EOF;
         $this->mkdirIfNotExists($this->libraryDir, 0777, true);
         $this->mkdirIfNotExists($this->extensionDir, 0777, true);
 
+
         if (BUILD_SHARED_LIBS) {
             $this->globalPrefix = '/usr/local/swoole-cli-shared';
         }
@@ -1127,8 +1129,9 @@ EOF;
         include __DIR__ . '/constants.php';
         //构建依赖库安装脚本
         //libraries_builder($this);
-        $extAvailabled = [];
-        $this->scanConfigFiles(__DIR__ . '/builder/extension', $extAvailabled);
+        $extAvailable = [];
+        $this->scanConfigFiles(__DIR__ . '/builder/extension', $extAvailable);
+
         $confPath = $this->getInputOption('conf-path');
         if ($confPath) {
             $confDirList = explode(':', $confPath);
@@ -1136,18 +1139,18 @@ EOF;
                 if (!is_dir($dir)) {
                     continue;
                 }
-                $this->scanConfigFiles($dir, $extAvailabled);
+                $this->scanConfigFiles($dir, $extAvailable);
             }
         }
         install_libraries($this);
         $this->extEnabled = array_unique($this->extEnabled);
 
         foreach ($this->extEnabled as $ext) {
-            if (!isset($extAvailabled[$ext])) {
+            if (!isset($extAvailable[$ext])) {
                 echo "unsupported extension[$ext]\n";
                 continue;
             }
-            ($extAvailabled[$ext])($this);
+            ($extAvailable[$ext])($this);
             if (isset($this->extCallbacks[$ext])) {
                 ($this->extCallbacks[$ext])($this);
             }
@@ -1209,6 +1212,7 @@ EOF;
 
         $this->generateFile(__DIR__ . '/template/make-install-deps.php', $this->rootDir . '/make-install-deps.sh');
         $this->generateFile(__DIR__ . '/template/make.php', $this->rootDir . '/make.sh');
+
         $this->generateFile(__DIR__ . '/template/make-env.php', $this->rootDir . '/make-env.sh');
         $this->generateFile(
             __DIR__ . '/template/make-export-variables.php',
@@ -1224,7 +1228,7 @@ EOF;
 
         if ($this->getInputOption('with-dependency-graph')) {
             $this->generateFile(
-                __DIR__ . '/template/extension-dependency-graph.php',
+                __DIR__ . '/template/extension_dependency_graph.php',
                 $this->rootDir . '/bin/ext-dependency-graph.graphviz.dot'
             );
         }
