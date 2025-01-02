@@ -5,6 +5,7 @@ use SwooleCli\Preprocessor;
 use SwooleCli\Extension;
 
 return function (Preprocessor $p) {
+
     $options = '--with-gd=' . LIBGD_PREFIX;
     $options .= ' --with-webp-dir=' . WEBP_PREFIX;
     $options .= ' --with-jpeg-dir=' . JPEG_PREFIX;
@@ -15,13 +16,12 @@ return function (Preprocessor $p) {
 
     //$options .= ' --with-gettext=' ;
 
-    $dependent_libraries = ['libjpeg', 'freetype', 'libwebp', 'libpng', 'libgif', 'libgd2'];
 
-
+    $dependentLibraries = ['libjpeg', 'freetype', 'libwebp', 'libpng', 'libgif'];
     $ext = (new Extension('gd'))
         ->withHomePage('https://www.php.net/manual/zh/book.image.php')
-        ->withOptions($options);
-    call_user_func_array([$ext, 'withDependentLibraries'], $dependent_libraries);
+        ->withOptions($options)
+        ->withDependentLibraries(... $dependentLibraries);
     $p->addExtension($ext);
 
 
@@ -44,4 +44,5 @@ EOF;
 
         return $cmd;
     });
+
 };
