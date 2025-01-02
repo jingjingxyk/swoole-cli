@@ -15,8 +15,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Show Environment Info
         run: |
-          echo ${{ github.event.head_commit.message }}
-          echo ${{ github.event.workflow_run.head_commit.message }}
+          echo "${{ github.event.head_commit.message }}"
+          echo "${{ github.event.workflow_run.head_commit.message }}"
           echo $PATH
           env
           docker info
@@ -194,3 +194,14 @@ jobs:
           files: |
             php-cli-v${{ env.APP_VERSION }}-linux-x64.tar.xz
             php-cli-v${{ env.APP_VERSION }}-linux-x64-debug.tar.xz
+
+      - name: upload artifacts to cloud object storage
+        if: ${{ 0 && (github.repository == 'swoole/swoole-cli') && (startsWith(github.ref, 'refs/tags/'))  }}
+        env:
+          OSS_SECRET_ID: ${{ secrets.QCLOUD_OSS_SECRET_ID }}
+          OSS_SECRET_KEY: ${{ secrets.QCLOUD_OSS_SECRET_KEY }}
+          OSS_BUCKET: ${{ vars.QCLOUD_OSS_BUCKET }}
+          OSS_REGION: ${{ vars.QCLOUD_OSS_REGION }}
+        run: |
+          bash sapi/scripts/tencent-cloud-object-storage.sh --upload-file ${{ github.workspace }}/swoole-cli-v${{ env.APP_VERSION }}-linux-x64.tar.xz
+
