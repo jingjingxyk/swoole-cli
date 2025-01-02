@@ -40,7 +40,7 @@ return [
     //'gettext',
     'uuid',
     //'phpy'
-    'xlswriter',
+    //'xlswriter',
     'apcu',
     'ds',
     'ssh2',
