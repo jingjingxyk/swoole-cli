@@ -48,22 +48,12 @@ case $ARCH in
   ;;
 esac
 
-APP_VERSION='v5.1.3'
-APP_NAME='swoole-cli'
-VERSION='v5.1.3.0'
+APP_VERSION='v8.2.25'
+APP_NAME='php-cli'
+VERSION='v1.6.0'
 
 mkdir -p bin/runtime
 mkdir -p var/runtime
-
-cd ${__PROJECT__}/var/runtime
-
-APP_DOWNLOAD_URL="https://github.com/swoole/swoole-cli/releases/download/${VERSION}/${APP_NAME}-${APP_VERSION}-${OS}-${ARCH}.tar.xz"
-COMPOSER_DOWNLOAD_URL="https://getcomposer.org/download/latest-stable/composer.phar"
-CACERT_DOWNLOAD_URL="https://curl.se/ca/cacert.pem"
-
-if [ $OS = 'windows' ]; then
-  APP_DOWNLOAD_URL="https://github.com/swoole/swoole-cli/releases/download/${VERSION}/${APP_NAME}-${APP_VERSION}-cygwin-${ARCH}.zip"
-fi
 
 MIRROR=''
 while [ $# -gt 0 ]; do
@@ -81,6 +71,36 @@ while [ $# -gt 0 ]; do
     NO_PROXY="${NO_PROXY},.myqcloud.com,.swoole.com"
     export NO_PROXY="${NO_PROXY},.tsinghua.edu.cn,.ustc.edu.cn,.npmmirror.com"
     ;;
+  --version)
+    # 指定发布 TAG
+    if [ $OS = "macos" ]; then
+      X_VERSION=$(echo "$2" | grep -Eo '^v\d\.\d{1,2}\.\d{1,2}$')
+    elif [ $OS = "linux" ]; then
+      X_VERSION=$(echo "$2" | grep -Po '^v\d\.\d{1,2}\.\d{1,2}$')
+    else
+      X_VERSION=''
+    fi
+    if [[ -n $X_VERSION ]]; then
+      {
+        VERSION=$X_VERSION
+      }
+    fi
+    ;;
+  --php-version)
+    # 指定发布 TAG
+    if [ $OS = "macos" ]; then
+      X_APP_VERSION=$(echo "$2" | grep -Eo '^v\d\.\d{1,2}\.\d{1,2}$')
+    elif [ $OS = "linux" ]; then
+      X_APP_VERSION=$(echo "$2" | grep -Po '^v\d\.\d{1,2}\.\d{1,2}$')
+    else
+      X_VERSION=''
+    fi
+    if [[ -n $X_APP_VERSION ]]; then
+      {
+        APP_VERSION=$X_APP_VERSION
+      }
+    fi
+    ;;
   --*)
     echo "Illegal option $1"
     ;;
@@ -88,39 +108,49 @@ while [ $# -gt 0 ]; do
   shift $(($# > 0 ? 1 : 0))
 done
 
+cd ${__PROJECT__}/var/runtime
+
+APP_DOWNLOAD_URL="https://github.com/swoole/build-static-php/releases/download/${VERSION}/${APP_NAME}-${APP_VERSION}-${OS}-${ARCH}.tar.xz"
+COMPOSER_DOWNLOAD_URL="https://getcomposer.org/download/latest-stable/composer.phar"
+CACERT_DOWNLOAD_URL="https://curl.se/ca/cacert.pem"
+
+if [ $OS = 'windows' ]; then
+  APP_DOWNLOAD_URL="https://github.com/swoole/build-static-php/releases/download/${VERSION}/${APP_NAME}-${APP_VERSION}-cygwin-${ARCH}.zip"
+fi
+
 case "$MIRROR" in
 china)
-  APP_DOWNLOAD_URL="https://wenda-1252906962.file.myqcloud.com/dist/${APP_NAME}-${APP_VERSION}-${OS}-${ARCH}.tar.xz"
+  APP_DOWNLOAD_URL="https://php-cli.jingjingxyk.com/${APP_NAME}-${APP_VERSION}-${OS}-${ARCH}.tar.xz"
   COMPOSER_DOWNLOAD_URL="https://mirrors.tencent.com/composer/composer.phar"
   if [ $OS = 'windows' ]; then
-    APP_DOWNLOAD_URL="https://wenda-1252906962.file.myqcloud.com/dist/${APP_NAME}-${APP_VERSION}-cygwin-${ARCH}.zip"
+    APP_DOWNLOAD_URL="https://php-cli.jingjingxyk.com/${APP_NAME}-${APP_VERSION}-cygwin-${ARCH}.zip"
   fi
   ;;
 
 esac
 
-test -f composer.phar || curl -fSLo composer.phar ${COMPOSER_DOWNLOAD_URL}
+test -f composer.phar || curl -LSo composer.phar ${COMPOSER_DOWNLOAD_URL}
 chmod a+x composer.phar
 
-test -f cacert.pem || curl -fSLo cacert.pem ${CACERT_DOWNLOAD_URL}
+test -f cacert.pem || curl -LSo cacert.pem ${CACERT_DOWNLOAD_URL}
 
 APP_RUNTIME="${APP_NAME}-${APP_VERSION}-${OS}-${ARCH}"
 
 if [ $OS = 'windows' ]; then
   {
     APP_RUNTIME="${APP_NAME}-${APP_VERSION}-cygwin-${ARCH}"
-    test -f ${APP_RUNTIME}.zip || curl -fSLo ${APP_RUNTIME}.zip ${APP_DOWNLOAD_URL}
+    test -f ${APP_RUNTIME}.zip || curl -LSo ${APP_RUNTIME}.zip ${APP_DOWNLOAD_URL}
     test -d ${APP_RUNTIME} && rm -rf ${APP_RUNTIME}
     unzip "${APP_RUNTIME}.zip"
+    echo
     exit 0
   }
 else
-  test -f ${APP_RUNTIME}.tar.xz || curl -fSLo ${APP_RUNTIME}.tar.xz ${APP_DOWNLOAD_URL}
+  test -f ${APP_RUNTIME}.tar.xz || curl -LSo ${APP_RUNTIME}.tar.xz ${APP_DOWNLOAD_URL}
   test -f ${APP_RUNTIME}.tar || xz -d -k ${APP_RUNTIME}.tar.xz
-  test -f swoole-cli && rm -f swoole-cli
-  tar -xvf ${APP_RUNTIME}.tar
-  chmod a+x swoole-cli
-  cp -f ${__PROJECT__}/var/runtime/swoole-cli ${__PROJECT__}/bin/runtime/php
+  test -f php || tar -xvf ${APP_RUNTIME}.tar
+  chmod a+x php
+  cp -f ${__PROJECT__}/var/runtime/php ${__PROJECT__}/bin/runtime/php
 fi
 
 cd ${__PROJECT__}/var/runtime
@@ -140,14 +170,12 @@ post_max_size="128M"
 memory_limit="1G"
 date.timezone="UTC"
 
-opcache.enable=On
-opcache.enable_cli=On
-opcache.jit=1225
-opcache.jit_buffer_size=128M
+opcache.enable_cli=1
+opcache.jit=1254
+opcache.jit_buffer_size=480M
 
 expose_php=Off
-phar.readonly=0
-
+apc.enable_cli=1
 
 EOF
 
@@ -156,7 +184,7 @@ cd ${__PROJECT__}/
 set +x
 
 echo " "
-echo " USE PHP RUNTIME :"
+echo " USE PHP-CLI RUNTIME :"
 echo " "
 echo " export PATH=\"${__PROJECT__}/bin/runtime:\$PATH\" "
 echo " "
@@ -164,7 +192,4 @@ echo " alias php='php -d curl.cainfo=${__PROJECT__}/bin/runtime/cacert.pem -d op
 echo " OR "
 echo " alias php='php -c ${__PROJECT__}/bin/runtime/php.ini' "
 echo " "
-test $OS="macos" && echo "sudo xattr -d com.apple.quarantine ${__PROJECT__}/bin/runtime/php"
-echo " "
-export PATH="${__PROJECT__}/bin/runtime:$PATH"
-php -v
+echo " PHP-CLI VERSION  ${APP_VERSION}"
