@@ -128,7 +128,7 @@ jobs:
           composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
           composer dump-autoload --optimize --profile --no-dev
 
-          php prepare.php --without-docker=1 +privoxy
+          php prepare.php --without-docker=1 +privoxy --with-build-type=release
 
       - name: Build
         run: |
