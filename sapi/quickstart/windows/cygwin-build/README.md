@@ -26,7 +26,7 @@ git config --global core.eol lf
 
 ```
 
-### cygwin mirror
+## cygwin mirror origin
 
     https://cygwin.com/mirrors.html
 
