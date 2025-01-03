@@ -19,6 +19,4 @@
 
 ```
 
-### cygwin mirror
 
-    https://cygwin.com/mirrors.html
