@@ -11,7 +11,9 @@ __PROJECT__=$(
 )
 cd ${__PROJECT__}
 
-cd ${__PROJECT__}/socat/
+WORK_TEMP_DIR=${__PROJECT__}/var/cygwin-build/
+cd ${WORK_TEMP_DIR}/socat/
+
 ldd ./socat
 
 cd ${__PROJECT__}
