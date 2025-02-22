@@ -37,11 +37,12 @@ done
 
 mkdir -p ${__PROJECT__}/bin/
 
-WORK_TEMP_DIR=${__PROJECT__}/var/cygwin-build/
+WORK_TEMP_DIR=${__PROJECT__}/var/msys2-build/
 cd ${WORK_TEMP_DIR}/php-src/
 
 # export CPPFLAGS="-I/usr/include"
-# export CFLAGS=""
+# export CFLAGS="-DZEND_WIN32=1 -DPHP_WIN32=1 -DWIN32 "
+# https://github.com/php/php-src/blob/php-8.1.27/win32/build/confutils.js#L3227
 # export LDFLAGS="-L/usr/lib"
 
 ./buildconf --force
@@ -59,7 +60,6 @@ test -f Makefile && make clean
   --enable-filter \
   --enable-session \
   --enable-tokenizer \
-  --enable-mbstring \
   --enable-ctype \
   --with-zlib \
   --enable-posix \
@@ -76,20 +76,21 @@ test -f Makefile && make clean
   --with-xsl \
   --with-gmp \
   --enable-exif \
-  --with-sodium \
   --enable-xml --enable-simplexml --enable-xmlreader --enable-xmlwriter --enable-dom --with-libxml \
-  --enable-gd --with-jpeg --with-freetype \
   --enable-swoole --enable-sockets --enable-mysqlnd --enable-swoole-curl --enable-cares \
-  --enable-swoole-pgsql \
   --enable-swoole-sqlite \
   --enable-redis \
   --enable-opcache \
   --disable-opcache-jit \
-  --with-imagick \
   --with-yaml \
   --with-readline \
   ${OPTIONS}
 
+#  --with-sodium \
+#  --enable-swoole-pgsql \
+#  --enable-mbstring \ 需要 oniguruma
+#  --with-imagick \
+#  --enable-gd --with-jpeg --with-freetype \
 #  --with-pdo-pgsql \
 #  --with-pgsql
 #  --with-pdo-sqlite \
