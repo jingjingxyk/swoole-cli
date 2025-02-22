@@ -20,20 +20,41 @@ fi
 
 echo '正在执行删除无关的文件或者文件夹'
 
-cd ${__PROJECT__}/sapi/quickstart/linux/
-test -d SDS && rm -rf SDS
-test -d kubernetes && rm -rf kubernetes
-test -d qemu && rm -rf qemu
-test -d SDN && rm -rf SDN
-
-cd ${__PROJECT__}/sapi/
-test -d build-dependencies-container && rm -rf build-dependencies-container
+cd ${__PROJECT__}
+test -f setup-aria2-runtime.sh && rm -rf setup-aria2-runtime.sh
+test -f setup-coturn-runtime.sh && rm -rf setup-coturn-runtime.sh
+test -f setup-ffmpeg-runtime.sh && rm -rf setup-ffmpeg-runtime.sh
+test -f setup-go-runtime.sh && rm -rf setup-go-runtime.sh
+test -f setup-nginx-runtime.sh && rm -rf setup-nginx-runtime.sh
+test -f setup-nodejs-runtime.sh && rm -rf setup-nodejs-runtime.sh
+test -f setup-php-cli-runtime.sh && rm -rf setup-php-cli-runtime.sh
+test -f setup-php-fpm-runtime.sh && rm -rf setup-php-fpm-runtime.sh
+test -f setup-privoxy-runtime.sh && rm -rf setup-privoxy-runtime.sh
+test -f setup-socat-runtime.sh && rm -rf setup-socat-runtime.sh
+test -f setup-supervisord.sh && rm -rf setup-supervisord.sh
+test -f setup-swoole-cli-pre-runtime.sh && rm -rf setup-swoole-cli-pre-runtime.sh
+test -f setup-webBenchmark-runtime.sh && rm -rf setup-webBenchmark-runtime.sh
+test -f setup-swow-cli-runtime.sh && rm -rf setup-swow-cli-runtime.sh
+test -f setup-php-fpm-7.4-runtime.sh && rm -rf setup-php-fpm-7.4-runtime.sh
+test -f setup-swoole-cli-runtime.sh && rm -rf setup-swoole-cli-runtime.sh
+test -f setup-php-cli-7.4-runtime.sh && rm -rf setup-php-cli-7.4-runtime.sh
+test -f setup-php-cli-7.3-runtime.sh && rm -rf setup-php-cli-7.3-runtime.sh
 
 cd ${__PROJECT__}/
 test -f sync-source-code.php && rm -f sync-source-code.php
 test -f setup-runtime.md && rm -rf setup-runtime.md
 test -f diff.php && rm -rf diff.php
 test -f run-tests.php && rm -rf run-tests.php
+test -f privoxy.sh && rm -rf privoxy.sh
+test -f tools/ssh-d.sh && rm -rf tools/ssh-d.sh
+test -f tools/ssh-j.sh && rm -rf tools/ssh-j.sh
+test -f tools/ssh-l.sh && rm -rf tools/ssh-l.sh
+test -f tools/ssh-r.sh && rm -rf tools/ssh-r.sh
+test -f tools/upload-file-server/index.html && rm -rf tools/upload-file-server/index.html
+test -f tools/upload-file-server/php.ini && rm -rf tools/upload-file-server/php.ini
+test -f tools/upload-file-server/upload.php && rm -rf tools/upload-file-server/upload.php
+test -f tools/upload-file-server/.gitignore && rm -rf tools/upload-file-server/.gitignore
+test -f tools/upload-file-server/start-server.sh && rm -rf tools/upload-file-server/start-server.sh
 
 cd ${__PROJECT__}/sapi/
 test -d build-dependencies-container && rm -rf build-dependencies-container
@@ -60,6 +81,7 @@ test -d postgis && rm -rf postgis
 test -d rabbitmq && rm -rf rabbitmq
 test -d redis && rm -rf redis
 test -d gitea && rm -rf gitea
+test -d postgresql && rm -rf postgresql
 
 cd ${__PROJECT__}/.github/workflows
 test -f ceph.yml && rm -rf ceph.yml
@@ -84,29 +106,16 @@ test -f build-native-php-example.sh && rm -rf build-native-php-example.sh
 test -f clean-no-match-library-for-php.sh && rm -rf clean-no-match-library-for-php.sh
 test -f mark-install-library-cached.sh && rm -rf mark-install-library-cached.sh
 
+cd ${__PROJECT__}/sapi/quickstart/linux/
+test -d SDS && rm -rf SDS
+test -d kubernetes && rm -rf kubernetes
+test -d qemu && rm -rf qemu
+test -d SDN && rm -rf SDN
+test -d pve && rm -rf pve
+
 cd ${__PROJECT__}/sapi/quickstart/windows/
 test -d msys2-build && rm -rf msys2-build
 test -d native-build && rm -rf native-build
-
-cd ${__PROJECT__}
-test -f setup-aria2-runtime.sh && rm -rf setup-aria2-runtime.sh
-test -f setup-coturn-runtime.sh && rm -rf setup-coturn-runtime.sh
-test -f setup-ffmpeg-runtime.sh && rm -rf setup-ffmpeg-runtime.sh
-test -f setup-go-runtime.sh && rm -rf setup-go-runtime.sh
-test -f setup-nginx-runtime.sh && rm -rf setup-nginx-runtime.sh
-test -f setup-nodejs-runtime.sh && rm -rf setup-nodejs-runtime.sh
-test -f setup-php-cli-runtime.sh && rm -rf setup-php-cli-runtime.sh
-test -f setup-php-fpm-runtime.sh && rm -rf setup-php-fpm-runtime.sh
-test -f setup-privoxy-runtime.sh && rm -rf setup-privoxy-runtime.sh
-test -f setup-socat-runtime.sh && rm -rf setup-socat-runtime.sh
-test -f setup-supervisord.sh && rm -rf setup-supervisord.sh
-test -f setup-swoole-cli-pre-runtime.sh && rm -rf setup-swoole-cli-pre-runtime.sh
-test -f setup-webBenchmark-runtime.sh && rm -rf setup-webBenchmark-runtime.sh
-test -f setup-swow-cli-runtime.sh && rm -rf setup-swow-cli-runtime.sh
-test -f setup-php-fpm-7.4-runtime.sh && rm -rf setup-php-fpm-7.4-runtime.sh
-test -f setup-swoole-cli-runtime.sh && rm -rf setup-swoole-cli-runtime.sh
-test -f setup-php-cli-7.4-runtime.sh && rm -rf setup-php-cli-7.4-runtime.sh
-test -f setup-php-cli-7.3-runtime.sh && rm -rf setup-php-cli-7.3-runtime.sh
 
 cd ${__PROJECT__}
 
