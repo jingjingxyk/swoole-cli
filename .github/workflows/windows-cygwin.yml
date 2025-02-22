@@ -107,9 +107,9 @@ jobs:
         shell: C:\cygwin\bin\bash.EXE --noprofile --norc -e -o pipefail -o igncr   {0}
         # shell: C:\cygwin\bin\bash.EXE --login --noprofile --norc -e -o pipefail -o igncr   {0}
         run: |
-          ./socat/socat -V | grep 'socat version' | awk '{ print $3 }'
+          ./var/cygwin-build/socat/socat -V | grep 'socat version' | awk '{ print $3 }'
 
-          APP_VERSION=$(./socat/socat -V | grep 'socat version' | awk '{ print $3 }')
+          APP_VERSION=$(./var/cygwin-build/socat/socat -V | grep 'socat version' | awk '{ print $3 }')
           echo $APP_VERSION
           echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
 
