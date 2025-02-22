@@ -18,3 +18,11 @@ cd ${WORK_TEMP_DIR}/socat/
 # libtoolize -ci
 # autoreconf -fi
 autoconf
+
+./configure --help
+
+CFLAGS=" -O2 -Wall -fPIC  -DWITH_OPENSSL" \
+  ./configure \
+  --prefix=/usr \
+  --enable-readline \
+  --enable-openssl-base=/usr
