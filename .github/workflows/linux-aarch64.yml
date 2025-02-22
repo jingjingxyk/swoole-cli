@@ -151,7 +151,7 @@ jobs:
       - name: production artifacts debug
         uses: actions/upload-artifact@v4
         with:
-          name: socat-v${{ env.SOCAT_VERSION }}-linux-x64
+          name: socat-v${{ env.SOCAT_VERSION }}-linux-arm64
           retention-days: 90
           path: ./bin/socat
 
