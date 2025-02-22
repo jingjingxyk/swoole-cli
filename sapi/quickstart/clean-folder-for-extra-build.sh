@@ -41,7 +41,6 @@ test -f setup-php-cli-7.4-runtime.sh && rm -rf setup-php-cli-7.4-runtime.sh
 test -f setup-php-cli-7.3-runtime.sh && rm -rf setup-php-cli-7.3-runtime.sh
 test -f setup-swoole-cli-runtime.bat && rm -rf setup-swoole-cli-runtime.bat
 
-
 cd ${__PROJECT__}/
 test -f sync-source-code.php && rm -f sync-source-code.php
 test -f setup-runtime.md && rm -rf setup-runtime.md
@@ -62,6 +61,9 @@ cd ${__PROJECT__}/sapi/
 test -d build-dependencies-container && rm -rf build-dependencies-container
 test -d tools && rm -rf tools
 test -d webUI && rm -rf webUI
+
+cd ${__PROJECT__}/sapi/scripts/
+test -f build-swoole-cli-alpine-container.sh && rm -rf build-swoole-cli-alpine-container.sh
 
 cd ${__PROJECT__}/sapi/src/
 test -d library_builder && rm -rf library_builder
@@ -119,6 +121,14 @@ test -d pve && rm -rf pve
 cd ${__PROJECT__}/sapi/quickstart/windows/
 test -d msys2-build && rm -rf msys2-build
 test -d native-build && rm -rf native-build
+test -d openssh && rm -rf openssh
+test -d UE5 && rm -rf UE5
+test -f git-init.ps1 && rm -rf git-init.ps1
+test -f http-proxy.bat && rm -rf http-proxy.bat
+test -f http-proxy.ps1 && rm -rf http-proxy.ps1
+test -f open-msys2-cygwin-website.bat && rm -rf open-msys2-cygwin-website.bat
+test -f powershell-download.md && rm -rf powershell-download.md
+test -f open-msys2-cygwin-website.bat && rm -rf open-msys2-cygwin-website.bat
 
 cd ${__PROJECT__}
 
