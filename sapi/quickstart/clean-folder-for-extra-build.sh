@@ -110,6 +110,7 @@ test -d swoole-install && rm -rf swoole-install
 test -f build-native-php-example.sh && rm -rf build-native-php-example.sh
 test -f clean-no-match-library-for-php.sh && rm -rf clean-no-match-library-for-php.sh
 test -f mark-install-library-cached.sh && rm -rf mark-install-library-cached.sh
+test -d unix && rm -rf unix
 
 cd ${__PROJECT__}/sapi/quickstart/linux/
 test -d SDS && rm -rf SDS
@@ -117,6 +118,10 @@ test -d kubernetes && rm -rf kubernetes
 test -d qemu && rm -rf qemu
 test -d SDN && rm -rf SDN
 test -d pve && rm -rf pve
+
+cd ${__PROJECT__}/sapi/quickstart/macos/
+test -f openssl-patch-for-qemu.sh && rm -rf openssl-patch-for-qemu.sh
+test -f qemu.sh && rm -rf qemu.sh
 
 cd ${__PROJECT__}/sapi/quickstart/windows/
 test -d msys2-build && rm -rf msys2-build
@@ -128,7 +133,6 @@ test -f http-proxy.bat && rm -rf http-proxy.bat
 test -f http-proxy.ps1 && rm -rf http-proxy.ps1
 test -f open-msys2-cygwin-website.bat && rm -rf open-msys2-cygwin-website.bat
 test -f powershell-download.md && rm -rf powershell-download.md
-test -f open-msys2-cygwin-website.bat && rm -rf open-msys2-cygwin-website.bat
 
 cd ${__PROJECT__}
 
