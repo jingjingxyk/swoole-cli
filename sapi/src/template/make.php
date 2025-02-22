@@ -7,7 +7,11 @@ use SwooleCli\Preprocessor;
 
 ?>
 #!/usr/bin/env bash
+<<<<<<< HEAD
 
+=======
+shopt -s expand_aliases
+>>>>>>> build_php_7.4
 __PROJECT_DIR__=$(cd "$(dirname "$0")"; pwd)
 CLI_BUILD_TYPE=<?= $this->getBuildType() . PHP_EOL ?>
 SRC=<?= $this->phpSrcDir . PHP_EOL ?>
@@ -492,8 +496,8 @@ if [ "$1" = "docker-build" ] ;then
     if [ -n "$2" ]; then
         MIRROR=$2
         case "$MIRROR" in
-        china | openatom )
-            CONTAINER_BASE_IMAGE="hub.atomgit.com/library/alpine:3.18"
+        china | openatom)
+            CONTAINER_BASE_IMAGE="docker.io/library/alpine:3.18"
         ;;
         esac
     fi
