@@ -39,6 +39,8 @@ test -f setup-php-fpm-7.4-runtime.sh && rm -rf setup-php-fpm-7.4-runtime.sh
 test -f setup-swoole-cli-runtime.sh && rm -rf setup-swoole-cli-runtime.sh
 test -f setup-php-cli-7.4-runtime.sh && rm -rf setup-php-cli-7.4-runtime.sh
 test -f setup-php-cli-7.3-runtime.sh && rm -rf setup-php-cli-7.3-runtime.sh
+test -f setup-swoole-cli-runtime.bat && rm -rf setup-swoole-cli-runtime.bat
+
 
 cd ${__PROJECT__}/
 test -f sync-source-code.php && rm -f sync-source-code.php
@@ -61,12 +63,12 @@ test -d build-dependencies-container && rm -rf build-dependencies-container
 test -d tools && rm -rf tools
 test -d webUI && rm -rf webUI
 
-cd ${__PROJECT__}/sapi/src/builder/
-test -d library_shared && rm -rf library_shared
-
 cd ${__PROJECT__}/sapi/src/
 test -d library_builder && rm -rf library_builder
 test -d UnitTest && rm -rf UnitTest
+
+cd ${__PROJECT__}/sapi/src/builder/
+test -d library_shared && rm -rf library_shared
 
 cd ${__PROJECT__}/sapi/docker/
 test -d database && rm -rf database
@@ -99,6 +101,7 @@ test -f linux-riscv64.yml && rm -rf linux-riscv64.yml
 test -f runner-images.md && rm -rf runner-images.md
 test -f docker-install-push-to-gitee.yml && rm -rf docker-install-push-to-gitee.yml
 test -f swoole-cli-push-to-gitee.yml && rm -rf swoole-cli-push-to-gitee.yml
+test -f linux-aarch64-qemu.yml && rm -rf linux-aarch64-qemu.yml
 
 cd ${__PROJECT__}/sapi/quickstart
 test -d swoole-install && rm -rf swoole-install
