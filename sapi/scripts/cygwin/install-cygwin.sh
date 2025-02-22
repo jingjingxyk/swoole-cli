@@ -41,6 +41,7 @@ while [ $# -gt 0 ]; do
   shift $(($# > 0 ? 1 : 0))
 done
 
+<<<<<<< HEAD
 set +u
 if [ -z "${GITHUB_ACTION}" ]; then
   # 非 github 构建环境下创建启动图标
@@ -50,3 +51,16 @@ set -u
 setup-x86_64.exe --no-desktop --no-shortcuts --no-startmenu --quiet-mode --quiet-mode --disable-buggy-antivirus --site $SITE --packages make,git,curl,wget,tar,libtool,bison,gcc-g++,autoconf,automake,openssl,libpcre2-devel,libssl-devel,libcurl-devel,libxml2-devel,libxslt-devel,libgmp-devel,zlib-devel,libbz2-devel,liblz4-devel,liblzma-devel,libzip-devel,libreadline-devel,coreutils
 setup-x86_64.exe --no-desktop --no-shortcuts --no-startmenu --quiet-mode --quiet-mode --disable-buggy-antivirus --site $SITE --packages zip unzip
 setup-x86_64.exe --no-desktop --no-shortcuts --no-startmenu --quiet-mode --quiet-mode --disable-buggy-antivirus --site $SITE --packages libwrap-devel
+=======
+# setup-x86_64.exe  --no-desktop --no-shortcuts --no-startmenu --quiet-mode --disable-buggy-antivirus    --site  http://mirrors.ustc.edu.cn/cygwin/ --packages make,git,curl,wget,tar,libtool,bison,gcc-g++,autoconf,automake,openssl,libpcre2-devel,libssl-devel,libcurl-devel,libxml2-devel,libxslt-devel,libgmp-devel,ImageMagick,libpng-devel,libjpeg-devel,libfreetype-devel,libwebp-devel,libsqlite3-devel,zlib-devel,libbz2-devel,liblz4-devel,liblzma-devel,libzip-devel,libicu-devel,libonig-devel,libcares-devel,libsodium-devel,libyaml-devel,libMagick-devel,libzstd-devel,libbrotli-devel,libreadline-devel,libintl-devel,libpq-devel,libssh2-devel,libidn2-devel,gettext-devel,coreutils,zip,unzip
+# setup-x86_64.exe  --no-desktop --no-shortcuts --no-startmenu --quiet-mode --disable-buggy-antivirus    --site  http://mirrors.ustc.edu.cn/cygwin/ --packages libzstd-devel
+
+setup-x86_64.exe --quiet-mode --disable-buggy-antivirus --site $SITE
+
+## 多个包之间，用逗号分隔
+PACKAGES="make,git,curl,wget,tar,libtool,bison,gcc-g++,autoconf,automake,openssl,libpcre2-devel,libssl-devel,libcurl-devel,libxml2-devel,libxslt-devel,libgmp-devel,ImageMagick,libpng-devel,libjpeg-devel,libfreetype-devel,libwebp-devel,libsqlite3-devel,zlib-devel,libbz2-devel,liblz4-devel,liblzma-devel,libzip-devel,libicu-devel,libonig-devel,libcares-devel,libsodium-devel,libyaml-devel,libMagick-devel,libzstd-devel,libbrotli-devel,libreadline-devel,libintl-devel,libpq-devel,libssh2-devel,libidn2-devel,gettext-devel,coreutils,zip,unzip"
+PACKAGES="${PACKAGES},zip,unzip,icu,libicu-devel"
+PACKAGES="${PACKAGES},libpq5 libpq-devel"
+PACKAGES="${PACKAGES},libzstd-devel"
+setup-x86_64.exe --no-desktop --no-shortcuts --no-startmenu --quiet-mode --disable-buggy-antivirus --site $SITE --packages $PACKAGES
+>>>>>>> new_dev
