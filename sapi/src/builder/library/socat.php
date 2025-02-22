@@ -13,11 +13,11 @@ return function (Preprocessor $p) {
             ->withHomePage('http://www.dest-unreach.org/socat/')
             ->withLicense('http://www.dest-unreach.org/socat/doc/README', Library::LICENSE_GPL)
             //->withUrl('http://www.dest-unreach.org/socat/download/socat-1.7.4.4.tar.gz')
-            ->withFile('socat-1.8.0.1.tar.gz')
+            ->withFile('socat-1.8.0.3.tar.gz')
             ->withDownloadScript(
                 'socat',
                 <<<EOF
-                git clone -b tag-1.8.0.1	 https://repo.or.cz/socat.git
+                git clone -b tag-1.8.0.3	 https://repo.or.cz/socat.git
 EOF
             )
             ->withBuildCached(false)
