@@ -23,7 +23,7 @@ NAME="socat-v${SOCAT_VERSION}-cygwin-x64"
 test -d /tmp/${NAME} && rm -rf /tmp/${NAME}
 mkdir -p /tmp/${NAME}
 
-cd ${__PROJECT__}/socat/
+cd ${WORK_TEMP_DIR}/socat/
 ldd ./socat | grep -v '/cygdrive/' | awk '{print $3}' | xargs -I {} cp {} /tmp/${NAME}/
 
 cp -f ./COPYING /tmp/${NAME}/
