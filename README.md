@@ -51,10 +51,19 @@ bash setup-php-runtime.sh
 # 来自 https://www.swoole.com/download
 bash setup-php-runtime.sh --mirror china
 
+# shell脚本中启用别名扩展功能‌
+shopt -s expand_aliases
+__DIR__=$(pwd)
+export PATH="${__DIR__}/bin/runtime:$PATH"
+ln -sf ${__DIR__}/bin/runtime/swoole-cli ${__DIR__}/bin/runtime/php
+alias php="php -d curl.cainfo=${__DIR__}/bin/runtime/cacert.pem -d openssl.cafile=${__DIR__}/bin/runtime/cacert.pem"
+which php
+php -v
 php prepare.php +socat
 bash make-install-deps.sh
 bash make.sh all-library
 bash make.sh config
+
 
 ```
 

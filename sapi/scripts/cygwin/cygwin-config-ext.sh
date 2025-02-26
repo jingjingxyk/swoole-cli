@@ -39,6 +39,8 @@ done
 cd ${__PROJECT__}
 mkdir -p ${__PROJECT__}/pool/
 mkdir -p ${__PROJECT__}/var/
+mkdir -p pool/ext
+mkdir -p pool/lib
 
 # download socat source code
 # https://repo.or.cz/socat.git
@@ -56,6 +58,9 @@ if [ ! -f ${__PROJECT__}/pool/socat-${SOCAT_VERSION}.tar.gz ]; then
 fi
 
 cd ${__PROJECT__}
+WORK_TEMP_DIR=${__PROJECT__}/var/cygwin-build/
+mkdir -p ${WORK_TEMP_DIR}
+cd ${WORK_TEMP_DIR}/
 
 test -d socat && rm -rf socat
 mkdir -p socat

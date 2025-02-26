@@ -10,12 +10,12 @@ __PROJECT__=$(
   pwd
 )
 cd ${__PROJECT__}
-cd ${__PROJECT__}/socat
+WORK_TEMP_DIR=${__PROJECT__}/var/cygwin-build/
+cd ${WORK_TEMP_DIR}/socat/
 
 # libtoolize -ci
 # autoreconf -fi
 autoconf
-
 
 ./configure --help
 
