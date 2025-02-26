@@ -132,7 +132,7 @@ EOF
             # PACKAGES="\$PACKAGES libpq"
             PACKAGES="\$PACKAGES hiredis"
             # PACKAGES="\$PACKAGES libsctp"
-            PACKAGES="\$PACKAGES libbson-static-1.0 libmongoc-ssl-1.0 libmongoc-static-1.0 "
+            # PACKAGES="\$PACKAGES libbson-static-1.0 libmongoc-ssl-1.0 libmongoc-static-1.0 "
 
             export SSL_CFLAGS="$(pkg-config  --cflags-only-I  --static openssl ) "
             export SSL_LIBS="$(pkg-config    --libs           --static openssl ) "
@@ -143,10 +143,8 @@ EOF
             export LIBS="$(pkg-config      --libs-only-l   --static    \$PACKAGES)  {$libcpp} -lm -lsnappy -pthread -lsocket -lrt "
             export CFLAGS="  -g  -std=gnu11 -Wall {$cflags}  " # -DOPENSSL_THREADS
 
-            export DBCFLAGS="$(pkg-config  --cflags --static libpq sqlite3 hiredis libbson-static-1.0 libmongoc-ssl-1.0 libmongoc-static-1.0     )"
-            export DBLIBS="$(pkg-config     --libs  --static libpq sqlite3 hiredis libbson-static-1.0 libmongoc-ssl-1.0 libmongoc-static-1.0     )"
-
-
+            export DBCFLAGS="$(pkg-config  --cflags --static libpq sqlite3 hiredis     )" # libbson-static-1.0 libmongoc-ssl-1.0 libmongoc-static-1.0
+            export DBLIBS="$(pkg-config     --libs  --static libpq sqlite3 hiredis     )"
 
             export OSLIBS="$(pkg-config    --libs          --static \$PACKAGES)  {$libcpp} -lm -lsnappy -pthread -lsocket -lrt"
             export OSCFLAGS=\$CPPFLAGS
@@ -180,7 +178,7 @@ EOF
                 'pgsql',
                 'hiredis',
                 //'libsctp',
-                'libmongoc',
+                //'libmongoc',
                 // 'prometheus_client_c'
                 //'libsctp',
                 //'liboauth2'
