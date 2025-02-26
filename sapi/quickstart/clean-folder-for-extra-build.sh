@@ -64,6 +64,12 @@ test -d webUI && rm -rf webUI
 
 cd ${__PROJECT__}/sapi/scripts/
 test -f build-swoole-cli-alpine-container.sh && rm -rf build-swoole-cli-alpine-container.sh
+test -f download-php-src-archive.php && rm -rf download-php-src-archive.php
+test -f tencent-cloud-object-storage.sh && rm -rf tencent-cloud-object-storage.sh
+test -f tencent-cloud-object-storage.yaml && rm -rf tencent-cloud-object-storage.yaml
+test -f pack-sfx.php && rm -rf pack-sfx.php
+test -f generate-artifact-hash.sh && rm -rf generate-artifact-hash.sh
+test -f msys2-cygwin-install-depend.sh && rm -rf msys2-cygwin-install-depend.sh
 
 cd ${__PROJECT__}/sapi/src/
 test -d library_builder && rm -rf library_builder
@@ -104,6 +110,10 @@ test -f runner-images.md && rm -rf runner-images.md
 test -f docker-install-push-to-gitee.yml && rm -rf docker-install-push-to-gitee.yml
 test -f swoole-cli-push-to-gitee.yml && rm -rf swoole-cli-push-to-gitee.yml
 test -f linux-aarch64-qemu.yml && rm -rf linux-aarch64-qemu.yml
+test -f push-to-gitee.yml.bak && rm -rf push-to-gitee.yml.bak
+test -f push-to-gitee.yml && rm -rf push-to-gitee.yml
+test -f windows-native-vs2025.yml && rm -rf windows-native-vs2025.yml
+test -f /windows-native-2022.yml && rm -rf /windows-native-2022.yml
 
 cd ${__PROJECT__}/sapi/quickstart
 test -d swoole-install && rm -rf swoole-install
@@ -111,6 +121,10 @@ test -f build-native-php-example.sh && rm -rf build-native-php-example.sh
 test -f clean-no-match-library-for-php.sh && rm -rf clean-no-match-library-for-php.sh
 test -f mark-install-library-cached.sh && rm -rf mark-install-library-cached.sh
 test -d unix && rm -rf unix
+test -d bsd && rm -rf bsd
+test -f authors.sh && rm -f authors.sh
+test -f deploy-git-proxy.sh && rm -f deploy-git-proxy.sh
+test -f git-proxy-example.sh && rm -f git-proxy-example.sh
 
 cd ${__PROJECT__}/sapi/quickstart/linux/
 test -d SDS && rm -rf SDS
