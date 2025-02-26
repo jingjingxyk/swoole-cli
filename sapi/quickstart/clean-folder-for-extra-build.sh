@@ -135,7 +135,6 @@ test -d pve && rm -rf pve
 
 cd ${__PROJECT__}/sapi/quickstart/macos/
 
-
 cd ${__PROJECT__}/sapi/quickstart/windows/
 test -d msys2-build && rm -rf msys2-build
 test -d native-build && rm -rf native-build
