@@ -5,8 +5,6 @@ use SwooleCli\Preprocessor;
 
 return function (Preprocessor $p) {
     $python3_prefix = PYTHON3_PREFIX;
-    $openssl_prefix = OPENSSL_PREFIX;
-    $libintl_prefix = LIBINTL_PREFIX;
     $libunistring_prefix = LIBUNISTRING_PREFIX;
 
     $openssl_prefix = OPENSSL_PREFIX;;
