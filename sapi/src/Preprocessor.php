@@ -7,9 +7,11 @@ use MJS\TopSort\CircularDependencyException;
 use MJS\TopSort\ElementNotFoundException;
 use MJS\TopSort\Implementations\StringSort;
 use RuntimeException;
+use SwooleCli\PreprocessorTrait\CleanBuilderTrait;
 use SwooleCli\PreprocessorTrait\CompilerTrait;
 use SwooleCli\PreprocessorTrait\DownloadBoxTrait;
 use SwooleCli\PreprocessorTrait\WebUITrait;
+
 
 #[AllowDynamicProperties]
 class Preprocessor
@@ -19,6 +21,8 @@ class Preprocessor
     use WebUITrait;
 
     use CompilerTrait;
+
+    use CleanBuilderTrait;
 
     public const VERSION = '1.7';
 
@@ -1234,6 +1238,11 @@ EOF;
         }
         if ($this->getInputOption('with-web-ui')) {
             $this->generateWebUIData();
+        }
+        if ($this->getInputOption('show-ext-deps')) {
+            $ext_name = $this->getInputOption('show-ext-deps');
+            $this->show_ext_deps($ext_name);
+            exit(0);
         }
         foreach ($this->endCallbacks as $endCallback) {
             $endCallback($this);
