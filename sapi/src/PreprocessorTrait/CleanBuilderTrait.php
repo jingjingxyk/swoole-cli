@@ -66,15 +66,15 @@ trait CleanBuilderTrait
         //var_dump($this->x_lib_builders);
 
         echo "=================" . PHP_EOL;
-        $x_ext_builders = array_map(fn ($value) => $value . '.php', $this->x_ext_builders+[$ext_name]);
+        $x_ext_builders = array_map(fn ($value) => $value . '.php', $this->x_ext_builders + [$ext_name]);
         $x_lib_builders = array_map(fn ($value) => $value . '.php', $this->x_lib_builders);
         # 求差集 获得不需要的 builder
         $clean_ext_builder = array_diff($ext_builders, $x_ext_builders);
         $clean_lib_builder = array_diff($library_builders, $x_lib_builders);
 
-        var_dump($clean_ext_builder);
+        //var_dump($clean_ext_builder);
         //var_dump($clean_lib_builder);
-        die;
+
         if ($this->getInputOption('with-clean-builder')) {
             $cmd = <<<EOF
 cd {$project_dir}
