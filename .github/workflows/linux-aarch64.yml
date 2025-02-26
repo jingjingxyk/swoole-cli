@@ -151,7 +151,7 @@ jobs:
       - name: production artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: openssh-${{ env.APP_VERSION }}-macos-arm64
+          name: openssh-${{ env.APP_VERSION }}-linux-arm64
           retention-days: 90
           path: openssh-${{ env.APP_VERSION }}-linux-arm64.tar.xz
 
