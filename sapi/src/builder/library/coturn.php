@@ -149,7 +149,7 @@ EOF
             export OSLIBS="$(pkg-config    --libs          --static \$PACKAGES)  {$libcpp} -lm -lsnappy -pthread -lsocket -lrt"
             export OSCFLAGS=\$CPPFLAGS
 
-            sed -i.backup  "s/libmongoc-1.0/libmongoc-static-1.0/" ./configure
+            # sed -i.backup  "s/libmongoc-1.0/libmongoc-static-1.0/" ./configure
 
             ./configure  \
             --prefix=$coturn_prefix
