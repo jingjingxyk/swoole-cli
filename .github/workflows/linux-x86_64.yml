@@ -3,41 +3,6 @@ name: build-linux-x86_64
 on:
   push:
   pull_request:
-  workflow_dispatch:
-    inputs:
-      build_latest_swoole_or_swow:
-        required: true
-        description: "定制构建选项: 构建最新版的 swoole 或者 swow （此二者扩展不能同时启用）"
-        default: ' '
-        type: choice
-        options:
-          - ' '
-          - '-swoole +swoole_latest'
-          - '-swoole +swow_latest'
-          - '-swoole +swow'
-      php_version:
-        required: true
-        description: "定制构建选项: 指定 PHP 版本(版本号大于等于8.1)"
-        default: '--with-php-version=8.2.27'
-        type: choice
-        options:
-          - '--with-php-version=8.1.31'
-          - '--with-php-version=8.2.27'
-          - '--with-php-version=8.3.15'
-      build_type:
-        required: true
-        description: "定制构建选项: 指定构建类型"
-        default: '--with-build-type=release'
-        type: choice
-        options:
-          - '--with-build-type=release'
-          - '--with-build-type=dev'
-      build_options:
-        required: false
-        description: "定制构建选项: 请查看 docs/options.md"
-        default: ' '
-        type: string
-
 
 env:
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
@@ -45,15 +10,8 @@ env:
 
 jobs:
   linux-x86_64:
-    if: 0
+    if: 1
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php-version:
-          - "8.2.27"
-          - "8.1.31"
-          - "8.3.15"
-          - "8.4.2"
     steps:
       - uses: actions/checkout@v4
       - name: Show Environment Info
@@ -196,7 +154,7 @@ jobs:
             composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
             composer dump-autoload --optimize --profile --no-dev
 
-            php prepare.php  -ffmpeg +coturn  --with-build-type=release ${{ inputs.build_type }} ${{ inputs.build_options }} --with-c-compiler=clang
+            php prepare.php  +openssh  --with-build-type=release ${{ inputs.build_type }} ${{ inputs.build_options }} --with-c-compiler=clang
 
             bash make-install-deps.sh
 
@@ -207,53 +165,34 @@ jobs:
             bash ./make.sh build
             bash ./make.sh archive
 
-      - name: Start Database
-        run: |
-          # 准备数据库容器
-          docker compose version
-          docker container ls -a
-          bash sapi/docker/database/start.sh
-
       - name: Show Build Result
         run: |
-          ./thirdparty/php-src/sapi/cli/php -v
-          ./thirdparty/php-src/sapi/cli/php -m
-          ./thirdparty/php-src/sapi/cli/php --ri gd
-          ./thirdparty/php-src/sapi/cli/php --ri swoole
-          ./thirdparty/php-src/sapi/cli/php --ri pgsql
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -v
-          file ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-          readelf -h ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-          APP_VERSION=$(./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php  -v | head -n 1 | awk '{print $2}')
+          ./bin/openssh/ssh -V 2>&1  | awk -F ',' '{ print $1 }' | sed 's/OpenSSH_//'
+          file ./bin/openssh/sshd
+          readelf -h ./bin/openssh/sshd
+          APP_VERSION=$(./bin/openssh/ssh -V 2>&1  | awk -F ',' '{ print $1 }' | sed 's/OpenSSH_//')
+          echo ${APP_VERSION}
+          echo ${APP_VERSION}  > APP_VERSION
+
+      - name: get app version
+        run: |
+          APP_VERSION=$(cat ./APP_VERSION)
+          echo $APP_VERSION
           echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
-
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -r "echo PHP_VERSION;"
-
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php  --list-tests
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php
-          # ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/SwoolePGSQLTest.php
-
-      - name: production artifacts debug
-        uses: actions/upload-artifact@v4
-        with:
-          name: php-cli-v${{ env.APP_VERSION }}-linux-x64-debug
-          retention-days: 90
-          path: ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
 
       - name: production artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: php-cli-v${{ env.APP_VERSION }}-linux-x64
+          name: openssh-${{ env.APP_VERSION }}-linux-x64
           retention-days: 90
-          path: ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/dist/php
+          path: openssh-${{ env.APP_VERSION }}-linux-x64.tar.xz
 
       - name: gh release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            php-cli-v${{ env.APP_VERSION }}-linux-x64.tar.xz
-            php-cli-v${{ env.APP_VERSION }}-linux-x64-debug.tar.xz
+            openssh-${{ env.APP_VERSION }}-linux-x64.tar.xz
 
       - name: upload artifacts to cloud object storage
         if: ${{ 0 && (github.repository == 'swoole/swoole-cli') && (startsWith(github.ref, 'refs/tags/'))  }}
