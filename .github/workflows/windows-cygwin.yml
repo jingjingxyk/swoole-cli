@@ -107,6 +107,7 @@ jobs:
         shell: C:\cygwin\bin\bash.EXE --noprofile --norc -e -o pipefail -o igncr   {0}
         # shell: C:\cygwin\bin\bash.EXE --login --noprofile --norc -e -o pipefail -o igncr   {0}
         run: |
+          cd var/cygwin-build/
           ./socat/socat -V | grep 'socat version' | awk '{ print $3 }'
 
           APP_VERSION=$(./socat/socat -V | grep 'socat version' | awk '{ print $3 }')
