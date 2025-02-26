@@ -6,7 +6,6 @@ use SwooleCli\Preprocessor;
 return function (Preprocessor $p) {
     $aria2_prefix = ARIA2_PREFIX;
     $libiconv_prefix = ICONV_PREFIX;
-    $libintl_prefix = LIBINTL_PREFIX;
     $libs = $p->isMacos() ? '-lc++' : ' -lstdc++ ';
     $p->addLibrary(
         (new Library('aria2'))
@@ -26,8 +25,8 @@ return function (Preprocessor $p) {
             PACKAGES="\$PACKAGES expat"
             PACKAGES="\$PACKAGES libssh2"
             PACKAGES="\$PACKAGES nettle hogweed"
-            CPPFLAGS="-I{$libiconv_prefix}/include -I{$libintl_prefix}/include "
-            LDFLAGS="-L{$libiconv_prefix}/lib -L{$libintl_prefix}/lib"
+            CPPFLAGS="-I{$libiconv_prefix}/include  "
+            LDFLAGS="-L{$libiconv_prefix}/lib "
             LIBS="-liconv -lintl {$libs}"
             CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$PACKAGES) \$CPPFLAGS " \
             LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES) \$LDFLAGS " \
