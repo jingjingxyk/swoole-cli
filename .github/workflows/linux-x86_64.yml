@@ -165,8 +165,8 @@ jobs:
 
       - name: Show Build Result
         run: |
-          ./bin/python3.12 --version -V 2>&1
-          ./bin/python3.12 --version -V 2>&1 | awk '{ print $2 }'
+          ./bin/python3/bin/python3.12 --version -V 2>&1
+          ./bin/python3/bin/python3.12 --version -V 2>&1 | awk '{ print $2 }'
           otool -L ./bin/python3/bin/python3.12
 
           APP_VERSION=$(./bin/python3/bin/python3.12 --version -V 2>&1 | awk '{ print $2 }')
