@@ -130,7 +130,7 @@ jobs:
           otool -L ./bin/python3/bin/python3.12
 
           APP_VERSION=$(./bin/python3/bin/python3.12 --version -V 2>&1 | awk '{ print $2 }')
-          X_APP_VERSION=$(./bin/python3/bin/python3.12 --version -V 2>&1 | awk '{ print $2 }' ｜ awk -F '.' '{ print $1"."$2 }')
+          X_APP_VERSION=$(./bin/python3/bin/python3.12 --version -V 2>&1 | awk '{ print $2 }' | awk -F '.' '{ print $1"."$2 }')
           echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
           echo "X_APP_VERSION=${X_APP_VERSION}" >> $GITHUB_ENV
 
