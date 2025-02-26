@@ -7,6 +7,7 @@ use SwooleCli\Preprocessor;
 
 ?>
 #!/usr/bin/env bash
+shopt -s expand_aliases
 __PROJECT_DIR__=$(cd "$(dirname "$0")"; pwd)
 CLI_BUILD_TYPE=<?= $this->getBuildType() . PHP_EOL ?>
 SRC=<?= $this->phpSrcDir . PHP_EOL ?>
@@ -105,12 +106,6 @@ make_<?=$item->name?>() {
             exit  $result_code
         fi
     fi
-
-
-    <?php if ($item->cleanPreInstallDirectory) : ?>
-    # If the install directory exist, clean the install directory
-    test -d <?=$item->preInstallDirectory?>/ && rm -rf <?=$item->preInstallDirectory?>/ ;
-    <?php endif; ?>
 
     cd <?=$this->getBuildDir()?>/<?=$item->name?>/
 
@@ -751,8 +746,8 @@ if [ "$1" = "docker-build" ] ;then
     if [ -n "$2" ]; then
         MIRROR=$2
         case "$MIRROR" in
-        china | openatom )
-            CONTAINER_BASE_IMAGE="hub.atomgit.com/library/alpine:3.18"
+        china | openatom)
+            CONTAINER_BASE_IMAGE="docker.io/library/alpine:3.18"
         ;;
         esac
     fi

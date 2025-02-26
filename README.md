@@ -60,6 +60,18 @@ bash make.sh archive
 
 
 
+# 使用swoole-cli
+# shell脚本中启用别名扩展功能‌
+shopt -s expand_aliases
+__DIR__=$(pwd)
+export PATH="${__DIR__}/bin/runtime:$PATH"
+ln -sf ${__DIR__}/bin/runtime/swoole-cli ${__DIR__}/bin/runtime/php
+alias php="php -d curl.cainfo=${__DIR__}/bin/runtime/cacert.pem -d openssl.cafile=${__DIR__}/bin/runtime/cacert.pem"
+which php
+php -v
+composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
+composer dump-autoload --optimize --profile --no-dev
+
 ```
 
 ## 快速准备运行环境
