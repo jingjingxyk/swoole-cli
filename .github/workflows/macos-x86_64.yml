@@ -152,8 +152,7 @@ jobs:
       - name: Show Build Result
         run: |
           ./bin/openssh/ssh -V 2>&1  | awk -F ',' '{ print $1 }' | sed 's/OpenSSH_//'
-          file ./bin/openssh/sshd
-          readelf -h ./bin/openssh/sshd
+          otool -L  ./bin/openssh/sshd
           APP_VERSION=$(./bin/openssh/ssh -V 2>&1  | awk -F ',' '{ print $1 }' | sed 's/OpenSSH_//')
           echo ${APP_VERSION}
           echo ${APP_VERSION}  > APP_VERSION
