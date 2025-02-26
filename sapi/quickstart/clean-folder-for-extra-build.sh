@@ -71,6 +71,7 @@ test -f pack-sfx.php && rm -rf pack-sfx.php
 test -f generate-artifact-hash.sh && rm -rf generate-artifact-hash.sh
 test -f msys2-cygwin-install-depend.sh && rm -rf msys2-cygwin-install-depend.sh
 test -d msys2 && rm -rf msys2
+test -f cygwin-install-depend.sh && rm -rf cygwin-install-depend.sh
 
 cd ${__PROJECT__}/sapi/src/
 test -d library_builder && rm -rf library_builder
