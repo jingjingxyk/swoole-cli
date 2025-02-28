@@ -12,10 +12,9 @@ __PROJECT__=$(
 cd ${__PROJECT__}
 
 WORK_TEMP_DIR=${__PROJECT__}/var/cygwin-build/
-mkdir -p ${WORK_TEMP_DIR}/openssh
+mkdir -p ${WORK_TEMP_DIR}/openssh/build/
 
-WORK_TEMP_DIR=${__PROJECT__}/var/cygwin-build/
-cd ${WORK_TEMP_DIR}/openssh/
+cd ${WORK_TEMP_DIR}/openssh/build/
 
 autoreconf -fi
 ./configure --help
