@@ -11,13 +11,6 @@ jobs:
   windows-cygwin:
     if: 0
     runs-on: windows-2022
-    strategy:
-      matrix:
-        php-version:
-          - "8.2.27"
-          - "8.1.31"
-          - "8.3.15"
-          - "8.4.2"
     steps:
       - name: Show Environment Info
         shell: cmd
@@ -114,15 +107,12 @@ jobs:
         shell: C:\cygwin\bin\bash.EXE --noprofile --norc -e -o pipefail -o igncr   {0}
         run: |
           bash ./sapi/scripts/cygwin/cygwin-build.sh
+          bash ./sapi/scripts/cygwin/cygwin-archive.sh
 
       - name: Show Build Result
         run: |
           ./bin/php.exe -v
-          ./bin/php.exe -m
-          ./bin/php.exe --ri mongodb
-          ./bin/php.exe --ri gd
-          ./bin/php.exe --ri swoole
-          ./bin/php.exe  -r "echo PHP_VERSION;"
+
 
       - name: get app version with bash
         # 参考 https://github.com/marketplace/actions/install-cygwin
