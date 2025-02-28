@@ -11,7 +11,7 @@ __PROJECT__=$(
 )
 cd ${__PROJECT__}
 
-SOCAT_VERSION='1.8.0.1'
+SOCAT_VERSION='1.8.0.3'
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -48,7 +48,7 @@ mkdir -p pool/lib
 if [ ! -f ${__PROJECT__}/pool/socat-${SOCAT_VERSION}.tar.gz ]; then
   cd ${__PROJECT__}/var/
   test -d socat && rm -rf socat
-  git clone -b tag-1.8.0.1 https://repo.or.cz/socat.git
+  git clone -b ${SOCAT_VERSION} https://repo.or.cz/socat.git
   cd socat
   curl -Lo cacert.pem https://curl.se/ca/cacert.pem
   tar -czvf ${__PROJECT__}/pool/socat-${SOCAT_VERSION}.tar.gz .
