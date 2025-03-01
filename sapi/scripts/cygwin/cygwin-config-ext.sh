@@ -43,6 +43,9 @@ ___EOF___
   shift $(($# > 0 ? 1 : 0))
 done
 
+git config --global http.proxy 'http://127.0.0.1:8016'
+git config --global https.proxy 'http://127.0.0.1:8016'
+
 mkdir -p pool/ext
 mkdir -p pool/lib
 
