@@ -133,16 +133,10 @@ jobs:
             bash ./make.sh build
             bash ./make.sh archive
 
-      - name: Show Build Result
-        run: |
-          ls ./bin/
-          uid=$(id -u) && gid=$(id -g) && sudo chown -R ${uid}:${gid} ./bin/privoxy/
-          uid=$(id -u) && gid=$(id -g) && sudo chown -R ${uid}:${gid} /usr/local/swoole-cli
-          PRIVOXY_VERSION=$(./bin/privoxy/sbin/privoxy --help | grep 'Privoxy version' | awk '{print $3}')
-          echo "${PRIVOXY_VERSION}" > APP_VERSION
-
       - name: get app version
         run: |
+          ls -lha ./bin/privoxy/
+          ls -lha ./bin/privoxy/sbin/
           APP_VERSION=$(cat ./APP_VERSION)
           echo $APP_VERSION
           echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV

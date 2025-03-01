@@ -160,12 +160,12 @@ jobs:
             bash ./make.sh build
             bash ./make.sh archive
 
-      - name: Show Build Result
+      - name: get app version
         run: |
-          ls ./bin/
-          uid=$(id -u) && gid=$(id -g) && sudo chown -R ${uid}:${gid} ./bin/privoxy/
-          uid=$(id -u) && gid=$(id -g) && sudo chown -R ${uid}:${gid} /usr/local/swoole-cli
-          APP_VERSION=$(./bin/privoxy/sbin/privoxy --help | grep 'Privoxy version' | awk '{print $3}')
+          ls -lha ./bin/privoxy/
+          ls -lha ./bin/privoxy/sbin/
+          APP_VERSION=$(cat ./APP_VERSION)
+          echo $APP_VERSION
           echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
           echo "APP_NAME=privoxy" >> $GITHUB_ENV
 
