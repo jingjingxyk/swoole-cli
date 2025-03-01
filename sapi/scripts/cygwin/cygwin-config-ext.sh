@@ -44,6 +44,7 @@ if [ ! -f openssh-${OPENSSH_VERSION}.tgz ]; then
 
 fi
 
+cd ${__PROJECT__}/
 tar --strip-components=1 -C ${WORK_TEMP_DIR}/openssh -xf ${__PROJECT__}/pool/lib/openssh-${OPENSSH_VERSION}.tgz
 
 cd ${__PROJECT__}

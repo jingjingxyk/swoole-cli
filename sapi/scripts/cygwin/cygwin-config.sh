@@ -21,5 +21,5 @@ autoreconf -fi
 mkdir build
 cd build
 ../configure \
-  --prefix=/usr/ \
+  --prefix=/usr/local/swoole-cli/openssh/ \
   --with-pie
