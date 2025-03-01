@@ -23,7 +23,14 @@ EOF
         ->withPreInstallCommand(
             'debian',
             <<<EOF
-            apt install nasm
+            apt install nasm yasm
+EOF
+        )
+        ->withPreInstallCommand(
+            'alpine',
+            <<<EOF
+            apk add nasm yasm
+
 EOF
         )
         ->withConfigure(
