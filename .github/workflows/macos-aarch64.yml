@@ -130,7 +130,7 @@ jobs:
         with:
           name: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-macos-arm64
           retention-days: 90
-          path: ./bin/privoxy/
+          path: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-macos-arm64.tar.xz
 
       - name: gh release
         uses: softprops/action-gh-release@v2

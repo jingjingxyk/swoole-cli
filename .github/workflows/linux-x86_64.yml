@@ -174,7 +174,7 @@ jobs:
         with:
           name: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-linux-x64
           retention-days: 7
-          path: ./bin/privoxy/
+          path: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-linux-x64.tar.xz
 
       - name: gh release
         uses: softprops/action-gh-release@v2
