@@ -18,6 +18,20 @@ while [ $# -gt 0 ]; do
   --openssh-version)
     OPENSSH_VERSION="$2"
     ;;
+  --proxy)
+    export GIT_PROXY_COMMAND=/tmp/git-proxy
+    cat >$GIT_PROXY_COMMAND <<___EOF___
+#!/usr/bin/env bash
+PROXY_SERVER_HOST=127.0.0.1
+PROXY_SERVER_PORT=8016
+# socat - socks4a:$PROXY_SERVER_HOST:\$1:\$2,socksport=$PROXY_SERVER_PORT
+socat - PROXY:$PROXY_SERVER_HOST:$1:$2,proxyport=$PROXY_SERVER_PORT
+
+___EOF___
+
+    chmod +x $GIT_PROXY_COMMAND
+
+    ;;
   --*)
     echo "Illegal option $1"
     ;;
