@@ -133,7 +133,7 @@ jobs:
           echo "FFMPEG_VERSION=${FFMPEG_VERSION}" >> $GITHUB_ENV
 
       - name: production artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ffmpeg-${{ env.FFMPEG_VERSION }}-macos-arm64
           retention-days: 90
