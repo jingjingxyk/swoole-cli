@@ -24,13 +24,13 @@ return function (Preprocessor $p) {
 EOF
         )
         ->withPrefix($openssh_prefix)
-        ->withBuildScript(
+        ->withConfigure(
             <<<EOF
             autoreconf -fi
             ./configure --help
             mkdir build
             cd build
-            PACKAGES='zlib openssl libedit '
+            PACKAGES='zlib openssl libedit ncursesw'
             PACKAGES="\$PACKAGES  "
 
             CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$PACKAGES)" \
@@ -41,16 +41,13 @@ EOF
             --with-libedit={$libedit_prefix}  \
             --with-zlib={$zlib_prefix} \
             --with-ssl-dir={$openssl_prefix} \
-            --enable-year2038 \
             --with-pie
-
-            make -j {$p->maxJob}
 
 EOF
         )
         ->withBuildCached(false)
         ->withInstallCached(false)
-        ->withDependentLibraries('openssl', 'zlib', 'libedit')
+        ->withDependentLibraries('openssl', 'zlib', 'libedit', 'ncurses')
         ->disableDefaultLdflags()
         ->disablePkgName()
         ->disableDefaultPkgConfig()

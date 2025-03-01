@@ -20,6 +20,7 @@ return function (Preprocessor $p) {
         $workdir = $p->getWorkDir();
         $builddir = $p->getBuildDir();
         $system_arch = $p->getSystemArch();
+        $openssh_prefix= OPENSSH_PREFIX;
 
         $cmd = <<<EOF
         cd {$builddir}/openssh/build/
