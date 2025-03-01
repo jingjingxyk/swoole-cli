@@ -27,6 +27,7 @@ return function (Preprocessor $p) {
                 cp -rf privoxy {$workdir}/bin/
                 strip {$workdir}/bin/privoxy/sbin/privoxy
                 PRIVOXY_VERSION=$({$workdir}/bin/privoxy/sbin/privoxy --help | grep 'Privoxy version' | awk '{print $3}')
+                echo \${PRIVOXY_VERSION} > {$workdir}/RLEASE_VERSION
 
 EOF;
         if ($p->getOsType() == 'macos') {
