@@ -18,34 +18,35 @@ return function (Preprocessor $p) {
         $builddir = $p->getBuildDir();
         $installdir = $p->getGlobalPrefix();
         $privoxy_prefix = PRIVOXY_PREFIX;
-        $system_arch=$p->getSystemArch();
+        $system_arch = $p->getSystemArch();
         $cmd = <<<EOF
-                mkdir -p {$workdir}/bin/
-                test -d {$workdir}/bin/privoxy && rm -rf {$workdir}/bin/privoxy
-                cd {$privoxy_prefix}/../
-                ls -lh privoxy
-                cp -rf privoxy {$workdir}/bin/
-                strip {$workdir}/bin/privoxy/sbin/privoxy
-                PRIVOXY_VERSION=$({$workdir}/bin/privoxy/sbin/privoxy --help | grep 'Privoxy version' | awk '{print $3}')
-                echo \${PRIVOXY_VERSION} > {$workdir}/APP_VERSION
+
+                cd {$privoxy_prefix}/
+                ls -lh .
+
+                strip {$privoxy_prefix}/sbin/privoxy
+                APP_VERSION=$({$privoxy_prefix}/sbin/privoxy --help | grep 'Privoxy version' | awk '{print $3}')
+                echo \${APP_VERSION} > {$workdir}/APP_VERSION
+
+                cd {$privoxy_prefix}/
 
 EOF;
         if ($p->getOsType() == 'macos') {
             $cmd .= <<<EOF
-            otool -L {$workdir}/bin/privoxy/sbin/privoxy
-            tar -cJvf {$workdir}/privoxy-\${PRIVOXY_VERSION}-macos-{$system_arch}.tar.xz privoxy
+            otool -L {$privoxy_prefix}/sbin/privoxy
+            tar -cJvf {$workdir}/privoxy-\${APP_VERSION}-macos-{$system_arch}.tar.xz .
 EOF;
         } else {
             $cmd .= <<<EOF
-              file {$workdir}/bin/privoxy/sbin/privoxy
-              readelf -h {$workdir}/bin/privoxy/sbin/privoxy
-              tar -cJvf {$workdir}/privoxy-\${PRIVOXY_VERSION}-linux-{$system_arch}.tar.xz privoxy
+              file {$privoxy_prefix}/sbin/privoxy
+              readelf -h {$privoxy_prefix}//sbin/privoxy
+              tar -cJvf {$workdir}/privoxy-\${APP_VERSION}-linux-{$system_arch}.tar.xz .
 EOF;
         }
         return $cmd;
     });
 };
 
-# TEST
+# TEST privoxy
 # cd $privoxy_prefix
 # ./sbin/privoxy --no-daemon etc/config
