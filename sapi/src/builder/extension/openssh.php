@@ -20,37 +20,27 @@ return function (Preprocessor $p) {
         $workdir = $p->getWorkDir();
         $builddir = $p->getBuildDir();
         $system_arch = $p->getSystemArch();
-        $openssh_prefix= OPENSSH_PREFIX;
+        $openssh_prefix = OPENSSH_PREFIX;
 
         $cmd = <<<EOF
-        cd {$builddir}/openssh/build/
-        test -d release/ && rm -rf release/
-        mkdir -p release/
-        cp -f sshd_config.out  release/
-        cp -f ssh_config.out  release/
-        cp -f opensshd.init  release/
+        cd {$openssh_prefix}/
 
-        ls -F | grep '*$' | awk -F '*' '{ print $1 }' | xargs -I {} cp {} release/
-        cp -rf release/ {$workdir}/bin/openssh/
-
-        cd {$workdir}/bin/openssh/
-        ls -lha .
-        rm -f config.status
-
-        VERSION=$(./ssh -V 2>&1  | awk -F ',' '{ print $1 }' | sed 's/OpenSSH_//')
+        VERSION=$({$openssh_prefix}/sbin/sshd -V 2>&1 | awk -F ',' '{ print $1 }' | awk -F '_' '{ print $2 }')
         echo \${VERSION} > {$workdir}/APP_VERSION
+
+        cd {$openssh_prefix}/
 
 EOF;
 
         if ($p->getOsType() == 'macos') {
             $cmd .= <<<EOF
-            otool -L {$workdir}/bin/openssh/sshd
+            otool -L {$openssh_prefix}/sbin/sshd
             tar -cJvf {$workdir}/openssh-\${VERSION}-macos-{$system_arch}.tar.xz .
 EOF;
         } else {
             $cmd .= <<<EOF
-              file {$workdir}/bin/openssh/sshd
-              readelf -h {$workdir}/bin/openssh/sshd
+              file {$openssh_prefix}/sbin/sshd
+              readelf -h {$openssh_prefix}/sbin/sshd
               tar -cJvf {$workdir}/openssh-\${VERSION}-linux-{$system_arch}.tar.xz .
 EOF;
         }
