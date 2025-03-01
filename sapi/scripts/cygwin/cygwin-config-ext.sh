@@ -26,7 +26,7 @@ PROXY_SERVER_HOST=127.0.0.1
 PROXY_SERVER_PORT=8016
 export PATH=$PATH:/cygdrive/c/Users/Administrator/var/socat-v1.8.0.1-cygwin-x64/socat-v1.8.0.1-cygwin-x64/
 # socat - socks4a:$PROXY_SERVER_HOST:$1:$2,socksport=$PROXY_SERVER_PORT
-socat - PROXY:$PROXY_SERVER_HOST:$1:$2,proxyport=$PROXY_SERVER_PORT
+socat.exe - PROXY:$PROXY_SERVER_HOST:$1:$2,proxyport=$PROXY_SERVER_PORT
 
 ___EOF___
 
