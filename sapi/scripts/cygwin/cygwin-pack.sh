@@ -11,29 +11,22 @@ __PROJECT__=$(
 )
 cd ${__PROJECT__}
 
-cd ${__PROJECT__}/
-ldd ${__PROJECT__}/bin/php.exe
+WORK_TEMP_DIR=${__PROJECT__}/var/cygwin-build/
+cd ${WORK_TEMP_DIR}/privoxy/
 
-cd ${__PROJECT__}
-APP_VERSION=$(${__PROJECT__}/bin/php.exe -v | head -n 1 | awk '{ print $2 }')
-NAME="php-cli-v${APP_VERSION}-cygwin-x64"
+APP_VERSION=$(${WORK_TEMP_DIR}/privoxy/privoxy.exe --help | grep 'Privoxy version' | awk '{print $3}')
+NAME="privoxy-${APP_VERSION}-cygwin-x64"
 
 test -d /tmp/${NAME} && rm -rf /tmp/${NAME}
-mkdir -p /tmp/${NAME}/
-mkdir -p /tmp/${NAME}/etc/
 mkdir -p /tmp/${NAME}/bin/
 
 cd ${__PROJECT__}/
-ldd ${__PROJECT__}/bin/php.exe | grep -v '/cygdrive/' | awk '{print $3}'
-ldd ${__PROJECT__}/bin/php.exe | grep -v '/cygdrive/' | awk '{print $3}' | xargs -I {} cp {} /tmp/${NAME}/bin/
+ldd ${WORK_TEMP_DIR}/privoxy/privoxy.exe | grep -v '/cygdrive/' | awk '{print $3}'
+ldd ${WORK_TEMP_DIR}/privoxy/privoxy.exe | grep -v '/cygdrive/' | awk '{print $3}' | xargs -I {} cp {} /tmp/${NAME}/bin/
 
 ls -lh /tmp/${NAME}/
 
-cp -f ${__PROJECT__}/bin/php.exe /tmp/${NAME}/bin/
-# cp -f ${__PROJECT__}/bin/LICENSE /tmp/${NAME}/
-# cp -f ${__PROJECT__}/bin/credits.html /tmp/${NAME}/
-
-cp -rL /etc/pki/ /tmp/${NAME}/etc/
+cp -f ${WORK_TEMP_DIR}/privoxy/privoxy.exe /tmp/${NAME}/bin/
 
 cd /tmp/${NAME}/
 
