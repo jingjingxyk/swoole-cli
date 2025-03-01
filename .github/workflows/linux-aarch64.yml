@@ -135,8 +135,6 @@ jobs:
 
       - name: get app version
         run: |
-          ls -lha ./bin/privoxy/
-          ls -lha ./bin/privoxy/sbin/
           APP_VERSION=$(cat ./APP_VERSION)
           echo $APP_VERSION
           echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
