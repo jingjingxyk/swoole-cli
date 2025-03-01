@@ -60,18 +60,18 @@ jobs:
       - name: Prepare
         shell: msys2 {0}
         run: |
-          bash ./sapi/scripts/cygwin/config-ext.sh
+          bash ./sapi/scripts/msys2/config-ext.sh
 
       - name: Configure
         shell: msys2 {0}
         run: |
-          bash ./sapi/scripts/cygwin/config.sh
+          bash ./sapi/scripts/msys2/config.sh
 
       - name: Build
         shell: msys2 {0}
         run: |
-          bash ./sapi/scripts/cygwin/build.sh
-          bash ./sapi/scripts/cygwin/archive.sh
+          bash ./sapi/scripts/msys2/build.sh
+          bash ./sapi/scripts/msys2/archive.sh
 
       - name: get app version with bash
         shell: msys2 {0}
