@@ -19,6 +19,8 @@ while [ $# -gt 0 ]; do
     OPENSSH_VERSION="$2"
     ;;
   --proxy)
+    git config --global http.proxy 'http://127.0.0.1:8016'
+    git config --global https.proxy 'http://127.0.0.1:8016'
     export GIT_TRACE_PACKET=1
     export GIT_TRACE=1
     export GIT_CURL_VERBOSE=1
@@ -43,8 +45,7 @@ ___EOF___
   shift $(($# > 0 ? 1 : 0))
 done
 
-git config --global http.proxy 'http://127.0.0.1:8016'
-git config --global https.proxy 'http://127.0.0.1:8016'
+
 
 mkdir -p pool/ext
 mkdir -p pool/lib
@@ -56,7 +57,11 @@ cd ${__PROJECT__}/pool/lib
 if [ ! -f openssh-${OPENSSH_VERSION}.tgz ]; then
   cd ${__PROJECT__}/var/
   test -d openssh && rm -rf openssh
-  git clone -b ${OPENSSH_VERSION} --depth=1 git://anongit.mindrot.org/openssh.git
+  if [ -z "${GITHUB_ACTIONS}" ] ; then
+    git clone -b ${OPENSSH_VERSION} --depth=1 git://anongit.mindrot.org/openssh.git
+  else
+    git clone -b ${OPENSSH_VERSION} --depth=1 https://gitee.com/jingjingxyk/openssh.git
+  fi
 
   cd openssh
   tar -czvf ${__PROJECT__}/pool/lib/openssh-${OPENSSH_VERSION}.tgz .
