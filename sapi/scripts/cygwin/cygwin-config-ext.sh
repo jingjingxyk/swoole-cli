@@ -11,7 +11,7 @@ __PROJECT__=$(
 )
 cd ${__PROJECT__}
 
-OPENSSH_VERSION=V_9_9_P1
+OPENSSH_VERSION=V_9_9_P2
 
 while [ $# -gt 0 ]; do
   case "$1" in
