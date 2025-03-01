@@ -9,7 +9,7 @@ env:
 
 jobs:
   windows-msys2:
-    if: 0
+    if: 1
     runs-on: windows-2022
     steps:
       - name: Show Environment Info
@@ -81,12 +81,14 @@ jobs:
       - name: get app version with bash
         shell: msys2 {0}
         run: |
-          ls -lha /usr/local/swoole-cli/privoxy/
-          ls -lha /usr/local/swoole-cli/privoxy/sbin/
+          ls -lha /usr/local/swoole-cli/openssh/
+          ls -lha /usr/local/swoole-cli/openssh/sbin/
+          ls -lha /usr/local/swoole-cli/openssh/libexec
+          ls -lha /usr/local/swoole-cli/openssh/bin/
           APP_VERSION=$(cat ./APP_VERSION)
           echo $APP_VERSION
           echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
-          echo "APP_NAME=privoxy" >> $GITHUB_ENV
+          echo "APP_NAME=openssh" >> $GITHUB_ENV
 
       - name: production artifacts
         uses: actions/upload-artifact@v4

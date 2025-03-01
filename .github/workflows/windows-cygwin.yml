@@ -115,6 +115,9 @@ jobs:
         # shell: C:\cygwin\bin\bash.EXE --login --noprofile --norc -e -o pipefail -o igncr   {0}
         run: |
           ls -lha /usr/local/swoole-cli/openssh/
+          ls -lha /usr/local/swoole-cli/openssh/sbin/
+          ls -lha /usr/local/swoole-cli/openssh/libexec
+          ls -lha /usr/local/swoole-cli/openssh/bin/
           APP_VERSION=$(cat ./APP_VERSION)
           echo $APP_VERSION
           echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV

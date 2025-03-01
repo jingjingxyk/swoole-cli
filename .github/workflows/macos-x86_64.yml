@@ -149,26 +149,23 @@ jobs:
           bash ./make.sh build
           bash ./make.sh archive
 
-      - name: Show Build Result
-        run: |
-          ./bin/openssh/ssh -V 2>&1  | awk -F ',' '{ print $1 }' | sed 's/OpenSSH_//'
-          otool -L  ./bin/openssh/sshd
-          APP_VERSION=$(./bin/openssh/ssh -V 2>&1  | awk -F ',' '{ print $1 }' | sed 's/OpenSSH_//')
-          echo ${APP_VERSION}
-          echo ${APP_VERSION}  > APP_VERSION
-
       - name: get app version
         run: |
+          ls -lha /usr/local/swoole-cli/openssh/
+          ls -lha /usr/local/swoole-cli/openssh/sbin/
+          ls -lha /usr/local/swoole-cli/openssh/libexec
+          ls -lha /usr/local/swoole-cli/openssh/bin/
           APP_VERSION=$(cat ./APP_VERSION)
           echo $APP_VERSION
           echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
+          echo "APP_NAME=openssh" >> $GITHUB_ENV
 
       - name: production artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: openssh-${{ env.APP_VERSION }}-macos-x64
+          name: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-macos-x64
           retention-days: 90
-          path: openssh-${{ env.APP_VERSION }}-macos-x64.tar.xz
+          path: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-macos-x64.tar.xz
 
       - name: gh release
         uses: softprops/action-gh-release@v2
@@ -177,14 +174,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           files: |
-            openssh-${{ env.APP_VERSION }}-macos-x64.tar.xz
-
-      - name: upload artifacts to cloud object storage
-        if: ${{ 0 && (github.repository == 'swoole/swoole-cli') && (startsWith(github.ref, 'refs/tags/'))  }}
-        env:
-          OSS_SECRET_ID: ${{ secrets.QCLOUD_OSS_SECRET_ID }}
-          OSS_SECRET_KEY: ${{ secrets.QCLOUD_OSS_SECRET_KEY }}
-          OSS_BUCKET: ${{ vars.QCLOUD_OSS_BUCKET }}
-          OSS_REGION: ${{ vars.QCLOUD_OSS_REGION }}
-        run: |
-          bash sapi/scripts/tencent-cloud-object-storage.sh --upload-file ${{ github.workspace }}/swoole-cli-v${{ env.APP_VERSION }}-macos-x64.tar.xz
+            ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-macos-x64.tar.xz
