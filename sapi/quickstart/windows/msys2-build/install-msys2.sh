@@ -68,9 +68,9 @@ pacman -S --noconfirm icu-devel
 pacman -S --noconfirm libsqlite-devel libsqlite
 pacman -S --noconfirm gmp-devel
 pacman -S --noconfirm libintl
-pacman -S --noconfirm pcre2
+pacman -S --noconfirm pcre2-devel
 pacman -S --noconfirm brotli-devel
-pacman -S --noconfirm pcre
+pacman -S --noconfirm pcre-devel
 
 : <<EOF
 
