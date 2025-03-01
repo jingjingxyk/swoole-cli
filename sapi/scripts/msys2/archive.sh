@@ -11,8 +11,8 @@ __PROJECT__=$(
 )
 cd ${__PROJECT__}
 
-cd ${__PROJECT__}/
-ldd ${__PROJECT__}/bin/php.exe
+WORK_TEMP_DIR=${__PROJECT__}/var/msys2-build/
+cd ${WORK_TEMP_DIR}/openssh/
 
 cd ${__PROJECT__}
 APP_VERSION=$(${__PROJECT__}/bin/php.exe -v | head -n 1 | awk '{ print $2 }')

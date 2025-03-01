@@ -11,7 +11,7 @@ __PROJECT__=$(
 )
 cd ${__PROJECT__}
 
-OPENSSH_VERSION=V_9_9_P1
+OPENSSH_VERSION=V_9_9_P2
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -35,7 +35,13 @@ cd ${__PROJECT__}/pool/lib
 if [ ! -f openssh-${OPENSSH_VERSION}.tgz ]; then
   cd ${__PROJECT__}/var/
   test -d openssh && rm -rf openssh
-  git clone -b ${OPENSSH_VERSION} --depth=1 git://anongit.mindrot.org/openssh.git
+  set +u
+  if [ ! -z "${GITHUB_ACTIONS}" ]; then
+    git clone -b ${OPENSSH_VERSION} --depth=1 git://anongit.mindrot.org/openssh.git
+  else
+    git clone -b ${OPENSSH_VERSION} --depth=1 https://gitee.com/jingjingxyk/openssh.git
+  fi
+  set -u
 
   cd openssh
   tar -czvf ${__PROJECT__}/pool/lib/openssh-${OPENSSH_VERSION}.tgz .

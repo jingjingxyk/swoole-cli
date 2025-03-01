@@ -18,7 +18,7 @@ while [ $# -gt 0 ]; do
   --openssh-version)
     OPENSSH_VERSION="$2"
     ;;
-  --proxy)
+  --proxy-test)
     git config --global http.proxy 'http://127.0.0.1:8016'
     git config --global https.proxy 'http://127.0.0.1:8016'
     export GIT_TRACE_PACKET=1
