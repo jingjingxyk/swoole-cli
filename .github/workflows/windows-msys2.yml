@@ -52,6 +52,9 @@ jobs:
           key: "${{ runner.os }}-build-pool-cache"
 
       - uses: msys2/setup-msys2@v2
+        # https://github.com/msys2/setup-msys2
+        with:
+          msystem: MSYS
       - name: prepare build environment
         shell: msys2 {0}
         run: |
