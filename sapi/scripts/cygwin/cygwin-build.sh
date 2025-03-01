@@ -13,7 +13,7 @@ cd ${__PROJECT__}
 mkdir -p bin
 
 WORK_TEMP_DIR=${__PROJECT__}/var/cygwin-build/
-cd ${WORK_TEMP_DIR}/openssh/
+cd ${WORK_TEMP_DIR}/openssh/build/
 
 make -j $(nproc)
 
