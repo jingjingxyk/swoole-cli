@@ -9,15 +9,8 @@ env:
 
 jobs:
   windows-cygwin:
-    if: 0
+    if: 1
     runs-on: windows-2022
-    strategy:
-      matrix:
-        php-version:
-          - "8.2.27"
-          - "8.1.31"
-          - "8.3.15"
-          - "8.4.2"
     steps:
       - name: Show Environment Info
         shell: cmd
@@ -114,53 +107,29 @@ jobs:
         shell: C:\cygwin\bin\bash.EXE --noprofile --norc -e -o pipefail -o igncr   {0}
         run: |
           bash ./sapi/scripts/cygwin/cygwin-build.sh
+          bash ./sapi/scripts/cygwin/cygwin-archive.sh
 
       - name: Show Build Result
         run: |
-          ./bin/php.exe -v
-          ./bin/php.exe -m
-          ./bin/php.exe --ri mongodb
-          ./bin/php.exe --ri gd
-          ./bin/php.exe --ri swoole
-          ./bin/php.exe  -r "echo PHP_VERSION;"
+          /usr/local/swoole-cli/privoxy/sbin/privoxy.ext --help
+          /usr/local/swoole-cli/privoxy/sbin/privoxy.ext --help | grep 'Privoxy version' | awk '{print $3}'
 
       - name: get app version with bash
         # 参考 https://github.com/marketplace/actions/install-cygwin
         shell: C:\cygwin\bin\bash.EXE --noprofile --norc -e -o pipefail -o igncr   {0}
         # shell: C:\cygwin\bin\bash.EXE --login --noprofile --norc -e -o pipefail -o igncr   {0}
         run: |
-          ./bin/php.exe  -v | awk '{print $2}'
-
-          APP_VERSION=$(./bin/php.exe  -v | head -n 1 | awk '{print $2}')
+          APP_VERSION=$(cat ./APP_VERSION)
           echo $APP_VERSION
           echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
-
-      - name: get app version with PowerShell
-        run: |
-          ./bin/php.exe  -v
-          $cmdOutput=./bin/php.exe  -v
-          $cmdOutput=$cmdOutput | select -first 1
-          $cmdOutput -match "(\d{1,2}\.\d{1,2}\.\d{1,2})"
-          $CYGWIN_APP_VERSION=$Matches[1]
-          echo $CYGWIN_APP_VERSION
-          echo "CYGWIN_APP_VERSION=$CYGWIN_APP_VERSION" >> $Env:GITHUB_ENV
-
-          # 参考 https://github.com/orgs/community/discussions/26641
-          # echo "APP_VERSION=${APP_VERSION}" >> $Env:GITHUB_ENV
-          # echo "APP_VERSION=$APP_VERSION" | Out-File -FilePath $env:GITHUB_ENV -Append
-          # Add-Content -Path $env:GITHUB_ENV -Value "name=$value"
-          # Add-Content -Path $env:GITHUB_ENV -Value "APP_VERSION=$APP_VERSION"
-
-      - name: Archive
-        run: |
-          bash ./sapi/scripts/cygwin/cygwin-archive.sh
+          echo "APP_NAME=privoxy" >> $GITHUB_ENV
 
       - name: production artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: php-cli-v${{ env.APP_VERSION }}-cygwin-x64
+          name: ${{ env.APP_NAME }}-v${{ env.APP_VERSION }}-cygwin-x64
           retention-days: 90
-          path: php-cli-v${{ env.APP_VERSION }}-cygwin-x64.zip
+          path: ${{ env.APP_NAME }}-v${{ env.APP_VERSION }}-cygwin-x64.zip
 
       - name: gh release
         uses: softprops/action-gh-release@v2
@@ -168,7 +137,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: php-cli-v${{ env.APP_VERSION }}-cygwin-x64.zip
+          files: ${{ env.APP_NAME }}-v${{ env.APP_VERSION }}-cygwin-x64.zip
 
   upload-to-cloud-object-storage:
     if: 0

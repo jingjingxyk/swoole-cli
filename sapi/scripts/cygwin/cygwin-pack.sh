@@ -16,6 +16,7 @@ cd ${WORK_TEMP_DIR}/privoxy/
 
 APP_VERSION=$(${WORK_TEMP_DIR}/privoxy/privoxy.exe --help | grep 'Privoxy version' | awk '{print $3}')
 NAME="privoxy-${APP_VERSION}-cygwin-x64"
+echo ${APP_VERSION} > ${__PROJECT__}/APP_VERSION
 
 test -d /tmp/${NAME} && rm -rf /tmp/${NAME}
 mkdir -p /tmp/${NAME}/sbin/
