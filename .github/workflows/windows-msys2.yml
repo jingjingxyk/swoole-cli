@@ -41,7 +41,7 @@ jobs:
         env:
           cache-name: cache-msys2-packages
         with:
-          path: C:\cygwin-packages
+          path: C:\msys2-packages
           key: "${{ runner.os }}-build-${{ env.cache-name }}"
 
       - name: Cache pool

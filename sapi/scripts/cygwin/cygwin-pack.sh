@@ -22,6 +22,7 @@ test -d /tmp/${NAME} && rm -rf /tmp/${NAME}
 mkdir -p /tmp/${NAME}/sbin/
 
 cd ${__PROJECT__}/
+ldd /usr/local/swoole-cli/privoxy/sbin/privoxy.exe
 ldd /usr/local/swoole-cli/privoxy/sbin/privoxy.exe | grep -v '/cygdrive/' | awk '{print $3}'
 ldd /usr/local/swoole-cli/privoxy/sbin/privoxy.exe | grep -v '/cygdrive/' | awk '{print $3}' | xargs -I {} cp {} /tmp/${NAME}/sbin/
 

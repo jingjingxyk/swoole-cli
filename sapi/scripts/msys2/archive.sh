@@ -11,29 +11,26 @@ __PROJECT__=$(
 )
 cd ${__PROJECT__}
 
-cd ${__PROJECT__}/
-ldd ${__PROJECT__}/bin/php.exe
+WORK_TEMP_DIR=${__PROJECT__}/var/msys2-build/
+cd ${WORK_TEMP_DIR}/privoxy/
+
+APP_VERSION=$(/usr/local/swoole-cli/privoxy/sbin/privoxy.exe --help | grep 'Privoxy version' | awk '{print $3}')
+NAME="privoxy-${APP_VERSION}-msys2-x64"
+echo ${APP_VERSION} >${__PROJECT__}/APP_VERSION
 
 cd ${__PROJECT__}
-APP_VERSION=$(${__PROJECT__}/bin/php.exe -v | head -n 1 | awk '{ print $2 }')
-NAME="php-cli-v${APP_VERSION}-msys2-x64"
-
 test -d /tmp/${NAME} && rm -rf /tmp/${NAME}
 mkdir -p /tmp/${NAME}/
-mkdir -p /tmp/${NAME}/etc/
-mkdir -p /tmp/${NAME}/bin/
+mkdir -p /tmp/${NAME}/sbin/
 
 cd ${__PROJECT__}/
-ldd ${__PROJECT__}/bin/php.exe | grep -v '/c/Windows/' | awk '{print $3}'
-ldd ${__PROJECT__}/bin/php.exe | grep -v '/c/Windows/' | awk '{print $3}' | xargs -I {} cp {} /tmp/${NAME}/
+ldd /usr/local/swoole-cli/privoxy/sbin/privoxy.exe
+ldd /usr/local/swoole-cli/privoxy/sbin/privoxy.exe | grep -v '/c/Windows/' | awk '{print $3}'
+ldd /usr/local/swoole-cli/privoxy/sbin/privoxy.exe | grep -v '/c/Windows/' | awk '{print $3}' | xargs -I {} cp {} /tmp/${NAME}/sbin/
 
 ls -lh /tmp/${NAME}/
 
-cp -f ${__PROJECT__}/bin/php.exe /tmp/${NAME}/bin/
-# cp -f ${__PROJECT__}/bin/LICENSE /tmp/${NAME}/
-# cp -f ${__PROJECT__}/bin/credits.html /tmp/${NAME}/
-
-cp -rL /etc/pki/ /tmp/${NAME}/etc/
+cp -rf /usr/local/swoole-cli/privoxy/* /tmp/${NAME}/
 
 cd /tmp/${NAME}/
 
