@@ -26,6 +26,8 @@ while [ $# -gt 0 ]; do
 done
 
 mkdir -p pool/lib
+mkdir -p var
+mkdir -p bin
 
 WORK_TEMP_DIR=${__PROJECT__}/var/cygwin-build/
 mkdir -p ${WORK_TEMP_DIR}
@@ -33,7 +35,6 @@ mkdir -p ${WORK_TEMP_DIR}
 cd ${__PROJECT__}/pool/lib/
 if [ ! -f privoxy-${PRIVOXY_VERSION}.tgz ]; then
   curl -fSLo var/privoxy-${PRIVOXY_VERSION}.tgz 'https://sourceforge.net/projects/ijbswa/files/Sources/3.0.34%20(stable)/privoxy-3.0.34-stable-src.tar.gz'
-  ''
   mv var/privoxy-${PRIVOXY_VERSION}.tgz ${__PROJECT__}/pool/lib/privoxy-${PRIVOXY_VERSION}.tgz
 fi
 mkdir -p ${WORK_TEMP_DIR}/privoxy
