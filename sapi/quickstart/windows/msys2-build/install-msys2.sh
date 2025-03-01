@@ -70,6 +70,7 @@ pacman -S --noconfirm gmp-devel
 pacman -S --noconfirm libintl
 pacman -S --noconfirm pcre2
 pacman -S --noconfirm brotli-devel
+pacman -S --noconfirm pcre
 
 : <<EOF
 
