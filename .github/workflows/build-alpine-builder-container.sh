@@ -85,3 +85,4 @@ EOF
 
 # 龙芯架构
 # https://cr.loongnix.cn/search
+# qemu-loongarch64-static
