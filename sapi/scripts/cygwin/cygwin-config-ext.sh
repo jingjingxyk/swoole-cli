@@ -20,12 +20,12 @@ while [ $# -gt 0 ]; do
     ;;
   --proxy)
     export GIT_PROXY_COMMAND=/tmp/git-proxy
-    cat >$GIT_PROXY_COMMAND <<___EOF___
+    cat >$GIT_PROXY_COMMAND <<'___EOF___'
 #!/usr/bin/env bash
 PROXY_SERVER_HOST=127.0.0.1
 PROXY_SERVER_PORT=8016
-# socat - socks4a:\$PROXY_SERVER_HOST:\$1:\$2,socksport=\$PROXY_SERVER_PORT
-socat - PROXY:\$PROXY_SERVER_HOST:$1:$2,proxyport=\$PROXY_SERVER_PORT
+# socat - socks4a:$PROXY_SERVER_HOST:$1:$2,socksport=$PROXY_SERVER_PORT
+socat - PROXY:$PROXY_SERVER_HOST:$1:$2,proxyport=$PROXY_SERVER_PORT
 
 ___EOF___
 
