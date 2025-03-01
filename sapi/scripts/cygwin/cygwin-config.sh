@@ -21,5 +21,9 @@ autoreconf -fi
 
 cd build
 ../configure \
-  --prefix=/usr/local/swoole-cli/openssh/ \
-  --with-pie
+--prefix=/usr/local/swoole-cli/openssh/ \
+--with-libedit=/usr/ \
+--with-zlib=/usr/ \
+--with-ssl-dir=/usr/ \
+--enable-year2038 \
+--with-pie
