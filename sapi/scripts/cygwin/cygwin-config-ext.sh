@@ -38,7 +38,9 @@ if [ ! -f privoxy-${PRIVOXY_VERSION}.tgz ]; then
   curl -fSLo privoxy-${PRIVOXY_VERSION}.tgz 'https://sourceforge.net/projects/ijbswa/files/Sources/3.0.34%20(stable)/privoxy-3.0.34-stable-src.tar.gz'
   mv privoxy-${PRIVOXY_VERSION}.tgz ${__PROJECT__}/pool/lib/privoxy-${PRIVOXY_VERSION}.tgz
 fi
+cd ${__PROJECT__}
+
 mkdir -p ${WORK_TEMP_DIR}/privoxy
-tar --strip-components=1 -C ${WORK_TEMP_DIR}/privoxy -xf privoxy-${PRIVOXY_VERSION}.tgz
+tar --strip-components=1 -C ${WORK_TEMP_DIR}/privoxy -xf ${__PROJECT__}/pool/lib/privoxy-${PRIVOXY_VERSION}.tgz
 
 cd ${__PROJECT__}
