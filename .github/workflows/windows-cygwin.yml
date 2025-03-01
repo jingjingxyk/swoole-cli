@@ -109,15 +109,13 @@ jobs:
           bash ./sapi/scripts/cygwin/cygwin-build.sh
           bash ./sapi/scripts/cygwin/cygwin-archive.sh
 
-      - name: Show Build Result
-        run: |
-          ls -lha .
-
       - name: get app version with bash
         # 参考 https://github.com/marketplace/actions/install-cygwin
         shell: C:\cygwin\bin\bash.EXE --noprofile --norc -e -o pipefail -o igncr   {0}
         # shell: C:\cygwin\bin\bash.EXE --login --noprofile --norc -e -o pipefail -o igncr   {0}
         run: |
+          ls -lha /usr/local/swoole-cli/privoxy/
+          ls -lha /usr/local/swoole-cli/privoxy/sbin/
           APP_VERSION=$(cat ./APP_VERSION)
           echo $APP_VERSION
           echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
