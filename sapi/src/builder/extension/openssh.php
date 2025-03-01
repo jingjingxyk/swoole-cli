@@ -11,8 +11,8 @@ return function (Preprocessor $p) {
     ];
     $ext = (new Extension('openssh'))
         ->withHomePage('https://www.openssh.com/')
-        ->withManual('https://developer.baidu.com/article/detail.html?id=293377')
-        ->withLicense('https://www.jingjingxyk.com/LICENSE', Extension::LICENSE_SPEC);
+        ->withManual('https://anongit.mindrot.org/openssh.git/tree/')
+        ->withLicense('https://anongit.mindrot.org/openssh.git/tree/LICENCE', Extension::LICENSE_SPEC);
     call_user_func_array([$ext, 'withDependentLibraries'], $depends);
     $p->addExtension($ext);
     $p->withReleaseArchive('openssh', function (Preprocessor $p) {

@@ -8,7 +8,7 @@ return function (Preprocessor $p) {
     $cflags = $p->getOsType() == 'macos' ? "" : '-static';
     $lib = new Library('openssh');
     $lib->withHomePage('https://www.openssh.com/')
-        ->withLicense('http://www.gnu.org/licenses/lgpl-2.1.html', Library::LICENSE_BSD)
+        ->withLicense('https://anongit.mindrot.org/openssh.git/tree/LICENCE', Library::LICENSE_BSD)
         ->withManual('https://www.openssh.com/portable.html')
         ->withDocumentation('https://anongit.mindrot.org/openssh.git')
         ->withFile('openssh-V_9_9_P1.tar.gz')
