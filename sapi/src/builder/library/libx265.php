@@ -7,15 +7,14 @@ return function (Preprocessor $p) {
     $libx265_prefix = LIBX265_PREFIX;
     $options = $p->getOsType() == 'macos' ? "" : ' -DSTATIC_LINK_CRT=ON ';
 
-
     $lib = new Library('libx265');
     $lib->withHomePage('https://www.videolan.org/developers/x265.html')
         ->withLicense('https://bitbucket.org/multicoreware/x265_git/src/master/COPYING', Library::LICENSE_LGPL)
-        ->withFile('libx265_v3.5.tar.gz')
+        ->withFile('libx265_v4.1.tar.gz')
         ->withDownloadScript(
             'x265_git',
             <<<EOF
-            git clone -b 3.5 --progress --depth=1  https://bitbucket.org/multicoreware/x265_git.git
+            git clone -b 4.1 --progress --depth=1  https://bitbucket.org/multicoreware/x265_git.git
 EOF
         )
         ->withManual('https://bitbucket.org/multicoreware/x265_git.git')
@@ -33,6 +32,8 @@ EOF
 
 EOF
         )
+        //->withBuildCached(false)
+        //->withInstallCached(false)
         ->withConfigure(
             <<<EOF
             ls source/CMakeLists.txt
@@ -41,7 +42,7 @@ EOF
             cd build-dir
 
             cmake \
-            -G "Unix Makefiles" ../source  \
+            -G "Unix Makefiles" ../source \
             -DCMAKE_INSTALL_PREFIX={$libx265_prefix} \
             -DCMAKE_BUILD_TYPE=Release  \
             -DBUILD_SHARED_LIBS=OFF  \
@@ -52,7 +53,7 @@ EOF
             -DENABLE_SHARED=OFF \
             -DENABLE_LIBNUMA=OFF \
             -DENABLE_PIC=ON \
-            -DENABLE_CLI=OFF
+            -DENABLE_CLI=ON
 
             #  {$options} \
             # -DCMAKE_CXX_IMPLICIT_LINK_LIBRARIES=' -lm -lstdc++ '
