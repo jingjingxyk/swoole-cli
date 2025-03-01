@@ -15,4 +15,4 @@ mkdir -p bin
 WORK_TEMP_DIR=${__PROJECT__}/var/cygwin-build/
 cd ${WORK_TEMP_DIR}/privoxy/
 
-LOGICAL_PROCESSORS=$(nproc)
+make -j $(nproc)
