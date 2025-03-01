@@ -14,11 +14,11 @@ cd ${__PROJECT__}
 WORK_TEMP_DIR=${__PROJECT__}/var/cygwin-build/
 mkdir -p ${WORK_TEMP_DIR}/openssh/build/
 
-cd ${WORK_TEMP_DIR}/openssh/build/
+cd ${WORK_TEMP_DIR}/openssh/
 
 autoreconf -fi
 ./configure --help
-mkdir build
+
 cd build
 ../configure \
   --prefix=/usr/local/swoole-cli/openssh/ \

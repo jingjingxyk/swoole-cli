@@ -45,8 +45,6 @@ ___EOF___
   shift $(($# > 0 ? 1 : 0))
 done
 
-
-
 mkdir -p pool/ext
 mkdir -p pool/lib
 
@@ -58,7 +56,7 @@ if [ ! -f openssh-${OPENSSH_VERSION}.tgz ]; then
   cd ${__PROJECT__}/var/
   test -d openssh && rm -rf openssh
   set +u
-  if [ ! -z "${GITHUB_ACTIONS}" ] ; then
+  if [ ! -z "${GITHUB_ACTIONS}" ]; then
     git clone -b ${OPENSSH_VERSION} --depth=1 git://anongit.mindrot.org/openssh.git
   else
     git clone -b ${OPENSSH_VERSION} --depth=1 https://gitee.com/jingjingxyk/openssh.git
