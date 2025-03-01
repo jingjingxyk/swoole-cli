@@ -124,9 +124,9 @@ jobs:
       - name: production artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.APP_NAME }}-v${{ env.APP_VERSION }}-cygwin-x64
+          name: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-cygwin-x64
           retention-days: 90
-          path: ${{ env.APP_NAME }}-v${{ env.APP_VERSION }}-cygwin-x64.zip
+          path: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-cygwin-x64.zip
 
       - name: gh release
         uses: softprops/action-gh-release@v2
@@ -134,7 +134,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: ${{ env.APP_NAME }}-v${{ env.APP_VERSION }}-cygwin-x64.zip
+          files: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-cygwin-x64.zip
 
   upload-to-cloud-object-storage:
     if: 0
