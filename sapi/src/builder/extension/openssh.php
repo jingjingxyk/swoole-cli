@@ -33,9 +33,11 @@ return function (Preprocessor $p) {
         cp -rf release/ {$workdir}/bin/openssh/
 
         cd {$workdir}/bin/openssh/
+        ls -lha .
         rm -f config.status
 
         VERSION=$(./ssh -V 2>&1  | awk -F ',' '{ print $1 }' | sed 's/OpenSSH_//')
+        echo \${VERSION} > {$workdir}/APP_VERSION
 
 EOF;
 

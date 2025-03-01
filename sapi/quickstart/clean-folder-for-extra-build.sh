@@ -70,7 +70,7 @@ test -f tencent-cloud-object-storage.yaml && rm -rf tencent-cloud-object-storage
 test -f pack-sfx.php && rm -rf pack-sfx.php
 test -f generate-artifact-hash.sh && rm -rf generate-artifact-hash.sh
 test -f msys2-cygwin-install-depend.sh && rm -rf msys2-cygwin-install-depend.sh
-test -d msys2 && rm -rf msys2
+test -f msys2/prepare-no-use.sh && rm -rf msys2/prepare-no-use.sh
 test -f cygwin-install-depend.sh && rm -rf cygwin-install-depend.sh
 
 cd ${__PROJECT__}/sapi/src/
@@ -138,7 +138,6 @@ test -d pve && rm -rf pve
 cd ${__PROJECT__}/sapi/quickstart/macos/
 
 cd ${__PROJECT__}/sapi/quickstart/windows/
-test -d msys2-build && rm -rf msys2-build
 test -d native-build && rm -rf native-build
 test -d openssh && rm -rf openssh
 test -d UE5 && rm -rf UE5
