@@ -32,7 +32,8 @@ mkdir -p ${WORK_TEMP_DIR}
 
 cd ${__PROJECT__}/pool/lib/
 if [ ! -f privoxy-${PRIVOXY_VERSION}.tgz ]; then
-  curl -fSLo var/privoxy-${PRIVOXY_VERSION}.tgz "https://sourceforge.net/projects/ijbswa/files/Sources/3.0.34%20(stable)/privoxy-3.0.34-stable-src.tar.gz"
+  curl -fSLo var/privoxy-${PRIVOXY_VERSION}.tgz 'https://sourceforge.net/projects/ijbswa/files/Sources/3.0.34%20(stable)/privoxy-3.0.34-stable-src.tar.gz'
+  ''
   mv var/privoxy-${PRIVOXY_VERSION}.tgz ${__PROJECT__}/pool/lib/privoxy-${PRIVOXY_VERSION}.tgz
 fi
 mkdir -p ${WORK_TEMP_DIR}/privoxy
