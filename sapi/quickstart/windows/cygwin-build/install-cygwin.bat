@@ -40,6 +40,7 @@ set "PACKAGES=%PACKAGES%,zip,unzip"
 set "PACKAGES=%PACKAGES%,libpq5,libpq-devel"
 set "PACKAGES=%PACKAGES%,libzstd-devel"
 set "PACKAGES=%PACKAGES%,cygwin-devel"
+set "PACKAGES=%PACKAGES%,libpcre-devel"
 
 set "OPTIONS=%OPTIONS% --packages %PACKAGES%"
 echo %OPTIONS%
