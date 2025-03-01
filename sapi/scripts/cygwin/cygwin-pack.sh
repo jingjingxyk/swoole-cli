@@ -12,28 +12,41 @@ __PROJECT__=$(
 cd ${__PROJECT__}
 
 cd ${__PROJECT__}/
-ldd ${__PROJECT__}/bin/php.exe
+ldd /usr/local/swoole-cli/openssh/sbin/sshd.exe
+ldd /usr/local/swoole-cli/openssh/bin/ssh.exe
+ldd /usr/local/swoole-cli/openssh/libexec/sftp-server.exe
 
 cd ${__PROJECT__}
-APP_VERSION=$(${__PROJECT__}/bin/php.exe -v | head -n 1 | awk '{ print $2 }')
-NAME="php-cli-v${APP_VERSION}-cygwin-x64"
+APP_VERSION=$(/usr/local/swoole-cli/openssh/sbin/sshd.exe -V 2>&1 |  awk -F ',' '{ print $1 }' | awk -F '_' '{ print $2 }')
+NAME="openssh-${APP_VERSION}-cygwin-x64"
+echo $APP_VERSION >  ${__PROJECT__}/APP_VERSION
 
 test -d /tmp/${NAME} && rm -rf /tmp/${NAME}
-mkdir -p /tmp/${NAME}/
-mkdir -p /tmp/${NAME}/etc/
+mkdir -p /tmp/${NAME}/sbin/
 mkdir -p /tmp/${NAME}/bin/
+mkdir -p /tmp/${NAME}/libexec/
+
 
 cd ${__PROJECT__}/
-ldd ${__PROJECT__}/bin/php.exe | grep -v '/cygdrive/' | awk '{print $3}'
-ldd ${__PROJECT__}/bin/php.exe | grep -v '/cygdrive/' | awk '{print $3}' | xargs -I {} cp {} /tmp/${NAME}/bin/
+ldd /usr/local/swoole-cli/openssh/sbin/sshd.exe | grep -v '/cygdrive/' | awk '{print $3}' | xargs -I {} cp -f {} /tmp/${NAME}/sbin/
+
+ldd /usr/local/swoole-cli/openssh/bin/scp.exe | grep -v '/cygdrive/' | awk '{print $3}' | xargs -I {} cp -f {} /tmp/${NAME}/bin/
+ldd /usr/local/swoole-cli/openssh/bin/ssh-add.exe | grep -v '/cygdrive/' | awk '{print $3}' | xargs -I {} cp -f {} /tmp/${NAME}/bin/
+ldd /usr/local/swoole-cli/openssh/bin/ssh-keygen.exe | grep -v '/cygdrive/' | awk '{print $3}' | xargs -I {} cp -f {} /tmp/${NAME}/bin/
+ldd /usr/local/swoole-cli/openssh/bin/ssh.exe | grep -v '/cygdrive/' | awk '{print $3}' | xargs -I {} cp -f {} /tmp/${NAME}/bin/
+ldd /usr/local/swoole-cli/openssh/bin/sftp.exe | grep -v '/cygdrive/' | awk '{print $3}' | xargs -I {} cp -f {} /tmp/${NAME}/bin/
+ldd /usr/local/swoole-cli/openssh/bin/ssh-agent.exe | grep -v '/cygdrive/' | awk '{print $3}' | xargs -I {} cp -f {} /tmp/${NAME}/bin/
+ldd /usr/local/swoole-cli/openssh/bin/ssh-keyscan.exe | grep -v '/cygdrive/' | awk '{print $3}' | xargs -I {} cp -f {} /tmp/${NAME}/bin/
+
+ldd /usr/local/swoole-cli/openssh/libexec/ssh-keysign.exe | grep -v '/cygdrive/' | awk '{print $3}' | xargs -I {} cp -f {} /tmp/${NAME}/libexec/
+ldd /usr/local/swoole-cli/openssh/libexec/ssh-sk-helper.exe | grep -v '/cygdrive/' | awk '{print $3}' | xargs -I {} cp -f {} /tmp/${NAME}/libexec/
+ldd /usr/local/swoole-cli/openssh/libexec/sftp-server.exe | grep -v '/cygdrive/' | awk '{print $3}' | xargs -I {} cp -f {} /tmp/${NAME}/libexec/
+ldd /usr/local/swoole-cli/openssh/libexec/ssh-pkcs11-helper.exe | grep -v '/cygdrive/' | awk '{print $3}' | xargs -I {} cp -f {} /tmp/${NAME}/libexec/
+ldd /usr/local/swoole-cli/openssh/libexec/sshd-session.exe | grep -v '/cygdrive/' | awk '{print $3}' | xargs -I {} cp -f {} /tmp/${NAME}/libexec/
 
 ls -lh /tmp/${NAME}/
 
-cp -f ${__PROJECT__}/bin/php.exe /tmp/${NAME}/bin/
-# cp -f ${__PROJECT__}/bin/LICENSE /tmp/${NAME}/
-# cp -f ${__PROJECT__}/bin/credits.html /tmp/${NAME}/
-
-cp -rL /etc/pki/ /tmp/${NAME}/etc/
+cp -rf /usr/local/swoole-cli/openssh/* /tmp/${NAME}/
 
 cd /tmp/${NAME}/
 
