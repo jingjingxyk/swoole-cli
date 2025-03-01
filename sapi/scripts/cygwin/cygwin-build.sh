@@ -16,3 +16,5 @@ WORK_TEMP_DIR=${__PROJECT__}/var/cygwin-build/
 cd ${WORK_TEMP_DIR}/privoxy/
 
 make -j $(nproc)
+
+make install
