@@ -19,6 +19,9 @@ while [ $# -gt 0 ]; do
     OPENSSH_VERSION="$2"
     ;;
   --proxy)
+    export GIT_TRACE_PACKET=1
+    export GIT_TRACE=1
+    export GIT_CURL_VERBOSE=1
     export GIT_PROXY_COMMAND=/tmp/git-proxy
     cat >$GIT_PROXY_COMMAND <<'___EOF___'
 #!/usr/bin/env bash
