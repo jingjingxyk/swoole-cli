@@ -111,8 +111,8 @@ jobs:
 
       - name: Show Build Result
         run: |
-          /usr/local/swoole-cli/privoxy/sbin/privoxy.ext --help
-          /usr/local/swoole-cli/privoxy/sbin/privoxy.ext --help | grep 'Privoxy version' | awk '{print $3}'
+          /usr/local/swoole-cli/privoxy/sbin/privoxy.exe --help
+          /usr/local/swoole-cli/privoxy/sbin/privoxy.exe --help | grep 'Privoxy version' | awk '{print $3}'
 
       - name: get app version with bash
         # 参考 https://github.com/marketplace/actions/install-cygwin
