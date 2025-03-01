@@ -18,7 +18,7 @@ autoheader
 autoconf
 
 ./configure \
-  --prefix=/usr/ \
+  --prefix=/usr/local/swoole-cli/privoxy \
   --with-openssl \
   --without-mbedtls \
   --with-brotli \
