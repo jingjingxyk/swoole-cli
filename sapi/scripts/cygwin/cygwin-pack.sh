@@ -14,16 +14,16 @@ cd ${__PROJECT__}
 WORK_TEMP_DIR=${__PROJECT__}/var/cygwin-build/
 cd ${WORK_TEMP_DIR}/privoxy/
 
-APP_VERSION=$(${WORK_TEMP_DIR}/privoxy/privoxy.exe --help | grep 'Privoxy version' | awk '{print $3}')
+APP_VERSION=$(/usr/local/swoole-cli/privoxy/sbin/privoxy.exe --help | grep 'Privoxy version' | awk '{print $3}')
 NAME="privoxy-${APP_VERSION}-cygwin-x64"
-echo ${APP_VERSION} > ${__PROJECT__}/APP_VERSION
+echo ${APP_VERSION} >${__PROJECT__}/APP_VERSION
 
 test -d /tmp/${NAME} && rm -rf /tmp/${NAME}
 mkdir -p /tmp/${NAME}/sbin/
 
 cd ${__PROJECT__}/
-ldd ${WORK_TEMP_DIR}/privoxy/privoxy.exe | grep -v '/cygdrive/' | awk '{print $3}'
-ldd ${WORK_TEMP_DIR}/privoxy/privoxy.exe | grep -v '/cygdrive/' | awk '{print $3}' | xargs -I {} cp {} /tmp/${NAME}/sbin/
+ldd /usr/local/swoole-cli/privoxy/sbin/privoxy.exe | grep -v '/cygdrive/' | awk '{print $3}'
+ldd /usr/local/swoole-cli/privoxy/sbin/privoxy.exe | grep -v '/cygdrive/' | awk '{print $3}' | xargs -I {} cp {} /tmp/${NAME}/sbin/
 
 ls -lh /tmp/${NAME}/
 
