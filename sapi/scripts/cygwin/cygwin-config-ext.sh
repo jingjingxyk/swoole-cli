@@ -37,7 +37,8 @@ if [ ! -f openssh-${OPENSSH_VERSION}.tgz ]; then
   if [[ -d openssh ]] ; then
     rm -rf openssh
   fi
-  git clone -b ${OPENSSH_VERSION} https://anongit.mindrot.org/openssh.git
+  # git clone -b ${OPENSSH_VERSION} https://anongit.mindrot.org/openssh.git
+  git clone -b ${OPENSSH_VERSION} https://github.com/openssh/openssh-portable.git openssh
   cd openssh
   tar -czvf ${__PROJECT__}/pool/lib/openssh-${OPENSSH_VERSION}.tgz .
   cd ${__PROJECT__}/
