@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -x
+set -eux
 __DIR__=$(
   cd "$(dirname "$0")"
   pwd
@@ -39,6 +39,7 @@ if [ ! -f openssh-${OPENSSH_VERSION}.tgz ]; then
   fi
   # git clone -b ${OPENSSH_VERSION} https://anongit.mindrot.org/openssh.git
   git clone -b ${OPENSSH_VERSION} https://github.com/openssh/openssh-portable.git openssh
+  ls -lha
   cd openssh
   tar -czvf ${__PROJECT__}/pool/lib/openssh-${OPENSSH_VERSION}.tgz .
   cd ${__PROJECT__}/
