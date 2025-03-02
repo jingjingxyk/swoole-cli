@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -eux
+set -x
 __DIR__=$(
   cd "$(dirname "$0")"
   pwd
