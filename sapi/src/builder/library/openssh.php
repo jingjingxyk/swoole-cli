@@ -20,7 +20,7 @@ return function (Preprocessor $p) {
         ->withDownloadScript(
             'openssh',
             <<<EOF
-                git clone -b V_9_9_P2  --depth=1 https://anongit.mindrot.org/openssh.git
+                git clone -b V_9_9_P2  https://anongit.mindrot.org/openssh.git
 EOF
         )
         ->withPrefix($openssh_prefix)
