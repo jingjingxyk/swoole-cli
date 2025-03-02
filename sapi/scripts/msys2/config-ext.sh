@@ -36,7 +36,7 @@ if [ ! -f openssh-${OPENSSH_VERSION}.tgz ]; then
   cd ${__PROJECT__}/var/
   test -d openssh && rm -rf openssh
   # git clone -b ${OPENSSH_VERSION} https://anongit.mindrot.org/openssh.git
-  git clone -b ${OPENSSH_VERSION} https://gitee.com/jingjingxyk/openssh.git
+  git clone -b ${OPENSSH_VERSION} https://github.com/openssh/openssh-portable
   cd openssh
   tar -czvf ${__PROJECT__}/pool/lib/openssh-${OPENSSH_VERSION}.tgz .
 
