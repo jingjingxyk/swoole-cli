@@ -26,6 +26,7 @@ return function (Preprocessor $p) {
                 strip {$workdir}/bin/aria2c
                 cd {$workdir}/bin/
                 APP_VERSION=\$({$workdir}/bin/aria2c -v | head -n 1 | awk '{print $3}')
+                echo \${APP_VERSION} > {$workdir}/APP_VERSION
 
 EOF;
         if ($p->getOsType() == 'macos') {
