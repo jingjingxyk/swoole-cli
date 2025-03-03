@@ -33,6 +33,7 @@ return function (Preprocessor $p) {
 
                 cd {$workdir}/bin/
                 COTURN_VERSION=\$({$workdir}/bin/coturn/bin/turnserver --version | tail -n 1)
+                echo \${COTURN_VERSION} > {$workdir}/APP_VERSION
 
 EOF;
         if ($p->getOsType() == 'macos') {
