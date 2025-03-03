@@ -9,9 +9,9 @@ return function (Preprocessor $p) {
     $lib = new Library('openh264');
     $lib->withHomePage('https://github.com/cisco/openh264.git')
         ->withLicense('https://github.com/cisco/openh264/blob/master/LICENSE', Library::LICENSE_BSD)
-        ->withUrl('https://github.com/cisco/openh264/archive/refs/tags/v2.3.1.tar.gz')
+        ->withUrl('https://github.com/cisco/openh264/archive/refs/tags/v2.6.0.tar.gz')
         ->withManual('https://github.com/cisco/openh264.git')
-        ->withFile('openh264-v2.3.1.tar.gz')
+        ->withFile('openh264-v2.6.0.tar.gz')
         ->withPrefix($openh264_prefix)
         ->withPreInstallCommand(
             'alpine',
