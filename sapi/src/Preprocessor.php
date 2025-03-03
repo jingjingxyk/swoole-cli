@@ -1228,8 +1228,6 @@ EOF;
         $this->generateFile(__DIR__ . '/template/license.php', $this->rootDir . '/bin/LICENSE');
         $this->generateFile(__DIR__ . '/template/credits.php', $this->rootDir . '/bin/credits.html');
 
-        copy($this->rootDir . '/sapi/scripts/pack-sfx.php', $this->rootDir . '/bin/pack-sfx.php');
-
         if ($this->getInputOption('with-dependency-graph')) {
             $this->generateFile(
                 __DIR__ . '/template/extension_dependency_graph.php',

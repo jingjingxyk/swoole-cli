@@ -34,5 +34,5 @@ done
 if [ ! -z "${EXT_NAME}" ]; then
   php prepare.php --without-docker --skip-download=1 +${EXT_NAME} --show-ext-deps=${EXT_NAME} --with-clean-builder=${CLEAN_BUILDER_ACTION}
 else
-  echo '请传入参数 --ext-name=ext_name --clean-builder 1 '
+  echo '请传入参数列子： --ext-name socat --clean-builder 1 '
 fi

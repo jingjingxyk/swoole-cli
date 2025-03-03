@@ -34,6 +34,7 @@ return function (Preprocessor $p) {
 
         {$workdir}/bin/python3/bin/python3.12 --version -V 2>&1 | awk '{ print $2 }'
         VERSION=$({$workdir}/bin/python3/bin/python3.12 --version -V 2>&1 | awk '{ print $2 }')
+        echo \${VERSION} > {$workdir}/APP_VERSION
         echo \$VERSION
 
         cd {$workdir}/bin/python3/bin/
