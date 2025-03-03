@@ -9,9 +9,9 @@
 
 > 本项目 只需要关注 `.github/workflow` 目录里配置文件的变更
 
-## 下载`build-static-openssh`发行版
+## [下载`build-static-openssh`发行版](https://github.com/jingjingxyk/build-static-openssh/releases)
 
-## 立即使用 socat
+## 立即使用 [openssh](https://github.com/jingjingxyk/build-static-openssh/releases)
 
 ```shell
 
@@ -119,6 +119,7 @@ bash build-release.sh
 ## openssh 源码构建参考
 
     https://www.openssh.com/
+    https://anongit.mindrot.org/openssh.git
 
 ## Test
 
