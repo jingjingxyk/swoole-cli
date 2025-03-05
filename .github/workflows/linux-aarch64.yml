@@ -7,15 +7,8 @@ env:
 
 jobs:
   linux-aarch64:
-    if: 0
+    if: 1
     runs-on: ubuntu-24.04-arm
-    strategy:
-      matrix:
-        php-version:
-          - "8.2.27"
-          - "8.1.31"
-          - "8.3.15"
-          - "8.4.2"
     steps:
       - uses: actions/checkout@v4
       - name: Show Environment Info
@@ -130,7 +123,7 @@ jobs:
             composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
             composer dump-autoload --optimize --profile --no-dev
 
-            php prepare.php +ffmpeg --with-build-type=release
+            php prepare.php +iperf3 --with-build-type=release
 
             bash make-install-deps.sh
 
@@ -140,27 +133,12 @@ jobs:
             bash ./make.sh build
             bash ./make.sh archive
 
-      - name: Show Build Result
-        run: |
-          ./thirdparty/php-src/sapi/cli/php -v
-          ./thirdparty/php-src/sapi/cli/php -m
-          ./thirdparty/php-src/sapi/cli/php --ri gd
-          ./thirdparty/php-src/sapi/cli/php --ri swoole
-          ./thirdparty/php-src/sapi/cli/php --ri pgsql
-          file ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-          readelf -h ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
-          APP_VERSION=$(./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php  -v | head -n 1 | awk '{print $2}')
-          echo ${APP_VERSION}
-          echo ${APP_VERSION}  > APP_VERSION
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -r "echo PHP_VERSION;"
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php  --list-tests
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php
-
       - name: get app version
         run: |
           APP_VERSION=$(cat ./APP_VERSION)
           echo $APP_VERSION
           echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
+          echo "APP_NAME=iperf3" >> $GITHUB_ENV
 
       - name: production artifacts debug
         uses: actions/upload-artifact@v4
