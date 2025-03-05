@@ -1,39 +1,24 @@
-# build static php-cli runtime  and php-fpm
+# build static iperf3
 
-构建静态 原生 php-cli 运行时 和 fastcgi 进程管理器 php-fpm
+构建静态 iperf3
 
-## 说明
+## 构建命令
 
-`php-cli` 是一个 `PHP`的 运行时 ，默认包含 swoole 扩展
+> 本项目 派生于[jingjingxyk/swoole-cli](https://github.com/jingjingxyk/swoole-cli/tree/new_dev)
+> 项目的 `new_dev`分支的静态库构建流程
 
-> 本项目 派生于 [swoole-cli](https://github.com/swoole/swoole-cli/)
+> 本项目 只需要关注 `.github/workflow` 目录里配置文件的变更
 
-> 代码与 swoole-cli 项目的 build_native_php 分支的代码 保持一致
+## [下载`build-static-iperf3`发行版](https://github.com/jingjingxyk/build-static-iperf3/releases)
 
-> 构建流程 与 swoole-cli 构建流程一致
-
-> 项目继承 `swoole_cli` 项目的 `main` 分支、`experiment` 分支的构建功能
-
-> 未对 PHP 源码 执行 裁剪、优化、添加新功能等操作
-
-> 可指定 PHP 版本 构建原生 PHP 版本
-
-> 可编译包含 swow 扩展
-
-## 下载`php-cli`发行版
-
-- [https://github.com/swoole/build-static-php/releases](https://github.com/swoole/build-static-php/releases)
-
-## 立即使用 php-cli
+## 立即使用 [openssh](https://github.com/jingjingxyk/build-static-iperf3/releases)
 
 ```shell
 
-curl -fSL https://github.com/swoole/swoole-cli/blob/build_native_php/setup-php-cli-runtime.sh?raw=true | bash
-
-curl -fSL https://github.com/swoole/build-static-php/blob/main/setup-php-cli-runtime.sh?raw=true | bash
+curl -fSL https://github.com/jingjingxyk/swoole-cli/blob/new_dev/setup-iperf3-runtime.sh?raw=true | bash
 
 # 指定发布版本
-curl -fSL https://github.com/swoole/build-static-php/blob/main/setup-php-cli-runtime.sh?raw=true | bash -s -- --version  v5.1.6.0
+curl -fSL https://github.com/jingjingxyk/swoole-cli/blob/new_dev/setup-iperf3-runtime.sh?raw=true | bash -s -- --version  v1.0.0
 
 ```
 
@@ -49,17 +34,16 @@ curl -fSL https://github.com/swoole/build-static-php/blob/main/setup-php-cli-run
 
 ```shell
 
-git clone -b main https://github.com/swoole/build-static-php.git
+git clone -b main https://github.com/jingjingxyk/build-static-iperf3.git
 
 # 或者
 
-git clone --recursive -b build_native_php  https://github.com/swoole/swoole-cli.git
+git clone --recursive -b build-static-iperf3 https://github.com/jingjingxyk/swoole-cli.git
 
 ```
 
-## 快速准备 PHP 运行时
+```bash
 
-```shell
 cd swoole-cli
 
 bash setup-php-runtime.sh
@@ -67,7 +51,6 @@ bash setup-php-runtime.sh
 # 来自 https://www.swoole.com/download
 bash setup-php-runtime.sh --mirror china
 
-# 使用swoole-cli
 # shell脚本中启用别名扩展功能‌
 shopt -s expand_aliases
 __DIR__=$(pwd)
@@ -76,8 +59,11 @@ ln -sf ${__DIR__}/bin/runtime/swoole-cli ${__DIR__}/bin/runtime/php
 alias php="php -d curl.cainfo=${__DIR__}/bin/runtime/cacert.pem -d openssl.cafile=${__DIR__}/bin/runtime/cacert.pem"
 which php
 php -v
-composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
-composer dump-autoload --optimize --profile --no-dev
+php prepare.php +iperf3
+bash make-install-deps.sh
+bash make.sh all-library
+bash make.sh config
+
 
 ```
 
@@ -130,74 +116,9 @@ bash build-release.sh
 
 ```
 
-## 生成构建脚本
+## openssh 源码构建参考
 
-```shell
-
-composer update
-php prepare.php
-
-# 指定PHP 版本
-php prepare.php +inotify +mongodb -mysqli --with-php-version=8.2.13
-
-# 使用镜像站下载依赖库
-php prepare.php +inotify +mongodb -mysqli --with-download-mirror-url=https://php-cli.jingjingxyk.com/
-
-# 使用代理下载依赖库
-php prepare.php +inotify +mongodb -mysqli --with-http-proxy=socks5h://192.168.3.26:2000
-
-# 只编译单个扩展（swoole)
-php prepare.php +swoole --with-override-default-enabled-ext=1
-
-# 编译最新版 swoole
-php prepare.php -swoole +swoole_latest
-
-# 编译最新版 swow
-php prepare.php -swoole +swow_latest
-
-
-```
-
-* 脚本会自动下载相关的`C/C++`库以及`PECL`扩展
-* 可使用`+{ext}`或者`-{ext}`增减扩展
-
-## 构建库之前安装 库依赖 构建环境
-
-```shell
-
-bash make-install-deps.sh
-
-```
-
-## 构建 `C/C++` 依赖库
-
-```shell
-./make.sh all-library
-```
-
-## 编译配置
-
-```shell
-./make.sh config
-```
-
-## 构建 php-cli
-
-```shell
-./make.sh build
-```
-
-> 编译成功后会生成`bin/php-{version}/bin/php`
-
-## 打包
-
-```shell
-./make.sh archive
-```
-
-> 打包成功后会生成 `php-cli-{version}-{os}-{arch}.tar.xz`
-> 压缩包，包含 `php` 可执行文件、`LICENSE` 授权协议文件。
-
+    https://github.com/esnet/iperf.git
 
 ## Test
 
@@ -214,9 +135,9 @@ $ ./vendor/bin/php-cs-fixer fix sapi/src/tests/
 
 ## 授权协议
 
-* `php-cli` 使用了多个其他开源项目，请认真阅读自动生成的 `bin/LICENSE`
+* `build-static-iperf3` 使用了多个其他开源项目，请认真阅读自动生成的 `bin/LICENSE`
   文件中版权协议，遵守对应开源项目的 `LICENSE`
-* `php-cli`本身的软件源代码、文档等内容以 `Apache 2.0 LICENSE`+`SWOOLE-CLI LICENSE`
+* `build-static-iperf3`本身的软件源代码、文档等内容以 `Apache 2.0 LICENSE`+`SWOOLE-CLI LICENSE`
   作为双重授权协议，用户需要同时遵守 `Apache 2.0 LICENSE`和`SWOOLE-CLI LICENSE`
   所规定的条款
 
@@ -224,3 +145,4 @@ $ ./vendor/bin/php-cs-fixer fix sapi/src/tests/
 
 * 对 `swoole-cli` 代码进行使用、修改、发布的新项目必须含有 `SWOOLE-CLI LICENSE`的全部内容
 * 使用 `swoole-cli`代码重新发布为新项目或者产品时，项目或产品名称不得包含 `swoole` 单词
+
