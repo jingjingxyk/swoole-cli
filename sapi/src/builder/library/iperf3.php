@@ -6,6 +6,11 @@ use SwooleCli\Preprocessor;
 return function (Preprocessor $p) {
     $iperf3_prefix = IPERF3_PREFIX;
     $openssl_prefix = OPENSSL_PREFIX;
+    $options = '';
+    if ($p->isLinux()) {
+        $options .= '--enable-static-bin';
+    }
+
     $lib = new Library('iperf3');
     $lib->withHomePage('https://github.com/esnet/iperf.git')
         ->withLicense('https://github.com/esnet/iperf/blob/master/LICENSE', Library::LICENSE_SPEC)
@@ -19,22 +24,21 @@ EOF
         ->withFile('iperf3-latest.tar.gz')
         ->withPrefix($iperf3_prefix)
         ->withBuildCached(false)
-        ->withInstallCached(false)
         ->withConfigure(
             <<<EOF
               ./configure  --help
               ./configure  \
               --prefix={$iperf3_prefix} \
-              --enable-static-bin \
               --enable-shared=no \
               --enable-static=yes \
-               --with-openssl={$openssl_prefix}
+              --with-openssl={$openssl_prefix} \
+              {$options}
 EOF
         )
+        ->withDependentLibraries('openssl')
         ->disableDefaultLdflags()
         ->disablePkgName()
-        ->disableDefaultPkgConfig()
-        ->withSkipBuildLicense();
+        ->disableDefaultPkgConfig();
 
     $p->addLibrary($lib);
 };

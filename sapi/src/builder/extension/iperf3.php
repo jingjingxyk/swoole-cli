@@ -8,9 +8,9 @@ return function (Preprocessor $p) {
         'iperf3'
     ];
     $ext = (new Extension('iperf3'))
-        ->withHomePage('https://www.jingjingxyk.com')
-        ->withManual('https://developer.baidu.com/article/detail.html?id=293377')
-        ->withLicense('https://www.jingjingxyk.com/LICENSE', Extension::LICENSE_SPEC);
+        ->withHomePage('https://github.com/esnet/iperf/blob/master/LICENSE')
+        ->withManual('https://github.com/esnet/iperf.git')
+        ->withLicense('https://github.com/esnet/iperf/blob/master/LICENSE', Extension::LICENSE_SPEC);
     call_user_func_array([$ext, 'withDependentLibraries'], $depends);
     $p->addExtension($ext);
     $p->withReleaseArchive('iperf3', function (Preprocessor $p) {
@@ -24,10 +24,11 @@ return function (Preprocessor $p) {
                 mkdir -p {$workdir}/bin/
                 cd {$installdir}/iperf3/bin/
                 cp -f iperf3 {$workdir}/bin/iperf3
-                APP_VERSION=\$({$workdir}/bin/iperf3 -v | head -n 1 | awk '{ print $2 }')
+                APP_VERSION=\$({$workdir}/bin/iperf3 -v | head -n 1 | awk '{ print $2 }' | sed 's/\+//g')
                 echo \${APP_VERSION} > {$workdir}/APP_VERSION
 
                 cd {$workdir}/bin/
+
 EOF;
 
         if ($p->getOsType() == 'macos') {
