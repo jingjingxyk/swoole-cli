@@ -24,7 +24,7 @@ return function (Preprocessor $p) {
                 mkdir -p {$workdir}/bin/
                 cd {$installdir}/iperf3/bin/
                 cp -f iperf3 {$workdir}/bin/iperf3
-                APP_VERSION=\$({$workdir}/bin/iperf3 -v | head -n 1 | awk '{ print $2 }' | sed 's/\+//g')
+                APP_VERSION=\$({$workdir}/bin/iperf3 -v | head -n 1 | awk '{ print $2 }' | sed 's/+//g')
                 echo \${APP_VERSION} > {$workdir}/APP_VERSION
 
                 cd {$workdir}/bin/
