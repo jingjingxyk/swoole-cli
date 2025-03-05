@@ -125,7 +125,7 @@ jobs:
           ls -A pool/lib/
           ls -A /usr/local/swoole-cli/
 
-      - name: prepare
+      - name: build
         run: |
           export PATH=${{ github.workspace }}/bin/runtime:$PATH
           alias php="php -d curl.cainfo=${{ github.workspace }}/bin/runtime/cacert.pem -d openssl.cafile=${{ github.workspace }}/bin/runtime/cacert.pem"
