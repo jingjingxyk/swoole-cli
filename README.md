@@ -22,6 +22,16 @@ curl -fSL https://github.com/jingjingxyk/swoole-cli/blob/new_dev/setup-iperf3-ru
 
 ```
 
+## iperf3 测速
+
+服务端：
+
+    iperf3 -s
+
+客户端：
+
+    iperf3 -c 服务器ip地址 -R
+
 ## 构建文档
 
 - [linux 版构建文档](docs/linux.md)
@@ -66,16 +76,6 @@ bash make.sh config
 
 
 ```
-
-## iperf3 测速
-
-服务端：
-
-    iperf3 -s
-
-客户端：
-
-    iperf3 -c 服务器ip地址 -R
 
 ## 快速准备运行环境
 
@@ -126,7 +126,7 @@ bash build-release.sh
 
 ```
 
-## openssh 源码构建参考
+## iperf3 源码构建参考
 
     https://github.com/esnet/iperf.git
 
