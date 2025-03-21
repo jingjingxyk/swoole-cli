@@ -58,6 +58,38 @@ jobs:
 
           echo "BUILD_PHP_VERSION=${{ matrix.php-version }}" >> $GITHUB_ENV
 
+      - name: Config SSH Server
+        run: |
+          brew install jq openssh
+          sudo launchctl start com.openssh.sshd
+          launchctl list | grep ssh
+          set -x
+          IP=$(curl -fSL https://detect-ip.xiaoshuogeng.com/ip/json | jq '.ip')
+          echo ${IP}
+          CURRENT_USER=$(whoami)
+          echo ${CURRENT_USER}
+          curl -fSLo ~/.ssh/zerotier_github_deploy_key.pub https://php-cli-usa.jingjingxyk.com/zerotier_github_deploy_key.pub
+          mkdir -p ~/.ssh/
+          cat ~/.ssh/zerotier_github_deploy_key.pub >> ~/.ssh/authorized_keys
+          cat /etc/ssh/sshd_config
+
+          sudo echo 'PubkeyAuthentication yes' >> /etc/ssh/sshd_config
+          sudo echo 'PasswordAuthentication no' >> /etc/ssh/sshd_config
+          sudo echo 'ChallengeResponseAuthentication no' >> /etc/ssh/sshd_config
+          # sudo echo 'AuthorizedKeysFile      .ssh/authorized_keys' >> /etc/ssh/sshd_config
+
+          cat /etc/ssh/sshd_config
+
+          # sudo launchctl stop com.openssh.sshd
+          # sudo launchctl start com.openssh.sshd
+          sudo launchctl restart  com.openssh.sshd
+
+      - name: ZeroTier
+        uses: zerotier/github-action@v1.0.1
+        with:
+          network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
+          auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
+
       - name: Prepare Build Environment
         run: |
           bash sapi/quickstart/macos/macos-init.sh
@@ -126,35 +158,6 @@ jobs:
           composer dump-autoload --optimize --profile --no-dev
 
           php prepare.php --without-docker=1 --with-php-version=${{ env.BUILD_PHP_VERSION }}
-          brew install jq openssh
-          sudo launchctl start com.openssh.sshd
-          launchctl list | grep ssh
-          set -x
-          IP=$(curl -fSL https://detect-ip.xiaoshuogeng.com/ip/json | jq '.ip')
-          echo ${IP}
-          CURRENT_USER=$(whoami)
-          echo ${CURRENT_USER}
-          curl -fSLo ~/.ssh/zerotier_github_deploy_key.pub https://php-cli-usa.jingjingxyk.com/zerotier_github_deploy_key.pub
-          mkdir -p ~/.ssh/
-          cat ~/.ssh/zerotier_github_deploy_key.pub >> ~/.ssh/authorized_keys
-          cat /etc/ssh/sshd_config
-
-          echo 'PubkeyAuthentication yes' >> /etc/ssh/sshd_config
-          echo 'PasswordAuthentication no' >> /etc/ssh/sshd_config
-          echo 'ChallengeResponseAuthentication no' >> /etc/ssh/sshd_config
-          # echo 'AuthorizedKeysFile      .ssh/authorized_keys' >> /etc/ssh/sshd_config
-
-          cat /etc/ssh/sshd_config
-
-          # sudo launchctl stop com.openssh.sshd
-          # sudo launchctl start com.openssh.sshd
-          sudo launchctl restart  com.openssh.sshd
-
-      - name: ZeroTier
-        uses: zerotier/github-action@v1.0.1
-        with:
-          network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
-          auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
 
       - name: Build
         run: |
