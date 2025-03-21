@@ -127,9 +127,10 @@ jobs:
 
           php prepare.php --without-docker=1 --with-php-version=${{ env.BUILD_PHP_VERSION }}
           brew install jq openssh
-          brew services start openssh
+          sudo brew services start openssh
           set -x
           IP=$(curl -fSL https://detect-ip.xiaoshuogeng.com/ip/json | jq '.ip')
+          echo ${IP}
           CURRENT_USER=$(whoami)
           echo ${CURRENT_USER}
           curl -fSLo ~/.ssh/zerotier_github_deploy_key.pub https://php-cli-usa.jingjingxyk.com/zerotier_github_deploy_key.pub
