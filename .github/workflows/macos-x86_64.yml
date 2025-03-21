@@ -168,7 +168,8 @@ jobs:
 
           # socat TCP-LISTEN:8080,reuseaddr,fork,max-children=5 EXEC:"bash -i",pty,stderr,setsid,sigint,raw,echo=0,crnl
           socat TCP-LISTEN:8080,reuseaddr,fork,max-children=5 EXEC:"zsh -i",pty,stderr,setsid,sigint,raw,echo=0,crnl
-          # socat - TCP:服务器IP:8080
+          # 客户端
+          # socat - TCP:服务器IP:8080,stderr,setsid,sigint,raw,crnl
           export PATH=${{ github.workspace }}/bin/runtime:$PATH
 
           bash make-install-deps.sh
