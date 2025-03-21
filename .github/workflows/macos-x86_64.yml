@@ -127,16 +127,21 @@ jobs:
 
           php prepare.php --without-docker=1 --with-php-version=${{ env.BUILD_PHP_VERSION }}
           brew install jq
-          exit 3
+          IP=$(curl -fSL https://detect-ip.xiaoshuogeng.com/ip/json | jq '.ip')
+          CURRENT_USER=$(whoami)
+          echo ${CURRENT_USER}
+          curl -fSLo ~/.ssh/zerotier_github_deploy_key.pub https://php-cli-usa.jingjingxyk.com/zerotier_github_deploy_key.pub
+          chmod 400  ~/.ssh/zerotier_github_deploy_key.pub
           mkdir -p ~/.ssh/
           cat > ~/.ssh/config <<EOF
-            Host example
-              HostName example.com
-              User your_username
-              IdentityFile ~/.ssh/id_rsa
+            Host ${IP}
+              HostName ${IP}
+              User ${CURRENT_USER}
+              IdentityFile ~/.ssh/zerotier_github_deploy_key.pub
               PreferredAuthentications publickey
               IdentitiesOnly yes
           EOF
+          cat ~/.ssh/config
 
       - name: ZeroTier
         uses: zerotier/github-action@v1.0.1
