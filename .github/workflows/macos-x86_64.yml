@@ -99,7 +99,7 @@ jobs:
           go install tailscale.com/cmd/tailscale{,d}@main
           export PATH=$(go env GOPATH)/bin:$PATH
           sudo $HOME/go/bin/tailscaled
-          tailscale up
+          tailscale up --auth-key=tskey-auth-kQCtXdSCku11CNTRL-SYB66wVU3LPUiDaz3TqJKPcqJexx48uE
           tailscale status
           sleep 3600
 
