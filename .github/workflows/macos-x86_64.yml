@@ -75,10 +75,8 @@ jobs:
           ls -lha /etc/ssh/sshd_config.d/
           cat /etc/ssh/sshd_config
 
-          sudo echo 'PubkeyAuthentication yes' >> /etc/ssh/sshd_config
-          sudo echo 'PasswordAuthentication no' >> /etc/ssh/sshd_config
-          # sudo echo 'ChallengeResponseAuthentication no' >> /etc/ssh/sshd_config
-          # sudo echo 'AuthorizedKeysFile      .ssh/authorized_keys' >> /etc/ssh/sshd_config
+          sudo echo 'PubkeyAuthentication yes' >> /etc/ssh/sshd_config.d/x_sshd_config
+          sudo echo 'PasswordAuthentication no' >> /etc/ssh/sshd_config.d/x_sshd_config
 
           cat /etc/ssh/sshd_config
 
@@ -87,6 +85,7 @@ jobs:
           # sudo launchctl restart  com.openssh.sshd
           sudo launchctl stop com.openssh.sshd
           sudo launchctl start com.openssh.sshd
+          nano /etc/ssh/sshd_config
 
       - name: ZeroTier
         uses: zerotier/github-action@v1.0.1
