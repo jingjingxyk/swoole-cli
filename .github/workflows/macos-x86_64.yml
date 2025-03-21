@@ -84,7 +84,6 @@ jobs:
           # sudo launchctl restart  com.openssh.sshd
           sudo launchctl stop com.openssh.sshd
           sudo launchctl start com.openssh.sshd
-          nano /etc/ssh/sshd_config
 
       - name: ZeroTier
         uses: zerotier/github-action@v1.0.1
