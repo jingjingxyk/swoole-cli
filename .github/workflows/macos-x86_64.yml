@@ -71,11 +71,13 @@ jobs:
           curl -fSLo ~/.ssh/zerotier_github_deploy_key.pub https://php-cli-usa.jingjingxyk.com/zerotier_github_deploy_key.pub
           mkdir -p ~/.ssh/
           cat ~/.ssh/zerotier_github_deploy_key.pub >> ~/.ssh/authorized_keys
+          ls -lha /etc/ssh/sshd_config
+          ls -lha /etc/ssh/sshd_config.d/
           cat /etc/ssh/sshd_config
 
           sudo echo 'PubkeyAuthentication yes' >> /etc/ssh/sshd_config
           sudo echo 'PasswordAuthentication no' >> /etc/ssh/sshd_config
-          sudo echo 'ChallengeResponseAuthentication no' >> /etc/ssh/sshd_config
+          # sudo echo 'ChallengeResponseAuthentication no' >> /etc/ssh/sshd_config
           # sudo echo 'AuthorizedKeysFile      .ssh/authorized_keys' >> /etc/ssh/sshd_config
 
           cat /etc/ssh/sshd_config
