@@ -75,11 +75,7 @@ jobs:
           CURRENT_USER=$(whoami) && sudo chown -R ${CURRENT_USER}:staff /usr/local/swoole-cli
 
           # git submodule update --init
-      - name: ZeroTier
-        uses: zerotier/github-action@v1.0.1
-        with:
-          network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
-          auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
+
       - name: Cache PHP Runtime
         uses: actions/cache@v4
         id: php-runtime-cache
@@ -130,6 +126,23 @@ jobs:
           composer dump-autoload --optimize --profile --no-dev
 
           php prepare.php --without-docker=1 --with-php-version=${{ env.BUILD_PHP_VERSION }}
+          brew install jq
+          exit 3
+          mkdir -p ~/.ssh/
+          cat > ~/.ssh/config <<EOF
+            Host example
+              HostName example.com
+              User your_username
+              IdentityFile ~/.ssh/id_rsa
+              PreferredAuthentications publickey
+              IdentitiesOnly yes
+          EOF
+
+      - name: ZeroTier
+        uses: zerotier/github-action@v1.0.1
+        with:
+          network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
+          auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
 
       - name: Build
         run: |
