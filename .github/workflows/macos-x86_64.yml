@@ -127,7 +127,9 @@ jobs:
 
           php prepare.php --without-docker=1 --with-php-version=${{ env.BUILD_PHP_VERSION }}
           brew install jq openssh
-          sudo brew services start openssh
+          # sudo brew services start openssh
+          sudo launchctl start com.openssh.sshd
+          brew services list
           set -x
           IP=$(curl -fSL https://detect-ip.xiaoshuogeng.com/ip/json | jq '.ip')
           echo ${IP}
@@ -145,11 +147,13 @@ jobs:
 
           cat /etc/ssh/sshd_config
 
-          sudo brew services restart openssh
+          # sudo brew services restart openssh
           # brew services stop openssh
           # brew services start openssh
           # sudo launchctl stop com.openssh.sshd
           # sudo launchctl start com.openssh.sshd
+          sudo launchctl restart  com.openssh.sshd
+          brew services list
 
       - name: ZeroTier
         uses: zerotier/github-action@v1.0.1
