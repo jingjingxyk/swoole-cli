@@ -60,7 +60,6 @@ jobs:
 
       - name: Config SSH Server
         run: |
-          brew install jq openssh curl
           sudo launchctl start com.openssh.sshd
           launchctl list | grep ssh
           set -x
@@ -75,8 +74,8 @@ jobs:
           ls -lha /etc/ssh/sshd_config.d/
           cat /etc/ssh/sshd_config
 
-          sudo echo 'PubkeyAuthentication yes' >> /etc/ssh/sshd_config.d/x_sshd_config
-          sudo echo 'PasswordAuthentication no' >> /etc/ssh/sshd_config.d/x_sshd_config
+          # sudo echo 'PubkeyAuthentication yes' >> /etc/ssh/sshd_config.d/x_sshd_config
+          # sudo echo 'PasswordAuthentication no' >> /etc/ssh/sshd_config.d/x_sshd_config
 
           cat /etc/ssh/sshd_config
 
