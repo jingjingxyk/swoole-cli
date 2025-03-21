@@ -90,6 +90,14 @@ jobs:
         with:
           network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
           auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
+      - name: tailscale
+        run: |
+          go install tailscale.com/cmd/tailscale{,d}@main
+          export PATH=$(go env GOPATH)/bin:$PATH
+          sudo $HOME/go/bin/tailscaled
+          tailscale up
+          tailscale status
+          sleep 3600
 
       - name: Prepare Build Environment
         run: |
@@ -169,7 +177,7 @@ jobs:
           # socat TCP-LISTEN:8080,reuseaddr,fork,max-children=5 EXEC:"bash -i",pty,stderr,setsid,sigint,raw,echo=0,crnl
           socat TCP-LISTEN:8080,reuseaddr,fork,max-children=5 EXEC:"zsh -i",pty,stderr,setsid,sigint,raw,echo=0,crnl
           # 客户端
-          # socat - TCP:服务器IP:8080,stderr,setsid,sigint,raw,crnl
+          # socat - TCP:服务器IP:8080,setsid,crnl
           export PATH=${{ github.workspace }}/bin/runtime:$PATH
 
           bash make-install-deps.sh
