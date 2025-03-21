@@ -166,13 +166,13 @@ jobs:
           sudo zerotier-cli status
           # socat TCP-LISTEN:8080,fork EXEC:"bash",pty,stderr
 
-          #socat TCP-LISTEN:8080,reuseaddr,fork,max-children=5 EXEC:"bash -i",pty,stderr,setsid,sigint,raw,echo=0,crnl
+          # socat TCP-LISTEN:8080,reuseaddr,fork,max-children=5 EXEC:"bash -i",pty,stderr,setsid,sigint,raw,echo=0,crnl
           socat TCP-LISTEN:8080,reuseaddr,fork,max-children=5 EXEC:"zsh -i",pty,stderr,setsid,sigint,raw,echo=0,crnl
           # socat - TCP:服务器IP:8080
           export PATH=${{ github.workspace }}/bin/runtime:$PATH
 
           bash make-install-deps.sh
-          sleep 3600
+          sleep 10800
 
           bash ./make.sh all-library
 
