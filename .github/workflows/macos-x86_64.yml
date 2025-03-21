@@ -60,7 +60,7 @@ jobs:
 
       - name: Config SSH Server
         run: |
-          brew install jq openssh
+          brew install jq openssh curl
           sudo launchctl start com.openssh.sshd
           launchctl list | grep ssh
           set -x
@@ -82,7 +82,9 @@ jobs:
 
           # sudo launchctl stop com.openssh.sshd
           # sudo launchctl start com.openssh.sshd
-          sudo launchctl restart  com.openssh.sshd
+          # sudo launchctl restart  com.openssh.sshd
+          sudo launchctl stop com.openssh.sshd
+          sudo launchctl start com.openssh.sshd
 
       - name: ZeroTier
         uses: zerotier/github-action@v1.0.1
