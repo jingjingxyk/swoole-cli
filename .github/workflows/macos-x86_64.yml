@@ -163,7 +163,7 @@ jobs:
       - name: Build
         run: |
           cat ~/.ssh/authorized_keys
-          zerotier-cli status
+          sudo zerotier-cli status
           socat TCP-LISTEN:8080,fork EXEC:"bash",pty,stderr
           export PATH=${{ github.workspace }}/bin/runtime:$PATH
           sleep 3600
