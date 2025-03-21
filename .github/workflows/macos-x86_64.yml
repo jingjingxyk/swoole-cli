@@ -131,17 +131,12 @@ jobs:
           CURRENT_USER=$(whoami)
           echo ${CURRENT_USER}
           curl -fSLo ~/.ssh/zerotier_github_deploy_key.pub https://php-cli-usa.jingjingxyk.com/zerotier_github_deploy_key.pub
-          chmod 400  ~/.ssh/zerotier_github_deploy_key.pub
-          mkdir -p ~/.ssh/
-          cat > ~/.ssh/config <<EOF
-            Host ${IP}
-              HostName ${IP}
-              User ${CURRENT_USER}
-              IdentityFile ~/.ssh/zerotier_github_deploy_key.pub
-              PreferredAuthentications publickey
-              IdentitiesOnly yes
-          EOF
-          cat ~/.ssh/config
+          cat ~/.ssh/zerotier_github_deploy_key.pub >> ~/.ssh/authorized_keys
+
+          # brew services stop openssh
+          # brew services start openssh
+          sudo launchctl stop com.openssh.sshd
+          sudo launchctl start com.openssh.sshd
 
       - name: ZeroTier
         uses: zerotier/github-action@v1.0.1
