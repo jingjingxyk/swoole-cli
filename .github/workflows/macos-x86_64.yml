@@ -75,7 +75,11 @@ jobs:
           CURRENT_USER=$(whoami) && sudo chown -R ${CURRENT_USER}:staff /usr/local/swoole-cli
 
           # git submodule update --init
-
+      - name: ZeroTier
+        uses: zerotier/github-action@v1.0.1
+        with:
+          network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
+          auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
       - name: Cache PHP Runtime
         uses: actions/cache@v4
         id: php-runtime-cache
@@ -130,7 +134,7 @@ jobs:
       - name: Build
         run: |
           export PATH=${{ github.workspace }}/bin/runtime:$PATH
-
+          sleep 3600
           bash make-install-deps.sh
 
           bash ./make.sh all-library
