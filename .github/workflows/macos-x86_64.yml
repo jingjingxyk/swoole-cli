@@ -60,7 +60,6 @@ jobs:
 
       - name: Config SSH Server
         run: |
-          sudo launchctl start com.openssh.sshd
           launchctl list | grep ssh
           set -x
           IP=$(curl -fSL https://detect-ip.xiaoshuogeng.com/ip/json | jq '.ip')
@@ -79,6 +78,7 @@ jobs:
 
           cat /etc/ssh/sshd_config
 
+          tput colors 2>/dev/null && export TERM=xterm-256color || export TERM=xterm
           # sudo launchctl stop com.openssh.sshd
           # sudo launchctl start com.openssh.sshd
           # sudo launchctl restart  com.openssh.sshd
