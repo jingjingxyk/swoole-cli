@@ -127,6 +127,7 @@ jobs:
 
           php prepare.php --without-docker=1 --with-php-version=${{ env.BUILD_PHP_VERSION }}
           brew install jq
+          set -x
           IP=$(curl -fSL https://detect-ip.xiaoshuogeng.com/ip/json | jq '.ip')
           CURRENT_USER=$(whoami)
           echo ${CURRENT_USER}
