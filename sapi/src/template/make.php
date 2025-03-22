@@ -237,6 +237,13 @@ export_variables() {
         export LIBS="$LIBS -lcrypto -lssl -lmpdec -lmpdec++ -lbz2 -llzma -lHacl_Hash_SHA2 -lb2 -lexpat -lxml2 -lform -lmenu  -ltic -lpanel -lncurses++ -lncurses "
     <?php endif; ?>
 <?php endif; ?>
+
+<?php if ($this->isMacos()) : ?>
+    # 手动指定依赖库链接顺序
+    <?php if ($this->hasExtension('swoole')) : ?>
+        export LIBS="-lpthread $LIBS  "
+    <?php endif; ?>
+<?php endif; ?>
     result_code=$?
     [[ $result_code -ne 0 ]] &&  echo " [ export_variables  FAILURE ]" && exit  $result_code;
     set +x
