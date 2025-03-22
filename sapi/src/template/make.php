@@ -241,7 +241,7 @@ export_variables() {
 <?php if ($this->isMacos()) : ?>
     # 手动指定依赖库链接顺序
     <?php if ($this->hasExtension('swoole')) : ?>
-        export LIBS="-lpthread $LIBS  "
+        export LIBS="-lpthread -lbrotlicommon -lbrotlidec -lbrotlienc -lc++ -lcares -lcrypto -lcurl -lexslt -liconv -licudata -licui18n -licuio -licuuc -llz4 -llzma -lm -lncursesw -lnghttp2 -lnghttp3 -lngtcp2 -lngtcp2_crypto_quictls -lodbc -lodbccr -lodbcinst -lpgcommon -lpgport -lpq -lpthread -lreadline -lresolv -lsqlite3 -lssh2 -lssl -lxml2 -lxslt -lz -lzstd $LIBS  "
     <?php endif; ?>
 <?php endif; ?>
     result_code=$?
