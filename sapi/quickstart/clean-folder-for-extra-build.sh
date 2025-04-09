@@ -79,6 +79,7 @@ test -f cygwin-install-depend.sh && rm -rf cygwin-install-depend.sh
 cd ${__PROJECT__}/sapi/src/
 test -d library_builder && rm -rf library_builder
 test -d UnitTest && rm -rf UnitTest
+test -d tests && rm -rf tests
 
 cd ${__PROJECT__}/sapi/src/builder/
 test -d library_shared && rm -rf library_shared
