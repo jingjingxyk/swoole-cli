@@ -347,6 +347,7 @@ define("EMULE_PREFIX", $p->getGlobalPrefix() . '/emule');
 define("TTYD_PREFIX", $p->getGlobalPrefix() . '/ttyd');
 define("LIBJSON_C_PREFIX", $p->getGlobalPrefix() . '/libjson_c');
 define("MBEDTLS_PREFIX", $p->getGlobalPrefix() . '/mbedtls');
+define("LIBZOOKEEPER_PREFIX", $p->getGlobalPrefix() . '/libzookeeper');
 define("EXAMPLE_PREFIX", $p->getGlobalPrefix() . '/example');
 
 

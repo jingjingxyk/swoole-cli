@@ -27,7 +27,8 @@ EOF
         -DCMAKE_BUILD_TYPE=Release  \
         -DBUILD_SHARED_LIBS=OFF  \
         -DBUILD_STATIC_LIBS=ON \
-        -DBUILD_TESTING=OFF
+        -DBUILD_TESTING=OFF \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 
         cmake --build . --config Release
 
