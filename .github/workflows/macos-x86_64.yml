@@ -150,6 +150,7 @@ jobs:
 
       - name: Show Build Result
         run: |
+
           file ./bin/ttyd
           otool -L ./bin/ttyd
 
