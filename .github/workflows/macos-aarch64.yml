@@ -129,7 +129,7 @@ jobs:
           ls ./bin/coturn/
           ./bin/coturn/bin/turnserver --version
           file./bin/coturn/bin/turnserver
-          otool -L ../bin/coturn/bin/turnserver
+          otool -L ./bin/coturn/bin/turnserver
 
       - name: get app version
         run: |
