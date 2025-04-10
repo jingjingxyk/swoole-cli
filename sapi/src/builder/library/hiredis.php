@@ -28,14 +28,8 @@ return function (Preprocessor $p) {
            -DENABLE_EXAMPLES=OFF \
            -DENABLE_ASYNC_TESTS=OFF  \
            -DENABLE_SSL=OFF \
-           -DOpenSSL_DIR={$openssl_prefix}
-EOF
-            )
-            ->withScriptAfterInstall(
-                <<<EOF
-            rm -rf {$hiredis_prefix}/lib/*.so.*
-            rm -rf {$hiredis_prefix}/lib/*.so
-            rm -rf {$hiredis_prefix}/lib/*.dylib
+           -DOpenSSL_DIR={$openssl_prefix} \
+           -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 EOF
             )
             ->withPkgName('hiredis')
