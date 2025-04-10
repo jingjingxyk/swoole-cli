@@ -137,9 +137,9 @@ jobs:
       - name: Show Build Result
         run: |
           ls ./bin/coturn/
-          file ./bin/coturn/bin/turnserver --version
+          ./bin/coturn/bin/turnserver --version
+          file ./bin/coturn/bin/turnserver
           readelf -h        ./bin/coturn/bin/turnserver
-          ./bin/coturn/bin/turnserver
 
       - name: get app version
         run: |
