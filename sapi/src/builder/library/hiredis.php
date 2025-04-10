@@ -27,7 +27,9 @@ return function (Preprocessor $p) {
            -DBUILD_STATIC_LIBS=ON \
            -DENABLE_EXAMPLES=OFF \
            -DENABLE_ASYNC_TESTS=OFF  \
-           -DENABLE_SSL=OFF \
+           -DENABLE_SSL=ON \
+           -DDISABLE_TESTS=ON \
+           -DENABLE_NUGET=OFF \
            -DOpenSSL_DIR={$openssl_prefix} \
            -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 EOF
