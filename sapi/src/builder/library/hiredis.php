@@ -30,7 +30,7 @@ return function (Preprocessor $p) {
            -DENABLE_SSL=ON \
            -DDISABLE_TESTS=ON \
            -DENABLE_NUGET=OFF \
-           -DOpenSSL_DIR={$openssl_prefix} \
+           -DCMAKE_PREFIX_PATH="{$openssl_prefix};" \
            -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 EOF
             )
