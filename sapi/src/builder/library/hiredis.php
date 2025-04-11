@@ -9,11 +9,10 @@ return function (Preprocessor $p) {
     $p->addLibrary(
         (new Library('hiredis'))
             ->withHomePage('https://github.com/redis/hiredis.git')
-            ->withLicense('https://github.com/digitalocean/prometheus-client-c/blob/master/LICENSE', Library::LICENSE_GPL)
-            ->withUrl('https://github.com/redis/hiredis/archive/refs/tags/v1.1.0.tar.gz')
-            ->withFile('hiredis-v1.1.0.tar.gz')
+            ->withLicense('https://github.com/redis/hiredis#BSD-3-Clause-1-ov-file', Library::LICENSE_BSD)
+            ->withUrl('https://github.com/redis/hiredis/archive/refs/tags/v1.2.0.tar.gz')
+            ->withFile('hiredis-v1.2.0.tar.gz')
             ->withPrefix($hiredis_prefix)
-            //->withBuildCached(false)
             ->withConfigure(
                 <<<EOF
 
