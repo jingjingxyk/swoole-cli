@@ -16,10 +16,11 @@
 
 ```shell
 curl -fSL https://github.com/jingjingxyk/swoole-cli/blob/new_dev/setup-coturn-runtime.sh?raw=true | bash
+curl -fSL https://gitee.com/jingjingxyk/swoole-cli/raw/new_dev/setup-coturn-runtime.sh | bash -s -- --mirror china
 
-cp -f ./bin/runtime/coturn/etc/turnserver.conf.default ./bin/runtime/coturn/etc/turnserver.conf
+cp -f ./runtime/coturn/etc/turnserver.conf.default ./runtime/coturn/etc/turnserver.conf
 
-./bin/runtime/coturn/bin/turnserver -c ./bin/runtime/coturn/etc/turnserver.conf
+./runtime/coturn/bin/turnserver -c ./runtime/coturn/etc/turnserver.conf
 
 
 ```
