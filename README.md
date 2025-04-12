@@ -9,9 +9,9 @@
 
 > 本项目 只需要关注 `.github/workflow` 目录里配置文件的变更
 
-## 下载`build-static-openssh`发行版
+## [下载`build-static-openssh`发行版](https://github.com/jingjingxyk/build-static-openssh/releases)
 
-## 立即使用 socat
+## 立即使用 [openssh](https://github.com/jingjingxyk/build-static-openssh/releases)
 
 ```shell
 
@@ -54,9 +54,9 @@ bash setup-php-runtime.sh --mirror china
 # shell脚本中启用别名扩展功能‌
 shopt -s expand_aliases
 __DIR__=$(pwd)
-export PATH="${__DIR__}/runtime:$PATH"
-ln -sf ${__DIR__}/runtime/swoole-cli ${__DIR__}/runtime/php
-alias php="php -d curl.cainfo=${__DIR__}/runtime/cacert.pem -d openssl.cafile=${__DIR__}/runtime/cacert.pem"
+export PATH="${__DIR__}/bin/runtime:$PATH"
+ln -sf ${__DIR__}/bin/runtime/swoole-cli ${__DIR__}/bin/runtime/php
+alias php="php -d curl.cainfo=${__DIR__}/bin/runtime/cacert.pem -d openssl.cafile=${__DIR__}/bin/runtime/cacert.pem"
 which php
 php -v
 php prepare.php +openssh
@@ -119,6 +119,7 @@ bash build-release.sh
 ## openssh 源码构建参考
 
     https://www.openssh.com/
+    https://anongit.mindrot.org/openssh.git
 
 ## Test
 
@@ -145,4 +146,3 @@ $ ./vendor/bin/php-cs-fixer fix sapi/src/tests/
 
 * 对 `swoole-cli` 代码进行使用、修改、发布的新项目必须含有 `SWOOLE-CLI LICENSE`的全部内容
 * 使用 `swoole-cli`代码重新发布为新项目或者产品时，项目或产品名称不得包含 `swoole` 单词
-
