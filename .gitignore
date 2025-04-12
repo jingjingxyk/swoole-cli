@@ -361,3 +361,9 @@ php-cli-*
 php-fpm-*
 !sapi/patches
 /RLEASE_VERSION
+/.venv
+/cmake-build-debug
+/CMakeFiles
+/runtime
+!/runtime/.gitkeep
+

@@ -5,7 +5,7 @@ on:
   pull_request:
 
 env:
-  BUILD_PHP_VERSION: 8.2.27
+  BUILD_PHP_VERSION: 8.2.28
 
 jobs:
   macos-x86_64:
@@ -88,7 +88,7 @@ jobs:
         uses: actions/cache@v4
         id: php-runtime-cache
         with:
-          path: ${{ github.workspace }}/bin/runtime
+          path: ${{ github.workspace }}/runtime
           key: ${{ runner.os }}-x86_64-php-runtime
 
       - name: Cache PHP Vendor
@@ -117,9 +117,10 @@ jobs:
           set -x
           mkdir -p pool/lib
           mkdir -p pool/ext
-          mkdir -p bin/runtime
-          if [ ! -f bin/runtime/php ] ; then
-              bash  sapi/quickstart/setup-php-runtime.sh
+          mkdir -p bin/
+          mkdir -p runtime/
+          if [ ! -f runtime/php ] ; then
+              bash  setup-php-runtime.sh
           fi
           bash sapi/download-box/download-box-get-archive-from-server.sh
           ls -A pool/lib/
@@ -127,8 +128,8 @@ jobs:
 
       - name: prepare
         run: |
-          export PATH=${{ github.workspace }}/bin/runtime:$PATH
-          alias php="php -d curl.cainfo=${{ github.workspace }}/bin/runtime/cacert.pem -d openssl.cafile=${{ github.workspace }}/bin/runtime/cacert.pem"
+          export PATH=${{ github.workspace }}/runtime:$PATH
+          alias php="php -d curl.cainfo=${{ github.workspace }}/runtime/cacert.pem -d openssl.cafile=${{ github.workspace }}/runtime/cacert.pem"
 
           composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
           composer dump-autoload --optimize --profile --no-dev
@@ -137,7 +138,7 @@ jobs:
 
       - name: Build
         run: |
-          export PATH=${{ github.workspace }}/bin/runtime:$PATH
+          export PATH=${{ github.workspace }}/runtime:$PATH
 
           bash make-install-deps.sh
 
@@ -149,23 +150,24 @@ jobs:
           bash ./make.sh build
           bash ./make.sh archive
 
-      - name: get app version
+
+      - name: Show Build Result
         run: |
           ls -lha /usr/local/swoole-cli/openssh/
           ls -lha /usr/local/swoole-cli/openssh/sbin/
           ls -lha /usr/local/swoole-cli/openssh/libexec
           ls -lha /usr/local/swoole-cli/openssh/bin/
+          file /usr/local/swoole-cli/openssh/sbin/sshd
+          otool -L /usr/local/swoole-cli/openssh/sbin/sshd
+
+
+      - name: get app version
+        run: |
           APP_VERSION=$(cat ./APP_VERSION)
           echo $APP_VERSION
           echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
           echo "APP_NAME=openssh" >> $GITHUB_ENV
 
-      - name: production artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-macos-x64
-          retention-days: 90
-          path: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-macos-x64.tar.xz
 
       - name: gh release
         uses: softprops/action-gh-release@v2
@@ -173,5 +175,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: |
-            ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-macos-x64.tar.xz
+          files: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-macos-x64.tar.xz
+

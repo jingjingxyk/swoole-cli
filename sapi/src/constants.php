@@ -133,6 +133,7 @@ define("GETTEXT_PREFIX", $p->getGlobalPrefix() . '/gettext');
 define("LIBUNISTRING_PREFIX", $p->getGlobalPrefix() . '/libunistring');
 define("LIBURING_PREFIX", $p->getGlobalPrefix() . '/liburing');
 
+
 define("LIBARCHIVE_PREFIX", $p->getGlobalPrefix() . '/libarchive');
 
 define("SOCAT_PREFIX", $p->getGlobalPrefix() . '/socat');
@@ -196,8 +197,6 @@ define("LIBCONFIG_PREFIX", $p->getGlobalPrefix() . '/libconfig');
 define("OPENH264_PREFIX", $p->getGlobalPrefix() . '/openh264');
 define("PAHO_MQTT_PREFIX", $p->getGlobalPrefix() . '/paho_mqtt');
 
-define("SDL2_PREFIX", $p->getGlobalPrefix() . '/sdl2');
-
 define("LIBVPX_PREFIX", $p->getGlobalPrefix() . '/libvpx');
 define("CJSON_PREFIX", $p->getGlobalPrefix() . '/cjson');
 define("BLENDER_PREFIX", $p->getGlobalPrefix() . '/blender');
@@ -209,12 +208,6 @@ define("LIBPRI_PREFIX", $p->getGlobalPrefix() . '/libpri');
 define("APR_PREFIX", $p->getGlobalPrefix() . '/apr');
 define("APR_UTIL_PREFIX", $p->getGlobalPrefix() . '/apr-util');
 
-define("PYTHON3_PREFIX", $p->getGlobalPrefix() . '/python3');
-define("LIBMPDECIMAL_PREFIX", $p->getGlobalPrefix() . '/libmpdecimal');
-define("LIBB2_PREFIX", $p->getGlobalPrefix() . '/libb2');
-define("LIBEXPAT_PREFIX", $p->getGlobalPrefix() . '/libexpat');
-
-
 define("LIBAVIF_PREFIX", $p->getGlobalPrefix() . '/libavif');
 define("DAV1D_PREFIX", $p->getGlobalPrefix() . '/dav1d');
 define("LIBGAV1_PREFIX", $p->getGlobalPrefix() . '/libgav1');
@@ -222,23 +215,30 @@ define("AOM_PREFIX", $p->getGlobalPrefix() . '/aom');
 define("SVT_AV1_PREFIX", $p->getGlobalPrefix() . '/svt_av1');
 define("LIBYUV_PREFIX", $p->getGlobalPrefix() . '/libyuv');
 
+define("PYTHON3_PREFIX", $p->getGlobalPrefix() . '/python3');
+define("LIBMPDECIMAL_PREFIX", $p->getGlobalPrefix() . '/libmpdecimal');
+define("LIBB2_PREFIX", $p->getGlobalPrefix() . '/libb2');
+define("LIBEXPAT_PREFIX", $p->getGlobalPrefix() . '/libexpat');
 
-define("ZOOKEEPER_PREFIX", $p->getGlobalPrefix() . '/zookeeper');
+
 define("LIBEVENT_PREFIX", $p->getGlobalPrefix() . '/libevent');
 define("SNAPPY_PREFIX", $p->getGlobalPrefix() . '/snappy');
 define("LIBSASL_PREFIX", $p->getGlobalPrefix() . '/sasl');
-
 define("LIBTIFF_PREFIX", $p->getGlobalPrefix() . '/libtiff');
+
 define("LIBRAW_PREFIX", $p->getGlobalPrefix() . '/libraw');
 define("LCMS2_PREFIX", $p->getGlobalPrefix() . '/lcms2');
 
 define("LIBMEMCACHED_PREFIX", $p->getGlobalPrefix() . '/libmemcached');
 define("LIBMEMCACHED_AWESOME_PREFIX", $p->getGlobalPrefix() . '/libmemcached_awesome');
 
+define("SDL2_PREFIX", $p->getGlobalPrefix() . '/sdl2');
+define("LIBARGON2_PREFIX", $p->getGlobalPrefix() . '/libargon2');
+define("ABSL_PREFIX", $p->getGlobalPrefix() . '/absl');
+
 define("GRPC_PREFIX", $p->getGlobalPrefix() . '/grpc');
 define("RE2_PREFIX", $p->getGlobalPrefix() . '/re2');
 
-define("LIBARGON2_PREFIX", $p->getGlobalPrefix() . '/libargon2');
 define("FFTW3_PREFIX", $p->getGlobalPrefix() . '/fftw3');
 define("LIBSAMPLERATE_PREFIX", $p->getGlobalPrefix() . '/libsamplerate');
 
@@ -257,8 +257,6 @@ define("FDK_AAC_PREFIX", $p->getGlobalPrefix() . '/fdk_aac');
 
 define("PROMETHEUS_CLIENT_C_PREFIX", $p->getGlobalPrefix() . '/prometheus_client_c');
 
-define("LIBBSON_PREFIX", $p->getGlobalPrefix() . '/libbson');
-define("LIBMONGOCRYPT_PREFIX", $p->getGlobalPrefix() . '/libmongocrypt');
 define("LIBMONGOC_PREFIX", $p->getGlobalPrefix() . '/libmongoc');
 define("LIBRIME_PREFIX", $p->getGlobalPrefix() . '/librime');
 define("GLOG_PREFIX", $p->getGlobalPrefix() . '/glog');
@@ -330,7 +328,6 @@ define("STRONGSWAN_PREFIX", $p->getGlobalPrefix() . '/strongswan');
 define("MUSL_CROSS_MAKE_PREFIX", $p->getGlobalPrefix() . '/musl_cross_make');
 define("MUSL_LIBC_PREFIX", $p->getGlobalPrefix() . '/musl_libc');
 
-define("ABSL_PREFIX", $p->getGlobalPrefix() . '/absl');
 
 define("GPAC_PREFIX", $p->getGlobalPrefix() . '/gpac');
 
@@ -343,5 +340,12 @@ define("V4L_UTILS_PREFIX", $p->getGlobalPrefix() . '/v4l_utils');
 define("LIBOAUTH2_PREFIX", $p->getGlobalPrefix() . '/liboauth2');
 define("CJOSE_PREFIX", $p->getGlobalPrefix() . '/cjose');
 
+define("EMULE_PREFIX", $p->getGlobalPrefix() . '/emule');
+
+define("TTYD_PREFIX", $p->getGlobalPrefix() . '/ttyd');
+define("LIBJSON_C_PREFIX", $p->getGlobalPrefix() . '/libjson_c');
+define("MBEDTLS_PREFIX", $p->getGlobalPrefix() . '/mbedtls');
+define("LIBZOOKEEPER_PREFIX", $p->getGlobalPrefix() . '/libzookeeper');
 define("EXAMPLE_PREFIX", $p->getGlobalPrefix() . '/example');
+
 
