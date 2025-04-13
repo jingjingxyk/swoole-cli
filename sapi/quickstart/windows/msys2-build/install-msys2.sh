@@ -73,7 +73,7 @@ pacman -S --noconfirm brotli-devel
 pacman -S --noconfirm pcre-devel
 pacman -S --noconfirm libedit-devel
 
-: <<EOF
+: <<'COMMENT'
 
 # 不存在的包
 pacman -S --noconfirm libpcre2-devel libssl-devel libgmp-devel
@@ -87,7 +87,7 @@ pacman -S --noconfirm gcc-g++
 # 不需要执行 bash ./sapi/scripts/cygwin/install-re2c.sh
 
 
-EOF
+COMMENT
 
 # 清理缓存
 # pacman -Scc --noconfirm
