@@ -90,4 +90,4 @@ pacman -S --noconfirm gcc-g++
 EOF
 
 # 清理缓存
-pacman -Scc --noconfirm
+# pacman -Scc --noconfirm
