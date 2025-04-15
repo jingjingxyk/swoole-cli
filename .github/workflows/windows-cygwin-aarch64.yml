@@ -1,11 +1,11 @@
-name: build-swoole-cli-windows-cygwin
+name: build-swoole-cli-windows-cygwin-aarch64
 
 on: [ push, pull_request ]
 
 jobs:
   windows-cygwin:
     if: ${{ !contains(github.event.head_commit.message, '--filter=') || contains(github.event.head_commit.message, '[windows-cygwin]') }}
-    runs-on: windows-2022
+    runs-on: windows-11-arm
     steps:
       - name: Show Environment Info
         shell: cmd
