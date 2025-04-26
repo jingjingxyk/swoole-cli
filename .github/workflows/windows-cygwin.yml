@@ -5,7 +5,7 @@ on:
   pull_request:
 
 env:
-  BUILD_PHP_VERSION: 8.2.27
+  BUILD_PHP_VERSION: 8.2.28
 
 jobs:
   windows-cygwin:
@@ -14,10 +14,10 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - "8.2.27"
-          - "8.1.31"
-          - "8.3.15"
-          - "8.4.2"
+          - "8.2.28"
+          - "8.1.32"
+          - "8.3.19"
+          - "8.4.5"
     steps:
       - name: Show Environment Info
         shell: cmd
@@ -155,12 +155,19 @@ jobs:
         run: |
           bash ./sapi/scripts/cygwin/cygwin-archive.sh
 
+      - name: get app version
+        run: |
+          APP_VERSION=$(cat ./APP_VERSION)
+          echo $APP_VERSION
+          echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
+          echo "APP_NAME=ne_dev" >> $GITHUB_ENV
+
       - name: production artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: php-cli-v${{ env.APP_VERSION }}-cygwin-x64
+          name: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-cygwin-x64
           retention-days: 90
-          path: php-cli-v${{ env.APP_VERSION }}-cygwin-x64.zip
+          path: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-cygwin-x64.zip
 
       - name: gh release
         uses: softprops/action-gh-release@v2
@@ -168,7 +175,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: php-cli-v${{ env.APP_VERSION }}-cygwin-x64.zip
+          files: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-cygwin-x64.zip
 
   upload-to-cloud-object-storage:
     if: 0

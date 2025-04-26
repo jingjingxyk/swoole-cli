@@ -3,7 +3,7 @@ name: build-macos-aarch64
 on: [ push, pull_request ]
 
 env:
-  BUILD_PHP_VERSION: 8.2.27
+  BUILD_PHP_VERSION: 8.2.28
 
 jobs:
   macos-aarch64:
@@ -65,7 +65,7 @@ jobs:
         uses: actions/cache@v4
         id: php-runtime-cache
         with:
-          path: ${{ github.workspace }}/bin/runtime
+          path: ${{ github.workspace }}/runtime
           key: ${{ runner.os }}-aarch64-php-runtime
 
       - name: Cache PHP Vendor
@@ -94,9 +94,10 @@ jobs:
           set -x
           mkdir -p pool/lib
           mkdir -p pool/ext
-          mkdir -p bin/runtime
-          if [ ! -f bin/runtime/php ] ; then
-              bash  sapi/quickstart/setup-php-runtime.sh
+          mkdir -p bin/
+          mkdir -p runtime/
+          if [ ! -f runtime/php ] ; then
+              bash  setup-php-runtime.sh
           fi
           bash sapi/download-box/download-box-get-archive-from-server.sh
           ls -A pool/lib/
@@ -104,8 +105,8 @@ jobs:
 
       - name: prepare
         run: |
-          export PATH=${{ github.workspace }}/bin/runtime:$PATH
-          alias php="php -d curl.cainfo=${{ github.workspace }}/bin/runtime/cacert.pem -d openssl.cafile=${{ github.workspace }}/bin/runtime/cacert.pem"
+          export PATH=${{ github.workspace }}/runtime:$PATH
+          alias php="php -d curl.cainfo=${{ github.workspace }}/runtime/cacert.pem -d openssl.cafile=${{ github.workspace }}/runtime/cacert.pem"
 
           composer install  --no-interaction --no-autoloader --no-scripts --profile
           composer dump-autoload --optimize --profile
@@ -114,28 +115,34 @@ jobs:
 
       - name: Build
         run: |
-          export PATH=${{ github.workspace }}/bin/runtime:$PATH
+          export PATH=${{ github.workspace }}/runtime:$PATH
 
           bash make-install-deps.sh
 
-          bash ./make.sh all-library
+          bash make.sh all-library
 
-          bash ./make.sh config
-          bash ./make.sh build
-          bash ./make.sh archive
-
+          bash make.sh config
+          bash make.sh build
+          bash make.sh archive
 
       - name: Show Build Result
         run: |
           ./bin/ffmpeg/bin/ffmpeg -h
           ./bin/ffmpeg/bin/ffmpeg -version
-          FFMPEG_VERSION=$(./bin/ffmpeg/bin/ffmpeg -version | grep 'ffmpeg version' | awk '{print $3}' )
-          echo "FFMPEG_VERSION=${FFMPEG_VERSION}" >> $GITHUB_ENV
+          file ./bin/ffmpeg/bin/ffmpeg
+          otool -L ./bin/ffmpeg/bin/ffmpeg
+
+      - name: get app version
+        run: |
+          APP_VERSION=$(cat ./APP_VERSION)
+          echo $APP_VERSION
+          echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
+          echo "APP_NAME=ffmpeg" >> $GITHUB_ENV
 
       - name: production artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ffmpeg-${{ env.FFMPEG_VERSION }}-macos-arm64
+          name: ${{ env.APP_NAME }}-${{ env.FFMPEG_VERSION }}-macos-arm64
           retention-days: 90
           path: ./bin/ffmpeg/
 
@@ -143,4 +150,4 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: ffmpeg-${{ env.FFMPEG_VERSION }}-macos-arm64.tar.xz
+          files: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-macos-arm64.tar.xz

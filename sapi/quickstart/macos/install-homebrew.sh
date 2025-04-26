@@ -44,9 +44,17 @@ china)
   rm -rf brew-install
   ;;
 *)
+  export HOMEBREW_API_DOMAIN="https://api.brew.sh"
+
+  export HOMEBREW_BREW_GIT_REMOTE="https://github.com/homebrew/brew.git"
+  export HOMEBREW_CORE_GIT_REMOTE="https://github.com/homebrew/homebrew-core.git"
+  export HOMEBREW_BOTTLE_DOMAIN="https://ghcr.io/v2/homebrew/core"
+
+  export HOMEBREW_PIP_INDEX_URL="https://pypi.org/simple"
+  export PIPENV_PYPI_MIRROR="https://pypi.org/simple"
+
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   ;;
 esac
 
 brew config
-

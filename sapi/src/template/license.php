@@ -20,5 +20,5 @@ foreach ($this->extensionList as $item) {
     if (!$item->license) {
         continue;
     }
-    echo "php-ext-{$item->name}: {$item->license}\n";
+    echo "ext-{$item->name}: {$item->license}\n";
 }
