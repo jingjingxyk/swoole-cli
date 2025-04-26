@@ -49,7 +49,6 @@ test -f setup-webdav-runtime.sh && rm -rf setup-webdav-runtime.sh
 cd ${__PROJECT__}/
 test -f .clang-format && rm -f .clang-format
 test -f .gdbinit && rm -f .gdbinit
-test -f && rm -f
 test -f sync-source-code.php && rm -f sync-source-code.php
 test -f setup-runtime.md && rm -rf setup-runtime.md
 test -f diff.php && rm -rf diff.php
