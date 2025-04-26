@@ -90,8 +90,6 @@ jobs:
 
           sudo apt install -y jq curl
 
-          curl https://detect-ip.xiaoshuogeng.com/ip/json  | jq
-
           echo ${{ env.BRANCH_NAME }}
 
           echo ${{ github.actor }}
