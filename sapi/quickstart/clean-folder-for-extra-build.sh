@@ -44,6 +44,7 @@ test -f setup-swoole-cli-runtime.ps1 && rm -rf setup-swoole-cli-runtime.ps1
 test -f setup-iperf3-runtime.sh && rm -rf setup-iperf3-runtime.sh
 test -f setup-openssh-runtime.sh && rm -rf setup-openssh-runtime.sh
 test -f setup-ttyd-runtime.sh && rm -rf setup-ttyd-runtime.sh
+test -f setup-webdav-runtime.sh && rm -rf setup-webdav-runtime.sh
 
 cd ${__PROJECT__}/
 test -f .clang-format && rm -f .clang-format
