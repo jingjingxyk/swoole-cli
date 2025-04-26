@@ -68,8 +68,6 @@ jobs:
           libtool --help-all
           # brew bison --debug
 
-          curl https://detect-ip.xiaoshuogeng.com/ip/json  | jq
-
           echo ${{ env.BRANCH_NAME }}
           echo ${{ github.actor }}
           echo ${{ github.repository }}
