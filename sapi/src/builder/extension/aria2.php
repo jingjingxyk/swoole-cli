@@ -17,7 +17,7 @@ return function (Preprocessor $p) {
 
         $workdir = $p->getWorkDir();
         $builddir = $p->getBuildDir();
-        $system_arch=$p->getSystemArch();
+        $system_arch = $p->getSystemArch();
         $cmd = <<<EOF
                 mkdir -p {$workdir}/bin/
                 cd {$builddir}/aria2/src
@@ -37,9 +37,9 @@ EOF;
 EOF;
         } else {
             $cmd .= <<<EOF
-              file {$workdir}/bin/aria2c
-              readelf -h {$workdir}/bin/aria2c
-              tar -cJvf {$workdir}/aria2c-\${APP_VERSION}-linux-{$system_arch}.tar.xz aria2c LICENSE
+            file {$workdir}/bin/aria2c
+            readelf -h {$workdir}/bin/aria2c
+            tar -cJvf {$workdir}/aria2c-\${APP_VERSION}-linux-{$system_arch}.tar.xz aria2c LICENSE
 
 EOF;
         }
