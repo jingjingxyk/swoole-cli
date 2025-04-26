@@ -5,11 +5,17 @@ __DIR__=$(
   cd "$(dirname "$0")"
   pwd
 )
-__PROJECT__=$(
-  cd ${__DIR__}/../../../
-  pwd
-)
-cd ${__DIR__}
+
+if [ -f "${__DIR__}/../../../prepare.php" ]; then
+  __PROJECT__=$(
+    cd ${__DIR__}/../../../
+    pwd
+  )
+else
+  __PROJECT__=${__DIR__}
+fi
+
+cd ${__PROJECT__}
 
 mkdir -p ${__PROJECT__}/var
 
@@ -23,6 +29,7 @@ while [ $# -gt 0 ]; do
     ;;
   --*)
     echo "Illegal option $1"
+    exit 3
     ;;
   esac
   shift $(($# > 0 ? 1 : 0))
@@ -67,3 +74,10 @@ tuna)
   exit 0
   ;;
 esac
+
+: <<'EOF'
+
+# 以非 root 用户身份管理 Docker
+sudo usermod -aG docker username
+
+EOF

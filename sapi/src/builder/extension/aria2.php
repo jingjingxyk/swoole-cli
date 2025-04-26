@@ -17,8 +17,7 @@ return function (Preprocessor $p) {
 
         $workdir = $p->getWorkDir();
         $builddir = $p->getBuildDir();
-        $system_arch=$p->getSystemArch();
-
+        $system_arch = $p->getSystemArch();
         $cmd = <<<EOF
                 mkdir -p {$workdir}/bin/
                 cd {$builddir}/aria2/src
@@ -26,20 +25,21 @@ return function (Preprocessor $p) {
                 strip {$workdir}/bin/aria2c
                 cd {$workdir}/bin/
                 APP_VERSION=\$({$workdir}/bin/aria2c -v | head -n 1 | awk '{print $3}')
+                echo \${APP_VERSION} > {$workdir}/APP_VERSION
 
 EOF;
         if ($p->getOsType() == 'macos') {
             $cmd .= <<<EOF
             xattr -cr {$workdir}/bin/aria2c
             otool -L {$workdir}/bin/aria2c
-            tar -cJvf {$workdir}/aria2c-\${APP_VERSION}-macos-{$system_arch}.tar.xz aria2c
+            tar -cJvf {$workdir}/aria2c-\${APP_VERSION}-macos-{$system_arch}.tar.xz aria2c LICENSE
 
 EOF;
         } else {
             $cmd .= <<<EOF
-              file {$workdir}/bin/aria2c
-              readelf -h {$workdir}/bin/aria2c
-              tar -cJvf {$workdir}/aria2c-\${APP_VERSION}-linux-{$system_arch}.tar.xz aria2c
+            file {$workdir}/bin/aria2c
+            readelf -h {$workdir}/bin/aria2c
+            tar -cJvf {$workdir}/aria2c-\${APP_VERSION}-linux-{$system_arch}.tar.xz aria2c LICENSE
 
 EOF;
         }
