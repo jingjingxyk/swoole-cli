@@ -18,6 +18,8 @@ cd ${WORK_TEMP_DIR}/socat/
 
 make -j $(nproc)
 
-SOCAT_VERSION=$(./socat -V | grep 'socat version' | awk '{ print $3 }')
-echo ${SOCAT_VERSION} >${__PROJECT__}/socat.version
+APP_VERSION=$(./socat -V | grep 'socat version' | awk '{ print $3 }')
+echo ${APP_VERSION} >${__PROJECT__}/APP_VERSION
+echo 'socat' >${__PROJECT__}/APP_NAME
+
 strip ./socat
