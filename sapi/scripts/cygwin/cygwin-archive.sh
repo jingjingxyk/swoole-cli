@@ -18,7 +18,7 @@ ldd ./socat
 cd ${__PROJECT__}
 APP_VERSION=$(echo -n $(cat ${__PROJECT__}/APP_VERSION))
 APP_NAME=$(echo -n $(cat ${__PROJECT__}/APP_NAME))
-NAME="${APP_NAME}-v${APP_VERSION}-cygwin-x64"
+NAME="${APP_NAME}-${APP_VERSION}-cygwin-x64"
 
 test -d /tmp/${NAME} && rm -rf /tmp/${NAME}
 mkdir -p /tmp/${NAME}

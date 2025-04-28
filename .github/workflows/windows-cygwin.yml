@@ -102,15 +102,6 @@ jobs:
         run: |
           bash ./sapi/scripts/cygwin/cygwin-build.sh
 
-      - name: get app version with bash
-        if: 0
-        # 参考 https://github.com/marketplace/actions/install-cygwin
-        shell: C:\cygwin\bin\bash.EXE --noprofile --norc -e -o pipefail -o igncr   {0}
-        # shell: C:\cygwin\bin\bash.EXE --login --noprofile --norc -e -o pipefail -o igncr   {0}
-        run: |
-          cd var/cygwin-build/
-          ./socat/socat -V | grep 'socat version' | awk '{ print $3 }'
-
       - name: Archive
         shell: C:\cygwin\bin\bash.EXE --noprofile --norc -e -o pipefail -o igncr   {0}
         run: |
