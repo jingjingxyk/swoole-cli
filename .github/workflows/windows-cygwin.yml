@@ -103,6 +103,7 @@ jobs:
           bash ./sapi/scripts/cygwin/cygwin-build.sh
 
       - name: get app version with bash
+        if: 0
         # 参考 https://github.com/marketplace/actions/install-cygwin
         shell: C:\cygwin\bin\bash.EXE --noprofile --norc -e -o pipefail -o igncr   {0}
         # shell: C:\cygwin\bin\bash.EXE --login --noprofile --norc -e -o pipefail -o igncr   {0}
@@ -110,15 +111,13 @@ jobs:
           cd var/cygwin-build/
           ./socat/socat -V | grep 'socat version' | awk '{ print $3 }'
 
-          APP_VERSION=$(./socat/socat -V | grep 'socat version' | awk '{ print $3 }')
-          echo $APP_VERSION
-          echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
-
       - name: Archive
+        shell: C:\cygwin\bin\bash.EXE --noprofile --norc -e -o pipefail -o igncr   {0}
         run: |
           bash ./sapi/scripts/cygwin/cygwin-archive.sh
 
       - name: get app version
+        shell: C:\cygwin\bin\bash.EXE --noprofile --norc -e -o pipefail -o igncr   {0}
         run: |
           APP_VERSION=$(cat ./APP_VERSION)
           APP_NAME=$(cat ./APP_NAME)
