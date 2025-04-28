@@ -361,3 +361,13 @@ php-cli-*
 php-fpm-*
 !sapi/patches
 socat
+/RLEASE_VERSION
+/.venv
+/cmake-build-debug
+/CMakeFiles
+/runtime
+!/runtime/.gitkeep
+/APP_VERSION
+/APP_NAME
+
+

@@ -10,9 +10,9 @@ __PROJECT__=$(
 )
 cd ${__PROJECT__}
 
-export PATH="${__PROJECT__}/bin/runtime:$PATH"
+export PATH="${__PROJECT__}/runtime:$PATH"
 shopt -s expand_aliases
-alias php="php -d curl.cainfo=${__PROJECT__}/bin/runtime/cacert.pem -d openssl.cafile=${__PROJECT__}/bin/runtime/cacert.pem"
+alias php="php -d curl.cainfo=${__PROJECT__}/runtime/cacert.pem -d openssl.cafile=${__PROJECT__}/runtime/cacert.pem"
 
 EXT_NAME=''
 CLEAN_BUILDER_ACTION=0

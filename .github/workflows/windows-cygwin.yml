@@ -5,7 +5,7 @@ on:
   pull_request:
 
 env:
-  BUILD_PHP_VERSION: 8.2.27
+  BUILD_PHP_VERSION: 8.2.28
 
 jobs:
   windows-cygwin:
@@ -118,12 +118,20 @@ jobs:
         run: |
           bash ./sapi/scripts/cygwin/cygwin-archive.sh
 
+      - name: get app version
+        run: |
+          APP_VERSION=$(cat ./APP_VERSION)
+          APP_NAME=$(cat ./APP_NAME)
+          echo $APP_VERSION
+          echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
+          echo "APP_NAME=${APP_NAME}" >> $GITHUB_ENV
+
       - name: production artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: socat-v${{ env.APP_VERSION }}-cygwin-x64
+          name: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-cygwin-x64
           retention-days: 90
-          path: socat-v${{ env.APP_VERSION }}-cygwin-x64.zip
+          path: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-cygwin-x64.zip
 
       - name: gh release
         uses: softprops/action-gh-release@v2
@@ -131,4 +139,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: socat-v${{ env.APP_VERSION }}-cygwin-x64.zip
+          files: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-cygwin-x64.zip
+
+
