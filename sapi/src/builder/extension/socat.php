@@ -24,21 +24,23 @@ return function (Preprocessor $p) {
                 cp -f socat {$workdir}/bin/
                 cp -rf doc {$workdir}/bin/socat-docs
                 cd {$workdir}/bin/
-                SOCAT_VERSION=$({$workdir}/bin/socat -V | grep 'socat version' | awk '{ print $3 }')
-                echo \${SOCAT_VERSION} > {$workdir}/APP_VERSION
+                APP_VERSION=$({$workdir}/bin/socat -V | grep 'socat version' | awk '{ print $3 }')
+                APP_NAME='socat'
+                echo \${APP_VERSION} > {$workdir}/APP_VERSION
+                echo \${APP_NAME} > {$workdir}/APP_NAME
                 strip {$workdir}/bin/socat
 
 EOF;
         if ($p->getOsType() == 'macos') {
             $cmd .= <<<EOF
             otool -L {$workdir}/bin/socat
-            tar -cJvf {$workdir}/socat-\${SOCAT_VERSION}-macos-{$system_arch}.tar.xz socat LICENSE
+            tar -cJvf {$workdir}/\${APP_NAME}-\${APP_VERSION}-macos-{$system_arch}.tar.xz \${APP_NAME} LICENSE
 EOF;
         } else {
             $cmd .= <<<EOF
               file {$workdir}/bin/socat
               readelf -h {$workdir}/bin/socat
-              tar -cJvf {$workdir}/socat-\${SOCAT_VERSION}-linux-{$system_arch}.tar.xz socat LICENSE
+              tar -cJvf {$workdir}/\${APP_NAME}-\${APP_VERSION}-linux-{$system_arch}.tar.xz \${APP_NAME} LICENSE
 
 EOF;
         }
