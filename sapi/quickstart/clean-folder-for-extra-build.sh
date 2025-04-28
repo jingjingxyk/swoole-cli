@@ -49,6 +49,7 @@ test -f drawdb.sh && rm -rf drawdb.sh
 test -f drawio.sh && rm -rf drawio.sh
 test -f geogebra.sh && rm -rf geogebra.sh
 test -f setup-openjdk-runtime.sh && rm -rf setup-openjdk-runtime.sh
+test -f three.js-editor.sh && rm -rf three.js-editor.sh
 
 cd ${__PROJECT__}/
 test -f .clang-format && rm -f .clang-format
