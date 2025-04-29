@@ -58,7 +58,7 @@ if [ ! -f ${__PROJECT__}/pool/lib/socat-${SOCAT_VERSION}.tar.gz ]; then
 fi
 
 cd ${__PROJECT__}
-WORK_TEMP_DIR=${__PROJECT__}/var/cygwin-build/
+WORK_TEMP_DIR=${__PROJECT__}/var/msys2-build/
 mkdir -p ${WORK_TEMP_DIR}
 cd ${WORK_TEMP_DIR}/
 
