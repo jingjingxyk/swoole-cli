@@ -42,6 +42,7 @@ return function (Preprocessor $p) {
             -DMI_PADDING=OFF \
             -DMI_SKIP_COLLECT_ON_EXIT=ON \
             -DMI_OVERRIDE=ON \
+            -DMI_USE_CXX=ON \
             {$cmake_options}
 
             cmake --build . --config Release
