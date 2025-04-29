@@ -81,12 +81,11 @@ jobs:
       - name: get app version with bash
         shell: msys2 {0}
         run: |
-          ls -lha /usr/local/swoole-cli/privoxy/
-          ls -lha /usr/local/swoole-cli/privoxy/sbin/
           APP_VERSION=$(cat ./APP_VERSION)
+          APP_NAME=$(cat ./APP_NAME)
           echo $APP_VERSION
           echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
-          echo "APP_NAME=privoxy" >> $GITHUB_ENV
+          echo "APP_NAME=${APP_NAME}" >> $GITHUB_ENV
 
       - name: production artifacts
         uses: actions/upload-artifact@v4
