@@ -11,33 +11,29 @@ __PROJECT__=$(
 )
 cd ${__PROJECT__}
 
-cd ${__PROJECT__}/
-ldd ${__PROJECT__}/bin/php.exe
+WORK_TEMP_DIR=${__PROJECT__}/var/msys2-build/
+cd ${WORK_TEMP_DIR}/socat/
+ldd ./socat
 
 cd ${__PROJECT__}
-APP_VERSION=$(${__PROJECT__}/bin/php.exe -v | head -n 1 | awk '{ print $2 }')
-NAME="php-cli-v${APP_VERSION}-msys2-x64"
+APP_VERSION=$(echo -n $(cat ${__PROJECT__}/APP_VERSION))
+APP_NAME=$(echo -n $(cat ${__PROJECT__}/APP_NAME))
+NAME="${APP_NAME}-${APP_VERSION}-msys2-x64"
 
 test -d /tmp/${NAME} && rm -rf /tmp/${NAME}
-mkdir -p /tmp/${NAME}/
-mkdir -p /tmp/${NAME}/etc/
-mkdir -p /tmp/${NAME}/bin/
+mkdir -p /tmp/${NAME}
 
-cd ${__PROJECT__}/
-ldd ${__PROJECT__}/bin/php.exe | grep -v '/c/Windows/' | awk '{print $3}'
-ldd ${__PROJECT__}/bin/php.exe | grep -v '/c/Windows/' | awk '{print $3}' | xargs -I {} cp {} /tmp/${NAME}/
+cd ${WORK_TEMP_DIR}/socat/
+ldd ./socat | grep -v '/c/Windows/' | awk '{print $3}'
+ldd ./socat | grep -v '/c/Windows/' | awk '{print $3}' | xargs -I {} cp {} /tmp/${NAME}/
 
-ls -lh /tmp/${NAME}/
-
-cp -f ${__PROJECT__}/bin/php.exe /tmp/${NAME}/bin/
-# cp -f ${__PROJECT__}/bin/LICENSE /tmp/${NAME}/
-# cp -f ${__PROJECT__}/bin/credits.html /tmp/${NAME}/
-
-cp -rL /etc/pki/ /tmp/${NAME}/etc/
+cp -f ./COPYING /tmp/${NAME}/
+cp -f ./COPYING.OpenSSL /tmp/${NAME}/
+cp -f ./socat /tmp/${NAME}/
+cp -f ./cacert.pem /tmp/${NAME}/
 
 cd /tmp/${NAME}/
 
-test -f ${__PROJECT__}/${NAME}.zip && rm -f ${__PROJECT__}/${NAME}.zip
 zip -r ${__PROJECT__}/${NAME}.zip .
 
 cd ${__PROJECT__}
