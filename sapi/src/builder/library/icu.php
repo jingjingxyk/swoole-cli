@@ -20,18 +20,22 @@ return function (Preprocessor $p) {
             ->withPrefix($icu_prefix)
             ->withConfigure(
                 <<<EOF
-             CPPFLAGS="-DU_CHARSET_IS_UTF8=1  -DU_USING_ICU_NAMESPACE=1  -DU_STATIC_IMPLEMENTATION=1 -include {$work_dir}/x-custom/mimalloc/include/mimalloc-new-delete.h " \
-             source/runConfigureICU $os --prefix={$icu_prefix} \
-             --enable-static=yes \
-             --enable-shared=no \
-             --with-data-packaging=static \
-             --enable-release=yes \
-             --enable-extras=yes \
-             --enable-icuio=yes \
-             --enable-dyload=no \
-             --enable-tools=yes \
-             --enable-tests=no \
-             --enable-samples=no
+                CPPFLAGS="$(pkg-config  --cflags-only-I  --static mimalloc) "
+                LDFLAGS="$(pkg-config   --libs-only-L    --static mimalloc) "
+                LIBS="$(pkg-config      --libs-only-l    --static mimalloc) "
+                CPPFLAGS="-DU_CHARSET_IS_UTF8=1  -DU_USING_ICU_NAMESPACE=1  -DU_STATIC_IMPLEMENTATION=1\${CPPFLAGS}" \
+                CPPFLAGS="\${CPPFLAGS} -include {$work_dir}/x-custom/mimalloc/include/mimalloc-new-delete.h " \
+                source/runConfigureICU $os --prefix={$icu_prefix} \
+                --enable-static=yes \
+                --enable-shared=no \
+                --with-data-packaging=static \
+                --enable-release=yes \
+                --enable-extras=yes \
+                --enable-icuio=yes \
+                --enable-dyload=no \
+                --enable-tools=yes \
+                --enable-tests=no \
+                --enable-samples=no
 EOF
             )
             ->withPkgName('icu-i18n')
