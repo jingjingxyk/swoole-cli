@@ -23,7 +23,7 @@ return function (Preprocessor $p) {
                 CPPFLAGS="$(pkg-config  --cflags-only-I  --static mimalloc) " \
                 LDFLAGS="$(pkg-config   --libs-only-L    --static mimalloc) " \
                 LIBS="$(pkg-config      --libs-only-l    --static mimalloc) " \
-                CPPFLAGS="-DU_CHARSET_IS_UTF8=1  -DU_USING_ICU_NAMESPACE=1  -DU_STATIC_IMPLEMENTATION=1\${CPPFLAGS}" \
+                CPPFLAGS="-DU_CHARSET_IS_UTF8=1  -DU_USING_ICU_NAMESPACE=1  -DU_STATIC_IMPLEMENTATION=1 \${CPPFLAGS}" \
                 CPPFLAGS="\${CPPFLAGS} -include {$work_dir}/x-custom/mimalloc/include/mimalloc-new-delete.h " \
                 source/runConfigureICU $os --prefix={$icu_prefix} \
                 --enable-static=yes \
