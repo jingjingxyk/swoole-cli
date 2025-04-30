@@ -10,6 +10,7 @@ return function (Preprocessor $p) {
         $cmake_options .= ' -DMI_LIBC_MUSL=ON ';
     }
     $tag = 'v2.2.2';
+    $work_dir = $p->getWorkDir();
     $p->addLibrary(
         (new Library('mimalloc'))
             ->withLicense('https://github.com/microsoft/mimalloc/blob/master/LICENSE', Library::LICENSE_MIT)
@@ -27,6 +28,9 @@ return function (Preprocessor $p) {
              # 替换 34 行内容
              # sed -i.bak  '34s/^.*$/  #include <sys\/prctl\.h>/'  src/prim/unix/prim.c
 
+             mkdir -p {$work_dir}/x-custom/mimalloc/include/
+             cp -f include/mimalloc-new-delete.h {$work_dir}/x-custom/mimalloc/include/
+
              mkdir -p build
              cd build
              cmake -LH ..
@@ -42,6 +46,7 @@ return function (Preprocessor $p) {
             -DMI_PADDING=OFF \
             -DMI_SKIP_COLLECT_ON_EXIT=ON \
             -DMI_OVERRIDE=ON \
+            -DMI_SECURE=ON \
             {$cmake_options}
 
             cmake --build . --config Release
@@ -51,4 +56,5 @@ EOF
             )
             ->withPkgName('mimalloc')
     );
+    $p->withVariable('CPPFLAGS', '$CPPFLAGS -include ' . $work_dir . '/x-custom/mimalloc/include/mimalloc-new-delete.h');
 };
