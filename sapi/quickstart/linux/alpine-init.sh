@@ -42,17 +42,15 @@ apk update
 
 apk add vim alpine-sdk xz autoconf automake linux-headers clang-dev clang lld libtool cmake bison re2c coreutils gcc g++
 apk add bash zip unzip flex pkgconf ca-certificates
-apk add tar gzip zip unzip bzip2 gettext gettext-dev
-
-apk add bash 7zip
-# apk add bash p7zip
-
+apk add tar gzip zip unzip bzip2
+apk add 7zip
+apk add gettext gettext-dev
 apk add wget git curl
 apk add libc++-static libltdl-static
 apk add yasm nasm
 apk add ninja python3 py3-pip
 apk add diffutils
-apk add netcat-openbsd socat
+apk add socat
 apk add python3-dev
 apk add mercurial
 apk add pigz parallel
@@ -70,4 +68,3 @@ esac
 
 # pip3 install meson
 apk add meson
-
