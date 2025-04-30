@@ -44,11 +44,16 @@ test -f setup-swoole-cli-runtime.ps1 && rm -rf setup-swoole-cli-runtime.ps1
 test -f setup-iperf3-runtime.sh && rm -rf setup-iperf3-runtime.sh
 test -f setup-openssh-runtime.sh && rm -rf setup-openssh-runtime.sh
 test -f setup-ttyd-runtime.sh && rm -rf setup-ttyd-runtime.sh
+test -f setup-webdav-runtime.sh && rm -rf setup-webdav-runtime.sh
+test -f drawdb.sh && rm -rf drawdb.sh
+test -f drawio.sh && rm -rf drawio.sh
+test -f geogebra.sh && rm -rf geogebra.sh
+test -f setup-openjdk-runtime.sh && rm -rf setup-openjdk-runtime.sh
+test -f three.js-editor.sh && rm -rf three.js-editor.sh
 
 cd ${__PROJECT__}/
 test -f .clang-format && rm -f .clang-format
 test -f .gdbinit && rm -f .gdbinit
-test -f && rm -f
 test -f sync-source-code.php && rm -f sync-source-code.php
 test -f setup-runtime.md && rm -rf setup-runtime.md
 test -f diff.php && rm -rf diff.php
@@ -69,6 +74,7 @@ cd ${__PROJECT__}/sapi/
 test -d build-dependencies-container && rm -rf build-dependencies-container
 test -d tools && rm -rf tools
 test -d webUI && rm -rf webUI
+test -d lib && rm -rf lib
 
 cd ${__PROJECT__}/sapi/scripts/
 test -f build-swoole-cli-alpine-container.sh && rm -rf build-swoole-cli-alpine-container.sh
@@ -104,6 +110,7 @@ test -d redis && rm -rf redis
 test -d gitea && rm -rf gitea
 test -d postgresql && rm -rf postgresql
 test -d zerotier && rm -rf zerotier
+test -d coturn && rm -rf coturn
 
 cd ${__PROJECT__}/.github/workflows
 test -f ceph.yml && rm -rf ceph.yml

@@ -118,11 +118,11 @@ jobs:
 
           bash make-install-deps.sh
 
-          bash ./make.sh all-library
+          bash make.sh all-library
 
-          bash ./make.sh config
-          bash ./make.sh build
-          bash ./make.sh archive
+          bash make.sh config
+          bash make.sh build
+          bash make.sh archive
 
       - name: Show Build Result
         run: |
@@ -134,9 +134,10 @@ jobs:
       - name: get app version
         run: |
           APP_VERSION=$(cat ./APP_VERSION)
+          APP_NAME=$(cat ./APP_NAME)
           echo $APP_VERSION
           echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
-          echo "APP_NAME=coturn" >> $GITHUB_ENV
+          echo "APP_NAME=${APP_NAME}" >> $GITHUB_ENV
 
 
       - name: Archive production artifacts

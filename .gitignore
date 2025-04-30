@@ -366,4 +366,5 @@ php-fpm-*
 /CMakeFiles
 /runtime
 !/runtime/.gitkeep
-
+/APP_VERSION
+/APP_NAME
