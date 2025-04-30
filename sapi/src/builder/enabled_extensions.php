@@ -37,14 +37,13 @@ return [
     'yaml',
     //'imagick',
     'mongodb',
-    //'gettext',
+    'gettext',
     'uuid',
-    //'phpy'
-    //'xlswriter',
     'apcu',
     'ds',
     'ssh2',
     'pgsql',
     'pdo_pgsql',
-    'memcached'
+    'memcached',
+    'gettext'
 ];
