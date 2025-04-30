@@ -18,6 +18,8 @@ return function (Preprocessor $p) {
             ->withUrl('https://github.com/microsoft/mimalloc/archive/refs/tags/' . $tag . '.tar.gz')
             ->withFile('mimalloc-' . $tag . '.tar.gz')
             ->withPrefix($mimalloc_prefix)
+            ->withBuildCached(false)
+            ->withInstallCached(false)
             ->withBuildScript(<<<EOF
              # v3.0.3 版本 需要 patch
              # patch 参考
