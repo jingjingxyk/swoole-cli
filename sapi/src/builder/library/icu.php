@@ -6,6 +6,7 @@ use SwooleCli\Preprocessor;
 return function (Preprocessor $p) {
     $icu_prefix = ICU_PREFIX;
     $os = $p->isMacos() ? 'MacOSX' : 'Linux';
+    $work_dir = $p->getWorkDir();
     $p->addLibrary(
         (new Library('icu'))
             ->withHomePage('https://icu.unicode.org/')
@@ -19,7 +20,7 @@ return function (Preprocessor $p) {
             ->withPrefix($icu_prefix)
             ->withConfigure(
                 <<<EOF
-             CPPFLAGS="-DU_CHARSET_IS_UTF8=1  -DU_USING_ICU_NAMESPACE=1  -DU_STATIC_IMPLEMENTATION=1" \
+             CPPFLAGS="-DU_CHARSET_IS_UTF8=1  -DU_USING_ICU_NAMESPACE=1  -DU_STATIC_IMPLEMENTATION=1 -include {$work_dir}/x-custom/mimalloc/include/mimalloc-new-delete.h " \
              source/runConfigureICU $os --prefix={$icu_prefix} \
              --enable-static=yes \
              --enable-shared=no \
@@ -37,6 +38,7 @@ EOF
             ->withPkgName('icu-io')
             ->withPkgName('icu-uc')
             ->withBinPath([$icu_prefix . '/bin', $icu_prefix . '/sbin',])
+            ->withDependentLibraries('mimalloc')
     );
 
     $libs = $p->isMacos() ? '-lc++' : ' -lstdc++ ';
