@@ -1,6 +1,6 @@
 # build static iperf3
 
-构建静态 iperf3
+构建静态 [iperf3](https://github.com/esnet/iperf.git)
 
 ## 构建命令
 
@@ -11,7 +11,7 @@
 
 ## [下载`build-static-iperf3`发行版](https://github.com/jingjingxyk/build-static-iperf3/releases)
 
-## 立即使用 [openssh](https://github.com/jingjingxyk/build-static-iperf3/releases)
+## 立即使用 [iperf3](https://github.com/jingjingxyk/build-static-iperf3/releases)
 
 ```shell
 
