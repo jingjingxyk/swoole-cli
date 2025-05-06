@@ -111,7 +111,7 @@ jobs:
           composer install  --no-interaction --no-autoloader --no-scripts --profile
           composer dump-autoload --optimize --profile
 
-          php prepare.php --without-docker=1  --with-php-version=${{ env.BUILD_PHP_VERSION }}
+          php prepare.php --without-docker=1 +iperf3 --with-php-version=${{ env.BUILD_PHP_VERSION }}
 
           bash make-install-deps.sh
 
