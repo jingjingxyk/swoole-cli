@@ -23,7 +23,9 @@ return function (Preprocessor $p) {
                 mkdir -p {$workdir}/bin/
                 cp -f {$tcpdump_prefix}/bin/tcpdump {$workdir}/bin/
                 APP_VERSION=\$({$workdir}/bin/tcpdump -h | head -n 1 | awk '{ print $3 }' | awk -F '-' '{ print $1 }')
+                APP_NAME="tcpdump"
                 echo \${APP_VERSION} > {$workdir}/APP_VERSION
+                echo \${APP_NAME} > {$workdir}/APP_NAME
 
                 cd {$workdir}/bin/
 
@@ -33,14 +35,14 @@ EOF;
             $cmd .= <<<EOF
             xattr -cr {$workdir}/bin/tcpdump
             otool -L {$workdir}/bin/tcpdump
-            tar -cJvf {$workdir}/tcpdump-\${APP_VERSION}-macos-{$system_arch}.tar.xz tcpdump LICENSE
+            tar -cJvf {$workdir}/\${APP_NAME}-\${APP_VERSION}-macos-{$system_arch}.tar.xz tcpdump LICENSE
 
 EOF;
         } else {
             $cmd .= <<<EOF
               file {$workdir}/bin/tcpdump
               readelf -h {$workdir}/bin/tcpdump
-              tar -cJvf {$workdir}/tcpdump-\${APP_VERSION}-linux-{$system_arch}.tar.xz tcpdump LICENSE
+              tar -cJvf {$workdir}/\${APP_NAME}-\${APP_VERSION}-linux-{$system_arch}.tar.xz tcpdump LICENSE
 
 EOF;
         }
