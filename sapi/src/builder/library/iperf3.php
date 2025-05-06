@@ -36,6 +36,7 @@ EOF
 EOF
         )
         ->withDependentLibraries('openssl')
-        ;
+    ;
+
     $p->addLibrary($lib);
 };
