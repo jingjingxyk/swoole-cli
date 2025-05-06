@@ -102,19 +102,16 @@ jobs:
           ls -A pool/lib/
           ls -A /usr/local/swoole-cli/
 
-      - name: build
+      - name: Build
         run: |
           export PATH=${{ github.workspace }}/runtime:$PATH
+
           alias php="php -d curl.cainfo=${{ github.workspace }}/runtime/cacert.pem -d openssl.cafile=${{ github.workspace }}/runtime/cacert.pem"
 
           composer install  --no-interaction --no-autoloader --no-scripts --profile
           composer dump-autoload --optimize --profile
 
           php prepare.php --without-docker=1  --with-php-version=${{ env.BUILD_PHP_VERSION }}
-
-      - name: Build
-        run: |
-          export PATH=${{ github.workspace }}/runtime:$PATH
 
           bash make-install-deps.sh
 
