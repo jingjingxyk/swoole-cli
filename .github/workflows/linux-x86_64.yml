@@ -164,13 +164,6 @@ jobs:
             bash make.sh build
             bash make.sh archive
 
-      - name: Start Database
-        run: |
-          # 准备数据库容器
-          docker compose version
-          docker container ls -a
-          bash sapi/docker/database/start.sh
-
       - name: Show Build Result
         run: |
           file ./bin/tcpdump
