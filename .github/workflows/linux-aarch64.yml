@@ -7,15 +7,8 @@ env:
 
 jobs:
   linux-aarch64:
-    if: 0
+    if: 1
     runs-on: ubuntu-24.04-arm
-    strategy:
-      matrix:
-        php-version:
-          - "8.2.28"
-          - "8.1.32"
-          - "8.3.19"
-          - "8.4.5"
     steps:
       - uses: actions/checkout@v4
       - name: Show Environment Info
@@ -123,15 +116,11 @@ jobs:
             export PATH=/work/runtime:$PATH  # 容器已经内置 php 和 composer
             alias php="php -d curl.cainfo=/work/runtime/cacert.pem -d openssl.cafile=/work/runtime/cacert.pem"
 
-            # sed -i 's/mirrors.tuna.tsinghua.edu.cn/dl-cdn.alpinelinux.org/g' /etc/apk/repositories
-            # sed -i 's/mirrors.ustc.edu.cn/dl-cdn.alpinelinux.org/g' /etc/apk/repositories
-            # bash sapi/quickstart/mark-install-library-cached.sh
-
             sh  sapi/quickstart/linux/alpine-init.sh
             composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
             composer dump-autoload --optimize --profile --no-dev
 
-            php prepare.php +ffmpeg --with-build-type=release
+            php prepare.php +tcpdump --with-build-type=release
 
             bash make-install-deps.sh
 

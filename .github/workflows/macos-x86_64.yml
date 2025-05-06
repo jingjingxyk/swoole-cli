@@ -9,7 +9,7 @@ env:
 
 jobs:
   macos-x86_64:
-    if: 0
+    if: 1
     runs-on: macos-13
     # macos-latest (macos-14)  变更了 CPU 架构，由 x86_64 变更为 arm64
     # macos-14 CPU 架构 arm64
@@ -17,13 +17,6 @@ jobs:
     # macos-12 CPU 架构 x86_64
     # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#choosing-github-hosted-runners
 
-    strategy:
-      matrix:
-        php-version:
-          - "8.2.28"
-          - "8.1.32"
-          - "8.3.19"
-          - "8.4.5"
     steps:
       - uses: actions/checkout@v4
       - name: Show Environment Info
@@ -140,7 +133,7 @@ jobs:
           composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
           composer dump-autoload --optimize --profile --no-dev
 
-          php prepare.php --without-docker=1  -coturn --with-build-type=release
+          php prepare.php --without-docker=1  +tcpdump --with-build-type=release
 
       - name: Build
         run: |
