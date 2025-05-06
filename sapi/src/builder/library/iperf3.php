@@ -23,7 +23,7 @@ EOF
         )
         ->withFile('iperf3-latest.tar.gz')
         ->withPrefix($iperf3_prefix)
-        ->withBuildCached(false)
+        ->withInstallCached(false)
         ->withConfigure(
             <<<EOF
               ./configure  --help
@@ -36,9 +36,7 @@ EOF
 EOF
         )
         ->withDependentLibraries('openssl')
-        ->disableDefaultLdflags()
-        ->disablePkgName()
-        ->disableDefaultPkgConfig();
+    ;
 
     $p->addLibrary($lib);
 };

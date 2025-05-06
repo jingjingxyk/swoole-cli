@@ -25,7 +25,9 @@ return function (Preprocessor $p) {
                 cd {$installdir}/iperf3/bin/
                 cp -f iperf3 {$workdir}/bin/iperf3
                 APP_VERSION=\$({$workdir}/bin/iperf3 -v | head -n 1 | awk '{ print $2 }' | sed 's/+//g')
+                APP_NAME="iperf3"
                 echo \${APP_VERSION} > {$workdir}/APP_VERSION
+                echo \${APP_NAME} > {$workdir}/APP_NAME
 
                 cd {$workdir}/bin/
 
@@ -35,14 +37,14 @@ EOF;
             $cmd .= <<<EOF
             xattr -cr {$workdir}/bin/iperf3
             otool -L {$workdir}/bin/iperf3
-            tar -cJvf {$workdir}/iperf3-\${APP_VERSION}-macos-{$system_arch}.tar.xz iperf3
+            tar -cJvf {$workdir}/\${APP_NAME}-\${APP_VERSION}-macos-{$system_arch}.tar.xz iperf3 LICENSE
 
 EOF;
         } else {
             $cmd .= <<<EOF
               file {$workdir}/bin/iperf3
               readelf -h {$workdir}/bin/iperf3
-              tar -cJvf {$workdir}/iperf3-\${APP_VERSION}-linux-{$system_arch}.tar.xz iperf3
+              tar -cJvf {$workdir}/\${APP_NAME}-\${APP_VERSION}-linux-{$system_arch}.tar.xz iperf3 LICENSE
 
 EOF;
         }

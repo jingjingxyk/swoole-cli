@@ -40,8 +40,20 @@ test -f setup-swoole-cli-runtime.sh && rm -rf setup-swoole-cli-runtime.sh
 test -f setup-php-cli-7.4-runtime.sh && rm -rf setup-php-cli-7.4-runtime.sh
 test -f setup-php-cli-7.3-runtime.sh && rm -rf setup-php-cli-7.3-runtime.sh
 test -f setup-swoole-cli-runtime.bat && rm -rf setup-swoole-cli-runtime.bat
+test -f setup-swoole-cli-runtime.ps1 && rm -rf setup-swoole-cli-runtime.ps1
+test -f setup-iperf3-runtime.sh && rm -rf setup-iperf3-runtime.sh
+test -f setup-openssh-runtime.sh && rm -rf setup-openssh-runtime.sh
+test -f setup-ttyd-runtime.sh && rm -rf setup-ttyd-runtime.sh
+test -f setup-webdav-runtime.sh && rm -rf setup-webdav-runtime.sh
+test -f drawdb.sh && rm -rf drawdb.sh
+test -f drawio.sh && rm -rf drawio.sh
+test -f geogebra.sh && rm -rf geogebra.sh
+test -f setup-openjdk-runtime.sh && rm -rf setup-openjdk-runtime.sh
+test -f three.js-editor.sh && rm -rf three.js-editor.sh
 
 cd ${__PROJECT__}/
+test -f .clang-format && rm -f .clang-format
+test -f .gdbinit && rm -f .gdbinit
 test -f sync-source-code.php && rm -f sync-source-code.php
 test -f setup-runtime.md && rm -rf setup-runtime.md
 test -f diff.php && rm -rf diff.php
@@ -51,6 +63,7 @@ test -f tools/ssh-d.sh && rm -rf tools/ssh-d.sh
 test -f tools/ssh-j.sh && rm -rf tools/ssh-j.sh
 test -f tools/ssh-l.sh && rm -rf tools/ssh-l.sh
 test -f tools/ssh-r.sh && rm -rf tools/ssh-r.sh
+test -f tools/socat-r.sh && rm -rf tools/socat-r.sh
 test -f tools/upload-file-server/index.html && rm -rf tools/upload-file-server/index.html
 test -f tools/upload-file-server/php.ini && rm -rf tools/upload-file-server/php.ini
 test -f tools/upload-file-server/upload.php && rm -rf tools/upload-file-server/upload.php
@@ -61,6 +74,7 @@ cd ${__PROJECT__}/sapi/
 test -d build-dependencies-container && rm -rf build-dependencies-container
 test -d tools && rm -rf tools
 test -d webUI && rm -rf webUI
+test -d lib && rm -rf lib
 
 cd ${__PROJECT__}/sapi/scripts/
 test -f build-swoole-cli-alpine-container.sh && rm -rf build-swoole-cli-alpine-container.sh
@@ -76,6 +90,7 @@ test -f cygwin-install-depend.sh && rm -rf cygwin-install-depend.sh
 cd ${__PROJECT__}/sapi/src/
 test -d library_builder && rm -rf library_builder
 test -d UnitTest && rm -rf UnitTest
+test -d tests && rm -rf tests
 
 cd ${__PROJECT__}/sapi/src/builder/
 test -d library_shared && rm -rf library_shared
@@ -94,6 +109,8 @@ test -d rabbitmq && rm -rf rabbitmq
 test -d redis && rm -rf redis
 test -d gitea && rm -rf gitea
 test -d postgresql && rm -rf postgresql
+test -d zerotier && rm -rf zerotier
+test -d coturn && rm -rf coturn
 
 cd ${__PROJECT__}/.github/workflows
 test -f ceph.yml && rm -rf ceph.yml
@@ -116,7 +133,10 @@ test -f openssh-push-to-gitee.yml && rm -rf openssh-push-to-gitee.yml
 test -f push-to-gitee.yml.bak && rm -rf push-to-gitee.yml.bak
 test -f push-to-gitee.yml && rm -rf push-to-gitee.yml
 test -f windows-native-vs2025.yml && rm -rf windows-native-vs2025.yml
-test -f /windows-native-2022.yml && rm -rf /windows-native-2022.yml
+test -f windows-native-2022.yml && rm -rf windows-native-2022.yml
+test -f zerotier2.yml && rm -rf zerotier2.yml
+test -f tailscale.yml && rm -rf tailscale.yml
+test -f build-static-php-push-to-gitee.yml && rm -rf build-static-php-push-to-gitee.yml
 
 cd ${__PROJECT__}/sapi/quickstart
 test -d swoole-install && rm -rf swoole-install

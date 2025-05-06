@@ -87,7 +87,7 @@ make_<?=$item->name?>() {
         mkdir -p <?= $this->getBuildDir() ?>/<?= $item->name . PHP_EOL ?>
         <?php if ($item->untarArchiveCommand == 'tar') :?>
         tar --strip-components=1 -C <?= $this->getBuildDir() ?>/<?= $item->name ?> -xf <?= $this->workDir ?>/pool/lib/<?= $item->file ?>;
-        <?php elseif($item->untarArchiveCommand == 'unzip') :?>
+        <?php elseif ($item->untarArchiveCommand == 'unzip') :?>
         unzip -d  <?=$this->getBuildDir()?>/<?=$item->name?>   <?=$this->workDir?>/pool/lib/<?=$item->file ?>;
         <?php elseif ($item->untarArchiveCommand == 'tar-default') :?>
         tar  -C <?= $this->getBuildDir() ?>/<?= $item->name ?> -xf <?= $this->workDir ?>/pool/lib/<?= $item->file ?>;
@@ -131,7 +131,7 @@ make_<?=$item->name?>() {
     cat > /etc/apt/apt.conf.d/proxy.conf <<'--OS-PROXY-<?=$item->name?>-EOF--'
     Acquire::http::Proxy  "<?= $this->getHttpProxy() ?>";
     Acquire::https::Proxy "<?= $this->getHttpProxy() ?>";
-
+    Acquire::NoProxy "127.0.0.0/8,10.0.0.0/8,100.64.0.0/10,172.16.0.0/12,192.168.0.0/16,::1/128,fe80::/10,fd00::/8,ff00::/8,.tsinghua.edu.cn,.ustc.edu.cn,.npmmirror.com,localhost";
 --OS-PROXY-<?=$item->name?>-EOF--
     <?php endif;?>
 
@@ -312,26 +312,33 @@ export_variables() {
 <?php foreach ($this->exportVariables as $value) : ?>
     export <?= key($value) ?>="<?= current($value) ?>"
 <?php endforeach; ?>
-
-<?php if ($this->hasExtension('opcache')):?>
-    export CFLAGS="$CFLAGS -DPHP_ENABLE_OPCACHE"
-    export CPPFLAGS="$CPPFLAGS -DPHP_ENABLE_OPCACHE"
-<?php endif; ?>
-<?php if ($this->hasExtension('phpy')):?>
-    CPPFLAGS="$CPPFLAGS -I<?= $this->getWorkDir() ?>/ext/phpy/include "
-<?php endif; ?>
     export CPPFLAGS=$(echo $CPPFLAGS | tr ' ' '\n' | sort | uniq | tr '\n' ' ')
     export CXXFLAGS=$(echo $CXXFLAGS | tr ' ' '\n' | sort | uniq | tr '\n' ' ')
     export CFLAGS=$(echo $CFLAGS | tr ' ' '\n' | sort | uniq | tr '\n' ' ')
     export LDFLAGS=$(echo $LDFLAGS | tr ' ' '\n' | sort | uniq | tr '\n' ' ')
     export LIBS=$(echo $LIBS | tr ' ' '\n' | sort | uniq | tr '\n' ' ')
+<?php if ($this->hasExtension('opcache')):?>
+    export CFLAGS="$CFLAGS -DPHP_ENABLE_OPCACHE"
+    export CPPFLAGS="$CPPFLAGS -DPHP_ENABLE_OPCACHE"
+<?php endif; ?>
+<?php if ($this->isMacos() && !empty($this->frameworks)):?>
+    # MACOS 链接 framework
+    export LDFLAGS="$LDFLAGS <?php foreach($this->frameworks as $framework) { echo "-framework $framework "; } ?>"
+<?php endif; ?>
+<?php if ($this->isLinux()) : ?>
+    # 手动指定依赖库链接顺序
+    <?php if ($this->hasLibrary('pgsql')) : ?>
+        export LIBS="$LIBS -lcrypto -lssl -lpgcommon -lpgport -lpq"
+    <?php endif; ?>
+    <?php if ($this->hasExtension('phpy')) : ?>
+        export LIBS="$LIBS -lcrypto -lssl -lmpdec -lmpdec++ -lbz2 -llzma -lHacl_Hash_SHA2 -lb2 -lexpat -lxml2 -lform -lmenu  -ltic -lpanel -lncurses++ -lncurses "
+    <?php endif; ?>
+<?php endif; ?>
 <?php if ($this->isLinux() && ($this->get_C_COMPILER() == 'musl-gcc')) : ?>
     ln -sf /usr/include/linux/ /usr/include/x86_64-linux-musl/linux
     ln -sf /usr/include/x86_64-linux-gnu/asm/ /usr/include/x86_64-linux-musl/asm
     ln -sf /usr/include/asm-generic/ /usr/include/x86_64-linux-musl/asm-generic
-
     export LDFLAGS="${LDFLAGS} -static -L/usr/lib/x86_64-linux-musl "
-
 <?php endif ;?>
     result_code=$?
     [[ $result_code -ne 0 ]] &&  echo " [ export_variables  FAILURE ]" && exit  $result_code;
@@ -553,7 +560,8 @@ make_build_old() {
     cd <?= $this->phpSrcDir . PHP_EOL ?>
     export_variables
     <?php if ($this->isLinux()) : ?>
-    export LDFLAGS="$LDFLAGS  -static -all-static "
+    export CFLAGS="$CFLAGS  -fPIE"
+    export LDFLAGS="$LDFLAGS  -static -all-static -static-pie"
     <?php endif ;?>
     export LDFLAGS="$LDFLAGS   <?= $this->extraLdflags ?>"
     export EXTRA_CFLAGS='<?= $this->extraCflags ?>'
@@ -898,7 +906,7 @@ elif [ "$1" = "variables" ] ;then
 	echo $LIBS
 elif [ "$1" = "sync" ] ;then
     PHP_CLI=$(which php)
-    test -f ${__PROJECT_DIR__}/bin/runtime/php && PHP_CLI="${__PROJECT_DIR__}/bin/runtime/php -c ${__PROJECT_DIR__}/bin/runtime/php.ini -d curl.cainfo=${__PROJECT_DIR__}/bin/runtime/cacert.pem -d openssl.cafile=${__PROJECT_DIR__}/bin/runtime/cacert.pem"
+    test -f ${__PROJECT_DIR__}/runtime/php && PHP_CLI="${__PROJECT_DIR__}/runtime/php -d curl.cainfo=${__PROJECT_DIR__}/runtime/cacert.pem -d openssl.cafile=${__PROJECT_DIR__}/runtime/cacert.pem"
     $PHP_CLI -v
     $PHP_CLI sync-source-code.php --action run
     exit 0

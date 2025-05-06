@@ -22,8 +22,8 @@ if [ -f "${__PROJECT__}/sapi/PHP-VERSION.conf" ]; then
   DOMAIN='https://github.com/swoole/swoole-cli/releases/download/v6.0.0.0/'
   ALL_DEPS_HASH="a55699ecee994032f33266dfa37eabb49f1f6d6b6b65cdcf7b881cac09c63bea"
 else
-  DOMAIN='https://github.com/swoole/build-static-php/releases/download/v1.6.0/'
-  ALL_DEPS_HASH="771f8c695477be93da10847f3051fb054f0f829b242300e1ae2126b67f338664"
+  DOMAIN='https://github.com/swoole/build-static-php/releases/download/v1.9.2/'
+  ALL_DEPS_HASH="4e840ca7d9fb2342a7d459282c7e403921a892ed4eebea4b1a6db48d790bf1ee"
 fi
 
 while [ $# -gt 0 ]; do
