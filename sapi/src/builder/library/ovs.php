@@ -9,7 +9,7 @@ return function (Preprocessor $p) {
     $ldflags = '';
     if ($p->isLinux()) {
         $cflags .= ' -static -fPIE ';
-        $ldflags .= ' -static  '; //-static-pie
+        $ldflags .= ' -static -static-pie ';
     }
     $lib = new Library('ovs');
     $lib->withHomePage('https://github.com/openvswitch/ovs/')
@@ -32,6 +32,7 @@ EOF
         ./boot.sh
         ./configure --help
         PACKAGES="openssl"
+        CFLAGS=" {$cflags} " \
         CPPFLAGS="$(pkg-config  --cflags-only-I --static \$PACKAGES ) " \
         LDFLAGS="$(pkg-config   --libs-only-L   --static \$PACKAGES ) {$ldflags}" \
         LIBS="$(pkg-config      --libs-only-l   --static \$PACKAGES ) " \
