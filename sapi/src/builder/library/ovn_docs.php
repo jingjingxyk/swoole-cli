@@ -7,7 +7,7 @@ return function (Preprocessor $p) {
     $workdir = $p->getBuildDir();
     $ovs_prefix = OVS_PREFIX;
     $ovn_prefix = OVN_PREFIX;
-    $lib = new Library('ovn');
+    $lib = new Library('ovn_docs');
     $lib->withHomePage('https://github.com/ovn-org/ovn.git')
         ->withLicense('https://github.com/ovn-org/ovn/blob/main/LICENSE', Library::LICENSE_APACHE2)
         ->withManual('https://github.com/ovn-org/ovn/blob/main/Documentation/intro/install/general.rst')
