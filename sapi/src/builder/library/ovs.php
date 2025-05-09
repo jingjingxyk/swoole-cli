@@ -8,8 +8,8 @@ return function (Preprocessor $p) {
     $cflags = '';
     $ldflags = '';
     if ($p->isLinux()) {
-        $cflags .= ' -static -fPIE ';
-        $ldflags .= ' -static -static-pie ';
+        $cflags .= ' -static  '; //-fPIE
+        $ldflags .= ' -static  '; //-static-pie
     }
     $lib = new Library('ovs');
     $lib->withHomePage('https://github.com/openvswitch/ovs/')
