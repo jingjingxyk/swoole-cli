@@ -19,6 +19,7 @@ return function (Preprocessor $p) {
         $workdir = $p->getWorkDir();
         $builddir = $p->getBuildDir();
         $cmd = <<<EOF
+            cp -rf {$builddir}/ovn_docs/dist-docs/. {$builddir}/ovn_docs/Documentation/_build/dist-docs
             cd {$builddir}/ovn_docs/Documentation/_build
             tar -cJvf {$workdir}/ovn-docs-latest.tar.xz .
 EOF;

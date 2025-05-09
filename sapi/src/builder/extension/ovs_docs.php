@@ -20,6 +20,7 @@ return function (Preprocessor $p) {
         $workdir = $p->getWorkDir();
         $builddir = $p->getBuildDir();
         $cmd = <<<EOF
+            cp -rf {$builddir}/ovs_docs/dist-docs/. {$builddir}/ovs_docs/Documentation/_build/dist-docs
             cd {$builddir}/ovs_docs/Documentation/_build
             tar -cJvf {$workdir}/ovs-docs-latest.tar.xz .
 
