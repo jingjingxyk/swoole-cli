@@ -109,7 +109,6 @@ make_<?=$item->name?>() {
 
     cd <?=$this->getBuildDir()?>/<?=$item->name?>/
 
-
     <?php if ($item->enableEnv) : ?>
     if [  -f <?= $this->getWorkDir() ?>/.env ] ; then
         for line in `cat <?= $this->getWorkDir() ?>/.env`
@@ -223,10 +222,6 @@ ___<?=$item->name?>__EOF___
     export PKG_CONFIG_PATH=${SWOOLE_CLI_PKG_CONFIG_PATH}
     export PATH=${SWOOLE_CLI_PATH}
     <?php endif;?>
-
-    <?php if ($item->enableCompiledCached) : ?>
-    touch <?=$this->getBuildDir()?>/<?=$item->name?>/.completed
-    <?php endif; ?>
 
     <?php if (in_array($this->buildType, ['dev', 'debug'])) : ?>
     set +x

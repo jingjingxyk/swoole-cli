@@ -31,6 +31,7 @@ PYTHON3
     pyenv
     pipenv
     venv
+    virtualenv
     rye + uv
         https://docs.astral.sh/uv/guides/scripts/
         https://docs.astral.sh/uv/

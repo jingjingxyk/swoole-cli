@@ -244,14 +244,6 @@ class Library extends Project
         return $this;
     }
 
-    public bool $enableCompiledCached = false;
-
-    public function withCompiledCached(): static
-    {
-        $this->enableCompiledCached = true;
-        return $this;
-    }
-
     public bool $enableSystemHttpProxy = false;
 
     public function withSystemHttpProxy(string $os): static

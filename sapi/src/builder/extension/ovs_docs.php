@@ -19,22 +19,11 @@ return function (Preprocessor $p) {
 
         $workdir = $p->getWorkDir();
         $builddir = $p->getBuildDir();
-        $ovs_prefix = OVS_PREFIX;
         $cmd = <<<EOF
-                mkdir -p {$workdir}/bin/
-                test -d {$workdir}/bin/ovs_docs/ && rm -rf {$workdir}/bin/ovs_docs/
-                cd {$builddir}/ovs/Documentation
-                cp -rf _build {$workdir}/bin/ovs_docs
-                cd {$builddir}/ovs/
-                cp -rf dist-docs {$workdir}/bin/ovs_docs/
-                cd {$builddir}/ovs/
-
-                # cd $ovs_prefix/../
-                # tar -cJvf ovs-vlatest-static-linux-x64.tar.xz ovs
-                # cp -f ovs-vlatest-static-linux-x64.tar.xz {$workdir}/bin/
+            cd {$builddir}/ovs_docs/Documentation/_build
+            tar -cJvf {$workdir}/ovs-docs-latest.tar.xz .
 
 EOF;
-
         return $cmd;
     });
 };

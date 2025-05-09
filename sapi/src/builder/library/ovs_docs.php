@@ -6,8 +6,8 @@ use SwooleCli\Preprocessor;
 return function (Preprocessor $p) {
     $ovs_prefix = OVS_PREFIX;
     $packages = '';
-    if ($p->isLinux()) {
-        // $packages .= ' libcap-ng ';
+    if ($p->isMacos()) {
+        throw new \Exception('ovs docs only linux !');
     }
     $lib = new Library('ovs_docs');
     $lib->withHomePage('https://github.com/openvswitch/ovs/')
@@ -27,13 +27,8 @@ EOF
             <<<EOF
         apk add mandoc man-pages
         apk add ghostscript
-        pip3 install pipenv
         pip3 install sphinx virtualenv
 
-        # apk add bind-tools  # dig pypi.org
-
-        # sysctl -w net.ipv6.conf.all.disable_ipv6=1
-        # sysctl -w net.ipv6.conf.default.disable_ipv6=1
 EOF
         )
         ->withBuildScript(
@@ -44,7 +39,7 @@ EOF
         virtualenv .venv
         source .venv/bin/activate
         pip3 install -r Documentation/requirements.txt
-        # pip3 install jinja2==3.0.0
+
         ./boot.sh
         ./configure --help
         PACKAGES="openssl {$packages}"
@@ -57,33 +52,12 @@ EOF
         --enable-shared=no \
         --enable-static=yes
 
-        # 文档构建  https://github.com/openvswitch/ovs/blob/master/Documentation/intro/install/documentation.rst
+        # 文档构建
+        # https://github.com/openvswitch/ovs/blob/master/Documentation/intro/install/documentation.rst
 
         make docs-check -j {$p->maxJob}
 
         deactivate
-
-
-
-        # make install
-
-        # export PIPENV_PYPI_MIRROR=https://pypi.tuna.tsinghua.edu.cn/simple
-        # cd Documentation/
-        # pipenv --rm
-        # pipenv --python 3
-        # pipenv shell
-
-        # 参考 文档 https://pipenv-fork.readthedocs.io/en/latest/advanced.html
-        # pipenv install -r requirements.txt -i https://pypi.python.org/simple
-        # pipenv install -r requirements.txt --pypi-mirror https://pypi.tuna.tsinghua.edu.cn/simple
-        # pipenv install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
-        # pipenv run pip3 install -r requirements.txt
-
-        # pipenv install jinja2==3.0.0
-        # pipenv run python3 conf.py
-
-
-
 
 EOF
         )
