@@ -314,3 +314,7 @@ git lfs pull
 git submodule update --init --recursive
 
 ```
+
+## 如何彻底清除 Git 仓库中提交的敏感信息
+
+    https://docs.atomgit.com/blog
