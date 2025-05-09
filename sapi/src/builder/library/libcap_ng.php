@@ -31,6 +31,8 @@ EOF
             --without-python \
             --without-python3
 
+            --with-capability_header=
+
 EOF
         )
 

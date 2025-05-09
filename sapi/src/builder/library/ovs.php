@@ -8,9 +8,7 @@ return function (Preprocessor $p) {
     $lib = new Library('ovs');
     $lib->withHomePage('https://github.com/openvswitch/ovs/')
         ->withLicense('https://github.com/openvswitch/ovs/blob/master/LICENSE', Library::LICENSE_APACHE2)
-        ->withManual('https://github.com/openvswitch/ovs/blob/v3.1.1/Documentation/intro/install/general.rst')
-        //->withUrl('https://github.com/openvswitch/ovs/archive/refs/tags/v3.1.1.tar.gz')
-        //->withFile('ovs-v3.2.0.tar.gz')
+        ->withManual('https://github.com/openvswitch/ovs/blob/main/Documentation/intro/install/general.rst')
         ->withAutoUpdateFile()
         ->withFile('ovs-latest.tar.gz')
         ->withDownloadScript(
@@ -22,14 +20,12 @@ EOF
         )
         ->withPrefix($ovs_prefix)
         ->withInstallCached(false)
-        ->withCompiledCached()
-
         ->withBuildScript(
             <<<EOF
 
         ./boot.sh
         ./configure --help
-        PACKAGES="openssl libcap-ng"
+        PACKAGES="openssl"
         CPPFLAGS="$(pkg-config  --cflags-only-I --static \$PACKAGES ) " \
         LDFLAGS="$(pkg-config   --libs-only-L   --static \$PACKAGES ) " \
         LIBS="$(pkg-config      --libs-only-l   --static \$PACKAGES ) " \
@@ -38,13 +34,9 @@ EOF
         --enable-ssl \
         --enable-shared=no \
         --enable-static=yes
-
+        make  -j {$p->maxJob}
 
         make install
-
-
-
-
 
 EOF
         )
@@ -54,7 +46,7 @@ EOF
         //->withPkgName('libovsdb')
         //->withPkgName('libsflow')
         ->withBinPath($ovs_prefix . '/bin/')
-        ->withDependentLibraries('openssl', 'libcap_ng') //'dpdk','unbound'
+        ->withDependentLibraries('openssl') //'dpdk','unbound', 'libcap_ng'
     ;
 
     $p->addLibrary($lib);
