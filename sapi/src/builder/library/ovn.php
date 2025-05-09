@@ -11,8 +11,6 @@ return function (Preprocessor $p) {
     $lib->withHomePage('https://github.com/ovn-org/ovn.git')
         ->withLicense('https://github.com/ovn-org/ovn/blob/main/LICENSE', Library::LICENSE_APACHE2)
         ->withManual('https://github.com/ovn-org/ovn/blob/main/Documentation/intro/install/general.rst')
-        //->withUrl('https://github.com/ovn-org/ovn/archive/refs/tags/v23.06.0.tar.gz')
-        //->withFile('ovn-v23.03.1.tar.gz')
         //->withAutoUpdateFile()
         ->withFile('ovn-latest.tar.gz')
         ->withDownloadScript(
@@ -35,11 +33,6 @@ EOF
         ->withBuildScript(
             <<<EOF
         set -x
-
-        virtualenv .venv
-        source .venv/bin/activate
-        pip3 install -r Documentation/requirements.txt
-        pip3 install jinja2==3.0.0
 
         sh ./boot.sh
         ./configure --help
