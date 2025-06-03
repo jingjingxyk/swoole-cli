@@ -47,6 +47,10 @@ cd ${WORK_TEMP_DIR}/php-src/
 ./buildconf --force
 test -f Makefile && make clean
 ./configure --prefix=/usr --disable-all \
+  --enable-intl
+
+exit 0
+./configure --prefix=/usr --disable-all \
   \
   --disable-fiber-asm \
   --without-pcre-jit \
