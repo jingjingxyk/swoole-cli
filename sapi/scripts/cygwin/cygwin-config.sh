@@ -42,7 +42,7 @@ cd ${WORK_TEMP_DIR}/php-src/
 
 # export CPPFLAGS="-I/usr/include"
 # export CFLAGS=""
-# export LDFLAGS="-L/usr/lib"
+export CXXFLAGS="-std=c++17"
 
 ./buildconf --force
 test -f Makefile && make clean
