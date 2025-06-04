@@ -42,7 +42,7 @@ set "PACKAGES=%PACKAGES%,libzstd-devel"
 set "PACKAGES=%PACKAGES%,cygwin-devel,libnet6-devel"
 rem set "PACKAGES=%PACKAGES%,libicu-devel"
 rem icu reference: https://cygwin.com/cgi-bin2/package-grep.cgi?grep=libicu
-set "PACKAGES=%PACKAGES%,libicu-devel-74.2-1,libicu74-74.2-1"
+set "PACKAGES=%PACKAGES%,libicu-devel=74.2-1,libicu=74-74.2-1"
 
 set "OPTIONS=%OPTIONS% --packages %PACKAGES%"
 echo %OPTIONS%
