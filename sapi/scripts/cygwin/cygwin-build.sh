@@ -10,7 +10,7 @@ __PROJECT__=$(
   pwd
 )
 cd ${__PROJECT__}
-export CXXFLAGS="-std=c++17"
+export CXXFLAGS="-std=c++20"
 
 WORK_TEMP_DIR=${__PROJECT__}/var/cygwin-build/
 cd ${WORK_TEMP_DIR}/php-src/
