@@ -169,7 +169,6 @@ jobs:
           ./bin/python3/bin/python3.12 --version -V 2>&1 | awk '{ print $2 }'
           file ./bin/python3/bin/python3.12
           readelf -h ./bin/python3/bin/python3.12
-          objdump -p ./bin/python3/bin/python3.12 | grep 'NEEDED'
 
       - name: get app version
         run: |
