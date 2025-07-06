@@ -139,7 +139,7 @@ jobs:
           ./bin/python3/bin/python3.12 --version -V 2>&1 | awk '{ print $2 }'
           file ./bin/python3/bin/python3.12
           readelf -h ./bin/python3/bin/python3.12
-          { ldd ./bin/python3/bin/python3.12 } || { echo $? }
+          objdump --dynamic ./bin/python3/bin/python3.12
 
       - name: get app version
         run: |
