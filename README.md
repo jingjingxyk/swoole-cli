@@ -28,9 +28,13 @@
 
 ```shell
 
-curl -fSL https://github.com/swoole/swoole-cli/blob/build_native_php/setup-php-cli-runtime.sh?raw=true | bash
-
 curl -fSL https://github.com/swoole/build-static-php/blob/main/setup-php-cli-runtime.sh?raw=true | bash
+
+# windows powershell
+irm https://github.com/swoole/build-static-php/blob/main/setup-swoole-cli-runtime.ps1?raw=true | iex
+
+# 来自 https://www.swoole.com/download
+curl -fSL https://github.com/swoole/swoole-cli/blob/main/setup-swoole-cli-runtime.sh?raw=true | bash -s -- --mirror china
 
 # 指定发布版本
 curl -fSL https://github.com/swoole/build-static-php/blob/main/setup-php-cli-runtime.sh?raw=true | bash -s -- --version  v5.1.6.0
@@ -71,9 +75,8 @@ bash setup-php-runtime.sh --mirror china
 # shell脚本中启用别名扩展功能‌
 shopt -s expand_aliases
 __DIR__=$(pwd)
-export PATH="${__DIR__}/bin/runtime:$PATH"
-ln -sf ${__DIR__}/bin/runtime/swoole-cli ${__DIR__}/bin/runtime/php
-alias php="php -d curl.cainfo=${__DIR__}/bin/runtime/cacert.pem -d openssl.cafile=${__DIR__}/bin/runtime/cacert.pem"
+export PATH="${__DIR__}/runtime/php/:$PATH"
+alias php="php -d curl.cainfo=${__DIR__}/runtime/php/cacert.pem -d openssl.cafile=${__DIR__}/runtime/php/cacert.pem"
 which php
 php -v
 composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
@@ -119,13 +122,13 @@ bash sapi/quickstart/macos/macos-init.sh --mirror china
 
 ```bash
 
-cp build-release-example.sh build-release.sh
+cp build-release-example.sh build-release-app.sh
 
 # 按你的需求修改配置  OPTIONS="${OPTIONS} --with-libavif=1 "
-vi build-release.sh
+vi build-release-app.sh
 
 # 执行构建流程
-bash build-release.sh
+bash build-release-app.sh
 
 
 ```

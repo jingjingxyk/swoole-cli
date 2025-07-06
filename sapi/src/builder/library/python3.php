@@ -6,10 +6,8 @@ use SwooleCli\Preprocessor;
 return function (Preprocessor $p) {
     $python3_prefix = PYTHON3_PREFIX;
     $libunistring_prefix = LIBUNISTRING_PREFIX;
-
-    $openssl_prefix = OPENSSL_PREFIX;;
+    $openssl_prefix = OPENSSL_PREFIX;
     $libintl_prefix = GETTEXT_PREFIX;
-
     $libiconv_prefix = ICONV_PREFIX;
     $bzip2_prefix = BZIP2_PREFIX;
 
@@ -22,11 +20,9 @@ return function (Preprocessor $p) {
         ->withManual('https://www.python.org')
         ->withManual('https://github.com/python/cpython.git')
         ->withUrl('https://www.python.org/ftp/python/3.12.2/Python-3.12.2.tgz')
-        //->withUrl('https://www.python.org/ftp/python/3.13.0/Python-3.13.0.tgz')
-        //->withUrl('https://github.com/python/cpython/archive/refs/tags/v3.13.0.tar.gz')
+        ->withMirrorUrl('https://github.com/python/cpython/archive/refs/tags/v3.13.0.tar.gz')
         ->withPrefix($python3_prefix)
         ->withBuildCached(false)
-        ->withInstallCached(true)
         ->withBuildScript(
             <<<EOF
 
@@ -35,7 +31,7 @@ return function (Preprocessor $p) {
         sed -i.backup 's/py_cv_module__ctypes=yes/py_cv_module__ctypes=disabled/' ./configure
         sed -i.backup 's/py_cv_module_xxlimited=yes/py_cv_module_xxlimited=disabled/' ./configure
         sed -i.backup 's/py_cv_module_xxlimited_35=yes/py_cv_module_xxlimited_35=disabled/' ./configure
-        sed -i.backup 's/py_cv_module__scproxy=yes/py_cv_module__scproxy=disabled/' ./configure
+        # sed -i.backup 's/py_cv_module__scproxy=yes/py_cv_module__scproxy=disabled/' ./configure
         sed -i.backup 's/py_cv_module__tkinter=yes/py_cv_module__tkinter=disabled/' ./configure
 
         PACKAGES='  '
@@ -137,14 +133,15 @@ EOF
         )
         ->withScriptAfterInstall(
             <<<EOF
-            sed -i.backup "s/-ldl/  /g" {$python3_prefix}/lib/pkgconfig/python3.pc
-            sed -i.backup "s/-ldl/  /g" {$python3_prefix}/lib/pkgconfig/python3-embed.pc
-            rm -f {$python3_prefix}/lib/pkgconfig/python3.pc.backup
-            rm -f {$python3_prefix}/lib/pkgconfig/python3-embed.pc.backup
+        # 直接使用 sed 替换文件内容报错信息：  in-place editing only works for regular files
+        cp -f {$python3_prefix}/lib/pkgconfig/python3.pc {$python3_prefix}/lib/pkgconfig/python3.backup.pc
+        cp -f {$python3_prefix}/lib/pkgconfig/python3-embed.pc {$python3_prefix}/lib/pkgconfig/python3-embed.backup.pc
+        cat {$python3_prefix}/lib/pkgconfig/python3.backup.pc       | sed 's/-ldl/  /g' > {$python3_prefix}/lib/pkgconfig/python3.pc
+        cat {$python3_prefix}/lib/pkgconfig/python3-embed.backup.pc | sed 's/-ldl/  /g' > {$python3_prefix}/lib/pkgconfig/python3-embed.pc
 EOF
         )
         ->withPkgName('python3-embed')
-        //->withPkgName('python3')
+        ->withPkgName('python3')
         ->withDependentLibraries(
             'libmpdecimal',
             'libb2',
@@ -163,12 +160,10 @@ EOF
     $p->addLibrary($lib);
 
     if ($p->isMacos()) {
-        //$p->withVariable('LDFLAGS', '$LDFLAGS -framework CoreFoundation ');
-
-        //module  _scproxy needs SystemConfiguration and CoreFoundation framework
-        //$p->withVariable('LDFLAGS', '$LDFLAGS -framework SystemConfiguration -framework CoreFoundation ');
+        $p->withFramework('CoreFoundation');
+        $p->withFramework('SystemConfiguration');
+        // module  _scproxy needs SystemConfiguration and CoreFoundation framework
     }
-    //libHacl_Hash_SHA2.a
     $p->withVariable('LIBS', '$LIBS -lHacl_Hash_SHA2');
     $p->withVariable('CPPFLAGS', "\$CPPFLAGS  -I{$python3_prefix}/_hacl/include/");
 };
@@ -176,7 +171,6 @@ EOF
 # https://github.com/indygreg/python-build-standalone.git
 # 参考文档： https://wiki.python.org/moin/BuildStatically
 # https://knazarov.com/posts/statically_linked_python_interpreter/
-
 
 # 配置参考 https://docs.python.org/zh-cn/3.12/using/configure.html
 
