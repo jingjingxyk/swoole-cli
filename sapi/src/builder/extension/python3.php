@@ -24,33 +24,31 @@ return function (Preprocessor $p) {
 
         $cmd = <<<EOF
         test -d {$workdir}/bin/python3/ && rm -rf {$workdir}/bin/python3/
-        mkdir -p {$workdir}/bin/python3/bin/
+        mkdir -p {$workdir}/bin/python3/
         cd {$python3_prefix}/
-        cp -f ./bin/2to3-3.12 {$workdir}/bin/python3/bin/
-        cp -f ./bin/idle3.12 {$workdir}/bin/python3/bin/
-        cp -f ./bin/python3.12 {$workdir}/bin/python3/bin/
-        cp -f ./bin/python3.12-config {$workdir}/bin/python3/bin/
-
+        cp -rf {$python3_prefix}/. {$workdir}/bin/python3/
 
         {$workdir}/bin/python3/bin/python3.12 --version -V 2>&1 | awk '{ print $2 }'
-        VERSION=$({$workdir}/bin/python3/bin/python3.12 --version -V 2>&1 | awk '{ print $2 }')
-        echo \${VERSION} > {$workdir}/APP_VERSION
-        echo \$VERSION
+        APP_VERSION=$({$workdir}/bin/python3/bin/python3.12 --version -V 2>&1 | awk '{ print $2 }')
+        APP_NAME='python'
+        echo \${APP_VERSION} > {$workdir}/APP_VERSION
+        echo \${APP_NAME} > {$workdir}/APP_NAME
 
-        cd {$workdir}/bin/python3/bin/
+        cd {$workdir}/bin/python3/
 
 EOF;
 
         if ($p->getOsType() == 'macos') {
             $cmd .= <<<EOF
+            file {$workdir}/bin/python3/bin/python3.12
             otool -L {$workdir}/bin/python3/bin/python3.12
-            tar -cJvf {$workdir}/python-\${VERSION}-macos-{$system_arch}.tar.xz .
+            tar -cJvf {$workdir}/\${APP_NAME}-\${APP_VERSION}-macos-{$system_arch}.tar.xz .
 EOF;
         } else {
             $cmd .= <<<EOF
               file {$workdir}/bin/python3/bin/python3.12
               readelf -h {$workdir}/bin/python3/bin/python3.12
-              tar -cJvf {$workdir}/python-\${VERSION}-linux-{$system_arch}.tar.xz .
+              tar -cJvf {$workdir}/\${APP_NAME}-\${APP_VERSION}-linux-{$system_arch}.tar.xz .
 EOF;
         }
         return $cmd;

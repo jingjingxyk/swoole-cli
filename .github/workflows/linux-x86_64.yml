@@ -4,6 +4,7 @@ on:
   push:
   pull_request:
 
+
 env:
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
   BUILD_PHP_VERSION: 8.2.28
@@ -169,11 +170,6 @@ jobs:
           file ./bin/python3/bin/python3.12
           readelf -h ./bin/python3/bin/python3.12
           ldd  ./bin/python3/bin/python3.12
-
-          APP_VERSION=$(./bin/python3/bin/python3.12 --version -V 2>&1 | awk '{ print $2 }')
-          X_APP_VERSION=$(./bin/python3/bin/python3.12 --version -V 2>&1 | awk '{ print $2 }' | awk -F '.' '{ print $1"."$2 }')
-          echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
-          echo "X_APP_VERSION=${X_APP_VERSION}" >> $GITHUB_ENV
 
       - name: get app version
         run: |

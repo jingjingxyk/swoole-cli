@@ -46,7 +46,7 @@ WITH_PHP_COMPOSER=1
 
 # 配置系统仓库  china mirror
 MIRROR='china'
-MIRROR=''
+
 
 # 依赖库默认安装目录
 LIBRARY_INSTALL_PREFIX=/usr/local/swoole-cli
