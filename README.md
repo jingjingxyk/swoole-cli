@@ -13,7 +13,7 @@
 
 - [https://github.com/jingjingxyk/build-static-python3.git](https://github.com/jingjingxyk/build-static-python3.git)
 
-## 立即使用 static ffmpeg
+## 立即使用 static python3
 
 ```shell
 
