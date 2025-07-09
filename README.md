@@ -11,7 +11,7 @@
 
 ## 下载`build static python3`发行版
 
-- [https://github.com/jingjingxyk/build-static-python3.git](https://github.com/jingjingxyk/build-static-python3.git)
+- [https://github.com/jingjingxyk/build-static-python3/releases/](https://github.com/jingjingxyk/build-static-python3/releases/latest)
 
 ## 立即使用 static python3
 
