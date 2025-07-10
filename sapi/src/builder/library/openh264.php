@@ -9,8 +9,13 @@ return function (Preprocessor $p) {
     $lib = new Library('openh264');
     $lib->withHomePage('https://github.com/cisco/openh264.git')
         ->withLicense('https://github.com/cisco/openh264/blob/master/LICENSE', Library::LICENSE_BSD)
-        ->withUrl('https://github.com/cisco/openh264/archive/refs/tags/v2.6.0.tar.gz')
         ->withManual('https://github.com/cisco/openh264.git')
+        ->withDownloadScript(
+            'openh264',
+            <<<EOF
+        git clone -b v2.6.0  https://github.com/cisco/openh264.git
+EOF
+        )
         ->withFile('openh264-v2.6.0.tar.gz')
         ->withPrefix($openh264_prefix)
         ->withPreInstallCommand(
@@ -50,8 +55,7 @@ EOF
 EOF
         )
         ->withPkgName('openh264')
-        ->withDependentLibraries('libpcap', 'openssl')
-    ;
+        ->withDependentLibraries('libpcap', 'openssl');
 
     $p->addLibrary($lib);
 };

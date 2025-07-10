@@ -53,7 +53,8 @@ EOF
             -DENABLE_SHARED=OFF \
             -DENABLE_LIBNUMA=OFF \
             -DENABLE_PIC=ON \
-            -DENABLE_CLI=ON
+            -DENABLE_CLI=ON \
+            -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 
             #  {$options} \
             # -DCMAKE_CXX_IMPLICIT_LINK_LIBRARIES=' -lm -lstdc++ '
