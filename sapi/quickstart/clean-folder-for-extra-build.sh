@@ -135,29 +135,31 @@ test -d tests && rm -rf tests
 cd ${__PROJECT__}/sapi/src/builder/
 test -d library_shared && rm -rf library_shared
 
-cd ${__PROJECT__}/sapi/docker/
-test -d database && rm -rf database
-test -d database-ui && rm -rf database-ui
-test -d elasticsearch && rm -rf elasticsearch
-test -d grafana && rm -rf grafana
-test -d minio && rm -rf minio
-test -d mysql && rm -rf mysql
-test -d neo4j && rm -rf neo4j
-test -d nginx && rm -rf nginx
-test -d postgis && rm -rf postgis
-test -d rabbitmq && rm -rf rabbitmq
-test -d redis && rm -rf redis
-test -d gitea && rm -rf gitea
-test -d postgresql && rm -rf postgresql
-test -d zerotier && rm -rf zerotier
-test -d coturn && rm -rf coturn
-test -d code-server && rm -rf code-server
-test -d prometeus && rm -rf prometeus
-test -d theia-ide && rm -rf theia-ide
-test -f build-export-container.sh && rm -f build-export-container.sh
-test -f docker-compose.md && rm -f docker-compose.md
-test -f Dockerfile && rm -f Dockerfile
-test -f README.md && rm -f README.md
+if [ -d ${__PROJECT__}/sapi/docker/ ]; then
+  cd ${__PROJECT__}/sapi/docker/
+  test -d database && rm -rf database
+  test -d database-ui && rm -rf database-ui
+  test -d elasticsearch && rm -rf elasticsearch
+  test -d grafana && rm -rf grafana
+  test -d minio && rm -rf minio
+  test -d mysql && rm -rf mysql
+  test -d neo4j && rm -rf neo4j
+  test -d nginx && rm -rf nginx
+  test -d postgis && rm -rf postgis
+  test -d rabbitmq && rm -rf rabbitmq
+  test -d redis && rm -rf redis
+  test -d gitea && rm -rf gitea
+  test -d postgresql && rm -rf postgresql
+  test -d zerotier && rm -rf zerotier
+  test -d coturn && rm -rf coturn
+  test -d code-server && rm -rf code-server
+  test -d prometeus && rm -rf prometeus
+  test -d theia-ide && rm -rf theia-ide
+  test -f build-export-container.sh && rm -f build-export-container.sh
+  test -f docker-compose.md && rm -f docker-compose.md
+  test -f Dockerfile && rm -f Dockerfile
+  test -f README.md && rm -f README.md
+fi
 
 cd ${__PROJECT__}/.github/workflows
 test -f ceph.yml && rm -rf ceph.yml
