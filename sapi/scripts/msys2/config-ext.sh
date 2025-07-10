@@ -39,7 +39,7 @@ mkdir -p pool/ext
 mkdir -p pool/lib
 mkdir -p pool/php-tar
 
-WORK_TEMP_DIR=${__PROJECT__}/var/cygwin-build/
+WORK_TEMP_DIR=${__PROJECT__}/var/msys2-build/
 EXT_TEMP_CACHE_DIR=${WORK_TEMP_DIR}/pool/ext/
 mkdir -p ${WORK_TEMP_DIR}
 mkdir -p ${EXT_TEMP_CACHE_DIR}
@@ -72,7 +72,6 @@ download_and_extract "yaml" ${YAML_VERSION}
 download_and_extract "imagick" ${IMAGICK_VERSION}
 
 cd ${__PROJECT__}/pool/ext
-# with git clone swoole source code
 if [ ! -f swoole-${SWOOLE_VERSION}.tgz ]; then
   test -d ${WORK_TEMP_DIR}/swoole && rm -rf ${WORK_TEMP_DIR}/swoole
   git clone -b ${SWOOLE_VERSION} https://github.com/swoole/swoole-src.git ${WORK_TEMP_DIR}/swoole
@@ -82,7 +81,7 @@ if [ ! -f swoole-${SWOOLE_VERSION}.tgz ]; then
   cd ${__PROJECT__}/pool/ext
 fi
 mkdir -p ${WORK_TEMP_DIR}/ext/swoole/
-tar --strip-components=1 -C ${WORK_TEMP_DIR}/ext/swoole/ -xf ${__PROJECT__}/pool/ext/swoole-${SWOOLE_VERSION}.tgz
+tar --strip-components=1 -C ${WORK_TEMP_DIR}/ext/swoole/ -xf swoole-${SWOOLE_VERSION}.tgz
 
 cd ${__PROJECT__}
 # clean extension folder
@@ -106,9 +105,7 @@ cd ${__PROJECT__}
 # copy extension
 # cp -rf ${WORK_TEMP_DIR}/ext/. ${__PROJECT__}/ext/
 # cp -rf ${__PROJECT__}/ext/. ${WORK_TEMP_DIR}/php-src/ext/
-# cp -rf ${__PROJECT__}/ext/. ${WORK_TEMP_DIR}/php-src/ext/
 cp -rf ${WORK_TEMP_DIR}/ext/. ${WORK_TEMP_DIR}/php-src/ext/
-
 # extension hook
 if [ "$X_PHP_VERSION" = "8.4" ]; then
   sed -i.backup "s/php_strtolower(/zend_str_tolower(/" ${WORK_TEMP_DIR}/php-src/ext/imagick/imagick.c

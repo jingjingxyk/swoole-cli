@@ -34,7 +34,7 @@ done
 
 mkdir -p ${__PROJECT__}/bin/
 
-WORK_TEMP_DIR=${__PROJECT__}/var/cygwin-build/
+WORK_TEMP_DIR=${__PROJECT__}/var/msys2-build/
 cd ${WORK_TEMP_DIR}/php-src/
 
 # export CPPFLAGS="-I/usr/include"
@@ -42,9 +42,12 @@ cd ${WORK_TEMP_DIR}/php-src/
 # https://github.com/php/php-src/blob/php-8.1.27/win32/build/confutils.js#L3227
 # export LDFLAGS="-L/usr/lib"
 
+# export CXXFLAGS="-std=gnu++14"
 export ICU_CXXFLAGS=" -std=gnu++17 "
+
 ./buildconf --force
 test -f Makefile && make clean
+./configure --help
 ./configure --prefix=/usr --disable-all \
   \
   --disable-fiber-asm \
@@ -52,13 +55,11 @@ test -f Makefile && make clean
   --with-openssl --enable-openssl \
   --with-curl \
   --with-iconv \
-  --enable-intl \
   --with-bz2 \
   --enable-bcmath \
   --enable-filter \
   --enable-session \
   --enable-tokenizer \
-  --enable-mbstring \
   --enable-ctype \
   --with-zlib \
   --enable-posix \
@@ -75,25 +76,31 @@ test -f Makefile && make clean
   --with-xsl \
   --with-gmp \
   --enable-exif \
-  --with-sodium \
   --enable-xml --enable-simplexml --enable-xmlreader --enable-xmlwriter --enable-dom --with-libxml \
-  --enable-gd --with-jpeg --with-freetype \
   --enable-swoole --enable-sockets --enable-mysqlnd --enable-swoole-curl --enable-cares \
-  --enable-swoole-pgsql \
   --enable-swoole-sqlite \
+  --enable-swoole-pgsql \
   --enable-redis \
   --enable-opcache \
   --disable-opcache-jit \
-  --with-imagick \
   --with-yaml \
   --with-readline \
   --with-zip \
+  --with-sodium \
+  --enable-mbstring \
   --with-pgsql \
+  --enable-intl \
   ${OPTIONS}
 
+#  --enable-intl \
+#  --with-sodium \
+#  --enable-swoole-pgsql \
+#  --enable-mbstring \ 需要 oniguruma
+#  --with-imagick \
+#  --enable-gd --with-jpeg --with-freetype \
 #  --with-pdo-pgsql \
 #  --with-pgsql
 #  --with-pdo-sqlite \
 #  --with-zip   #  cygwin libzip-devel 版本库暂不支持函数 zip_encryption_method_supported （2020年新增函数)
-# --enable-zts
-# --disable-opcache-jit
+#  --enable-zts
+#  --disable-opcache-jit

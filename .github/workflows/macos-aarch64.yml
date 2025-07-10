@@ -14,7 +14,6 @@ jobs:
     # macos-13 CPU 架构 x86_64
     # macos-12 CPU 架构 x86_64
     # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#choosing-github-hosted-runners
-
     steps:
       - uses: actions/checkout@v4
       - name: Show Environment Info
@@ -96,7 +95,7 @@ jobs:
           mkdir -p pool/ext
           mkdir -p bin/
           mkdir -p runtime/
-          if [ ! -f runtime/php ] ; then
+          if [ ! -f runtime/php/php ] ; then
               bash  setup-php-runtime.sh
           fi
           bash sapi/download-box/download-box-get-archive-from-server.sh
@@ -105,8 +104,8 @@ jobs:
 
       - name: prepare
         run: |
-          export PATH=${{ github.workspace }}/runtime:$PATH
-          alias php="php -d curl.cainfo=${{ github.workspace }}/runtime/cacert.pem -d openssl.cafile=${{ github.workspace }}/runtime/cacert.pem"
+          export PATH=${{ github.workspace }}/runtime/php/:$PATH
+          alias php="php -d curl.cainfo=${{ github.workspace }}/runtime/php/cacert.pem -d openssl.cafile=${{ github.workspace }}/runtime/php/cacert.pem"
 
           composer install  --no-interaction --no-autoloader --no-scripts --profile
           composer dump-autoload --optimize --profile
@@ -115,7 +114,7 @@ jobs:
 
       - name: Build
         run: |
-          export PATH=${{ github.workspace }}/runtime:$PATH
+          export PATH=${{ github.workspace }}/runtime/php/:$PATH
 
           bash make-install-deps.sh
 
@@ -135,9 +134,11 @@ jobs:
       - name: get app version
         run: |
           APP_VERSION=$(cat ./APP_VERSION)
+          APP_NAME=$(cat ./APP_NAME)
           echo $APP_VERSION
+          echo $APP_NAME
           echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
-          echo "APP_NAME=ffmpeg" >> $GITHUB_ENV
+          echo "APP_NAME=${APP_NAME}" >> $GITHUB_ENV
 
       - name: production artifacts
         uses: actions/upload-artifact@v4

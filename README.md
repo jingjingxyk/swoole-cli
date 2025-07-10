@@ -1,6 +1,6 @@
 # build static ffmpeg
 
-构建静态 [ffmpeg]()
+构建静态 [ffmpeg](https://github.com/FFmpeg/FFmpeg.git)
 
 ## 构建命令
 
@@ -11,7 +11,7 @@
 
 ## 下载`build static ffmpeg `发行版
 
-- [https://github.com/jingjingxyk/build-static-ffmpeg.git](https://github.com/jingjingxyk/build-static-ffmpeg.git)
+- [https://github.com/jingjingxyk/build-static-ffmpeg/releases](https://github.com/jingjingxyk/build-static-ffmpeg/releases)
 
 ## 立即使用 static ffmpeg
 
@@ -37,7 +37,7 @@ git clone -b main https://github.com/jingjingxyk/build-static-ffmpeg.git
 
 # 或者
 
-git clone --recursive -b ffmpeg  https://github.com/jingjingxyk/swoole-cli.git
+git clone --recursive -b build-static-ffmpeg  https://github.com/jingjingxyk/swoole-cli.git
 
 ```
 
@@ -54,9 +54,8 @@ bash setup-php-runtime.sh --mirror china
 # shell脚本中启用别名扩展功能‌
 shopt -s expand_aliases
 __DIR__=$(pwd)
-export PATH="${__DIR__}/runtime:$PATH"
-ln -sf ${__DIR__}/runtime/swoole-cli ${__DIR__}/runtime/php
-alias php="php -d curl.cainfo=${__DIR__}/runtime/cacert.pem -d openssl.cafile=${__DIR__}/runtime/cacert.pem"
+export PATH="${__DIR__}/runtime/php/:$PATH"
+alias php="php -d curl.cainfo=${__DIR__}/runtime/php/cacert.pem -d openssl.cafile=${__DIR__}/runtime/php/cacert.pem"
 which php
 php -v
 composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
@@ -110,13 +109,13 @@ bash sapi/quickstart/macos/macos-init.sh --mirror china
 
 ```bash
 
-cp build-release-example.sh build-release.sh
+cp build-release-example.sh build-release-app.sh
 
 # 按你的需求修改配置  OPTIONS="${OPTIONS} +ffmpeg "
-vi build-release.sh
+vi build-release-app.sh
 
 # 执行构建流程
-bash build-release.sh
+bash build-release-app.sh
 
 
 ```
