@@ -71,6 +71,14 @@ test -f setup-ninja-runtime.sh && rm -rf setup-ninja-runtime.sh
 test -f setup-python3-runtime.sh && rm -rf setup-python3-runtime.sh
 test -f setup-swoole-docs.sh && rm -rf setup-swoole-docs.sh
 test -f setup-threejs-editor.sh && rm -rf setup-threejs-editor.sh
+test -f setup-blender-runtime.sh && rm -rf setup-blender-runtime.sh
+test -f setup-casdoor-runtime.sh && rm -rf setup-casdoor-runtime.sh
+test -f setup-gimp-runtime.sh && rm -rf setup-gimp-runtime.sh
+test -f setup-linyaps-runtime.sh && rm -rf setup-linyaps-runtime.sh
+test -f setup-localsend-runtime.sh && rm -rf setup-localsend-runtime.sh
+test -f setup-moonlight-runtime.sh && rm -rf setup-moonlight-runtime.sh
+test -f setup-rustfs-runtime.sh && rm -rf setup-rustfs-runtime.sh
+test -f setup-sunshine-runtime.sh && rm -rf setup-sunshine-runtime.sh
 
 cd ${__PROJECT__}/
 test -f .clang-format && rm -f .clang-format
