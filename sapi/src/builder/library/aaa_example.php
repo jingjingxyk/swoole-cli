@@ -226,6 +226,11 @@ EOF
         # meson compile -C build
         # meson install -C build
 
+        # meson 三个步骤
+        # meson setup build
+        # meson compile -C build
+        # meson install -C build
+
         ninja -C build
         ninja -C build install
 
