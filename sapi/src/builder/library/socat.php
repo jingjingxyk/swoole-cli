@@ -4,6 +4,8 @@ use SwooleCli\Library;
 use SwooleCli\Preprocessor;
 
 return function (Preprocessor $p) {
+    # 构建参考
+    // https://pkgs.pkgforge.dev/repo/soarpkgs/nixpkgs-socat/socat/socat/
     // https://github.com/aledbf/socat-static-binary/blob/master/build.sh
     $socat_prefix = SOCAT_PREFIX;
     $openssl_prefix = OPENSSL_PREFIX;

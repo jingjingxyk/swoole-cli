@@ -155,6 +155,9 @@ EOF
 // linux package
 // https://nginx.org/en/linux_packages.html
 
+// 构建参考 https://pkgs.pkgforge.dev/repo/soarpkgs/binaries-stable/nginx/nginx/
+// https://pkgs.pkgforge.dev
+
 /*
 
 

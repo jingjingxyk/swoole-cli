@@ -170,6 +170,8 @@ EOF
 # 构建独立版本 python 参考
 # https://github.com/indygreg/python-build-standalone.git
 # 参考文档： https://wiki.python.org/moin/BuildStatically
+# https://pkgs.pkgforge.dev/repo/soarpkgs/nixpkgs-python/python3/python3/
+
 # https://knazarov.com/posts/statically_linked_python_interpreter/
 
 # 配置参考 https://docs.python.org/zh-cn/3.12/using/configure.html
