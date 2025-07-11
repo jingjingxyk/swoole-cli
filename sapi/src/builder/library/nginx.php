@@ -141,7 +141,7 @@ EOF
                 'zlib',
                 'pcre2',
                 'ngx_http_proxy_connect_module',
-                'ngx_sticky_module'
+              // 'ngx_sticky_module'
             ) //'pcre',
     );
 };
