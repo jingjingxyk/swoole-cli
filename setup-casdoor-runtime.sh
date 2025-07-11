@@ -48,8 +48,12 @@ case $ARCH in
   ;;
 esac
 
+MIRROR=''
 while [ $# -gt 0 ]; do
   case "$1" in
+  --mirror)
+    MIRROR="$2"
+    ;;
   --proxy)
     export HTTP_PROXY="$2"
     export HTTPS_PROXY="$2"
