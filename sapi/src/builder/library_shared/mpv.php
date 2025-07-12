@@ -13,6 +13,7 @@ return function (Preprocessor $p) {
     $lib = new Library('mpv');
     $lib->withHomePage('https://mpv.io/')
         ->withLicense('http://www.gnu.org/licenses/lgpl-2.1.html', Library::LICENSE_LGPL)
+        ->withManual('https://mpv.io/installation/')
         ->withManual('https://github.com/mpv-player/mpv')
         ->withManual('https://github.com/mpv-player/mpv-build')
         ->withManual('https://github.com/mpv-player/')

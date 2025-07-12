@@ -60,6 +60,8 @@
 1. [noVNC](https://github.com/novnc/noVNC)
 1. [localsend](https://localsend.org/zh-CN/download?os=macos)
 1. [localsend](https://github.com/localsend/localsend)
+1. [局域网文件互传](https://github.com/schlagmichdoch/pairdrop)
+1. [局域网文件互传](https://pairdrop.net/)
 1. [网易uu远程](https://uuyc.163.com/)
 1. [连连控](https://www.asklink.com/)
 
