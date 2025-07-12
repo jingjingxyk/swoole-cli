@@ -2,6 +2,17 @@
 
     ovn Geneve使用UDP封包
 
+## 查看 genev_sys_6081 ovs-system br-int 网卡用途
+
+```shell
+ovs-dpctl show
+ovs-dpctl dump-dps
+ovs-appctl dpctl/show system@ovs-system
+
+ovs-vsctl get open . external-ids
+
+```
+
 ## 验证命令
 
 ````bash
