@@ -114,7 +114,6 @@ apt install -y curl
 curl -fSL https://gitee.com/jingjingxyk/swoole-cli/raw/new_dev/sapi/quickstart/linux/SDN/install-ovn-ovs.sh | bash -s -- --mirror china --install-deps
 curl -fSL https://gitee.com/jingjingxyk/swoole-cli/raw/new_dev/sapi/quickstart/linux/SDN/install-ovn-ovs.sh | bash -s --  --install-deps
 curl -fSL https://github.com/jingjingxyk/swoole-cli/blob/new_dev/sapi/quickstart/linux/SDN/install-ovn-ovs.sh?raw=true | bash
-
 curl -fSL https://github.com/jingjingxyk/swoole-cli/blob/new_dev/sapi/quickstart/linux/SDN/install-ovn-ovs.sh?raw=true | bash -s --  --install-deps
 
 curl -fSL https://gitee.com/jingjingxyk/swoole-cli/raw/new_dev/sapi/quickstart/linux/debian-init-minimal.sh

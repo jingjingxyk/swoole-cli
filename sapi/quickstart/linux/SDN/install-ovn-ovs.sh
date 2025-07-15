@@ -10,6 +10,13 @@ __DIR__=$(
 )
 cd ${__DIR__}
 
+OVS_TAG='v3.4.2'
+OVN_TAG='v24.09.2'
+# OVN_TAG='v25.03.0'
+
+CPU_NUMS=$(nproc)
+CPU_NUMS=$(grep "processor" /proc/cpuinfo | sort -u | wc -l)
+
 export LANGUAGE="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 export LC_CTYPE="en_US.UTF-8"
@@ -18,6 +25,8 @@ export LANG="en_US.UTF-8"
 MIRROR=''
 FORCE_INSTALL_DEPS=0
 FORCE_INSTALL=0
+DEBIAN_APT_INSTALL=0
+
 while [ $# -gt 0 ]; do
   case "$1" in
   --mirror)
@@ -44,6 +53,12 @@ while [ $# -gt 0 ]; do
     ;;
   --force)
     FORCE_INSTALL=1
+    ;;
+  --debian-install)
+    DEBIAN_APT_INSTALL=1
+    ;;
+  --set-cpu-num)
+    CPU_NUMS=$2
     ;;
   --*)
     echo "Illegal option $1"
@@ -140,6 +155,13 @@ openwrt_install_deps() {
   opkg install libustream-openssl ca-bundle ca-certificates
   opkg install curl bash git xz unzip
   opkg install wireguard-tools
+}
+
+debian_apt_install() {
+  apt install -y ovn-central ovn-common ovn-controller-vtep ovn-docker ovn-host
+  apt install -y ovn-ic ovn-ic-db
+  apt install -y openvswitch-switch openvswitch-common openvswitch-ipsec openvswitch-pki
+  apt install -y openvswitch-switch-dpdk openvswitch-vtep python3-openvswitch
 }
 
 OS_ID=$(cat /etc/os-release | grep '^ID=' | awk -F '=' '{print $2}')
@@ -241,19 +263,17 @@ install_deps() {
   esac
 }
 
+if [[ $DEBIAN_APT_INSTALL -eq 1 ]]; then
+  debian_apt_install
+  exit 0
+fi
+
 if [[ "$FORCE_INSTALL_DEPS" -eq 1 ]]; then
   install_deps
 else
   # test $(dpkg-query -l graphviz | wc -l) -eq 0 && install_deps
   test $(command -v bc | wc -l) -eq 0 && install_deps
 fi
-
-OVS_TAG='v3.4.2'
-OVN_TAG='v24.09.2'
-# OVN_TAG='v25.03.0'
-
-CPU_NUMS=$(nproc)
-CPU_NUMS=$(grep "processor" /proc/cpuinfo | sort -u | wc -l)
 
 cd ${__DIR__}
 if [[ "$FORCE_INSTALL" -eq 1 ]]; then
