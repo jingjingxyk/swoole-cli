@@ -52,3 +52,8 @@ lsof -i -c nginx
 ss -tunlp
 
 ```
+
+```shell
+ip netns exec vm1 traceroute 10.1.20.5
+
+```
