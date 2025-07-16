@@ -19,7 +19,12 @@ if (-not (Test-Path -Path http-proxy.bat))
     #    irm $url -outfile http-proxy.bat
 }
 
-irm $url -outfile http-proxy.bat
+irm $url -outfile "$__PROJECT__\http-proxy.bat"
+
+Invoke-Expression -Command "cmd /c $__PROJECT__\http-proxy.bat $domain"
+
+exit
+
 $text = Get-Content -Path http-proxy.bat;
 if ($proxy -ne '')
 {
