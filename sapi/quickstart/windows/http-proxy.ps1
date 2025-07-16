@@ -1,3 +1,7 @@
+param(
+    [string]
+    $domain = ''
+)
 $__DIR__ = Split-Path -Parent $MyInvocation.MyCommand.Definition
 Write-Host  $__DIR__
 $__DIR__ = (Get-Location).Path
@@ -17,10 +21,14 @@ if (-not (Test-Path -Path http-proxy.bat))
 
 irm $url -outfile http-proxy.bat
 $text = Get-Content -Path http-proxy.bat;
-$newText = $text -replace "apple", "orange"
+if ($proxy -ne '')
+{
+    $newText = $text -replace "http-proxy.example.com", "$domain"
 
-# Write-Host $newText
-$newText | Out-File -FilePath "$__PROJECT__\http-proxy.bat" -Encoding ASCII
+    # Write-Host $newText
+    $newText | Out-File -FilePath "$__PROJECT__\http-proxy.bat" -Encoding ASCII
+}
+
 
 Invoke-Expression -Command "cmd /c $__PROJECT__\http-proxy.bat"
 
