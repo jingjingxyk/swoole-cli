@@ -1,7 +1,7 @@
 @echo off
 
 set X_DOMAIN="%1"
-echo "%X_DOMAIN%
+echo "%X_DOMAIN%"
 
 
 setlocal enableextensions enabledelayedexpansion
