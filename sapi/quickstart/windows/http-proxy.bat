@@ -20,7 +20,7 @@ cd %__PROJECT__%\var\
 if not exist "%__PROJECT__%\var\socat-1.8.0.3-cygwin-x64.zip" (
 	powershell  -NoProfile -NoLogo -command "Invoke-WebRequest -Uri https://php-cli.jingjingxyk.com/socat-1.8.0.3-cygwin-x64.zip -OutFile socat-1.8.0.3-cygwin-x64.zip"
 	:: powershell  -NoProfile -NoLogo -command "irm https://php-cli.jingjingxyk.com/socat-1.8.0.3-cygwin-x64.zip -outfile socat-1.8.0.3-cygwin-x64.zip"
-	powershell  -NoProfile -NoLogo -command "irm https://curl.se/ca/cacert.pem -outfile cacert.pem"
+	:: powershell  -NoProfile -NoLogo -command "irm https://curl.se/ca/cacert.pem -outfile cacert.pem"
 )
 if not exist "%__PROJECT__%\var\socat-1.8.0.3-cygwin-x64" (
 	powershell -command "Expand-Archive -Path .\socat-1.8.0.3-cygwin-x64.zip -DestinationPath .\socat-1.8.0.3-cygwin-x64"
@@ -32,7 +32,7 @@ if not exist "%__PROJECT__%\var\socat-1.8.0.3-cygwin-x64" (
 :: 7z.exe x -osocat-1.8.0.3-cygwin-x64 socat-1.8.0.3-cygwin-x64.zip
 
 
-cd %__PROJECT__%\var\socat-1.8.0.3-cygwin-x64\socat-1.8.0.3-cygwin-x64\
+cd %__PROJECT__%\var\socat-1.8.0.3-cygwin-x64\
 
 set "DOMAIN=http-proxy.example.com:8015"
 set "SNI=http-proxy.example.com"
