@@ -1,8 +1,7 @@
 @echo off
-echo all parameter：%*
 
 set X_DOMAIN="%1"
-
+echo "%X_DOMAIN%
 
 
 setlocal enableextensions enabledelayedexpansion
