@@ -1,6 +1,14 @@
 @echo off
+echo 脚本路径：%0
+echo 参数1：%1
+echo 参数2：%2
+echo 所有参数：%*
 
-setlocal enableextensions
+set X_DOMAIN="%1"
+
+
+
+setlocal enableextensions enabledelayedexpansion
 rem show current file location
 echo %~dp0
 cd /d %~dp0
@@ -31,6 +39,17 @@ cd %__PROJECT__%\var\socat-1.8.0.3-cygwin-x64\socat-1.8.0.3-cygwin-x64\
 
 set "DOMAIN=http-proxy.example.com:8015"
 set "SNI=http-proxy.example.com"
+if defined X_DOMAIN (
+    if not "!input!"=="" (
+        echo 输入有效: !input!
+        set "DOMAIN=%X_DOMAIN%:8015"
+        set "SNI=%X_DOMAIN%"
+    ) else (
+        echo 输入为空值
+    )
+) else (
+    echo 变量未定义
+)
 
 .\socat -d -d  TCP4-LISTEN:8016,reuseaddr,fork ssl:%DOMAIN%,snihost=%SNI%,commonname=%SNI%,openssl-min-proto-version=TLS1.3,openssl-max-proto-version=TLS1.3,verify=1,cafile=cacert.pem
 
