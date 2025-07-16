@@ -38,7 +38,7 @@ set "DOMAIN=http-proxy.example.com:8015"
 set "SNI=http-proxy.example.com"
 if defined X_DOMAIN (
     if not "!input!"=="" (
-        echo "input ok"
+        echo "input domain ok"
         set "DOMAIN=%X_DOMAIN%:8015"
         set "SNI=%X_DOMAIN%"
     ) else (
