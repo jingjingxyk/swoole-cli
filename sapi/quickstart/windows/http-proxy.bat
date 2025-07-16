@@ -41,14 +41,14 @@ set "DOMAIN=http-proxy.example.com:8015"
 set "SNI=http-proxy.example.com"
 if defined X_DOMAIN (
     if not "!input!"=="" (
-        echo 输入有效: !input!
+        echo "input ok"
         set "DOMAIN=%X_DOMAIN%:8015"
         set "SNI=%X_DOMAIN%"
     ) else (
-        echo 输入为空值
+        echo "input is null"
     )
 ) else (
-    echo 变量未定义
+    echo "var no define"
 )
 
 .\socat -d -d  TCP4-LISTEN:8016,reuseaddr,fork ssl:%DOMAIN%,snihost=%SNI%,commonname=%SNI%,openssl-min-proto-version=TLS1.3,openssl-max-proto-version=TLS1.3,verify=1,cafile=cacert.pem
