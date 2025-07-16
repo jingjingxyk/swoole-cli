@@ -1,8 +1,5 @@
 @echo off
-echo 脚本路径：%0
-echo 参数1：%1
-echo 参数2：%2
-echo 所有参数：%*
+echo all parameter：%*
 
 set X_DOMAIN="%1"
 
