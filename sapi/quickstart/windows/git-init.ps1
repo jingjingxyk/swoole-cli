@@ -21,7 +21,7 @@ if (-not (Test-Path -Path $git_install_package))
 # 已经安装 跳过
 if (-not (Test-Path -Path "C:\Program Files\Git\bin\git.exe"))
 {
-    & cmd /c start /wait .\Git-2.47.1-64-bit.exe /VERYSILENT /NORESTART /NOCANCEL /SP- /CLOSEONEXIT=1 /DIR="C:\Program Files\Git"
+    & cmd /c start /wait .\Git-2.50.0-64-bit.exe /VERYSILENT /NORESTART /NOCANCEL /SP- /CLOSEONEXIT=1 /DIR="C:\Program Files\Git"
 }
 
 $env:PATH += ";C:\Program Files\Git\bin;"
