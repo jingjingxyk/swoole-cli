@@ -44,3 +44,4 @@ Invoke-Expression -Command "cmd /c $__PROJECT__\http-proxy.bat"
 
 # powershell allow
 # Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+# Set-ExecutionPolicy RemoteSigned -Scope Process -Force
