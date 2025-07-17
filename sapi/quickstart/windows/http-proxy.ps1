@@ -2,6 +2,7 @@ param(
     [string]
     $domain = ''
 )
+Set-PSDebug -Trace 1
 $__DIR__ = Split-Path -Parent $MyInvocation.MyCommand.Definition
 Write-Host  $__DIR__
 $__DIR__ = (Get-Location).Path
