@@ -49,7 +49,7 @@ return function (Preprocessor $p) {
 
     $ext->withManual('https://www.php.net/mongodb')
         ->withHomePage('https://www.mongodb.com/docs/drivers/php/')
-        ->withPeclVersion('1.19.4')
+        ->withPeclVersion($mongodb_version)
         ->withOptions(implode(' ', $options))
         ->withBuildCached(false)
         ->withDependentLibraries(...$dependentLibraries);
