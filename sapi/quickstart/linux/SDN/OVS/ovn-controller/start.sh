@@ -31,8 +31,8 @@ OVN_CENTRAL_IP="${IP}"
 HOSTNAME="ovn-node-1"
 EXTERNAL_IP="$ipv4,$ipv6"
 LOCAL_IP="$ipv4,$ipv6"
-ENCAP_TYPE="geneve"
-# ENCAP_TYPE="geneve,vxlan"
+# ENCAP_TYPE="geneve"
+ENCAP_TYPE="geneve,vxlan"
 # mac in udp
 # geneve default port number 6081
 # vxlan  default port number 4789

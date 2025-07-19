@@ -9,10 +9,6 @@ __PROJECT__=${__DIR__}
 shopt -s expand_aliases
 cd ${__PROJECT__}
 
-if [ ! -f "${__PROJECT__}/runtime/node/bin/node" ]; then
-  curl -fSL https://gitee.com/jingjingxyk/swoole-cli/raw/new_dev/setup-nodejs-runtime.sh?raw=ture | bash -s -- --mirror china
-fi
-
 while [ $# -gt 0 ]; do
   case "$1" in
   --proxy)
@@ -32,6 +28,9 @@ while [ $# -gt 0 ]; do
   shift $(($# > 0 ? 1 : 0))
 done
 
+if [ ! -f "${__PROJECT__}/runtime/node/bin/node" ]; then
+  curl -fSL https://gitee.com/jingjingxyk/swoole-cli/raw/new_dev/setup-nodejs-runtime.sh?raw=ture | bash -s -- --mirror china
+fi
 export PATH=${__PROJECT__}/runtime/node/bin/:$PATH
 
 mkdir -p ${__PROJECT__}/var/
@@ -40,8 +39,27 @@ if [ -f swoole-docs/.git/index ]; then
   cd swoole-docs/
   git pull
 else
-  git clone --depth=1 https://github.com/swoole/docs.git swoole-docs
+  # git clone -b dev --depth=1 https://github.com/swoole/docs.git swoole-docs
+  git clone -b dev --depth=1 https://github.com/jingjingxyk/swoole-docs.git
 fi
 cd ${__PROJECT__}/var/swoole-docs/
-npm install
-npm run dev
+npm install -g pnpm --registry=https://registry.npmmirror.com
+pnpm install --registry=https://registry.npmmirror.com
+
+# npx docsify --help
+
+cd ${__PROJECT__}/var/swoole-docs/public
+test -f _sidebar.md && rm -f _sidebar.md
+npx docsify generate .
+
+cat >robots.txt <<EOF
+User-agent: *
+Disallow:
+EOF
+
+if [ -f ${__PROJECT__}/tools/upload-swoole-docs.sh ]; then
+  bash ${__PROJECT__}/tools/upload-swoole-docs.sh
+fi
+
+cd ${__PROJECT__}/var/swoole-docs/public
+python3 -m http.server 4000
