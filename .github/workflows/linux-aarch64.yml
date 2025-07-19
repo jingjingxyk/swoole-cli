@@ -141,7 +141,6 @@ jobs:
           ./thirdparty/php-src/sapi/fpm/php-fpm -m
           ./thirdparty/php-src/sapi/fpm/php-fpm --ri gd
           ./thirdparty/php-src/sapi/fpm/php-fpm --ri pgsql
-          ldd ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php-fpm
           file ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php-fpm
           readelf -h ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php-fpm
           APP_VERSION=$(./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php-fpm -v | head -n 1 | awk '{print $2}')
