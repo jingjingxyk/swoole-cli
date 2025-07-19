@@ -24,7 +24,7 @@ return function (Preprocessor $p) {
     $p->withExportVariable('PHP_MONGODB_ZLIB_LIBS', '$(pkg-config   --libs   --static zlib)');
 
 
-    $mongodb_version = '1.19.4';
+    $mongodb_version = '1.16.2';
 
     $options = [];
     $options[] = ' --enable-mongodb ';
