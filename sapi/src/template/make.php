@@ -356,8 +356,12 @@ make_build() {
     cd <?= $this->phpSrcDir . PHP_EOL ?>
     export_variables
     <?php if ($this->isLinux()) : ?>
-    export CFLAGS="$CFLAGS  -fPIE"
-    export LDFLAGS="$LDFLAGS  -static -all-static -static-pie"
+    export CFLAGS="$CFLAGS  "
+    export LDFLAGS="$LDFLAGS  -static -all-static "
+        <?php if($this->getInputOption('with-static-pie')) : ?>
+        export CFLAGS="$CFLAGS  -fPIE"
+        export LDFLAGS="$LDFLAGS -static-pie"
+        <?php endif ;?>
     <?php endif ;?>
     export LDFLAGS="$LDFLAGS   <?= $this->extraLdflags ?>"
     export EXTRA_CFLAGS='<?= $this->extraCflags ?>'
@@ -375,6 +379,7 @@ make_build() {
     xattr -cr <?= $this->phpSrcDir  ?>/sapi/cli/php
     otool -L <?= $this->phpSrcDir  ?>/sapi/cli/php
 <?php else : ?>
+    ldd <?= $this->phpSrcDir  ?>/sapi/cli/php
     file <?= $this->phpSrcDir  ?>/sapi/cli/php
     readelf -h <?= $this->phpSrcDir  ?>/sapi/cli/php
 <?php endif; ?>
@@ -660,7 +665,7 @@ elif [ "$1" = "variables" ] ;then
 	echo $LIBS
 elif [ "$1" = "sync" ] ;then
     PHP_CLI=$(which php)
-    test -f ${__PROJECT_DIR__}/runtime/php && PHP_CLI="${__PROJECT_DIR__}/runtime/php -d curl.cainfo=${__PROJECT_DIR__}/runtime/cacert.pem -d openssl.cafile=${__PROJECT_DIR__}/runtime/cacert.pem"
+    test -f ${__PROJECT_DIR__}/runtime/php/php && PHP_CLI="${__PROJECT_DIR__}/runtime/php/php -d curl.cainfo=${__PROJECT_DIR__}/runtime/php/cacert.pem -d openssl.cafile=${__PROJECT_DIR__}/runtime/php/cacert.pem"
     $PHP_CLI -v
     $PHP_CLI sync-source-code.php --action run
     exit 0

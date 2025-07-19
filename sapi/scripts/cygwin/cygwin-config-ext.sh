@@ -14,6 +14,7 @@ cd ${__PROJECT__}
 PHP_VERSION='8.0.30'
 SWOOLE_VERSION="v4.8.13"
 X_PHP_VERSION='8.0'
+SWOOLE_VERSION=$(awk 'NR==1{ print $1 }' "${__PROJECT__}/sapi/SWOOLE-VERSION.conf")
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -35,6 +36,7 @@ REDIS_VERSION=6.1.0
 MONGODB_VERSION=1.17.2
 YAML_VERSION=2.2.2
 IMAGICK_VERSION=3.7.0
+SWOOLE_VERSION=$(awk 'NR==1{ print $1 }' "${__PROJECT__}/sapi/SWOOLE-VERSION.conf")
 
 mkdir -p pool/ext
 mkdir -p pool/lib
@@ -73,6 +75,7 @@ download_and_extract "yaml" ${YAML_VERSION}
 download_and_extract "imagick" ${IMAGICK_VERSION}
 
 cd ${__PROJECT__}/pool/ext
+# with git clone swoole source code
 if [ ! -f swoole-${SWOOLE_VERSION}.tgz ]; then
   test -d ${WORK_TEMP_DIR}/swoole && rm -rf ${WORK_TEMP_DIR}/swoole
   git clone -b ${SWOOLE_VERSION} https://github.com/swoole/swoole-src.git ${WORK_TEMP_DIR}/swoole
@@ -82,7 +85,7 @@ if [ ! -f swoole-${SWOOLE_VERSION}.tgz ]; then
   cd ${__PROJECT__}/pool/ext
 fi
 mkdir -p ${WORK_TEMP_DIR}/ext/swoole/
-tar --strip-components=1 -C ${WORK_TEMP_DIR}/ext/swoole/ -xf swoole-${SWOOLE_VERSION}.tgz
+tar --strip-components=1 -C ${WORK_TEMP_DIR}/ext/swoole/ -xf ${__PROJECT__}/pool/ext/swoole-${SWOOLE_VERSION}.tgz
 
 cd ${__PROJECT__}
 # clean extension folder
@@ -103,8 +106,8 @@ tar --strip-components=1 -C ${WORK_TEMP_DIR}/php-src -xf php-${PHP_VERSION}.tar.
 
 cd ${__PROJECT__}
 # copy extension
-# cp -rf var/cygwin-build/ext/* var/cygwin-build/php-src/ext/
-cp -rf ${WORK_TEMP_DIR}/ext/* ${WORK_TEMP_DIR}/php-src/ext/
+# cp -rf ${WORK_TEMP_DIR}/ext/. ${__PROJECT__}/ext/
+cp -rf ${WORK_TEMP_DIR}/ext/. ${WORK_TEMP_DIR}/php-src/ext/
 
 # extension hook
 if [ "$X_PHP_VERSION" = "8.4" ]; then
