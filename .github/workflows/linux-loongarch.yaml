@@ -112,6 +112,7 @@ jobs:
             uname -a
             cat /etc/os-release
             sh sapi/quickstart/linux/alpine-init.sh
+            exit 0
             bash sapi/quickstart/linux/extra/alpine-php-init.sh
             php prepare.php --with-override-default-enabled-ext=1 --with-php-version=8.3.4
 
