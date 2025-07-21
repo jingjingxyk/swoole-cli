@@ -79,9 +79,10 @@ jobs:
           echo `expr $LIB_NUM - $CACHE_NUM`
 
           if test $CACHE_NUM -eq 0  ; then
-              bash sapi/download-box/download-box-get-archive-from-container.sh
+              # bash sapi/download-box/download-box-get-archive-from-container.sh
+              echo ''
           fi
-
+          bash sapi/download-box/download-box-get-archive-from-server.sh
           ls -A pool/lib/
           ls -A /usr/local/swoole-cli/
 

@@ -64,7 +64,7 @@ jobs:
           mkdir -p pool/lib
           mkdir -p pool/ext
 
-          bash sapi/download-box/download-box-get-archive-from-container.sh
+          bash sapi/download-box/download-box-get-archive-from-server.sh
 
           ls -A pool/lib/
           ls -A /usr/local/swoole-cli/
