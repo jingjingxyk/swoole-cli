@@ -21,7 +21,7 @@ case $OS in
   ;;
 *)
   case $OS in
-  'MSYS_NT'* | 'CYGWIN_NT'* )
+  'MSYS_NT'* | 'CYGWIN_NT'*)
     OS="windows"
     ;;
   'MINGW64_NT'*)
@@ -105,6 +105,25 @@ china)
   ;;
 
 esac
+
+function verfiy_sha256sum() {
+  local tarball=$1
+  if command -v sha256sum >/dev/null 2>&1; then
+    hash2="$(sha256sum -b "$tarball" | cut -c1-64)"
+  elif command -v shasum >/dev/null 2>&1; then
+    hash2="$(shasum -a 256 -b "$tarball" | cut -c1-64)"
+  elif command -v openssl >/dev/null 2>&1; then
+    hash2="$(openssl dgst -r -sha256 "$tarball" | cut -c1-64)"
+  else
+    echo "cannot verify the SHA-256 hash of '$APP_DOWNLOAD_URL'; you need one of 'shasum', 'sha256sum', or 'openssl'"
+    exit 1
+  fi
+
+  if [ "$APP_RUNTIME_TARBALL_SHA256SUM" != "$hash2" ]; then
+    echo "SHA-256 hash mismatch in '$APP_DOWNLOAD_URL'; expected $APP_RUNTIME_TARBALL_SHA256SUM, got $hash2"
+    exit 1
+  fi
+}
 
 downloader() {
   local file=$1
