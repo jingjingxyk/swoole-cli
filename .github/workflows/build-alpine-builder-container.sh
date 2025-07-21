@@ -17,7 +17,8 @@ cd ${__PROJECT__}/var/build-github-action-container/
 cp -f ${__PROJECT__}/sapi/quickstart/linux/alpine-init.sh .
 
 cat >Dockerfile <<'EOF'
-FROM alpine:3.18
+ARG BASE_IMAGE=alpine:3.18
+FROM ${BASE_IMAGE}
 
 ENV TZ=Etc/UTC
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
@@ -35,6 +36,7 @@ ENTRYPOINT ["tini", "--"]
 EOF
 
 PLATFORM=''
+BASE_IMAGE="alpine:18"
 ARCH=$(uname -m)
 case $ARCH in
 'x86_64')
@@ -46,9 +48,6 @@ case $ARCH in
 'riscv64')
   PLATFORM="linux/riscv64"
   ;;
-'mips64le')
-  PLATFORM="linux/mips64le"
-  ;;
 'loongarch64')
   PLATFORM="linux/loongarch64"
   ;;
@@ -59,6 +58,9 @@ while [ $# -gt 0 ]; do
   --platform)
     PLATFORM="$2"
     ;;
+  --container-image)
+    BASE_IMAGE="$2"
+    ;;
   --*)
     echo "Illegal option $1"
     ;;
@@ -67,7 +69,7 @@ while [ $# -gt 0 ]; do
 done
 
 IMAGE='swoole-cli-builder:latest'
-docker buildx build -t ${IMAGE} -f ./Dockerfile . --platform ${PLATFORM}
+docker buildx build -t ${IMAGE} -f ./Dockerfile . --platform ${PLATFORM} --build-arg BASE_IMAGE="${BASE_IMAGE}"
 
 docker save -o "swoole-cli-builder-image.tar" ${IMAGE}
 
