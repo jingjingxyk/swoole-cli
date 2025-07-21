@@ -103,6 +103,7 @@ jobs:
           ls /proc/sys/fs/binfmt_misc/
 
       - name: Run Container
+        if: 0
         uses: addnab/docker-run-action@v3
         with:
 #           image: cr.loongnix.cn/library/debian:buster
@@ -122,25 +123,8 @@ jobs:
               bash .github/workflows/build-alpine-builder-container.sh --platform "linux/loongarch64" --container-image "cr.loongnix.cn/library/alpine:3.11"
           fi
 
-      - name: prepare pre-built library
-        if: 1
-        uses: addnab/docker-run-action@v3
-        with:
-          image: swoole-cli-builder:latest
-          options: -v ${{ github.workspace }}:/work -w /work  -v /usr/local/swoole-cli/:/usr/local/swoole-cli/
-          run: |
-            for i in `ls /usr/local/swoole-cli/`
-            do
-                    echo $i
-            done
-            uname -a
-            uname -s
-            uname -m
-            bash sapi/quickstart/linux/extra/alpine-php-init.sh
-
-
       - name: Build
-        if: 0
+        if: 1
         uses: addnab/docker-run-action@v3
         with:
           image: swoole-cli-builder:latest
@@ -148,14 +132,13 @@ jobs:
           run: |
             set -eux
             uname -m
-            if [ ! -f bin/runtime/php ] ; then
-              bash  setup-php-runtime.sh
-            fi
-
-            # export PATH=/work/bin/runtime:$PATH  # 容器已经内置 php 和 composer
-            # alias php="php -d curl.cainfo=/work/bin/runtime/cacert.pem -d openssl.cafile=/work/bin/runtime/cacert.pem"
 
             sh  sapi/quickstart/linux/alpine-init.sh
+            apk search php
+            curl -fSLo composer.phar  https://getcomposer.org/download/latest-stable/composer.phar
+            chmod a+x composer.phar
+            mv composer.phar /usr/local/bin/composer
+            exit 0
             composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
             composer dump-autoload --optimize --profile --no-dev
 
