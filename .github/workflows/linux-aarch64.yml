@@ -7,7 +7,7 @@ env:
 
 jobs:
   linux-aarch64:
-    if: 0
+    if: 1
     runs-on: ubuntu-24.04-arm
     steps:
       - uses: actions/checkout@v4
@@ -139,8 +139,6 @@ jobs:
         run: |
           ./thirdparty/php-src/sapi/fpm/php-fpm -v
           ./thirdparty/php-src/sapi/fpm/php-fpm -m
-          ./thirdparty/php-src/sapi/fpm/php-fpm --ri gd
-          ./thirdparty/php-src/sapi/fpm/php-fpm --ri pgsql
           file ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php-fpm
           readelf -h ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php-fpm
           APP_VERSION=$(./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php-fpm -v | head -n 1 | awk '{print $2}')
