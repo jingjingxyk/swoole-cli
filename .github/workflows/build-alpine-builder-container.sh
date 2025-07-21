@@ -69,12 +69,11 @@ while [ $# -gt 0 ]; do
 done
 
 IMAGE='swoole-cli-builder:latest'
-docker buildx build -t ${IMAGE} -f ./Dockerfile . --platform ${PLATFORM} --build-arg BASE_IMAGE="${BASE_IMAGE}" -o "swoole-cli-builder-image.tar"
+docker buildx build -t ${IMAGE} -f ./Dockerfile . --platform ${PLATFORM} --build-arg BASE_IMAGE="${BASE_IMAGE}"
 
 docker images
-# docker save -o "swoole-cli-builder-image.tar" ${IMAGE}
+docker save -o "swoole-cli-builder-image.tar" ${IMAGE}
 ls -lha .
-docker load -i  "swoole-cli-builder-image.tar"
 
 # alpine 可设置的架构选项
 # https://hub.docker.com/_/alpine/tags
