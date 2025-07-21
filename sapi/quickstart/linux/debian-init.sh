@@ -110,7 +110,7 @@ export LC_CTYPE="en_US.UTF-8"
 export LANG="en_US.UTF-8"
 
 apt install -y git curl wget ca-certificates
-apt install -y xz-utils autoconf automake clang-tools clang lld libtool cmake bison re2c gettext coreutils lzip zip unzip
+apt install -y xz-utils autoconf automake clang-tools clang  libtool cmake bison re2c gettext coreutils lzip zip unzip
 apt install -y pkg-config bzip2 flex p7zip
 apt install -y gcc g++ libtool-bin autopoint
 apt install -y linux-headers-generic
