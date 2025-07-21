@@ -50,9 +50,9 @@ case $ARCH in
   ;;
 esac
 
-APP_VERSION='1.0.0-alpha.6'
+APP_VERSION='1.0.0-alpha.32'
 APP_NAME='rustfs'
-VERSION="1.0.0-alpha.6"
+VERSION="1.0.0-alpha.32"
 
 cd ${__PROJECT__}
 mkdir -p runtime/
