@@ -21,9 +21,6 @@ cd ${__DIR__}
 
 IMAGE=alpine:3.18
 
-OS=$(uname -s)
-ARCH=$(uname -m)
-
 cd ${__DIR__}
 
 mkdir -p /dev/shm/swoole-cli/thirdparty/
