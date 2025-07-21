@@ -64,6 +64,7 @@ done
 
 
 IMAGE='swoole-cli-builder:latest'
+docker buildx ls
 docker buildx build -t ${IMAGE} -f ./Dockerfile .  --platform ${PLATFORM} --build-arg BASE_IMAGE="${BASE_IMAGE}"
 docker images
 docker save -o "swoole-cli-builder-image.tar" ${IMAGE}

@@ -35,7 +35,7 @@ ENTRYPOINT ["tini", "--"]
 
 EOF
 
-PLATFORM=''
+PLATFORM='linux/amd64'
 BASE_IMAGE="alpine:3.18"
 ARCH=$(uname -m)
 case $ARCH in
@@ -69,6 +69,7 @@ while [ $# -gt 0 ]; do
 done
 
 IMAGE='swoole-cli-builder:latest'
+docker buildx ls
 docker buildx build -t ${IMAGE} -f ./Dockerfile . --platform ${PLATFORM} --build-arg BASE_IMAGE="${BASE_IMAGE}"
 
 docker images
