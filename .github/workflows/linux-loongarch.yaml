@@ -100,7 +100,7 @@ jobs:
       - name: Build
         uses: addnab/docker-run-action@v3
         with:
-          image: cr.loongnix.cn/library/alpine
+          image: cr.loongnix.cn/library/debian:buster
           options: -v ${{ github.workspace }}:/work/
           run: |
             uname -a
