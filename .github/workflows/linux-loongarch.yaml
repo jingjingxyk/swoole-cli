@@ -102,7 +102,7 @@ jobs:
         with:
 #           image: cr.loongnix.cn/library/debian:buster
           image: cr.loongnix.cn/library/alpine:3.11
-          options: -v ${{ github.workspace }}:/work/
+          options: -v ${{ github.workspace }}:/work -w /work  -v /usr/local/swoole-cli/:/usr/local/swoole-cli/
           run: |
             uname -a
             cat /etc/os-release
