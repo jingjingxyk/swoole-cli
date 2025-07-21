@@ -130,7 +130,7 @@ jobs:
             composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
             composer dump-autoload --optimize --profile --no-dev
 
-            php prepare.php --with-override-default-enabled-ext=1 --with-php-version=8.3.4
+            php prepare.php --with-override-default-enabled-ext=1 --with-php-version=8.1.33
 
             bash make-install-deps.sh
 
