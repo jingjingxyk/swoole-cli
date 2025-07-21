@@ -1,3 +1,4 @@
+apk search php
 apk add php7-cli php7-dev
 apk add php7-iconv php7-mbstring php7-phar php7-openssl
 apk add php7-posix php7-tokenizer php7-intl

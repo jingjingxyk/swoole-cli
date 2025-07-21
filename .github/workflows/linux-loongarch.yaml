@@ -135,7 +135,7 @@ jobs:
 
             sh  sapi/quickstart/linux/alpine-init.sh
             sh sapi/quickstart/linux/extra/alpine-php-init-loongarch.sh
-            apk search php
+
             curl -fSLo composer.phar  https://getcomposer.org/download/latest-stable/composer.phar
             chmod a+x composer.phar
             cp -f composer.phar /usr/local/bin/composer
