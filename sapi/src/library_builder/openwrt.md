@@ -133,4 +133,4 @@ https://openwrt.org/docs/guide-user/virtualization/virtualbox-vm
 
     方式三：将客户端机器的网关配置成透明网关 ip
 
-## 路由器可结合iptables或dnsmasq设置透明代理
+## 路由器可结合iptables或dnsmasq设置透明代理 妙用
