@@ -73,6 +73,8 @@ docker buildx build -t ${IMAGE} -f ./Dockerfile . --platform ${PLATFORM} --build
 
 # docker save -o "swoole-cli-builder-image.tar" ${IMAGE}
 
+docker load -i  "swoole-cli-builder-image.tar"
+
 # alpine 可设置的架构选项
 # https://hub.docker.com/_/alpine/tags
 : <<'EOF'
