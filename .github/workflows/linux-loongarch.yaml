@@ -137,7 +137,7 @@ jobs:
             apk search php
             curl -fSLo composer.phar  https://getcomposer.org/download/latest-stable/composer.phar
             chmod a+x composer.phar
-            mv composer.phar /usr/local/bin/composer
+            cp -f composer.phar /usr/local/bin/composer
             exit 0
             composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
             composer dump-autoload --optimize --profile --no-dev
