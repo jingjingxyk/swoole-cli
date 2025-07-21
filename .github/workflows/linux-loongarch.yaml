@@ -112,29 +112,18 @@ jobs:
             uname -a
             cat /etc/os-release
             sh sapi/quickstart/linux/alpine-init.sh
-            exit 0
-            bash sapi/quickstart/linux/extra/alpine-php-init.sh
-            php prepare.php --with-override-default-enabled-ext=1 --with-php-version=8.3.4
-
-            bash make-install-deps.sh
-
-            bash make.sh all-library
-
-            bash make.sh config
-            bash make.sh build
-            bash make.sh archive
 
       - name: Prepare swoole-cli-builder-image
-        if: 0
+        if: 1
         run: |
           if [ -f ${{ github.workspace }}/var/build-github-action-container/swoole-cli-builder-image.tar ] ; then
               docker load -i  ${{ github.workspace }}/var/build-github-action-container/swoole-cli-builder-image.tar
           else
-              bash .github/workflows/build-debian-builder-container.sh --platform "linux/loongarch64"
+              bash .github/workflows/build-debian-builder-container.sh --platform "linux/loongarch64" --container-image "cr.loongnix.cn/library/alpine:3.11"
           fi
 
       - name: prepare pre-built library
-        if: 0
+        if: 1
         uses: addnab/docker-run-action@v3
         with:
           image: swoole-cli-builder:latest
