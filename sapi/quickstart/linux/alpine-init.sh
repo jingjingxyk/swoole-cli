@@ -46,7 +46,7 @@ apk add tar gzip zip unzip bzip2
 # apk add 7zip
 apk add gettext gettext-dev
 apk add wget git curl
-apk add libc++-static libltdl-static
+apk add libltdl-static
 apk add yasm nasm
 apk add ninja python3 py3-pip
 apk add diffutils
