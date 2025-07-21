@@ -119,7 +119,7 @@ jobs:
           if [ -f ${{ github.workspace }}/var/build-github-action-container/swoole-cli-builder-image.tar ] ; then
               docker load -i  ${{ github.workspace }}/var/build-github-action-container/swoole-cli-builder-image.tar
           else
-              bash .github/workflows/build-debian-builder-container.sh --platform "linux/loongarch64" --container-image "cr.loongnix.cn/library/alpine:3.11"
+              bash .github/workflows/build-alpine-builder-container.sh --platform "linux/loongarch64" --container-image "cr.loongnix.cn/library/alpine:3.11"
           fi
 
       - name: prepare pre-built library
