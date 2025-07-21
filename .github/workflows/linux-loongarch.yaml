@@ -146,7 +146,7 @@ jobs:
             uname -m
 
             sh  sapi/quickstart/linux/alpine-init.sh
-            sleep 3600
+            # sleep 3600
             sh sapi/quickstart/linux/extra/alpine-php-init-loongarch.sh
 
             curl -fSLo composer.phar  https://getcomposer.org/download/latest-stable/composer.phar
