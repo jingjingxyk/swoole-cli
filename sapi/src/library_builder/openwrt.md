@@ -113,8 +113,7 @@ https://openwrt.org/docs/guide-user/virtualization/virtualbox-vm
     OSPF （常用路由器之间组网）
     ISIS (运营商使用）
 
-
-##  wireguard 辅助工具
+## wireguard 辅助工具
 
     默认端口： 51820
     udp2raw
@@ -133,3 +132,5 @@ https://openwrt.org/docs/guide-user/virtualization/virtualbox-vm
     route add 7.0.0.0 mask 255.0.0.0 192.168.20.5 (windows)
 
     方式三：将客户端机器的网关配置成透明网关 ip
+
+## 路由器可结合iptables或dnsmasq设置透明代理
