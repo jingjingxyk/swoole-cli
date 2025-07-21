@@ -36,7 +36,7 @@ ENTRYPOINT ["tini", "--"]
 EOF
 
 PLATFORM=''
-BASE_IMAGE="alpine:18"
+BASE_IMAGE="alpine:3.18"
 ARCH=$(uname -m)
 case $ARCH in
 'x86_64')
@@ -82,6 +82,7 @@ linux/arm/v6
 linux/arm/v7
 linux/arm64/v8
 linux/ppc64le
+linux/riscv64
 linux/s390x
 EOF
 

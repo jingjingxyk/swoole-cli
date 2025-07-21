@@ -96,7 +96,7 @@ jobs:
           if [ -f ${{ github.workspace }}/var/build-github-action-container/swoole-cli-builder-image.tar ] ; then
               docker load -i  ${{ github.workspace }}/var/build-github-action-container/swoole-cli-builder-image.tar
           else
-              bash .github/workflows/build-alpine-builder-container.sh --platform "linux/riscv64" --container-image "alpine:22"
+              bash .github/workflows/build-alpine-builder-container.sh --platform "linux/riscv64" --container-image "alpine:3.22"
           fi
 
       - name: Prepare QEMU
