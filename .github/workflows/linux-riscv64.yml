@@ -112,24 +112,8 @@ jobs:
           exit 1
           sudo docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 
-      - name: prepare pre-built library
-        if: 1
-        uses: addnab/docker-run-action@v3
-        with:
-          image: swoole-cli-builder:latest
-          options: -v ${{ github.workspace }}:/work -w /work  -v /usr/local/swoole-cli/:/usr/local/swoole-cli
-          run: |
-            for i in `ls /usr/local/swoole-cli/`
-            do
-                    echo $i
-            done
-            uname -a
-            uname -s
-            uname -m
-            bash sapi/quickstart/linux/extra/alpine-php-init.sh
-
       - name: Build
-        if: 0
+        if: 1
         uses: addnab/docker-run-action@v3
         with:
           image: swoole-cli-builder:latest
@@ -137,18 +121,16 @@ jobs:
           run: |
             set -eux
             uname -m
-            if [ ! -f runtime/php/php ] ; then
-              bash  setup-php-runtime.sh
-            fi
-
-            export PATH=/work/runtime/php/:$PATH  # 容器已经内置 php 和 composer
-            alias php="php -d curl.cainfo=/work/runtime/php/cacert.pem -d openssl.cafile=/work/runtime/php/cacert.pem"
 
             sh  sapi/quickstart/linux/alpine-init.sh
+            sh  sapi/quickstart/linux/alpine-php-init.sh
+            curl -fSLo composer.phar  https://getcomposer.org/download/latest-stable/composer.phar
+            chmod a+x composer.phar
+            mv composer.phar /usr/local/bin/composer
             composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
             composer dump-autoload --optimize --profile --no-dev
 
-            php prepare.php --with-override-default-enabled-ext=1 --with-php-version=8.3.4 --with-c-compiler=musl-gcc
+            php prepare.php --with-override-default-enabled-ext=1 --with-php-version=8.3.4
 
             bash make-install-deps.sh
 
