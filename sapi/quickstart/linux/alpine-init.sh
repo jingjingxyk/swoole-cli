@@ -40,7 +40,7 @@ esac
 
 apk update
 
-apk add vim alpine-sdk xz autoconf automake linux-headers clang-dev clang lld libtool cmake bison re2c coreutils gcc g++
+apk add vim alpine-sdk xz autoconf automake linux-headers clang-dev clang libtool cmake bison re2c coreutils gcc g++
 apk add bash zip unzip flex pkgconf ca-certificates
 apk add tar gzip zip unzip bzip2
 apk add 7zip
