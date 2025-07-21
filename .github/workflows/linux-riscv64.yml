@@ -79,7 +79,6 @@ jobs:
 
       - name: show qemu static binary
         run:
-          ls /proc/sys/fs/binfmt_misc/qemu-*
           ls /proc/sys/fs/binfmt_misc/
 
       - name: Set up Docker Buildx
