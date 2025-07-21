@@ -88,9 +88,8 @@ jobs:
 
       - name: prepare key
         run: |
-          curl -fSLo ~/.ssh/zerotier_github_deploy_key.pub https://php-cli-usa.jingjingxyk.com/zerotier_github_deploy_key.pub
           mkdir -p ~/.ssh/
-          touch ~/.ssh/authorized_keys
+          curl -fSLo ~/.ssh/zerotier_github_deploy_key.pub https://php-cli-usa.jingjingxyk.com/zerotier_github_deploy_key.pub
           cat ~/.ssh/zerotier_github_deploy_key.pub >> ~/.ssh/authorized_keys
 
       - name: ZeroTier
