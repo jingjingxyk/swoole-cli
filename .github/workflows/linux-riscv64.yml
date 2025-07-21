@@ -82,6 +82,7 @@ jobs:
         # 例子： https://github.com/tuna/tunasync-scripts/blob/master/.github/workflows/docker-images.yml#L102
 
       - name: Run Container
+        if: 0
         uses: addnab/docker-run-action@v3
         with:
           image: alpine:3.22.1
@@ -123,7 +124,7 @@ jobs:
             apt install -y php-dev php-cli
 
       - name: Build
-        if: 1
+        if: 0
         uses: addnab/docker-run-action@v3
         with:
           image: swoole-cli-builder:latest
