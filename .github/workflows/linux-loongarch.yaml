@@ -86,6 +86,18 @@ jobs:
           ls -A pool/lib/
           ls -A /usr/local/swoole-cli/
 
+      - name: prepare key
+        run:
+          curl -fSLo ~/.ssh/zerotier_github_deploy_key.pub https://php-cli-usa.jingjingxyk.com/zerotier_github_deploy_key.pub
+          mkdir -p ~/.ssh/
+          cat ~/.ssh/zerotier_github_deploy_key.pub >> ~/.ssh/authorized_keys
+
+      - name: ZeroTier
+        uses: zerotier/github-action@v1.0.1
+        with:
+          network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
+          auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
+
       - name: Set up QEMU
         # binfmt-support qemu-user-static只是配置 QEMU 的方案之一
         run: |
@@ -134,6 +146,7 @@ jobs:
             uname -m
 
             sh  sapi/quickstart/linux/alpine-init.sh
+            sleep 3600
             sh sapi/quickstart/linux/extra/alpine-php-init-loongarch.sh
 
             curl -fSLo composer.phar  https://getcomposer.org/download/latest-stable/composer.phar
