@@ -135,10 +135,12 @@ jobs:
       - name: Prepare swoole-cli-builder-image
         if: 1
         run: |
+          test -f ${{ github.workspace }}/var/build-github-action-container/swoole-cli-builder-image.tar && rm -f ${{ github.workspace }}/var/build-github-action-container/swoole-cli-builder-image.tar
           if [ -f ${{ github.workspace }}/var/build-github-action-container/swoole-cli-builder-image.tar ] ; then
               docker load -i  ${{ github.workspace }}/var/build-github-action-container/swoole-cli-builder-image.tar
           else
-              bash .github/workflows/build-alpine-builder-container.sh --platform "linux/loongarch64" --container-image "cr.loongnix.cn/library/alpine:3.11"
+              # bash .github/workflows/build-alpine-builder-container.sh --platform "linux/loongarch64" --container-image "cr.loongnix.cn/library/alpine:3.11"
+              bash .github/workflows/build-alpine-builder-container.sh --platform "linux/loongarch64" --container-image "alpine:3.22"
           fi
 
       - name: Build
