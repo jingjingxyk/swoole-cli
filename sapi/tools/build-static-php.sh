@@ -1,10 +1,17 @@
 #!/usr/bin/env bash
 
+set -exu
 __DIR__=$(
   cd "$(dirname "$0")"
   pwd
 )
+__PROJECT__=$(
+  cd ${__DIR__}/../../
+  pwd
+)
 
+cd ${__DIR__}
+cd ${__PROJECT__}
 set -uex
 
 PHP_VERSION=8.2.29

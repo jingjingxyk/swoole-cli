@@ -105,13 +105,6 @@ jobs:
               bash .github/workflows/build-alpine-builder-container.sh --platform "linux/riscv64" --container-image "alpine:3.22"
           fi
 
-      - name: Prepare QEMU
-        if: 0
-        run: |
-          set -x
-          exit 1
-          sudo docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-
       - name: Build
         if: 1
         uses: addnab/docker-run-action@v3
