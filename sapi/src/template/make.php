@@ -217,6 +217,10 @@ export_variables() {
     CFLAGS=""
     LDFLAGS=""
     LIBS=" "
+    if [[ $(uname -m) == "loongarch64" ]] ; then
+        # for fiber
+        LIBS+=" -lucontext "
+    fi
 <?php foreach ($this->variables as $name => $value) : ?>
     <?= key($value) ?>="<?= current($value) ?>"
 <?php endforeach; ?>

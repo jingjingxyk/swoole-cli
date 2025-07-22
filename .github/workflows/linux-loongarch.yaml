@@ -165,8 +165,8 @@ jobs:
             composer dump-autoload --optimize --profile --no-dev
 
             php prepare.php --with-override-default-enabled-ext=1 --with-php-version=8.2.29
+            if [[ $(uname -m) == "loongarch64" ]] ; then  { bash sapi/scripts/msys2/install-libucontext.sh ; } ; fi ;
 
-            bash sapi/scripts/msys2/install-libucontext.sh
             bash make-install-deps.sh
 
             bash make.sh all-library
