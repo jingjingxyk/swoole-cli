@@ -12,6 +12,7 @@ __PROJECT__=$(
 
 cd ${__DIR__}
 cd ${__PROJECT__}
+
 mkdir -p var/
 cd ${__PROJECT__}/var/
 
@@ -26,6 +27,11 @@ export CC=clang
 export CXX=clang++
 export LD=ld.lld
 
+if [[ $(uname -m) == 'loongarch64' ]]; then
+  # for fiber
+  export LIBS=" -lucontext "
+  bash sapi/scripts/install-libucontext.sh
+fi
 cd php-src
 
 bash ${__DIR__}/opcache-static-compile-patch.sh
@@ -41,7 +47,8 @@ bash ${__DIR__}/opcache-static-compile-patch.sh
   --enable-zts \
   --disable-phpdbg \
   --without-valgrind \
-  --enable-opcache
+  --enable-opcache \
+  --without-pcre-jit
 
 export LDFLAGS=" -static -all-static "
 sed -i.backup 's/-export-dynamic/-all-static/g' Makefile
