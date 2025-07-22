@@ -142,14 +142,12 @@ jobs:
           run: |
             ./thirdparty/php-src/sapi/cli/php -v
             ./thirdparty/php-src/sapi/cli/php -m
-            BUILD_PHP_VERSION=$(./thirdparty/php-src/sapi/cli/php -v | head -n 1 | awk '{print $2}')
-            file ./bin/php-${BUILD_PHP_VERSION}/bin/php
-            readelf -h ./bin/php-${BUILD_PHP_VERSION}/bin/php
-            APP_VERSION=$(./bin/php-${BUILD_PHP_VERSION}/bin/php  -v | head -n 1 | awk '{print $2}')
+            APP_VERSION=$(./thirdparty/php-src/sapi/cli/php -v | head -n 1 | awk '{print $2}')
+            file ./bin/php-${APP_VERSION}/bin/php
+            readelf -h ./bin/php-${APP_VERSION}/bin/php
             echo ${APP_VERSION}
             echo ${APP_VERSION}  > APP_VERSION
             echo "php-cli"  > APP_NAME
-            ./bin/php-${BUILD_PHP_VERSION}/bin/php -r "echo PHP_VERSION;"
 
       - name: get app version
         run: |
@@ -165,14 +163,14 @@ jobs:
         with:
           name: ${{ env.APP_NAME }}-v${{ env.APP_VERSION }}-linux-riscv64-debug
           retention-days: 90
-          path: ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
+          path: ./bin/php-${{ env.APP_VERSION }}/bin/php
 
       - name: production artifacts
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APP_NAME }}-v${{ env.APP_VERSION }}-linux-riscv64
           retention-days: 90
-          path: ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/dist/php
+          path: ./bin/php-${{ env.APP_VERSION }}/bin/dist/php
 
       - name: gh release
         uses: softprops/action-gh-release@v2
