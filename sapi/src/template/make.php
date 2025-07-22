@@ -212,11 +212,11 @@ before_configure_script() {
 export_variables() {
     set -x
 
-    CPPFLAGS="/usr/include/"
+    CPPFLAGS=""
     CXXFLAGS=""
     CFLAGS=""
     LDFLAGS=""
-    LIBS=""
+    LIBS=" -lucontext "
 <?php foreach ($this->variables as $name => $value) : ?>
     <?= key($value) ?>="<?= current($value) ?>"
 <?php endforeach; ?>

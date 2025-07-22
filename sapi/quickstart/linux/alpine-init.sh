@@ -54,6 +54,7 @@ apk add socat
 apk add python3-dev
 apk add mercurial
 apk add pigz parallel
+ apk add libucontext-dev
 
 case "$MIRROR" in
 china | tuna | ustc)
