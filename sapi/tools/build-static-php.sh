@@ -12,7 +12,8 @@ __PROJECT__=$(
 
 cd ${__DIR__}
 cd ${__PROJECT__}
-set -uex
+mkdir -p var/
+cd ${__PROJECT__}/var/
 
 PHP_VERSION=8.2.29
 
