@@ -216,7 +216,7 @@ export_variables() {
     CXXFLAGS=""
     CFLAGS=""
     LDFLAGS=""
-    LIBS=" -lucontext "
+    LIBS=" "
 <?php foreach ($this->variables as $name => $value) : ?>
     <?= key($value) ?>="<?= current($value) ?>"
 <?php endforeach; ?>
