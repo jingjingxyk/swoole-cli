@@ -30,7 +30,7 @@ OPTIONS="--disable-all \
     --disable-cgi  \
     --enable-cli  \
     --disable-phpdbg \
-    --disable-pcre2-jit \
+    --without-pcre-jit \
     --with-config-file-path=<?= $this->getGlobalPrefix() ?>/etc/ \
     --with-config-file-scan-dir=<?= $this->getGlobalPrefix() ?>/etc/conf.d/ \
 <?php foreach ($this->extensionList as $item) : ?>
