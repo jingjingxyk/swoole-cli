@@ -163,14 +163,14 @@ jobs:
       - name: production artifacts debug
         uses: actions/upload-artifact@v4
         with:
-          name: php-cli-v${{ env.APP_VERSION }}-linux-riscv64-debug
+          name: ${{ env.APP_NAME }}-v${{ env.APP_VERSION }}-linux-riscv64-debug
           retention-days: 90
           path: ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
 
       - name: production artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: php-cli-v${{ env.APP_VERSION }}-linux-riscv64
+          name: ${{ env.APP_NAME }}-v${{ env.APP_VERSION }}-linux-riscv64
           retention-days: 90
           path: ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/dist/php
 
