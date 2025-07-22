@@ -112,7 +112,7 @@ jobs:
 
       - name: Set Container
         if: 0
-        uses: docker://cr.loongnix.cn/library/debian
+        uses: docker://cr.loongnix.cn/library/debian:buster
         with:
           args: ./.github/test.sh
 
