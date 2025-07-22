@@ -110,12 +110,6 @@ jobs:
           exit 1
           sudo docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 
-      - name: Set Container
-        if: 0
-        uses: docker://cr.loongnix.cn/library/debian:buster
-        with:
-          args: ./.github/test.sh
-
       - name: show qemu static binary
         run:
           ls /proc/sys/fs/binfmt_misc/

@@ -96,6 +96,7 @@ EOF
 # 软件源
 # http://alpine.loongnix.cn
 # http://alpine.loongnix.cn/v3.11/releases/loongarch64/
+# loongarch64/alpine:3.21
 
 : <<'EOF'
 

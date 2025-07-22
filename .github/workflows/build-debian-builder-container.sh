@@ -87,5 +87,9 @@ linux/riscv64
 linux/s390x
 EOF
 
+# 支持龙芯
+# cr.loongnix.cn/library/debian:buster
+# loongarch64/debian:12
+
 # Debian 全球镜像站
 # https://www.debian.org/mirror/list
