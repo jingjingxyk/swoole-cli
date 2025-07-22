@@ -115,8 +115,6 @@ jobs:
         uses: docker://cr.loongnix.cn/library/debian
         with:
           args: ./.github/test.sh
-          env:
-            IS_TAGGED: "startsWith(github.ref, 'refs/tags/')"
 
       - name: show qemu static binary
         run:

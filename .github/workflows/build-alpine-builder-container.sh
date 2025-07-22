@@ -92,6 +92,9 @@ EOF
 # 3.20 开始支持 linux/riscv64
 # 龙芯架构
 # https://cr.loongnix.cn/search
+# 软件源
+# http://alpine.loongnix.cn
+# http://alpine.loongnix.cn/v3.11/releases/loongarch64/
 
 : <<'EOF'
 
