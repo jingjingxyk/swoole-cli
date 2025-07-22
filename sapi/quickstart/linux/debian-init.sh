@@ -136,3 +136,7 @@ aliyuncs | tencentyun | huaweicloud)
   test "$MIRROR" = "huaweicloud" && pip3 config set global.index-url https://repo.huaweicloud.com/pypi/simple/
   ;;
 esac
+
+# Debian mirrors backed by Fastly CDN
+# https://ftp.debian.org/
+# https://www.debian.org/mirror/list
