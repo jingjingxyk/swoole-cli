@@ -212,7 +212,7 @@ before_configure_script() {
 export_variables() {
     set -x
 
-    CPPFLAGS=""
+    CPPFLAGS="/usr/include/"
     CXXFLAGS=""
     CFLAGS=""
     LDFLAGS=""
