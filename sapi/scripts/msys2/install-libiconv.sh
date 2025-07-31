@@ -30,7 +30,7 @@ build() {
   cd libiconv-${VERSION}
   mkdir -p build
   cd build
-  ./configure \
+  ../configure \
     --prefix=/usr \
     --enable-extra-encodings
 
