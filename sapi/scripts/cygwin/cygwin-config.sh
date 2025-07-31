@@ -41,7 +41,7 @@ cd ${WORK_TEMP_DIR}/php-src/
 # export CFLAGS=""
 # export LDFLAGS="-L/usr/lib"
 
-export LDFLAGS=" -liconv "
+export LIBS="  -liconv "
 export ICU_CXXFLAGS=" -std=gnu++17 "
 ./buildconf --force
 test -f Makefile && make clean
