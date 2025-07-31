@@ -27,11 +27,12 @@ build() {
   cd ${WORK_TEMP_DIR}
   tar xvf ${__PROJECT__}/pool/lib/libiconv-${VERSION}.tar.gz
 
+  mkdir -p /tmp/swoole-cli/libiconv/
   cd libiconv-${VERSION}
   mkdir -p build
   cd build
   ../configure \
-    --prefix=/usr \
+    --prefix=/tmp/swoole-cli/libiconv/ \
     --enable-extra-encodings
 
   make -j $(nproc)
