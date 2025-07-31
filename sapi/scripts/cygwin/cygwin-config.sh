@@ -41,6 +41,7 @@ cd ${WORK_TEMP_DIR}/php-src/
 # export CFLAGS=""
 # export LDFLAGS="-L/usr/lib"
 
+export LDFLAGS=" -liconv "
 export ICU_CXXFLAGS=" -std=gnu++17 "
 ./buildconf --force
 test -f Makefile && make clean
@@ -48,7 +49,6 @@ test -f Makefile && make clean
   \
   --disable-fiber-asm \
   --without-pcre-jit \
-  --with-curl \
   --with-iconv
 
 
