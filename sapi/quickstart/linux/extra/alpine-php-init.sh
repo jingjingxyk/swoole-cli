@@ -4,6 +4,7 @@ apk add php82-posix php82-tokenizer php82-intl
 apk add php82-dom php82-xmlwriter php82-xml php82-simplexml
 apk add php82-pdo php82-sockets php82-curl php82-mysqlnd php82-pgsql php82-sqlite3
 apk add php82-redis php82-mongodb
+apk add php82-redis php82-fileinfo
 
 php82 -v
 php82 --ini
