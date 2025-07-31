@@ -13,6 +13,9 @@ cd ${__PROJECT__}
 WORK_TEMP_DIR=${__PROJECT__}/var/cygwin-build/
 cd ${WORK_TEMP_DIR}/php-src/
 
+export CPPFLAGS="-I/tmp/swoole-cli/libiconv/include"
+export LDFLAGS="-L/tmp/swoole-cli/libiconv/lib"
+export LIBS="  -liconv "
 mkdir -p bin/.libs
 # export LDFLAGS="-all-static"
 
