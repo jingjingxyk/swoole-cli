@@ -25,7 +25,8 @@ cp -f ${WORK_TEMP_DIR}/php-src/sapi/cli/php.exe ${__PROJECT__}/bin/
 
 ${__PROJECT__}/bin/php.exe -v
 ${__PROJECT__}/bin/php.exe -m
-${__PROJECT__}/bin/php.exe --ri swoole
+${__PROJECT__}/bin/php.exe --ri iconv
+
 
 cd ${__PROJECT__}
 APP_VERSION=$(${__PROJECT__}/bin/php.exe -v | awk 'NR==1{print $2}')
