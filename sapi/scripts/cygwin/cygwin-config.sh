@@ -38,9 +38,9 @@ WORK_TEMP_DIR=${__PROJECT__}/var/cygwin-build/
 cd ${WORK_TEMP_DIR}/php-src/
 
 # export CFLAGS=""
-export CPPFLAGS="-I/tmp/swoole-cli/libiconv/include"
-export LDFLAGS="-L/tmp/swoole-cli/libiconv/lib"
-export LIBS="  -liconv "
+# export CPPFLAGS="-I/tmp/swoole-cli/libiconv/include"
+# export LDFLAGS="-L/tmp/swoole-cli/libiconv/lib"
+# export LIBS="  -liconv "
 export ICU_CXXFLAGS=" -std=gnu++17 "
 ./buildconf --force
 test -f Makefile && make clean
