@@ -65,6 +65,7 @@
 1. [局域网文件互传](https://pairdrop.net/)
 1. [网易uu远程](https://uuyc.163.com/)
 1. [连连控](https://www.asklink.com/)
+1. [中国运营商IPv4/IPv6地址库-每日更新 ](https://github.com/gaoyifan/china-operator-ip.git)
 
 mDNS（Multicast DNS）是一种用于局域网内设备自动发现和名称解析的协议，其核心作用是通过组播方式实现零配置网络服务发现。
 
