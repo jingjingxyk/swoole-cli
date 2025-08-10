@@ -26,6 +26,8 @@ if [ -f runtime/aria2c/aria2c ]; then
   curl -fSL https://gitee.com/jingjingxyk/swoole-cli/raw/new_dev/setup-aria2-runtime.sh?raw=ture | bash -s -- --mirror china
 fi
 export PATH="${__PROJECT__}/runtime/aria2c/:$PATH"
+which aria2c
+
 aria2c -c -x4 -s8 \
   https://mirrors.bfsu.edu.cn/proxmox/iso/proxmox-ve_9.0-1.iso \
   https://mirrors.cqupt.edu.cn/proxmox/iso/proxmox-ve_9.0-1.iso \
