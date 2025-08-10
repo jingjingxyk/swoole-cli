@@ -6,12 +6,18 @@ __DIR__=$(
   pwd
 )
 __PROJECT__=${__DIR__}
+
 cd ${__PROJECT__}
+
 if [ -f runtime/node/bin/node ]; then
-  bash setup-nodejs-runtime.sh --mirror china
+  curl -fSL https://gitee.com/jingjingxyk/swoole-cli/raw/new_dev/setup-nodejs-runtime.sh?raw=ture | bash -s -- --mirror china
 fi
 
-export PATH="${__PROJECT__}/runtime/node/bin/:$PATH"
+if [ -f runtime/php/php ]; then
+  curl -fSL https://gitee.com/jingjingxyk/swoole-cli/raw/new_dev/setup-php-runtime.sh?raw=ture | bash -s -- --mirror china
+fi
+
+export PATH="${__PROJECT__}/runtime/node/bin/:${__PROJECT__}/runtime/php/:$PATH"
 
 npm install pnpm --registry=https://registry.npmmirror.com
 
