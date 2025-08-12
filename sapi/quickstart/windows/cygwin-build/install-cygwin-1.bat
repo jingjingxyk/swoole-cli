@@ -38,6 +38,9 @@ if defined GITHUB_ACTIONS (
 :: package  separate with commas
 set "PACKAGES="
 set "PACKAGES=%PACKAGES%,libiconv-devel"
+set "PACKAGES=%PACKAGES%,libiconv"
+set "PACKAGES=%PACKAGES%,libcharset1"
+set "PACKAGES=%PACKAGES%,libiconv2"
 
 
 set "OPTIONS=%OPTIONS% --packages %PACKAGES%"
