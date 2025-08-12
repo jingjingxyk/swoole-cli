@@ -87,6 +87,11 @@ jobs:
           Copy-Item -Path "C:\setup.exe" -Destination "${{ github.workspace }}\setup-x86_64.exe"
           cmd /c .\sapi\quickstart\windows\cygwin-build\install-cygwin.bat
 
+      - name: Install Cygwin Packages with CMD
+        shell: cmd
+        run: |
+          .\sapi\quickstart\windows\cygwin-build\install-cygwin-1.bat
+
       - name: Install re2c
         shell: C:\cygwin\bin\bash.EXE --noprofile --norc -e -o pipefail -o igncr   {0}
         run: |
