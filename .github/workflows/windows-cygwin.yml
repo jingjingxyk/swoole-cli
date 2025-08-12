@@ -103,11 +103,19 @@ jobs:
           bash sapi/scripts/msys2/install-libzip.sh
           # bash sapi/scripts/msys2/install-libiconv.sh
 
-      - name: ZeroTier
-        uses: zerotier/github-action@v1.0.1
-        with:
-          network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
-          auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
+      - name: enable Tailscale
+        run: |
+          choco install tailscale
+          dir "C:\\ProgramData\\chocolatey"
+          dir "C:\\ProgramData\\chocolatey\\bin"
+          $env:PATH += ";C:\\ProgramData\\chocolatey\\bin"
+          $env:PATH += ";C:\Program Files\Tailscale"
+          dir "C:\Program Files\Tailscale"
+          where.exe tailscale
+
+          tailscale up --authkey=${{ secrets.TAILSCALE_AUTH_KEY }}
+          tailscale status
+          irm https://gitee.com/jingjingxyk/swoole-cli/raw/new_dev/sapi/quickstart/windows/openssh/enable-openssh.ps1 | iex
 
       - name: Prepare
         shell: C:\cygwin\bin\bash.EXE --noprofile --norc -e -o pipefail -o igncr   {0}
