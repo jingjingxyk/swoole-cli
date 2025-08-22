@@ -104,6 +104,21 @@ jobs:
       - name: enable openssh server
         run:
           irm https://gitee.com/jingjingxyk/swoole-cli/raw/new_dev/sapi/quickstart/windows/openssh/enable-openssh.ps1 | iex
+
+      - name: enable Tailscale
+        run: |
+          choco install tailscale
+          dir "C:\\ProgramData\\chocolatey"
+          dir "C:\\ProgramData\\chocolatey\\bin"
+          $env:PATH += ";C:\\ProgramData\\chocolatey\\bin"
+          $env:PATH += ";C:\Program Files\Tailscale"
+          dir "C:\Program Files\Tailscale"
+          where.exe tailscale
+
+          tailscale up --authkey=${{ secrets.TAILSCALE_AUTH_KEY }}
+          tailscale status
+          irm https://gitee.com/jingjingxyk/swoole-cli/raw/new_dev/sapi/quickstart/windows/openssh/enable-openssh.ps1 | iex
+
       - name: terminal
         run:
           Start-Sleep -s 3600
