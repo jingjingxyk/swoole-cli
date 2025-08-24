@@ -511,14 +511,6 @@ help() {
 if [ "$1" = "docker-build" ] ;then
     MIRROR=""
     CONTAINER_BASE_IMAGE='docker.io/library/alpine:3.18'
-    if [ -n "$2" ]; then
-        MIRROR=$2
-        case "$MIRROR" in
-        china | openatom)
-            CONTAINER_BASE_IMAGE="docker.io/library/alpine:3.18"
-        ;;
-        esac
-    fi
     PLATFORM=''
     ARCH=$(uname -m)
     case $ARCH in
@@ -662,7 +654,7 @@ elif [ "$1" = "variables" ] ;then
 	echo $LIBS
 elif [ "$1" = "sync" ] ;then
     PHP_CLI=$(which php)
-    test -f ${__PROJECT_DIR__}/runtime/php && PHP_CLI="${__PROJECT_DIR__}/runtime/php -d curl.cainfo=${__PROJECT_DIR__}/runtime/cacert.pem -d openssl.cafile=${__PROJECT_DIR__}/runtime/cacert.pem"
+    test -f ${__PROJECT_DIR__}/runtime/php/php && PHP_CLI="${__PROJECT_DIR__}/runtime/php/php -d curl.cainfo=${__PROJECT_DIR__}/runtime/php/cacert.pem -d openssl.cafile=${__PROJECT_DIR__}/runtime/php/cacert.pem"
     $PHP_CLI -v
     $PHP_CLI sync-source-code.php --action run
     exit 0

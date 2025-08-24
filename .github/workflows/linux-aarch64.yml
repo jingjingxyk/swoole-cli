@@ -105,6 +105,7 @@ jobs:
           mkdir -p pool/ext
           mkdir -p bin/
           mkdir -p runtime/
+          test -f runtime/php && rm -f runtime/php
           if [ ! -f runtime/php/php ] ; then
               bash  setup-php-runtime.sh
           fi
@@ -122,10 +123,6 @@ jobs:
             uname -m
             export PATH=/work/runtime/php/:$PATH  # 容器已经内置 php 和 composer
             alias php="php -d curl.cainfo=/work/runtime/php/cacert.pem -d openssl.cafile=/work/runtime/php/cacert.pem"
-
-            # sed -i 's/mirrors.tuna.tsinghua.edu.cn/dl-cdn.alpinelinux.org/g' /etc/apk/repositories
-            # sed -i 's/mirrors.ustc.edu.cn/dl-cdn.alpinelinux.org/g' /etc/apk/repositories
-            # bash sapi/quickstart/mark-install-library-cached.sh
 
             sh  sapi/quickstart/linux/alpine-init.sh
             composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev

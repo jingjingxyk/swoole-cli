@@ -10,7 +10,6 @@ __PROJECT__=$(
   pwd
 )
 cd ${__PROJECT__}
-mkdir -p bin
 
 WORK_TEMP_DIR=${__PROJECT__}/var/cygwin-build/
 cd ${WORK_TEMP_DIR}/php-src/
