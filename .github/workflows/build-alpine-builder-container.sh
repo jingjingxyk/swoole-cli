@@ -17,7 +17,8 @@ cd ${__PROJECT__}/var/build-github-action-container/
 cp -f ${__PROJECT__}/sapi/quickstart/linux/alpine-init.sh .
 
 cat >Dockerfile <<'EOF'
-FROM alpine:3.18
+ARG BASE_IMAGE=alpine:3.18
+FROM ${BASE_IMAGE}
 
 ENV TZ=Etc/UTC
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
@@ -34,7 +35,8 @@ ENTRYPOINT ["tini", "--"]
 
 EOF
 
-PLATFORM=''
+PLATFORM='linux/amd64'
+BASE_IMAGE="alpine:3.18"
 ARCH=$(uname -m)
 case $ARCH in
 'x86_64')
@@ -46,11 +48,9 @@ case $ARCH in
 'riscv64')
   PLATFORM="linux/riscv64"
   ;;
-'mips64le')
-  PLATFORM="linux/mips64le"
-  ;;
 'loongarch64')
   PLATFORM="linux/loongarch64"
+  PLATFORM="linux/loong64"
   ;;
 esac
 
@@ -58,6 +58,9 @@ while [ $# -gt 0 ]; do
   case "$1" in
   --platform)
     PLATFORM="$2"
+    ;;
+  --container-image)
+    BASE_IMAGE="$2"
     ;;
   --*)
     echo "Illegal option $1"
@@ -67,9 +70,12 @@ while [ $# -gt 0 ]; do
 done
 
 IMAGE='swoole-cli-builder:latest'
-docker buildx build -t ${IMAGE} -f ./Dockerfile . --platform ${PLATFORM}
+docker buildx ls
+docker buildx build -t ${IMAGE} -f ./Dockerfile . --platform ${PLATFORM} --build-arg BASE_IMAGE="${BASE_IMAGE}"
 
+docker images
 docker save -o "swoole-cli-builder-image.tar" ${IMAGE}
+ls -lha .
 
 # alpine 可设置的架构选项
 # https://hub.docker.com/_/alpine/tags
@@ -80,12 +86,17 @@ linux/arm/v6
 linux/arm/v7
 linux/arm64/v8
 linux/ppc64le
+linux/riscv64
 linux/s390x
 EOF
 
 # 3.20 开始支持 linux/riscv64
 # 龙芯架构
 # https://cr.loongnix.cn/search
+# 软件源
+# http://alpine.loongnix.cn
+# http://alpine.loongnix.cn/v3.11/releases/loongarch64/
+# loongarch64/alpine:3.21
 
 : <<'EOF'
 

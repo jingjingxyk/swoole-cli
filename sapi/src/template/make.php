@@ -30,6 +30,7 @@ OPTIONS="--disable-all \
     --disable-cgi  \
     --enable-cli  \
     --disable-phpdbg \
+    --without-pcre-jit \
     --with-config-file-path=<?= $this->getGlobalPrefix() ?>/etc/ \
     --with-config-file-scan-dir=<?= $this->getGlobalPrefix() ?>/etc/conf.d/ \
 <?php foreach ($this->extensionList as $item) : ?>
@@ -215,7 +216,11 @@ export_variables() {
     CXXFLAGS=""
     CFLAGS=""
     LDFLAGS=""
-    LIBS=""
+    LIBS=" "
+    if [[ $(uname -m) == "loongarch64" ]] ; then
+        # for fiber
+        LIBS+=" -lucontext "
+    fi
 <?php foreach ($this->variables as $name => $value) : ?>
     <?= key($value) ?>="<?= current($value) ?>"
 <?php endforeach; ?>

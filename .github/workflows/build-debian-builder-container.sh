@@ -64,6 +64,7 @@ done
 
 
 IMAGE='swoole-cli-builder:latest'
+docker buildx ls
 docker buildx build -t ${IMAGE} -f ./Dockerfile .  --platform ${PLATFORM} --build-arg BASE_IMAGE="${BASE_IMAGE}"
 docker images
 docker save -o "swoole-cli-builder-image.tar" ${IMAGE}
@@ -85,6 +86,10 @@ linux/ppc64le
 linux/riscv64
 linux/s390x
 EOF
+
+# 支持龙芯
+# cr.loongnix.cn/library/debian:buster
+# loongarch64/debian:12
 
 # Debian 全球镜像站
 # https://www.debian.org/mirror/list
