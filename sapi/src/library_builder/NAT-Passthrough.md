@@ -105,3 +105,13 @@ https://github.com/IrineSistiana/mosdns/blob/main/scripts/update_chn_ip_domain.p
     https://source.chromium.org/chromium/chromium/src/+/main:chrome/installer/linux/debian/dist_package_versions.json
     https://github.com/puppeteer/puppeteer/issues/5662#issuecomment-732076246
     playwright  https://github.com/microsoft/playwright
+
+##
+
+1. 端口转发
+2. 动态域名 ddns
+3. web 服务
+4. stun 内网穿透
+5. 网络唤醒
+6. 计划任务
+7. 网络存储
