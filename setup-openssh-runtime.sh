@@ -100,11 +100,11 @@ done
 
 case "$MIRROR" in
 china)
-  APP_DOWNLOAD_URL="https://php-cli.jingjingxyk.com/${APP_NAME}-${APP_VERSION}-${OS}-${ARCH}.tar.xz"
+  APP_DOWNLOAD_URL="https://php-cli-usa.jingjingxyk.com/${APP_NAME}-${APP_VERSION}-${OS}-${ARCH}.tar.xz"
   if [ $OS = 'windows' ]; then
     APP_DOWNLOAD_URL="https://php-cli.jingjingxyk.com/${APP_NAME}-${APP_VERSION}-msys2-${ARCH}.zip"
   fi
-  CACERT_DOWNLOAD_URL="https://php-cli.jingjingxyk.com/cacert.pem"
+  CACERT_DOWNLOAD_URL="https://php-cli-usa.jingjingxyk.com/cacert.pem"
   ;;
 
 esac
@@ -156,11 +156,11 @@ ${__DIR__}/sbin/sshd -D -e -f   ${__DIR__}/etc/sshd_config
 
 EOF
 
-
 T__PROJECT__=$(echo "${__PROJECT__}" | sed "s|/|\\\/|g")
 T_APP_RUNTIME_DIR=$(echo "${APP_RUNTIME_DIR}" | sed "s|\/|\\\/|g")
 sed -i.bak "s@\/usr\/local\/swoole-cli@${T__PROJECT__}\/runtime@" $SSHD_CONFIG
 sed -i.bak "s@\.ssh\/authorized_keys@${T_APP_RUNTIME_DIR}\/\.ssh\/authorized_keys@" $SSHD_CONFIG
+sed -i.bak 's/^#HostKey/HostKey/g' $SSHD_CONFIG
 
 echo 'Port 65527' >>$SSHD_CONFIG
 echo 'AddressFamily any' >>$SSHD_CONFIG
