@@ -192,4 +192,4 @@ echo " ssh client example:"
 echo " cat example_ssh_key.pub >> ${APP_RUNTIME_DIR}/.ssh/authorized_keys"
 echo " ssh -o StrictHostKeyChecking=no -p 65527 -i example_ssh_key -v -CNT -D 0.0.0.0:$(date +%Y) $(id -un)@127.0.0.1"
 
-export PATH="${APP_RUNTIME_DIR}/bin/:${APP_RUNTIME_DIR}/sbin/:$PATH"
+export PATH="${APP_RUNTIME_DIR}/bin/:${APP_RUNTIME_DIR}/sbin/:${APP_RUNTIME_DIR}/libexec/:$PATH"
