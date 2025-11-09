@@ -257,7 +257,7 @@ make_config() {
 
 <?php if ($this->isMacos()) : ?>
     <?php if ($this->hasLibrary('pgsql')) : ?>
-    sed -i.backup "s/ac_cv_func_explicit_bzero\" = xyes/ac_cv_func_explicit_bzero\" = x_fake_yes/" ./configure
+    # sed -i.backup "s/ac_cv_func_explicit_bzero\" = xyes/ac_cv_func_explicit_bzero\" = x_fake_yes/" ./configure
     <?php endif;?>
 <?php endif; ?>
 

@@ -69,18 +69,6 @@ EOF
         ->withDependentLibraries(...$dependentLibraries)
         ->withDependentExtensions(...$dependentExtensions));
 
-    $p->withBeforeConfigureScript('swoole', function (Preprocessor $p) {
-        $cmd = '';
-        if ($p->isMacos()) {
-            $workDir = $p->getWorkDir();
-            $cmd = <<<EOF
-        cd {$workDir}/
-        # sed -i '' 's/pthread_barrier_init/pthread_barrier_init_x_fake/' ext/swoole/config.m4
-EOF;
-        }
-        return $cmd;
-
-    });
     if ($p->isMacos()) {
         # 测试 macos 专有特性
         # 定义 _GNU_SOURCE 会隐式启用 _POSIX_C_SOURCE=200112L 和 _XOPEN_SOURCE=600
