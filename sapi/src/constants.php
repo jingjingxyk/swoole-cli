@@ -220,11 +220,14 @@ define("LIBMPDECIMAL_PREFIX", $p->getGlobalPrefix() . '/libmpdecimal');
 define("LIBB2_PREFIX", $p->getGlobalPrefix() . '/libb2');
 define("LIBEXPAT_PREFIX", $p->getGlobalPrefix() . '/libexpat');
 
-
 define("LIBEVENT_PREFIX", $p->getGlobalPrefix() . '/libevent');
 define("SNAPPY_PREFIX", $p->getGlobalPrefix() . '/snappy');
 define("LIBSASL_PREFIX", $p->getGlobalPrefix() . '/sasl');
 define("LIBTIFF_PREFIX", $p->getGlobalPrefix() . '/libtiff');
+define("LIBARGON2_PREFIX", $p->getGlobalPrefix() . '/libargon2');
+define("LIBPSL_PREFIX", $p->getGlobalPrefix() . '/libpsl');
+
+define("ABSL_PREFIX", $p->getGlobalPrefix() . '/absl');
 
 define("LIBRAW_PREFIX", $p->getGlobalPrefix() . '/libraw');
 define("LCMS2_PREFIX", $p->getGlobalPrefix() . '/lcms2');
@@ -319,9 +322,7 @@ define("ASTERISK_PREFIX", $p->getGlobalPrefix() . '/asterisk');
 define("PJPROJECT_PREFIX", $p->getGlobalPrefix() . '/pjproject');
 define("QEMU_PREFIX", $p->getGlobalPrefix() . '/qemu');
 
-
 define("LIBFFI_PREFIX", $p->getGlobalPrefix() . '/libffi');
-
 
 define("STRONGSWAN_PREFIX", $p->getGlobalPrefix() . '/strongswan');
 
