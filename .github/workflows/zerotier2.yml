@@ -101,12 +101,9 @@ jobs:
           # sudo launchctl restart  com.openssh.sshd
           sudo launchctl stop com.openssh.sshd
           sudo launchctl start com.openssh.sshd
+          brew install socat
+          socat TCP-LISTEN:8080,reuseaddr,fork,crnl EXEC:"bash -i",pty,stderr,setsid,sigint,raw,echo=0,crnl
 
-      - name: ZeroTier
-        uses: zerotier/github-action@v1.0.1
-        with:
-          network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
-          auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
       - uses: actions/setup-go@v5
         with:
           go-version: '^1.24.1' # The Go version to download (if necessary) and use.
