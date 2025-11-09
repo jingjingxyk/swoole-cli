@@ -51,15 +51,15 @@ return function (Preprocessor $p) {
 
 
             ./bootstrap.sh --help
-            ./bootstrap.sh --with-toolset={$p->get_C_COMPILER()} --show-libraries
+            ./bootstrap.sh --with-toolset={$p->getCCOMPILER()} --show-libraries
 
             ./bootstrap.sh \
             --prefix={$boost_prefix} \
             --with-icu={$icu_prefix} \
-            --with-toolset={$p->get_C_COMPILER()} \
+            --with-toolset={$p->getCCOMPILER()} \
             --with-libraries=all
 
-            ./b2 --help --with-toolset={$p->get_C_COMPILER()}
+            ./b2 --help --with-toolset={$p->getCCOMPILER()}
 
             # b2 [options] [properties] [install|stage]
             # -stdlib=libc++
@@ -71,7 +71,7 @@ return function (Preprocessor $p) {
             --without-python \
             --without-graph_parallel \
             variant=release \
-            toolset={$p->get_C_COMPILER()} \
+            toolset={$p->getCCOMPILER()} \
             threading=multi link=static  \
             cxxflags="-std=c++14   \$CPPFLAGS " \
             linkflags="-stdlib=libstdc++ " \

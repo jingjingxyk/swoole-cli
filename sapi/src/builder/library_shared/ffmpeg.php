@@ -125,8 +125,8 @@ EOF
             --enable-libsvtav1 \
             --enable-shared \
             --disable-static \
-            --cc={$p->get_C_COMPILER()} \
-            --cxx={$p->get_CXX_COMPILER()} \
+            --cc={$p->getCCOMPILER()} \
+            --cxx={$p->getCXXCOMPILER()} \
             --extra-cflags="\${CPPFLAGS} " \
             --extra-ldflags="\${LDFLAGS} " \
             --extra-libs="\${LIBS} " \

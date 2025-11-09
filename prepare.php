@@ -143,6 +143,20 @@ if ($p->isMacos()) {
         ->withBinPath($homebrew_prefix . '/opt/gettext/bin')
         ->setLinker('ld');
     $p->setLogicalProcessors('$(sysctl -n hw.ncpu)');
+    /*
+    $p->withBinPath($homebrew_prefix . '/opt/llvm/bin');
+    $p->withBinPath($homebrew_prefix . '/opt/lld/bin');
+    $p->setCCOMPILER($homebrew_prefix . '/opt/llvm/bin/clang')
+        ->setCXXCOMPILER($homebrew_prefix . '/opt/llvm/bin/clang++')
+        ->setAR($homebrew_prefix . '/opt/llvm/bin/llvm-ar')
+        ->setAS($homebrew_prefix . '/opt/llvm/bin/llvm-as')
+        ->setLinker($homebrew_prefix . '/opt/lld/bin/lld');
+    //-L/opt/homebrew/opt/llvm/lib/c++
+    $p->withVariable('LDFLAGS', '$LDFLAGS -L' . $homebrew_prefix . '/opt/llvm/lib/c++');
+    $p->withVariable('LDFLAGS', '$LDFLAGS -L'. `xcrun --show-sdk-path`.'/usr/lib/');
+    $p->withVariable('LDFLAGS', '$LDFLAGS -fuse-ld=lld');
+    $p->withVariable('LDFLAGS', '$LDFLAGS -L/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/');
+    */
 } else {
     $p->setLogicalProcessors('$(nproc 2> /dev/null)');
 }
@@ -150,8 +164,8 @@ if ($p->isMacos()) {
 
 $c_compiler = $p->getInputOption('with-c-compiler');
 if ($c_compiler == 'gcc') {
-    $p->set_C_COMPILER('gcc');
-    $p->set_CXX_COMPILER('g++');
+    $p->setCCOMPILER('gcc');
+    $p->setCXXCOMPILER('g++');
     $p->setLinker('ld');
 }
 

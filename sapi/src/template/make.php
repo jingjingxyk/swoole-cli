@@ -24,7 +24,8 @@ export OS_RELEASE='macos'
 export CC=<?= $this->cCompiler . PHP_EOL ?>
 export CXX=<?= $this->cppCompiler . PHP_EOL ?>
 export LD=<?= $this->lld . PHP_EOL ?>
-
+export AR=<?= $this->ar . PHP_EOL ?>
+export AS=<?= $this->as . PHP_EOL ?>
 
 export SYSTEM_ORIGIN_PKG_CONFIG_PATH=$PKG_CONFIG_PATH
 export PKG_CONFIG_PATH=<?= implode(':', $this->pkgConfigPaths) . PHP_EOL ?>
@@ -334,7 +335,7 @@ export_variables() {
         export LIBS="$LIBS -lcrypto -lssl -lmpdec -lmpdec++ -lbz2 -llzma -lHacl_Hash_SHA2 -lb2 -lexpat -lxml2 -lform -lmenu  -ltic -lpanel -lncurses++ -lncurses "
     <?php endif; ?>
 <?php endif; ?>
-<?php if ($this->isLinux() && ($this->get_C_COMPILER() == 'musl-gcc')) : ?>
+<?php if ($this->isLinux() && ($this->getCCOMPILER() == 'musl-gcc')) : ?>
     ln -sf /usr/include/linux/ /usr/include/x86_64-linux-musl/linux
     ln -sf /usr/include/x86_64-linux-gnu/asm/ /usr/include/x86_64-linux-musl/asm
     ln -sf /usr/include/asm-generic/ /usr/include/x86_64-linux-musl/asm-generic

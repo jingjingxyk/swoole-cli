@@ -38,6 +38,20 @@ jobs:
           brew config
           xcrun --show-sdk-path
           ls -lh $(xcrun --show-sdk-path)
+          ls -lh /Applications/Xcode*
+          ls -lh /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/
+          ls -lh /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/
+          ls -lh /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/bin
+          ls -lh /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_pthread
+          MACOS_SDK_ROOT=$(xcrun --show-sdk-path)
+          cho $MACOS_SDK_ROOT
+          MACOS_VERSION=$(sw_vers -productVersion)
+          echo $MACOS_VERSION
+          ls -lha /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib
+          ls -lha /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/
+          ls -lha /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/
+          ls -lha /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/
+          ls -lha /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
           clang --version
 
           ifconfig
@@ -55,7 +69,11 @@ jobs:
           bash sapi/quickstart/macos/macos-init.sh
 
           export PATH="/opt/homebrew/opt/libtool/bin:$PATH"
+          set -x
           ls -lha /opt/homebrew/opt/libtool/bin/
+          ls -lha /opt/homebrew/opt/llvm/bin/
+          ls -lha /opt/homebrew/opt/lld/bin/
+          ls -lha /opt/homebrew/opt/llvm/lib/c++
           libtoolize --version
           libtool --help-all
 

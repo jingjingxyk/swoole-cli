@@ -8,7 +8,7 @@ return function (Preprocessor $p) {
     $static = $p->isMacos() ? '' : ' -static --static';
 
     $cc = '';
-    if ($p->isLinux() && ($p->get_C_COMPILER() === 'musl-gcc')) {
+    if ($p->isLinux() && ($p->getCCOMPILER() === 'musl-gcc')) {
 
         # 参考 https://github.com/openssl/openssl/issues/7207#issuecomment-880121450
         # -idirafter /usr/include/ -idirafter /usr/include/x86_64-linux-gnu/"
