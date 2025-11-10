@@ -1,0 +1,47 @@
+<?php
+
+use SwooleCli\Library;
+use SwooleCli\Preprocessor;
+
+return function (Preprocessor $p) {
+    $openssl_prefix = OPENSSL_PREFIX;
+    $p->addLibrary(
+        (new Library('openssl'))
+            ->withHomePage('https://www.openssl.org/')
+            ->withLicense('https://github.com/openssl/openssl/blob/master/LICENSE.txt', Library::LICENSE_APACHE2)
+            ->withManual('https://www.openssl.org/docs/')
+            ->withUrl('https://github.com/openssl/openssl/releases/download/openssl-3.6.0/openssl-3.6.0.tar.gz')
+            ->withFileHash('md5', '77ab78417082f22a2ce809898bd44da0')
+            ->withPrefix($openssl_prefix)
+            ->withConfigure(
+                <<<EOF
+                # Fix openssl error, "-ldl" should not be added when compiling statically
+                sed -i.backup 's/add("-ldl", threads("-pthread"))/add(threads("-pthread"))/g' ./Configurations/10-main.conf
+                # ./Configure LIST
+               ./config no-tests shared  enable-tls1_3  --release \
+               --prefix={$openssl_prefix} \
+               --libdir=lib
+
+EOF
+            )
+            ->withMakeOptions('build_sw')
+            ->withMakeInstallCommand('install_sw')
+            ->withScriptAfterInstall(
+                <<<EOF
+            sed -i.backup "s/-ldl/  /g" {$openssl_prefix}/lib/pkgconfig/libcrypto.pc
+
+            sed -i.backup 's@\\\${libdir}/lib/@\\\${prefix}/lib/@g' {$openssl_prefix}/lib/pkgconfig/libcrypto.pc
+
+            sed -i.backup '/^libdir/s/.*/libdir=\\\${prefix}\/lib/' {$openssl_prefix}/lib/pkgconfig/libcrypto.pc
+            sed -i.backup '/^libdir/s/.*/libdir=\\\${prefix}\/lib/' {$openssl_prefix}/lib/pkgconfig/libssl.pc
+            sed -i.backup '/^libdir/s/.*/libdir=\\\${prefix}\/lib/' {$openssl_prefix}/lib/pkgconfig/openssl.pc
+
+            {$openssl_prefix}/bin/openssl version -a
+EOF
+            )
+            ->withPkgName('libssl')
+            ->withPkgName('libcrypto')
+            ->withPkgName('openssl')
+            ->withBinPath($openssl_prefix . '/bin/')
+    );
+};

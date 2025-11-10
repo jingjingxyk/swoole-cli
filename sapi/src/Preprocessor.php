@@ -98,6 +98,7 @@ class Preprocessor
     {
         $this->setOsType($this->getRealOsType());
         $this->extEnabled = require __DIR__ . '/builder/enabled_extensions.php';
+        $this->extEnabled = [];
     }
 
     public function setLinker(string $ld): static
@@ -688,6 +689,9 @@ class Preprocessor
     {
         if (!isset($this->libraryMap[$library_name])) {
             $file = realpath(__DIR__ . '/builder/library/' . $library_name . '.php');
+            if ($this->getInputOption('with-build-shared')) {
+                $file = realpath(__DIR__ . '/builder/library-shared/' . $library_name . '.php');
+            }
             if (!is_file($file)) {
                 throw new Exception("The library-$library_name does not exist");
             }
