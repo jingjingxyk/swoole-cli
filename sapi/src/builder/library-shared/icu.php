@@ -23,7 +23,7 @@ return function (Preprocessor $p) {
              source/runConfigureICU $os --prefix={$icu_prefix} \
              --enable-static=no \
              --enable-shared=yes \
-             --with-data-packaging=archive \
+             --with-data-packaging=files \
              --enable-release=yes \
              --enable-extras=yes \
              --enable-icuio=yes \
