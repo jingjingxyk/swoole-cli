@@ -94,6 +94,8 @@ class Preprocessor
     protected bool $inVirtualMachine = false;
     protected bool $skipHashVerify = false;
 
+    public bool $shared = false;
+
     protected function __construct()
     {
         $this->setOsType($this->getRealOsType());
@@ -689,7 +691,7 @@ class Preprocessor
     {
         if (!isset($this->libraryMap[$library_name])) {
             $file = realpath(__DIR__ . '/builder/library/' . $library_name . '.php');
-            if ($this->getInputOption('with-build-shared')) {
+            if ($this->shared) {
                 $file = realpath(__DIR__ . '/builder/library-shared/' . $library_name . '.php');
             }
             if (!is_file($file)) {
@@ -904,5 +906,11 @@ class Preprocessor
     public function hasExtension(string $ext): bool
     {
         return isset($this->extensionMap[$ext]);
+    }
+
+    public function setBuildShared(bool $shared): static
+    {
+        $this->shared = $shared;
+        return $this;
     }
 }

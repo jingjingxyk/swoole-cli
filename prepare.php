@@ -40,6 +40,10 @@ if ($p->getInputOption('with-parallel-jobs')) {
     $p->setMaxJob(intval($p->getInputOption('with-parallel-jobs')));
 }
 
+if ($p->getInputOption('with-build-shared')) {
+    $p->setBuildShared(true);
+}
+
 if ($p->isMacos()) {
     $p->setExtraLdflags('');
     $homebrew_prefix = trim(shell_exec('brew --prefix'));

@@ -24,8 +24,13 @@ export PKG_CONFIG_PATH=<?= implode(':', $this->pkgConfigPaths) . PHP_EOL ?>
 export PATH=<?= implode(':', $this->binPaths) . PHP_EOL ?>
 
 OPTIONS="--disable-all \
+<?php if($this->shared) : ?>
+    --enable-shared=yes \
+    --enable-static=no \
+<?php else : ?>
     --enable-shared=no \
     --enable-static=yes \
+<?php endif; ?>
     --with-config-file-path=<?= $this->getGlobalPrefix() ?>/etc/ \
     --with-config-file-scan-dir=<?= $this->getGlobalPrefix() ?>/etc/conf.d/ \
     --enable-zts \
