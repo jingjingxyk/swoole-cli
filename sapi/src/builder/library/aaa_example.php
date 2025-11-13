@@ -9,6 +9,7 @@ return function (Preprocessor $p) {
 
     $gettext_prefix = GETTEXT_PREFIX;
     $cares_prefix = CARES_PREFIX;
+    $openh264_prefix = OPENH264_PREFIX;
 
     $tag = '';
     //文件名称 和 库名称一致
@@ -206,16 +207,19 @@ EOF
         LDFLAGS="-L{$gettext_prefix}/lib" \
         LIBS=" -lintl " \
 
-        meson setup  build \
-        -Dprefix={$example_prefix} \
-        -Dlibdir={$example_prefix}/lib \
-        -Dincludedir={$example_prefix}/include \
-        -Dbackend=ninja \
-        -Dbuildtype=release \
-        -Ddefault_library=static \
-        -Db_staticpic=true \
-        -Db_pie=true \
-        -Dprefer_static=true
+        meson setup  build_dir \
+        --prefix={$openh264_prefix} \
+        --libdir={$openh264_prefix}/lib \
+        --includedir={$openh264_prefix}/include \
+        --default-library=static \
+        --backend=ninja \
+        --default-both-libraries=static \
+        --prefer-static \
+        -Dtests=disabled
+
+        # meson compile -v
+        # cat build.ninja | grep "command ="
+        # ninja -t commands
 
         # 更多构建选项，请查看 meson_options.txt 文件
         # -Dexamples=disabled
@@ -341,8 +345,7 @@ EOF
         ->withPkgName('libexample')
         ->withBinPath($example_prefix . '/bin/')
         //依赖其它静态链接库
-        ->withDependentLibraries('zlib', 'openssl')
-        /*
+        ->withDependentLibraries('zlib', 'openssl')/*
 
 
         //默认不需要此配置，特殊目录才需要配置
