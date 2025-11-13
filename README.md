@@ -55,6 +55,7 @@ curl -fSL  https://github.com/jingjingxyk/build-swow-cli/blob/main/setup-swow-cl
 - [php-cli 构建选项文档](docs/options.md)
 - [php-cli 搭建依赖库镜像服务](sapi/download-box/README.md)
 - [quickstart](sapi/quickstart/README.md)
+- [常见问题解答](https://github.com/swoole/swoole-cli/blob/main/docs/FAQ.md)
 
 ## Clone
 
