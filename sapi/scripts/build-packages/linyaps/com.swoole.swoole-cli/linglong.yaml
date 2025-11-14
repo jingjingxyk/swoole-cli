@@ -1,0 +1,50 @@
+version: '1'
+
+package:
+  id: org.deepin.calculator
+  name: deepin-calculator
+  version: 5.7.21.0
+  kind: app
+  description: |
+    calculator for deepin os.
+
+command:
+  - /opt/apps/org.deepin.calculator/files/bin/deepin-calculator
+
+base: org.deepin.base/23.1.0
+runtime: org.deepin.runtime.dtk/23.1.0
+
+sources:
+  - kind: git
+    url: https://github.com/linuxdeepin/deepin-calculator.git
+    version: master
+    commit: d7e207b4a71bbd97f7d818de5044228c1a6e2c92
+
+  - kind: git
+    url: https://github.com/linuxdeepin/dde-qt-dbus-factory.git
+    version: master
+    commit: d952e1913172c5507af080f644a654f9ba5fed95
+
+build: |
+  # build dde-qt-dbus-factory
+  cd /project/linglong/sources/dde-qt-dbus-factory.git
+  qmake -makefile \
+        PREFIX=${PREFIX} \
+        LIB_INSTALL_DIR=${PREFIX}/lib/${TRIPLET} \
+        INSTALL_ROOT=${PREFIX}
+
+  make
+  make install
+
+  # build calculator
+  cd /project/linglong/sources/deepin-calculator.git
+  cmake -Bbuild \
+        -DCMAKE_INSTALL_PREFIX=${PREFIX} \
+        -DCMAKE_INSTALL_LIBDIR=${PREFIX}/lib/${TRIPLET} \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_SAFETYTEST_ARG="CMAKE_SAFETYTEST_ARG_OFF" \
+        -DAPP_VERSION=5.7.21 \
+        -DVERSION=5.7.21
+
+  cmake --build build
+  cmake --build build --target install
