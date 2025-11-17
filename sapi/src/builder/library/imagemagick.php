@@ -11,10 +11,11 @@ return function (Preprocessor $p) {
             ->withHomePage('https://imagemagick.org/index.php')
             ->withManual('https://github.com/ImageMagick/ImageMagick.git')
             ->withLicense('https://imagemagick.org/script/license.php', Library::LICENSE_APACHE2)
-            ->withUrl('https://github.com/ImageMagick/ImageMagick/archive/refs/tags/7.1.1-20.tar.gz')
-            ->withFile('ImageMagick-v7.1.1-20.tar.gz')
-            ->withFileHash('md5', '90eb1a9263b47b7e844eb817fe08932c')
+            ->withUrl('https://github.com/ImageMagick/ImageMagick/archive/refs/tags/7.1.2-8.tar.gz')
+            ->withFile('ImageMagick-v7.1.2-8.tar.gz')
+            //->withFileHash('md5', '90eb1a9263b47b7e844eb817fe08932c')
             ->withPrefix($imagemagick_prefix)
+            ->withBuildCached(false)
             ->withConfigure(
                 <<<EOF
             ./configure --help
@@ -22,7 +23,8 @@ return function (Preprocessor $p) {
             PACKAGES_NAMES="\${PACKAGES_NAMES} libbrotlicommon libbrotlidec libbrotlienc libzip  zlib  libzstd  liblzma"
             PACKAGES_NAMES="\${PACKAGES_NAMES} libcrypto libssl   openssl"
             PACKAGES_NAMES="\${PACKAGES_NAMES} libxml-2.0"
-            PACKAGES_NAMES="\${PACKAGES_NAMES} libtiff-4 lcms2"
+            PACKAGES_NAMES="\${PACKAGES_NAMES} libheif lcms2 libraw libraw_r libtiff-4 "
+            PACKAGES_NAMES="\${PACKAGES_NAMES} libdeflate "
             CPPFLAGS="\$(pkg-config --cflags-only-I --static \$PACKAGES_NAMES ) -I{$bzip2_prefix}/include" \
             LDFLAGS="\$(pkg-config  --libs-only-L   --static \$PACKAGES_NAMES ) -L{$bzip2_prefix}/lib"  \
             LIBS="\$(pkg-config     --libs-only-l   --static \$PACKAGES_NAMES ) -lbz2" \
@@ -30,6 +32,7 @@ return function (Preprocessor $p) {
             --prefix={$imagemagick_prefix} \
             --enable-shared=no \
             --enable-static=yes \
+            --with-pic \
             --with-zip \
             --with-zlib \
             --with-lzma \
@@ -39,6 +42,7 @@ return function (Preprocessor $p) {
             --with-webp \
             --with-xml \
             --with-freetype \
+            --with-heic \
             --with-raw \
             --with-tiff \
             --with-lcms \
@@ -53,7 +57,6 @@ return function (Preprocessor $p) {
             --without-djvu \
             --without-rsvg \
             --without-fontconfig \
-            --without-heic \
             --without-jbig \
             --without-jxl \
             --without-openjp2 \
@@ -98,9 +101,12 @@ EOF
                 'libgif',
                 'openssl',
                 'libzstd',
-                // 'lcms2',
-                // 'libtiff',
-                // 'libraw'
+                'libheif',
+                'lcms2',
+                'libraw',
+                'libtiff',
+                'libdeflate',
+                //'libjxl' //咱不启用
             )
     );
 };

@@ -57,15 +57,11 @@ define("LIBMCRYPT_PREFIX", $p->getGlobalPrefix() . '/libmcrypt');
 define("PRIVOXY_PREFIX", $p->getGlobalPrefix() . '/privoxy');
 
 
-define("LIBDE265_PREFIX", $p->getGlobalPrefix() . '/libde265');
 define("LIBX264_PREFIX", $p->getGlobalPrefix() . '/libx264');
 define("NUMA_PREFIX", $p->getGlobalPrefix() . '/numa');
-define("LIBX265_PREFIX", $p->getGlobalPrefix() . '/libx265');
 
-define("LIBHEIF_PREFIX", $p->getGlobalPrefix() . '/libheif');
-define("LIBJXL_PREFIX", $p->getGlobalPrefix() . '/libjxl');
+
 define("LIBGD_PREFIX", $p->getGlobalPrefix() . '/libgd');
-
 
 define("RAV1E_PREFIX", $p->getGlobalPrefix() . '/rav1e');
 
@@ -133,6 +129,20 @@ define("GETTEXT_PREFIX", $p->getGlobalPrefix() . '/gettext');
 define("LIBUNISTRING_PREFIX", $p->getGlobalPrefix() . '/libunistring');
 define("LIBURING_PREFIX", $p->getGlobalPrefix() . '/liburing');
 
+define("SDL2_PREFIX", $p->getGlobalPrefix() . '/sdl2');
+define("LIBARGON2_PREFIX", $p->getGlobalPrefix() . '/libargon2');
+
+define("LIBHEIF_PREFIX", $p->getGlobalPrefix() . '/libheif');
+define("LIBX265_PREFIX", $p->getGlobalPrefix() . '/libx265');
+define("LIBDE265_PREFIX", $p->getGlobalPrefix() . '/libde265');
+define("OPENH264_PREFIX", $p->getGlobalPrefix() . '/openh264');
+define("LIBTIFF_PREFIX", $p->getGlobalPrefix() . '/libtiff');
+define("LIBRAW_PREFIX", $p->getGlobalPrefix() . '/libraw');
+define("LCMS2_PREFIX", $p->getGlobalPrefix() . '/lcms2');
+define("OPENJPEG_PREFIX", $p->getGlobalPrefix() . '/openjpeg');
+define("LIBDEFLATE_PREFIX", $p->getGlobalPrefix() . '/libdeflate');
+define("LIBPSL_PREFIX", $p->getGlobalPrefix() . '/libpsl');
+define("LIBJXL_PREFIX", $p->getGlobalPrefix() . '/libjxl');
 
 define("LIBARCHIVE_PREFIX", $p->getGlobalPrefix() . '/libarchive');
 
@@ -194,7 +204,6 @@ define("UPNP_PREFIX", $p->getGlobalPrefix() . '/upnp');
 define("USRSCTP_PREFIX", $p->getGlobalPrefix() . '/usrsctp');
 define("RABBITMQ_C_PREFIX", $p->getGlobalPrefix() . '/rabbitmq_c');
 define("LIBCONFIG_PREFIX", $p->getGlobalPrefix() . '/libconfig');
-define("OPENH264_PREFIX", $p->getGlobalPrefix() . '/openh264');
 define("PAHO_MQTT_PREFIX", $p->getGlobalPrefix() . '/paho_mqtt');
 
 define("LIBVPX_PREFIX", $p->getGlobalPrefix() . '/libvpx');
@@ -214,7 +223,6 @@ define("LIBGAV1_PREFIX", $p->getGlobalPrefix() . '/libgav1');
 define("AOM_PREFIX", $p->getGlobalPrefix() . '/aom');
 define("SVT_AV1_PREFIX", $p->getGlobalPrefix() . '/svt_av1');
 define("LIBYUV_PREFIX", $p->getGlobalPrefix() . '/libyuv');
-define("LIBPSL_PREFIX", $p->getGlobalPrefix() . '/libpsl');
 
 define("PYTHON3_PREFIX", $p->getGlobalPrefix() . '/python3');
 define("LIBMPDECIMAL_PREFIX", $p->getGlobalPrefix() . '/libmpdecimal');
@@ -224,19 +232,11 @@ define("LIBEXPAT_PREFIX", $p->getGlobalPrefix() . '/libexpat');
 define("LIBEVENT_PREFIX", $p->getGlobalPrefix() . '/libevent');
 define("SNAPPY_PREFIX", $p->getGlobalPrefix() . '/snappy');
 define("LIBSASL_PREFIX", $p->getGlobalPrefix() . '/sasl');
-define("LIBTIFF_PREFIX", $p->getGlobalPrefix() . '/libtiff');
-define("LIBARGON2_PREFIX", $p->getGlobalPrefix() . '/libargon2');
 
-define("ABSL_PREFIX", $p->getGlobalPrefix() . '/absl');
-
-define("LIBRAW_PREFIX", $p->getGlobalPrefix() . '/libraw');
-define("LCMS2_PREFIX", $p->getGlobalPrefix() . '/lcms2');
 
 define("LIBMEMCACHED_PREFIX", $p->getGlobalPrefix() . '/libmemcached');
 define("LIBMEMCACHED_AWESOME_PREFIX", $p->getGlobalPrefix() . '/libmemcached_awesome');
 
-define("SDL2_PREFIX", $p->getGlobalPrefix() . '/sdl2');
-define("LIBARGON2_PREFIX", $p->getGlobalPrefix() . '/libargon2');
 define("ABSL_PREFIX", $p->getGlobalPrefix() . '/absl');
 
 define("GRPC_PREFIX", $p->getGlobalPrefix() . '/grpc');
@@ -273,7 +273,6 @@ define("LIBYAML_CPP_PREFIX", $p->getGlobalPrefix() . '/libyaml_cpp');
 define("LIBMARISA_PREFIX", $p->getGlobalPrefix() . '/libmarisa');
 define("LIBSCTP_PREFIX", $p->getGlobalPrefix() . '/libsctp');
 define("BCG729_PREFIX", $p->getGlobalPrefix() . '/bcg729');
-define("LIBDEFLATE_PREFIX", $p->getGlobalPrefix() . '/libdeflate');
 
 define("COREUTILS_PREFIX", $p->getGlobalPrefix() . '/coreutils');
 define("LIBGOMP_PREFIX", $p->getGlobalPrefix() . '/libgomp');
@@ -283,7 +282,6 @@ define("LIBFVAD_PREFIX", $p->getGlobalPrefix() . '/libfvad');
 define("GVDB_PREFIX", $p->getGlobalPrefix() . '/gvdb');
 define("GLIB_PREFIX", $p->getGlobalPrefix() . '/glib');
 define("LIBSOUP_PREFIX", $p->getGlobalPrefix() . '/libsoup');
-define("LIBPSL_PREFIX", $p->getGlobalPrefix() . '/libpsl');
 define("LIBBSD_PREFIX", $p->getGlobalPrefix() . '/libbsd');
 define("LIBMD_PREFIX", $p->getGlobalPrefix() . '/libmd');
 define("PGSQL_LATEST_PREFIX", $p->getGlobalPrefix() . '/pgsql_latest');
@@ -293,7 +291,7 @@ define("UNBOUND_PREFIX", $p->getGlobalPrefix() . '/unbound');
 define("LIBXDP_PREFIX", $p->getGlobalPrefix() . '/libxdp');
 define("CPU_FEATURES_PREFIX", $p->getGlobalPrefix() . '/cpu_features');
 define("OPENEXR_PREFIX", $p->getGlobalPrefix() . '/openexr');
-define("OPENJPEG_PREFIX", $p->getGlobalPrefix() . '/openjpeg');
+
 define("OPENBLAS_PREFIX", $p->getGlobalPrefix() . '/openblas');
 define("LAPACK_PREFIX", $p->getGlobalPrefix() . '/lapack');
 define("RISCV_PREFIX", $p->getGlobalPrefix() . '/riscv');
@@ -350,5 +348,6 @@ define("LIBZOOKEEPER_PREFIX", $p->getGlobalPrefix() . '/libzookeeper');
 define("TCPDUMP_PREFIX", $p->getGlobalPrefix() . '/tcpdump');
 define("MASSCAN_PREFIX", $p->getGlobalPrefix() . '/masscan');
 define("LIBJWT_PREFIX", $p->getGlobalPrefix() . '/libjwt');
-define("EXAMPLE_PREFIX", $p->getGlobalPrefix() . '/example');
 
+
+define("EXAMPLE_PREFIX", $p->getGlobalPrefix() . '/example');

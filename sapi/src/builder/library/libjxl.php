@@ -5,40 +5,66 @@ use SwooleCli\Preprocessor;
 
 return function (Preprocessor $p) {
     $libjxl_prefix = LIBJXL_PREFIX;
+    $brotli_prefix = BROTLI_PREFIX;
+    $libgif_prefix = GIF_PREFIX;
+    $libjpeg_prefix = JPEG_PREFIX;
+    $libpng_prefix = PNG_PREFIX;
+    $zlib_prefix = ZLIB_PREFIX;
+    $libwebp_prefix = WEBP_PREFIX;
+    $cmake_prefix_path = "";
+    $cmake_prefix_path .= "{$brotli_prefix};";
+    $cmake_prefix_path .= "{$libgif_prefix};";
+    $cmake_prefix_path .= "{$libjpeg_prefix};";
+    $cmake_prefix_path .= "{$libpng_prefix};";
+    $cmake_prefix_path .= "{$zlib_prefix};";
+    $cmake_prefix_path .= "{$libwebp_prefix};";
     $lib = new Library('libjxl');
-    $lib->withHomePage('https://github.com/libjxl/libjxl.git')
-        ->withLicense('https://github.com/libjxl/libjxl/blob/main/LICENSE', Library::LICENSE_BSD)
-        ->withUrl('https://github.com/libjxl/libjxl/archive/refs/tags/v0.8.1.tar.gz')
-        ->withManual('https://github.com/libjxl/libjxl/blob/main/BUILDING.md')
-        ->withFile('libjpegxl-v0.8.1.tar.gz')
+    $lib->withHomePage('https://github.com/ebiggers/libdeflate')
+        ->withLicense('https://github.com/libjxl/libjxl/#BSD-3-Clause-1-ov-file', Library::LICENSE_BSD)
+        ->withManual('https://github.com/libjxl/libjxl.git')
+        ->withUrl('https://github.com/libjxl/libjxl/archive/refs/tags/v0.11.1.tar.gz')
+        ->withFile('libjxl-v0.11.1.tar.gz')
         ->withPrefix($libjxl_prefix)
+        ->withBuildCached(false)
         ->withBuildScript(
             <<<EOF
-
-        ## 会自动 下载依赖 ，如网速不佳，请在环境变量里设置代理地址，用于加速下载
-        git init -b main .
-        git add ./.gitmodules
-
-        git -C . submodule update --init --recursive --depth 1 --recommend-shallow
-
-        sh deps.sh
-
-        git submodule update --init --recursive
-        exit 0
-        mkdir -p build
-        cd build
-        cmake -DJPEGXL_STATIC=true \
-        -DCMAKE_BUILD_TYPE=Release \
-        -DBUILD_SHARED_LIBS=OFF \
-        -DBUILD_TESTING=OFF \
+        mkdir -p build_dir
+        cd build_dir
+        cmake -S .. -B . \
         -DCMAKE_INSTALL_PREFIX={$libjxl_prefix} \
-         ..
+        -DCMAKE_BUILD_TYPE=Release  \
+        -DJPEGXL_ENABLE_FUZZERS=OFF  \
+        -DBUILD_SHARED_LIBS=OFF \
+        -DBUILD_STATIC_LIBS=ON \
+        -DJPEGXL_ENABLE_DOXYGEN=OFF \
+        -DJPEGXL_ENABLE_MANPAGES=OFF \
+        -DJPEGXL_ENABLE_BENCHMARK=OFF \
+        -DJPEGXL_ENABLE_EXAMPLES=OFF \
+        -DJPEGXL_ENABLE_JNI=OFF \
+        -DJPEGXL_STATIC=OFF \
+        -DBUILD_TESTING=OFF \
+        -DCMAKE_PREFIX_PATH="{$cmake_prefix_path}" \
 
-        cmake --build . -- -j$(nproc)
-        cmake --install .
+
+        cmake --build . --config Release
+
+        cmake --build . --config Release --target install
 EOF
         )
-        ->withPkgName('libjxl');
+        ->withScriptAfterInstall(
+            <<<EOF
+            rm -rf {$libjxl_prefix}/lib/*.so.*
+            rm -rf {$libjxl_prefix}/lib/*.so
+EOF
+        )
+        ->withBinPath($libjxl_prefix . '/bin/')
+        ->withPkgName('aom')
+        ->withDependentLibraries(
+            'brotli',
+            'libgif',
+            'libjpeg'
+        );
 
     $p->addLibrary($lib);
 };
+

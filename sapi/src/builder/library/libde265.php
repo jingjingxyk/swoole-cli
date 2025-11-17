@@ -9,13 +9,7 @@ return function (Preprocessor $p) {
     $lib->withHomePage('https://github.com/strukturag/libde265.git')
         ->withLicense('https://github.com/strukturag/libde265/blob/master/COPYING', Library::LICENSE_LGPL)
         ->withManual('https://github.com/strukturag/libde265.git')
-        ->withFile('libde265-v1.0.15.tar.gz')
-        ->withDownloadScript(
-            'libde265',
-            <<<EOF
-                git clone -b v1.0.15  --depth=1 https://github.com/strukturag/libde265.git
-EOF
-        )
+        ->withUrl('https://github.com/strukturag/libde265/releases/download/v1.0.16/libde265-1.0.16.tar.gz')
         ->withPrefix($libde265_prefix)
         ->withConfigure(
             <<<EOF
@@ -26,7 +20,10 @@ EOF
         ./configure \
         --prefix={$libde265_prefix} \
         --enable-shared=no \
-        --enable-static=yes
+        --enable-static=yes \
+        --enable-pic \
+        --enable-encoder \
+        --disable-sherlock265
 
 EOF
         )

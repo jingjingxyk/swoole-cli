@@ -6,46 +6,39 @@ use SwooleCli\Preprocessor;
 return function (Preprocessor $p) {
 
     # libdeflate是一个用于基于DEFLATE的全缓冲区快速压缩和解压缩的库
-
     $libdeflate_prefix = LIBDEFLATE_PREFIX;
     $lib = new Library('libdeflate');
-    $lib->withHomePage('https://github.com/ebiggers/libdeflate.git')
-        ->withLicense('https://github.com/ebiggers/libdeflate/blob/master/COPYING', Library::LICENSE_MIT)
-        ->withManual('https://github.com/ebiggers/libdeflate.git')
-        ->withFile('libdeflate-v1.18.tar.gz')
-        ->withDownloadScript(
-            'libdeflate',
-            <<<EOF
-            git clone -b v1.18  --depth=1 https://github.com/ebiggers/libdeflate.git
-EOF
-        )
+    $lib->withHomePage('https://github.com/ebiggers/libdeflate')
+        ->withLicense('https://github.com/ebiggers/libdeflate#MIT-1-ov-file', Library::LICENSE_MIT)
+        ->withManual('https://github.com/ebiggers/libdeflate')
+        ->withUrl('https://github.com/ebiggers/libdeflate/releases/download/v1.25/libdeflate-1.25.tar.gz')
         ->withPrefix($libdeflate_prefix)
+        ->withBuildCached(false)
         ->withBuildScript(
             <<<EOF
-             mkdir -p build
-             cd build
+        mkdir -p build_dir
+        cd build_dir
+        cmake -S .. -B . \
+        -DCMAKE_INSTALL_PREFIX={$libdeflate_prefix} \
+        -DCMAKE_BUILD_TYPE=Release  \
+        -DLIBDEFLATE_BUILD_SHARED_LIB=OFF  \
+        -DLIBDEFLATE_BUILD_STATIC_LIB=ON \
+        -DLIBDEFLATE_BUILD_TESTS=OFF
 
-             cmake .. \
-            -DCMAKE_INSTALL_PREFIX={$libdeflate_prefix} \
-            -DCMAKE_BUILD_TYPE=Release  \
-            -DBUILD_SHARED_LIBS=OFF  \
-            -DBUILD_STATIC_LIBS=ON
+        cmake --build . --config Release
 
-            cmake --build . --config Release
-
-            cmake --build . --config Release --target install
-
+        cmake --build . --config Release --target install
 EOF
         )
-        ->withPkgName('libdeflate')
-        ->withBinPath($libdeflate_prefix . '/bin/')
         ->withScriptAfterInstall(
             <<<EOF
             rm -rf {$libdeflate_prefix}/lib/*.so.*
             rm -rf {$libdeflate_prefix}/lib/*.so
             rm -rf {$libdeflate_prefix}/lib/*.dylib
 EOF
-        );
+        )
+        ->withBinPath($libdeflate_prefix . '/bin/')
+        ->withPkgName('libdeflate');
 
     $p->addLibrary($lib);
 };

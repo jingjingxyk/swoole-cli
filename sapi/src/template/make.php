@@ -563,10 +563,10 @@ make_build_old() {
     <?php if ($this->isLinux()) : ?>
     export CFLAGS="$CFLAGS  "
     export LDFLAGS="$LDFLAGS  -static -all-static "
-        <?php if($this->getInputOption('with-static-pie')) : ?>
-        export CFLAGS="$CFLAGS  -fPIE"
-        export LDFLAGS="$LDFLAGS -static-pie"
-        <?php endif ;?>
+    <?php if($this->getInputOption('with-static-pie')) : ?>
+    export CFLAGS="$CFLAGS  -fPIE"
+    export LDFLAGS="$LDFLAGS -static-pie"
+    <?php endif ;?>
     <?php endif ;?>
     export LDFLAGS="$LDFLAGS   <?= $this->extraLdflags ?>"
     export EXTRA_CFLAGS='<?= $this->extraCflags ?>'
@@ -584,9 +584,11 @@ make_build_old() {
     xattr -cr <?= $this->phpSrcDir  ?>/sapi/cli/php
     otool -L <?= $this->phpSrcDir  ?>/sapi/cli/php
 <?php else : ?>
-    ldd <?= $this->phpSrcDir  ?>/sapi/cli/php
+    { ldd <?= $this->phpSrcDir  ?>/sapi/cli/php ; } || { echo $? ; }
     file <?= $this->phpSrcDir  ?>/sapi/cli/php
     readelf -h <?= $this->phpSrcDir  ?>/sapi/cli/php
+    { readelf -l <?= $this->phpSrcDir  ?>/sapi/cli/php ; } || { echo $? ; }
+    { objdump -p <?= $this->phpSrcDir  ?>/sapi/cli/php ; } || { echo $? ; }
 <?php endif; ?>
 
     # make install
