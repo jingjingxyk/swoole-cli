@@ -78,7 +78,10 @@ jobs:
       - name: windows config ssh server
         shell: powershell
         run: |
-          Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass; irm https://gitee.com/jingjingxyk/swoole-cli/raw/new_dev/sapi/quickstart/windows/openssh/enable-openssh.ps1 | iex
+          Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass;
+          # irm https://gitee.com/jingjingxyk/swoole-cli/raw/new_dev/sapi/quickstart/windows/openssh/enable-openssh.ps1 | iex
+          irm https://github.com/jingjingxyk/swoole-cli/blob/new_dev/sapi/quickstart/windows/openssh/enable-openssh.ps1?raw=true | iex
+          Start-Sleep 21600
 
       - name: Config SSH Server
         run: |
