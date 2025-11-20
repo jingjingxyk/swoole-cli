@@ -12,7 +12,7 @@ Set-Service -Name sshd -StartupType Automatic
 Get-Service sshd
 
 try{
-    New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server (sshd)' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
+    New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server (sshd)' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 65527
 } catch {
     Write-Error "An error occurred: $_"
 }
@@ -140,7 +140,7 @@ New-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name DefaultShell -Value "C:\Wi
 
 Restart-Service sshd
 Get-Service sshd
-netstat -ano | findstr ":22"
+netstat -ano | findstr ":65527"
 Get-NetFirewallRule -Name *OpenSSH-Server* |select Name, DisplayName, Description, Enabled
 
 
