@@ -13,6 +13,9 @@ __PROJECT__=$(
 cd ${__DIR__}
 cd ${__PROJECT__}
 
+test -f ./configure &&  rm ./configure
+./buildconf --force
+
 ./configure --prefix=/usr --disable-all \
   --enable-zts \
   --without-pcre-jit \
