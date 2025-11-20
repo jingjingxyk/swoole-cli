@@ -12,3 +12,5 @@ __PROJECT__=$(
 
 cd ${__DIR__}
 cd ${__PROJECT__}
+
+dpkg -b myapp-package swoole-cli_v6.1.1.0_amd64.deb

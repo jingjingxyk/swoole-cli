@@ -1,0 +1,9 @@
+Package: swoole-cli
+Version: 1.0
+Section: utils
+Priority: optional
+Architecture: amd64
+Depends: bash, coreutils
+Maintainer: Your Name <your.email@example.com>
+Description: A simple custom application
+    This is a small tool I made for demonstration. It does something useful.
