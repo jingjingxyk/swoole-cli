@@ -57,9 +57,9 @@ test -f ./configure &&  rm ./configure
   --enable-zstd \
   --enable-swoole-stdext \
   --enable-redis \
-  --with-imagick \
   --with-yaml \
   --with-readline \
   --enable-opcache
 
+#   --with-imagick \
 make -j "$(nproc)"

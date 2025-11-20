@@ -25,7 +25,8 @@ libaom-dev libspng-dev libcares2 libbrotli-dev libwoff-dev \
 libarchive-dev libonig-dev \
 re2c \
 libreadline-dev \
-libxslt1-dev
+libxslt1-dev \
+libyaml-dev
 
 
 

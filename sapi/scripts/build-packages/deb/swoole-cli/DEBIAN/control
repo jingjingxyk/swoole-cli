@@ -3,7 +3,7 @@ Version: 1.0
 Section: utils
 Priority: optional
 Architecture: amd64
-Depends: libssl-dev, libpq-dev, libpq5, libcurl4-openssl-dev, libicu70, libbz2-dev, libzstd-dev, libdeflate-dev, libzip-dev, libsqlite3-dev, libgmp-dev, libexif-dev, libxmltok1-dev, libsodium-dev, libfreetype-dev, libjpeg-dev, libwebp-dev, libavif-dev, libaom-dev, libspng-dev, libcares2, libbrotli-dev, libwoff-dev, libarchive-dev, libonig-dev, libreadline-dev, libxslt1-dev
+Depends: libssl-dev, libpq-dev, libpq5, libcurl4-openssl-dev, libicu70, libbz2-dev, libzstd-dev, libdeflate-dev, libzip-dev, libsqlite3-dev, libgmp-dev, libexif-dev, libxmltok1-dev, libsodium-dev, libfreetype-dev, libjpeg-dev, libwebp-dev, libavif-dev, libaom-dev, libspng-dev, libcares2, libbrotli-dev, libwoff-dev, libarchive-dev, libonig-dev, libreadline-dev, libxslt1-dev, libyaml-dev
 Maintainer: Your Name <your.email@example.com>
 Description: A simple custom application
     This is a small tool I made for demonstration. It does something useful.
