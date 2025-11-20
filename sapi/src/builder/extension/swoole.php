@@ -6,7 +6,9 @@ use SwooleCli\Extension;
 
 return function (Preprocessor $p) {
     $libiconv_prefix = ICONV_PREFIX;
-    $dependentLibraries = ['curl', 'openssl', 'cares', 'zlib', 'brotli', 'nghttp2', 'sqlite3', 'unix_odbc', 'pgsql', 'libzstd'];
+    $ngtcp2_prefix = NGTCP2_PREFIX;
+    $nghttp3_prefix = NGHTTP3_PREFIX;
+    $dependentLibraries = ['curl', 'openssl', 'cares', 'zlib', 'brotli', 'nghttp2', 'sqlite3', 'unix_odbc', 'pgsql', 'libzstd', 'nghttp3'];
     $dependentExtensions = ['curl', 'openssl', 'sockets', 'mysqlnd', 'pdo'];
 
     $options[] = '--enable-swoole';
@@ -23,6 +25,7 @@ return function (Preprocessor $p) {
     $options[] = '--enable-brotli';
     $options[] = '--enable-zstd';
     $options[] = '--enable-swoole-stdext';
+    $options[] = '--with-nghttp3-dir=' . $nghttp3_prefix;
 
     if ($p->isLinux() && $p->getInputOption('with-iouring')) {
         $options[] = '--enable-iouring';
@@ -73,7 +76,7 @@ return function (Preprocessor $p) {
             test -d ext/swoole && rm -rf ext/swoole
             if [ ! -f ${WORKDIR}/pool/ext/swoole-${SWOOLE_VERSION}.tgz ] ;then
                 test -d /tmp/swoole && rm -rf /tmp/swoole
-                git clone -b "${ORIGIN_SWOOLE_VERSION}" https://github.com/swoole/swoole-src.git /tmp/swoole
+                git clone -b "${ORIGIN_SWOOLE_VERSION}" https://github.com/diyism/swoole-src.git /tmp/swoole
                 status=$?
                 if [[ $status -ne 0 ]]; then { echo $status ; exit 1 ; } fi
                 cd  /tmp/swoole
