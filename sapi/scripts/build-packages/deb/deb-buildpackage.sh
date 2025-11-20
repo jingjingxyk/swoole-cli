@@ -12,6 +12,23 @@ __PROJECT__=$(
 
 cd ${__DIR__}
 
+
+apt install -y \
+libssl-dev \
+libpq-dev libpq5 \
+libcurl4-openssl-dev \
+libicu70 libbz2-dev \
+libzstd-dev libdeflate-dev libzip-dev \
+libsqlite3-dev libgmp-dev libexif-dev \
+libxmltok1-dev libsodium-dev libfreetype-dev libjpeg-dev libwebp-dev libavif-dev \
+libaom-dev libspng-dev libcares2 libbrotli-dev libwoff-dev \
+libarchive-dev \
+
+
+
+
+bash ${__PROJECT__}/sapi/scripts/build-swoole-cli-with-linux-gcc.sh
+
 chmod 755 swoole-cli/usr/local/bin/swoole-cli
 
 # shellcheck disable=SC2067
