@@ -12,6 +12,10 @@ __PROJECT__=$(
 
 cd ${__DIR__}
 
+chmod 755 swoole-cli/usr/local/bin/swoole-cli
+
+# shellcheck disable=SC2067
+find swoole-cli -type d -exec chmod 755 {} ;
 
 dpkg -b swoole-cli ${__PROJECT__}/swoole-cli_v6.1.1.0_amd64.deb
 
