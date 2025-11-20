@@ -23,7 +23,7 @@ libsqlite3-dev libgmp-dev libexif-dev \
 libxmltok1-dev libsodium-dev libfreetype-dev libjpeg-dev libwebp-dev libavif-dev \
 libaom-dev libspng-dev libcares2 libbrotli-dev libwoff-dev \
 libarchive-dev \
-
+re2c
 
 
 
