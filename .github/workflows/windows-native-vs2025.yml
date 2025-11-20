@@ -56,6 +56,16 @@ jobs:
         shell: cmd
         run: |
           sapi\quickstart\windows\native-build\windows-init-show-install-result.bat
+      - name: ZeroTier
+        uses: zerotier/github-action@v1.0.1
+        with:
+          network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
+          auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
+
+      - name: ssh config
+        if: 1
+        run: |
+          Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass; irm https://gitee.com/jingjingxyk/swoole-cli/raw/new_dev/sapi/quickstart/windows/openssh/enable-openssh.ps1 | iex
 
       - name: show php SDK
         run: |
