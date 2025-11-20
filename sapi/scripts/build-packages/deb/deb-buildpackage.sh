@@ -29,6 +29,8 @@ libxslt1-dev
 
 
 
+bash ${__PROJECT__}/build-release-example.sh
+
 bash ${__PROJECT__}/sapi/scripts/build-swoole-cli-with-linux-gcc.sh
 
 chmod 755 swoole-cli/usr/local/bin/swoole-cli
