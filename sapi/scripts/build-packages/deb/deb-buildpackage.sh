@@ -13,7 +13,7 @@ __PROJECT__=$(
 cd ${__DIR__}
 
 
-apt install -y \
+sudo apt install -y \
 libssl-dev \
 libpq-dev libpq5 \
 libcurl4-openssl-dev \
@@ -22,8 +22,10 @@ libzstd-dev libdeflate-dev libzip-dev \
 libsqlite3-dev libgmp-dev libexif-dev \
 libxmltok1-dev libsodium-dev libfreetype-dev libjpeg-dev libwebp-dev libavif-dev \
 libaom-dev libspng-dev libcares2 libbrotli-dev libwoff-dev \
-libarchive-dev \
-re2c
+libarchive-dev libonig-dev \
+re2c \
+libreadline-dev \
+libxslt1-dev
 
 
 
