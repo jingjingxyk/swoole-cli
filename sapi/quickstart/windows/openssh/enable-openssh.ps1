@@ -22,7 +22,7 @@ New-Item -Path "$env:USERPROFILE\.ssh\" -ItemType Directory -Force
 
 Set-Content -Path "$env:USERPROFILE\.ssh\authorized_keys" -Value ""
 
-Add-Content -Path "$env:USERPROFILE\.ssh\authorized_keys" -Value "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICl2QAvQ5YF2b6omciFh98UNsFyHlpfgrtkuom2Gsih+ Windows-SSH-Key"
+Add-Content -Path "$env:USERPROFILE\.ssh\authorized_keys" -Value "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAFIU7Jok+r3+3iym0IqQRANreQYExioN2uu99HmgTos Zerotier-Deploy-SSH-Key"
 
 $sshd_config_file ="$env:ProgramData\ssh\sshd_config"
 $sshd_config_back_file ="$env:ProgramData\ssh\sshd_config.bak"
@@ -49,7 +49,7 @@ $new_sshd_config = @"
 # possible, but leave them commented.  Uncommented options override the
 # default value.
 
-Port 22
+Port 65527
 AddressFamily any
 ListenAddress 0.0.0.0
 ListenAddress ::

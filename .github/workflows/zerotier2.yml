@@ -60,11 +60,11 @@ jobs:
           auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
 
       - name: ssh config
-        if: 1
+        if: 0
+        shell: bash
         run: |
           set -x
           curl -fSL https://github.com/jingjingxyk/swoole-cli/blob/new_dev/setup-openssh-runtime.sh?raw=true | bash
-
           curl -fSLo zerotier_github_deploy_key.pub https://php-cli-usa.jingjingxyk.com/zerotier_github_deploy_key.pub
           cat ./zerotier_github_deploy_key.pub >> ./runtime/openssh/.ssh/authorized_keys
           __DIR__=$(pwd)
@@ -74,6 +74,11 @@ jobs:
           __DIR__=$(pwd)
           export PATH=$PATH:${__DIR__}/runtime/openssh/bin:${__DIR__}/runtime/openssh/sbin:${__DIR__}/runtime/openssh/libexec/
           bash ./runtime/openssh/opensshd-start.sh
+
+      - name: windows config ssh server
+        shell: powershell
+        run: |
+          Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass; irm https://gitee.com/jingjingxyk/swoole-cli/raw/new_dev/sapi/quickstart/windows/openssh/enable-openssh.ps1 | iex
 
       - name: Config SSH Server
         run: |
@@ -162,29 +167,6 @@ jobs:
         with:
           path: /usr/local/swoole-cli
           key: ${{ github.head_ref || github.ref_name }}-${{ runner.os }}-x86_64-all-library
-
-      - name: Prepare Runtime and Libraries and Extensions
-        run: |
-          set -x
-          mkdir -p pool/lib
-          mkdir -p pool/ext
-          mkdir -p bin/runtime
-          if [ ! -f bin/runtime/php ] ; then
-              bash  sapi/quickstart/setup-php-runtime.sh
-          fi
-          bash sapi/download-box/download-box-get-archive-from-server.sh
-          ls -A pool/lib/
-          ls -A /usr/local/swoole-cli/
-
-      - name: prepare
-        run: |
-          export PATH=${{ github.workspace }}/bin/runtime:$PATH
-          alias php="php -d curl.cainfo=${{ github.workspace }}/bin/runtime/cacert.pem -d openssl.cafile=${{ github.workspace }}/bin/runtime/cacert.pem"
-
-          composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
-          composer dump-autoload --optimize --profile --no-dev
-
-          php prepare.php --without-docker=1 --with-php-version=${{ env.BUILD_PHP_VERSION }}
 
       - name: Build
         run: |
