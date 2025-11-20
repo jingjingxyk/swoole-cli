@@ -11,6 +11,6 @@ __PROJECT__=$(
 )
 
 cd ${__DIR__}
-cd ${__PROJECT__}
+# cd ${__PROJECT__}
 
-dpkg -b swoole-cli swoole-cli_v6.1.1.0_amd64.deb
+dpkg -b swoole-cli ${__PROJECT__}/swoole-cli_v6.1.1.0_amd64.deb
