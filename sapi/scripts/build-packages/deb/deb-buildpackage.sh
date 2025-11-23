@@ -31,7 +31,7 @@ sudo apt install -y \
 bash ${__PROJECT__}/build-release-example.sh
 cd ${__PROJECT__}
 mkdir -p ext/swoole
-test -d ext/swoole || git clone -b master https://github.com/swoole/swoole-src.git ext/swoole/
+test -f ext/swoole/CMakeLists.txt || git clone -b master https://github.com/swoole/swoole-src.git ext/swoole/
 cd ${__PROJECT__}
 bash ${__PROJECT__}/sapi/scripts/build-swoole-cli-with-linux-gcc.sh
 
