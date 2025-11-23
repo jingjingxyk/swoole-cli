@@ -11,6 +11,7 @@ __PROJECT__=$(
 )
 
 cd ${__DIR__}
+sudo apt install -y libc-bin libc6-dev
 
 sudo apt install -y \
   libssl-dev \
@@ -36,6 +37,7 @@ cd ${__PROJECT__}
 
 bash ${__PROJECT__}/sapi/scripts/build-swoole-cli-with-linux-gcc.sh
 
+ldd ${__PROJECT__}/bin/swoole-cli
 chmod 755 ${__PROJECT__}/bin/swoole-cli
 
 cp -f ${__PROJECT__}/bin/swoole-cli sapi/scripts/build-packages/deb/swoole-cli/usr/local/bin
