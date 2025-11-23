@@ -16,7 +16,7 @@ sudo apt install -y \
   libssl-dev \
   libpq-dev libpq5 \
   libcurl4-openssl-dev \
-  libicu70 libbz2-dev \
+  libicu-dev libbz2-dev \
   libzstd-dev libdeflate-dev libzip-dev \
   libsqlite3-dev libgmp-dev libexif-dev \
   libxmltok1-dev libsodium-dev libfreetype-dev libjpeg-dev libwebp-dev libavif-dev \
@@ -42,7 +42,9 @@ cp -f ${__PROJECT__}/bin/swoole-cli sapi/scripts/build-packages/deb/swoole-cli/u
 
 cd ${__DIR__}
 # shellcheck disable=SC2067
-find swoole-cli -type d -exec chmod 755 {}
+find swoole-cli -type d -exec chmod 755 {} \;
+chmod 0755 swoole-cli/DEBIAN/postinst
+chmod 0755 swoole-cli/DEBIAN/prerm
 
 dpkg -b swoole-cli ${__PROJECT__}/swoole-cli_v6.1.1.0_amd64.deb
 
