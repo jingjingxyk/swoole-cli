@@ -1,3 +1,21 @@
+#!/usr/bin/env bash
+
+set -exu
+__DIR__=$(
+  cd "$(dirname "$0")"
+  pwd
+)
+__PROJECT__=$(
+  cd ${__DIR__}/../../
+  pwd
+)
+
+cd ${__DIR__}
+cd ${__PROJECT__}
+
+test -f ./configure &&  rm ./configure
+./buildconf --force
+
 ./configure --prefix=/usr --disable-all \
   --enable-zts \
   --without-pcre-jit \
@@ -39,9 +57,9 @@
   --enable-zstd \
   --enable-swoole-stdext \
   --enable-redis \
-  --with-imagick \
   --with-yaml \
   --with-readline \
   --enable-opcache
 
+#   --with-imagick \
 make -j "$(nproc)"

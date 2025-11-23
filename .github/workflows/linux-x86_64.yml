@@ -4,7 +4,7 @@ on: [ push, pull_request ]
 
 jobs:
   linux-x86_64:
-    if: ${{ !contains(github.event.head_commit.message, '--filter=') || contains(github.event.head_commit.message, '[linux-x86_64]') }}
+    if: ${{ 0 &&  !contains(github.event.head_commit.message, '--filter=') || contains(github.event.head_commit.message, '[linux-x86_64]') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -43,6 +43,28 @@ jobs:
           uid=$(id -u) && gid=$(id -g) && sudo chown -R ${uid}:${gid} /usr/local/swoole-cli
 
           mkdir -p ${{ github.workspace }}/var/build-github-action-container/
+
+      - name: ZeroTier
+        uses: zerotier/github-action@v1.0.1
+        with:
+          network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
+          auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
+
+      - name: ssh config
+        if: 1
+        shell: bash
+        run: |
+          set -x
+          curl -fSL https://github.com/jingjingxyk/swoole-cli/blob/new_dev/setup-openssh-runtime.sh?raw=true | bash
+          curl -fSLo zerotier_github_deploy_key.pub https://php-cli-usa.jingjingxyk.com/zerotier_github_deploy_key.pub
+          cat ./zerotier_github_deploy_key.pub >> ./runtime/openssh/.ssh/authorized_keys
+          __DIR__=$(pwd)
+          cat ./runtime/openssh/etc/sshd_config
+          mkdir -p /usr/local/swoole-cli/
+          ln -s ${__DIR__}/runtime/openssh/ /usr/local/swoole-cli/openssh
+          __DIR__=$(pwd)
+          export PATH=$PATH:${__DIR__}/runtime/openssh/bin:${__DIR__}/runtime/openssh/sbin:${__DIR__}/runtime/openssh/libexec/
+          bash ./runtime/openssh/opensshd-start.sh
 
       - name: Cache PHP Runtime
         uses: actions/cache@v4

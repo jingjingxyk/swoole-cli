@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=swoole-cli
+Comment=swoole-cli
+Exec=/usr/local/bin/swoole-cli
+Icon=/usr/share/icons/swoole-cli.png
+Terminal=false
+Type=Application
+Categories=Utility;
