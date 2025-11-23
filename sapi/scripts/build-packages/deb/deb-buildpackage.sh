@@ -25,7 +25,8 @@ sudo apt install -y \
   re2c \
   libreadline-dev \
   libxslt1-dev \
-  libyaml-dev
+  libyaml-dev \
+  libc-ares-dev
 
 bash ${__PROJECT__}/build-release-example.sh
 cd ${__PROJECT__}
