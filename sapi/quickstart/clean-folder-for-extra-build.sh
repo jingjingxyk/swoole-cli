@@ -79,6 +79,7 @@ test -f setup-localsend-runtime.sh && rm -rf setup-localsend-runtime.sh
 test -f setup-moonlight-runtime.sh && rm -rf setup-moonlight-runtime.sh
 test -f setup-rustfs-runtime.sh && rm -rf setup-rustfs-runtime.sh
 test -f setup-sunshine-runtime.sh && rm -rf setup-sunshine-runtime.sh
+test -f setup-ventoy.sh && rm -rf setup-ventoy.sh
 
 cd ${__PROJECT__}/
 test -f .clang-format && rm -f .clang-format
