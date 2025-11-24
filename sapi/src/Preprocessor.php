@@ -125,6 +125,7 @@ class Preprocessor
 
     protected string $buildType = 'release';
     protected bool $inVirtualMachine = false;
+    protected bool $skipHashVerify = false;
 
     protected string $proxyConfig = '';
 
@@ -457,7 +458,7 @@ __GIT_PROXY_CONFIG_EOF;
             throw new Exception("Downloading file[" . basename($file) . "] from url[$url] failed");
         }
         // 下载文件的 hash 不一致
-        if ($project->enableHashVerify) {
+        if (!$this->skipHashVerify and $project->enableHashVerify) {
             if (!$project->hashVerify($file)) {
                 throw new Exception("The {$project->hashAlgo} of downloaded file[$file] is inconsistent with the configuration");
             }
@@ -499,6 +500,7 @@ __GIT_PROXY_CONFIG_EOF;
      */
     public function addLibrary(Library $lib): void
     {
+
         if ($lib->enableDownloadScript || !empty($lib->url)) {
             if (empty($lib->file)) {
                 if ($lib->enableDownloadScript) {
@@ -652,7 +654,7 @@ EOF;
                 }
             }
 
-            if ($ext->enableHashVerify) {
+            if (!$this->skipHashVerify and $ext->enableHashVerify) {
                 // 检查文件的 hash，若不一致删除后重新下载
                 $ext->hashVerify($ext->path);
             }
@@ -1159,7 +1161,10 @@ EOF;
                 $this->scanConfigFiles($dir, $extAvailable);
             }
         }
+
         install_libraries($this);
+        $this->skipHashVerify = boolval($this->getInputOption('skip-hash-verify'));
+
         $this->extEnabled = array_unique($this->extEnabled);
 
         foreach ($this->extEnabled as $ext) {

@@ -48,44 +48,33 @@ fi
 
 # 无须确认安装包
 pacman -S --needed --noconfirm git curl wget openssl
-
-pacman -S --needed --noconfirm zip unzip xz gcc cmake make
-
+pacman -S --needed --noconfirm zip unzip xz gcc gcc-libs cmake make
 pacman -S --needed --noconfirm re2c
-
-pacman -S --needed --noconfirm openssl-devel libreadline
-
 pacman -S --needed --noconfirm lzip
 pacman -S --needed --noconfirm zip unzip
-pacman -S --needed --noconfirm bison automake autoconf libtool coreutils
-pacman -S --needed --noconfirm libcurl-devel libxml2-devel libxslt-devel
 pacman -S --needed --noconfirm zlib-devel
+pacman -S --needed --noconfirm bison automake autoconf libtool coreutils
+pacman -S --needed --noconfirm openssl-devel libreadline-devel libiconv-devel
+pacman -S --needed --noconfirm libcurl-devel libxml2-devel libxslt-devel
 pacman -S --needed --noconfirm libbz2-devel liblz4-devel liblzma-devel libcares-devel
-pacman -S --needed --noconfirm libyaml-devel libzstd-devel libreadline-devel
-pacman -S --needed --noconfirm libssh2-devel libidn2-devel gettext-devel
 pacman -S --needed --noconfirm libzstd-devel
-pacman -S --needed --noconfirm icu-devel
-pacman -S --needed --noconfirm libsqlite-devel libsqlite
-pacman -S --needed --noconfirm gmp-devel
-pacman -S --needed --noconfirm libintl
-pacman -S --needed --noconfirm pcre2
-pacman -S --needed --noconfirm brotli-devel
-pacman -S --needed --noconfirm pcre-devel
+pacman -S --needed --noconfirm libyaml-devel
+pacman -S --needed --noconfirm libssh2-devel libidn2-devel gettext-devel
+pacman -S --needed --noconfirm libsqlite-devel
 pacman -S --needed --noconfirm libedit-devel
+pacman -S --needed --noconfirm gmp-devel
+pacman -S --needed --noconfirm brotli-devel
+pacman -S --needed --noconfirm pcre pcre2 pcre-devel
+pacman -S --needed --noconfirm icu
+pacman -S --needed --noconfirm icu-devel
+pacman -S --needed --noconfirm gettext-devel
+pacman -S --needed --noconfirm libintl
+pacman -S --needed --noconfirm flex
 
 : <<'COMMENT'
-
 # 不存在的包
-pacman -S --needed --noconfirm libpcre2-devel libssl-devel libgmp-devel
-pacman -S --needed --noconfirm ImageMagick libpng-devel libjpeg-devel libfreetype-devel libwebp-devel libsqlite3-devel
-pacman -S --needed --noconfirm libzip-devel libicu-devel libonig-devel libsodium-devel
-pacman -S --needed --noconfirm libMagick-devel  libbrotli-devel libintl-devel libpq-devel
-pacman -S --needed --noconfirm libpq5 libpq-devel
-pacman -S --needed --noconfirm gcc-g++
-
-# msys 环境下 可以安装 re2c
-# 不需要执行 bash ./sapi/scripts/cygwin/install-re2c.sh
-
+pacman -S --noconfirm ImageMagick libpng-devel libjpeg-devel libfreetype-devel libwebp-devel
+pacman -S --noconfirm libMagick-devel
 
 COMMENT
 

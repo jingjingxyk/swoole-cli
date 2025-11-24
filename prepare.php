@@ -32,9 +32,9 @@ $p->cleanFile(__DIR__ . '/configure.backup');
 
 
 # PHP 默认版本 （此文件配置 /sapi/PHP-VERSION.conf 在 build_native_php分支 和 衍生分支 无效）
-$php_version = '8.2.28';
-$php_version_id = '802028';
-$php_version_tag = 'php-8.2.28';
+$php_version = '8.2.29';
+$php_version_id = '802029';
+$php_version_tag = 'php-8.2.29';
 
 if ($p->getInputOption('with-php-version')) {
     $subject = $p->getInputOption('with-php-version');
@@ -134,17 +134,29 @@ if ($p->isMacos()) {
     //$p->setExtraLdflags(' -framework CoreFoundation');
     $p->setExtraLdflags(' ');
     $homebrew_prefix = trim(shell_exec('brew --prefix'));
-    $p->withBinPath($homebrew_prefix . '/opt/llvm/bin')
-        ->withBinPath($homebrew_prefix . '/opt/flex/bin')
+    $p->withBinPath($homebrew_prefix . '/opt/flex/bin')
         ->withBinPath($homebrew_prefix . '/opt/bison/bin')
         ->withBinPath($homebrew_prefix . '/opt/libtool/bin')
         ->withBinPath($homebrew_prefix . '/opt/m4/bin')
         ->withBinPath($homebrew_prefix . '/opt/automake/bin/')
         ->withBinPath($homebrew_prefix . '/opt/autoconf/bin/')
         ->withBinPath($homebrew_prefix . '/opt/gettext/bin')
-        ->setLinker('ld64.lld');
-
+        ->setLinker('ld');
     $p->setLogicalProcessors('$(sysctl -n hw.ncpu)');
+    /*
+    $p->withBinPath($homebrew_prefix . '/opt/llvm/bin');
+    $p->withBinPath($homebrew_prefix . '/opt/lld/bin');
+    $p->setCCOMPILER($homebrew_prefix . '/opt/llvm/bin/clang')
+        ->setCXXCOMPILER($homebrew_prefix . '/opt/llvm/bin/clang++')
+        ->setAR($homebrew_prefix . '/opt/llvm/bin/llvm-ar')
+        ->setAS($homebrew_prefix . '/opt/llvm/bin/llvm-as')
+        ->setLinker($homebrew_prefix . '/opt/lld/bin/lld');
+    //-L/opt/homebrew/opt/llvm/lib/c++
+    $p->withVariable('LDFLAGS', '$LDFLAGS -L' . $homebrew_prefix . '/opt/llvm/lib/c++');
+    $p->withVariable('LDFLAGS', '$LDFLAGS -L'. `xcrun --show-sdk-path`.'/usr/lib/');
+    $p->withVariable('LDFLAGS', '$LDFLAGS -fuse-ld=lld');
+    $p->withVariable('LDFLAGS', '$LDFLAGS -L/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/');
+    */
 } else {
     $p->setLogicalProcessors('$(nproc 2> /dev/null)');
 }
@@ -152,8 +164,8 @@ if ($p->isMacos()) {
 
 $c_compiler = $p->getInputOption('with-c-compiler');
 if ($c_compiler == 'gcc') {
-    $p->set_C_COMPILER('gcc');
-    $p->set_CXX_COMPILER('g++');
+    $p->setCCOMPILER('gcc');
+    $p->setCXXCOMPILER('g++');
     $p->setLinker('ld');
 }
 

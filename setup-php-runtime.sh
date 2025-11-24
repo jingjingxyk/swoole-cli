@@ -21,7 +21,7 @@ case $OS in
   ;;
 *)
   case $OS in
-  'MSYS_NT'* | 'CYGWIN_NT'* )
+  'MSYS_NT'* | 'CYGWIN_NT'*)
     OS="windows"
     ;;
   'MINGW64_NT'*)
@@ -51,12 +51,15 @@ esac
 APP_VERSION='v5.1.3'
 APP_NAME='swoole-cli'
 VERSION='v5.1.3.0'
+PIE_VERSION="1.2.1"
+# 查看pie最新版本 https://github.com/php/pie/releases/latest
 
 cd ${__PROJECT__}
 mkdir -p bin/
 mkdir -p runtime/
 mkdir -p var/runtime
-APP_RUNTIME_DIR=${__PROJECT__}/runtime
+APP_RUNTIME_DIR=${__PROJECT__}/runtime/php
+test -f ${__PROJECT__}/runtime/php && rm -f ${__PROJECT__}/runtime/php
 mkdir -p ${APP_RUNTIME_DIR}
 
 cd ${__PROJECT__}/var/runtime
@@ -64,16 +67,19 @@ cd ${__PROJECT__}/var/runtime
 APP_DOWNLOAD_URL="https://github.com/swoole/swoole-cli/releases/download/${VERSION}/${APP_NAME}-${APP_VERSION}-${OS}-${ARCH}.tar.xz"
 COMPOSER_DOWNLOAD_URL="https://getcomposer.org/download/latest-stable/composer.phar"
 CACERT_DOWNLOAD_URL="https://curl.se/ca/cacert.pem"
+PIE_DOWNLOAD_URL="https://github.com/php/pie/releases/download/${PIE_VERSION}/pie.phar"
 
 if [ $OS = 'windows' ]; then
   APP_DOWNLOAD_URL="https://github.com/swoole/swoole-cli/releases/download/${VERSION}/${APP_NAME}-${APP_VERSION}-cygwin-${ARCH}.zip"
 fi
 
 MIRROR=''
+CURL_OPTIONS=""
 while [ $# -gt 0 ]; do
   case "$1" in
   --mirror)
     MIRROR="$2"
+    CURL_OPTIONS+="-H 'Referer: https://www.swoole.com/download' -H 'User-Agent: download swoole-cli runtime with setup-php-runtime.sh'  -H 'X-Auth-Token: 6F0A7F038A69'"
     ;;
   --proxy)
     export HTTP_PROXY="$2"
@@ -94,17 +100,46 @@ done
 
 case "$MIRROR" in
 china)
-  APP_DOWNLOAD_URL="https://wenda-1252906962.file.myqcloud.com/dist/${APP_NAME}-${APP_VERSION}-${OS}-${ARCH}.tar.xz"
+  APP_DOWNLOAD_URL="https://storage.swoole.com/dist/${APP_NAME}-${APP_VERSION}-${OS}-${ARCH}.tar.xz"
   COMPOSER_DOWNLOAD_URL="https://mirrors.tencent.com/composer/composer.phar"
   if [ $OS = 'windows' ]; then
-    APP_DOWNLOAD_URL="https://wenda-1252906962.file.myqcloud.com/dist/${APP_NAME}-${APP_VERSION}-cygwin-${ARCH}.zip"
+    APP_DOWNLOAD_URL="https://storage.swoole.com/dist/${APP_NAME}-${APP_VERSION}-cygwin-${ARCH}.zip"
   fi
   ;;
 
 esac
 
+function verfiy_sha256sum() {
+  local tarball=$1
+  if command -v sha256sum >/dev/null 2>&1; then
+    hash2="$(sha256sum -b "$tarball" | cut -c1-64)"
+  elif command -v shasum >/dev/null 2>&1; then
+    hash2="$(shasum -a 256 -b "$tarball" | cut -c1-64)"
+  elif command -v openssl >/dev/null 2>&1; then
+    hash2="$(openssl dgst -r -sha256 "$tarball" | cut -c1-64)"
+  else
+    echo "cannot verify the SHA-256 hash of '$APP_DOWNLOAD_URL'; you need one of 'shasum', 'sha256sum', or 'openssl'"
+    exit 1
+  fi
+
+  if [ "$APP_RUNTIME_TARBALL_SHA256SUM" != "$hash2" ]; then
+    echo "SHA-256 hash mismatch in '$APP_DOWNLOAD_URL'; expected $APP_RUNTIME_TARBALL_SHA256SUM, got $hash2"
+    exit 1
+  fi
+}
+
+downloader() {
+  local file=$1
+  local url=$2
+  local cmd=$(echo "curl $CURL_OPTIONS -fSLo $file $url ")
+  eval $cmd
+}
+
 test -f composer.phar || curl -fSLo composer.phar ${COMPOSER_DOWNLOAD_URL}
 chmod a+x composer.phar
+
+test -f pie.phar || curl -fSLo pie.phar ${PIE_DOWNLOAD_URL}
+chmod a+x pie.phar
 
 test -f cacert.pem || curl -fSLo cacert.pem ${CACERT_DOWNLOAD_URL}
 
@@ -113,24 +148,26 @@ APP_RUNTIME="${APP_NAME}-${APP_VERSION}-${OS}-${ARCH}"
 if [ $OS = 'windows' ]; then
   {
     APP_RUNTIME="${APP_NAME}-${APP_VERSION}-cygwin-${ARCH}"
-    test -f ${APP_RUNTIME}.zip || curl -fSLo ${APP_RUNTIME}.zip ${APP_DOWNLOAD_URL}
+    test -f ${APP_RUNTIME}.zip || downloader ${APP_RUNTIME}.zip ${APP_DOWNLOAD_URL}
     test -d ${APP_RUNTIME} && rm -rf ${APP_RUNTIME}
     unzip "${APP_RUNTIME}.zip"
     exit 0
   }
 else
-  test -f ${APP_RUNTIME}.tar.xz || curl -fSLo ${APP_RUNTIME}.tar.xz ${APP_DOWNLOAD_URL}
+  test -f ${APP_RUNTIME}.tar.xz || downloader ${APP_RUNTIME}.tar.xz ${APP_DOWNLOAD_URL}
   test -f ${APP_RUNTIME}.tar || xz -d -k ${APP_RUNTIME}.tar.xz
   test -f swoole-cli && rm -f swoole-cli
   tar -xvf ${APP_RUNTIME}.tar
   chmod a+x swoole-cli
-  cp -f ${__PROJECT__}/var/runtime/swoole-cli ${APP_RUNTIME_DIR}/php
+  cp -f ${__PROJECT__}/var/runtime/swoole-cli ${APP_RUNTIME_DIR}/
+  cp -f ${APP_RUNTIME_DIR}/swoole-cli ${APP_RUNTIME_DIR}/php
 fi
 
 cd ${__PROJECT__}/var/runtime
 
 cp -f ${__PROJECT__}/var/runtime/composer.phar ${APP_RUNTIME_DIR}/composer
 cp -f ${__PROJECT__}/var/runtime/cacert.pem ${APP_RUNTIME_DIR}/cacert.pem
+cp -f ${__PROJECT__}/var/runtime/pie.phar ${APP_RUNTIME_DIR}/pie
 
 cat >${APP_RUNTIME_DIR}/php.ini <<EOF
 curl.cainfo="${APP_RUNTIME_DIR}/cacert.pem"
@@ -163,6 +200,17 @@ php -v
 php --ri curl
 php --ri openssl
 php --ri swoole
+
+composer -v
+# search package
+# https://packagist.org
+# composer require swoole/phpy --prefer-dist  --no-scripts
+
+pie -v
+pie --help
+# search extension
+# https://packagist.org/extensions
+# pie download phpredis/phpredis:6.3
 
 set +x
 
