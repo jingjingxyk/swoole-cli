@@ -36,7 +36,7 @@ jobs:
           ls -lh /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/bin
           ls -lh /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_pthread
           MACOS_SDK_ROOT=$(xcrun --show-sdk-path)
-          cho $MACOS_SDK_ROOT
+          echo $MACOS_SDK_ROOT
           MACOS_VERSION=$(sw_vers -productVersion)
           echo $MACOS_VERSION
           ls -lha /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib
