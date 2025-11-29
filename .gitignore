@@ -367,10 +367,8 @@ php-fpm-*
 /CMakeFiles
 /runtime
 !/runtime/.gitkeep
-<<<<<<< HEAD
 /APP_VERSION
 /APP_NAME
-=======
-/APP_NAME
-/APP_VERSION
->>>>>>> build_native_php
+*.deb
+*.rpm
+nfpm-pkg.yaml
