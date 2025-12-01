@@ -21,6 +21,7 @@ EOF
         )
         ->withPrefix($libx264_prefix)
         //->withInstallCached(false)
+        ->withBuildCached(false)
         ->withConfigure(
             <<<EOF
         ./configure --help
@@ -30,6 +31,7 @@ EOF
         --prefix={$libx264_prefix} \
         --enable-static \
         --enable-pic \
+        --disable-asm \
         --disable-opencl \
         --disable-avs \
         --disable-swscale \
