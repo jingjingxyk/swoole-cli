@@ -40,13 +40,6 @@ return function (Preprocessor $p) {
 EOF
         )
         ->withPrefix($ffmpeg_prefix)
-        ->withPreInstallCommand(
-            'alpine',
-            <<<EOF
-            # 汇编编译器
-            apk add yasm nasm
-EOF
-        )
         ->withAutoUpdateFile()
         ->withBuildCached(false)
         ->withInstallCached(false)
