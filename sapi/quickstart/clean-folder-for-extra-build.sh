@@ -80,6 +80,12 @@ test -f setup-moonlight-runtime.sh && rm -rf setup-moonlight-runtime.sh
 test -f setup-rustfs-runtime.sh && rm -rf setup-rustfs-runtime.sh
 test -f setup-sunshine-runtime.sh && rm -rf setup-sunshine-runtime.sh
 test -f setup-ventoy.sh && rm -rf setup-ventoy.sh
+test -f setup-ajax-libs.sh && rm -rf setup-ajax-libs.sh
+test -f setup-fossflow.sh && rm -rf setup-fossflow.sh
+test -f setup-nix-runtime.sh && rm -rf setup-nix-runtime.sh
+test -f setup-proxmox-pve.sh && rm -rf setup-proxmox-pve.sh
+test -f setup-qemu-user-static-runtime.sh && rm -rf setup-qemu-user-static-runtime.sh
+test -f setup-nix-runtime.sh && rm -rf setup-nix-runtime.sh
 
 cd ${__PROJECT__}/
 test -f .clang-format && rm -f .clang-format
