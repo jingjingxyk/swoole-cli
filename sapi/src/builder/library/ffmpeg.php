@@ -41,13 +41,6 @@ return function (Preprocessor $p) {
 EOF
         )
         ->withPrefix($ffmpeg_prefix)
-        ->withPreInstallCommand(
-            'alpine',
-            <<<EOF
-            # 汇编编译器
-            apk add yasm nasm
-EOF
-        )
         ->withAutoUpdateFile()
         ->withBuildCached(false)
         ->withInstallCached(false)
@@ -130,8 +123,8 @@ EOF
             --extra-cxxflags="\${CPPFLAGS} " \
             --extra-ldflags="\${LDFLAGS} " \
             --extra-libs="\${LIBS} " \
-            --cc={$p->get_C_COMPILER()} \
-            --cxx={$p->get_CXX_COMPILER()} \
+            --cc={$p->getCCOMPILER()} \
+            --cxx={$p->getCXXCOMPILER()} \
             --pkg-config-flags="--static"
 
             # libxcb、xlib 是 x11 相关的库

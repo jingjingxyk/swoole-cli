@@ -11,7 +11,6 @@ return function (Preprocessor $p) {
         ->withLicense('https://gitlab.com/libtiff/libtiff/-/blob/master/LICENSE.md', Library::LICENSE_SPEC)
         ->withUrl('http://download.osgeo.org/libtiff/tiff-4.5.0.tar.gz')
         ->withPrefix($libtiff_prefix)
-        ->withBuildCached(false)
         ->withConfigure(
             <<<EOF
             ./configure --help
@@ -26,7 +25,7 @@ return function (Preprocessor $p) {
             --enable-static=yes \
             --disable-docs \
             --disable-tests \
-            --disable-contrib \
+            --disable-contrib
 
 EOF
         )

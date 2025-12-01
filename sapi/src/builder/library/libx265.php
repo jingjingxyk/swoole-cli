@@ -10,34 +10,14 @@ return function (Preprocessor $p) {
     $lib = new Library('libx265');
     $lib->withHomePage('https://www.videolan.org/developers/x265.html')
         ->withLicense('https://bitbucket.org/multicoreware/x265_git/src/master/COPYING', Library::LICENSE_LGPL)
-        ->withFile('libx265_v4.1.tar.gz')
-        ->withDownloadScript(
-            'x265_git',
-            <<<EOF
-            git clone -b 4.1 --progress --depth=1  https://bitbucket.org/multicoreware/x265_git.git
-EOF
-        )
+        ->withUrl('https://bitbucket.org/multicoreware/x265_git/get/ffba52bab55dce9b1b3a97dd08d12e70297e2180.tar.gz')
+        ->withFile('libx265_master.tar.gz')
         ->withManual('https://bitbucket.org/multicoreware/x265_git.git')
         ->withPrefix($libx265_prefix)
-        ->withPreInstallCommand(
-            'debian',
-            <<<EOF
-            apt install nasm yasm
-EOF
-        )
-        ->withPreInstallCommand(
-            'alpine',
-            <<<EOF
-            apk add nasm yasm
-
-EOF
-        )
-        //->withBuildCached(false)
-        //->withInstallCached(false)
         ->withConfigure(
             <<<EOF
-            ls source/CMakeLists.txt
 
+            cat source/CMakeLists.txt
             mkdir -p build-dir
             cd build-dir
 
@@ -48,8 +28,6 @@ EOF
             -DBUILD_SHARED_LIBS=OFF  \
             -DBUILD_STATIC_LIBS=ON \
             -DCMAKE_CURRENT_SOURCE_DIR={$p->getBuildDir()}/libx265/source/ \
-            -DCMAKE_C_COMPILER={$p->get_C_COMPILER()} \
-            -DCMAKE_CXX_COMPILER={$p->get_CXX_COMPILER()} \
             -DENABLE_SHARED=OFF \
             -DENABLE_LIBNUMA=OFF \
             -DENABLE_PIC=ON \

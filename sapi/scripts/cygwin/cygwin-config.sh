@@ -12,9 +12,7 @@ __PROJECT__=$(
 cd ${__PROJECT__}
 
 OPTIONS=''
-OPTIONS+=' --enable-swoole-thread '
-OPTIONS+=' --enable-brotli '
-OPTIONS+=' --enable-zstd '
+
 OPTIONS+=' --enable-zts '
 OPTIONS+=' --disable-opcache-jit '
 
@@ -42,9 +40,13 @@ cd ${WORK_TEMP_DIR}/php-src/
 # https://github.com/php/php-src/blob/php-8.1.27/win32/build/confutils.js#L3227
 # export LDFLAGS="-L/usr/lib"
 
+sed -i.bak 's/ICONV_ALIASED_LIBICONV/HAVE_ICONV/' ext/iconv/iconv.c
+export PATH=/usr/bin:$PATH
+
 export ICU_CXXFLAGS=" -std=gnu++17 "
 ./buildconf --force
 test -f Makefile && make clean
+
 ./configure --prefix=/usr --disable-all \
   \
   --disable-fiber-asm \
@@ -77,10 +79,14 @@ test -f Makefile && make clean
   --enable-exif \
   --with-sodium \
   --enable-xml --enable-simplexml --enable-xmlreader --enable-xmlwriter --enable-dom --with-libxml \
-  --enable-gd --with-jpeg --with-freetype \
+  --enable-gd --with-jpeg --with-freetype --with-avif --with-webp \
   --enable-swoole --enable-sockets --enable-mysqlnd --enable-swoole-curl --enable-cares \
   --enable-swoole-pgsql \
   --enable-swoole-sqlite \
+  --enable-swoole-thread \
+  --enable-brotli \
+  --enable-zstd \
+  --enable-swoole-stdext \
   --enable-redis \
   --enable-opcache \
   --disable-opcache-jit \

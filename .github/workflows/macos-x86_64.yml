@@ -10,7 +10,7 @@ env:
 jobs:
   macos-x86_64:
     if: 1
-    runs-on: macos-13
+    runs-on: macos-15-intel
     # macos-latest (macos-14)  变更了 CPU 架构，由 x86_64 变更为 arm64
     # macos-14 CPU 架构 arm64
     # macos-13 CPU 架构 x86_64
@@ -116,6 +116,7 @@ jobs:
           mkdir -p pool/ext
           mkdir -p bin/
           mkdir -p runtime/
+          test -f runtime/php && rm -f runtime/php
           if [ ! -f runtime/php/php ] ; then
               bash  setup-php-runtime.sh
           fi

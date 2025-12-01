@@ -31,9 +31,10 @@ while [ $# -gt 0 ]; do
   shift $(($# > 0 ? 1 : 0))
 done
 
-REDIS_VERSION=6.1.0
+REDIS_VERSION=6.2.0
+MONGODB_VERSION=1.14.2
 YAML_VERSION=2.2.2
-IMAGICK_VERSION=3.7.0
+IMAGICK_VERSION=3.8.0
 
 mkdir -p pool/ext
 mkdir -p pool/lib
@@ -73,6 +74,9 @@ download_and_extract "imagick" ${IMAGICK_VERSION}
 
 cd ${__PROJECT__}/pool/ext
 # with git clone swoole source code
+if [ -n "${GITHUB_ACTION}" ]; then
+  test -f ${__PROJECT__}/pool/ext/swoole-${SWOOLE_VERSION}.tgz && rm -f ${__PROJECT__}/pool/ext/swoole-${SWOOLE_VERSION}.tgz
+fi
 if [ ! -f swoole-${SWOOLE_VERSION}.tgz ]; then
   test -d ${WORK_TEMP_DIR}/swoole && rm -rf ${WORK_TEMP_DIR}/swoole
   git clone -b ${SWOOLE_VERSION} https://github.com/swoole/swoole-src.git ${WORK_TEMP_DIR}/swoole
@@ -105,8 +109,6 @@ tar --strip-components=1 -C ${WORK_TEMP_DIR}/php-src -xf php-${PHP_VERSION}.tar.
 cd ${__PROJECT__}
 # copy extension
 # cp -rf ${WORK_TEMP_DIR}/ext/. ${__PROJECT__}/ext/
-# cp -rf ${__PROJECT__}/ext/. ${WORK_TEMP_DIR}/php-src/ext/
-# cp -rf ${__PROJECT__}/ext/. ${WORK_TEMP_DIR}/php-src/ext/
 cp -rf ${WORK_TEMP_DIR}/ext/. ${WORK_TEMP_DIR}/php-src/ext/
 
 # extension hook

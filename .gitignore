@@ -316,6 +316,7 @@ tmp-php.ini
 /ext/inotify
 /ext/swoole_tracker_agent
 /ext/loader8
+/ext/swoole
 /ext/ds
 /ext/xlswriter
 /ext/uuid
@@ -368,3 +369,6 @@ php-fpm-*
 !/runtime/.gitkeep
 /APP_VERSION
 /APP_NAME
+*.deb
+*.rpm
+nfpm-pkg.yaml

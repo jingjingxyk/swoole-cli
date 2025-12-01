@@ -28,6 +28,7 @@ curl -fSL https://github.com/jingingxyk/swoole-cli/blob/new_dev/setup-ffmpeg-run
 - [构建选项文档](docs/options.md)
 - [搭建依赖库镜像服务](sapi/download-box/README.md)
 - [quickstart](sapi/quickstart/README.md)
+- [常见问题解答](https://github.com/swoole/swoole-cli/blob/main/docs/FAQ.md)
 
 ## Clone
 
