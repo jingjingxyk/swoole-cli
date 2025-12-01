@@ -20,7 +20,8 @@ return function (Preprocessor $p) {
 EOF
         )
         ->withPrefix($libx264_prefix)
-        //->withInstallCached(false)
+        ->withInstallCached(false)
+        ->withBuildCached(false)
         ->withConfigure(
             <<<EOF
         ./configure --help
@@ -28,7 +29,8 @@ EOF
         LIBS=" {$libs} " \
         ./configure \
         --prefix={$libx264_prefix} \
-        --enable-static \
+        --enable-static=yes \
+        --enable-shared=no \
         --enable-pic \
         --disable-opencl \
         --disable-avs \
