@@ -29,8 +29,7 @@ EOF
         LIBS=" {$libs} " \
         ./configure \
         --prefix={$libx264_prefix} \
-        --enable-static=yes \
-        --enable-shared=no \
+        --enable-static \
         --enable-pic \
         --disable-asm \
         --disable-opencl \
