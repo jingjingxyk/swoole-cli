@@ -14,6 +14,7 @@ return function (Preprocessor $p) {
     $libxml2_prefix = LIBXML2_PREFIX;
     $bzip2_prefix = BZIP2_PREFIX;
     $libiconv_prefix = ICONV_PREFIX;
+    $libx264_prefix = LIBX264_PREFIX;
 
     $cppflags = $p->getOsType() == 'macos' ? ' ' : "  ";
     $ldfalgs = $p->getOsType() == 'macos' ? ' ' : " -static ";
@@ -60,7 +61,7 @@ EOF
             PACKAGES="\$PACKAGES aom "
             PACKAGES="\$PACKAGES dav1d "
             PACKAGES="\$PACKAGES lcms2 "
-            PACKAGES="\$PACKAGES x264 "
+            # PACKAGES="\$PACKAGES x264 "
             PACKAGES="\$PACKAGES x265 " # numa
             # PACKAGES="\$PACKAGES sdl2 "
             PACKAGES="\$PACKAGES ogg "
@@ -79,13 +80,16 @@ EOF
             CPPFLAGS="\$CPPFLAGS -I{$libxml2_prefix}/include/  "
             CPPFLAGS="\$CPPFLAGS -I{$bzip2_prefix}/include/  "
             CPPFLAGS="\$CPPFLAGS -I{$libiconv_prefix}/include/  "
+            CPPFLAGS="\$CPPFLAGS -I{$libx264_prefix}/include/  "
 
             LDFLAGS="\$LDFLAGS  -L{$libxml2_prefix}/lib"
             LDFLAGS="\$LDFLAGS  -L{$bzip2_prefix}/lib"
             LDFLAGS="\$LDFLAGS  -L{$libiconv_prefix}/lib"
+            LDFLAGS="\$LDFLAGS  -L{$libx264_prefix}/lib"
 
             LIBS="\$LIBS   -lbz2"
             LIBS="\$LIBS   -liconv"
+            LIBS="\$LIBS   -lx264"
 
             CPPFLAGS="\$CPPFLAGS  {$cppflags} "
             LDFLAGS="\$LDFLAGS  {$ldfalgs} "
