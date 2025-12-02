@@ -121,7 +121,6 @@ test -d build-dependencies-container && rm -rf build-dependencies-container
 test -d tools && rm -rf tools
 test -d webUI && rm -rf webUI
 test -d lib && rm -rf lib
-test -f SWOOLE-VERSION.conf && rm -f SWOOLE-VERSION.conf
 
 cd ${__PROJECT__}/sapi/scripts/
 test -f build-swoole-cli-alpine-container.sh && rm -rf build-swoole-cli-alpine-container.sh
