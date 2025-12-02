@@ -16,25 +16,8 @@ return function (Preprocessor $p) {
             git clone -b v1.15.2  --depth=1  https://chromium.googlesource.com/webm/libvpx
 EOF
         )
-        ->withPreInstallCommand(
-            'alpine',
-            <<<EOF
-        apk add diffutils
-EOF
-        )
-        ->withPreInstallCommand(
-            'debian',
-            <<<EOF
-        apt install -y diffutils
-EOF
-        )
-        ->withPreInstallCommand(
-            'ubuntu',
-            <<<EOF
-        apt install -y diffutils
-EOF
-        )
         ->withPrefix($libvpx_prefix)
+        ->withBuildCached(false)
         ->withConfigure(
             <<<EOF
             ./configure --help
@@ -45,23 +28,23 @@ EOF
             --enable-vp8 \
             --enable-vp9 \
             --enable-pic \
-            --disable-examples \
-            --enable-tools \
-            --disable-docs \
-            --disable-unit-tests \
-            --enable-vp9-highbitdepth \
             --enable-libyuv \
             --enable-internal-stats \
             --enable-postproc \
             --enable-vp9-temporal-denoising \
-            --enable-webm-io
+            --enable-vp9-highbitdepth \
+            --enable-webm-io \
+            --enable-tools \
+            --as=auto \
+            --disable-docs \
+            --disable-unit-tests \
+            --disable-examples
 
 EOF
         )
         ->withPkgName('vpx')
         ->withBinPath($libvpx_prefix . '/bin/')
-        ->withDependentLibraries('libwebp')
-    ;
+        ->withDependentLibraries('libwebp');
 
     $p->addLibrary($lib);
 };
