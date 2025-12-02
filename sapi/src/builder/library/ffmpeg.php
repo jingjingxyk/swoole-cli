@@ -14,6 +14,7 @@ return function (Preprocessor $p) {
     $libxml2_prefix = LIBXML2_PREFIX;
     $bzip2_prefix = BZIP2_PREFIX;
     $libiconv_prefix = ICONV_PREFIX;
+    $libx264_prefix = LIBX264_PREFIX;
 
     $cppflags = $p->getOsType() == 'macos' ? ' ' : "  ";
     $ldfalgs = $p->getOsType() == 'macos' ? ' ' : " -static ";
