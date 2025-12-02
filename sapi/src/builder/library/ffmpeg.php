@@ -12,6 +12,8 @@ return function (Preprocessor $p) {
 
     $ffmpeg_prefix = FFMPEG_PREFIX;
     $libxml2_prefix = LIBXML2_PREFIX;
+    $bzip2_prefix = BZIP2_PREFIX;
+    $libiconv_prefix = ICONV_PREFIX;
 
     $cppflags = $p->getOsType() == 'macos' ? ' ' : "  ";
     $ldfalgs = $p->getOsType() == 'macos' ? ' ' : " -static ";
@@ -51,8 +53,8 @@ EOF
             # ./configure --help | grep  'enable'
             # ./configure --help | grep  'disable'
 
-            PACKAGES='openssl  libxml-2.0  freetype2 gmp liblzma' # libssh2
-            PACKAGES="\$PACKAGES bz2"
+            PACKAGES='openssl  libxml-2.0  freetype2 gmp liblzma'
+            PACKAGES="\$PACKAGES libssh2"
             PACKAGES="\$PACKAGES libsharpyuv  libwebp  libwebpdecoder  libwebpdemux  libwebpmux"
             PACKAGES="\$PACKAGES SvtAv1Enc "
             PACKAGES="\$PACKAGES aom "
@@ -64,6 +66,7 @@ EOF
             PACKAGES="\$PACKAGES ogg "
             PACKAGES="\$PACKAGES opus "
             PACKAGES="\$PACKAGES openh264 "
+            PACKAGES="\$PACKAGES libopenjp2 "
             PACKAGES="\$PACKAGES vpx "
             PACKAGES="\$PACKAGES fdk-aac "
             PACKAGES="\$PACKAGES fribidi "
@@ -74,12 +77,18 @@ EOF
             LIBS="$(pkg-config      --libs-only-l    --static \$PACKAGES) "
 
             CPPFLAGS="\$CPPFLAGS -I{$libxml2_prefix}/include/  "
+            CPPFLAGS="\$CPPFLAGS -I{$bzip2_prefix}/include/  "
+            CPPFLAGS="\$CPPFLAGS -I{$libiconv_prefix}/include/  "
+
+            LDFLAGS="\$LDFLAGS  -L{$libxml2_prefix}/lib"
+            LDFLAGS="\$LDFLAGS  -L{$bzip2_prefix}/lib"
+            LDFLAGS="\$LDFLAGS  -L{$libiconv_prefix}/lib"
+
+            LIBS="\$LIBS   -lbz2"
+            LIBS="\$LIBS   -liconv"
+
             CPPFLAGS="\$CPPFLAGS  {$cppflags} "
-
-            LDFLAGS="\$LDFLAGS  "
             LDFLAGS="\$LDFLAGS  {$ldfalgs} "
-
-            LIBS="\$LIBS   "
             LIBS="\$LIBS  {$libs} "
 
             ./configure  \
@@ -90,6 +99,7 @@ EOF
             --enable-nonfree \
             --enable-static \
             --enable-pic \
+            --enable-gmp \
             --enable-gray \
             --enable-ffplay \
             --enable-openssl \
@@ -98,12 +108,12 @@ EOF
             --enable-libsvtav1 \
             --enable-libaom \
             --enable-lcms2 \
-            --enable-gmp \
             --enable-libfreetype \
             --enable-libvpx \
             --enable-libdav1d \
             --enable-libopus \
             --enable-libopenh264 \
+            --enable-libopenjpeg \
             --enable-libfdk-aac \
             --enable-libfribidi \
             --enable-librabbitmq \
@@ -166,7 +176,8 @@ EOF
             'rabbitmq_c',
             "libx265",
             //'speex', //被opus 取代
-            //'libssh2',
+            'libssh2',
+            'openjpeg'
         );
 
     $p->addLibrary($lib);
