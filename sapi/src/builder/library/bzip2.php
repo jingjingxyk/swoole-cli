@@ -36,7 +36,7 @@ Cflags: -I\${includedir}
 __bzip2__EOF
 EOF
             )
-            //->withPkgName('bz2')
+            ->withPkgName('bz2')
             ->withLdflags('-L' . $bzip2_prefix . '/lib')
             ->withPkgConfig('')
     );

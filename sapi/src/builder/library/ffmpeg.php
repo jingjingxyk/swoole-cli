@@ -13,14 +13,9 @@ return function (Preprocessor $p) {
     $ffmpeg_prefix = FFMPEG_PREFIX;
     $libxml2_prefix = LIBXML2_PREFIX;
 
-    $cppflags = $p->getOsType() == 'macos' ? ' ' : "  "; # -I/usr/include
-    $ldfalgs = $p->getOsType() == 'macos' ? ' ' : " -static "; #-L/usr/lib
-
-
-    # $libs = $p->getOsType() == 'macos' ? ' -lc++ ' : ' -lc -lstdc++ /usr/lib/libc.a /usr/lib/libstdc++.a /usr/lib/libm.a /usr/lib/librt.a';
+    $cppflags = $p->getOsType() == 'macos' ? ' ' : "  ";
+    $ldfalgs = $p->getOsType() == 'macos' ? ' ' : " -static ";
     $libs = $p->getOsType() == 'macos' ? ' -lc++ ' : ' -lc -lstdc++ ';
-
-    # $ldexeflags = $p->getOsType() == 'macos' ? ' ' : ' -Bstatic '; # -wl,-Bstatic -ldl
 
     $lib = new Library('ffmpeg');
     $lib->withHomePage('https://ffmpeg.org/')
@@ -40,13 +35,6 @@ return function (Preprocessor $p) {
 EOF
         )
         ->withPrefix($ffmpeg_prefix)
-        ->withPreInstallCommand(
-            'alpine',
-            <<<EOF
-            # 汇编编译器
-            apk add yasm nasm
-EOF
-        )
         ->withAutoUpdateFile()
         ->withBuildCached(false)
         ->withInstallCached(false)
@@ -64,6 +52,7 @@ EOF
             # ./configure --help | grep  'disable'
 
             PACKAGES='openssl  libxml-2.0  freetype2 gmp liblzma' # libssh2
+            PACKAGES="\$PACKAGES bz2"
             PACKAGES="\$PACKAGES libsharpyuv  libwebp  libwebpdecoder  libwebpdemux  libwebpmux"
             PACKAGES="\$PACKAGES SvtAv1Enc "
             PACKAGES="\$PACKAGES aom "
