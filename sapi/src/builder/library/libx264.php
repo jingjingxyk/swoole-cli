@@ -20,7 +20,7 @@ return function (Preprocessor $p) {
 EOF
         )
         ->withPrefix($libx264_prefix)
-        ->withInstallCached(false)
+        //->withInstallCached(false)
         ->withBuildCached(false)
         ->withConfigure(
             <<<EOF
@@ -32,6 +32,7 @@ EOF
         --enable-static=yes \
         --enable-shared=no \
         --enable-pic \
+        --disable-asm \
         --disable-opencl \
         --disable-avs \
         --disable-swscale \
