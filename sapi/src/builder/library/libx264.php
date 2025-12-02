@@ -52,7 +52,6 @@ EOF
         )
         */
         ->withPkgName('x264')
-        */
         ->withBinPath($libx264_prefix . '/bin/');
 
     $p->addLibrary($lib);
