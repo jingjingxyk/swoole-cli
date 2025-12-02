@@ -72,7 +72,7 @@ jobs:
           set -x
           ls -lha /opt/homebrew/opt/libtool/bin/
           ls -lha /opt/homebrew/opt/llvm/bin/
-          ls -lha /opt/homebrew/opt/lld/bin/
+          # ls -lha /opt/homebrew/opt/lld/bin/
           ls -lha /opt/homebrew/opt/llvm/lib/c++
           libtoolize --version
           libtool --help-all
