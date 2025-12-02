@@ -19,7 +19,7 @@ return function (Preprocessor $p) {
         $cflags .= ' -static -fPIE ';
         $ldflags .= ' -static  '; //-static-pie
     }
-    $tag = '1.28.0';
+    $tag = '1.29.3';
     $p->addLibrary(
         (new Library('nginx'))
             ->withHomePage('https://nginx.org/')
