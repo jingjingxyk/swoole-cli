@@ -14,7 +14,7 @@ set "__PROJECT__=%cd%"
 echo %cd%
 
 md %__PROJECT__%\var\windows-build-deps\
-md %__PROJECT__%\bin\runtime\
+md %__PROJECT__%\runtime\
 
 cd /d %__PROJECT__%\var\windows-build-deps\
 dir
@@ -71,17 +71,17 @@ rem choco install archive
 :: vcpkg install libarchive
 :: vcpkg install libarchive:x64-linux-release
 :: powershell -command "irm asheroto.com/winget | iex "
-powershell -command "winget search libarchive --accept-source-agreements"
-powershell -command "winget install libarchive "
+:: powershell -command "winget search libarchive --accept-source-agreements"
+:: powershell -command "winget install libarchive "
 
 
-move nasm\nasm-2.16.03 %__PROJECT__%\bin\runtime\nasm
-move libarchive\libarchive %__PROJECT__%\bin\runtime\libarchive
-move php-nts-Win32-x64 %__PROJECT__%\bin\runtime\php
-move cacert.pem %__PROJECT__%\bin\runtime\cacert.pem
+move nasm\nasm-2.16.03 %__PROJECT__%\runtime\nasm
+move libarchive\libarchive %__PROJECT__%\runtime\libarchive
+move php-nts-Win32-x64 %__PROJECT__%\runtime\php
+move cacert.pem %__PROJECT__%\runtime\cacert.pem
 
 (
-echo extension_dir="%__PROJECT__%\bin\runtime\php\ext\"
+echo extension_dir="%__PROJECT__%\runtime\php\ext\"
 echo extension=php_curl.dll
 echo extension=php_bz2.dll
 echo extension=php_openssl.dll
@@ -100,8 +100,8 @@ echo extension=php_sodium.dll
 echo extension=php_xsl.dll
 echo extension=php_zip.dll
 
-echo curl.cainfo="%__PROJECT__%\bin\runtime\cacert.pem"
-echo openssl.cafile="%__PROJECT__%\bin\runtime\cacert.pem"
+echo curl.cainfo="%__PROJECT__%\runtime\cacert.pem"
+echo openssl.cafile="%__PROJECT__%\runtime\cacert.pem"
 echo display_errors = On
 echo error_reporting = E_ALL
 
@@ -117,7 +117,7 @@ echo opcache.jit_buffer_size=480M
 echo expose_php=Off
 echo apc.enable_cli=1
 
-) > %__PROJECT__%\bin\runtime\php.ini
+) > %__PROJECT__%\runtime\php.ini
 
 call %__PROJECT__%\sapi\quickstart\windows\native-build\windows-init-show-install-result.bat
 

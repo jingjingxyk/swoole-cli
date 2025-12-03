@@ -14,7 +14,7 @@ set "__PROJECT__=%cd%"
 echo %cd%
 
 md %__PROJECT__%\var\windows-build-deps\
-md %__PROJECT__%\bin\runtime\
+md %__PROJECT__%\runtime\
 
 cd /d %__PROJECT__%\var\windows-build-deps\
 
@@ -35,11 +35,11 @@ perl -v
 nasm -v
 git version
 curl -V
-:: dir %__PROJECT__%\bin\runtime\php\ext\
-php -c %__PROJECT__%\bin\runtime\php.ini -v
-php -c %__PROJECT__%\bin\runtime\php.ini -m
-php -c %__PROJECT__%\bin\runtime\php.ini --ri curl
-php -c %__PROJECT__%\bin\runtime\php.ini composer.phar list
+:: dir %__PROJECT__%\runtime\php\ext\
+php -c %__PROJECT__%\runtime\php.ini -v
+php -c %__PROJECT__%\runtime\php.ini -m
+php -c %__PROJECT__%\runtime\php.ini --ri curl
+php -c %__PROJECT__%\runtime\php.ini composer.phar list
 
 :: vswhere find  Visual Studio component
 :: https://github.com/microsoft/vswhere/wiki/Examples
