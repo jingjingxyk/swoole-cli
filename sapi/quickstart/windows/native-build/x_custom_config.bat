@@ -13,7 +13,7 @@ cd /d %__PROJECT__%\var\windows-build-deps\php-src\
 
 set X_MAKEFILE=%__PROJECT__%\var\windows-build-deps\php-src\Makefile
 
-:: set "PATH=%ProgramFiles%\7-Zip;%ProgramFiles%\Git\bin;%__PROJECT__%\bin\runtime\;%__PROJECT__%\bin\runtime\nasm\;%__PROJECT__%\bin\runtime\php;%__PROJECT__%\bin\runtime\libarchive\bin;%PATH%"
+:: set "PATH=%ProgramFiles%\7-Zip;%ProgramFiles%\Git\bin;%__PROJECT__%\runtime\;%__PROJECT__%\runtime\nasm\;%__PROJECT__%\runtime\php;%__PROJECT__%\runtime\libarchive\bin;%PATH%"
 
 rem https://learn.microsoft.com/zh-cn/cpp/error-messages/tool-errors/linker-tools-warning-lnk4098?view=msvc-170&redirectedfrom=MSDN
 rem https://learn.microsoft.com/zh-cn/cpp/build/reference/md-mt-ld-use-run-time-library?view=msvc-170
