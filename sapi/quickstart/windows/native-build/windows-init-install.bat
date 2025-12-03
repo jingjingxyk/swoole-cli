@@ -32,7 +32,7 @@ set "PATH=%__PROJECT__%\var\windows-build-deps\php-sdk-binary-tools\bin\;%__PROJ
 echo "%PATH%"
 echo %ProgramFiles%\7-Zip
 
-cd /d %__PROJECT__%\bin\runtime\
+cd /d %__PROJECT__%\runtime\
 if  exist ".\nasm\" (
    rd /s /q ".\nasm\"
 )
