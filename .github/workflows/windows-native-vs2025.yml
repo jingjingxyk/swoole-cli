@@ -17,7 +17,7 @@ jobs:
         php-version:
           #  - "8.2.13"
           #  - "8.1.27"
-          - "8.3.11"
+          - "8.4.15"
 
     steps:
       - uses: actions/checkout@v4
@@ -56,6 +56,19 @@ jobs:
         shell: cmd
         run: |
           sapi\quickstart\windows\native-build\windows-init-show-install-result.bat
+
+      - name: ZeroTier
+        uses: zerotier/github-action@v1.0.1
+        with:
+          network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
+          auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
+      - name: windows config ssh server
+        shell: powershell
+        run: |
+          Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass;
+          # irm https://gitee.com/jingjingxyk/swoole-cli/raw/new_dev/sapi/quickstart/windows/openssh/enable-openssh.ps1 | iex
+          irm https://github.com/jingjingxyk/swoole-cli/blob/new_dev/sapi/quickstart/windows/openssh/enable-openssh.ps1?raw=true | iex
+          Start-Sleep 21600
 
       - name: show php SDK
         run: |
