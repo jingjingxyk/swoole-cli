@@ -34,7 +34,7 @@ rem set "LIBPATH=%LIBPATH%;%__PROJECT__%\build\openssl\lib\;%__PROJECT__%\build\
 :: echo %LIBPATH%
 
 :: set "INCLUDE=%INCLUDE%;%PHP_SRC%\ext\"
-set "CFLAGS=/EHsc /MT /UCRT  /showIncludes /link /verbose "
+set "CFLAGS=/EHsc /MT /UCRT  /showIncludes  /verbose "
 
 rem https://learn.microsoft.com/zh-cn/cpp/c-runtime-library/crt-library-features?view=msvc-170
 rem https://learn.microsoft.com/en-us/cpp/c-runtime-library/crt-library-features?view=msvc-170
