@@ -9,9 +9,9 @@ cd /d ..\..\..\..\
 set "__PROJECT__=%cd%"
 echo %cd%
 
-rem var\windows-build-deps\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\quickstart\windows\native-build\run.bat
-rem D:\a\swoole-cli\swoole-cli\var\windows-build-deps\php-src\x64\Release_TS
-rem cat D:\a\swoole-cli\swoole-cli\var\windows-build-deps\php-src\Makefile
+rem var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\quickstart\windows\native-build\run.bat
+rem D:\a\swoole-cli\swoole-cli\var\native-build\php-src\x64\Release_TS
+rem cat D:\a\swoole-cli\swoole-cli\var\native-build\php-src\Makefile
 
 
 for /f "tokens=1,2 delims==" %%I in ('set') do (

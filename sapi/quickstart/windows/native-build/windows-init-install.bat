@@ -13,10 +13,10 @@ cd /d ..\..\..\..\
 set "__PROJECT__=%cd%"
 echo %cd%
 
-md %__PROJECT__%\var\windows-build-deps\
+md %__PROJECT__%\var\native-build\
 md %__PROJECT__%\runtime\
 
-cd /d %__PROJECT__%\var\windows-build-deps\
+cd /d %__PROJECT__%\var\native-build\
 dir
 
 
@@ -28,7 +28,7 @@ msiexec /i strawberry-perl-5.38.2.2-64bit.msi  /passive
 
 
 set "PATH=%ProgramFiles%\7-Zip;%PATH%;"
-set "PATH=%__PROJECT__%\var\windows-build-deps\php-sdk-binary-tools\bin\;%__PROJECT__%\var\windows-build-deps\php-sdk-binary-tools\msys2\bin;%PATH%;"
+set "PATH=%__PROJECT__%\var\native-build\php-sdk-binary-tools\bin\;%__PROJECT__%\var\native-build\php-sdk-binary-tools\msys2\bin;%PATH%;"
 echo "%PATH%"
 echo %ProgramFiles%\7-Zip
 
@@ -46,7 +46,7 @@ if  exist ".\php\" (
    rd /s /q ".\php\"
 )
 
-cd /d %__PROJECT__%\var\windows-build-deps\
+cd /d %__PROJECT__%\var\native-build\
 
 
 if  exist ".\nasm\" (
@@ -60,7 +60,7 @@ if  exist ".\php-nts-Win32-x64" (
    rmdir /s /q ".\php-nts-Win32-x64"
 )
 
-cd /d %__PROJECT__%\var\windows-build-deps\
+cd /d %__PROJECT__%\var\native-build\
 
 7z.exe x -onasm nasm-2.16.03-win64.zip
 7z.exe x -ophp-nts-Win32-x64 php-nts-Win32-x64.zip

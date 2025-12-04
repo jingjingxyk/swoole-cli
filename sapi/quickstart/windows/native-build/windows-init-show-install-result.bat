@@ -13,10 +13,10 @@ cd /d ..\..\..\..\
 set "__PROJECT__=%cd%"
 echo %cd%
 
-md %__PROJECT__%\var\windows-build-deps\
+md %__PROJECT__%\var\native-build\
 md %__PROJECT__%\runtime\
 
-cd /d %__PROJECT__%\var\windows-build-deps\
+cd /d %__PROJECT__%\var\native-build\
 
 
 echo %ProgramFiles(x86)%
@@ -24,7 +24,7 @@ echo %USERPROFILE%
 echo %NUMBER_OF_PROCESSORS%
 echo %ProgramFiles%
 set "PATH=%ProgramFiles%\Git\bin;%__PROJECT__%\runtime\nasm\;%__PROJECT__%\runtime\php;%__PROJECT__%\runtime\libarchive\bin;%PATH%"
-set "PATH=%__PROJECT__%\var\windows-build-deps\php-sdk-binary-tools\bin\;%__PROJECT__%\var\windows-build-deps\php-sdk-binary-tools\msys2\bin;%PATH%"
+set "PATH=%__PROJECT__%\var\native-build\php-sdk-binary-tools\bin\;%__PROJECT__%\var\native-build\php-sdk-binary-tools\msys2\bin;%PATH%"
 echo "%PATH%"
 
 :: git config --global core.autocrlf false

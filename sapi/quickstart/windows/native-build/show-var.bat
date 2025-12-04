@@ -8,11 +8,11 @@ cd /d ..\..\..\..\
 
 set "__PROJECT__=%cd%"
 echo %cd%
-cd %__PROJECT__%\var\windows-build-deps\php-src\
+cd %__PROJECT__%\var\native-build\php-src\
 
 where sed.exe
 
-dir  %__PROJECT__%\var\windows-build-deps\php-sdk-binary-tools\msys2\usr\bin\
+dir  %__PROJECT__%\var\native-build\php-sdk-binary-tools\msys2\usr\bin\
 
 
 

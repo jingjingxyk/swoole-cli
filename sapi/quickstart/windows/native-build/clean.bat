@@ -8,7 +8,7 @@ cd /d ..\..\..\..\
 
 set "__PROJECT__=%cd%"
 echo %cd%
-cd /d %__PROJECT__%\var\windows-build-deps\php-src\
+cd /d %__PROJECT__%\var\native-build\php-src\
 
 
 nmake clean

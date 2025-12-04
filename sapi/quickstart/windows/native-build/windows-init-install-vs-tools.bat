@@ -13,10 +13,10 @@ cd /d ..\..\..\..\
 set "__PROJECT__=%cd%"
 echo %cd%
 
-md %__PROJECT__%\var\windows-build-deps\
+md %__PROJECT__%\var\native-build\
 
 
-cd /d %__PROJECT__%\var\windows-build-deps\
+cd /d %__PROJECT__%\var\native-build\
 dir
 
 .\VisualStudioSetup.exe ^

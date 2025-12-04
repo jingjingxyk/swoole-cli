@@ -8,7 +8,7 @@ cd /d ..\..\..\..\
 
 set "__PROJECT__=%cd%"
 echo %cd%
-cd %__PROJECT__%\var\windows-build-deps\php-src\
+cd %__PROJECT__%\var\native-build\php-src\
 
 rem set "INCLUDE=%INCLUDE%;%__PROJECT__%\openssl\include\;%__PROJECT__%\zlib\include"
 rem set "LIB=%LIB%;%__PROJECT__%\openssl\lib\;%__PROJECT__%\zlib\lib"

@@ -8,9 +8,9 @@ cd /d ..\..\..\..\
 set "__PROJECT__=%cd%"
 echo %cd%
 
-md %__PROJECT__%\var\windows-build-deps\
+md %__PROJECT__%\var\native-build\
 
-cd /d %__PROJECT__%\var\windows-build-deps\
+cd /d %__PROJECT__%\var\native-build\
 
 
 if not exist "strawberry-perl-5.38.2.2-64bit.msi" curl.exe -fSLo strawberry-perl-5.38.2.2-64bit.msi https://github.com/StrawberryPerl/Perl-Dist-Strawberry/releases/download/SP_53822_64bit/strawberry-perl-5.38.2.2-64bit.msi
