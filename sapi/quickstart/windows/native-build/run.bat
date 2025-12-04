@@ -1,6 +1,6 @@
 @echo off
 
-setlocal
+setlocal enabledelayedexpansion
 rem show current file location
 echo %~dp0
 cd /d %~dp0
