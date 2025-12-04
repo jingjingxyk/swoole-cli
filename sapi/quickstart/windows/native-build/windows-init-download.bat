@@ -45,6 +45,7 @@ echo %PHP_RUNIME_FILE%
 
 if not exist "php-nts-Win32-x64.zip" curl.exe -fSLo php-nts-Win32-x64.zip "https://windows.php.net/downloads/releases/%PHP_RUNIME_FILE%"
 if not exist "composer.phar" curl.exe -fSLo composer.phar "https://getcomposer.org/download/latest-stable/composer.phar"
+if not exist "pie.phar" curl.exe -fSLo pie.phar "https://github.com/php/pie/releases/download/1.2.1/pie.phar"
 if not exist "cacert.pem" curl.exe -fSLo cacert.pem "https://curl.se/ca/cacert.pem"
 
 if not exist "php-sdk-binary-tools" git clone -b master --depth=1 https://github.com/php/php-sdk-binary-tools.git
