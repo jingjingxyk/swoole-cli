@@ -22,8 +22,6 @@ dir  %__PROJECT__%\var\windows-build-deps\php-sdk-binary-tools\msys2\usr\bin\
 
 :: vswhere.exe -legacy -prerelease
 
-nmake /E /f Makefile x-show-var
-
 cd %__PROJECT__%
 endlocal
 
