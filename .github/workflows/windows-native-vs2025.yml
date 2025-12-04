@@ -96,12 +96,6 @@ jobs:
           cmd /c ${CURRENT_DIR}\var\windows-build-deps\php-sdk-binary-tools\phpsdk-starter.bat -h
           # cmd /c ${CURRENT_DIR}\var\windows-build-deps\php-sdk-binary-tools\phpsdk-vs17-x64.bat
 
-      - name: php build
-        shell: cmd
-        run: |
-          cd var\windows-build-deps\php-src\
-          nmake /E
-
       - name: Show Build Result
         run: |
           cd var\windows-build-deps\php-src\
