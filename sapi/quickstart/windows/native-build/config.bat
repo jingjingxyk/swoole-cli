@@ -35,7 +35,7 @@ set "LIBPATH=%LIBPATH%;%VCInstallDir%lib\x64"
 :: echo %LIBPATH%
 
 :: set "INCLUDE=%INCLUDE%;%PHP_SRC%\ext\"
-set "CFLAGS=/EHsc /MT /UCRT "
+set "CFLAGS=/EHsc /MT /UCRT /GS- "
 :: /showIncludes
 
 rem https://learn.microsoft.com/zh-cn/cpp/c-runtime-library/crt-library-features?view=msvc-170
