@@ -33,6 +33,7 @@ echo "%PATH%"
 echo %ProgramFiles%\7-Zip
 
 cd /d %__PROJECT__%\runtime\
+
 if  exist ".\nasm\" (
    rd /s /q ".\nasm\"
 )

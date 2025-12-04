@@ -53,7 +53,7 @@ if not exist "php-src" git clone -b php-8.4.2 --depth=1 https://github.com/php/p
 
 
 :: with mirror
-:: curl.exe -fSLo Git-2.47.1-64-bit.exe  https://download.jingjingxyk.com/Git-2.47.1-64-bit.exe
+:: curl.exe -fSLo Git-2.50.0-64-bit.exe  https://download.jingjingxyk.com/Git-2.50.0-64-bit.exe
 :: curl.exe -fSLo 7z2409-x64.exe  https://download.jingjingxyk.com/7z2409-x64.exe
 :: curl.exe -fSLo nasm-2.16.03-win64.zip  https://download.jingjingxyk.com/nasm-2.16.03-win64.zip
 
