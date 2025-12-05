@@ -34,7 +34,7 @@ rem set "LIBPATH=%LIBPATH%;%__PROJECT__%\build\openssl\lib\;%__PROJECT__%\build\
 :: echo %LIBPATH%
 
 :: set "INCLUDE=%INCLUDE%;%PHP_SRC%\ext\"
-set "CFLAGS=/EHsc /MP /MT /UCRT "
+set "CFLAGS=/EHsc /MP /MT /UCRT /FORCE:MULTIPLE "
 ::  /MT
 :: /showIncludes
 
