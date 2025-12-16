@@ -9,7 +9,7 @@ env:
 
 jobs:
   windows-native:
-    if: 0
+    if: 1
     # runs-on: windows-2022
     runs-on: windows-2025
     strategy:
@@ -58,12 +58,14 @@ jobs:
           sapi\quickstart\windows\native-build\windows-init-show-install-result.bat
 
       - name: ZeroTier
+        if: 0
         uses: zerotier/github-action@v1.0.1
         with:
           network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
           auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
 
       - name: windows config ssh server
+        if: 0
         shell: powershell
         run: |
           Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass;
@@ -86,9 +88,10 @@ jobs:
 
       - name: run build
         run: |
-          var\windows-build-deps\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\quickstart\windows\native-build\run.bat
+          cmd /c sapi\quickstart\windows\native-build\main.bat
 
       - name: show php SDK
+        if: 0
         run: |
           $CURRENT_DIR = Get-Location
           # Start-Process cmd -ArgumentList "${CURRENT_DIR}\var\windows-build-deps\php-sdk-binary-tools\phpsdk-starter.bat -h" -NoNewWindow
@@ -97,6 +100,7 @@ jobs:
           # cmd /c ${CURRENT_DIR}\var\windows-build-deps\php-sdk-binary-tools\phpsdk-vs17-x64.bat
 
       - name: Show Build Result
+        if: 0
         run: |
           cd var\windows-build-deps\php-src\
 
@@ -105,6 +109,7 @@ jobs:
           dumpbin /DEPENDENTS ".\x64\Release_TS\php.exe"
 
       - name: production artifacts
+        if: 0
         uses: actions/upload-artifact@v4
         with:
           name: php-cli-v${{ env.BUILD_PHP_VERSION }}-vs16-x64
