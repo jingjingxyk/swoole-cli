@@ -372,3 +372,4 @@ php-fpm-*
 *.deb
 *.rpm
 nfpm-pkg.yaml
+!/var/.gitkeep
