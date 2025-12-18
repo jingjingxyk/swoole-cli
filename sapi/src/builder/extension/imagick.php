@@ -12,29 +12,10 @@ return function (Preprocessor $p) {
             ->withFileHash('md5', 'f7b5e9b23fb844e5eb035203d316bc63')
             ->withHomePage('https://github.com/Imagick/imagick')
             ->withLicense('https://github.com/Imagick/imagick/blob/master/LICENSE', Extension::LICENSE_PHP)
-            ->withMd5sum('f7b5e9b23fb844e5eb035203d316bc63')
             ->withDependentLibraries('imagemagick')
             ->withDependentExtensions('tokenizer')
             ->withBuildCached(false)
     );
-
-    // 扩展钩子
-    $p->withBeforeConfigureScript('imagick', function (Preprocessor $p) {
-        $workDir = $p->getPhpSrcDir();
-        $cmd = <<<EOF
-        cd {$workDir}
-        sed -i.backup "s/php_strtolower(/zend_str_tolower(/" ext/imagick/imagick.c
-EOF;
-
-        if (BUILD_CUSTOM_PHP_VERSION_ID >= 8040) {
-            //参考
-            //https://github.com/swoole/swoole-src/blob/4787a8a0e8b4adb0e8643901d2b5bae4fafe0876/ext-src/swoole_redis_server.cc#L162
-            $cmd .= PHP_EOL;
-        } else {
-            $cmd = '';
-        }
-        return $cmd;
-    });
 };
 
 

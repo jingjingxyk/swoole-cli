@@ -135,13 +135,16 @@ jobs:
             export PATH=/work/runtime/php:$PATH  # 容器已经内置 php 和 composer
             alias php="php -d curl.cainfo=/work/runtime/php/cacert.pem -d openssl.cafile=/work/runtime/php/cacert.pem"
 
-            # bash sapi/quickstart/mark-install-library-cached.sh
-
             sh  sapi/quickstart/linux/alpine-init.sh
+            git config --global --add safe.directory /work
             composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
             composer dump-autoload --optimize --profile --no-dev
 
+<<<<<<< HEAD
             php prepare.php  +inotify +apcu +ds +xlswriter +ssh2  +pgsql +pdo_pgsql +memcached -gd -imagick  --with-php-version=${{ env.BUILD_PHP_VERSION }} --with-c-compiler=gcc
+=======
+            php prepare.php --with-static-pie ${{ inputs.build_type }} ${{ inputs.build_options }} --with-php-version=${{ env.BUILD_PHP_VERSION }}
+>>>>>>> build_php_7.4
 
             bash make-install-deps.sh
 
@@ -162,9 +165,13 @@ jobs:
         run: |
           ./thirdparty/php-src/sapi/cli/php -v
           ./thirdparty/php-src/sapi/cli/php -m
+          ./thirdparty/php-src/sapi/cli/php --ri mongodb
+          ./thirdparty/php-src/sapi/cli/php --ri curl
+          ./thirdparty/php-src/sapi/cli/php --ri imagick
           ./thirdparty/php-src/sapi/cli/php --ri swoole
           ./thirdparty/php-src/sapi/cli/php --ri pgsql
           ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -v
+          { ldd ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ; } || { echo $? ; } ;
           file ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
           readelf -h ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
           APP_VERSION=$(./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php  -v | head -n 1 | awk '{print $2}')

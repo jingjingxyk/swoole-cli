@@ -49,6 +49,7 @@ class Preprocessor
     protected string $libraryDir;
     protected string $extensionDir;
     protected array $pkgConfigPaths = [];
+    protected array $nfpmDepends = [];
     protected string $phpSrcDir;
     protected string $dockerVersion = 'latest';
     /**
@@ -116,6 +117,7 @@ class Preprocessor
 
     protected string $buildType = 'release';
     protected bool $inVirtualMachine = false;
+    protected bool $skipHashVerify = false;
 
     protected string $proxyConfig = '';
 
@@ -159,6 +161,19 @@ class Preprocessor
         switch ($uname['machine']) {
             case 'x86_64':
                 return 'x64';
+            case 'aarch64':
+                return 'arm64';
+            default:
+                return $uname['machine'];
+        }
+    }
+
+    public function getDebArch(): string
+    {
+        $uname = posix_uname();
+        switch ($uname['machine']) {
+            case 'x86_64':
+                return 'amd64';
             case 'aarch64':
                 return 'arm64';
             default:
@@ -244,6 +259,11 @@ class Preprocessor
     public function getBuildDir(): string
     {
         return $this->buildDir;
+    }
+
+    public function getSwooleVersion(): string
+    {
+        return trim(file_get_contents($this->rootDir . '/sapi/SWOOLE-VERSION.conf'));
     }
 
     public function getWorkDir(): string
@@ -446,7 +466,7 @@ __GIT_PROXY_CONFIG_EOF;
             throw new Exception("Downloading file[" . basename($file) . "] from url[$url] failed");
         }
         // 下载文件的 hash 不一致
-        if ($project->enableHashVerify) {
+        if (!$this->skipHashVerify and $project->enableHashVerify) {
             if (!$project->hashVerify($file)) {
                 throw new Exception("The {$project->hashAlgo} of downloaded file[$file] is inconsistent with the configuration");
             }
@@ -488,6 +508,7 @@ __GIT_PROXY_CONFIG_EOF;
      */
     public function addLibrary(Library $lib): void
     {
+
         if ($lib->enableDownloadScript || !empty($lib->url)) {
             if (empty($lib->file)) {
                 if ($lib->enableDownloadScript) {
@@ -637,7 +658,7 @@ EOF;
                 }
             }
 
-            if ($ext->enableHashVerify) {
+            if (!$this->skipHashVerify and $ext->enableHashVerify) {
                 // 检查文件的 hash，若不一致删除后重新下载
                 $ext->hashVerify($ext->path);
             }
@@ -1116,7 +1137,10 @@ EOF;
                 $this->scanConfigFiles($dir, $extAvailable);
             }
         }
+
         install_libraries($this);
+        $this->skipHashVerify = boolval($this->getInputOption('skip-hash-verify'));
+
         $this->extEnabled = array_unique($this->extEnabled);
         foreach ($this->extEnabled as $ext) {
             if (!isset($extAvailable[$ext])) {
@@ -1180,6 +1204,7 @@ EOF;
         $this->mkdirIfNotExists($this->rootDir . '/bin');
         $this->generateFile(__DIR__ . '/template/license.php', $this->rootDir . '/bin/LICENSE');
         $this->generateFile(__DIR__ . '/template/credits.php', $this->rootDir . '/bin/credits.html');
+        $this->generateFile(__DIR__ . '/template/nfpm-yaml.php', $this->rootDir . '/nfpm-pkg.yaml');
 
         copy($this->rootDir . '/sapi/scripts/pack-sfx.php', $this->rootDir . '/bin/pack-sfx.php');
 
