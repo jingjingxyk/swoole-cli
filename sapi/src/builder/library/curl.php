@@ -21,13 +21,14 @@ return function (Preprocessor $p) {
                 <<<EOF
             ./configure --help
 
-            PACKAGES='zlib openssl libcares libbrotlicommon libbrotlidec libbrotlienc libzstd  '
+            PACKAGES='zlib openssl libssl libcrypto libcares libbrotlicommon libbrotlidec libbrotlienc libzstd  '
             PACKAGES="\$PACKAGES   libidn2 libpsl " # libssh2
 
             CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$PACKAGES)" \
             LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES)" \
             LIBS="$(pkg-config      --libs-only-l    --static \$PACKAGES)" \
-            ./configure --prefix={$curl_prefix}  \
+            ./configure \
+            --prefix={$curl_prefix}  \
             --enable-static \
             --disable-shared \
             --without-librtmp \
