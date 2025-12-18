@@ -329,7 +329,7 @@ make_config() {
         test -f ./configure.backup && rm -f ./configure.backup
     <?php endif; ?>
 <?php endif; ?>
-
+   ./configure --help
     export_variables
     export LDFLAGS="$LDFLAGS <?= $this->extraLdflags ?>"
     export EXTRA_CFLAGS='<?= $this->extraCflags ?>'
@@ -355,12 +355,12 @@ make_build() {
     export_variables
     <?php if ($this->isLinux()) : ?>
     export CFLAGS="$CFLAGS  "
-    export LDFLAGS="$LDFLAGS  -static -all-static "
-        <?php if($this->getInputOption('with-static-pie')) : ?>
-        export CFLAGS="$CFLAGS  -fPIE"
-        export LDFLAGS="$LDFLAGS -static-pie"
-        <?php endif ;?>
-    <?php endif ;?>
+    export LDFLAGS="$LDFLAGS  -static -all-static"
+    <?php if ($this->getInputOption('with-static-pie')) : ?>
+    export CFLAGS="$CFLAGS  -fPIE"
+    export LDFLAGS="$LDFLAGS -static-pie"
+    <?php endif ; ?>
+    <?php endif ; ?>
     export LDFLAGS="$LDFLAGS   <?= $this->extraLdflags ?>"
     export EXTRA_CFLAGS='<?= $this->extraCflags ?>'
     <?php if(!empty($this->httpProxy)) : ?>
@@ -377,9 +377,11 @@ make_build() {
     xattr -cr <?= $this->phpSrcDir  ?>/sapi/cli/php
     otool -L <?= $this->phpSrcDir  ?>/sapi/cli/php
 <?php else : ?>
-    ldd <?= $this->phpSrcDir  ?>/sapi/cli/php
+    { ldd <?= $this->phpSrcDir  ?>/sapi/cli/php ; } || { echo $? ; }
     file <?= $this->phpSrcDir  ?>/sapi/cli/php
     readelf -h <?= $this->phpSrcDir  ?>/sapi/cli/php
+    { readelf -l <?= $this->phpSrcDir  ?>/sapi/cli/php ; } || { echo $? ; }
+    { objdump -p <?= $this->phpSrcDir  ?>/sapi/cli/php ; } || { echo $? ; }
 <?php endif; ?>
 
     # make install
@@ -392,6 +394,7 @@ make_build() {
     <?= BUILD_PHP_INSTALL_PREFIX ?>/bin/php -v
 
     # elfedit --output-osabi linux sapi/cli/php
+
 }
 
 make_archive() {
@@ -481,6 +484,23 @@ lib_dep_pkg() {
     exit 0
 }
 
+make_swoole_cli_with_linux_gcc() {
+    if [ ! -f bin/swoole-cli ] ;then
+        ./buildconf --force
+        ./sapi/scripts/build-swoole-cli-with-linux-gcc.sh
+    fi
+}
+
+make_nfpm_pkg() {
+    make_swoole_cli_with_linux_gcc
+    ./bin/swoole-cli sapi/scripts/copy-depend-libs.php
+    patchelf --force-rpath --set-rpath '/usr/local/swoole-cli/lib' bin/swoole-cli
+    NFPM_PKG_FILENAME=swoole-cli-<?=$this->getSwooleVersion()?>-linux-<?=$this->getSystemArch()?>-glibc
+    nfpm pkg --config nfpm-pkg.yaml --target "${NFPM_PKG_FILENAME}.rpm"
+    nfpm pkg --config nfpm-pkg.yaml --target "${NFPM_PKG_FILENAME}.deb"
+    return 0
+}
+
 help() {
     echo "./make.sh docker-build [ china | ustc | tuna ]"
     echo "./make.sh docker-bash"
@@ -504,6 +524,7 @@ help() {
     echo "./make.sh list-swoole-branch"
     echo "./make.sh switch-swoole-branch"
     echo "./make.sh [library-name]"
+    echo "./make.sh nfpm-pkg"
     echo  "./make.sh clean-[library-name]"
     echo  "./make.sh clean-[library-name]-cached"
     echo  "./make.sh clean"
@@ -640,6 +661,8 @@ elif [ "$1" = "list-extension" ] ;then
     echo "<?= $item->name ?>"
 <?php endforeach; ?>
     exit 0
+elif [ "$1" = "nfpm-pkg" ] ;then
+    make_nfpm_pkg
 elif [ "$1" = "clean" ] ;then
     make_clean
     exit 0

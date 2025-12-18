@@ -311,6 +311,7 @@ tmp-php.ini
 /ext/inotify
 /ext/swoole_tracker_agent
 /ext/loader8
+/ext/swoole
 /ext/ds
 /ext/xlswriter
 /ext/uuid
@@ -334,8 +335,6 @@ php.ini
 sapi/webUI/deploy.sh
 sapi/webUI/public/data/
 Makefile.backup
-ldflags.log
-cppflags.log
 libs.log
 ext/apcu/
 ext/ssh2/
@@ -346,3 +345,9 @@ php-fpm-*
 !sapi/patches
 /runtime
 !/runtime/.gitkeep
+/APP_NAME
+/APP_VERSION
+*.deb
+*.rpm
+nfpm-pkg.yaml
+!/var/.gitkeep
