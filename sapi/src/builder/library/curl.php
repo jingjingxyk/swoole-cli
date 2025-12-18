@@ -22,7 +22,7 @@ return function (Preprocessor $p) {
             ./configure --help
 
             PACKAGES='zlib openssl libcares libbrotlicommon libbrotlidec libbrotlienc libzstd  '
-            PACKAGES="\$PACKAGES  libssh2 libidn2 libpsl " # libngtcp2
+            PACKAGES="\$PACKAGES   libidn2 libpsl " # libssh2
 
             CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$PACKAGES)" \
             LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES)" \
@@ -77,7 +77,7 @@ EOF
                 'nghttp2',
                 //'nghttp3',
                 //'ngtcp2',
-                'libssh2',
+                //'libssh2',
                 'libidn2',
                 'libpsl'
             )
