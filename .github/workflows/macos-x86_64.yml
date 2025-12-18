@@ -10,7 +10,7 @@ env:
 jobs:
   macos-x86_64:
     if: 1
-    runs-on: macos-13
+    runs-on: macos-15-intel
     # macos-latest (macos-14)  变更了 CPU 架构，由 x86_64 变更为 arm64
     # macos-14 CPU 架构 arm64
     # macos-13 CPU 架构 x86_64
@@ -143,7 +143,9 @@ jobs:
           ./thirdparty/php-src/sapi/cli/php -v
           ./thirdparty/php-src/sapi/cli/php -m
           ./thirdparty/php-src/sapi/cli/php --ri mongodb
+          ./thirdparty/php-src/sapi/cli/php --ri curl
           ./thirdparty/php-src/sapi/cli/php --ri gd
+          ./thirdparty/php-src/sapi/cli/php --ri imagick
           ./thirdparty/php-src/sapi/cli/php --ri swoole
           ./thirdparty/php-src/sapi/cli/php --ri pgsql
 
