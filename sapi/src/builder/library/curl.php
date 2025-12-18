@@ -54,7 +54,7 @@ return function (Preprocessor $p) {
             --with-nghttp2 \
             --without-nghttp3 \
             --with-libidn2 \
-            --with-libssh2 \
+            --without-libssh2 \
             --with-openssl  \
             --with-default-ssl-backend=openssl \
             --without-openssl-quic \
