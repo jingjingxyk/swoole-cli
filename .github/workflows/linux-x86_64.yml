@@ -140,11 +140,7 @@ jobs:
             composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
             composer dump-autoload --optimize --profile --no-dev
 
-<<<<<<< HEAD
-            php prepare.php  +inotify +apcu +ds +xlswriter +ssh2  +pgsql +pdo_pgsql +memcached -gd -imagick  --with-php-version=${{ env.BUILD_PHP_VERSION }} --with-c-compiler=gcc
-=======
-            php prepare.php --with-static-pie ${{ inputs.build_type }} ${{ inputs.build_options }} --with-php-version=${{ env.BUILD_PHP_VERSION }}
->>>>>>> build_php_7.4
+            php prepare.php  --with-static-pie +inotify +apcu  +ssh2  +pgsql +pdo_pgsql +memcached -gd -imagick  --with-php-version=${{ env.BUILD_PHP_VERSION }} --with-c-compiler=gcc
 
             bash make-install-deps.sh
 
