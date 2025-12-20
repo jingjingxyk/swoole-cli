@@ -34,7 +34,7 @@ done
 
 REDIS_VERSION=6.2.0
 YAML_VERSION=2.2.2
-IMAGICK_VERSION=3.8.0
+IMAGICK_VERSION=3.8.1
 
 mkdir -p pool/ext
 mkdir -p pool/lib
