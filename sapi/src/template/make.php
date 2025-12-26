@@ -22,6 +22,10 @@ export LD=<?= $this->lld . PHP_EOL ?>
 
 export PKG_CONFIG_PATH=<?= implode(':', $this->pkgConfigPaths) . PHP_EOL ?>
 export PATH=<?= implode(':', $this->binPaths) . PHP_EOL ?>
+<?php if ($this->isMacos()) :?>
+# 兼容 最低 macOS 版本
+export MACOSX_DEPLOYMENT_TARGET=12.0
+<?php endif; ?>
 
 OPTIONS="--disable-all \
     --enable-shared=no \
