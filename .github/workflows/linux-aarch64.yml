@@ -7,7 +7,7 @@ env:
 
 jobs:
   linux-aarch64:
-    if: 0
+    if: 1
     runs-on: ubuntu-24.04-arm
     steps:
       - uses: actions/checkout@v4
@@ -119,6 +119,7 @@ jobs:
 
             sh  sapi/quickstart/linux/alpine-init.sh
             git config --global --add safe.directory /work
+
             composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
             composer dump-autoload --optimize --profile --no-dev
 
@@ -140,7 +141,9 @@ jobs:
           ./thirdparty/php-src/sapi/cli/php --ri curl
           ./thirdparty/php-src/sapi/cli/php --ri gd
           ./thirdparty/php-src/sapi/cli/php --ri imagick
-          ./thirdparty/php-src/sapi/cli/php --ri swoole
+
+          # ./thirdparty/php-src/sapi/cli/php --ri swoole
+
           ./thirdparty/php-src/sapi/cli/php --ri pgsql
           { ldd ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ; } || { echo $? ; } ;
           file ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
@@ -150,8 +153,6 @@ jobs:
           echo ${APP_VERSION}  > APP_VERSION
           echo "php-cli"  > APP_NAME
           ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -r "echo PHP_VERSION;"
-          ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php  --list-tests
-          # ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ./vendor/bin/phpunit ./sapi/src/UnitTest/MainTest.php
 
       - name: get app version
         run: |

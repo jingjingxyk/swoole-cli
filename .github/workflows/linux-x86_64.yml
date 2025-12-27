@@ -137,10 +137,11 @@ jobs:
 
             sh  sapi/quickstart/linux/alpine-init.sh
             git config --global --add safe.directory /work
+
             composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
             composer dump-autoload --optimize --profile --no-dev
 
-            php prepare.php --with-static-pie ${{ inputs.build_type }} ${{ inputs.build_options }} --with-php-version=${{ env.BUILD_PHP_VERSION }}
+            php prepare.php --with-static-pie --with-php-version=${{ env.BUILD_PHP_VERSION }}
 
             bash make-install-deps.sh
 
@@ -165,7 +166,9 @@ jobs:
           ./thirdparty/php-src/sapi/cli/php --ri curl
           ./thirdparty/php-src/sapi/cli/php --ri gd
           ./thirdparty/php-src/sapi/cli/php --ri imagick
+
           ./thirdparty/php-src/sapi/cli/php --ri swoole
+
           ./thirdparty/php-src/sapi/cli/php --ri pgsql
           ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -v
           { ldd ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ; } || { echo $? ; } ;

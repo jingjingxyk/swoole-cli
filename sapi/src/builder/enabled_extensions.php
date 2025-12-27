@@ -39,10 +39,9 @@ return [
     'mongodb',
     'gettext',
     'uuid',
-    'apcu',
-    'ds',
-    'ssh2',
+    //'apcu',
+    //'ds',
+    //'ssh2',
     'pgsql',
-    'pdo_pgsql',
-    'gettext'
+    'pdo_pgsql'
 ];

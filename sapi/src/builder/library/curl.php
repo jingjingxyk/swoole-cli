@@ -8,25 +8,27 @@ return function (Preprocessor $p) {
     $zlib_prefix = ZLIB_PREFIX;
     $cares_prefix = CARES_PREFIX;
 
+
     $p->addLibrary(
         (new Library('curl'))
             ->withHomePage('https://curl.se/')
             ->withManual('https://curl.se/docs/install.html')
             ->withLicense('https://github.com/curl/curl/blob/master/COPYING', Library::LICENSE_SPEC)
-            ->withUrl('https://curl.se/download/curl-8.4.0.tar.gz')
-            ->withFileHash('md5', '533e8a3b1228d5945a6a512537bea4c7')
+            ->withUrl('https://github.com/curl/curl/releases/download/curl-8_16_0/curl-8.16.0.tar.gz')
+            ->withFileHash('md5', '3db9de72cc8f04166fa02d3173ac78bb')
             ->withPrefix($curl_prefix)
             ->withConfigure(
                 <<<EOF
             ./configure --help
 
-            PACKAGES='zlib openssl libcares libbrotlicommon libbrotlidec libbrotlienc libzstd '
-            PACKAGES="\$PACKAGES  libssh2 " # libidn2
+            PACKAGES='zlib openssl libcares libbrotlicommon libbrotlidec libbrotlienc libzstd  '
+            PACKAGES="\$PACKAGES   libidn2 libpsl " # libssh2
 
             CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$PACKAGES)" \
             LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES)" \
             LIBS="$(pkg-config      --libs-only-l    --static \$PACKAGES)" \
-            ./configure --prefix={$curl_prefix}  \
+            ./configure \
+            --prefix={$curl_prefix}  \
             --enable-static \
             --disable-shared \
             --without-librtmp \
@@ -39,7 +41,6 @@ return function (Preprocessor $p) {
             --enable-mime \
             --enable-cookies \
             --enable-doh \
-            --enable-threaded-resolver \
             --enable-ipv6 \
             --enable-proxy  \
             --enable-websockets \
@@ -51,17 +52,17 @@ return function (Preprocessor $p) {
             --enable-optimize \
             --with-zlib={$zlib_prefix} \
             --enable-ares={$cares_prefix} \
-            --without-nghttp2 \
-            --without-ngtcp2 \
+            --with-nghttp2 \
             --without-nghttp3 \
-            --without-libidn2 \
-            --with-libssh2 \
+            --with-libidn2 \
+            --without-libssh2 \
             --with-openssl  \
             --with-default-ssl-backend=openssl \
+            --without-openssl-quic \
             --without-gnutls \
             --without-mbedtls \
             --without-wolfssl \
-            --without-bearssl \
+            --without-libressl \
             --without-rustls
 
 EOF
@@ -74,7 +75,12 @@ EOF
                 'zlib',
                 'brotli',
                 'libzstd',
-                'libssh2'
-            ) # 'libidn2',
+                'nghttp2',
+                //'nghttp3',
+                //'ngtcp2',
+                //'libssh2',
+                'libidn2',
+                'libpsl'
+            )
     );
 };

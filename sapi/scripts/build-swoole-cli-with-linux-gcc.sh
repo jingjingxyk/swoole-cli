@@ -35,7 +35,11 @@ fi
   --enable-exif \
   --with-sodium \
   --enable-xml --enable-simplexml --enable-xmlreader --enable-xmlwriter --enable-dom --with-libxml \
+<<<<<<< HEAD
   --enable-gd --with-jpeg --with-freetype \
+=======
+  --enable-gd --with-jpeg --with-freetype --with-avif \
+>>>>>>> build_native_php
   --enable-swoole \
   --enable-swoole-curl \
   --enable-cares \
@@ -50,6 +54,10 @@ fi
   --with-imagick \
   --with-yaml \
   --with-readline \
+<<<<<<< HEAD
+=======
+  --enable-phpy --with-python-config=python3-config \
+>>>>>>> build_native_php
   --enable-opcache
 
 make -j "$(nproc)"
