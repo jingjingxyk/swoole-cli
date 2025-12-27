@@ -33,4 +33,10 @@ sudo apt install libyaml-dev \
     libmagic-dev \
     libonig-dev \
     libxslt-dev \
+<<<<<<< HEAD
     libzip-dev
+=======
+    libzip-dev \
+    libavif-dev \
+    libpython3-dev
+>>>>>>> build_native_php

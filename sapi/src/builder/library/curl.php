@@ -7,15 +7,15 @@ return function (Preprocessor $p) {
     $curl_prefix = CURL_PREFIX;
     $zlib_prefix = ZLIB_PREFIX;
     $cares_prefix = CARES_PREFIX;
-    # HTTP3 (and QUIC)
-    # https://github.com/curl/curl/blob/master/docs/HTTP3.md#openssl-version
+
+
     $p->addLibrary(
         (new Library('curl'))
             ->withHomePage('https://curl.se/')
             ->withManual('https://curl.se/docs/install.html')
             ->withLicense('https://github.com/curl/curl/blob/master/COPYING', Library::LICENSE_SPEC)
-            ->withUrl('https://curl.se/download/curl-8.4.0.tar.gz')
-            ->withFileHash('md5', '533e8a3b1228d5945a6a512537bea4c7')
+            ->withUrl('https://github.com/curl/curl/releases/download/curl-8_16_0/curl-8.16.0.tar.gz')
+            ->withFileHash('md5', '3db9de72cc8f04166fa02d3173ac78bb')
             ->withPrefix($curl_prefix)
             ->withConfigure(
                 <<<EOF
