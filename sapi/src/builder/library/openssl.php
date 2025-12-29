@@ -15,12 +15,13 @@ return function (Preprocessor $p) {
 
             ->withUrl('https://github.com/openssl/openssl/releases/download/OpenSSL_1_1_1w/openssl-1.1.1w.tar.gz')
             ->withPrefix($openssl_prefix)
+            ->withBuildCached(false)
             ->withConfigure(
                 <<<EOF
                 # Fix openssl error, "-ldl" should not be added when compiling statically
                 sed -i.backup 's/add("-ldl", threads("-pthread"))/add(threads("-pthread"))/g' ./Configurations/10-main.conf
                 # ./Configure LIST
-               ./config {$static} no-shared  enable-tls1_3 --release \
+               ./config {$static} no-shared --release \
                --prefix={$openssl_prefix} \
                --libdir={$openssl_prefix}/lib
 
