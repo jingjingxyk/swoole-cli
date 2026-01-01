@@ -22,7 +22,7 @@ return function (Preprocessor $p) {
             ->withUrl('https://github.com/curl/curl/releases/download/curl-7_87_0/curl-7.87.0.tar.gz')
             ->withPrefix($curl_prefix)
             ->withBuildCached(false)
-            //->withInstallCached(false)
+            ->withInstallCached(false)
             ->withBuildScript(
                 <<<EOF
              mkdir -p build
@@ -42,6 +42,7 @@ return function (Preprocessor $p) {
             -DCURL_DISABLE_LDAP=ON \
             -DCURL_DISABLE_LDAPS=ON \
             -DCURL_DISABLE_RTSP=ON \
+            -DCURL_DISABLE_GETOPTIONS=OFF \
             -DENABLE_MANUAL=OFF \
             -DCMAKE_PREFIX_PATH="{$openssl_prefix};{$cares_prefix};{$nghttp2_prefix};{$libidn2_prefix};{$libpsl_prefix};{$zlib_prefix}" \
             -DCURL_USE_GSSAPI=OFF \
@@ -56,7 +57,8 @@ return function (Preprocessor $p) {
             -DCURL_USE_LIBSSH2=OFF \
             -DCMAKE_VERBOSE_MAKEFILE=ON \
             -DCMAKE_C_FLAGS="\${CPPFLAGS}" \
-            -DCMAKE_EXE_LINKER_FLAGS="\${LDFLAGS} \${LIBS}"
+            -DCMAKE_EXE_LINKER_FLAGS="\${LDFLAGS} \${LIBS}" \
+            -DCURL_STATICLIB=ON
 
 
             cmake --build . --config Release --target install
@@ -75,7 +77,7 @@ EOF
                 'nghttp2',
                 //'nghttp3',
                 //'ngtcp2',
-                'libssh2',
+                //'libssh2',
                 'libidn2',
                 'libpsl'
             )
