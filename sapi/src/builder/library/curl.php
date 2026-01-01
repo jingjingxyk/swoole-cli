@@ -8,66 +8,61 @@ return function (Preprocessor $p) {
     $zlib_prefix = ZLIB_PREFIX;
     $cares_prefix = CARES_PREFIX;
     $openssl_prefix = OPENSSL_PREFIX;
+    $gettext_prefix = GETTEXT_PREFIX;
+    $nghttp2_prefix = NGHTTP2_PREFIX;
+    $libidn2_prefix = LIBIDN2_PREFIX;
+    $libpsl_prefix = LIBPSL_PREFIX;
+
     // curl 7.88.0 版本开始要求 openssl 3
     $p->addLibrary(
         (new Library('curl'))
             ->withHomePage('https://curl.se/')
             ->withManual('https://curl.se/docs/install.html')
             ->withLicense('https://github.com/curl/curl/blob/master/COPYING', Library::LICENSE_SPEC)
-            ->withUrl('https://github.com/curl/curl/releases/download/curl-7_78_0/curl-7.78.0.tar.gz')
+            ->withUrl('https://github.com/curl/curl/releases/download/curl-7_87_0/curl-7.87.0.tar.gz')
             ->withPrefix($curl_prefix)
             ->withBuildCached(false)
-            ->withConfigure(
+            ->withInstallCached(false)
+            ->withBuildScript(
                 <<<EOF
-            ./configure --help
+             mkdir -p build
+             cd build
 
             PACKAGES='openssl zlib libcares libbrotlicommon libbrotlidec libbrotlienc libzstd  '
-            PACKAGES="\$PACKAGES   libidn2 libpsl " # libssh2
+            PACKAGES="\$PACKAGES   libidn2 libpsl libssh2 "
 
-            CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$PACKAGES)  " \
-            LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES)" \
-            LIBS="$(pkg-config      --libs-only-l    --static \$PACKAGES)" \
-            ./configure \
-            --prefix={$curl_prefix}  \
-            --enable-static=yes \
-            --enable-shared=no \
-            --without-librtmp \
-            --disable-ldap \
-            --disable-rtsp \
-            --enable-http \
-            --enable-alt-svc \
-            --enable-hsts \
-            --enable-http-auth \
-            --enable-mime \
-            --enable-cookies \
-            --enable-doh \
-            --enable-ipv6 \
-            --enable-proxy  \
-            --enable-websockets \
-            --enable-libcurl-option \
-            --enable-get-easy-options \
-            --enable-file \
-            --enable-mqtt \
-            --enable-unix-sockets  \
-            --enable-progress-meter \
-            --enable-optimize \
-            --with-zlib={$zlib_prefix} \
-            --enable-ares={$cares_prefix} \
-            --with-nghttp2 \
-            --without-nghttp3 \
-            --with-libidn2 \
-            --without-libssh2 \
-            --with-default-ssl-backend=openssl \
-            --without-gnutls \
-            --without-mbedtls \
-            --without-wolfssl \
-            --without-rustls \
-            --without-bearssl \
-            --disable-sspi \
-            --disable-crypto-auth \
-            --with-openssl={$openssl_prefix} \
-            --without-amissl \
-            --with-pic
+            CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$PACKAGES)  -I{$gettext_prefix}/include/ "
+            LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES)  -L{$gettext_prefix}/lib/ "
+            LIBS="$(pkg-config      --libs-only-l    --static \$PACKAGES)  -lintl"
+
+             cmake .. \
+            -DCMAKE_INSTALL_PREFIX={$curl_prefix} \
+            -DCMAKE_BUILD_TYPE=Release  \
+            -DBUILD_SHARED_LIBS=OFF  \
+            -DCURL_DISABLE_LDAP=ON \
+            -DCURL_DISABLE_LDAPS=ON \
+            -DCURL_DISABLE_RTSP=ON \
+            -DCURL_DISABLE_GETOPTIONS=OFF \
+            -DENABLE_MANUAL=OFF \
+            -DCMAKE_PREFIX_PATH="{$openssl_prefix};{$cares_prefix};{$nghttp2_prefix};{$libidn2_prefix};{$libpsl_prefix};{$zlib_prefix}" \
+            -DCURL_USE_GSSAPI=OFF \
+            -DOPENSSL_ROOT_DIR={$openssl_prefix} \
+            -DCARES_ROOT={$cares_prefix} \
+            -DBUILD_TESTING=OFF \
+            -DENABLE_ARES=ON \
+            -DCURL_USE_OPENSSL=ON \
+            -DCURL_USE_MBEDTLS=OFF \
+            -DCURL_USE_BEARSSL=OFF \
+            -DCURL_USE_WOLFSSL=OFF \
+            -DCURL_USE_LIBSSH2=OFF \
+            -DCMAKE_VERBOSE_MAKEFILE=ON \
+            -DCMAKE_C_FLAGS="\${CPPFLAGS}" \
+            -DCMAKE_EXE_LINKER_FLAGS="\${LDFLAGS} \${LIBS}" \
+            -DCURL_STATICLIB=ON
+
+
+            cmake --build . --config Release --target install
+
 
 EOF
             )
