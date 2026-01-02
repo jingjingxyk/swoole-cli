@@ -12,16 +12,28 @@ return function (Preprocessor $p) {
     $nghttp2_prefix = NGHTTP2_PREFIX;
     $libidn2_prefix = LIBIDN2_PREFIX;
     $libpsl_prefix = LIBPSL_PREFIX;
+    $libunistring_prefix = LIBUNISTRING_PREFIX;
+    $iconv_prefix = ICONV_PREFIX;
+
 
     $cppflags = "";
     $ldflags = "";
     $libs = "";
 
     if ($p->isMacos()) {
-        $cppflags .= "-I{$gettext_prefix}/include/";
-        $ldflags .= "-L{$gettext_prefix}/lib/";
-        $libs .= "-lintl";
+        $cppflags .= " -I{$gettext_prefix}/include/ ";
+        $ldflags .= " -L{$gettext_prefix}/lib/ ";
+        $libs .= " -lintl ";
     }
+
+    $cppflags .= " -I{$libunistring_prefix}/include/ ";
+    $ldflags .= " -L{$libunistring_prefix}/lib/ ";
+    $libs .= " -lunistring ";
+
+    $cppflags .= " -I{$iconv_prefix}/include/ ";
+    $ldflags .= " -L{$iconv_prefix}/lib/ ";
+    $libs .= " -liconv ";
+
 
     // curl 7.88.0 版本开始要求 openssl 3
     $p->addLibrary(
