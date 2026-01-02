@@ -55,7 +55,7 @@ return function (Preprocessor $p) {
 
             CPPFLAGS=" {$cppflags} $(pkg-config   --cflags-only-I  --static \$PACKAGES)"
             LDFLAGS="  {$ldflags}  $(pkg-config   --libs-only-L    --static \$PACKAGES)"
-            LIBS=" {$libs}         $(pkg-config   --libs-only-l    --static \$PACKAGES)"
+            LIBS="     {$libs}     $(pkg-config   --libs-only-l    --static \$PACKAGES)"
 
              cmake .. \
             -DCMAKE_INSTALL_PREFIX={$curl_prefix} \
