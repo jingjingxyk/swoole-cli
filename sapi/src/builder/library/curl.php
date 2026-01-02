@@ -13,6 +13,16 @@ return function (Preprocessor $p) {
     $libidn2_prefix = LIBIDN2_PREFIX;
     $libpsl_prefix = LIBPSL_PREFIX;
 
+    $cppflags = "";
+    $ldflags = "";
+    $libs = "";
+
+    if ($p->isMacos()) {
+        $cppflags .= "-I{$gettext_prefix}/include/";
+        $ldflags .= "-L{$gettext_prefix}/lib/";
+        $libs .= "-lintl";
+    }
+
     // curl 7.88.0 版本开始要求 openssl 3
     $p->addLibrary(
         (new Library('curl'))
@@ -31,9 +41,9 @@ return function (Preprocessor $p) {
             PACKAGES='openssl zlib libcares libbrotlicommon libbrotlidec libbrotlienc libzstd  '
             PACKAGES="\$PACKAGES   libidn2 libpsl libssh2 "
 
-            CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$PACKAGES)  -I{$gettext_prefix}/include/ "
-            LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES)  -L{$gettext_prefix}/lib/ "
-            LIBS="$(pkg-config      --libs-only-l    --static \$PACKAGES)  -lintl"
+            CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$PACKAGES) {$cppflags}"
+            LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES) {$ldflags}"
+            LIBS="$(pkg-config      --libs-only-l    --static \$PACKAGES) {$libs}"
 
              cmake .. \
             -DCMAKE_INSTALL_PREFIX={$curl_prefix} \
