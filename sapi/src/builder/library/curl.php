@@ -53,9 +53,9 @@ return function (Preprocessor $p) {
             PACKAGES='openssl zlib libcares libbrotlicommon libbrotlidec libbrotlienc libzstd  '
             PACKAGES="\$PACKAGES   libidn2 libpsl " # libssh2
 
-            CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$PACKAGES) {$cppflags}"
-            LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES) {$ldflags}"
-            LIBS="$(pkg-config      --libs-only-l    --static \$PACKAGES) {$libs}"
+            CPPFLAGS=" {$cppflags} $(pkg-config   --cflags-only-I  --static \$PACKAGES)"
+            LDFLAGS="  {$ldflags}  $(pkg-config   --libs-only-L    --static \$PACKAGES)"
+            LIBS=" {$libs}         $(pkg-config   --libs-only-l    --static \$PACKAGES)"
 
              cmake .. \
             -DCMAKE_INSTALL_PREFIX={$curl_prefix} \
