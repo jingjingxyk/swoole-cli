@@ -26,14 +26,17 @@ return function (Preprocessor $p) {
         $libs .= " -lintl ";
     }
 
-    $cppflags .= " -I{$libunistring_prefix}/include/ ";
-    $ldflags .= " -L{$libunistring_prefix}/lib/ ";
-    $libs .= " -lunistring ";
-
     $cppflags .= " -I{$iconv_prefix}/include/ ";
     $ldflags .= " -L{$iconv_prefix}/lib/ ";
     $libs .= " -liconv ";
 
+    $cppflags .= " -I{$libunistring_prefix}/include/ ";
+    $ldflags .= " -L{$libunistring_prefix}/lib/ ";
+    $libs .= " -lunistring ";
+
+    $cppflags .= " -I{$libidn2_prefix}/include/ ";
+    $ldflags .= " -L{$libidn2_prefix}/lib/ ";
+    $libs .= " -lidn2 ";
 
     // curl 7.88.0 版本开始要求 openssl 3
     $p->addLibrary(
