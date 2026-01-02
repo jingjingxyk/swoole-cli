@@ -51,7 +51,7 @@ return function (Preprocessor $p) {
              cd build
 
             PACKAGES='openssl zlib libcares libbrotlicommon libbrotlidec libbrotlienc libzstd  '
-            PACKAGES="\$PACKAGES   libidn2 libpsl libssh2 "
+            PACKAGES="\$PACKAGES   libidn2 libpsl " # libssh2
 
             CPPFLAGS="$(pkg-config  --cflags-only-I  --static \$PACKAGES) {$cppflags}"
             LDFLAGS="$(pkg-config   --libs-only-L    --static \$PACKAGES) {$ldflags}"
