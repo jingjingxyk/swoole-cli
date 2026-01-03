@@ -161,8 +161,7 @@ if ($p->isMacos()) {
     //$p->setExtraLdflags('-undefined dynamic_lookup');
     //$p->setExtraLdflags(' -framework CoreFoundation');
     $p->setExtraLdflags(' ');
-    exec("brew --prefix", $output, $result_code);
-
+    exec("brew --prefix 2>&1", $output, $result_code);
     if ($result_code == 0) {
         $homebrew_prefix = trim($output);
     } else {
