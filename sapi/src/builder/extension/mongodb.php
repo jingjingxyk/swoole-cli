@@ -54,7 +54,7 @@ return function (Preprocessor $p) {
         ->withDownloadScript(
             'mongo-php-driver',
             <<<EOF
-        git clone -b {$mongodb_version} --depth=1 --recursive https://github.com/mongodb/mongo-php-driver.git
+        git clone -b {$mongodb_version} --recursive https://github.com/mongodb/mongo-php-driver.git
 EOF
         )
         //->withAutoUpdateFile()
