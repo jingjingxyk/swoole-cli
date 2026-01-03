@@ -163,7 +163,7 @@ if ($p->isMacos()) {
     $p->setExtraLdflags(' ');
     exec("brew --prefix 2>&1", $output, $result_code);
     if ($result_code == 0) {
-        $homebrew_prefix = trim($output);
+        $homebrew_prefix = trim(implode(' ', $output));
     } else {
         $homebrew_prefix = "";
     }
