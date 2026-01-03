@@ -161,13 +161,10 @@ if ($p->isMacos()) {
     //$p->setExtraLdflags('-undefined dynamic_lookup');
     //$p->setExtraLdflags(' -framework CoreFoundation');
     $p->setExtraLdflags(' ');
-    ob_start();
-    passthru("brew --prefix", $result_code);
-    $result_info = ob_get_contents();
-    ob_end_clean();
-    if ($result_code == 0) {
-        $homebrew_prefix = trim($result_info);
+    exec("brew --prefix", $output, $result_code);
 
+    if ($result_code == 0) {
+        $homebrew_prefix = trim($output);
     } else {
         $homebrew_prefix = "";
     }
