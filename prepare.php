@@ -162,7 +162,12 @@ if ($p->isMacos()) {
     //$p->setExtraLdflags('-undefined dynamic_lookup');
     //$p->setExtraLdflags(' -framework CoreFoundation');
     $p->setExtraLdflags(' ');
-    $homebrew_prefix = trim(shell_exec('brew --prefix'));
+    $result_info = shell_exec('brew --prefix');
+    if (empty($result_info)) {
+        $homebrew_prefix = "";
+    } else {
+        $homebrew_prefix = trim($result_info);
+    }
     $p->withBinPath($homebrew_prefix . '/opt/flex/bin')
         ->withBinPath($homebrew_prefix . '/opt/bison/bin')
         ->withBinPath($homebrew_prefix . '/opt/libtool/bin')
