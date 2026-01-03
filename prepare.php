@@ -6,7 +6,6 @@ use SwooleCli\Exception;
 use SwooleCli\Preprocessor;
 use SwooleCli\Library;
 
-
 $homeDir = getenv('HOME');
 $p = Preprocessor::getInstance();
 $p->parseArguments($argc, $argv);
@@ -162,11 +161,15 @@ if ($p->isMacos()) {
     //$p->setExtraLdflags('-undefined dynamic_lookup');
     //$p->setExtraLdflags(' -framework CoreFoundation');
     $p->setExtraLdflags(' ');
-    $result_info = shell_exec('brew --prefix');
-    if (empty($result_info)) {
-        $homebrew_prefix = "";
-    } else {
+    ob_start();
+    passthru("brew --prefix", $result_code);
+    $result_info = ob_get_contents();
+    ob_end_clean();
+    if ($result_code == 0) {
         $homebrew_prefix = trim($result_info);
+
+    } else {
+        $homebrew_prefix = "";
     }
     $p->withBinPath($homebrew_prefix . '/opt/flex/bin')
         ->withBinPath($homebrew_prefix . '/opt/bison/bin')
@@ -201,4 +204,3 @@ function install_libraries(Preprocessor $p): void
 {
     $p->loadDependentLibrary('php');
 }
-
