@@ -63,7 +63,7 @@ download_and_extract() {
 }
 
 # Download and extract extensions
-download_and_extract "redis" ${REDIS_VERSION}
+# download_and_extract "redis" ${REDIS_VERSION}
 
 # mongodb 扩展 不支持 cygwin 环境下构建
 # 详见： https://github.com/mongodb/mongo-php-driver/issues/1381
