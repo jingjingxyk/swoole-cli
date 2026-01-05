@@ -35,7 +35,7 @@ return [
     //'redis',
     'swoole',
     'yaml',
-    //'imagick',
+    'imagick',
     'mongodb',
     'gettext',
     'uuid',
