@@ -450,7 +450,7 @@ __GIT_PROXY_CONFIG_EOF;
      * @param string $httpProxyConfig
      * @return void
      */
-    protected function downloadFile(?object $project = null, string $httpProxyConfig = ''): void
+    protected function downloadFile(object $project = null, string $httpProxyConfig = ''): void
     {
 
         # $userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36';
@@ -480,7 +480,7 @@ __GIT_PROXY_CONFIG_EOF;
      * @param string $httpProxyConfig
      * @return void
      */
-    public function downloadFileWithPie(?object $project = null, string $httpProxyConfig): void
+    public function downloadFileWithPie(object $project = null, string $httpProxyConfig): void
     {
         $pieName = $project->pieName;
         $pieVersion = $project->pieVersion;
@@ -520,7 +520,7 @@ EOF;
      * @param string $httpProxyConfig
      * @return void
      */
-    protected function downloadFileWithScript(?object $project = null, string $httpProxyConfig): void
+    protected function downloadFileWithScript(object $project = null, string $httpProxyConfig): void
     {
 
         if (!empty($project->downloadScript) && !empty($project->downloadDirName)) {
