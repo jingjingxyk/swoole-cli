@@ -116,7 +116,8 @@ jobs:
           mkdir -p pool/ext
           mkdir -p bin/
           mkdir -p runtime/
-          if [ ! -f runtime/php ] ; then
+          test -f runtime/php && rm -f runtime/php
+          if [ ! -f runtime/php/pie ] ; then
               bash  setup-php-runtime.sh
           fi
 
@@ -145,12 +146,12 @@ jobs:
           run: |
             set -eux
             uname -m
-            export PATH=/work/runtime:$PATH  # 容器已经内置 php 和 composer
-            alias php="php -d curl.cainfo=/work/runtime/cacert.pem -d openssl.cafile=/work/runtime/cacert.pem"
-
-            # bash sapi/quickstart/mark-install-library-cached.sh
+            export PATH=/work/runtime/php:$PATH  # 容器已经内置 php 和 composer
+            alias php="php -d curl.cainfo=/work/runtime/php/cacert.pem -d openssl.cafile=/work/runtime/php/cacert.pem"
 
             sh  sapi/quickstart/linux/alpine-init.sh
+            git config --global --add safe.directory /work
+
             composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
             composer dump-autoload --optimize --profile --no-dev
 
@@ -159,6 +160,7 @@ jobs:
             bash make-install-deps.sh
 
             bash make.sh all-library
+
             bash make.sh config
             bash make.sh build
             bash make.sh archive
@@ -175,6 +177,7 @@ jobs:
           APP_VERSION=$(cat ./APP_VERSION)
           APP_NAME=$(cat ./APP_NAME)
           echo $APP_VERSION
+          echo $APP_NAME
           echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
           echo "APP_NAME=${APP_NAME}" >> $GITHUB_ENV
 
@@ -188,5 +191,6 @@ jobs:
       - name: gh release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
+        #        if ${{ !startsWith(github.ref, 'refs/tags/v') }}
         with:
           files: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-linux-x64.tar.xz

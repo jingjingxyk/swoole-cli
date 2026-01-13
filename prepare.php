@@ -32,9 +32,9 @@ $p->cleanFile(__DIR__ . '/configure.backup');
 
 
 # PHP 默认版本 （此文件配置 /sapi/PHP-VERSION.conf 在 build_native_php分支 和 衍生分支 无效）
-$php_version = '8.2.28';
-$php_version_id = '802028';
-$php_version_tag = 'php-8.2.28';
+$php_version = '8.2.29';
+$php_version_id = '802029';
+$php_version_tag = 'php-8.2.29';
 
 if ($p->getInputOption('with-php-version')) {
     $subject = $p->getInputOption('with-php-version');
@@ -60,8 +60,15 @@ define('BUILD_CUSTOM_PHP_VERSION_ID', intval(substr($php_version_id, 0, 4))); //
 // Sync code from php-src
 $p->setPhpSrcDir($p->getWorkDir() . '/var/php-' . BUILD_PHP_VERSION);
 
+/*
+// Download swoole-src
+if (!is_dir(__DIR__ . '/ext/swoole')) {
+    //shell_exec(__DIR__ . '/sapi/scripts/download-swoole-src-archive.sh');
+}
+*/
+
 // Compile directly on the host machine, not in the docker container
-if ($p->getInputOption('without-docker') || ($p->isMacos())) {
+if ($p->getInputOption('without-docker') || ($p->isMacos()) || ($p->isLinux() && (!is_file('/.dockerenv')))) {
     $p->setWorkDir(__DIR__);
     $p->setBuildDir(__DIR__ . '/thirdparty');
 }
@@ -78,11 +85,9 @@ if ($p->getInputOption('with-php-src')) {
 //设置PHP 安装目录
 define("BUILD_PHP_INSTALL_PREFIX", $p->getRootDir() . '/bin/php-' . BUILD_PHP_VERSION);
 
-
 if ($p->getInputOption('with-override-default-enabled-ext')) {
     $p->setExtEnabled([]);
 }
-
 
 if ($p->getInputOption('with-global-prefix')) {
     $p->setGlobalPrefix($p->getInputOption('with-global-prefix'));
@@ -131,20 +136,36 @@ EOF;
 
 if ($p->isMacos()) {
     //$p->setExtraLdflags('-undefined dynamic_lookup');
-    //$p->setExtraLdflags(' -framework CoreFoundation');
-    $p->setExtraLdflags(' ');
-    $homebrew_prefix = trim(shell_exec('brew --prefix'));
-    $p->withBinPath($homebrew_prefix . '/opt/llvm/bin')
-        ->withBinPath($homebrew_prefix . '/opt/flex/bin')
+    $p->setExtraLdflags('');
+    exec("brew --prefix 2>&1", $output, $result_code);
+    if ($result_code == 0) {
+        $homebrew_prefix = trim(implode(' ', $output));
+    } else {
+        $homebrew_prefix = "";
+    }
+    $p->withBinPath($homebrew_prefix . '/opt/flex/bin')
         ->withBinPath($homebrew_prefix . '/opt/bison/bin')
         ->withBinPath($homebrew_prefix . '/opt/libtool/bin')
         ->withBinPath($homebrew_prefix . '/opt/m4/bin')
         ->withBinPath($homebrew_prefix . '/opt/automake/bin/')
         ->withBinPath($homebrew_prefix . '/opt/autoconf/bin/')
         ->withBinPath($homebrew_prefix . '/opt/gettext/bin')
-        ->setLinker('ld64.lld');
-
+        ->setLinker('ld');
     $p->setLogicalProcessors('$(sysctl -n hw.ncpu)');
+    /*
+    $p->withBinPath($homebrew_prefix . '/opt/llvm/bin');
+    $p->withBinPath($homebrew_prefix . '/opt/lld/bin');
+    $p->setCCOMPILER($homebrew_prefix . '/opt/llvm/bin/clang')
+        ->setCXXCOMPILER($homebrew_prefix . '/opt/llvm/bin/clang++')
+        ->setAR($homebrew_prefix . '/opt/llvm/bin/llvm-ar')
+        ->setAS($homebrew_prefix . '/opt/llvm/bin/llvm-as')
+        ->setLinker($homebrew_prefix . '/opt/lld/bin/lld');
+    //-L/opt/homebrew/opt/llvm/lib/c++
+    $p->withVariable('LDFLAGS', '$LDFLAGS -L' . $homebrew_prefix . '/opt/llvm/lib/c++');
+    $p->withVariable('LDFLAGS', '$LDFLAGS -L'. `xcrun --show-sdk-path`.'/usr/lib/');
+    $p->withVariable('LDFLAGS', '$LDFLAGS -fuse-ld=lld');
+    $p->withVariable('LDFLAGS', '$LDFLAGS -L/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/');
+    */
 } else {
     $p->setLogicalProcessors('$(nproc 2> /dev/null)');
 }
@@ -152,8 +173,8 @@ if ($p->isMacos()) {
 
 $c_compiler = $p->getInputOption('with-c-compiler');
 if ($c_compiler == 'gcc') {
-    $p->set_C_COMPILER('gcc');
-    $p->set_CXX_COMPILER('g++');
+    $p->setCCOMPILER('gcc');
+    $p->setCXXCOMPILER('g++');
     $p->setLinker('ld');
 }
 

@@ -11,7 +11,8 @@ __PROJECT__=$(
 )
 cd ${__PROJECT__}
 
-SOCAT_VERSION='1.8.0.3'
+SOCAT_VERSION='1.8.1.0'
+
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -39,6 +40,7 @@ done
 cd ${__PROJECT__}
 mkdir -p ${__PROJECT__}/pool/
 mkdir -p ${__PROJECT__}/var/
+
 mkdir -p pool/ext
 mkdir -p pool/lib
 
