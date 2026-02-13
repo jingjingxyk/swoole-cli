@@ -32,7 +32,7 @@ return [
     'readline',
     'xml',
     'gd',
-    //'redis',
+    'redis',
     'swoole',
     'yaml',
     'imagick',
