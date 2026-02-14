@@ -103,7 +103,7 @@ jobs:
 
           mkdir -p ${{ github.workspace }}/var/build-github-action-container/
           export DEBIAN_FRONTEND=noninteractive
-          sudo apt -y rmeove docker-ce docker-ce-cli containerd.io docker-compose-plugin docker-ce-rootless-extras docker-buildx-plugin docker-model-plugin
+          sudo apt -y remove docker-ce docker-ce-cli containerd.io docker-compose-plugin docker-ce-rootless-extras docker-buildx-plugin docker-model-plugin
           curl -fsSL https://github.com/docker/docker-install/blob/master/install.sh?raw=true | sudo bash
 
       - name: Cache PHP Runtime
