@@ -107,9 +107,9 @@ jobs:
           curl -fsSL https://github.com/docker/docker-install/blob/master/install.sh?raw=true | sudo bash
           docker info
           whereis docker
-          ls -alh /usr/local/bin/
+
           /usr/bin/docker info
-          /usr/libexec/docker info
+          ls -lah /usr/libexec/docker
 
       - name: Cache PHP Runtime
         uses: actions/cache@v4
