@@ -105,6 +105,8 @@ jobs:
           export DEBIAN_FRONTEND=noninteractive
           sudo apt -y remove docker-ce docker-ce-cli containerd.io docker-compose-plugin docker-ce-rootless-extras docker-buildx-plugin docker-model-plugin
           curl -fsSL https://github.com/docker/docker-install/blob/master/install.sh?raw=true | sudo bash
+          sudo apt install which
+          which docker
 
       - name: Cache PHP Runtime
         uses: actions/cache@v4
