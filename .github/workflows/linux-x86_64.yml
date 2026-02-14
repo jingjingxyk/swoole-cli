@@ -102,6 +102,8 @@ jobs:
           uid=$(id -u) && gid=$(id -g) && sudo chown -R ${uid}:${gid} /usr/local/swoole-cli
 
           mkdir -p ${{ github.workspace }}/var/build-github-action-container/
+          export DEBIAN_FRONTEND=noninteractive
+          sudo  -y -qq rmeove docker-ce docker-ce-cli containerd.io docker-compose-plugin docker-ce-rootless-extras docker-buildx-plugin docker-model-plugin
           curl -fsSL https://github.com/docker/docker-install/blob/master/install.sh?raw=true | sudo bash
 
       - name: Cache PHP Runtime
