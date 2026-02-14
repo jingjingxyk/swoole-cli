@@ -108,6 +108,8 @@ jobs:
           docker info
           whereis docker
           ls -alh /usr/local/bin/
+          /usr/bin/docker info
+          /usr/libexec/docker info
 
       - name: Cache PHP Runtime
         uses: actions/cache@v4
