@@ -41,6 +41,7 @@ on:
 
 env:
   BUILD_PHP_VERSION: 8.4.17
+  DOCKER_API_VERSION: 1.44
 
 jobs:
   linux-x86_64:
@@ -102,14 +103,10 @@ jobs:
           uid=$(id -u) && gid=$(id -g) && sudo chown -R ${uid}:${gid} /usr/local/swoole-cli
 
           mkdir -p ${{ github.workspace }}/var/build-github-action-container/
-          export DEBIAN_FRONTEND=noninteractive
-          sudo apt -y remove docker-ce docker-ce-cli containerd.io docker-compose-plugin docker-ce-rootless-extras docker-buildx-plugin docker-model-plugin
-          curl -fsSL https://github.com/docker/docker-install/blob/master/install.sh?raw=true | sudo bash
+          # export DEBIAN_FRONTEND=noninteractive
+          # sudo apt -y remove docker-ce docker-ce-cli containerd.io docker-compose-plugin docker-ce-rootless-extras docker-buildx-plugin docker-model-plugin
+          # curl -fsSL https://github.com/docker/docker-install/blob/master/install.sh?raw=true | sudo bash
           docker info
-          whereis docker
-
-          /usr/bin/docker info
-          ls -lah /usr/libexec/docker
 
       - name: Cache PHP Runtime
         uses: actions/cache@v4
