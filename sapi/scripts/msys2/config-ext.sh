@@ -33,7 +33,7 @@ while [ $# -gt 0 ]; do
 done
 
 REDIS_VERSION=6.3.0
-YAML_VERSION=2.2.2
+YAML_VERSION=2.3.0
 IMAGICK_VERSION=3.8.1
 
 mkdir -p pool/ext
