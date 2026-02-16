@@ -31,7 +31,7 @@ while [ $# -gt 0 ]; do
   shift $(($# > 0 ? 1 : 0))
 done
 
-REDIS_VERSION=6.2.0
+REDIS_VERSION=6.3.0
 MONGODB_VERSION=1.14.2
 YAML_VERSION=2.2.2
 IMAGICK_VERSION=3.8.1
