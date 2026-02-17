@@ -32,6 +32,10 @@ while [ $# -gt 0 ]; do
   shift $(($# > 0 ? 1 : 0))
 done
 
+if [ "${X_PHP_VERSION}" == "8.1" ]; then
+  SWOOLE_VERSION="v6.1.6"
+fi
+
 REDIS_VERSION=6.3.0
 YAML_VERSION=2.3.0
 IMAGICK_VERSION=3.8.1
