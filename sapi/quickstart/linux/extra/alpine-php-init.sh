@@ -12,5 +12,5 @@ php84 --ini
 php84 --ini | grep ".ini files"
 
 ln -sf /usr/bin/php84 /usr/bin/php
-ln -sf /usr/bin/phpize82 /usr/bin/phpize
-ln -sf /usr/bin/php-config82 /usr/bin/php-config
+ln -sf /usr/bin/phpize84 /usr/bin/phpize
+ln -sf /usr/bin/php-config84 /usr/bin/php-config
