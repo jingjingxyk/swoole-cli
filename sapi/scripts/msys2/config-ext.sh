@@ -32,9 +32,16 @@ while [ $# -gt 0 ]; do
   shift $(($# > 0 ? 1 : 0))
 done
 
-REDIS_VERSION=6.2.0
-YAML_VERSION=2.2.2
-IMAGICK_VERSION=3.8.0
+if [ "${X_PHP_VERSION}" == "8.1" ]; then
+  SWOOLE_VERSION="v6.1.6"
+fi
+if [ "${X_PHP_VERSION}" == "8.5" ]; then
+  SWOOLE_VERSION="master"
+fi
+
+REDIS_VERSION=6.3.0
+YAML_VERSION=2.3.0
+IMAGICK_VERSION=3.8.1
 
 mkdir -p pool/ext
 mkdir -p pool/lib
@@ -73,9 +80,11 @@ download_and_extract "yaml" ${YAML_VERSION}
 download_and_extract "imagick" ${IMAGICK_VERSION}
 
 cd ${__PROJECT__}/pool/ext
+set +u
 if [ -n "${GITHUB_ACTION}" ]; then
   test -f ${__PROJECT__}/pool/ext/swoole-${SWOOLE_VERSION}.tgz && rm -f ${__PROJECT__}/pool/ext/swoole-${SWOOLE_VERSION}.tgz
 fi
+set -u
 if [ ! -f swoole-${SWOOLE_VERSION}.tgz ]; then
   test -d ${WORK_TEMP_DIR}/swoole && rm -rf ${WORK_TEMP_DIR}/swoole
   git clone -b ${SWOOLE_VERSION} https://github.com/swoole/swoole-src.git ${WORK_TEMP_DIR}/swoole

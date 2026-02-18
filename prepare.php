@@ -6,7 +6,6 @@ use SwooleCli\Exception;
 use SwooleCli\Preprocessor;
 use SwooleCli\Library;
 
-
 $homeDir = getenv('HOME');
 $p = Preprocessor::getInstance();
 $p->parseArguments($argc, $argv);
@@ -31,10 +30,10 @@ $p->cleanFile(__DIR__ . '/libs.log');
 $p->cleanFile(__DIR__ . '/configure.backup');
 
 
-# PHP 默认版本 （此文件配置 /sapi/PHP-VERSION.conf 在 build_native_php分支 和 衍生分支 无效）
-$php_version = '8.2.29';
-$php_version_id = '802029';
-$php_version_tag = 'php-8.2.29';
+# PHP 默认版本
+$php_version = '8.4.18';
+$php_version_id = '804018';
+$php_version_tag = 'php-8.4.18';
 
 if ($p->getInputOption('with-php-version')) {
     $subject = $p->getInputOption('with-php-version');
@@ -90,8 +89,15 @@ echo PHP_EOL;
 // Sync code from php-src
 $p->setPhpSrcDir($p->getWorkDir() . '/var/php-' . BUILD_PHP_VERSION);
 
+/*
+// Download swoole-src
+if (!is_dir(__DIR__ . '/ext/swoole')) {
+    //shell_exec(__DIR__ . '/sapi/scripts/download-swoole-src-archive.sh');
+}
+*/
+
 // Compile directly on the host machine, not in the docker container
-if ($p->getInputOption('without-docker') || ($p->isMacos())) {
+if ($p->getInputOption('without-docker') || ($p->isMacos()) || ($p->isLinux() && (!is_file('/.dockerenv')))) {
     $p->setWorkDir(__DIR__);
     $p->setBuildDir(__DIR__ . '/thirdparty');
 }
@@ -108,11 +114,9 @@ if ($p->getInputOption('with-php-src')) {
 //设置PHP 安装目录
 define("BUILD_PHP_INSTALL_PREFIX", $p->getRootDir() . '/bin/php-' . BUILD_PHP_VERSION);
 
-
 if ($p->getInputOption('with-override-default-enabled-ext')) {
     $p->setExtEnabled([]);
 }
-
 
 if ($p->getInputOption('with-global-prefix')) {
     $p->setGlobalPrefix($p->getInputOption('with-global-prefix'));
@@ -163,7 +167,12 @@ if ($p->isMacos()) {
     //$p->setExtraLdflags('-undefined dynamic_lookup');
     //$p->setExtraLdflags(' -framework CoreFoundation');
     $p->setExtraLdflags(' ');
-    $homebrew_prefix = trim(shell_exec('brew --prefix'));
+    exec("brew --prefix 2>&1", $output, $result_code);
+    if ($result_code == 0) {
+        $homebrew_prefix = trim(implode(' ', $output));
+    } else {
+        $homebrew_prefix = "";
+    }
     $p->withBinPath($homebrew_prefix . '/opt/flex/bin')
         ->withBinPath($homebrew_prefix . '/opt/bison/bin')
         ->withBinPath($homebrew_prefix . '/opt/libtool/bin')
@@ -197,4 +206,3 @@ function install_libraries(Preprocessor $p): void
 {
     $p->loadDependentLibrary('php');
 }
-

@@ -18,13 +18,14 @@ on:
       php_version:
         required: true
         description: "定制构建选项: 指定 PHP 版本(版本号大于等于8.1)"
-        default: '--with-php-version=8.2.28'
+        default: '--with-php-version=8.4.18'
         type: choice
         options:
-          - '--with-php-version=8.1.32'
-          - '--with-php-version=8.2.28'
-          - '--with-php-version=8.3.19'
-          - '--with-php-version=8.4.5'
+          - '--with-php-version=8.1.34'
+          - '--with-php-version=8.2.30'
+          - '--with-php-version=8.3.30'
+          - '--with-php-version=8.4.18'
+          - '--with-php-version=8.5.3'
       build_type:
         required: true
         description: "定制构建选项: 指定构建类型"
@@ -40,7 +41,8 @@ on:
         type: string
 
 env:
-  BUILD_PHP_VERSION: 8.2.28
+  BUILD_PHP_VERSION: 8.4.18
+  DOCKER_API_VERSION: 1.44
 
 jobs:
   linux-x86_64:
@@ -49,10 +51,11 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - "8.2.29"
-          - "8.1.33"
-          - "8.3.23"
-          - "8.4.10"
+          - "8.2.30"
+          - "8.1.34"
+          - "8.3.30"
+          - "8.4.18"
+          - "8.5.3"
     steps:
       - uses: actions/checkout@v4
       - name: Show Environment Info
@@ -101,6 +104,10 @@ jobs:
           uid=$(id -u) && gid=$(id -g) && sudo chown -R ${uid}:${gid} /usr/local/swoole-cli
 
           mkdir -p ${{ github.workspace }}/var/build-github-action-container/
+          # export DEBIAN_FRONTEND=noninteractive
+          # sudo apt -y remove docker-ce docker-ce-cli containerd.io docker-compose-plugin docker-ce-rootless-extras docker-buildx-plugin docker-model-plugin
+          # curl -fsSL https://github.com/docker/docker-install/blob/master/install.sh?raw=true | sudo bash
+          docker info
 
       - name: Cache PHP Runtime
         uses: actions/cache@v4
@@ -153,7 +160,7 @@ jobs:
           mkdir -p bin/
           mkdir -p runtime/
           test -f runtime/php && rm -f runtime/php
-          if [ ! -f runtime/php/php ] ; then
+          if [ ! -f runtime/php/pie ] ; then
               bash  setup-php-runtime.sh
           fi
 
@@ -178,10 +185,12 @@ jobs:
             alias php="php -d curl.cainfo=/work/runtime/php/cacert.pem -d openssl.cafile=/work/runtime/php/cacert.pem"
 
             sh  sapi/quickstart/linux/alpine-init.sh
+            git config --global --add safe.directory /work
+
             composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
             composer dump-autoload --optimize --profile --no-dev
 
-            php prepare.php  --with-static-pie +inotify +apcu +ds +xlswriter +ssh2 +pgsql +uuid ${{ inputs.build_type }} ${{ inputs.build_options }} --with-php-version=${{ env.BUILD_PHP_VERSION }}
+            php prepare.php --with-static-pie --with-libavif +inotify +apcu +ds +xlswriter +ssh2 +pgsql +uuid ${{ inputs.build_type }} ${{ inputs.build_options }} --with-php-version=${{ env.BUILD_PHP_VERSION }}
 
             bash make-install-deps.sh
 
@@ -202,11 +211,14 @@ jobs:
         run: |
           ./thirdparty/php-src/sapi/cli/php -v
           ./thirdparty/php-src/sapi/cli/php -m
+          ./thirdparty/php-src/sapi/cli/php --ri mongodb
+          ./thirdparty/php-src/sapi/cli/php --ri curl
           ./thirdparty/php-src/sapi/cli/php --ri gd
+          ./thirdparty/php-src/sapi/cli/php --ri imagick
           ./thirdparty/php-src/sapi/cli/php --ri swoole
           ./thirdparty/php-src/sapi/cli/php --ri pgsql
           ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php -v
-          ldd ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
+          { ldd ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php ; } || { echo $? ; } ;
           file ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
           readelf -h ./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php
           APP_VERSION=$(./bin/php-${{ env.BUILD_PHP_VERSION }}/bin/php  -v | head -n 1 | awk '{print $2}')
@@ -248,7 +260,6 @@ jobs:
         with:
           files: |
             ${{ env.APP_NAME }}-v${{ env.APP_VERSION }}-linux-x64.tar.xz
-            ${{ env.APP_NAME }}-v${{ env.APP_VERSION }}-linux-x64-debug.tar.xz
 
       - name: upload artifacts to cloud object storage
         if: ${{ 0 && (github.repository == 'swoole/swoole-cli') && (startsWith(github.ref, 'refs/tags/'))  }}
