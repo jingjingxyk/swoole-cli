@@ -30,10 +30,10 @@ $p->cleanFile(__DIR__ . '/libs.log');
 $p->cleanFile(__DIR__ . '/configure.backup');
 
 
-# PHP 默认版本 （此文件配置 /sapi/PHP-VERSION.conf 在 build_native_php分支 和 衍生分支 无效）
-$php_version = '8.2.29';
-$php_version_id = '802029';
-$php_version_tag = 'php-8.2.29';
+# PHP 默认版本
+$php_version = '8.4.18';
+$php_version_id = '804018';
+$php_version_tag = 'php-8.4.18';
 
 if ($p->getInputOption('with-php-version')) {
     $subject = $p->getInputOption('with-php-version');
