@@ -35,6 +35,9 @@ done
 if [ "${X_PHP_VERSION}" == "8.1" ]; then
   SWOOLE_VERSION="v6.1.6"
 fi
+if [ "${X_PHP_VERSION}" == "8.5" ]; then
+  SWOOLE_VERSION="master"
+fi
 
 REDIS_VERSION=6.3.0
 YAML_VERSION=2.3.0

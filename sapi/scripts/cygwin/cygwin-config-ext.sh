@@ -38,6 +38,9 @@ IMAGICK_VERSION=3.8.1
 if [ "${X_PHP_VERSION}" == "8.1" ]; then
   SWOOLE_VERSION="v6.1.6"
 fi
+if [ "${X_PHP_VERSION}" == "8.5" ]; then
+  SWOOLE_VERSION="master"
+fi
 mkdir -p pool/ext
 mkdir -p pool/lib
 mkdir -p pool/php-tar
