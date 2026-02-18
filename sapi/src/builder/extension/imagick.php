@@ -9,7 +9,7 @@ return function (Preprocessor $p) {
         (new Extension('imagick'))
             ->withOptions('--with-imagick=' . IMAGEMAGICK_PREFIX)
             ->withPeclVersion('3.8.1')
-            //->withFileHash('md5', 'e6185b1412e65a91e598d1c79a00aeb9')
+            ->withFileHash('sha256', '3a3587c0a524c17d0dad9673a160b90cd776e836838474e173b549ed864352ee')
             ->withHomePage('https://github.com/Imagick/imagick')
             ->withLicense('https://github.com/Imagick/imagick/blob/master/LICENSE', Extension::LICENSE_PHP)
             ->withDependentLibraries('imagemagick')
