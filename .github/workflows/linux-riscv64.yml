@@ -4,6 +4,7 @@ on: [ push, pull_request ]
 
 env:
   BUILD_PHP_VERSION: 8.4.18
+  DOCKER_API_VERSION: 1.44
 
 jobs:
   linux-riscv:
@@ -126,7 +127,7 @@ jobs:
             composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
             composer dump-autoload --optimize --profile --no-dev
 
-            php prepare.php --with-override-default-enabled-ext=1 --with-php-version=8.2.29
+            php prepare.php --with-override-default-enabled-ext=1 --with-php-version=${{ env.BUILD_PHP_VERSION }}
 
             bash make-install-deps.sh
 
