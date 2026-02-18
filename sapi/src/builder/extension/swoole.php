@@ -7,16 +7,23 @@ return function (Preprocessor $p) {
 
     $file = new SplFileObject(realpath(__DIR__ . '/../../../../sapi/SWOOLE-VERSION.conf'));
     $swoole_tag = trim($file->current());
+
     // $swoole_tag = 'v6.0.1';
+    if (BUILD_CUSTOM_PHP_VERSION_ID == 8010) {
+        $swoole_tag = 'v6.1.6';
+    }
+    if (BUILD_CUSTOM_PHP_VERSION_ID == 8050) {
+        $swoole_tag = 'master';
+    }
+
     $file = "swoole-{$swoole_tag}.tar.gz";
     $url = "https://github.com/swoole/swoole-src/archive/refs/tags/{$swoole_tag}.tar.gz";
     // v5.1.x 不支持 PHP 8.4
+    // v6.2.x 不支持 PHP 8.1 以下版本
     // swoole 支持计划 https://wiki.swoole.com/zh-cn/#/version/supported?id=%e6%94%af%e6%8c%81%e8%ae%a1%e5%88%92
+    // PHP 支持计划 https://www.php.net/supported-versions.php
 
     $options = [];
-
-    $dependentLibraries = ['curl', 'openssl', 'cares', 'zlib', 'brotli', 'nghttp2', 'sqlite3', 'unix_odbc', 'pgsql', 'libzstd'];
-    $dependentExtensions = ['curl', 'openssl', 'sockets', 'mysqlnd', 'pdo'];
 
     if ($p->getBuildType() === 'debug') {
         $options[] = ' --enable-debug ';
@@ -57,21 +64,28 @@ return function (Preprocessor $p) {
         $p->withExportVariable('URING_LIBS', '$(pkg-config    --libs   --static  liburing)');
     }
 
-    $p->addExtension((new Extension('swoole'))
-        ->withHomePage('https://github.com/swoole/swoole-src')
-        ->withLicense('https://github.com/swoole/swoole-src/blob/master/LICENSE', Extension::LICENSE_APACHE2)
-        ->withManual('https://wiki.swoole.com/#/')
-        ->withFile($file)
-        ->withDownloadScript(
-            'swoole-src',
-            <<<EOF
+
+    $p->addExtension(
+        (new Extension('swoole'))
+            ->withHomePage('https://github.com/swoole/swoole-src')
+            ->withLicense('https://github.com/swoole/swoole-src/blob/master/LICENSE', Extension::LICENSE_APACHE2)
+            ->withManual('https://wiki.swoole.com/#/')
+            //->withAutoUpdateFile()
+            //->withFile($file)
+            //->withPeclVersion('6.1.6')
+            //->withPieName('swoole/swoole')
+            //->withPieVersion('v6.1.6')
+            ->withDownloadScript(
+                'swoole-src',
+                <<<EOF
             git clone -b {$swoole_tag} --depth=1 https://github.com/swoole/swoole-src.git
 EOF
-        )
-        ->withOptions(implode(' ', $options))
-        ->withBuildCached(false)
-        ->withDependentLibraries(...$dependentLibraries)
-        ->withDependentExtensions(...$dependentExtensions));
+            )
+            ->withOptions(implode(' ', $options))
+            ->withBuildCached(false)
+            ->withDependentLibraries(...$dependentLibraries)
+            ->withDependentExtensions(...$dependentExtensions)
+    );
 
     if ($p->isMacos()) {
         # 测试 macos 专有特性
