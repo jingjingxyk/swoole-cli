@@ -1,3 +1,4 @@
+apk search php
 apk add php82-cli php82-dev
 apk add php82-iconv php82-mbstring php82-phar php82-openssl
 apk add php82-posix php82-tokenizer php82-intl
