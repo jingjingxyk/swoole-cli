@@ -111,10 +111,10 @@ jobs:
         with:
           name: php-cli-v${{ env.BUILD_PHP_VERSION }}-vs17-x64
           retention-days: 90
-          path: "native-build/php-src/Makefile"
+          path: "var/native-build/php-src/Makefile"
 
       - name: gh release
         uses: softprops/action-gh-release@v2
         if: ${{ 0 && startsWith(github.ref, 'refs/tags/') }}
         with:
-          files: "var/windows-build-deps/php-src/x64/Release_TS/php.exe"
+          files: "var/native-build/php-src/x64/Release_TS/php.exe"
