@@ -90,7 +90,7 @@ jobs:
         run: |
           $CURRENT_DIR = Get-Location
           # Start-Process cmd -ArgumentList "${CURRENT_DIR}\var\windows-build-deps\php-sdk-binary-tools\phpsdk-vs17-x64.bat -a x64  " -NoNewWindow
-          cmd /c ${CURRENT_DIR}\var\windows-build-deps\php-sdk-binary-tools\phpsdk-starter.bat -h
+          cmd /c ${CURRENT_DIR}\var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -h
 
       - name: run build
         run: |
