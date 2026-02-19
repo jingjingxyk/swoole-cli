@@ -109,7 +109,7 @@ jobs:
         if: 0
         uses: actions/upload-artifact@v4
         with:
-          name: php-cli-v${{ env.BUILD_PHP_VERSION }}-vs16-x64
+          name: php-cli-v${{ env.BUILD_PHP_VERSION }}-vs17-x64
           retention-days: 90
           path: "var/windows-build-deps/php-src/x64/Release_TS/php.exe"
 

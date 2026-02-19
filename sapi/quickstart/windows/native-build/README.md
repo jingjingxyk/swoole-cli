@@ -4,7 +4,7 @@
 
 > bat 脚本不能包含中文
 
-> nmake并行编译  使用NMake命令，并在其后加上/MP选项
+> nmake并行编译 使用NMake命令，并在其后加上/MP选项
 
 > `echo. >>` makefile 给 makefile 增加一空行
 
@@ -25,14 +25,9 @@ git config --global core.ignorecase false
 .\sapi\quickstart\windows\native-build\windows-init-install.bat
 .\sapi\quickstart\windows\native-build\windows-init-install-vs-tools.bat
 
-.\sapi\quickstart\windows\native-build\php-sdk-setup.bat
-
-
-.\sapi\quickstart\windows\native-build\run.bat
-
-.\sapi\quickstart\windows\native-build\config.bat
-.\sapi\quickstart\windows\native-build\x_custom_config.bat
-.\sapi\quickstart\windows\native-build\build.bat
+.\sapi\scripts\windows-native\config.bat
+.\sapi\scripts\windows-native\x_custom_config.bat
+.\sapi\scripts\windows-native\\build.bat
 
 ```
 
@@ -41,10 +36,9 @@ git config --global core.ignorecase false
  cmd /c .\sapi\quickstart\windows\native-build\windows-init-install.bat
  cmd /c .\sapi\quickstart\windows\native-build\windows-init-install-vs-tools.bat
 
- cmd /c .\sapi\quickstart\windows\native-build\php-sdk.bat
- cmd /c .\sapi\quickstart\windows\native-build\config.bat
- cmd /c .\\sapi\quickstart\windows\native-build\x_custom_config.bat
- cmd /c .\sapi\quickstart\windows\native-build\build.bat
+ cmd /c .\sapi\scripts\windows-native\config.bat
+ cmd /c .\sapi\scripts\windows-native\x_custom_config.bat
+ cmd /c .\sapi\scripts\windows-native\\build.bat
 
 ```
 
@@ -69,7 +63,7 @@ cmd /k "d:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Bui
 %comspec% /k "c:\vs\VC\Auxiliary\Build\vcvarsamd64_x86.bat"
 %ProgramFiles(x86)%
 %USERPROFILE%
- %NUMBER_OF_PROCESSORS%
+%NUMBER_OF_PROCESSORS%
 
 :: phpsdk_deps -u
 :: phpsdk_buildtree phpdev
@@ -106,8 +100,13 @@ cmd /c dumpbin /DEPENDENTS ".\x64\Release_TS\php.exe"
 
 # 方式一
 curl -Lo VisualStudioSetup.exe 'https://c2rsetup.officeapps.live.com/c2r/downloadVS.aspx?sku=community&channel=Release&version=VS2022'
+
+curl -Lo VisualStudioSetup.exe 'https://c2rsetup.officeapps.live.com/c2r/downloadVS.aspx?sku=community&channel=stable&version=VS18'
+
 # 方式二
 curl -Lo VisualStudioSetup.exe 'https://aka.ms/vs/17/release/vs_community.exe'
+curl -Lo VisualStudioSetup.exe 'https://aka.ms/vs/18/release/vs_community.exe'
+
 
 ```
 
@@ -250,19 +249,16 @@ dumpbin /DEPENDENTS test-vc.exe
 1. [Visual Studio 2019 版本 16.11 发行说明](https://learn.microsoft.com/zh-cn/visualstudio/releases/2019/release-notes)
 1. [Visual Studio 2022 版本 17.9 发行说明](https://learn.microsoft.com/zh-cn/visualstudio/releases/2022/release-notes)
 
-
-常用命令	    说明
-MSBuild	    生成项目或解决方案
-dotnet	    .NET CLI 命令
-dotnet run	.NET CLI 命令
-clrver	     用于 CLR 的 .NET Framework 工具
-ildasm	     用于反汇编程序的 .NET Framework 工具
-CL	         C/C++ 编译工具
-NMAKE	     C/C++ 编译工具
-LIB	         C/C++ 生成工具
-DUMPBIN	     C/C++ 生成工具
-
-
+常用命令 说明
+MSBuild 生成项目或解决方案
+dotnet .NET CLI 命令
+dotnet run .NET CLI 命令
+clrver 用于 CLR 的 .NET Framework 工具
+ildasm 用于反汇编程序的 .NET Framework 工具
+CL C/C++ 编译工具
+NMAKE C/C++ 编译工具
+LIB C/C++ 生成工具
+DUMPBIN C/C++ 生成工具
 
 ```bash
 
@@ -320,7 +316,6 @@ test -f strawberry-perl-5.38.2.2-64bit.msi ||  curl -Lo strawberry-perl-5.38.2.2
 
 
 ```
-
 
 ```shell
 
