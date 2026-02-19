@@ -9,7 +9,7 @@ cd /d ..\..\..\..\
 set "__PROJECT__=%cd%"
 echo %cd%
 
-var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\quickstart\windows\native-build\build-static-php.bat
+var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\main.bat
 
 cd /d %__PROJECT__%
 endlocal

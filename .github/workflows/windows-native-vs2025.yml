@@ -1,4 +1,4 @@
-name: build-php-cli-windows-vs2022
+name: build-php-cli-windows-vs2025
 
 on:
   push:
@@ -86,18 +86,15 @@ jobs:
           where bison.exe
           where  re2c.exe
 
-      - name: run build
-        run: |
-          cmd /c sapi\quickstart\windows\native-build\main.bat
-
       - name: show php SDK
-        if: 0
         run: |
           $CURRENT_DIR = Get-Location
-          # Start-Process cmd -ArgumentList "${CURRENT_DIR}\var\windows-build-deps\php-sdk-binary-tools\phpsdk-starter.bat -h" -NoNewWindow
           # Start-Process cmd -ArgumentList "${CURRENT_DIR}\var\windows-build-deps\php-sdk-binary-tools\phpsdk-vs17-x64.bat -a x64  " -NoNewWindow
           cmd /c ${CURRENT_DIR}\var\windows-build-deps\php-sdk-binary-tools\phpsdk-starter.bat -h
-          # cmd /c ${CURRENT_DIR}\var\windows-build-deps\php-sdk-binary-tools\phpsdk-vs17-x64.bat
+
+      - name: run build
+        run: |
+          cmd /c sapi\scripts\windows-native\entry.bat
 
       - name: Show Build Result
         if: 0
