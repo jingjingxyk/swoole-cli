@@ -22,4 +22,4 @@ cd ${__DIR__}
 IMAGE=swoole-cli-builder:latest
 
 cd ${__DIR__}
-docker run --rm --name swoole-cli-builder-latest -d -v ${__PROJECT__}:/work -w /work --init $IMAGE tail -f /dev/null
+docker run --rm --name swoole-cli-builder-latest --platform "linux/loong64" -d -v ${__PROJECT__}:/work -w /work --init $IMAGE tail -f /dev/null
