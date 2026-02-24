@@ -30,7 +30,7 @@ return function (Preprocessor $p) {
             ->withPrefix($gettext_prefix)
             ->withConfigure(
                 <<<EOF
-
+            autoreconf --install
             ./configure --help
 
             PACKAGES='zlib  '
