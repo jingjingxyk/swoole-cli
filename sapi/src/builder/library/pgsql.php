@@ -18,10 +18,10 @@ return function (Preprocessor $p) {
         (new Library('pgsql'))
             ->withHomePage('https://www.postgresql.org/')
             ->withLicense('https://www.postgresql.org/about/licence/', Library::LICENSE_SPEC)
-            ->withUrl('https://ftp.postgresql.org/pub/source/v16.3/postgresql-16.3.tar.gz')
+            ->withUrl('https://ftp.postgresql.org/pub/source/v18.2/postgresql-18.2.tar.gz')
             ->withManual('https://www.postgresql.org/docs/current/install-procedure.html#CONFIGURE-OPTIONS')
             ->withManual('https://www.postgresql.org/docs/current/install-procedure.html#CONFIGURE-OPTIONS#:~:text=Client-only%20installation')
-            ->withFileHash('md5', '8a58db4009e1a50106c5e1a8c4b03bed')
+            ->withFileHash('md5', '8772b9b16d856899b4ac613a6cb7dbc0')
             ->withPrefix($pgsql_prefix)
             ->withBuildScript(
                 <<<EOF
