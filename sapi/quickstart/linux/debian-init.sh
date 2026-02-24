@@ -115,6 +115,7 @@ apt install -y pkg-config bzip2 flex p7zip
 apt install -y gcc g++ libtool-bin autopoint
 apt install -y linux-headers-generic
 apt install -y musl-dev musl-tools
+apt install -y tini
 
 # apt install -y linux-headers-$(uname -r)
 
