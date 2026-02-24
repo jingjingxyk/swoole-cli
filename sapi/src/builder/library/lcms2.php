@@ -16,7 +16,7 @@ return function (Preprocessor $p) {
         ->withConfigure(
             <<<EOF
             ./configure --help
-
+            autoreconf --install
             PACKAGES="zlib"
             CPPFLAGS="\$(pkg-config  --cflags-only-I --static \$PACKAGES )" \
             LDFLAGS="\$(pkg-config   --libs-only-L   --static \$PACKAGES )" \
