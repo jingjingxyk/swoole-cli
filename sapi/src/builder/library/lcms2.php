@@ -23,6 +23,7 @@ return function (Preprocessor $p) {
             LIBS="\$(pkg-config      --libs-only-l   --static \$PACKAGES )" \
             ./configure \
             --prefix={$lcms2_prefix} \
+            --build=loongarch64-unknown-linux-gnu \
             --enable-shared=no \
             --enable-static=yes \
             --with-jpeg={$libjpeg_prefix} \
