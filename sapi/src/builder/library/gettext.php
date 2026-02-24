@@ -46,6 +46,7 @@ return function (Preprocessor $p) {
             LIBS="\${LIBS} -liconv -lunistring " \
             ./configure \
             --prefix={$gettext_prefix} \
+            --build=loongarch64-unknown-linux-gnu \
             --enable-shared=no \
             --enable-static=yes \
             --enable-relocatable \
