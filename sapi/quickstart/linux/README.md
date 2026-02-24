@@ -100,5 +100,20 @@ bash sapi/quickstart/linux/debian-init.sh --mirror china
 
 ```
 
+# docker 设置代理
+
+```shell
+systemctl status docker
+
+vi /lib/systemd/system/docker.service
+Environment="HTTP_PROXY=http://127.0.0.1:8016"
+Environment="HTTPS_PROXY=http://127.0.0.1:8016"
+Environment="NO_PROXY=localhost,127.0.0.1"
+
+
+systemctl daemon-reload
+systemctl restart docker
+```
+
 
 
