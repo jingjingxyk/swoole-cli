@@ -16,7 +16,11 @@ return function (Preprocessor $p) {
             ->withConfigure(
                 <<<EOF
             autoreconf --install
-            ./configure --prefix={$libyaml_prefix} --enable-static --disable-shared
+            ./configure \
+            --prefix={$libyaml_prefix} \
+            --build=loongarch64-unknown-linux-gnu \
+            --enable-static \
+            --disable-shared
 EOF
             )
             ->withPkgName('yaml-0.1')
