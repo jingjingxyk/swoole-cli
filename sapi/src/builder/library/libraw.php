@@ -15,6 +15,7 @@ return function (Preprocessor $p) {
             <<<EOF
             ./configure --help
             echo {$link_cpp}
+            autoreconf --install
 
             set -uex
             package_names="zlib libjpeg libturbojpeg lcms2"
@@ -24,6 +25,7 @@ return function (Preprocessor $p) {
             LIBS="\$(pkg-config      --libs-only-l   --static \$package_names ) {$link_cpp}" \
             ./configure \
             --prefix={$libraw_prefix} \
+            --build=loongarch64-unknown-linux-gnu \
             --enable-shared=no \
             --enable-static=yes \
             --enable-jpeg \
