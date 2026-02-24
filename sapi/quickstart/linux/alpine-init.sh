@@ -26,7 +26,7 @@ done
 case "$MIRROR" in
 china | tuna | ustc)
   test -f /etc/apk/repositories.save || cp /etc/apk/repositories /etc/apk/repositories.save
-  test "$MIRROR" = "china" && sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
+  test "$MIRROR" = "china" && sed -i 's/dl-cdn.alpinelinux.org/mirrors.cernet.edu.cn/g' /etc/apk/repositories
   test "$MIRROR" = "tuna" && sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
   test "$MIRROR" = "ustc" && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
   ;;
@@ -54,7 +54,9 @@ apk add socat
 apk add python3-dev
 apk add mercurial
 apk add pigz parallel
- apk add libucontext-dev
+apk add tini
+apk add libucontext-dev
+
 
 case "$MIRROR" in
 china | tuna | ustc)

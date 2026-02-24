@@ -17,7 +17,7 @@ cd ${__PROJECT__}/var/build-github-action-container/
 cp -f ${__PROJECT__}/sapi/quickstart/linux/alpine-init.sh .
 
 cat >Dockerfile <<'EOF'
-ARG BASE_IMAGE=alpine:3.18
+ARG BASE_IMAGE=alpine:3.23
 FROM ${BASE_IMAGE}
 
 ENV TZ=Etc/UTC
@@ -36,7 +36,7 @@ ENTRYPOINT ["tini", "--"]
 EOF
 
 PLATFORM='linux/amd64'
-BASE_IMAGE="alpine:3.18"
+BASE_IMAGE="alpine:3.23"
 ARCH=$(uname -m)
 case $ARCH in
 'x86_64')

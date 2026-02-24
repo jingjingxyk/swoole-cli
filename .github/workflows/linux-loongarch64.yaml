@@ -136,6 +136,7 @@ jobs:
             composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
             composer dump-autoload --optimize --profile --no-dev
 
+
             php prepare.php --with-override-default-enabled-ext=1 +swoole --with-php-version=${{ env.BUILD_PHP_VERSION }}
 
             if [[ $(uname -m) == "loongarch64" ]] ; then  { bash sapi/scripts/install-libucontext.sh ; } ; fi ;
