@@ -39,6 +39,7 @@ return function (Preprocessor $p) {
 
             PACKAGES="libssl libcrypto openssl zlib icu-uc icu-io icu-i18n readline libxml-2.0  libxslt libzstd liblz4 ncursesw"
             CPPFLAGS="$(pkg-config  --cflags-only-I --static \$PACKAGES )" \
+            CFLAGS="-fPIC" \
             LDFLAGS="$(pkg-config   --libs-only-L   --static \$PACKAGES ) {$ldflags} " \
             LIBS="$(pkg-config      --libs-only-l   --static \$PACKAGES ) {$libs}  " \
             ../configure  \
