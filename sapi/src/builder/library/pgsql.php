@@ -44,6 +44,8 @@ return function (Preprocessor $p) {
             LIBS="$(pkg-config      --libs-only-l   --static \$PACKAGES ) {$libs}  " \
             ../configure  \
             --prefix={$pgsql_prefix} \
+            --enable-static=yes \
+            --enable-shared=no \
             --enable-coverage=no \
             --with-openssl \
             --with-ssl=openssl  \
