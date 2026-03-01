@@ -22,6 +22,7 @@ cd ${__DIR__}
 IMAGE="alpine:3.23"
 PLATFORM='linux/amd64'
 DEV_SHM=0
+INIT="--init"
 
 ARCH=$(uname -m)
 case $ARCH in
@@ -52,6 +53,9 @@ while [ $# -gt 0 ]; do
   --dev-shm) #使用 /dev/shm 目录加快构建速度
     DEV_SHM=1
     ;;
+  --init) #使用 /dev/shm 目录加快构建速度
+    INIT="$2"
+    ;;
   --*)
     echo "Illegal option $1"
     ;;
@@ -71,14 +75,14 @@ if [ $DEV_SHM -eq 1 ]; then
     -v /dev/shm/swoole-cli/ext/:/work/ext/ \
     -v /dev/shm/swoole-cli/var/:/work/var/ \
     -w /work \
-    --init $IMAGE tail -f /dev/null
+    $INIT $IMAGE tail -f /dev/null
 else
   docker run --rm --name swoole-cli-alpine-dev --platform ${PLATFORM} -d \
     -v ${__PROJECT__}:/work \
     -w /work \
-    --init $IMAGE tail -f /dev/null
+    $INIT $IMAGE tail -f /dev/null
 fi
 
 # loongarch64
-# bash sapi/quickstart/linux/run-alpine-container.sh --platform "linux/loong64" --container-image "ghcr.io/loong64/alpine:3.23" --dev-shm
+# bash sapi/quickstart/linux/run-alpine-container.sh --platform "linux/loong64" --container-image "ghcr.io/loong64/alpine:3.23" --dev-shm --init ''
 # bash sapi/quickstart/linux/run-alpine-container.sh --platform "linux/loong64" --container-image "ghcr.io/loong64/alpine:3.23"
