@@ -19,7 +19,6 @@ return function (Preprocessor $p) {
                 <<<EOF
             ./configure --help
 
-            CFLAGS="-fPIC" \
             ./configure \
             --prefix=$gmp_prefix \
             --enable-static=yes \

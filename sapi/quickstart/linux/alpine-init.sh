@@ -70,4 +70,4 @@ tencentyun | huaweicloud)
 esac
 
 # pip3 install meson
-apk add meson
+apk add meson uv

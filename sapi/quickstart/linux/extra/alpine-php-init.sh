@@ -14,3 +14,8 @@ php84 --ini | grep ".ini files"
 ln -sf /usr/bin/php84 /usr/bin/php
 ln -sf /usr/bin/phpize84 /usr/bin/phpize
 ln -sf /usr/bin/php-config84 /usr/bin/php-config
+
+curl -fSLo composer.phar https://getcomposer.org/download/latest-stable/composer.phar
+curl -fSLo composer.phar https://mirrors.tencent.com/composer/composer.phar
+chmod a+x composer.phar
+cp -f composer.phar /usr/local/bin/composer
