@@ -67,8 +67,6 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 ENV TZ=Etc/UTC
 
 ADD ./swoole-cli /usr/local/swoole-cli
-
-RUN cp -f /etc/apk/repositories.save /etc/apk/repositories
 RUN uname -m
 RUN mkdir /work
 
