@@ -37,7 +37,7 @@ return function (Preprocessor $p) {
             sed -i.backup "278 s/^/# /"  ../src/Makefile.shlib
             sed -i.backup "402 s/^/# /"  ../src/Makefile.shlib
 
-            PACKAGES="libssl libcrypto openssl zlib icu-uc icu-io icu-i18n readline libxml-2.0  libxslt libzstd liblz4"
+            PACKAGES="libssl libcrypto openssl zlib icu-uc icu-io icu-i18n readline libxml-2.0  libxslt libzstd liblz4 ncursesw"
             CPPFLAGS="$(pkg-config  --cflags-only-I --static \$PACKAGES )" \
             LDFLAGS="$(pkg-config   --libs-only-L   --static \$PACKAGES ) {$ldflags} " \
             LIBS="$(pkg-config      --libs-only-l   --static \$PACKAGES ) {$libs}  " \
@@ -92,7 +92,8 @@ EOF
                 'readline',
                 'libxslt',
                 'libzstd',
-                'liblz4'
+                'liblz4',
+                'ncurses'
             )
     );
     $p->withExportVariable('LIBPQ_CFLAGS', '$(pkg-config  --cflags --static libpq)');
