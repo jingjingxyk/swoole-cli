@@ -20,8 +20,8 @@ cd ${__PROJECT__}
 
 # alpine 基础镜像 支持多架构
 
-CONTAINER_BASE_IMAGE='swoole-cli-alpine-dev'
-CONTAIENR_NAME='swoole-cli-alpine-dev-loongarch64'
+CONTAINER_BASE_IMAGE='alpine:3.23'
+CONTAIENR_NAME='swoole-cli-alpine-dev'
 MIRROR=''
 PLATFORM=''
 ARCH=$(uname -m)
