@@ -66,11 +66,6 @@ ARG MIRROR=""
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 ENV TZ=Etc/UTC
 
-RUN test -f /etc/apk/repositories.save || cp /etc/apk/repositories /etc/apk/repositories.save
-RUN if [ "${MIRROR}" = "ustc" -o "${MIRROR}" = "china"   ]; then { sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories ; } fi
-RUN if [ "${MIRROR}" = "tuna" ]; then { sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories ; } fi
-
-RUN apk add ca-certificates tini
 ADD ./swoole-cli /usr/local/swoole-cli
 
 RUN cp -f /etc/apk/repositories.save /etc/apk/repositories
@@ -78,7 +73,7 @@ RUN uname -m
 RUN mkdir /work
 
 WORKDIR /work
-ENTRYPOINT ["tini", "--"]
+
 
 EOF
 
