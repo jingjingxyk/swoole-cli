@@ -24,12 +24,13 @@ return function (Preprocessor $p) {
             ->withHomePage('https://www.gnu.org/software/gettext/')
             ->withLicense('https://www.gnu.org/licenses/licenses.html', Library::LICENSE_GPL)
             ->withManual('https://www.gnu.org/software/gettext/')
-            ->withUrl('https://ftpmirror.gnu.org/gettext/gettext-0.22.5.tar.gz')
+            //->withUrl('https://ftpmirror.gnu.org/gettext/gettext-0.22.5.tar.gz')
+            ->withUrl('https://mirrors.cernet.edu.cn/gnu/gettext/gettext-0.22.5.tar.gz')
             ->withFileHash('sha256', "ec1705b1e969b83a9f073144ec806151db88127f5e40fe5a94cb6c8fa48996a0")
             ->withPrefix($gettext_prefix)
             ->withConfigure(
                 <<<EOF
-
+            autoreconf --install
             ./configure --help
 
             PACKAGES='zlib  '
@@ -45,6 +46,7 @@ return function (Preprocessor $p) {
             LIBS="\${LIBS} -liconv -lunistring " \
             ./configure \
             --prefix={$gettext_prefix} \
+            --build=loongarch64-unknown-linux-gnu \
             --enable-shared=no \
             --enable-static=yes \
             --enable-relocatable \

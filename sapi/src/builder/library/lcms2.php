@@ -16,13 +16,14 @@ return function (Preprocessor $p) {
         ->withConfigure(
             <<<EOF
             ./configure --help
-
+            autoreconf --install
             PACKAGES="zlib"
             CPPFLAGS="\$(pkg-config  --cflags-only-I --static \$PACKAGES )" \
             LDFLAGS="\$(pkg-config   --libs-only-L   --static \$PACKAGES )" \
             LIBS="\$(pkg-config      --libs-only-l   --static \$PACKAGES )" \
             ./configure \
             --prefix={$lcms2_prefix} \
+            --build=loongarch64-unknown-linux-gnu \
             --enable-shared=no \
             --enable-static=yes \
             --with-jpeg={$libjpeg_prefix} \

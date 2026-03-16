@@ -18,10 +18,10 @@ return function (Preprocessor $p) {
         (new Library('pgsql'))
             ->withHomePage('https://www.postgresql.org/')
             ->withLicense('https://www.postgresql.org/about/licence/', Library::LICENSE_SPEC)
-            ->withUrl('https://ftp.postgresql.org/pub/source/v16.3/postgresql-16.3.tar.gz')
+            ->withUrl('https://ftp.postgresql.org/pub/source/v18.2/postgresql-18.2.tar.gz')
             ->withManual('https://www.postgresql.org/docs/current/install-procedure.html#CONFIGURE-OPTIONS')
             ->withManual('https://www.postgresql.org/docs/current/install-procedure.html#CONFIGURE-OPTIONS#:~:text=Client-only%20installation')
-            ->withFileHash('md5', '8a58db4009e1a50106c5e1a8c4b03bed')
+            ->withFileHash('md5', '8772b9b16d856899b4ac613a6cb7dbc0')
             ->withPrefix($pgsql_prefix)
             ->withBuildScript(
                 <<<EOF
@@ -37,12 +37,15 @@ return function (Preprocessor $p) {
             sed -i.backup "278 s/^/# /"  ../src/Makefile.shlib
             sed -i.backup "402 s/^/# /"  ../src/Makefile.shlib
 
-            PACKAGES="libssl libcrypto openssl zlib icu-uc icu-io icu-i18n readline libxml-2.0  libxslt libzstd liblz4"
+            PACKAGES="libssl libcrypto openssl zlib icu-uc icu-io icu-i18n readline libxml-2.0  libxslt libzstd liblz4 ncursesw"
             CPPFLAGS="$(pkg-config  --cflags-only-I --static \$PACKAGES )" \
+            CFLAGS="-fPIC" \
             LDFLAGS="$(pkg-config   --libs-only-L   --static \$PACKAGES ) {$ldflags} " \
             LIBS="$(pkg-config      --libs-only-l   --static \$PACKAGES ) {$libs}  " \
             ../configure  \
             --prefix={$pgsql_prefix} \
+            --enable-static=yes \
+            --enable-shared=no \
             --enable-coverage=no \
             --with-openssl \
             --with-ssl=openssl  \
@@ -92,7 +95,8 @@ EOF
                 'readline',
                 'libxslt',
                 'libzstd',
-                'liblz4'
+                'liblz4',
+                'ncurses'
             )
     );
     $p->withExportVariable('LIBPQ_CFLAGS', '$(pkg-config  --cflags --static libpq)');

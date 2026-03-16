@@ -26,7 +26,7 @@ done
 case "$MIRROR" in
 china | tuna | ustc)
   test -f /etc/apk/repositories.save || cp /etc/apk/repositories /etc/apk/repositories.save
-  test "$MIRROR" = "china" && sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
+  test "$MIRROR" = "china" && sed -i 's/dl-cdn.alpinelinux.org/mirrors.cernet.edu.cn/g' /etc/apk/repositories
   test "$MIRROR" = "tuna" && sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
   test "$MIRROR" = "ustc" && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
   ;;
@@ -40,13 +40,13 @@ esac
 
 apk update
 
-apk add vim alpine-sdk xz autoconf automake linux-headers clang-dev clang lld libtool cmake bison re2c coreutils gcc g++
+apk add vim alpine-sdk xz autoconf automake linux-headers clang-dev clang libtool cmake bison re2c coreutils gcc g++
 apk add bash zip unzip flex pkgconf ca-certificates
 apk add tar gzip zip unzip bzip2
-apk add 7zip
+# apk add 7zip
 apk add gettext gettext-dev
 apk add wget git curl
-apk add libc++-static libltdl-static
+apk add libltdl-static
 apk add yasm nasm
 apk add ninja python3 py3-pip
 apk add diffutils
@@ -54,6 +54,9 @@ apk add socat
 apk add python3-dev
 apk add mercurial
 apk add pigz parallel
+apk add tini
+apk add libucontext-dev
+
 
 case "$MIRROR" in
 china | tuna | ustc)
@@ -67,4 +70,4 @@ tencentyun | huaweicloud)
 esac
 
 # pip3 install meson
-apk add meson
+apk add meson uv

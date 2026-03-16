@@ -23,3 +23,5 @@ IMAGE=debian:12
 
 cd ${__DIR__}
 docker run --rm --name swoole-cli-debian-dev -d -v ${__PROJECT__}:/work -w /work --init $IMAGE tail -f /dev/null
+
+# docker run -e TERM=xterm-256color -it ubuntu bash

@@ -21,7 +21,8 @@ return function (Preprocessor $p) {
             ->withManual('https://www.gnu.org/software/libidn/libidn2/manual/')
             ->withLicense('https://www.gnu.org/licenses/old-licenses/gpl-2.0.html', Library::LICENSE_GPL)
             //->withUrl('https://ftp.gnu.org/gnu/libidn/libidn2-2.3.8.tar.gz')
-            ->withUrl('https://ftpmirror.gnu.org/gnu/libidn/libidn2-2.3.8.tar.gz')
+            //->withUrl('https://ftpmirror.gnu.org/gnu/libidn/libidn2-2.3.8.tar.gz')
+            ->withUrl('https://mirrors.cernet.edu.cn/gnu/libidn/libidn2-2.3.8.tar.gz')
             ->withFileHash('md5', 'a8e113e040d57a523684e141970eea7a')
             ->withPrefix($libidn2_prefix)
             ->withConfigure(

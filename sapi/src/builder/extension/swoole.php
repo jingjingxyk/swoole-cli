@@ -36,7 +36,7 @@ return function (Preprocessor $p) {
 
     $libiconv_prefix = ICONV_PREFIX;
 
-    $dependentLibraries = ['curl', 'openssl', 'cares', 'zlib', 'brotli', 'nghttp2', 'sqlite3', 'unix_odbc', 'pgsql', 'libzstd'];
+    $dependentLibraries = ['curl', 'openssl', 'cares', 'zlib', 'brotli', 'nghttp2', 'sqlite3', 'libzstd'];// 'unix_odbc', 'pgsql',
     $dependentExtensions = ['curl', 'openssl', 'sockets', 'mysqlnd', 'pdo'];
 
     $options[] = '--enable-swoole';
@@ -46,9 +46,9 @@ return function (Preprocessor $p) {
     $options[] = '--enable-cares';
     $options[] = '--with-brotli-dir=' . BROTLI_PREFIX;
     $options[] = '--with-nghttp2-dir=' . NGHTTP2_PREFIX;
-    $options[] = '--enable-swoole-pgsql';
+    //$options[] = '--enable-swoole-pgsql';
     $options[] = '--enable-swoole-sqlite';
-    $options[] = '--with-swoole-odbc=unixODBC,' . UNIX_ODBC_PREFIX;
+    // $options[] = '--with-swoole-odbc=unixODBC,' . UNIX_ODBC_PREFIX;
     $options[] = '--enable-swoole-thread';
     $options[] = '--enable-brotli';
     $options[] = '--enable-zstd';
