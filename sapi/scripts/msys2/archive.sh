@@ -32,8 +32,15 @@ cp -f ./COPYING.OpenSSL /tmp/${NAME}/
 cp -f ./socat /tmp/${NAME}/
 cp -f ./cacert.pem /tmp/${NAME}/
 
+cd /tmp/${NAME}/etc/
+test -f cacert.pem || curl -LSo cacert.pem https://curl.se/ca/cacert.pem
+
 cd /tmp/${NAME}/
 
 zip -r ${__PROJECT__}/${NAME}.zip .
+
+cd ${__PROJECT__}
+
+ls -lha ${__PROJECT__}/${NAME}.zip
 
 cd ${__PROJECT__}

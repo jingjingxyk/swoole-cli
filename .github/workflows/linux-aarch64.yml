@@ -3,14 +3,14 @@ name: build-linux-aarch64
 on: [ push, pull_request ]
 
 env:
-  BUILD_PHP_VERSION: 8.2.28
+  BUILD_PHP_VERSION: 8.4.19
 
 jobs:
   linux-aarch64:
     if: 1
     runs-on: ubuntu-24.04-arm
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Show Environment Info
         run: |
           echo $PATH
@@ -49,35 +49,35 @@ jobs:
           mkdir -p ${{ github.workspace }}/var/build-github-action-container/
 
       - name: Cache PHP Runtime
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         id: php-runtime-cache-aarch64
         with:
           path: ${{ github.workspace }}/runtime
           key: ${{ runner.os }}-aarch64-php-runtime
 
       - name: Cache PHP Vendor
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         id: php-vendor-cache-aarch64
         with:
           path: ${{ github.workspace }}/vendor
           key: ${{ runner.os }}-aarch64-php-vendor
 
       - name: Cache Dependency Source Code Tarball
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         id: pool-cache
         with:
           path: ${{ github.workspace }}/pool/
           key: source-code-tarball-pool
 
       - name: Cache all-library
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         id: all-library-cache-aarch64
         with:
           path: /usr/local/swoole-cli
           key: ${{ github.head_ref || github.ref_name }}-${{ runner.os }}-aarch64-all-library
 
       - name: Cache swoole-cli-builder-image
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         id: swoole-cli-builder-image-cache-aarch64
         with:
           path: ${{ github.workspace }}/var/build-github-action-container/swoole-cli-builder-image.tar
@@ -98,7 +98,8 @@ jobs:
           mkdir -p pool/ext
           mkdir -p bin/
           mkdir -p runtime/
-          if [ ! -f runtime/php ] ; then
+          test -f runtime/php && rm -f runtime/php
+          if [ ! -f runtime/php/box ] ; then
               bash  setup-php-runtime.sh
           fi
           bash sapi/download-box/download-box-get-archive-from-server.sh
@@ -113,14 +114,12 @@ jobs:
           run: |
             set -eux
             uname -m
-            export PATH=/work/runtime:$PATH  # 容器已经内置 php 和 composer
-            alias php="php -d curl.cainfo=/work/runtime/cacert.pem -d openssl.cafile=/work/runtime/cacert.pem"
-
-            # sed -i 's/mirrors.tuna.tsinghua.edu.cn/dl-cdn.alpinelinux.org/g' /etc/apk/repositories
-            # sed -i 's/mirrors.ustc.edu.cn/dl-cdn.alpinelinux.org/g' /etc/apk/repositories
-            # bash sapi/quickstart/mark-install-library-cached.sh
+            export PATH=/work/runtime/php/:$PATH  # 容器已经内置 php 和 composer
+            alias php="php -d curl.cainfo=/work/runtime/php/cacert.pem -d openssl.cafile=/work/runtime/php/cacert.pem"
 
             sh  sapi/quickstart/linux/alpine-init.sh
+            git config --global --add safe.directory /work
+
             composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
             composer dump-autoload --optimize --profile --no-dev
 
@@ -146,11 +145,12 @@ jobs:
           APP_VERSION=$(cat ./APP_VERSION)
           APP_NAME=$(cat ./APP_NAME)
           echo $APP_VERSION
+          echo $APP_NAME
           echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
           echo "APP_NAME=${APP_NAME}" >> $GITHUB_ENV
 
       - name: production artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-linux-arm64
           retention-days: 90

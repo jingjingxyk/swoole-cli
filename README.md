@@ -29,6 +29,7 @@ curl -fSL https://github.com/jingjingxyk/swoole-cli/blob/new_dev/setup-socat-run
 - [构建选项文档](docs/options.md)
 - [搭建依赖库镜像服务](sapi/download-box/README.md)
 - [quickstart](sapi/quickstart/README.md)
+- [常见问题解答](https://github.com/swoole/swoole-cli/blob/main/docs/FAQ.md)
 
 ## Clone
 
@@ -54,9 +55,8 @@ bash setup-php-runtime.sh --mirror china
 # shell脚本中启用别名扩展功能‌
 shopt -s expand_aliases
 __DIR__=$(pwd)
-export PATH="${__DIR__}/runtime:$PATH"
-ln -sf ${__DIR__}/runtime/swoole-cli ${__DIR__}/runtime/php
-alias php="php -d curl.cainfo=${__DIR__}/runtime/cacert.pem -d openssl.cafile=${__DIR__}/runtime/cacert.pem"
+export PATH="${__DIR__}/runtime/php/:$PATH"
+alias php="php -d curl.cainfo=${__DIR__}/runtime/php/cacert.pem -d openssl.cafile=${__DIR__}/runtime/php/cacert.pem"
 which php
 php -v
 composer install  --no-interaction --no-autoloader --no-scripts --profile --no-dev
@@ -107,13 +107,13 @@ bash sapi/quickstart/macos/macos-init.sh --mirror china
 
 ```bash
 
-cp build-release-example.sh build-release.sh
+cp build-release-example.sh build-release-app.sh
 
 # 按你的需求修改配置  OPTIONS="${OPTIONS} --with-libavif=1 "
-vi build-release.sh
+vi build-release-app.sh
 
 # 执行构建流程
-bash build-release.sh
+bash build-release-app.sh
 
 
 ```

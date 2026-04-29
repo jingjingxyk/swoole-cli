@@ -3,20 +3,20 @@ name: build-macos-aarch64
 on: [ push, pull_request ]
 
 env:
-  BUILD_PHP_VERSION: 8.2.28
+  BUILD_PHP_VERSION: 8.4.19
 
 jobs:
   macos-aarch64:
     if: 1
-    runs-on: macos-14
+    runs-on: macos-15
     # macos-latest (macos-14)  变更了 CPU 架构，由 x86_64 变更为 arm64
     # macos-14 CPU 架构 arm64
     # macos-13 CPU 架构 x86_64
     # macos-12 CPU 架构 x86_64
     # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#choosing-github-hosted-runners
-
+    # https://github.blog/changelog/2026-02-26-macos-26-is-now-generally-available-for-github-hosted-runners/
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Show Environment Info
         run: |
           set -x
@@ -31,6 +31,20 @@ jobs:
           brew config
           xcrun --show-sdk-path
           ls -lh $(xcrun --show-sdk-path)
+          ls -lh /Applications/Xcode*
+          ls -lh /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/
+          ls -lh /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/
+          ls -lh /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/bin
+          ls -lh /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_pthread
+          MACOS_SDK_ROOT=$(xcrun --show-sdk-path)
+          echo $MACOS_SDK_ROOT
+          MACOS_VERSION=$(sw_vers -productVersion)
+          echo $MACOS_VERSION
+          ls -lha /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib
+          ls -lha /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/
+          ls -lha /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/
+          ls -lha /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/
+          ls -lha /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
           clang --version
 
           ifconfig
@@ -48,7 +62,11 @@ jobs:
           bash sapi/quickstart/macos/macos-init.sh
 
           export PATH="/opt/homebrew/opt/libtool/bin:$PATH"
+          set -x
           ls -lha /opt/homebrew/opt/libtool/bin/
+          ls -lha /opt/homebrew/opt/llvm/bin/
+          # ls -lha /opt/homebrew/opt/lld/bin/
+          ls -lha /opt/homebrew/opt/llvm/lib/c++
           libtoolize --version
           libtool --help-all
 
@@ -62,28 +80,28 @@ jobs:
           # git submodule update --init
 
       - name: Cache PHP Runtime
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         id: php-runtime-cache
         with:
           path: ${{ github.workspace }}/runtime
           key: ${{ runner.os }}-aarch64-php-runtime
 
       - name: Cache PHP Vendor
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         id: php-vendor-cache
         with:
           path: ${{ github.workspace }}/vendor
           key: ${{ runner.os }}-aarch64-php-vendor
 
       - name: Cache Dependency Source Code Tarball
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         id: pool-cache
         with:
           path: ${{ github.workspace }}/pool/
           key: source-code-tarball-pool
 
       - name: Cache all-library
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         id: all-library-cache
         with:
           path: /usr/local/swoole-cli
@@ -96,7 +114,8 @@ jobs:
           mkdir -p pool/ext
           mkdir -p bin/
           mkdir -p runtime/
-          if [ ! -f runtime/php ] ; then
+          test -f runtime/php && rm -f runtime/php
+          if [ ! -f runtime/php/box ] ; then
               bash  setup-php-runtime.sh
           fi
           bash sapi/download-box/download-box-get-archive-from-server.sh
@@ -105,8 +124,8 @@ jobs:
 
       - name: prepare
         run: |
-          export PATH=${{ github.workspace }}/runtime:$PATH
-          alias php="php -d curl.cainfo=${{ github.workspace }}/runtime/cacert.pem -d openssl.cafile=${{ github.workspace }}/runtime/cacert.pem"
+          export PATH=${{ github.workspace }}/runtime/php/:$PATH
+          alias php="php -d curl.cainfo=${{ github.workspace }}/runtime/php/cacert.pem -d openssl.cafile=${{ github.workspace }}/runtime/php/cacert.pem"
 
           composer install  --no-interaction --no-autoloader --no-scripts --profile
           composer dump-autoload --optimize --profile
@@ -115,7 +134,7 @@ jobs:
 
       - name: Build
         run: |
-          export PATH=${{ github.workspace }}/runtime:$PATH
+          export PATH=${{ github.workspace }}/runtime/php/:$PATH
 
           bash make-install-deps.sh
 
@@ -137,11 +156,12 @@ jobs:
           APP_VERSION=$(cat ./APP_VERSION)
           APP_NAME=$(cat ./APP_NAME)
           echo $APP_VERSION
+          echo $APP_NAME
           echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
           echo "APP_NAME=${APP_NAME}" >> $GITHUB_ENV
 
       - name: Archive production artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-macos-arm64
           retention-days: 90

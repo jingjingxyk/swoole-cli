@@ -11,7 +11,7 @@ __PROJECT__=$(
 )
 cd ${__PROJECT__}
 
-SOCAT_VERSION='1.8.0.3'
+SOCAT_VERSION='1.8.1.1'
 
 while [ $# -gt 0 ]; do
   case "$1" in

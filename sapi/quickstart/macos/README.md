@@ -24,6 +24,9 @@ bash sapi/quickstart/macos/macos-init.sh
 
 brew cleanup
 
+
+ls -lh ~/Library/Caches
+
 ```
 
 ## [进入构建 PHP 环节](../README.md#构建依赖库-构建swoole-打包)
