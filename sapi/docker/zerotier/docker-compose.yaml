@@ -1,9 +1,0 @@
-name: zerotier
-services:
-  zerotier:
-    image: debian:12
-    ports:
-      - 9993:9993
-    cap_add:
-      - NET_ADMIN
-      - SYS_ADMIN
