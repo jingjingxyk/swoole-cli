@@ -22,6 +22,7 @@ NAME="${APP_NAME}-${APP_VERSION}-msys2-x64"
 
 test -d /tmp/${NAME} && rm -rf /tmp/${NAME}
 mkdir -p /tmp/${NAME}
+mkdir -p /tmp/${NAME}/etc/
 
 cd ${WORK_TEMP_DIR}/socat/
 ldd ./socat | grep -v '/c/Windows/' | awk '{print $3}'
