@@ -39,8 +39,8 @@ if [ -f swoole-docs/.git/index ]; then
   cd swoole-docs/
   git pull
 else
-  # git clone -b dev --depth=1 https://github.com/swoole/docs.git swoole-docs
-  git clone -b dev --depth=1 https://github.com/jingjingxyk/swoole-docs.git
+  git clone -b main --depth=1 https://github.com/swoole/docs.git swoole-docs
+  # git clone -b dev --depth=1 https://github.com/jingjingxyk/swoole-docs.git
 fi
 cd ${__PROJECT__}/var/swoole-docs/
 npm install -g pnpm --registry=https://registry.npmmirror.com
