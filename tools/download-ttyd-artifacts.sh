@@ -126,8 +126,8 @@ while [ $# -gt 0 ]; do
   shift $(($# > 0 ? 1 : 0))
 done
 
-mkdir -p ${__PROJECT__}/var/artifacts/${VERSION}
-cd ${__PROJECT__}/var/artifacts/${VERSION}
+mkdir -p ${__PROJECT__}/var/artifacts/${APP_NAME}/${VERSION}
+cd ${__PROJECT__}/var/artifacts/${APP_NAME}/${VERSION}
 
 UNIX_DOWNLOAD_SWOOLE_CLIE_RUNTIME() {
   local OS="$1"
@@ -169,4 +169,5 @@ DOWNLOAD() {
 
 DOWNLOAD
 
-cp -rf ${__PROJECT__}/var/artifacts/${VERSION}/* ${__PROJECT__}/pool/
+mkdir -p ${__PROJECT__}/pool/${APP_NAME}
+cp -rf ${__PROJECT__}/var/artifacts/${APP_NAME}/${VERSION}/* ${__PROJECT__}/pool/${APP_NAME}

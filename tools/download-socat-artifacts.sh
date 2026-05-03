@@ -54,8 +54,6 @@ APP_VERSION='1.8.1.1'
 APP_NAME='socat'
 VERSION='v2.5.0'
 X_APP_VERSIONS=""
-mkdir -p ${__PROJECT__}/${APP_NAME}/
-cd ${__PROJECT__}/${APP_NAME}/
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -172,4 +170,4 @@ DOWNLOAD() {
 DOWNLOAD
 
 mkdir -p ${__PROJECT__}/pool/${APP_NAME}
-cp -rf ${__PROJECT__}/var/artifacts/${APP_NAME}/${VERSION}/* ${__PROJECT__}/pool/
+cp -rf ${__PROJECT__}/var/artifacts/${APP_NAME}/${VERSION}/* ${__PROJECT__}/pool/${APP_NAME}
