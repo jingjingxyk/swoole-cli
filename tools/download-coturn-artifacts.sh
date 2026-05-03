@@ -54,7 +54,6 @@ APP_VERSION='4.6.3'
 APP_NAME='coturn'
 VERSION='v2.3.0'
 X_APP_VERSIONS=""
-mkdir -p ${__PROJECT__}/${APP_NAME}/
 
 while [ $# -gt 0 ]; do
   case "$1" in
