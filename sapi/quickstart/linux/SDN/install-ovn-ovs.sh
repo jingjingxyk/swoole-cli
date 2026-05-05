@@ -23,6 +23,7 @@ export LC_CTYPE="en_US.UTF-8"
 export LANG="en_US.UTF-8"
 
 MIRROR=''
+SOURCE_CODE_MIRROR=""
 FORCE_INSTALL_DEPS=0
 FORCE_INSTALL=0
 DEBIAN_APT_INSTALL=0
@@ -31,6 +32,9 @@ while [ $# -gt 0 ]; do
   case "$1" in
   --mirror)
     MIRROR="$2"
+    ;;
+  --source-code-mirror)
+    SOURCE_CODE_MIRROR="$2"
     ;;
   --proxy)
     export HTTP_PROXY="$2"
@@ -285,7 +289,7 @@ if test -d ovs; then
   cd ${__DIR__}/ovs/
   # git   pull --depth=1 --progress --rebase
 else
-  if [[ "$MIRROR" == "china" ]]; then
+  if [[ "$SOURCE_CODE_MIRROR" == "china" ]]; then
     git clone -b ${OVS_TAG} https://gitee.com/jingjingxyk/ovs.git --depth=1 --progress
   else
     git clone -b ${OVS_TAG} https://github.com/openvswitch/ovs.git --depth=1 --progress
@@ -298,7 +302,7 @@ if test -d ovn; then
   cd ${__DIR__}/ovn/
   # git   pull --depth=1 --progress --rebase
 else
-  if [[ "$MIRROR" == "china" ]]; then
+  if [[ "$SOURCE_CODE_MIRROR" == "china" ]]; then
     git clone -b ${OVN_TAG} https://gitee.com/jingjingxyk/ovn.git --depth=1 --progress
   else
     git clone -b ${OVN_TAG} https://github.com/ovn-org/ovn.git --depth=1 --progress
