@@ -10,8 +10,8 @@ __DIR__=$(
 )
 cd ${__DIR__}
 
-OVS_TAG='v3.4.2'
-OVN_TAG='v24.09.2'
+OVS_TAG='v3.7.1'
+OVN_TAG='v26.03.1'
 # OVN_TAG='v25.03.0'
 
 CPU_NUMS=$(nproc)
