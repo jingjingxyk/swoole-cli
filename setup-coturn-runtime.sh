@@ -48,9 +48,9 @@ case $ARCH in
   ;;
 esac
 
-APP_VERSION='4.6.3'
+APP_VERSION='4.10.0'
 APP_NAME='coturn'
-VERSION='v2.3.0'
+VERSION='v2.4.0'
 
 cd ${__PROJECT__}
 mkdir -p runtime/

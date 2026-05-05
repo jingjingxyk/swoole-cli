@@ -50,9 +50,9 @@ case $ARCH in
   ;;
 esac
 
-APP_VERSION='4.6.3'
+APP_VERSION='4.10.10'
 APP_NAME='coturn'
-VERSION='v2.3.0'
+VERSION='v2.4.0'
 X_APP_VERSIONS=""
 
 while [ $# -gt 0 ]; do
