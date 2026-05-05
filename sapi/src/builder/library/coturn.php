@@ -124,7 +124,7 @@ EOF
             export CPPFLAGS="$(pkg-config  --cflags-only-I --static  \$PACKAGES)  "
             export LDFLAGS="$(pkg-config   --libs-only-L   --static  \$PACKAGES)  {$ldflags} " # -Wl,--whole-archive -l:pgcommon.a -l:pgport.a -l:pq.a -Wl,--no-whole-archive
             export LIBS="$(pkg-config      --libs-only-l   --static  \$PACKAGES)  {$libcpp} "
-            export CFLAGS="  -g  -std=gnu11   {$cflags}  "
+            export CFLAGS="  -g  -std=gnu11  -D_GNU_SOURCE   {$cflags}  "
 
             export DBCFLAGS="$(pkg-config  --cflags --static libpq sqlite3 hiredis libbson-static-1.0 libmongoc-static-1.0  )"
             export DBLIBS="$(pkg-config     --libs  --static libpq sqlite3 hiredis libbson-static-1.0 libmongoc-static-1.0  ) {$libcpp}"
