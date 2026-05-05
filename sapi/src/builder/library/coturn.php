@@ -43,7 +43,7 @@ return function (Preprocessor $p) {
     }
 
     $tag = 'master';
-    $tag = '4.6.3';
+    $tag = '4.10.0';
     $p->addLibrary(
         (new Library('coturn'))
             ->withHomePage('https://github.com/coturn/coturn/')

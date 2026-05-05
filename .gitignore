@@ -320,6 +320,7 @@ tmp-php.ini
 /ext/ds
 /ext/xlswriter
 /ext/uuid
+/ext/phpy
 /.phpunit.result.cache
 /samples/sfx/*.phar
 .php-cs-fixer.cache
@@ -369,3 +370,7 @@ php-fpm-*
 !/runtime/.gitkeep
 /APP_VERSION
 /APP_NAME
+*.deb
+*.rpm
+nfpm-pkg.yaml
+!/var/.gitkeep

@@ -34,6 +34,7 @@ return function (Preprocessor $p) {
             ->withUrl('https://github.com/openssl/openssl/releases/download/openssl-3.6.0/openssl-3.6.0.tar.gz')
             ->withFileHash('md5', '77ab78417082f22a2ce809898bd44da0')
             ->withPrefix($openssl_prefix)
+            ->withBuildCached(false)
             ->withConfigure(
                 <<<EOF
                 # Fix openssl error, "-ldl" should not be added when compiling statically
