@@ -125,13 +125,42 @@ test -d lib && rm -rf lib
 cd ${__PROJECT__}/sapi/scripts/
 test -f build-swoole-cli-alpine-container.sh && rm -rf build-swoole-cli-alpine-container.sh
 test -f download-php-src-archive.php && rm -rf download-php-src-archive.php
+test -f build-swoole-cli-with-linux-gcc.sh && rm -rf build-swoole-cli-with-linux-gcc.sh
+test -f copy-depend-libs.php && rm -rf copy-depend-libs.php
+test -f cygwin-install-depend.sh && rm -rf cygwin-install-depend.sh
+test -f download-php-src-archive.php && rm -rf download-php-src-archive.php
+test -f download-swoole-src-archive.sh && rm -rf download-swoole-src-archive.sh
+test -f generate-artifact-hash.sh && rm -rf generate-artifact-hash.sh
+test -f install-deps-on-ubuntu.sh && rm -rf install-deps-on-ubuntu.sh
+test -f msys2-cygwin-install-depend.sh && rm -rf msys2-cygwin-install-depend.sh
+test -f pack-sfx.php && rm -rf pack-sfx.php
 test -f tencent-cloud-object-storage.sh && rm -rf tencent-cloud-object-storage.sh
 test -f tencent-cloud-object-storage.yaml && rm -rf tencent-cloud-object-storage.yaml
-test -f pack-sfx.php && rm -rf pack-sfx.php
-test -f generate-artifact-hash.sh && rm -rf generate-artifact-hash.sh
-test -f msys2-cygwin-install-depend.sh && rm -rf msys2-cygwin-install-depend.sh
 test -f msys2/prepare-no-use.sh && rm -rf msys2/prepare-no-use.sh
-test -f cygwin-install-depend.sh && rm -rf cygwin-install-depend.sh
+
+cd ${__PROJECT__}/sapi/scripts/msys2/
+test -f install-deps-lib.sh && rm -rf install-deps-lib.sh
+test -f install-libavif.sh && rm -rf install-libavif.sh
+test -f install-liboniguruma.sh && rm -rf install-liboniguruma.sh
+test -f install-libwebp.sh && rm -rf install-libwebp.sh
+
+test -f install-freetype.sh && rm -rf install-freetype.sh
+test -f install-libgav1.sh && rm -rf install-libgav1.sh
+test -f install-libpng.sh && rm -rf install-libpng.sh
+test -f install-libyuv.sh && rm -rf install-libyuv.sh
+
+test -f install-imagemagick.sh && rm -rf install-imagemagick.sh
+test -f install-libgif.sh && rm -rf install-libgif.sh
+test -f install-libpq.sh && rm -rf install-libpq.sh
+test -f install-libzip.sh && rm -rf install-libzip.sh
+
+test -f install-libaom.sh && rm -rf install-libaom.sh
+test -f install-libjpeg.sh && rm -rf install-libjpeg.sh
+test -f install-libsodium.sh && rm -rf install-libsodium.sh
+
+cd ${__PROJECT__}/sapi/scripts/cygwin/
+test -f test-single-extension.sh && rm -rf test-single-extension.sh
+test -f cygwin-pack.php && rm -rf cygwin-pack.php
 
 cd ${__PROJECT__}/sapi/src/
 test -d library_builder && rm -rf library_builder
