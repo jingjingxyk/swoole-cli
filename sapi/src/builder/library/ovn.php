@@ -7,6 +7,7 @@ return function (Preprocessor $p) {
     $workdir = $p->getBuildDir();
     $ovs_prefix = OVS_PREFIX;
     $ovn_prefix = OVN_PREFIX;
+    $ovn_tag = "v26.03.1";
     $lib = new Library('ovn');
     $lib->withHomePage('https://github.com/ovn-org/ovn.git')
         ->withLicense('https://github.com/ovn-org/ovn/blob/main/LICENSE', Library::LICENSE_APACHE2)
@@ -18,7 +19,7 @@ return function (Preprocessor $p) {
         ->withDownloadScript(
             'ovn',
             <<<EOF
-            git clone -b main --depth=1 --progress https://github.com/ovn-org/ovn.git
+            git clone -b {$ovn_tag} --depth=1 --progress https://github.com/ovn-org/ovn.git
 EOF
         )
         ->withPrefix($ovn_prefix)
