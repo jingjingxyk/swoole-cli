@@ -28,7 +28,6 @@ EOF
 
             ./configure --help
 
-            CFLAGS="-O2 -D_GNU_SOURCE" \
             ./configure \
             --prefix={$libsctp_prefix} \
             --enable-shared=no \
