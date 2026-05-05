@@ -122,7 +122,10 @@ debian_install_deps() {
   # timedatectl set-local-rtc 0  # 将硬件时钟设为UTC
 
   # apt install ntp ntpsec -y
-  ntpq -pn
+  {
+      ntpq -pn
+  } || { echo $? ; }
+
 
   # debian.map.fastlydns.net
 
