@@ -48,9 +48,9 @@ case $ARCH in
   ;;
 esac
 
-APP_VERSION='v5.1.3'
+APP_VERSION='v6.2.0'
 APP_NAME='swoole-cli'
-VERSION='v5.1.3.0'
+VERSION='v6.2.0.0'
 PIE_VERSION="1.3.5"
 # 查看pie最新版本 https://github.com/php/pie/releases/latest
 
