@@ -3,7 +3,7 @@ name: build-macos-aarch64
 on: [ push, pull_request ]
 
 env:
-  BUILD_PHP_VERSION: 8.4.19
+  BUILD_PHP_VERSION: 8.4.21
 
 jobs:
   macos-aarch64:
@@ -15,14 +15,6 @@ jobs:
     # macos-12 CPU 架构 x86_64
     # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#choosing-github-hosted-runners
     # https://github.blog/changelog/2026-02-26-macos-26-is-now-generally-available-for-github-hosted-runners/
-    strategy:
-      matrix:
-        php-version:
-          - "8.2.30"
-          - "8.1.34"
-          - "8.3.30"
-          - "8.4.19"
-          - "8.5.4"
     steps:
       - uses: actions/checkout@v5
       - name: Show Environment Info
@@ -138,7 +130,7 @@ jobs:
           composer install  --no-interaction --no-autoloader --no-scripts --profile
           composer dump-autoload --optimize --profile
 
-          php prepare.php --without-docker=1 --with-libavif +apcu +ds +xlswriter +pgsql +uuid --with-php-version=${{ env.BUILD_PHP_VERSION }}
+          php prepare.php --without-docker=1 --with-libavif +apcu +ds +pgsql +uuid --with-php-version=${{ env.BUILD_PHP_VERSION }}
 
       - name: Build
         run: |

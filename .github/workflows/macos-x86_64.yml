@@ -5,7 +5,7 @@ on:
   pull_request:
 
 env:
-  BUILD_PHP_VERSION: 8.4.19
+  BUILD_PHP_VERSION: 8.4.21
 
 jobs:
   macos-x86_64:
@@ -16,15 +16,6 @@ jobs:
     # macos-13 CPU 架构 x86_64
     # macos-12 CPU 架构 x86_64
     # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#choosing-github-hosted-runners
-
-    strategy:
-      matrix:
-        php-version:
-          - "8.2.30"
-          - "8.1.34"
-          - "8.3.30"
-          - "8.4.19"
-          - "8.5.4"
     steps:
       - uses: actions/checkout@v5
       - name: Show Environment Info
