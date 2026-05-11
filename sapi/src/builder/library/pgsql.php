@@ -23,6 +23,61 @@ return function (Preprocessor $p) {
             ->withManual('https://www.postgresql.org/docs/current/install-procedure.html#CONFIGURE-OPTIONS#:~:text=Client-only%20installation')
             //->withFileHash('md5', '8a58db4009e1a50106c5e1a8c4b03bed')
             ->withPrefix($pgsql_prefix)
+            ->withInstallCached(false)
+            ->withBuildCached(false)
+            ->withBuildScript(
+                <<<EOF
+            {$custom_env_start}
+            test -d build && rm -rf build
+            mkdir -p build
+            cd build
+
+            ../configure --help
+
+            sed -i.backup "s/invokes exit\'; exit 1;/invokes exit\';/"  ../src/interfaces/libpq/Makefile
+
+            # sed -i.backup "278 s/^/# /"  ../src/Makefile.shlib
+            # sed -i.backup "402 s/^/# /"  ../src/Makefile.shlib
+
+            PACKAGES="libssl libcrypto openssl zlib icu-uc icu-io icu-i18n readline libxml-2.0  libxslt libzstd liblz4 libcurl"
+            CPPFLAGS="$(pkg-config  --cflags-only-I --static \$PACKAGES )" \
+            LDFLAGS="$(pkg-config   --libs-only-L   --static \$PACKAGES ) {$ldflags} " \
+            LIBS="$(pkg-config      --libs-only-l   --static \$PACKAGES ) {$libs}  " \
+            ../configure  \
+            --prefix={$pgsql_prefix} \
+            --enable-coverage=no \
+            --with-openssl \
+            --with-ssl=openssl  \
+            --with-readline \
+            --with-icu \
+            --with-libxml  \
+            --with-libxslt \
+            --with-lz4 \
+            --with-zstd \
+            --without-ldap \
+            --without-perl \
+            --without-python \
+            --without-pam \
+            --without-ldap \
+            --without-bonjour \
+            --without-tcl
+
+            make -C src/bin/pg_config install
+
+            make -C src/include install
+
+            make -C  src/common install
+
+            make -C  src/port install
+
+            make -C  src/interfaces/libpq install
+
+            make -C  src/interfaces/libpq-oauth install
+
+            {$custom_env_end}
+EOF
+            )
+            /*
             ->withBuildScript(
                 <<<EOF
             {$custom_env_start}
@@ -73,56 +128,7 @@ return function (Preprocessor $p) {
             {$custom_env_end}
 EOF
             )
-            ->withBuildScript(
-                <<<EOF
-            {$custom_env_start}
-            test -d build && rm -rf build
-            mkdir -p build
-            cd build
-
-            ../configure --help
-
-            sed -i.backup "s/invokes exit\'; exit 1;/invokes exit\';/"  ../src/interfaces/libpq/Makefile
-
-            sed -i.backup "278 s/^/# /"  ../src/Makefile.shlib
-            sed -i.backup "402 s/^/# /"  ../src/Makefile.shlib
-
-            PACKAGES="libssl libcrypto openssl zlib icu-uc icu-io icu-i18n readline libxml-2.0  libxslt libzstd liblz4"
-            CPPFLAGS="$(pkg-config  --cflags-only-I --static \$PACKAGES )" \
-            LDFLAGS="$(pkg-config   --libs-only-L   --static \$PACKAGES ) {$ldflags} " \
-            LIBS="$(pkg-config      --libs-only-l   --static \$PACKAGES ) {$libs}  " \
-            ../configure  \
-            --prefix={$pgsql_prefix} \
-            --enable-coverage=no \
-            --with-openssl \
-            --with-ssl=openssl  \
-            --with-readline \
-            --with-icu \
-            --with-libxml  \
-            --with-libxslt \
-            --with-lz4 \
-            --with-zstd \
-            --without-ldap \
-            --without-perl \
-            --without-python \
-            --without-pam \
-            --without-ldap \
-            --without-bonjour \
-            --without-tcl
-
-            make -C src/bin/pg_config install
-
-            make -C src/include install
-
-            make -C  src/common install
-
-            make -C  src/port install
-
-            make -C  src/interfaces/libpq install
-
-            {$custom_env_end}
-EOF
-            )
+            */
             ->withScriptAfterInstall(
                 <<<EOF
             rm -rf {$pgsql_prefix}/lib/*.so.*
@@ -142,7 +148,8 @@ EOF
                 'readline',
                 'libxslt',
                 'libzstd',
-                'liblz4'
+                'liblz4',
+                'curl'
             )
     );
     $p->withExportVariable('LIBPQ_CFLAGS', '$(pkg-config  --cflags --static libpq)');
