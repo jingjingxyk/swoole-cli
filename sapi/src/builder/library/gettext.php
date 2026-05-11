@@ -61,6 +61,8 @@ return function (Preprocessor $p) {
             --without-cvs \
             --without-git \
             --without-xz \
+            --disable-examples \
+            --disable-tests
             {$options} \
 
 EOF
