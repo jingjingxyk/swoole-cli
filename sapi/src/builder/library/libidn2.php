@@ -24,10 +24,13 @@ return function (Preprocessor $p) {
             ->withUrl('https://ftpmirror.gnu.org/gnu/libidn/libidn2-2.3.8.tar.gz')
             ->withFileHash('md5', 'a8e113e040d57a523684e141970eea7a')
             ->withPrefix($libidn2_prefix)
+            ->withBuildCached(false)
             ->withConfigure(
                 <<<EOF
             ./configure --help
-            ./configure --prefix={$libidn2_prefix} \
+
+            ./configure \
+            --prefix={$libidn2_prefix} \
             --enable-static=yes \
             --enable-shared=no \
             --disable-doc \
