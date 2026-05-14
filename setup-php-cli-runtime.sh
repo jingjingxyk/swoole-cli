@@ -48,9 +48,9 @@ case $ARCH in
   ;;
 esac
 
-APP_VERSION='v8.2.29'
+APP_VERSION='v8.4.21'
 APP_NAME='php-cli'
-VERSION='v1.12.0'
+VERSION='v1.16.0'
 
 cd ${__PROJECT__}
 mkdir -p runtime/
@@ -121,17 +121,16 @@ CACERT_DOWNLOAD_URL="https://curl.se/ca/cacert.pem"
 PIE_DOWNLOAD_URL="https://github.com/php/pie/releases/download/1.2.1/pie.phar"
 BOX_DOWNLOAD_URL="https://github.com/box-project/box/releases/latest/download/box.phar"
 
-
 if [ $OS = 'windows' ]; then
   APP_DOWNLOAD_URL="https://github.com/swoole/build-static-php/releases/download/${VERSION}/${APP_NAME}-${APP_VERSION}-cygwin-${ARCH}.zip"
 fi
 
 case "$MIRROR" in
 china)
-  APP_DOWNLOAD_URL="https://php-cli.jingjingxyk.com/${APP_NAME}-${APP_VERSION}-${OS}-${ARCH}.tar.xz"
+  APP_DOWNLOAD_URL="https://php-cli.jingjingxyk.com/${APP_NAME}/${APP_NAME}-${APP_VERSION}-${OS}-${ARCH}.tar.xz"
   COMPOSER_DOWNLOAD_URL="https://mirrors.tencent.com/composer/composer.phar"
   if [ $OS = 'windows' ]; then
-    APP_DOWNLOAD_URL="https://php-cli.jingjingxyk.com/${APP_NAME}-${APP_VERSION}-cygwin-${ARCH}.zip"
+    APP_DOWNLOAD_URL="https://php-cli.jingjingxyk.com/${APP_NAME}/${APP_NAME}-${APP_VERSION}-cygwin-${ARCH}.zip"
   fi
   ;;
 

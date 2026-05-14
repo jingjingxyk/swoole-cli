@@ -23,6 +23,7 @@ return function (Preprocessor $p) {
             ->withManual('https://www.postgresql.org/docs/current/install-procedure.html#CONFIGURE-OPTIONS#:~:text=Client-only%20installation')
             ->withFileHash('md5', '8a58db4009e1a50106c5e1a8c4b03bed')
             ->withPrefix($pgsql_prefix)
+            ->withBuildCached(false)
             ->withBuildScript(
                 <<<EOF
             {$custom_env_start}
@@ -34,25 +35,22 @@ return function (Preprocessor $p) {
 
             sed -i.backup "s/invokes exit\'; exit 1;/invokes exit\';/"  ../src/interfaces/libpq/Makefile
 
-            sed -i.backup "278 s/^/# /"  ../src/Makefile.shlib
-            sed -i.backup "402 s/^/# /"  ../src/Makefile.shlib
-
-            PACKAGES="libssl libcrypto openssl zlib icu-uc icu-io icu-i18n readline libxml-2.0  libxslt libzstd liblz4"
+            PACKAGES="openssl zlib icu-uc icu-io icu-i18n readline libxml-2.0  libxslt libzstd liblz4"
             CPPFLAGS="$(pkg-config  --cflags-only-I --static \$PACKAGES )" \
             LDFLAGS="$(pkg-config   --libs-only-L   --static \$PACKAGES ) {$ldflags} " \
             LIBS="$(pkg-config      --libs-only-l   --static \$PACKAGES ) {$libs}  " \
             ../configure  \
             --prefix={$pgsql_prefix} \
             --enable-coverage=no \
-            --with-openssl \
+            --disable-thread-safety \
             --with-ssl=openssl  \
             --with-readline \
             --with-icu \
+            --without-ldap \
             --with-libxml  \
             --with-libxslt \
             --with-lz4 \
             --with-zstd \
-            --without-ldap \
             --without-perl \
             --without-python \
             --without-pam \
@@ -78,8 +76,6 @@ EOF
             rm -rf {$pgsql_prefix}/lib/*.so.*
             rm -rf {$pgsql_prefix}/lib/*.so
             rm -rf {$pgsql_prefix}/lib/*.dylib
-            rm -rf {$pgsql_prefix}/lib/libpgcommon_shlib.a
-            rm -rf {$pgsql_prefix}/lib/libpgport_shlib.a
 EOF
             )
             ->withPkgName('libpq')
@@ -97,6 +93,8 @@ EOF
     );
     $p->withExportVariable('LIBPQ_CFLAGS', '$(pkg-config  --cflags --static libpq)');
     $p->withExportVariable('LIBPQ_LIBS', '$(pkg-config    --libs   --static libpq)');
-    $p->withExportVariable('PGSQL_CFLAGS', '$(pkg-config  --cflags --static  libpq)');
-    $p->withExportVariable('PGSQL_LIBS', '$(pkg-config    --libs   --static  libpq)');
 };
+
+# postgresql 17 18 需要
+# sed -i.backup '/install-lib: install-lib-shared/s/^/# /'        ../src/Makefile.shlib
+# sed -i.backup '/\$(COMPILER) -dynamiclib -install_name/s/^/#/' ../src/Makefile.shlib

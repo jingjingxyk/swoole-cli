@@ -153,6 +153,7 @@ cd ${__PROJECT__}/var/runtime
 cp -f ${__PROJECT__}/var/runtime/composer.phar ${APP_RUNTIME_DIR}/composer
 cp -f ${__PROJECT__}/var/runtime/cacert.pem ${APP_RUNTIME_DIR}/cacert.pem
 cp -f ${__PROJECT__}/var/runtime/pie.phar ${APP_RUNTIME_DIR}/pie
+cp -f ${__PROJECT__}/var/runtime/box.phar ${APP_RUNTIME_DIR}/box
 
 cat >${APP_RUNTIME_DIR}/php.ini <<EOF
 curl.cainfo="${APP_RUNTIME_DIR}/cacert.pem"
