@@ -14,4 +14,5 @@ return function (Preprocessor $p) {
             ->withOptions(' --with-xlswriter --enable-reader --with-openssl=' . OPENSSL_PREFIX)
             ->withDependentLibraries('openssl')
     );
+    $p->withVariable('CFLAGS', '$CFLAGS -std=gnu17');
 };
