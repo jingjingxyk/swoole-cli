@@ -211,5 +211,5 @@ echo " alias php='php -d curl.cainfo=${APP_RUNTIME_DIR}/cacert.pem -d openssl.ca
 echo " OR "
 echo " alias php='php -c${APP_RUNTIME_DIR}/php.ini' "
 echo " "
-test $OS="macos" && echo "sudo xattr -d com.apple.quarantine ${APP_RUNTIME_DIR}/php"
+[[ "$OS" == "macos" ]] && { echo "sudo xattr -d com.apple.quarantine ${APP_RUNTIME_DIR}/php"; }
 echo " "
