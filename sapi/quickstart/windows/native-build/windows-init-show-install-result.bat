@@ -40,7 +40,7 @@ curl -V
 :: php -c %__PROJECT__%\runtime\php.ini -m
 :: php -c %__PROJECT__%\runtime\php.ini --ri curl
 :: php -c %__PROJECT__%\runtime\php.ini composer.phar list
-
+php -version
 php -m
 php --ri curl
 php  composer.phar list
