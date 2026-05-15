@@ -36,20 +36,20 @@ rem http://www.libarchive.org/
 if not exist "VisualStudioSetup.exe" curl.exe -fSLo VisualStudioSetup.exe "https://c2rsetup.officeapps.live.com/c2r/downloadVS.aspx?sku=community&channel=Release&version=VS2022"
 
 
-if not exist "jq-windows-amd64.exe" curl.exe -fSLo jq-windows-amd64.exe https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-windows-amd64.exe
+:: if not exist "jq-windows-amd64.exe" curl.exe -fSLo jq-windows-amd64.exe https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-windows-amd64.exe
 
-if not exist "TEMP_PHP_RUNTIME_FILE" curl.exe https://windows.php.net/downloads/releases/releases.json | jq-windows-amd64.exe ".[\"8.4\"].[\"nts-vs17-x64\"].[\"zip\"].[\"path\"]" -r > TEMP_PHP_RUNTIME_FILE
+:: if not exist "TEMP_PHP_RUNTIME_FILE" curl.exe https://windows.php.net/downloads/releases/releases.json | jq-windows-amd64.exe ".[\"8.4\"].[\"nts-vs17-x64\"].[\"zip\"].[\"path\"]" -r > TEMP_PHP_RUNTIME_FILE
 
-set /p PHP_RUNIME_FILE=<TEMP_PHP_RUNTIME_FILE
-echo %PHP_RUNIME_FILE%
+:: set /p PHP_RUNIME_FILE=<TEMP_PHP_RUNTIME_FILE
+:: echo %PHP_RUNIME_FILE%
 
-if not exist "php-nts-Win32-x64.zip" curl.exe -fSLo php-nts-Win32-x64.zip "https://windows.php.net/downloads/releases/%PHP_RUNIME_FILE%"
+:: if not exist "php-nts-Win32-x64.zip" curl.exe -fSLo php-nts-Win32-x64.zip "https://windows.php.net/downloads/releases/%PHP_RUNIME_FILE%"
 if not exist "composer.phar" curl.exe -fSLo composer.phar "https://getcomposer.org/download/latest-stable/composer.phar"
-if not exist "pie.phar" curl.exe -fSLo pie.phar "https://github.com/php/pie/releases/download/1.2.1/pie.phar"
+if not exist "pie.phar" curl.exe -fSLo pie.phar "https://github.com/php/pie/releases/latest/download/pie.phar"
 if not exist "cacert.pem" curl.exe -fSLo cacert.pem "https://curl.se/ca/cacert.pem"
 
 if not exist "php-sdk-binary-tools" git clone -b master --depth=1 https://github.com/php/php-sdk-binary-tools.git
-if not exist "php-src" git clone -b php-8.4.18 --depth=1 https://github.com/php/php-src.git php-src
+if not exist "php-src" git clone -b php-8.4.21 --depth=1 https://github.com/php/php-src.git php-src
 
 
 :: with mirror

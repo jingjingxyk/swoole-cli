@@ -36,10 +36,14 @@ nasm -v
 git version
 curl -V
 :: dir %__PROJECT__%\runtime\php\ext\
-php -c %__PROJECT__%\runtime\php.ini -v
-php -c %__PROJECT__%\runtime\php.ini -m
-php -c %__PROJECT__%\runtime\php.ini --ri curl
-php -c %__PROJECT__%\runtime\php.ini composer.phar list
+:: php -c %__PROJECT__%\runtime\php.ini -v
+:: php -c %__PROJECT__%\runtime\php.ini -m
+:: php -c %__PROJECT__%\runtime\php.ini --ri curl
+:: php -c %__PROJECT__%\runtime\php.ini composer.phar list
+
+php -m
+php --ri curl
+php  composer.phar list
 
 :: vswhere find  Visual Studio component
 :: https://github.com/microsoft/vswhere/wiki/Examples
