@@ -11,7 +11,7 @@ jobs:
   windows-native:
     if: 1
     # runs-on: windows-2022
-    runs-on: windows-2025
+    runs-on: windows-2022
     # runs-on: windows-2025-vs2026
     strategy:
       matrix:
@@ -43,6 +43,11 @@ jobs:
           systeminfo
           echo "BUILD_PHP_VERSION=${{ matrix.php-version }}" >> $Env:GITHUB_ENV
 
+      - name: Display VS Version
+        shell: cmd
+        run: |
+          call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+          cl.exe
       - name: download deps soft
         shell: cmd
         run: |
@@ -59,14 +64,14 @@ jobs:
           sapi\quickstart\windows\native-build\windows-init-show-install-result.bat
 
       - name: ZeroTier
-        if: 0
+        if: 1
         uses: zerotier/github-action@v1.0.1
         with:
           network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
           auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
 
       - name: windows config ssh server
-        if: 0
+        if: 1
         shell: powershell
         run: |
           Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass;
