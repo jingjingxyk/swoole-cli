@@ -34,11 +34,15 @@ echo "%PATH%"
 :: vswhere find  Visual Studio component
 :: https://github.com/microsoft/vswhere/wiki/Examples
 
+
 vswhere -?
 vswhere -all
 
+where perl
 perl -v
 nasm -v
+where bison.exe
+where  re2c.exe
 git version
 curl -V
 :: dir %__PROJECT__%\runtime\php\ext\

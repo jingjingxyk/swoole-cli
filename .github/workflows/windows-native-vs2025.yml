@@ -64,33 +64,20 @@ jobs:
           sapi\quickstart\windows\native-build\windows-init-show-install-result.bat
 
       - name: ZeroTier
-        if: 0
+        if: 1
         uses: zerotier/github-action@v1.0.1
         with:
           network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
           auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
 
       - name: windows config ssh server
-        if: 0
+        if: 1
         shell: powershell
         run: |
           Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass;
           # irm https://gitee.com/jingjingxyk/swoole-cli/raw/new_dev/sapi/quickstart/windows/openssh/enable-openssh.ps1 | iex
           irm https://github.com/jingjingxyk/swoole-cli/blob/new_dev/sapi/quickstart/windows/openssh/enable-openssh.ps1?raw=true | iex
           Start-Sleep 21600
-
-      - name: show deps soft
-        if: 1
-        run: |
-          $CURRENT_DIR = Get-Location
-          $env:Path +=  "${CURRENT_DIR}\var\windows-build-deps\php-sdk-binary-tools\bin;${CURRENT_DIR}\var\windows-build-deps\php-sdk-binary-tools\msys2\usr\bin;${CURRENT_DIR}\bin\runtime\nasm\;"
-
-          where perl
-          php -v
-          perl -v
-          nasm -v
-          where bison.exe
-          where  re2c.exe
 
       - name: show php SDK
         run: |
