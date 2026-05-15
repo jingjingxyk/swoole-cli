@@ -57,7 +57,7 @@ configure.bat ^
 --enable-sockets      --enable-ctype     --enable-pdo    --enable-phar  ^
 --enable-filter ^
 --enable-xmlreader   --enable-xmlwriter ^
---enable-tokenize
+--enable-tokenizer
 
 :: --enable-cli-win32 ^
 :: --disable-zts ^
