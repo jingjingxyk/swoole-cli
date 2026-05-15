@@ -31,6 +31,12 @@ echo "%PATH%"
 :: git config --global core.eol lf
 :: git config --global core.ignorecase false
 
+:: vswhere find  Visual Studio component
+:: https://github.com/microsoft/vswhere/wiki/Examples
+
+vswhere -?
+vswhere -all
+
 perl -v
 nasm -v
 git version
@@ -44,12 +50,6 @@ php -version
 php -m
 php --ri curl
 php  composer.phar list
-
-:: vswhere find  Visual Studio component
-:: https://github.com/microsoft/vswhere/wiki/Examples
-
-vswhere -?
-vswhere -all
 
 set
 
