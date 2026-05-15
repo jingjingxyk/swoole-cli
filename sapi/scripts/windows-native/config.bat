@@ -65,7 +65,6 @@ configure.bat ^
 :: --enable-bcmath ^
 :: --enable-zlib  ^
 :: --with-openssl=static ^
-:: --with-toolset=vs ^
 :: --with-extra-includes="%INCLUDE%" ^
 :: --with-extra-libs="%LIB%"
 

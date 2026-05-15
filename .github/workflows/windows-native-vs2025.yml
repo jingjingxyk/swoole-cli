@@ -109,7 +109,7 @@ jobs:
       - name: production artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: php-cli-v${{ env.BUILD_PHP_VERSION }}-vs17-x64
+          name: php-cli-v${{ env.BUILD_PHP_VERSION }}-vs17-x64-makefile
           retention-days: 90
           path: "var/native-build/php-src/Makefile"
 
