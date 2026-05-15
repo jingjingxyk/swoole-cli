@@ -64,18 +64,17 @@ jobs:
           sapi\quickstart\windows\native-build\windows-init-show-install-result.bat
 
       - name: ZeroTier
-        if: 1
+        if: 0
         uses: zerotier/github-action@v1.0.1
         with:
           network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
           auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
 
       - name: windows config ssh server
-        if: 1
+        if: 0
         shell: powershell
         run: |
           Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass;
-          # irm https://gitee.com/jingjingxyk/swoole-cli/raw/new_dev/sapi/quickstart/windows/openssh/enable-openssh.ps1 | iex
           irm https://github.com/jingjingxyk/swoole-cli/blob/new_dev/sapi/quickstart/windows/openssh/enable-openssh.ps1?raw=true | iex
           Start-Sleep 21600
 
