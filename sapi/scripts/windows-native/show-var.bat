@@ -9,7 +9,7 @@ cd /d ..\..\..\
 set "__PROJECT__=%cd%"
 echo %cd%
 cd %__PROJECT__%\var\native-build\php-src\
-
+nmake /E /f Makefile  x-show-var
 where sed.exe
 
 dir  %__PROJECT__%\var\native-build\php-sdk-binary-tools\msys2\usr\bin\
