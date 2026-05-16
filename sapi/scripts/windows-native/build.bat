@@ -22,7 +22,7 @@ rem nmake   mode=static debug=false
 :: nmake /E php.exe
 :: exit /b
 nmake /E /f Makefile  x-show-var
-nmake /E /f Makefile  x-release-php
+nmake /E /f Makefile  x-release-static-php
 
 
 
