@@ -87,7 +87,7 @@ jobs:
       - name: run build
         run: |
           cmd /c sapi\scripts\windows-native\entry.bat
-          var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\x-show-var.bat
+          cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\x-show-var.bat
 
       - name: Show Build Result
         if: 0

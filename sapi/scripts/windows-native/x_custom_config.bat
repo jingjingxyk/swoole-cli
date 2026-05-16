@@ -89,13 +89,13 @@ echo    ^@echo ==================           >> %X_MAKEFILE%
 :x-custom-show-var-end
 
 
-findstr /C:"x-release-php:" %X_MAKEFILE% >nul
+findstr /C:"x-release-static-php:" %X_MAKEFILE% >nul
 
 if errorlevel 1 (
-	echo "custom x-release-php config !"
+	echo "custom x-release-static-php config !"
 	goto x-release-php-start
 ) else (
-	echo "custom x-release-php config file exits !"
+	echo "custom x-release-static-php config file exits !"
 	goto x-release-php-end
 )
 
@@ -105,7 +105,7 @@ echo. >> %X_MAKEFILE%
 echo. >> %X_MAKEFILE%
 
 echo x-release-static-php^: $(DEPS_CLI) $(CLI_GLOBAL_OBJS)  generated_files  $(PHP_GLOBAL_OBJS) $(STATIC_EXT_OBJS)  $(PHPDLL_RES) $(ASM_OBJS)  $(MCFILE) $(BUILD_DIR)\php.exe.res $(BUILD_DIR)\php.exe.manifest   >> %X_MAKEFILE%
-echo 	@"$(LINK)" /nologo  $(PHP_GLOBAL_OBJS_RESP) $(STATIC_EXT_OBJS_RESP) $(STATIC_EXT_LIBS) $(ASM_OBJS) $(PHPDLL_RES) $(MCFILE) $(LIBS_CLI) $(BUILD_DIR)\php.exe.res /out:$(BUILD_DIR)\php.exe $(LDFLAGS) $(LDFLAGS_CLI) $(LIBS) >> %X_MAKEFILE%
+echo 	@"$(LINK)" /nologo  $(PHP_GLOBAL_OBJS_RESP) $(STATIC_EXT_OBJS_RESP) $(STATIC_EXT_LIBS) $(ASM_OBJS) $(PHPDLL_RES) $(LIBS_CLI) $(BUILD_DIR)\php.exe.res /out:$(BUILD_DIR)\php.exe $(LDFLAGS) $(LDFLAGS_CLI) $(LIBS) >> %X_MAKEFILE%
 
 rem echo 	@"$(LINK)" /nologo $(PHP_GLOBAL_OBJS_RESP) $(CLI_GLOBAL_OBJS_RESP)  $(STATIC_EXT_OBJS_RESP) $(STATIC_EXT_LIBS) $(ASM_OBJS) $(LIBS_CLI) $(BUILD_DIR)\php.exe.res /out:$(BUILD_DIR)\php.exe $(LDFLAGS) $(LDFLAGS_CLI) $(LIBS) >> %X_MAKEFILE%
 rem echo 	-@$(_VC_MANIFEST_EMBED_EXE) >> %X_MAKEFILE%
