@@ -46,7 +46,13 @@ set "LDFLAGS=/VERBOSE:LIB	/DEFAULTLIB:libvcruntime.lib"
 rem set "LDFLAGS=/WHOLEARCHIVE /FORCE:MULTIPLE"
 
 rem https://github.com/php/php-src/blob/PHP-8.5.8/win32/winutil.c#L487
-sed.exe -i "s/#if PHP_LINKER_MAJOR == 14/#if 0 && (PHP_LINKER_MAJOR == 14)/" win32\winutil.c
+if not exist "win32\winutil.c.bak" (
+    echo 文件不存在，正在创建...
+    sed.exe -i".bak" "s/#if PHP_LINKER_MAJOR == 14/#if 0 && (PHP_LINKER_MAJOR == 14)/" win32\winutil.c
+)
+
+rem cat .\var\native-build\php-src\win32\winutil.c
+rem cmd /c .\sapi\scripts\windows-native\clean.bat
 
 
 configure.bat ^
