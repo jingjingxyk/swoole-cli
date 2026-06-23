@@ -55,8 +55,8 @@ rem 调试命令
 rem cat .\var\native-build\php-src\win32\winutil.c
 rem cat .\var\native-build\php-src\win32\winutil.c.bak
 rem cmd /c .\sapi\scripts\windows-native\clean.bat
-rem .\var\native-build\php-src\x64\Release\php.exe -v
 rem cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t .\sapi\scripts\windows-native\clean.bat
+rem .\var\native-build\php-src\x64\Release\php.exe -v
 
 sed.exe -i 's/ZEND_DLIMPORT/ /' Zend\zend_stream.c
 
@@ -68,8 +68,8 @@ configure.bat ^
 --with-mp=auto ^
 --disable-all  ^
 --disable-cgi  ^
---disable-zts  ^
 --enable-cli   ^
+--enable-zts ^
 --enable-sockets      --enable-ctype     --enable-pdo    --enable-phar  ^
 --enable-filter ^
 --enable-xmlreader   --enable-xmlwriter ^
@@ -83,7 +83,7 @@ configure.bat ^
 :: --with-openssl=static ^
 :: --with-extra-includes="%INCLUDE%" ^
 :: --with-extra-libs="%LIB%"
-
+:: --disable-zts
 
 :: --enable-mbstring
 :: --enable-redis ^
