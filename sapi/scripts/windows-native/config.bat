@@ -12,6 +12,13 @@ cd /d %__PROJECT__%\var\native-build\php-src\
 set "PHP_SRC=%cd%"
 echo %cd%
 
+set "INCLUDES=%__PROJECT__%\build\zlib\include"
+set "LIBS=%__PROJECT__%\build\zlib\lib"
+
+
+set "INCLUDE=%INCLUDES%"
+set "LIB=%LIBS%"
+
 if exist "configure.js" (
     nmake clean
 )
@@ -25,12 +32,11 @@ call configure.bat --help
 
 echo "===================="
 
-rem set "INCLUDE=%INCLUDE%;%__PROJECT__%\build\openssl\include\;%__PROJECT__%\build\zlib\include"
-rem set "LIB=%LIB%;%__PROJECT__%\build\openssl\lib\;%__PROJECT__%\build\zlib\lib"
+
 rem set "LIBPATH=%LIBPATH%;%__PROJECT__%\build\openssl\lib\;%__PROJECT__%\build\zlib\lib\"
 
-:: echo %INCLUDE%
-:: echo %LIB%
+echo %INCLUDE%
+echo %LIB%
 :: echo %LIBPATH%
 
 :: set "INCLUDE=%INCLUDE%;%PHP_SRC%\ext\"
@@ -44,9 +50,8 @@ set "LDFLAGS=/VERBOSE:LIB	/DEFAULTLIB:libvcruntime.lib /DEFAULTLIB:libucrt.lib "
 
 ::set "LDFLAGS=/VERBOSE:LIB 	/NODEFAULTLIB:msvcrt.lib /NODEFAULTLIB:msvcrtd.lib /NODEFAULTLIB:libcmtd.lib /DEFAULTLIB:libcmt.lib  /DEFAULTLIB:libucrt.lib /DEFAULTLIB:libcpmt.lib /DEFAULTLIB:libvcruntime.lib	/NODEFAULTLIB:libucrtd.lib  /NODEFAULTLIB:ucrt.lib /NODEFAULTLIB:ucrtd.lib	"
 
-rem https://github.com/php/php-src/blob/PHP-8.5.8/win32/winutil.c#L487
-
 rem no link vcruntime140d.dll
+rem https://github.com/php/php-src/blob/PHP-8.5.8/win32/winutil.c#L487
 if not exist "win32\winutil.c.bak" (
     echo "win32\winutil.c.bak no found ..."
     sed.exe -i".bak" "s/#if PHP_LINKER_MAJOR == 14/#if 0/" win32\winutil.c
@@ -67,6 +72,8 @@ sed.exe -i.".bak" 's/ZEND_DLIMPORT/ /' Zend\zend_stream.c
 rem _tsrm_ls_cache redefined
 sed.exe -i.".bak" 's/ZEND_TSRMLS_CACHE_DEFINE()/ /' sapi/cli/php_cli.c
 
+
+
 configure.bat ^
 --with-php-build="c:\php-cli" ^
 --with-extra-includes='' ^
@@ -80,7 +87,8 @@ configure.bat ^
 --enable-sockets      --enable-ctype     --enable-pdo    --enable-phar  ^
 --enable-filter ^
 --enable-xmlreader   --enable-xmlwriter ^
---enable-tokenizer
+--enable-tokenizer ^
+--enable-zlib
 
 :: --enable-cli-win32 ^
 :: --disable-zts ^
