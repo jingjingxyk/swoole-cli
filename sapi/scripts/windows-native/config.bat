@@ -17,10 +17,9 @@ set "LIBS=%__PROJECT__%\build\zlib\lib"
 
 
 set "INCLUDE=%INCLUDES%"
-set "LIB=%LIBS%"
 set "LIBPATH=%LIBS%"
-echo %INCLUDE%
-echo %LIB%
+set "LIB=kernel32.lib ole32.lib user32.lib advapi32.lib shell32.lib ws2_32.lib Dnsapi.lib psapi.lib bcrypt.lib "
+set "LIB=%LIB%  zlib.lib"
 
 if exist "configure.js" (
     nmake clean
@@ -46,7 +45,7 @@ set "CFLAGS=/EHsc /MP /MT /UCRT"
 
 rem https://learn.microsoft.com/zh-cn/cpp/c-runtime-library/crt-library-features?view=msvc-170
 
-set "LDFLAGS=/VERBOSE:LIB	/DEFAULTLIB:libvcruntime.lib /DEFAULTLIB:libucrt.lib zlib.lib "
+set "LDFLAGS=/VERBOSE:LIB	/DEFAULTLIB:libvcruntime.lib /DEFAULTLIB:libucrt.lib "
 
 ::set "LDFLAGS=/VERBOSE:LIB 	/NODEFAULTLIB:msvcrt.lib /NODEFAULTLIB:msvcrtd.lib /NODEFAULTLIB:libcmtd.lib /DEFAULTLIB:libcmt.lib  /DEFAULTLIB:libucrt.lib /DEFAULTLIB:libcpmt.lib /DEFAULTLIB:libvcruntime.lib	/NODEFAULTLIB:libucrtd.lib  /NODEFAULTLIB:ucrt.lib /NODEFAULTLIB:ucrtd.lib	"
 
