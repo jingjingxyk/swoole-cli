@@ -14,10 +14,10 @@ cd /d %__PROJECT__%
 mkdir  %__PROJECT__%/build/zlib/
 
 set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
-mkdir -p %__PROJECT__%\thirdparty\zlib
+mkdir %__PROJECT__%\thirdparty\zlib
 cd /d %__PROJECT__%\thirdparty\zlib
 where tar
-tar --strip-components=1 -C %__PROJECT__%\thirdparty\zlib -xf %__PROJECT__%\pool\lib\zlib-v1.3.1.tar.gz
+tar.exe --strip-components=1 -C %__PROJECT__%\thirdparty\zlib -xf %__PROJECT__%\pool\lib\zlib-v1.3.1.tar.gz
 
 dir
 
