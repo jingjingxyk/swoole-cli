@@ -8,7 +8,7 @@ cd /d ..\..\..\
 
 set "__PROJECT__=%cd%"
 cd %__PROJECT__%
-dumpbin /DEPENDENTS ".\var\windows-native\php-src\x64\Release_TS\php.exe"
+dumpbin /DEPENDENTS ".\var\native-build\php-src\x64\Release_TS\php.exe"
 
 cd /d %__PROJECT__%
 endlocal
