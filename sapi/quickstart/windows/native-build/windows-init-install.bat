@@ -68,6 +68,10 @@ rem 7z.exe x -ophp-nts-Win32-x64 php-nts-Win32-x64.zip
 rem 7z.exe x -olibarchive libarchive-3.8.1.tar.gz
 rem choco install archive
 
+
+md %__PROJECT__%\pool\
+7z.exe x -o%__PROJECT__%\pool\ all-deps.zip
+
 :: set CMAKE_BUILD_TYPE=Release
 :: vcpkg install libarchive
 :: vcpkg install libarchive:x64-linux-release

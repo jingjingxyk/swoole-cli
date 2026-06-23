@@ -51,7 +51,7 @@ if not exist "cacert.pem" curl.exe -fSLo cacert.pem "https://curl.se/ca/cacert.p
 if not exist "php-sdk-binary-tools" git clone -b master --depth=1 https://github.com/php/php-sdk-binary-tools.git
 if not exist "php-src" git clone -b php-8.4.21 --depth=1 https://github.com/php/php-src.git php-src
 
-
+if not exist "all-deps.zip" curl.exe -fSLo all-deps.zip https://github.com/swoole/swoole-cli/releases/download/v6.2.0.0/all-deps.zip
 :: with mirror
 :: curl.exe -fSLo Git-2.50.0-64-bit.exe  https://download.jingjingxyk.com/Git-2.50.0-64-bit.exe
 :: curl.exe -fSLo 7z2409-x64.exe  https://download.jingjingxyk.com/7z2409-x64.exe
