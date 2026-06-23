@@ -89,6 +89,8 @@ configure.bat ^
 --enable-tokenizer ^
 --enable-sockets ^
 --enable-bcmath ^
+--enable-shared=no ^
+--enable-static=yes ^
 --enable-zlib
 
 :: --enable-cli-win32 ^
