@@ -92,11 +92,10 @@ jobs:
       - name: Show Build Result
         if: 0
         run: |
-          cd var\windows-build-deps\php-src\
-
-          .\x64\Release_TS\php.exe -v
-          .\x64\Release_TS\php.exe -m
-          dumpbin /DEPENDENTS ".\x64\Release_TS\php.exe"
+          .\var\windows-native\php-src\x64\Release\php.exe -v
+          .\var\windows-native\php-src\x64\Release_TS\php.exe -v
+          .\var\windows-native\php-src\x64\Release_TS\php.exe -m
+          dumpbin /DEPENDENTS ".\var\windows-native\php-src\x64\Release_TS\php.exe"
 
       - name: production artifacts
         uses: actions/upload-artifact@v4

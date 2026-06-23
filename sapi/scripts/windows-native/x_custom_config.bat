@@ -17,7 +17,6 @@ set X_MAKEFILE=%__PROJECT__%\var\native-build\php-src\Makefile
 
 rem https://learn.microsoft.com/zh-cn/cpp/error-messages/tool-errors/linker-tools-warning-lnk4098?view=msvc-170&redirectedfrom=MSDN
 rem https://learn.microsoft.com/zh-cn/cpp/build/reference/md-mt-ld-use-run-time-library?view=msvc-170
-rem /VERBOSE:LIB	/NODEFAULTLIB:msvcrt.lib /NODEFAULTLIB:libcmtd.lib /NODEFAULTLIB:msvcrtd.lib
 
 rem -lucrt
 
@@ -108,9 +107,9 @@ echo. >> %X_MAKEFILE%
 
 echo x-release-static-php^: generated_files $(DEPS_CLI) $(PHP_GLOBAL_OBJS) $(CLI_GLOBAL_OBJS) $(STATIC_EXT_OBJS)  $(ASM_OBJS)  $(BUILD_DIR)\php.exe.res $(BUILD_DIR)\php.exe.manifest   >> %X_MAKEFILE%
 echo 	@"$(LINK)" /nologo  $(PHP_GLOBAL_OBJS_RESP) $(CLI_GLOBAL_OBJS_RESP) $(STATIC_EXT_OBJS_RESP) $(STATIC_EXT_LIBS) $(ASM_OBJS) $(LIBS) $(LIBS_CLI) $(BUILD_DIR)\php.exe.res /out:$(BUILD_DIR)\php.exe $(LDFLAGS) $(LDFLAGS_CLI)  >> %X_MAKEFILE%
-rem echo 	@"$(LINK)" /nologo $(PHP_GLOBAL_OBJS_RESP) $(CLI_GLOBAL_OBJS_RESP)  $(STATIC_EXT_OBJS_RESP) $(STATIC_EXT_LIBS) $(ASM_OBJS) $(LIBS_CLI) $(BUILD_DIR)\php.exe.res /out:$(BUILD_DIR)\php.exe $(LDFLAGS) $(LDFLAGS_CLI) $(LIBS) >> %X_MAKEFILE%
 rem echo 	-@$(_VC_MANIFEST_EMBED_EXE) >> %X_MAKEFILE%
-rem $(PHP_GLOBAL_OBJS_RESP)
+echo 	@if exist php.exe.manifest $(MT) -nologo -manifest php.exe.manifest -outputresource:php.exe    >> %X_MAKEFILE%
+
 
 rem /ENTRY:main
 rem /ENTRY:main php8ts.lib
@@ -125,9 +124,6 @@ rem echo 	^@echo SAPI sapi\cli build complete  >> %x_makefile%
 rem echo 	@if exist php.exe.manifest $(MT) -nologo -manifest php.exe.manifest -outputresource:php.exe    >> %x_makefile%
 
 rem  /WHOLEARCHIVE  /NODEFAULTLIB:msvcrt.lib /NODEFAULTLIB:msvcrtd.lib /FORCE:MULTIPLE
-rem libcpmt.lib  libvcruntime.lib libucrt.lib msvcrt.lib
-rem  /NODEFAULTLIB:libc.lib /NODEFAULTLIB:libcmt.lib /NODEFAULTLIB:msvcrt.lib /NODEFAULTLIB:libcd.lib /NODEFAULTLIB:libcmtd.lib /NODEFAULTLIB:msvcrtd.lib
-rem libvcruntime.lib libcmt.lib
 
 rem /MANIFEST:php.exe.manifest /MANIFESTUAC:uiAccess /SUBSYSTEM:CONSOLE  /subsystem:windows
 
