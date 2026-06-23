@@ -60,8 +60,8 @@ rem cmd /c sapi\scripts\windows-native\entry.bat
 rem cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t .\sapi\scripts\windows-native\clean.bat
 rem .\var\native-build\php-src\x64\Release\php.exe -v
 
-sed.exe -i 's/ZEND_DLIMPORT/ /' Zend\zend_stream.c
-sed -i 's/ZEND_TSRMLS_CACHE_DEFINE()/ /' sapi/cli/php_cli.c
+sed.exe -i.".bak" 's/ZEND_DLIMPORT/ /' Zend\zend_stream.c
+sed.exe -i.".bak" 's/ZEND_TSRMLS_CACHE_DEFINE()/ /' sapi/cli/php_cli.c
 
 configure.bat ^
 --with-php-build="c:\php-cli" ^
