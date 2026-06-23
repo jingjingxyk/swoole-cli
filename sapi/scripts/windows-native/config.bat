@@ -75,9 +75,8 @@ sed.exe -i.".bak" 's/ZEND_TSRMLS_CACHE_DEFINE()/ /' sapi/cli/php_cli.c
 
 
 configure.bat ^
---with-php-build="c:\php-cli" ^
---with-extra-includes='' ^
---with-extra-libs='' ^
+--with-extra-includes="%INCLUDE%" ^
+--with-extra-libs="%LIB%" ^
 --with-toolset=vs ^
 --with-mp=auto ^
 --disable-all  ^
@@ -99,7 +98,7 @@ configure.bat ^
 :: --with-extra-includes="%INCLUDE%" ^
 :: --with-extra-libs="%LIB%"
 :: --disable-zts
-
+:: --with-php-build="c:\php-cli" ^
 :: --enable-mbstring
 :: --enable-redis ^
 :: --enable-phar-native-ssl
