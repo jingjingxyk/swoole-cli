@@ -21,9 +21,10 @@ cd /d %__PROJECT__%\pool\lib\
 
 if  exist "%__PROJECT__%\thirdparty\zlib" rmdir /s /q "%__PROJECT__%\thirdparty\zlib"
 mkdir "%__PROJECT__%\thirdparty\zlib"
-7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\zlib"  %__PROJECT__%\pool\lib\zlib-v1.3.1.tar
-
 cd /d "%__PROJECT__%\thirdparty\zlib"
+7z.exe x -aoa -y  -o"."  %__PROJECT__%\pool\lib\zlib-v1.3.1.tar
+
+
 dir
 
 mkdir build
