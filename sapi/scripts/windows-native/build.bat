@@ -29,7 +29,7 @@ nmake /E /f Makefile  x-release-static-php
 :: .\x64\Release\php.exe -v
 :: .\x64\Release\php.exe -m
 :: dumpbin /DEPENDENTS ".\x64\Release\php.exe"
-:: dumpbin /DEPENDENTS ".\x64\Release_TS\php.exe"
+dumpbin /DEPENDENTS ".\x64\Release_TS\php.exe"
 
 cd %__PROJECT__%
 endlocal
