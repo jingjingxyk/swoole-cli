@@ -14,11 +14,16 @@ cd /d %__PROJECT__%
 mkdir  %__PROJECT__%/build/zlib/
 
 set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
-mkdir %__PROJECT__%\thirdparty\zlib
-cd /d %__PROJECT__%\thirdparty\zlib
-where tar
-7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\zlib"  %__PROJECT__%\pool\lib\zlib-v1.3.1.tar.gz
 
+
+cd /d %__PROJECT__%\pool\lib\
+7z.exe x -aoa -y   %__PROJECT__%\pool\lib\zlib-v1.3.1.tar.gz
+
+if  exist "%__PROJECT__%\thirdparty\zlib" rmdir /s /q "%__PROJECT__%\thirdparty\zlib"
+mkdir "%__PROJECT__%\thirdparty\zlib"
+7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\zlib"  %__PROJECT__%\pool\lib\zlib-v1.3.1.tar
+
+cd /d "%__PROJECT__%\thirdparty\zlib"
 dir
 
 mkdir build
