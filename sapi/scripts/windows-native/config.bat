@@ -72,6 +72,7 @@ sed.exe -i.".bak" 's/ZEND_DLIMPORT/ /' Zend\zend_stream.c
 rem _tsrm_ls_cache redefined
 sed.exe -i.".bak" 's/ZEND_TSRMLS_CACHE_DEFINE()/ /' sapi/cli/php_cli.c
 
+mkdir -p %__PROJECT__%\build
 
 configure.bat ^
 --with-php-build="%__PROJECT__%\build" ^
