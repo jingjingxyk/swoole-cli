@@ -7,8 +7,7 @@ cd /d %~dp0
 cd /d ..\..\..\
 
 set "__PROJECT__=%cd%"
-echo %cd%
-
+cd %__PROJECT__%
 dumpbin /DEPENDENTS ".\var\windows-native\php-src\x64\Release_TS\php.exe"
 
 cd /d %__PROJECT__%
