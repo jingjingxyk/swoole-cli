@@ -70,7 +70,7 @@ rem choco install archive
 
 
 md %__PROJECT__%\pool\
-7z.exe x -ao%__PROJECT__%\pool\ all-deps.zip
+7z.exe x -aoa -y -o"%__PROJECT__%\pool\" all-deps.zip
 
 :: set CMAKE_BUILD_TYPE=Release
 :: vcpkg install libarchive

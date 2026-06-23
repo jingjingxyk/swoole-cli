@@ -4,15 +4,21 @@ setlocal
 rem show current file location
 echo %~dp0
 cd %~dp0
-cd ..\..\..\..\..\
+cd ..\..\..\..\
 
+rem
+rem cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t .\sapi\scripts\windows-native\library\zlib.bat
+rem
 set __PROJECT__=%cd%
 cd /d %__PROJECT__%
-mkdir  build
+mkdir  %__PROJECT__%/build/zlib/
 
 set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
-
+mkdir -p %__PROJECT__%\thirdparty\zlib
 cd /d %__PROJECT__%\thirdparty\zlib
+
+tar --strip-components=1 -C %__PROJECT__%\thirdparty\zlib -xf %__PROJECT__%\pool\lib\zlib-v1.3.1.tar.gz
+
 dir
 
 mkdir build
