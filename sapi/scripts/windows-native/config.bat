@@ -34,24 +34,25 @@ rem set "LIBPATH=%LIBPATH%;%__PROJECT__%\build\openssl\lib\;%__PROJECT__%\build\
 :: echo %LIBPATH%
 
 :: set "INCLUDE=%INCLUDE%;%PHP_SRC%\ext\"
-set "CFLAGS=/EHsc /MP /MT /UCRT  -D isatty=_isatty"
+set "CFLAGS=/EHsc /MP /MT /UCRT"
 ::  /MT
 :: /showIncludes
 
 rem https://learn.microsoft.com/zh-cn/cpp/c-runtime-library/crt-library-features?view=msvc-170
 
 set "LDFLAGS=/VERBOSE:LIB	/DEFAULTLIB:libvcruntime.lib /DEFAULTLIB:libucrt.lib "
+
 ::set "LDFLAGS=/VERBOSE:LIB 	/NODEFAULTLIB:msvcrt.lib /NODEFAULTLIB:msvcrtd.lib /NODEFAULTLIB:libcmtd.lib /DEFAULTLIB:libcmt.lib  /DEFAULTLIB:libucrt.lib /DEFAULTLIB:libcpmt.lib /DEFAULTLIB:libvcruntime.lib	/NODEFAULTLIB:libucrtd.lib  /NODEFAULTLIB:ucrt.lib /NODEFAULTLIB:ucrtd.lib	"
 
-rem set "LDFLAGS=/WHOLEARCHIVE /FORCE:MULTIPLE"
-
 rem https://github.com/php/php-src/blob/PHP-8.5.8/win32/winutil.c#L487
+
+rem no link vcruntime140d.dll
 if not exist "win32\winutil.c.bak" (
-    echo "win32\winutil.c.bak 文件不存在，正在创建..."
+    echo "win32\winutil.c.bak no found ..."
     sed.exe -i".bak" "s/#if PHP_LINKER_MAJOR == 14/#if 0/" win32\winutil.c
 )
 
-rem 调试命令
+rem debug
 rem cat .\var\native-build\php-src\win32\winutil.c
 rem cat .\var\native-build\php-src\win32\winutil.c.bak
 rem cat .\var\native-build\php-src\sapi/cli/php_cli.c
@@ -59,7 +60,9 @@ rem cmd /c .\sapi\scripts\windows-native\clean.bat
 rem cmd /c sapi\scripts\windows-native\entry.bat
 rem cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t .\sapi\scripts\windows-native\clean.bat
 rem .\var\native-build\php-src\x64\Release\php.exe -v
+rem .\var\native-build\php-src\x64\Release_TS\php.exe -v
 
+set "CFLAGS=%CFLAGS% -D isatty=_isatty"
 sed.exe -i.".bak" 's/ZEND_DLIMPORT/ /' Zend\zend_stream.c
 sed.exe -i.".bak" 's/ZEND_TSRMLS_CACHE_DEFINE()/ /' sapi/cli/php_cli.c
 
