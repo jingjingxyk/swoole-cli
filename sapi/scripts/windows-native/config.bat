@@ -86,8 +86,8 @@ configure.bat ^
 --enable-sockets      --enable-ctype     --enable-pdo    --enable-phar  ^
 --enable-filter ^
 --enable-xmlreader   --enable-xmlwriter ^
---enable-tokenizer ^
---enable-zlib
+--enable-tokenizer
+:: --enable-zlib
 
 :: --enable-cli-win32 ^
 :: --disable-zts ^
