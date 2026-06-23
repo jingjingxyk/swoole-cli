@@ -18,6 +18,8 @@ set "LIBS=%__PROJECT__%\build\zlib\lib"
 
 set "INCLUDE=%INCLUDES%"
 set "LIB=%LIBS%"
+set "LIBPATH=%__PROJECT__%\build\zlib\lib"
+
 
 if exist "configure.js" (
     nmake clean
@@ -33,15 +35,13 @@ call configure.bat --help
 echo "===================="
 
 
-rem set "LIBPATH=%LIBPATH%;%__PROJECT__%\build\openssl\lib\;%__PROJECT__%\build\zlib\lib\"
-
 echo %INCLUDE%
 echo %LIB%
 :: echo %LIBPATH%
 
 :: set "INCLUDE=%INCLUDE%;%PHP_SRC%\ext\"
 set "CFLAGS=/EHsc /MP /MT /UCRT"
-::  /MT
+:: /MT
 :: /showIncludes
 
 rem https://learn.microsoft.com/zh-cn/cpp/c-runtime-library/crt-library-features?view=msvc-170
@@ -73,8 +73,8 @@ rem _tsrm_ls_cache redefined
 sed.exe -i.".bak" 's/ZEND_TSRMLS_CACHE_DEFINE()/ /' sapi/cli/php_cli.c
 
 
-
 configure.bat ^
+--with-php-build="%__PROJECT__%\build" ^
 --with-extra-includes="%INCLUDE%" ^
 --with-extra-libs="%LIB%" ^
 --with-toolset=vs ^
