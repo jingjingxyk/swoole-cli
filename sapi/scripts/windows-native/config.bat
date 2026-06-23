@@ -53,7 +53,7 @@ if not exist "win32\winutil.c.bak" (
 
 rem cat .\var\native-build\php-src\win32\winutil.c
 rem cmd /c .\sapi\scripts\windows-native\clean.bat
-
+rem .\var\native-build\php-src\x64\Release\php.exe -v
 
 configure.bat ^
 --with-php-build="c:\php-cli" ^
