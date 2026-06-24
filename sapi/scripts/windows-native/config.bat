@@ -6,7 +6,8 @@ echo %~dp0
 cd /d %~dp0
 cd /d ..\..\..\
 
-call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+rem cd d:\a\swoole-cli\swoole-cli\
+rem call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
 env
 
 
