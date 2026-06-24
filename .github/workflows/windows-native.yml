@@ -9,7 +9,7 @@ env:
 
 jobs:
   windows-native:
-    if: 0
+    if: 1
     runs-on: windows-2022
     # runs-on: windows-2025-vs2026
     strategy:
@@ -61,7 +61,10 @@ jobs:
         shell: cmd
         run: |
           sapi\quickstart\windows\native-build\windows-init-show-install-result.bat
-
+      - name: Add folder to Windows Defender exclusion list
+        shell: powershell
+        run: |
+          Add-MpPreference -ExclusionPath "${{ github.workspace }}"
       - name: ZeroTier
         if: 1
         uses: zerotier/github-action@v1.0.1
