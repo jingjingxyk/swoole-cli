@@ -26,7 +26,8 @@ set "LIBS_CLI=%LIBS_CLI% zlibstatic.lib"
 rem LIBS_CLI="%LIBS_CLI%"
 
 nmake /E /f Makefile  x-show-var
-nmake /E /n /f Makefile  x-release-static-php mode=static
+nmake /E /f Makefile  x-release-static-php
+:: nmake /E /n /f Makefile  x-release-static-php mode=static
 
 
 
