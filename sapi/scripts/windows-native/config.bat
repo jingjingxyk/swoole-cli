@@ -64,7 +64,7 @@ if not exist "win32\winutil.c.bak" (
     sed.exe -i".bak" "s/#if PHP_LINKER_MAJOR == 14/#if 0/" win32\winutil.c
 )
 
-rem debug
+
 rem cat .\var\native-build\php-src\win32\winutil.c
 rem cat .\var\native-build\php-src\win32\winutil.c.bak
 rem cat .\var\native-build\php-src\sapi/cli/php_cli.c
@@ -81,6 +81,8 @@ sed.exe -i.".bak" 's/ZEND_TSRMLS_CACHE_DEFINE()/ /' sapi/cli/php_cli.c
 
 mkdir %__PROJECT__%\build
 
+bison.exe -Wall --output=Zend/zend_language_parser.c -v -d Zend/zend_language_parser.y
+
 configure.bat ^
 --with-php-build="%__PROJECT__%\build" ^
 --with-extra-includes="%INCLUDE%" ^
@@ -96,8 +98,8 @@ configure.bat ^
 --enable-xmlreader   --enable-xmlwriter ^
 --enable-tokenizer ^
 --enable-sockets ^
---enable-bcmath
-:: --enable-zlib
+--enable-bcmath ^
+--enable-zlib
 
 :: --enable-cli-win32 ^
 :: --disable-zts ^
