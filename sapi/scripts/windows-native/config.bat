@@ -88,8 +88,8 @@ configure.bat ^
 --enable-xmlreader   --enable-xmlwriter ^
 --enable-tokenizer ^
 --enable-sockets ^
---enable-bcmath
-:: --enable-zlib
+--enable-bcmath ^
+--enable-zlib
 
 :: --enable-cli-win32 ^
 :: --disable-zts ^
