@@ -12,7 +12,6 @@ env
 
 where bison
 bison --version
-dir "%LIB%" | findstr ws2_32.lib
 
 
 set "__PROJECT__=%cd%"
@@ -25,8 +24,12 @@ set "INCLUDES=%__PROJECT__%\build\zlib\include"
 set "LIBS=%__PROJECT__%\build\zlib\lib"
 
 
-set "INCLUDE=%INCLUDES%"
-set "LIB=%LIBS%"
+
+:: set "INCLUDE=%INCLUDE%;%PHP_SRC%\ext\"
+set "INCLUDE=%INCLUDE%;%INCLUDES%"
+set "LIB=%LIB%;%LIBS%"
+dir "%LIB%" | findstr ws2_32.lib
+:: echo %LIBPATH%
 
 if exist "configure.js" (
     nmake clean
@@ -42,10 +45,6 @@ call configure.bat --help
 echo "===================="
 
 
-
-:: echo %LIBPATH%
-
-:: set "INCLUDE=%INCLUDE%;%PHP_SRC%\ext\"
 set "CFLAGS=/EHsc /MP /MT /UCRT"
 :: /MT
 :: /showIncludes
