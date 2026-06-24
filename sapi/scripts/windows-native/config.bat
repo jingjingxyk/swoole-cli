@@ -6,6 +6,10 @@ echo %~dp0
 cd /d %~dp0
 cd /d ..\..\..\
 
+call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+env
+
+
 set "__PROJECT__=%cd%"
 echo %cd%
 cd /d %__PROJECT__%\var\native-build\php-src\
@@ -52,7 +56,7 @@ set "LDFLAGS=%LDFLAGS% zlibstatic.lib"
 rem no link vcruntime140d.dll
 rem https://github.com/php/php-src/blob/PHP-8.5.8/win32/winutil.c#L487
 if not exist "win32\winutil.c.bak" (
-    echo "win32\winutil.c.bak no found ..."
+    echo "win32\winutil.c.bak no found , now creating it ..."
     sed.exe -i".bak" "s/#if PHP_LINKER_MAJOR == 14/#if 0/" win32\winutil.c
 )
 
