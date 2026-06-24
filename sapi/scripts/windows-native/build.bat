@@ -30,17 +30,6 @@ nmake /E /n /f Makefile  x-release-static-php mode=static
 
 
 
-IPHLPAPI.DLL
-    zlib.dll
-    KERNEL32.dll
-    ole32.dll
-    ADVAPI32.dll
-    SHELL32.dll
-    WS2_32.dll
-    DNSAPI.dll
-    bcrypt.dll
-
-
 .\x64\Release_TS\php.exe -v
 .\x64\Release_TS\php.exe -m
 :: dumpbin /DEPENDENTS ".\x64\Release\php.exe"
