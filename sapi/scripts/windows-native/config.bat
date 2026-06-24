@@ -12,6 +12,8 @@ env
 
 where bison
 bison --version
+dir "%LIB%" | findstr ws2_32.lib
+
 
 set "__PROJECT__=%cd%"
 echo %cd%
