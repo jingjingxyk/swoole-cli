@@ -30,7 +30,7 @@ perl -v
 
 
 set "INCLUDE=%cd%\include\;%cd%\apps\include\;%INCLUDE%"
-perl apps\progs.pl apps\openssl.c > apps\progs.h
+rem perl apps\progs.pl apps\openssl.c > apps\progs.h
 perl Configure VC-WIN64A threads no-shared  no-tests --release --prefix="%__PROJECT__%\build\openssl"  --openssldir="%__PROJECT__%\build\openssl\ssl"
 
 set CL=/MP
