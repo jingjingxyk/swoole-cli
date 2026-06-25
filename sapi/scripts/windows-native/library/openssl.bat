@@ -4,18 +4,26 @@ setlocal
 rem show current file location
 echo %~dp0
 cd %~dp0
-cd ..\..\..\..\..\
+cd ..\..\..\..\
 
 set __PROJECT__=%cd%
 cd /d %__PROJECT__%
 mkdir  build
 
 
-set "PATH=%__PROJECT__%\nasm\;C:\Strawberry\perl\bin;%PATH%"
+set "PATH=%__PROJECT__%\runtime\nasm\;C:\Strawberry\perl\bin;%PATH%"
 
 
+cd /d %__PROJECT__%\pool\lib\
+7z.exe x -aoa -y   %__PROJECT__%\pool\lib\openssl-3.6.0.tar.gz
 
-cd /d %__PROJECT__%\thirdparty\openssl
+if  exist "%__PROJECT__%\thirdparty\openssl" rmdir /s /q "%__PROJECT__%\thirdparty\openssl"
+mkdir "%__PROJECT__%\thirdparty\openssl"
+
+7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\openssl"  %__PROJECT__%\pool\lib\openssl-3.6.0.tar
+cd %__PROJECT__%\thirdparty\openssl\openssl-3.6.0\
+
+cd /d %__PROJECT__%\thirdparty\openssl\openssl-3.6.0\
 dir
 echo %cd%
 perl -v
@@ -30,7 +38,7 @@ rem openssl\Configurations\windows-makefile.tmpl
 nmake install_sw
 
 rem fix no found file " openssl/applink.c "
-copy %__PROJECT__%\thirdparty\openssl\ms\applink.c  %__PROJECT__%\build\openssl\include\openssl\applink.c
+copy %__PROJECT__%\thirdparty\openssl\openssl-3.6.0\ms\applink.c  %__PROJECT__%\build\openssl\include\openssl\applink.c
 
 
 cd /d %__PROJECT__%

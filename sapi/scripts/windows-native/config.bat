@@ -99,7 +99,9 @@ configure.bat ^
 --enable-tokenizer ^
 --enable-sockets ^
 --enable-bcmath ^
---enable-zlib
+--enable-zlib ^
+--enable-phar-native-ssl ^
+--with-openssl=static
 
 :: --enable-cli-win32 ^
 :: --disable-zts ^
