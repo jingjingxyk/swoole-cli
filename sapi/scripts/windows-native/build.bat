@@ -21,8 +21,8 @@ rem nmake   mode=static debug=false
 
 :: nmake /E php.exe
 :: exit /b
-set "LIBS_CLI=kernel32.lib ole32.lib user32.lib advapi32.lib shell32.lib ws2_32.lib Dnsapi.lib psapi.lib bcrypt.lib"
-set "LIBS_CLI=%LIBS_CLI% zlibstatic.lib"
+rem set "LIBS_CLI=kernel32.lib ole32.lib user32.lib advapi32.lib shell32.lib ws2_32.lib Dnsapi.lib psapi.lib bcrypt.lib"
+rem set "LIBS_CLI=%LIBS_CLI% zlibstatic.lib"
 rem LIBS_CLI="%LIBS_CLI%"
 
 nmake /E /f Makefile  x-show-var
