@@ -43,7 +43,7 @@ cmake .. ^
 cmake --build . --config Release --target install
 
 del "%__PROJECT__%\build\zlib\lib\zlib.lib"
-rem del "%__PROJECT__%\build\zlib\bin\zlib.dll"
+del "%__PROJECT__%\build\zlib\bin\zlib.dll"
 copy /Y "%__PROJECT__%\build\zlib\lib\zlibstatic.lib" "%__PROJECT__%\build\zlib\lib\zlib.lib"
 dir "%__PROJECT__%\build\zlib\lib\"
 cd /d %__PROJECT__%

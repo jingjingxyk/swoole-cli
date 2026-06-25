@@ -33,7 +33,7 @@ rem debug
 set "PATH=%PATH%;C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\"
 :: $env:Path += ";C:\Program Files (x86)\Windows Kits\10\Debuggers\x64"
 
-cdb.exe -pn ".\x64\Release_TS\php.exe"
+cdb.exe -pn "%__PROJECT__%\var\native-build\php-src\x64\Release_TS\php.exe"
 
 .\x64\Release_TS\php.exe -v
 .\x64\Release_TS\php.exe -m
