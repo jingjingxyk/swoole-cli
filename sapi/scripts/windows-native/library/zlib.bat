@@ -41,6 +41,7 @@ cmake .. ^
 
 cmake --build . --config Release --target install
 
+copy /Y "%__PROJECT__%\build\zlib\lib\zlibstatic.lib" "%__PROJECT__%\build\zlib\lib\zlib.lib"
 
 cd /d %__PROJECT__%
 endlocal
