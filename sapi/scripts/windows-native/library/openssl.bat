@@ -21,14 +21,13 @@ if  exist "%__PROJECT__%\thirdparty\openssl" rmdir /s /q "%__PROJECT__%\thirdpar
 mkdir "%__PROJECT__%\thirdparty\openssl"
 
 7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\openssl"  %__PROJECT__%\pool\lib\openssl-3.6.0.tar
-cd %__PROJECT__%\thirdparty\openssl\openssl-3.6.0\
 
 cd /d %__PROJECT__%\thirdparty\openssl\openssl-3.6.0\
 dir
 echo %cd%
 perl -v
 
-set "INCLUDE=%cd%\include\;%INCLUDE%"
+set "INCLUDE=%cd%\include\;%cd%\apps\include\;%INCLUDE%"
 perl Configure VC-WIN64A threads no-shared  no-tests --release --prefix="%__PROJECT__%\build\openssl"  --openssldir="%__PROJECT__%\build\openssl\ssl"
 
 set CL=/MP
