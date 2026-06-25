@@ -35,6 +35,9 @@ rem http://www.libarchive.org/
 :: curl -fSL VisualStudioSetup.exe 'https://aka.ms/vs/17/release/vs_community.exe'
 if not exist "VisualStudioSetup.exe" curl.exe -fSLo VisualStudioSetup.exe "https://c2rsetup.officeapps.live.com/c2r/downloadVS.aspx?sku=community&channel=Release&version=VS2022"
 
+rem more info:  https://learn.microsoft.com/zh-cn/sysinternals/downloads/procdump
+if not exist "Procdump.zip" curl.exe -fSLo Procdump.zip "https://download.sysinternals.com/files/Procdump.zip"
+
 
 :: if not exist "jq-windows-amd64.exe" curl.exe -fSLo jq-windows-amd64.exe https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-windows-amd64.exe
 
