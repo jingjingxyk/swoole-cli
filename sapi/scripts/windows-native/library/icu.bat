@@ -21,15 +21,22 @@ if  exist "%__PROJECT__%\thirdparty\icu" rmdir /s /q "%__PROJECT__%\thirdparty\i
 mkdir "%__PROJECT__%\thirdparty\icu"
 
 7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\icu"  %__PROJECT__%\pool\lib\icu4c-73_2-src.tar
-cd %__PROJECT__%\thirdparty\icu\
+cd %__PROJECT__%\thirdparty\icu\icu\
 
 dir
 
-mkdir build
-
-cd build
-dir
-echo %cd%
+set "CPPFLAGS="-D U_CHARSET_IS_UTF8=1  -D U_USING_ICU_NAMESPACE=1  -D U_STATIC_IMPLEMENTATION=1 /MT"
+source/runConfigureICU MSYS/MSVC --prefix=%__PROJECT__%\build\icu\ ^
+--enable-static=yes ^
+--enable-shared=no ^
+--with-data-packaging=static ^
+--enable-release=yes ^
+--enable-extras=yes ^
+--enable-icuio=yes ^
+--enable-dyload=no ^
+--enable-tools=yes ^
+--enable-tests=no ^
+--enable-samples=no
 
 
 cd /d %__PROJECT__%
