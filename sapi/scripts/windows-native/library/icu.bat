@@ -26,9 +26,11 @@ cd %__PROJECT__%\thirdparty\icu\icu\
 dir
 
 set "PATH=%__PROJECT__%\runtime\nasm\;C:\Strawberry\perl\bin;%PATH%"
-set "PATH=%PATH%;%__PROJECT__%\var\native-build\php-sdk-binary-tools\bin\;%__PROJECT__%\var\native-build\php-sdk-binary-tools\msys2\bin;
+set "PATH=%ProgramFiles%\7-Zip;%PATH%;"
+set "PATH=%__PROJECT__%\var\native-build\php-sdk-binary-tools\bin\;%__PROJECT__%\var\native-build\php-sdk-binary-tools\msys2\bin;%PATH%;"
+echo "%PATH%"
 
-set "CPPFLAGS=-D U_CHARSET_IS_UTF8=1  -D U_USING_ICU_NAMESPACE=1  -D U_STATIC_IMPLEMENTATION=1 "
+
 
 where link.exe
 
@@ -36,6 +38,9 @@ cmd /c 'cd /d "C:\Program Files\Git\usr\bin\" && rename link.exe link.exe.bak'
 
 cd %__PROJECT__%\thirdparty\icu\icu\
 
+for /f "delims=" %%i in ('cygpath -w $(pwd)') do set BUILD_DIR=%%i
+echo %BUILD_DIR%
+set "CPPFLAGS=-D U_CHARSET_IS_UTF8=1  -D U_USING_ICU_NAMESPACE=1  -D U_STATIC_IMPLEMENTATION=1 "
 bash ./source/runConfigureICU MSYS/MSVC --prefix=%__PROJECT__%\build\icu\ ^
 --enable-static=yes ^
 --enable-shared=no ^
