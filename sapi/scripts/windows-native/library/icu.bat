@@ -40,7 +40,7 @@ cd %__PROJECT__%\thirdparty\icu\icu\
 
 
 set "CPPFLAGS=-D U_CHARSET_IS_UTF8=1  -D U_USING_ICU_NAMESPACE=1  -D U_STATIC_IMPLEMENTATION=1 "
-bash ./source/runConfigureICU MSYS/MSVC --prefix=%__PROJECT__%\build\icu\ ^
+bash ./source/runConfigureICU MSYS/MSVC --prefix=D:/a/swoole-cli/swoole-cli/build/icu/ ^
 --enable-static=yes ^
 --enable-shared=no ^
 --with-data-packaging=static ^
@@ -52,10 +52,11 @@ bash ./source/runConfigureICU MSYS/MSVC --prefix=%__PROJECT__%\build\icu\ ^
 --enable-tests=no ^
 --enable-samples=no
 
-make
+make -j %NUMBER_OF_PROCESSORS%
 make install
 cmd /c 'cd /d "C:\Program Files\Git\usr\bin\" && rename link.exe.bak link.exe'
 
 
 cd /d %__PROJECT__%
 endlocal
+
