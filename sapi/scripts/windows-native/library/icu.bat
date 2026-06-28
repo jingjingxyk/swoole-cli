@@ -21,7 +21,7 @@ if  exist "%__PROJECT__%\thirdparty\icu" rmdir /s /q "%__PROJECT__%\thirdparty\i
 mkdir "%__PROJECT__%\thirdparty\icu"
 
 7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\icu"  %__PROJECT__%\pool\lib\icu4c-73_2-src.tar
-cd %__PROJECT__%\thirdparty\zlib\icu4c-73_2-src\
+cd %__PROJECT__%\thirdparty\icu\
 
 dir
 
