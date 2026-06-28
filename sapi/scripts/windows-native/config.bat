@@ -21,6 +21,11 @@ cd /d %__PROJECT__%\var\native-build\php-src\
 set "PHP_SRC=%cd%"
 echo %cd%
 
+if exist "configure.js" (
+    nmake clean
+    start /b /wait %__PROJECT__%\sapi\scripts\windows-native\clean.bat
+)
+
 set "INCLUDES="
 set "LIBS="
 
@@ -37,9 +42,7 @@ set "LIB=%LIB%;%LIBS%"
 dir "%LIB%" | findstr ws2_32.lib
 :: echo %LIBPATH%
 
-if exist "configure.js" (
-    nmake clean
-)
+
 
 call buildconf.bat -f
 
