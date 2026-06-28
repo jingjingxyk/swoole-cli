@@ -29,7 +29,9 @@ set "PATH=%__PROJECT__%\runtime\nasm\;C:\Strawberry\perl\bin;%PATH%"
 set "PATH=%PATH%;%__PROJECT__%\var\native-build\php-sdk-binary-tools\bin\;%__PROJECT__%\var\native-build\php-sdk-binary-tools\msys2\bin;
 
 set "CPPFLAGS=-D U_CHARSET_IS_UTF8=1  -D U_USING_ICU_NAMESPACE=1  -D U_STATIC_IMPLEMENTATION=1 "
+
 where link.exe
+rename "C:\Program Files\Git\usr\bin\link.exe" "C:\Program Files\Git\usr\bin\link.exe.bak"
 
 bash ./source/runConfigureICU MSYS/MSVC --prefix=%__PROJECT__%\build\icu\ ^
 --enable-static=yes ^
