@@ -7,12 +7,13 @@ cd /d %~dp0
 cd /d ..\..\..\
 
 rem cd d:\a\swoole-cli\swoole-cli\
+vswhere -products * -latest -prerelease -find **\VC\Auxiliary\Build\vcvarsall.bat
 rem call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
 env
 
 where bison
 bison --version
-
+re2c --version
 
 set "__PROJECT__=%cd%"
 echo %cd%
