@@ -23,7 +23,6 @@ echo %cd%
 
 if exist "configure.js" (
     nmake clean
-    start /b /wait %__PROJECT__%\sapi\scripts\windows-native\clean.bat
 )
 
 set "INCLUDES="
