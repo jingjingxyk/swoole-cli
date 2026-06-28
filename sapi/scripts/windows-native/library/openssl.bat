@@ -33,7 +33,7 @@ set "INCLUDE=%cd%\include\;%cd%\apps\include\;%INCLUDE%"
 :: perl apps/progs.pl -H apps/openssl > apps/progs.h
 perl Configure VC-WIN64A threads no-shared  no-legacy  no-tests  --release --prefix="%__PROJECT__%\build\openssl"  --openssldir="%__PROJECT__%\build\openssl\ssl"
 
-set CL=/MP
+:: set CL=/MP
 
 rem document
 rem openssl\Configurations\windows-makefile.tmpl
