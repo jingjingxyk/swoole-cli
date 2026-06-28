@@ -25,8 +25,10 @@ cd %__PROJECT__%\thirdparty\icu\icu\
 
 dir
 
-set "CPPFLAGS=-D U_CHARSET_IS_UTF8=1  -D U_USING_ICU_NAMESPACE=1  -D U_STATIC_IMPLEMENTATION=1 /MT"
-bash .\source/runConfigureICU MSYS/MSVC --prefix=%__PROJECT__%\build\icu\ ^
+set "CPPFLAGS=-D U_CHARSET_IS_UTF8=1  -D U_USING_ICU_NAMESPACE=1  -D U_STATIC_IMPLEMENTATION=1 "
+set "CFLAGS=/EHsc /MP /MT "
+
+bash ./source/runConfigureICU MSYS/MSVC --prefix=%__PROJECT__%\build\icu\ ^
 --enable-static=yes ^
 --enable-shared=no ^
 --with-data-packaging=static ^
