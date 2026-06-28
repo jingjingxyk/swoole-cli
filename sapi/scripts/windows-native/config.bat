@@ -92,6 +92,9 @@ mkdir %__PROJECT__%\build
 
 bison.exe -Wall --output=Zend/zend_language_parser.c -v -d Zend/zend_language_parser.y
 
+mklink /H %__PROJECT__%\build\openssl\lib\libeay32st.lib %__PROJECT__%\build\openssl\lib\libcrypto.lib
+
+
 set CL=/MP
 
 configure.bat ^
