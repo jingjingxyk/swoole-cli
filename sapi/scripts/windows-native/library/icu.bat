@@ -34,12 +34,12 @@ echo "%PATH%"
 
 where link.exe
 
-cmd /c 'cd /d "C:\Program Files\Git\usr\bin\" && rename link.exe link.exe.bak'
 
 cd %__PROJECT__%\thirdparty\icu\icu\
 
 for /f "delims=" %%i in ('cygpath -w $(pwd)') do set BUILD_DIR=%%i
 echo %BUILD_DIR%
+
 set "CPPFLAGS=-D U_CHARSET_IS_UTF8=1  -D U_USING_ICU_NAMESPACE=1  -D U_STATIC_IMPLEMENTATION=1 "
 bash ./source/runConfigureICU MSYS/MSVC --prefix=%__PROJECT__%\build\icu\ ^
 --enable-static=yes ^
@@ -55,7 +55,8 @@ bash ./source/runConfigureICU MSYS/MSVC --prefix=%__PROJECT__%\build\icu\ ^
 
 make
 make install
-cmd /c 'cd /d "C:\Program Files\Git\usr\bin\" && rename link.exe.bak link.exe'
+
+rem cmd /c 'cd /d "C:\Program Files\Git\usr\bin\" && rename link.exe link.exe.bak'
 
 
 cd /d %__PROJECT__%
