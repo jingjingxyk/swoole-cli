@@ -25,8 +25,9 @@ cd %__PROJECT__%\thirdparty\icu\icu\
 
 dir
 
+set "PATH=%__PROJECT__%\runtime\nasm\;C:\Strawberry\perl\bin;%PATH%"
 set "CPPFLAGS=-D U_CHARSET_IS_UTF8=1  -D U_USING_ICU_NAMESPACE=1  -D U_STATIC_IMPLEMENTATION=1 "
-rem set "CFLAGS=/EHsc /MP /MT "
+
 
 bash ./source/runConfigureICU MSYS/MSVC --prefix=%__PROJECT__%\build\icu\ ^
 --enable-static=yes ^
