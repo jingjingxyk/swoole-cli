@@ -38,7 +38,8 @@ perl Configure VC-WIN64A threads no-shared  no-legacy  no-tests  --release --pre
 rem document
 rem openssl\Configurations\windows-makefile.tmpl
 
-nmake install_sw
+nmake
+nmake install
 
 rem fix no found file " openssl/applink.c "
 rem copy %__PROJECT__%\thirdparty\openssl\openssl-3.6.0\ms\applink.c  %__PROJECT__%\build\openssl\include\openssl\applink.c
