@@ -20,8 +20,13 @@ cd /d %__PROJECT__%\var\native-build\php-src\
 set "PHP_SRC=%cd%"
 echo %cd%
 
-set "INCLUDES=%__PROJECT__%\build\zlib\include"
-set "LIBS=%__PROJECT__%\build\zlib\lib"
+set "INCLUDES="
+set "LIBS="
+
+set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\zlib\include"
+set "LIBS=%LIBS%;%__PROJECT__%\build\zlib\lib"
+set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\openssl\include"
+set "LIBS=%LIBS%;%__PROJECT__%\build\openssl\lib"
 
 
 
