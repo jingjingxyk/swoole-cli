@@ -31,7 +31,7 @@ set "PATH=%PATH%;%__PROJECT__%\var\native-build\php-sdk-binary-tools\bin\;%__PRO
 set "CPPFLAGS=-D U_CHARSET_IS_UTF8=1  -D U_USING_ICU_NAMESPACE=1  -D U_STATIC_IMPLEMENTATION=1 "
 
 
-./source/runConfigureICU MSYS/MSVC --prefix=%__PROJECT__%\build\icu\ ^
+bash ./source/runConfigureICU MSYS/MSVC --prefix=%__PROJECT__%\build\icu\ ^
 --enable-static=yes ^
 --enable-shared=no ^
 --with-data-packaging=static ^
