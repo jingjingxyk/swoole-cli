@@ -88,7 +88,6 @@ sed.exe -i.".bak" 's/ZEND_TSRMLS_CACHE_DEFINE()/ /' sapi/cli/php_cli.c
 mkdir %__PROJECT__%\build
 
 bison.exe -Wall --output=Zend/zend_language_parser.c -v -d Zend/zend_language_parser.y
-re2c.exe --no-generation-date -o zend_ini_scanner.c zend_ini_scanner.l
 
 set CL=/MP
 
