@@ -37,6 +37,7 @@ echo "%PATH%"
 where link.exe
 
 cmd /c "cd /d C:\Program Files\Git\usr\bin && rename link.exe link.exe.exe"
+cmd /c "cd /d C:\cygwin64\bin\ && rename link.exe link.exe.exe"
 
 
 cd %__PROJECT__%\thirdparty\icu\icu\
