@@ -26,10 +26,11 @@ cd %__PROJECT__%\thirdparty\icu\icu\
 dir
 
 set "ORIGIN_PATH=%PATH%"
-set "PATH=%__PROJECT__%\runtime\nasm\;C:\Strawberry\perl\bin;"
+set "PATH=%__PROJECT__%\runtime\nasm\;"
 set "PATH=%ProgramFiles%\7-Zip;%PATH%;"
 set "PATH=%__PROJECT__%\var\native-build\php-sdk-binary-tools\bin\;%__PROJECT__%\var\native-build\php-sdk-binary-tools\msys2\bin;%PATH%;"
-set "PATH=%ProgramFiles%\7-Zip;%PATH%;%ORIGIN_PATH%"
+set "PATH=C:\Strawberry\perl\bin;%PATH%;"
+set "PATH=%PATH%;%ORIGIN_PATH%"
 echo "%PATH%"
 
 
