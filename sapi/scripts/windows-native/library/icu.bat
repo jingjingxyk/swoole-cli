@@ -27,6 +27,7 @@ dir
 
 set "ORIGIN_PATH=%PATH%"
 set "PATH=%__PROJECT__%\runtime\nasm\;"
+set "PATH=C:\cygwin64\bin\;%PATH%;"
 set "PATH=%__PROJECT__%\var\native-build\php-sdk-binary-tools\bin\;%__PROJECT__%\var\native-build\php-sdk-binary-tools\msys2\bin;%PATH%;"
 set "PATH=%PATH%;%ORIGIN_PATH%"
 echo "%PATH%"
