@@ -39,7 +39,7 @@ cmd /c "cd /d \"C:\Program Files\Git\usr\bin\" && rename link.exe link.exe.exe"
 
 cd %__PROJECT__%\thirdparty\icu\icu\
 
-
+exit /b 0
 set "CPPFLAGS=-D U_CHARSET_IS_UTF8=1  -D U_USING_ICU_NAMESPACE=1  -D U_STATIC_IMPLEMENTATION=1 "
 
 bash ./source/runConfigureICU MSYS/MSVC --prefix=D:/a/swoole-cli/swoole-cli/build/icu/ ^
