@@ -25,9 +25,11 @@ cd %__PROJECT__%\thirdparty\icu\icu\
 
 dir
 
-set "PATH=%__PROJECT__%\runtime\nasm\;C:\Strawberry\perl\bin;%PATH%"
+set "ORIGIN_PATH=%PATH%"
+set "PATH=%__PROJECT__%\runtime\nasm\;C:\Strawberry\perl\bin;"
 set "PATH=%ProgramFiles%\7-Zip;%PATH%;"
 set "PATH=%__PROJECT__%\var\native-build\php-sdk-binary-tools\bin\;%__PROJECT__%\var\native-build\php-sdk-binary-tools\msys2\bin;%PATH%;"
+set "PATH=%ProgramFiles%\7-Zip;%PATH%;%ORIGIN_PATH%"
 echo "%PATH%"
 
 
@@ -40,6 +42,7 @@ cd %__PROJECT__%\thirdparty\icu\icu\
 
 
 set "CPPFLAGS=-D U_CHARSET_IS_UTF8=1  -D U_USING_ICU_NAMESPACE=1  -D U_STATIC_IMPLEMENTATION=1 "
+
 bash ./source/runConfigureICU MSYS/MSVC --prefix=D:/a/swoole-cli/swoole-cli/build/icu/ ^
 --enable-static=yes ^
 --enable-shared=no ^
