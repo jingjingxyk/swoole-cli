@@ -37,7 +37,7 @@ where link.exe
 
 cmd /c "cd /d C:\Program Files\Git\usr\bin && rename link.exe link.exe.exe"
 
-exit /b 0
+
 cd %__PROJECT__%\thirdparty\icu\icu\
 
 exit /b 0
