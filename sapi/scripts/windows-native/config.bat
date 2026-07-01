@@ -117,11 +117,10 @@ configure.bat ^
 --enable-zlib ^
 --enable-phar-native-ssl ^
 --with-openssl=static ^
---enable-fileinfo ^
---enable-intl ^
+--enable-intl
 
 
-
+:: --enable-fileinfo ^
 :: --enable-cli-win32 ^
 :: --disable-zts ^
 :: --enable-apcu ^
