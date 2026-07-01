@@ -32,6 +32,8 @@ set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\zlib\include"
 set "LIBS=%LIBS%;%__PROJECT__%\build\zlib\lib"
 set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\openssl\include"
 set "LIBS=%LIBS%;%__PROJECT__%\build\openssl\lib"
+set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\icu\include"
+set "LIBS=%LIBS%;%__PROJECT__%\build\icu\lib"
 
 
 
@@ -115,7 +117,9 @@ configure.bat ^
 --enable-zlib ^
 --enable-phar-native-ssl ^
 --with-openssl=static ^
---enable-fileinfo
+--enable-fileinfo ^
+--enable-intl ^
+
 
 
 :: --enable-cli-win32 ^
