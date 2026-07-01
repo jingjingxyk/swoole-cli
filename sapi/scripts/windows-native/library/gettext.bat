@@ -22,7 +22,7 @@ mkdir "%__PROJECT__%\thirdparty\gettext"
 
 7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\gettext"  %__PROJECT__%\pool\lib\gettext-0.22.5.tar
 
-cd /d %__PROJECT__%\thirdparty\gettext-0.22.5
+cd /d %__PROJECT__%\thirdparty\gettext\gettext-0.22.5
 dir
 echo %cd%
 perl -v
