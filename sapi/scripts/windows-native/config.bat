@@ -114,7 +114,9 @@ configure.bat ^
 --enable-bcmath ^
 --enable-zlib ^
 --enable-phar-native-ssl ^
---with-openssl=static
+--with-openssl=static ^
+--enable-fileinfo
+
 
 :: --enable-cli-win32 ^
 :: --disable-zts ^

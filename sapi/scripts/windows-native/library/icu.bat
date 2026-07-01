@@ -35,9 +35,16 @@ echo "%PATH%"
 
 
 where link.exe
-which link
-cmd /c "cd /d C:\Program Files\Git\usr\bin && rename link.exe link.backup"
-cmd /c "cd /d C:\cygwin64\bin\ && rename link.exe link.backup"
+
+mkdir %__PROJECT__%\backup\
+if exist "C:\Program Files\Git\usr\bin\link.exe" (
+   move "C:\Program Files\Git\usr\bin\link.exe"  %__PROJECT__%\backup\git-link.exe
+)
+
+if exist "C:\cygwin64\bin\link.exe" (
+   move "C:\cygwin64\bin\link.exe" %__PROJECT__%\backup\cygwin-link.exe
+)
+
 
 
 cd %__PROJECT__%\thirdparty\icu\icu\
@@ -59,8 +66,14 @@ bash ./source/runConfigureICU Cygwin/MSVC --prefix=/cygdrive/d/a/swoole-cli/swoo
 
 make -j %NUMBER_OF_PROCESSORS%
 make install
-cmd /c 'cd /d "C:\Program Files\Git\usr\bin\" && rename link.exe.bak link.exe'
 
+if exist %__PROJECT__%\backup\git-link.exe (
+   move  %__PROJECT__%\backup\git-link.exe "C:\Program Files\Git\usr\bin\link.exe"
+)
+
+if exist %__PROJECT__%\backup\cygwin-link.exe (
+   move %__PROJECT__%\backup\cygwin-link.exe "C:\cygwin64\bin\link.exe"
+)
 
 cd /d %__PROJECT__%
 endlocal
