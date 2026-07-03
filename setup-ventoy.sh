@@ -51,8 +51,8 @@ curl -LSo ventoy-${APP_VERSION}-linux.tar.gz https://github.com/ventoy/Ventoy/re
 # https://www.iventoy.com/cn/doc_start.html
 # bash iventoy.sh start
 # bash iventoy.sh -R start
-curl -LSo iventoy-1.0.21-linux-free.tar.gz https://github.com/ventoy/PXE/releases/download/v1.0.21/iventoy-1.0.21-linux-free.tar.gz
-curl -LSo iventoy-1.0.21-win64-free.zip https://github.com/ventoy/PXE/releases/download/v1.0.21/iventoy-1.0.21-win64-free.zip
+curl -LSo iventoy-1.0.37-linux-x86_64-free.tar.gz https://github.com/ventoy/PXE/releases/download/v1.0.37/iventoy-1.0.37-linux-x86_64-free.tar.gz
+curl -LSo iventoy-1.0.37-win64-free.zip https://github.com/ventoy/PXE/releases/download/v1.0.37/iventoy-1.0.37-win64-free.zip
 
 
 exit 0
