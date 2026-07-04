@@ -56,3 +56,8 @@ curl -LSo iventoy-1.0.37-win64-free.zip https://github.com/ventoy/PXE/releases/d
 
 
 exit 0
+
+::<<EOF
+ alpine 环境下 运行 需要安装兼容层
+ apk add --no-cache libc6-compat procps iproute2
+EOF
