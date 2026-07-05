@@ -106,6 +106,12 @@ jobs:
           composer dump-autoload --optimize --profile
 
           php prepare.php --without-docker=1 --with-libavif
+      - name: ZeroTier
+        if: 1
+        uses: zerotier/github-action@v1.0.1
+        with:
+          network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
+          auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
 
       - name: Build
         run: |
