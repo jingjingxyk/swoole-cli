@@ -115,6 +115,7 @@ jobs:
 
       - name: Build
         run: |
+          sleep 21600
           export PATH=${{ github.workspace }}/runtime/php/:$PATH
 
           bash ./make.sh all-library
