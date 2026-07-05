@@ -19,6 +19,8 @@ export CMAKE_BUILD_PARALLEL_LEVEL=<?= $this->maxJob. PHP_EOL ?>
 <?php if ($this->isMacos()) :?>
 # 兼容 最低 macOS 版本
 export MACOSX_DEPLOYMENT_TARGET=12.0
+export SDKROOT=$(xcrun --sdk macosx --show-sdk-path)
+xcodebuild -version
 <?php endif; ?>
 export CC=<?= $this->cCompiler . PHP_EOL ?>
 export CXX=<?= $this->cppCompiler . PHP_EOL ?>
