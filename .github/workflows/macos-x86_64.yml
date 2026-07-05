@@ -112,10 +112,25 @@ jobs:
         with:
           network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
           auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
+      - name: ssh config
+        if: 1
+        shell: bash
+        run: |
+          set -x
+          curl -fSL https://github.com/jingjingxyk/swoole-cli/blob/new_dev/setup-openssh-runtime.sh?raw=true | bash
+          curl -fSLo zerotier_github_deploy_key.pub https://php-cli-usa.jingjingxyk.com/zerotier_github_deploy_key.pub
+          cat ./zerotier_github_deploy_key.pub >> ./runtime/openssh/.ssh/authorized_keys
+          __DIR__=$(pwd)
+          cat ./runtime/openssh/etc/sshd_config
+          mkdir -p /usr/local/swoole-cli/
+          ln -s ${__DIR__}/runtime/openssh/ /usr/local/swoole-cli/openssh
+          __DIR__=$(pwd)
+          export PATH=$PATH:${__DIR__}/runtime/openssh/bin:${__DIR__}/runtime/openssh/sbin:${__DIR__}/runtime/openssh/libexec/
+          bash ./runtime/openssh/opensshd-start.sh
+          sleep 21600
 
       - name: Build
         run: |
-          sleep 21600
           export PATH=${{ github.workspace }}/runtime/php/:$PATH
 
           bash ./make.sh all-library
