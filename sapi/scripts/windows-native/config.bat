@@ -130,7 +130,7 @@ configure.bat ^
 --with-xml=static ^
 --enable-xmlreader ^
 --enable-xmlwriter ^
---with-simplexml ^
+--with-simplexml=static
 
 
 :: --enable-fileinfo ^
