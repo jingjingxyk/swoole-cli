@@ -40,11 +40,8 @@ rem set "LIBS=%LIBS%;%__PROJECT__%\build\icu\lib"
 set "INCLUDES=%INCLUDES%;C:\vcpkg\packages\libiconv_x64-windows-static\include\"
 set "LIBS=%LIBS%;C:\vcpkg\packages\libiconv_x64-windows-static\lib\"
 
-
-:: set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\icu\include"
-:: set "INCLUDES=%INCLUDES%;C:\vcpkg\packages\libxml2_x64-windows-static\include\libxml2"
-:: set "INCLUDES=%INCLUDES%;C:\vcpkg\packages\libxml2_x64-windows-static\include\libxml2\libxml"
-:: set "LIBS=%LIBS%;C:\vcpkg\packages\libxml2_x64-windows-static\lib\"
+set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\libxml2\include"
+set "LIBS=%LIBS%;%__PROJECT__%\build\libxml2\lib\"
 
 
 
