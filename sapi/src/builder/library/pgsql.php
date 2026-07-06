@@ -11,6 +11,8 @@ return function (Preprocessor $p) {
     # fix macos error: 'strchrnul' is only available on macOS 15.4 or newer
     # https://www.postgresql.org/message-id/385134.1743523038@sss.pgh.pa.us
     # fix solution https://github.com/theory/pgenv/issues/93
+    $custom_env_start = $p->isMacos() ? 'export MACOSX_DEPLOYMENT_TARGET="$(sw_vers -productVersion)"' : '';
+    $custom_env_end = $p->isMacos() ? 'unset MACOSX_DEPLOYMENT_TARGET' : '';
 
     $p->addLibrary(
         (new Library('pgsql'))
@@ -20,9 +22,13 @@ return function (Preprocessor $p) {
             ->withManual('https://www.postgresql.org/download/')
             ->withManual('https://git.postgresql.org/gitweb/?p=postgresql.git;a=summary')
             ->withUrl('https://ftp.postgresql.org/pub/source/v16.3/postgresql-16.3.tar.gz')
+
             //->withUrl('https://ftp.postgresql.org/pub/source/v18.3/postgresql-18.3.tar.gz')
             ->withManual('https://www.postgresql.org/docs/current/install-procedure.html#CONFIGURE-OPTIONS#:~:text=Client-only%20installation')
             //->withFileHash('sha256', 'bd3798c399bc1b6d08b94340f9dd7a75a30a7fa076788ef2f4848be2be6a5fc5')
+            ->withManual('https://www.postgresql.org/docs/current/install-procedure.html#CONFIGURE-OPTIONS')
+            ->withManual('https://www.postgresql.org/docs/current/install-procedure.html#CONFIGURE-OPTIONS#:~:text=Client-only%20installation')
+            ->withFileHash('md5', '8a58db4009e1a50106c5e1a8c4b03bed')
             ->withPrefix($pgsql_prefix)
             /*
                 https://git.postgresql.org/gitweb/
@@ -35,6 +41,7 @@ return function (Preprocessor $p) {
             ->withBuildCached(false)
             ->withBuildScript(
                 <<<EOF
+            {$custom_env_start}
             test -d build && rm -rf build
             mkdir -p build
             cd build
@@ -43,12 +50,13 @@ return function (Preprocessor $p) {
 
             sed -i.backup "s/invokes exit\'; exit 1;/invokes exit\';/"  ../src/interfaces/libpq/Makefile
 
+
             sed -i.backup '/\$(LINK.shared) -o \$@ \$(OBJS) \$(LDFLAGS) \$(LDFLAGS_SL) \$(SHLIB_LINK)/s/^/# /'        ../src/Makefile.shlib
             sed -i.backup "402 s/^/# /"  ../src/Makefile.shlib
 
-            PACKAGES="libssl libcrypto openssl zlib icu-uc icu-io icu-i18n readline libxml-2.0  libxslt libzstd liblz4"
-
             # CFLAGS="-DUSE_PRIVATE_ENCODING_FUNCS" \
+
+            PACKAGES="openssl zlib icu-uc icu-io icu-i18n readline libxml-2.0  libxslt libzstd liblz4"
 
             CPPFLAGS="$(pkg-config  --cflags-only-I --static \$PACKAGES )" \
             LDFLAGS="$(pkg-config   --libs-only-L   --static \$PACKAGES ) {$ldflags} " \
@@ -56,15 +64,15 @@ return function (Preprocessor $p) {
             ../configure  \
             --prefix={$pgsql_prefix} \
             --enable-coverage=no \
-            --with-openssl \
+            --disable-thread-safety \
             --with-ssl=openssl  \
             --with-readline \
             --with-icu \
+            --without-ldap \
             --with-libxml  \
             --with-libxslt \
             --with-lz4 \
             --with-zstd \
-            --without-ldap \
             --without-perl \
             --without-python \
             --without-pam \
@@ -72,9 +80,9 @@ return function (Preprocessor $p) {
             --without-bonjour \
             --without-tcl
 
-            make -C  src/bin/pg_config install
+            make -C src/bin/pg_config install
 
-            make -C  src/include install
+            make -C src/include install
 
             make -C  src/common install
 
@@ -90,6 +98,8 @@ return function (Preprocessor $p) {
 
             # make -C doc install
 
+            {$custom_env_end}
+
 EOF
             )
             ->withScriptAfterInstall(
@@ -97,6 +107,7 @@ EOF
             rm -rf {$pgsql_prefix}/lib/*.so.*
             rm -rf {$pgsql_prefix}/lib/*.so
             rm -rf {$pgsql_prefix}/lib/*.dylib
+
             rm -rf {$pgsql_prefix}/lib/libpgcommon_shlib.a
             rm -rf {$pgsql_prefix}/lib/libpgport_shlib.a
 
@@ -115,11 +126,10 @@ EOF
                 'liblz4'
             )
     );
-    $p->withExportVariable('LIBPQ_CFLAGS', '$(pkg-config  --cflags --static  libpq)');
-    $p->withExportVariable('LIBPQ_LIBS', '$(pkg-config    --libs   --static  libpq)');
-    $p->withExportVariable('PGSQL_CFLAGS', '$(pkg-config  --cflags --static  libpq)');
-    $p->withExportVariable('PGSQL_LIBS', '$(pkg-config    --libs   --static  libpq)');
+    $p->withExportVariable('LIBPQ_CFLAGS', '$(pkg-config  --cflags --static libpq)');
+    $p->withExportVariable('LIBPQ_LIBS', '$(pkg-config    --libs   --static libpq)');
 };
+
 
 /*
 
@@ -129,3 +139,8 @@ EOF
     cd ../../bin/pg_config && make -j $(nproc) && make install && \
 
  */
+
+# postgresql 17 18 需要
+# sed -i.backup '/install-lib: install-lib-shared/s/^/# /'        ../src/Makefile.shlib
+# sed -i.backup '/\$(COMPILER) -dynamiclib -install_name/s/^/#/' ../src/Makefile.shlib
+

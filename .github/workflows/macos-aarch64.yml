@@ -3,7 +3,7 @@ name: build-macos-aarch64
 on: [ push, pull_request ]
 
 env:
-  BUILD_PHP_VERSION: 8.4.21
+  BUILD_PHP_VERSION: 8.4.23
 
 jobs:
   macos-aarch64:
