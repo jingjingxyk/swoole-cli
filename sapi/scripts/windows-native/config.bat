@@ -127,6 +127,7 @@ configure.bat ^
 --enable-phar-native-ssl ^
 --with-openssl=static ^
 --with-iconv=static ^
+--with-libxml=static ^
 --with-xml=static ^
 --enable-xmlreader ^
 --enable-xmlwriter ^
