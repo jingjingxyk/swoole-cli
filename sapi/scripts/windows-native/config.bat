@@ -135,7 +135,8 @@ configure.bat ^
 --enable-xmlwriter ^
 --with-dom ^
 --with-simplexml ^
---with-readline
+--with-readline ^
+--enable-fileinfo
 
 
 :: --enable-fileinfo ^
