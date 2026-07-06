@@ -28,14 +28,14 @@ echo %cd%
 set CL=/MP
 mkdir -p build_dir
 cd build_dir
+
+set "PKG_CONFIG_PATH=C:/vcpkg/packages/libiconv_x64-windows-static/lib/pkgconfig"
 cmake ^
 cmake -S .. -B . ^
 -DBUILD_SHARED_LIBS=OFF ^
 -DCMAKE_BUILD_TYPE=Release ^
 -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
 -DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\openssl" ^
--DIconv_LIBRARY="C:\vcpkg\packages\libiconv_x64-windows-static\lib\" ^
--DIconv_INCLUDE_DIR="C:\vcpkg\packages\libiconv_x64-windows-static\include\" ^
 -DLIBXML_STATIC=ON ^
 -DLIBXML2_WITH_ZLIB=OFF ^
 -DLIBXML2_WITH_LZMA=OFF ^
