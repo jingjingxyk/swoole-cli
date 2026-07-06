@@ -23,8 +23,8 @@ dir
 echo %cd%
 
 set CL=/MP
-mkdir -p build
-cd build
+mkdir -p build_dir
+cd build_dir
 cmake ^
 cmake -S .. -B . ^
 -DBUILD_SHARED_LIBS=OFF ^
