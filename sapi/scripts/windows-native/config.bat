@@ -126,7 +126,11 @@ configure.bat ^
 --enable-zlib ^
 --enable-phar-native-ssl ^
 --with-openssl=static ^
---enable-intl
+--with-iconv=static ^
+--with-xml=static ^
+--enable-xmlreader ^
+--enable-xmlwriter ^
+--with-simplexml ^
 
 
 :: --enable-fileinfo ^
