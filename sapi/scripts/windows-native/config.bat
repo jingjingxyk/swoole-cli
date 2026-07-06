@@ -107,6 +107,7 @@ mklink /H %__PROJECT__%\build\openssl\lib\libeay32st.lib %__PROJECT__%\build\ope
 
 set CL=/MP
 
+set "PHP_PHP_BUILD=%__PROJECT__%\build"
 
 configure.bat ^
 --with-php-build=%__PROJECT__%\build ^
