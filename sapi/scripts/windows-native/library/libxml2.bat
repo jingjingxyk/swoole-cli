@@ -18,7 +18,7 @@ mkdir "%__PROJECT__%\thirdparty\libxml2"
 
 7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libxml2"  %__PROJECT__%\pool\lib\libxml2-v2.9.14.tar
 
-cd /d %__PROJECT__%\thirdparty\libxml2\libxml2-v2.9.14\
+cd /d %__PROJECT__%\thirdparty\libxml2\libxml2-2.9.14\
 dir
 echo %cd%
 
