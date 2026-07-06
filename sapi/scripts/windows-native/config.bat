@@ -129,10 +129,11 @@ configure.bat ^
 --with-iconv=static ^
 --with-libxml=static ^
 --with-dom=static ^
---enable-xml ^
+--enable-session ^
+--with-xml ^
 --enable-xmlreader ^
 --enable-xmlwriter ^
---enable-simplexml
+--with-simplexml
 
 
 :: --enable-fileinfo ^
