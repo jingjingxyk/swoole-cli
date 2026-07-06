@@ -136,7 +136,6 @@ configure.bat ^
 --with-dom ^
 --with-simplexml ^
 --with-readline ^
---enable-fileinfo
 
 
 :: --enable-fileinfo ^
