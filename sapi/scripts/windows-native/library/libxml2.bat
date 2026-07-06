@@ -37,6 +37,7 @@ cmake -S .. -B . ^
 -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
 -DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\openssl" ^
 -DIconv_INCLUDE_DIR="C:/vcpkg/packages/libiconv_x64-windows-static/include/" ^
+-DIconv_LIBRARY="C:/vcpkg/packages/libiconv_x64-windows-static/lib/iconv.lib" ^
 -DLIBXML_STATIC=ON ^
 -DLIBXML2_WITH_ZLIB=OFF ^
 -DLIBXML2_WITH_LZMA=OFF ^
