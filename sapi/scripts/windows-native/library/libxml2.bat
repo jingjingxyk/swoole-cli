@@ -22,7 +22,7 @@ cd /d %__PROJECT__%\thirdparty\libxml2\libxml2-2.9.14\
 dir
 echo %cd%
 
-exit /b 0
+:: exit /b 0
 
 
 set CL=/MP
@@ -33,7 +33,7 @@ cmake -S .. -B . ^
 -DBUILD_SHARED_LIBS=OFF ^
 -DCMAKE_BUILD_TYPE=Release ^
 -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
--DIconv_DIR=%__PROJECT__%\build\iconv\ ^
+-DIconv_DIR=C:\vcpkg\packages\libiconv_x64-windows-static\ ^
 -DLIBXML_STATIC=ON ^
 -DLIBXML2_WITH_ZLIB=OFF ^
 -DLIBXML2_WITH_LZMA=OFF ^
