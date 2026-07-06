@@ -30,10 +30,19 @@ set "LIBS="
 
 set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\zlib\include"
 set "LIBS=%LIBS%;%__PROJECT__%\build\zlib\lib"
+
 set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\openssl\include"
 set "LIBS=%LIBS%;%__PROJECT__%\build\openssl\lib"
-set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\icu\include"
-set "LIBS=%LIBS%;%__PROJECT__%\build\icu\lib"
+
+rem set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\icu\include"
+rem set "LIBS=%LIBS%;%__PROJECT__%\build\icu\lib"
+
+set "INCLUDES=%INCLUDES%;C:\vcpkg\packages\libiconv_x64-windows-static\include\"
+set "LIBS=%LIBS%;C:\vcpkg\packages\libiconv_x64-windows-static\lib\"
+
+
+set "INCLUDES=%INCLUDES%;C:\vcpkg\packages\libxml2_x64-windows-static\include\"
+set "LIBS=%LIBS%;C:\vcpkg\packages\libxml2_x64-windows-static\lib"
 
 
 

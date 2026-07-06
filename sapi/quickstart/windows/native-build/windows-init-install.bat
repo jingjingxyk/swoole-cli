@@ -60,8 +60,11 @@ if  exist ".\php-nts-Win32-x64" (
    rmdir /s /q ".\php-nts-Win32-x64"
 )
 
-cd /d %__PROJECT__%\var\native-build\
+cd /d %__PROJECT__%\var\native-build\vcpkg
+:: 运行引导脚本，生成 vcpkg.exe
+call bootstrap-vcpkg.bat
 
+cd /d %__PROJECT__%\var\native-build\
 7z.exe x -onasm nasm-2.16.03-win64.zip
 rem 7z.exe x -ophp-nts-Win32-x64 php-nts-Win32-x64.zip
 

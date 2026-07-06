@@ -61,5 +61,7 @@ if not exist "all-deps.zip" curl.exe -fSLo all-deps.zip https://github.com/swool
 :: curl.exe -fSLo nasm-2.16.03-win64.zip  https://download.jingjingxyk.com/nasm-2.16.03-win64.zip
 
 
+if not exist "vcpkg" git clone https://github.com/microsoft/vcpkg.git
+
 
 endlocal
