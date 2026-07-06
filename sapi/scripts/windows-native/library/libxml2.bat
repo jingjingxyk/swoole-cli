@@ -42,7 +42,8 @@ cmake -S .. -B . ^
 -DLIBXML2_WITH_ZLIB=OFF ^
 -DLIBXML2_WITH_LZMA=OFF ^
 -DLIBXML2_WITH_ICU=OFF ^
--DLIBXML2_WITH_PYTHON=OFF
+-DLIBXML2_WITH_PYTHON=OFF ^
+-DLIBXML2_WITH_TESTS=OFF
 
 cmake --build . --config Release --target install
 
