@@ -47,6 +47,7 @@ cmake -S .. -B . ^
 
 cmake --build . --config Release --target install
 
+copy %__PROJECT__%\build\lib\libxml2s.lib %__PROJECT__%\build\lib\libxml2_a.lib
 
 cd /d %__PROJECT__%
 endlocal

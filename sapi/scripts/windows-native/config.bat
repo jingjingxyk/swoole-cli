@@ -109,7 +109,7 @@ set CL=/MP
 
 
 configure.bat ^
---with-php-build=%__PROJECT__%\build ^
+--with-php-build=%__PROJECT__%\\build ^
 --with-extra-includes="%INCLUDE%" ^
 --with-extra-libs="%LIB%" ^
 --with-toolset=vs ^
@@ -120,7 +120,7 @@ configure.bat ^
 --enable-zts ^
 --enable-sockets      --enable-ctype     --enable-pdo    --enable-phar  ^
 --enable-filter ^
---enable-xmlreader   --enable-xmlwriter ^
+--enable-session ^
 --enable-tokenizer ^
 --enable-sockets ^
 --enable-bcmath ^
@@ -129,12 +129,11 @@ configure.bat ^
 --with-openssl=static ^
 --with-iconv=static ^
 --with-libxml=static ^
---with-dom=static ^
---enable-session ^
---with-xml ^
+--with-xml=static ^
 --enable-xmlreader ^
 --enable-xmlwriter ^
---with-simplexml
+--with-dom=static ^
+--with-simplexml=static
 
 
 :: --enable-fileinfo ^
