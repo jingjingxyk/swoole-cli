@@ -35,7 +35,7 @@ cmake -S .. -B . ^
 -DBUILD_SHARED_LIBS=OFF ^
 -DCMAKE_BUILD_TYPE=Release ^
 -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
--DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\openssl" ^
+-DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\libxml2" ^
 -DIconv_ROOT=C:/vcpkg/packages/libiconv_x64-windows-static/ ^
 -DLIBXML_STATIC=ON ^
 -DLIBXML2_WITH_ZLIB=OFF ^
