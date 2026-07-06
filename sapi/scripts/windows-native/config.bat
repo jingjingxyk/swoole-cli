@@ -129,11 +129,11 @@ configure.bat ^
 --with-openssl=static ^
 --with-iconv=static ^
 --with-libxml=static ^
---with-xml=static ^
+--with-xml ^
 --enable-xmlreader ^
 --enable-xmlwriter ^
---with-dom=static ^
---with-simplexml=static
+--with-dom ^
+--with-simplexml
 
 
 :: --enable-fileinfo ^
