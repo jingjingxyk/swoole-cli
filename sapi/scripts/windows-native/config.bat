@@ -134,7 +134,8 @@ configure.bat ^
 --enable-xmlreader ^
 --enable-xmlwriter ^
 --with-dom ^
---with-simplexml
+--with-simplexml ^
+--with-eadline
 
 
 :: --enable-fileinfo ^
