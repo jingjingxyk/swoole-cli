@@ -41,6 +41,7 @@ set "INCLUDES=%INCLUDES%;C:\vcpkg\packages\libiconv_x64-windows-static\include\"
 set "LIBS=%LIBS%;C:\vcpkg\packages\libiconv_x64-windows-static\lib\"
 
 set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\libxml2\include"
+set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\libxml2\include\libxml2\"
 set "LIBS=%LIBS%;%__PROJECT__%\build\libxml2\lib\"
 
 

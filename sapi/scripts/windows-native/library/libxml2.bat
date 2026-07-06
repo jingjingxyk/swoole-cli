@@ -29,7 +29,8 @@ set CL=/MP
 mkdir -p build_dir
 cd build_dir
 
-set "PKG_CONFIG_PATH=C:/vcpkg/packages/libiconv_x64-windows-static/lib/pkgconfig"
+:: set "PKG_CONFIG_PATH=C:/vcpkg/packages/libiconv_x64-windows-static/lib/pkgconfig"
+
 cmake ^
 cmake -S .. -B . ^
 -DBUILD_SHARED_LIBS=OFF ^
