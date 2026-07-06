@@ -18,26 +18,25 @@ mkdir "%__PROJECT__%\thirdparty\libxml2"
 
 7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libxml2"  %__PROJECT__%\pool\lib\libxml2-v2.9.14.tar
 
-cd /d %__PROJECT__%\thirdparty\openssl\libxml2-v2.9.14\
+cd /d %__PROJECT__%\thirdparty\libxml2\libxml2-v2.9.14\
 dir
 echo %cd%
-perl -v
 
-
-set "INCLUDE=%cd%\include\;%cd%\apps\include\;%INCLUDE%"
 set CL=/MP
-:: perl apps/progs.pl -H apps/openssl > apps/progs.h
-perl Configure VC-WIN64A threads no-shared  no-legacy  no-tests  --release --prefix="%__PROJECT__%\build\openssl"  --openssldir="%__PROJECT__%\build\openssl\ssl"
+mkdir -p build
+cd build
+cmake ^
+cmake -S .. -B . ^
+-DBUILD_SHARED_LIBS=OFF ^
+-DCMAKE_BUILD_TYPE=Release ^
+-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
+-DLIBXML_STATIC=ON ^
+-DLIBXML2_WITH_ZLIB=OFF ^
+-DLIBXML2_WITH_LZMA=OFF ^
+-DLIBXML2_WITH_ICU=OFF ^
+-DLIBXML2_WITH_PYTHON=OFF
 
-nmake
-nmake install_sw
-
-
-
-rem document
-rem openssl\Configurations\windows-makefile.tmpl
-rem fix no found file " openssl/applink.c "
-copy %__PROJECT__%\thirdparty\openssl\openssl-3.6.0\ms\applink.c  %__PROJECT__%\build\openssl\include\openssl\applink.c
+cmake --build . --config Release --target install
 
 
 cd /d %__PROJECT__%
