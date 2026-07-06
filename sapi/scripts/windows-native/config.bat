@@ -107,10 +107,9 @@ mklink /H %__PROJECT__%\build\openssl\lib\libeay32st.lib %__PROJECT__%\build\ope
 
 set CL=/MP
 
-set "CFLAGS_XML=%__PROJECT__%\build\libxml2\include\"
 
 configure.bat ^
---with-php-build="%__PROJECT__%\build" ^
+--with-php-build="%__PROJECT__%\build\" ^
 --with-extra-includes="%INCLUDE%" ^
 --with-extra-libs="%LIB%" ^
 --with-toolset=vs ^
