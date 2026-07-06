@@ -33,7 +33,8 @@ cmake -S .. -B . ^
 -DBUILD_SHARED_LIBS=OFF ^
 -DCMAKE_BUILD_TYPE=Release ^
 -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
--DIconv_ROOT=C:\vcpkg\packages\libiconv_x64-windows-static\ ^
+-DIconv_LIBRARY=C:\vcpkg\packages\libiconv_x64-windows-static\lib\ ^
+-DIconv_INCLUDE_DIR=C:\vcpkg\packages\libiconv_x64-windows-static\include\ ^
 -DLIBXML_STATIC=ON ^
 -DLIBXML2_WITH_ZLIB=OFF ^
 -DLIBXML2_WITH_LZMA=OFF ^
