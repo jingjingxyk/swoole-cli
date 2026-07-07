@@ -27,7 +27,7 @@ set CL=/MP
 set "VCPKG_ROOT=%__PROJECT__%\var\native-build\vcpkg"
 set PATH=%VCPKG_ROOT%;%PATH%
 
-vcpkg install libxml2:x64-windows-static libiconv:x64-windows-static
+vcpkg install libiconv:x64-windows-static
 
 rem C:/vcpkg/packages/libxml2_x64-windows-static/lib/
 

@@ -24,6 +24,7 @@ echo %cd%
 
 :: exit /b 0
 
+:: libxml2:x64-windows-static
 
 set CL=/MP
 mkdir -p build_dir
@@ -48,6 +49,7 @@ cmake -S .. -B . ^
 cmake --build . --config Release --target install
 
 copy %__PROJECT__%\build\lib\libxml2s.lib %__PROJECT__%\build\lib\libxml2_a.lib
+
 
 cd /d %__PROJECT__%
 endlocal
