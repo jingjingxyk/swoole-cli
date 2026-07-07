@@ -52,6 +52,7 @@ dir "%LIB%" | findstr ws2_32.lib
 :: echo %LIBPATH%
 
 set "PHP_PHP_BUILD=%__PROJECT__%\build"
+echo %PHP_PHP_BUILD%
 mkdir %__PROJECT__%\build
 
 call buildconf.bat -f
