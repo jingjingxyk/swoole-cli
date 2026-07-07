@@ -51,7 +51,8 @@ set "LIB=%LIB%;%LIBS%"
 dir "%LIB%" | findstr ws2_32.lib
 :: echo %LIBPATH%
 
-
+set "PHP_PHP_BUILD=%__PROJECT__%\build"
+mkdir %__PROJECT__%\build
 
 call buildconf.bat -f
 
@@ -98,17 +99,12 @@ sed.exe -i.".bak" 's/ZEND_DLIMPORT/ /' Zend\zend_stream.c
 rem _tsrm_ls_cache redefined
 sed.exe -i.".bak" 's/ZEND_TSRMLS_CACHE_DEFINE()/ /' sapi/cli/php_cli.c
 
-mkdir %__PROJECT__%\build
 
 bison.exe -Wall --output=Zend/zend_language_parser.c -v -d Zend/zend_language_parser.y
 
 mklink /H %__PROJECT__%\build\openssl\lib\libeay32st.lib %__PROJECT__%\build\openssl\lib\libcrypto.lib
 
-
 set CL=/MP
-
-env
-set "PHP_PHP_BUILD=%__PROJECT__%\build"
 
 configure.bat ^
 --with-php-build=%__PROJECT__%\build ^
