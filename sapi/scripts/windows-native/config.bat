@@ -37,8 +37,8 @@ set "LIBS=%LIBS%;%__PROJECT__%\build\openssl\lib"
 rem set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\icu\include"
 rem set "LIBS=%LIBS%;%__PROJECT__%\build\icu\lib"
 
-set "INCLUDES=%INCLUDES%;D:\a\swoole-cli\swoole-cli\var\native-build\vcpkg\packages\libiconv_x64-windows-static\include\"
-set "LIBS=%LIBS%;D:\a\swoole-cli\swoole-cli\var\native-build\vcpkg\packages\lib\"
+set "INCLUDES=%INCLUDES%;D:\a\swoole-cli\swoole-cli\var\native-build\vcpkg\packages\libiconv_x64-windows-static\include"
+set "LIBS=%LIBS%;D:\a\swoole-cli\swoole-cli\var\native-build\vcpkg\packages\libiconv_x64-windows-static\lib"
 
 set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\include\"
 set "LIBS=%LIBS%;%__PROJECT__%\build\lib\"
