@@ -37,7 +37,7 @@ cmake -S .. -B . ^
 -DCMAKE_BUILD_TYPE=Release ^
 -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
 -DCMAKE_INSTALL_PREFIX=%__PROJECT__%\build ^
--DIconv_ROOT=C:/vcpkg/packages/libiconv_x64-windows-static/ ^
+-DIconv_ROOT=D:/a/swoole-cli/swoole-cli/var/native-build/vcpkg/packages/libiconv_x64-windows-static/ ^
 -DLIBXML_STATIC=ON ^
 -DLIBXML2_WITH_ZLIB=OFF ^
 -DLIBXML2_WITH_LZMA=OFF ^
