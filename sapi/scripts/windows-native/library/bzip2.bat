@@ -26,7 +26,7 @@ dir
 
 set "CFLAGS=/EHsc /MP /MT "
 
-nmake -f makefile.msc
+nmake -f makefile.msc PREFIX=%__PROJECT__%\build\bzip2\
 
 
 :: vcpkg install bzip2:x64-windows-static
