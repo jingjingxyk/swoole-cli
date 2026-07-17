@@ -11,8 +11,16 @@ cd /d %__PROJECT__%
 mkdir  build
 
 set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
+cd /d %__PROJECT__%\pool\lib\
+7z.exe x -aoa -y   %__PROJECT__%\pool\lib\lz4-v1.9.4.tar.gz
 
-cd thirdparty\liblz4\build\cmake\
+if  exist "%__PROJECT__%\thirdparty\liblz4" rmdir /s /q "%__PROJECT__%\thirdparty\liblz4"
+mkdir "%__PROJECT__%\thirdparty\liblz4"
+
+7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libyaml"  %__PROJECT__%\pool\lib\lz4-v1.9.4.tar
+cd %__PROJECT__%\thirdparty\liblz4\lz4-v1.9.4\
+
+cd build\cmake\
 dir
 mkdir  build-dir
 cd build-dir

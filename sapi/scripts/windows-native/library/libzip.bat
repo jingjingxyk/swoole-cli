@@ -11,8 +11,15 @@ cd /d %__PROJECT__%
 mkdir  build
 
 set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
+cd /d %__PROJECT__%\pool\lib\
+7z.exe x -aoa -y   %__PROJECT__%\pool\lib\libzip-1.11.4.tar.gz
 
-cd thirdparty\libzip\
+if  exist "%__PROJECT__%\thirdparty\libzip" rmdir /s /q "%__PROJECT__%\thirdparty\libzip"
+mkdir "%__PROJECT__%\thirdparty\libzip"
+
+7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libzip"  %__PROJECT__%\pool\lib\libzip-1.11.4.tar
+cd %__PROJECT__%\thirdparty\libzip\libzip-1.11.4\
+
 dir
 mkdir  build-dir
 cd build-dir

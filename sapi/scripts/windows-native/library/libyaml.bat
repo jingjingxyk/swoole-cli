@@ -12,7 +12,15 @@ mkdir  build
 
 set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
 
-cd thirdparty\libyaml
+cd /d %__PROJECT__%\pool\lib\
+7z.exe x -aoa -y   %__PROJECT__%\pool\lib\yaml-0.2.5.tar.gz
+
+if  exist "%__PROJECT__%\thirdparty\libyaml" rmdir /s /q "%__PROJECT__%\thirdparty\libyaml"
+mkdir "%__PROJECT__%\thirdparty\libyaml"
+
+7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libyaml"  %__PROJECT__%\pool\lib\yaml-0.2.5.tar
+cd %__PROJECT__%\thirdparty\libyaml\yaml-0.2.5\
+
 dir
 mkdir  build
 cd build

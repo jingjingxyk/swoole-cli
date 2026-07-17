@@ -11,8 +11,15 @@ cd /d %__PROJECT__%
 mkdir  build
 
 set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
+cd /d %__PROJECT__%\pool\lib\
+7z.exe x -aoa -y   %__PROJECT__%\pool\lib\xz-5.4.1.tar.gz
 
-cd thirdparty\liblzma\
+if  exist "%__PROJECT__%\thirdparty\liblzma" rmdir /s /q "%__PROJECT__%\thirdparty\liblzma"
+mkdir "%__PROJECT__%\thirdparty\liblzmal"
+
+7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\liblzma"  %__PROJECT__%\pool\lib\xz-5.4.1.tar
+cd %__PROJECT__%\thirdparty\liblzma\xz-5.4.1\
+
 dir
 mkdir  build-dir
 cd build-dir

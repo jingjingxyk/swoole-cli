@@ -12,7 +12,16 @@ mkdir  build
 
 set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
 
-cd thirdparty\brotli
+
+cd /d %__PROJECT__%\pool\lib\
+7z.exe x -aoa -y   %__PROJECT__%\pool\lib\brotli-1.0.9.tar.gz
+
+if  exist "%__PROJECT__%\thirdparty\brotli" rmdir /s /q "%__PROJECT__%\thirdparty\brotli"
+mkdir "%__PROJECT__%\thirdparty\brotli"
+
+7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\brotli"  %__PROJECT__%\pool\lib\brotli-1.0.9.tar
+cd %__PROJECT__%\thirdparty\brotli\brotli-1.0.9\
+
 dir
 mkdir  build-dir
 cd build-dir
