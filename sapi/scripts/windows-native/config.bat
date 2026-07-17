@@ -40,9 +40,20 @@ rem set "LIBS=%LIBS%;%__PROJECT__%\build\icu\lib"
 set "INCLUDES=%INCLUDES%;D:\a\swoole-cli\swoole-cli\var\native-build\vcpkg\packages\libiconv_x64-windows-static\include"
 set "LIBS=%LIBS%;D:\a\swoole-cli\swoole-cli\var\native-build\vcpkg\packages\libiconv_x64-windows-static\lib"
 
+set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\liblz4\include\"
+set "LIBS=%LIBS%;%__PROJECT__%\build\liblz4\lib\"
+
+set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\bzip2\include\"
+set "LIBS=%LIBS%;%__PROJECT__%\build\bzip2\lib\"
+
+set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\liblzma\include\"
+set "LIBS=%LIBS%;%__PROJECT__%\build\liblzma\lib\"
+
+set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\libzip\include\"
+set "LIBS=%LIBS%;%__PROJECT__%\build\libzip\lib\"
+
 set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\include\"
 set "LIBS=%LIBS%;%__PROJECT__%\build\lib\"
-
 
 
 :: set "INCLUDE=%INCLUDE%;%PHP_SRC%\ext\"
