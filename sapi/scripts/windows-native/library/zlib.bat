@@ -45,6 +45,7 @@ cmake --build . --config Release --target install
 del "%__PROJECT__%\build\zlib\lib\zlib.lib"
 del "%__PROJECT__%\build\zlib\bin\zlib.dll"
 copy /Y "%__PROJECT__%\build\zlib\lib\zlibstatic.lib" "%__PROJECT__%\build\zlib\lib\zlib.lib"
+copy /Y "%__PROJECT__%\build\zlib\lib\zlibstatic.lib" "%__PROJECT__%\build\zlib\lib\zlib_a.lib"
 dir "%__PROJECT__%\build\zlib\lib\"
 cd /d %__PROJECT__%
 endlocal
