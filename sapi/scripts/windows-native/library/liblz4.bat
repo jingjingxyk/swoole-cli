@@ -18,7 +18,7 @@ if  exist "%__PROJECT__%\thirdparty\liblz4" rmdir /s /q "%__PROJECT__%\thirdpart
 mkdir "%__PROJECT__%\thirdparty\liblz4"
 
 7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\liblz4"  %__PROJECT__%\pool\lib\lz4-v1.9.4.tar
-cd %__PROJECT__%\thirdparty\liblz4\lz4-v1.9.4\
+cd %__PROJECT__%\thirdparty\liblz4\lz4-1.9.4\
 
 cd build\cmake\
 dir
