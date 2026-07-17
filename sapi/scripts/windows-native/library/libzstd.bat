@@ -53,6 +53,7 @@ cmake .. ^
 cmake --build . --config Release --target install
 
 del "%__PROJECT__%\build\libzstd\bin\zstd.dll"
-
+del "%__PROJECT__%\build\libzstd\lib\zstd.lib"
+copy /Y "%__PROJECT__%\build\libzstd\lib\zstd_static.lib" "%__PROJECT__%\build\libzstd\lib\zstd.lib"
 cd /d %__PROJECT__%
 endlocal
