@@ -142,15 +142,16 @@ configure.bat ^
 --enable-phar-native-ssl ^
 --with-openssl=static ^
 --with-iconv=static ^
---with-libxml=static ^
---with-xml ^
---enable-xmlreader ^
---enable-xmlwriter ^
---with-dom ^
---with-simplexml ^
---with-readline ^
 --enable-zip ^
---with-bz2 ^
+--with-bz2
+
+:: --with-libxml=static ^
+:: --with-xml ^
+:: --enable-xmlreader ^
+:: --enable-xmlwriter ^
+:: --with-dom ^
+:: --with-simplexml ^
+:: --with-readline ^
 :: --enable-mbstring ^
 :: --enable-exif ^
 :: --enable-mbregex ^
