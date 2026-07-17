@@ -33,7 +33,7 @@ nmake -f makefile.msc
 dumpbin /dependents bzip2.exe
 
 copy /Y *.h "%__PROJECT__%\build\bzip2\include\"
-copy /Y *.lib "%__PROJECT__%\build\bzip2\lib\"
+copy /Y libbz2.lib "%__PROJECT__%\build\bzip2\lib\libbz2_a.lib"
 
 :: vcpkg install bzip2:x64-windows-static
 
