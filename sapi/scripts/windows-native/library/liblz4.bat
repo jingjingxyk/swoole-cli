@@ -24,7 +24,7 @@ cd build\cmake\
 dir
 mkdir  build-dir
 cd build-dir
-cmake .. ^
+cmake -S .. -B . ^
 -DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\liblz4" ^
 -DCMAKE_BUILD_TYPE=Release  ^
 -DBUILD_SHARED_LIBS=OFF  ^
