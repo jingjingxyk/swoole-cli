@@ -29,6 +29,8 @@ set CL=/MP
 
 nmake -f makefile.msc
 
+dumpbin /dependents bzip2.exe
+
 copy /Y *.h "%__PROJECT__%\build\bzip2\include\"
 copy /Y *.lib "%__PROJECT__%\build\bzip2\lib\"
 
