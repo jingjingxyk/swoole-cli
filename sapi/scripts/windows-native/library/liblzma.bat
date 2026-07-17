@@ -28,7 +28,7 @@ cmake .. ^
 -DCMAKE_BUILD_TYPE=Release  ^
 -DBUILD_SHARED_LIBS=OFF  ^
 -DBUILD_STATIC_LIBS=ON ^
--DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
+-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded
 
 cmake --build . --config Release --target install
 
