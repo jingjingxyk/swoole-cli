@@ -142,8 +142,9 @@ configure.bat ^
 --enable-phar-native-ssl ^
 --with-openssl=static ^
 --with-iconv=static ^
---enable-zip
-:: --with-bz2
+--with-mysqlnd ^
+--enable-zip ^
+--with-bz2
 
 :: --with-libxml=static ^
 :: --with-xml ^
@@ -157,7 +158,6 @@ configure.bat ^
 :: --enable-mbregex ^
 :: --enable-fileinfo ^
 :: --enable-intl ^
-:: --with-mysqlnd ^
 :: --enable-soap ^
 :: --with-xsl
 
