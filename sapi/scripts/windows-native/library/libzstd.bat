@@ -21,7 +21,7 @@ mkdir "%__PROJECT__%\thirdparty\libzstd"
 7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libzstd"  %__PROJECT__%\pool\lib\zstd-1.5.2.tar
 cd %__PROJECT__%\thirdparty\libzstd\zstd-1.5.2\
 
-cd thirdparty\libzstd\build\cmake\
+cd build\cmake\
 dir
 
 set "LIBLZ4_PREFIX=%__PROJECT__%\build\liblz4"
