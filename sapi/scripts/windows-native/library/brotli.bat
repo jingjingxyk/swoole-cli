@@ -40,7 +40,7 @@ cmake --build . --config Release --target install
 
 
 del "%__PROJECT__%\build\brotli\bin\brotli.exe"
-del "%__PROJECT__%\build\brotli\bin\brotlidec.dll"
+del "%__PROJECT__%\build\brotli\bin\brotlienc.dll"
 del "%__PROJECT__%\build\brotli\bin\brotlidec.dll"
 del "%__PROJECT__%\build\brotli\bin\brotlicommon.dll"
 del "%__PROJECT__%\build\brotli\lib\brotlienc.lib"
