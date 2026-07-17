@@ -26,6 +26,7 @@ dir
 
 set "CFLAGS=/EHsc /MP /MT "
 set CL=/MP
+set "LDFLAGS=/VERBOSE:LIB	/DEFAULTLIB:libvcruntime.lib"
 
 nmake -f makefile.msc
 
