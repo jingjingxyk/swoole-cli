@@ -59,6 +59,7 @@ cmake .. ^
 
 cmake --build . --config Release --target install
 
+copy /Y %__PROJECT__%\build\libzip\libzip.lib "%__PROJECT__%\build\libzip\lib\libzip_a.lib"
 
 cd /d %__PROJECT__%
 endlocal
