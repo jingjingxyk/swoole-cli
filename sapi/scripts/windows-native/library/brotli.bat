@@ -23,12 +23,7 @@ mkdir "%__PROJECT__%\thirdparty\brotli"
 cd %__PROJECT__%\thirdparty\brotli\brotli-1.0.9\
 
 dir
-set "LIBLZ4_PREFIX=%__PROJECT__%\build\liblz4"
-set "LIBLZMA_PREFIX=%__PROJECT__%\build\liblzma"
-set "LIBZLIB_PREFIX=%__PROJECT__%\build\zlib"
-set "LIBZSTD_PREFIX=%__PROJECT__%\build\libzstd"
-set "OPENSSL_PREFIX=%__PROJECT__%\build\openssl"
-set "BZIP2_PREFIX=%__PROJECT__%\build\bzip2"
+
 
 mkdir  build-dir
 cd build-dir
@@ -41,8 +36,20 @@ cmake .. ^
 -DBROTLI_DISABLE_TESTS=OFF  ^
 -DBROTLI_BUNDLED_MODE=OFF
 
-
 cmake --build . --config Release --target install
+
+
+del "%__PROJECT__%\build\brotli\bin\brotli.exe"
+del "%__PROJECT__%\build\brotli\bin\brotlidec.dll"
+del "%__PROJECT__%\build\brotli\bin\brotlidec.dll"
+del "%__PROJECT__%\build\brotli\bin\brotlicommon.dll"
+del "%__PROJECT__%\build\brotli\lib\brotlienc.lib"
+del "%__PROJECT__%\build\brotli\lib\brotlidec.lib"
+del "%__PROJECT__%\build\brotli\lib\brotlicommon.lib"
+
+copy /Y "%__PROJECT__%\build\brotli\lib\brotlienc-static.lib" "%__PROJECT__%\build\brotli\lib\brotlienc.lib"
+copy /Y "%__PROJECT__%\build\brotli\lib\brotlidec-static.lib" "%__PROJECT__%\build\brotli\lib\brotlidec.lib"
+copy /Y "%__PROJECT__%\build\brotli\lib\brotlicommon-static.lib" "%__PROJECT__%\build\brotli\lib\brotlicommon.lib"
 
 cd /d %__PROJECT__%
 endlocal
