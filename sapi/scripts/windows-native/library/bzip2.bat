@@ -8,9 +8,9 @@ cd ..\..\..\..\
 
 set __PROJECT__=%cd%
 cd /d %__PROJECT__%
-mkdir  build
-
-set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
+mkdir  %__PROJECT__%\build\bzip2\
+mkdir  %__PROJECT__%\build\bzip2\include\
+mkdir  %__PROJECT__%\build\bzip2\lib\
 
 
 cd /d %__PROJECT__%\pool\lib\
@@ -25,9 +25,12 @@ cd %__PROJECT__%\thirdparty\bzip2\bzip2-1.0.8\
 dir
 
 set "CFLAGS=/EHsc /MP /MT "
+set CL=/MP
 
-nmake -f makefile.msc PREFIX=%__PROJECT__%\build\bzip2\
+nmake -f makefile.msc
 
+copy /Y *.h "%__PROJECT__%\build\bzip2\include\"
+copy /Y *.lib "%__PROJECT__%\build\bzip2\lib\"
 
 :: vcpkg install bzip2:x64-windows-static
 
