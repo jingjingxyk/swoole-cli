@@ -23,6 +23,13 @@ mkdir "%__PROJECT__%\thirdparty\brotli"
 cd %__PROJECT__%\thirdparty\brotli\brotli-1.0.9\
 
 dir
+set "LIBLZ4_PREFIX=%__PROJECT__%\build\liblz4"
+set "LIBLZMA_PREFIX=%__PROJECT__%\build\liblzma"
+set "LIBZLIB_PREFIX=%__PROJECT__%\build\zlib"
+set "LIBZSTD_PREFIX=%__PROJECT__%\build\libzstd"
+set "OPENSSL_PREFIX=%__PROJECT__%\build\openssl"
+set "BZIP2_PREFIX=%__PROJECT__%\build\bzip2"
+
 mkdir  build-dir
 cd build-dir
 cmake .. ^
@@ -33,24 +40,7 @@ cmake .. ^
 -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
 -DBROTLI_DISABLE_TESTS=OFF  ^
 -DBROTLI_BUNDLED_MODE=OFF
--DBUILD_TOOLS=ON \
--DBUILD_EXAMPLES=OFF \
--DBUILD_DOC=OFF \
--DLIBZIP_DO_INSTALL=ON \
--DENABLE_GNUTLS=OFF  \
--DENABLE_MBEDTLS=OFF \
--DENABLE_OPENSSL=ON \
--DOPENSSL_USE_STATIC_LIBS=TRUE \
--DENABLE_BZIP2=ON \
--DENABLE_COMMONCRYPTO=OFF \
--DENABLE_LZMA=ON \
--DENABLE_ZSTD=ON \
--DOpenSSL_ROOT={$openssl_prefix} \
--DZLIB_ROOT={$zlib_prefix} \
--DBZip2_ROOT={$bzip2_prefix} \
--DLibLZMA_ROOT={$liblzma_prefix} \
--DZstd_ROOT={$libzstd_prefix} \
--DCMAKE_POLICY_VERSION_MINIMUM=3.5
+
 
 cmake --build . --config Release --target install
 
