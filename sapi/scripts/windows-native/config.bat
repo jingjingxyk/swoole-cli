@@ -142,8 +142,8 @@ configure.bat ^
 --enable-phar-native-ssl ^
 --with-openssl=static ^
 --with-iconv=static ^
---enable-zip ^
---with-bz2
+--enable-zip
+:: --with-bz2
 
 :: --with-libxml=static ^
 :: --with-xml ^
