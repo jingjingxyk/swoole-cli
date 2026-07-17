@@ -146,6 +146,17 @@ configure.bat ^
 --with-dom ^
 --with-simplexml ^
 --with-readline ^
+--enable-zip ^
+--with-bz2 ^
+--enable-mbstring ^
+--enable-exif ^
+--enable-mbregex ^
+--enable-fileinfo ^
+--enable-intl ^
+--with-mysqlnd ^
+--enable-soap ^
+--with-xsl
+
 
 
 :: --enable-fileinfo ^
