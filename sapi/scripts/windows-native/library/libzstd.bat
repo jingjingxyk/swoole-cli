@@ -18,7 +18,7 @@ cd /d %__PROJECT__%\pool\lib\
 if  exist "%__PROJECT__%\thirdparty\libzstd" rmdir /s /q "%__PROJECT__%\thirdparty\libzstd"
 mkdir "%__PROJECT__%\thirdparty\libzstd"
 
-7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libyaml"  %__PROJECT__%\pool\lib\zstd-1.5.2.tar
+7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libzstd"  %__PROJECT__%\pool\lib\zstd-1.5.2.tar
 cd %__PROJECT__%\thirdparty\libzstd\zstd-1.5.2\
 
 cd thirdparty\libzstd\build\cmake\
