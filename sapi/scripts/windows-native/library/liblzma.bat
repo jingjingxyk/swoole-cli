@@ -32,6 +32,7 @@ cmake .. ^
 
 cmake --build . --config Release --target install
 
+copy /Y "%__PROJECT__%\build\liblzma\lib\liblzma.lib" "%__PROJECT__%\build\liblzma\lib\liblzma_a.lib"
 
 cd /d %__PROJECT__%
 endlocal
