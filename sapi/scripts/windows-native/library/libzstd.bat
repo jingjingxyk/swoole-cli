@@ -52,6 +52,7 @@ cmake .. ^
 
 cmake --build . --config Release --target install
 
+del "%__PROJECT__%\build\libzstd\bin\zstd.dll"
 
 cd /d %__PROJECT__%
 endlocal
