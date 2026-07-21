@@ -52,6 +52,9 @@ set "LIBS=%LIBS%;%__PROJECT__%\build\liblzma\lib"
 set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\brotli\include"
 set "LIBS=%LIBS%;%__PROJECT__%\build\brotli\lib"
 
+set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\libzstd\include"
+set "LIBS=%LIBS%;%__PROJECT__%\build\libzstd\lib"
+
 set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\libzip\include"
 set "LIBS=%LIBS%;%__PROJECT__%\build\libzip\lib"
 
