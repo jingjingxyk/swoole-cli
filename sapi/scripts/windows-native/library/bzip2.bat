@@ -37,6 +37,8 @@ copy /Y *.h "%__PROJECT__%\build\bzip2\include\"
 copy /Y libbz2.lib "%__PROJECT__%\build\bzip2\lib\libbz2_a.lib"
 copy /Y libbz2.lib "%__PROJECT__%\build\bzip2\lib\"
 
+dumpbin /DIRECTIVES "%__PROJECT__%\build\bzip2\lib\libbz2_a.lib" |  findstr /i "DEFAULTLIB"
+
 :: vcpkg install bzip2:x64-windows-static
 
 cd /d %__PROJECT__%

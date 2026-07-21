@@ -66,5 +66,7 @@ cmake --build . --config Release --target install
 copy /Y %__PROJECT__%\build\libzip\lib\zip.lib "%__PROJECT__%\build\libzip\lib\zip_a.lib"
 copy /Y %__PROJECT__%\build\libzip\lib\zip.lib "%__PROJECT__%\build\libzip\lib\libzip_a.lib"
 
+dumpbin /DIRECTIVES %__PROJECT__%\build\libzip\lib\zip.lib | findstr /i "DEFAULTLIB"
+
 cd /d %__PROJECT__%
 endlocal
