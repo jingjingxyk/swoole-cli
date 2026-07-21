@@ -37,6 +37,7 @@ rem debug
 .\x64\Release_TS\php.exe -v
 .\x64\Release_TS\php.exe -m
 :: dumpbin /DEPENDENTS ".\x64\Release\php.exe"
+
 dumpbin /DEPENDENTS ".\x64\Release_TS\php.exe"
 
 cd %__PROJECT__%
