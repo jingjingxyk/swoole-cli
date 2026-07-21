@@ -56,6 +56,5 @@ del "%__PROJECT__%\build\libzstd\bin\zstd.dll"
 del "%__PROJECT__%\build\libzstd\lib\zstd.lib"
 copy /Y "%__PROJECT__%\build\libzstd\lib\zstd_static.lib" "%__PROJECT__%\build\libzstd\lib\zstd.lib"
 copy /Y "%__PROJECT__%\build\libzstd\lib\zstd.lib" "%__PROJECT__%\build\libzstd\lib\zstd_a.lib"
-copy /Y "%__PROJECT__%\build\libzstd\lib\zstd.lib" "%__PROJECT__%\build\libzstd\lib\libzstd_a.lib"
 cd /d %__PROJECT__%
 endlocal
