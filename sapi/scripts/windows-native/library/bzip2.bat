@@ -28,7 +28,7 @@ set "CFLAGS=/EHsc /MP /MT "
 set CL=/MP
 set "LDFLAGS=/VERBOSE:LIB	/DEFAULTLIB:libvcruntime.lib"
 
-sed.exe -i".bak" "s/CFLAGS= -DWIN32/CFLAGS= -DWIN32 \/EHsc \/MP \/MT/" makefile.msc
+sed.exe -i".bak" "s/-MD/-MT/" makefile.msc
 nmake /E -f makefile.msc
 
 dumpbin /dependents bzip2.exe
