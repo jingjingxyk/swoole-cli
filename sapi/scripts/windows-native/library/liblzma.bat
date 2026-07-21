@@ -34,5 +34,8 @@ cmake --build . --config Release --target install
 
 copy /Y "%__PROJECT__%\build\liblzma\lib\liblzma.lib" "%__PROJECT__%\build\liblzma\lib\liblzma_a.lib"
 
+dumpbin /DIRECTIVES "%__PROJECT__%\build\liblzma\lib\liblzma.lib" |  findstr /i "DEFAULTLIB"
+
+
 cd /d %__PROJECT__%
 endlocal
