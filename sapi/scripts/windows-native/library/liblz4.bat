@@ -32,7 +32,9 @@ cmake -S .. -B . ^
 -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
 -DLZ4_POSITION_INDEPENDENT_LIB=ON  ^
 -DLZ4_BUILD_LEGACY_LZ4C=ON  ^
--DLZ4_BUILD_CLI=ON
+-DLZ4_BUILD_CLI=ON ^
+-DCMAKE_C_FLAGS="/MT /O2 /W3 /DNDEBUG" ^
+-DCMAKE_C_FLAGS_RELEASE="/MT /O2 /W3 /DNDEBUG"
 
 cmake --build . --config Release --target install
 
