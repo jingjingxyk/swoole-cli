@@ -29,7 +29,8 @@ cmake .. ^
 -DBUILD_SHARED_LIBS=OFF  ^
 -DBUILD_STATIC_LIBS=ON ^
 -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
--DCMAKE_C_FLAGS_RELEASE="/MT /O2 /DNDEBUG"
+-DCMAKE_C_FLAGS="/MT /O2 /W3 /DNDEBUG" ^
+-DCMAKE_C_FLAGS_RELEASE="/MT /O2 /W3 /DNDEBUG"
 
 cmake --build . --config Release --target install
 
