@@ -24,7 +24,7 @@ cd %__PROJECT__%\thirdparty\bzip2\bzip2-1.0.8\
 
 dir
 
-set "CFLAGS=/EHsc /MP /MT "
+:: set "CFLAGS=/EHsc /MP /MT "
 set CL=/MP
 set "LDFLAGS=/VERBOSE:LIB	/DEFAULTLIB:libvcruntime.lib"
 
