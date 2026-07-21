@@ -146,8 +146,8 @@ configure.bat ^
 --with-openssl=static ^
 --with-iconv=static ^
 --with-mysqlnd ^
---with-bz2
-:: --enable-zip ^
+--with-bz2 ^
+--enable-zip
 
 :: --with-libxml=static ^
 :: --with-xml ^
