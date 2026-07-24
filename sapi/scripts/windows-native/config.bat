@@ -66,9 +66,11 @@ set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\lib"
 :: set "INCLUDE=%INCLUDE%;%PHP_SRC%\ext\"
 set "INCLUDE=%X_INCLUDES%;%INCLUDE%"
 set "LIB=%X_LIBS%;%LIB%"
+set "X_LIBS= libzstd_a.lib "
 
-echo "%INCLUDE%"
-echo "%LIB%"
+echo "INCLUDE=%INCLUDE%"
+echo "LIB=%LIB%"
+
 set "PHP_PHP_BUILD=%__PROJECT__%\build"
 echo %PHP_PHP_BUILD%
 mkdir %__PROJECT__%\build

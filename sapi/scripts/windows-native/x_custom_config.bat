@@ -86,6 +86,7 @@ echo    ^@echo ASM_OBJS: $(ASM_OBJS)        >> %X_MAKEFILE%
 echo    ^@echo ==================           >> %X_MAKEFILE%
 echo    ^@echo MCFILE: $(MCFILE)            >> %X_MAKEFILE%
 echo    ^@echo ==================           >> %X_MAKEFILE%
+echo    ^@echo X_LIBS: $(X_LIBS)            >> %X_MAKEFILE%
 
 :x-custom-show-var-end
 
