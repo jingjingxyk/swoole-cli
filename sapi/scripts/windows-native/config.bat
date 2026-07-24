@@ -154,11 +154,11 @@ configure.bat ^
 --with-bz2 ^
 --enable-zip ^
 --with-libxml=static ^
---with-xml ^
---enable-xmlreader ^
---enable-xmlwriter ^
---with-dom ^
---with-simplexml
+:: --with-xml ^
+:: --enable-xmlreader ^
+:: --enable-xmlwriter ^
+:: --with-dom ^
+:: --with-simplexml
 :: --with-readline ^
 :: --enable-mbstring ^
 :: --enable-exif ^
