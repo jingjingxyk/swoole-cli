@@ -74,7 +74,7 @@ copy /Y %__PROJECT__%\build\libzip\lib\zip.lib "%__PROJECT__%\build\libzip\lib\z
 copy /Y %__PROJECT__%\build\libzip\lib\zip.lib "%__PROJECT__%\build\libzip\lib\libzip_a.lib"
 
 dumpbin /DIRECTIVES "%__PROJECT__%\build\libzip\lib\libzip_a.lib" | findstr /i "DEFAULTLIB"
-dumpbin /SYMBOLS "%__PROJECT__%\build\libzip\lib\libzip_a.lib" | findstr "ZSTD_" | findstr "imp"
+dumpbin /SYMBOLS "%__PROJECT__%\build\libzip\lib\libzip_a.lib" | findstr "imp"
 
 cd /d %__PROJECT__%
 endlocal
