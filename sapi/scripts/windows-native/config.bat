@@ -131,7 +131,7 @@ set CL=/MP
 
 
 configure.bat ^
---with-php-build="%__PROJECT__%\\build" ^
+--with-php-build="%PHP_PHP_BUILD%" ^
 --with-extra-includes="%INCLUDE%" ^
 --with-extra-libs="%LIB%" ^
 --with-toolset=vs ^
