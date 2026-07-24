@@ -62,6 +62,7 @@ copy /Y "%__PROJECT__%\build\libzstd\lib\zstd.lib" "%__PROJECT__%\build\libzstd\
 
 dumpbin /DIRECTIVES "%__PROJECT__%\build\libzstd\lib\zstd.lib" | findstr /i "DEFAULTLIB"
 
+findstr /i "dllimport" "%__PROJECT__%\build\libzstd\include\zstd.h"
 
 cd /d %__PROJECT__%
 endlocal

@@ -39,6 +39,7 @@ copy /Y "%__PROJECT__%\build\liblzma\lib\liblzma.lib" "%__PROJECT__%\build\liblz
 
 dumpbin /DIRECTIVES "%__PROJECT__%\build\liblzma\lib\liblzma.lib" |  findstr /i "DEFAULTLIB"
 
+findstr /i "dllimport" "%__PROJECT__%\build\liblzma\include\lzma.h"
 
 cd /d %__PROJECT__%
 endlocal
