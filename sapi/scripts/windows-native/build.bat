@@ -10,11 +10,8 @@ set "__PROJECT__=%cd%"
 echo %cd%
 cd %__PROJECT__%\var\native-build\php-src\
 
-rem set "INCLUDE=%INCLUDE%;%__PROJECT__%\openssl\include\;%__PROJECT__%\zlib\include"
-rem set "LIB=%LIB%;%__PROJECT__%\openssl\lib\;%__PROJECT__%\zlib\lib"
-rem set "LIBPATH=%LIBPATH%;%__PROJECT__%\openssl\lib\;%__PROJECT__%\zlib\lib\"
-
 set CL=/MP
+
 rem set RTLIBCFG=static
 rem nmake   mode=static debug=false
 
@@ -23,6 +20,8 @@ rem nmake   mode=static debug=false
 :: exit /b
 rem set "LIBS_CLI=kernel32.lib ole32.lib user32.lib advapi32.lib shell32.lib ws2_32.lib Dnsapi.lib psapi.lib bcrypt.lib"
 rem set "LIBS_CLI=%LIBS_CLI% zlibstatic.lib"
+
+set "X_LIBS= libzstd_a.lib "
 
 
 nmake /E /f Makefile  x-show-var
