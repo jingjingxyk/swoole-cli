@@ -53,10 +53,10 @@ cmake .. ^
 -DOpenSSL_ROOT="%OPENSSL_PREFIX%" ^
 -DZLIB_ROOT="%LIBZLIB_PREFIX%" ^
 -DLibLZMA_ROOT="%LIBLZMA_PREFIX%" ^
--DLibLZMA_LIBRARIES="%LIBLZMA_PREFIX%\lib\liblzma_a.lib" ^
+-DLIBLZMA_LIBRARY="%LIBLZMA_PREFIX%\lib\liblzma_a.lib" ^
 -DLibLZMA_INCLUDE_DIR="%LIBLZMA_PREFIX%\include" ^
 -DZstd_ROOT="%LIBZSTD_PREFIX%" ^
--DZstd_LIBRARIES="%LIBZSTD_PREFIX%\lib\libzstd_a.lib" ^
+-DZstd_LIBRARY="%LIBZSTD_PREFIX%\lib\libzstd_a.lib" ^
 -DZstd_INCLUDE_DIR="%LIBZSTD_PREFIX%\include" ^
 -DBZip2_ROOT="%BZIP2_PREFIX%" ^
 -DBZIP2_LIBRARIES="%BZIP2_PREFIX%\lib\libbz2_a.lib" ^
