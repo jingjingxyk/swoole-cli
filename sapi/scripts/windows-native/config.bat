@@ -152,14 +152,13 @@ configure.bat ^
 --with-iconv=static ^
 --with-mysqlnd ^
 --with-bz2 ^
---enable-zip
-
-:: --with-libxml=static ^
-:: --with-xml ^
-:: --enable-xmlreader ^
-:: --enable-xmlwriter ^
-:: --with-dom ^
-:: --with-simplexml ^
+--enable-zip ^
+--with-libxml=static ^
+--with-xml ^
+--enable-xmlreader ^
+--enable-xmlwriter ^
+--with-dom ^
+--with-simplexml
 :: --with-readline ^
 :: --enable-mbstring ^
 :: --enable-exif ^
