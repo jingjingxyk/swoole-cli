@@ -52,11 +52,12 @@ cmake --build . --config Release --target install
 
 del "%__PROJECT__%\build\libzstd\bin\zstd.dll"
 del "%__PROJECT__%\build\libzstd\lib\zstd.lib"
-copy /Y "%__PROJECT__%\build\libzstd\lib\zstd_static.lib" "%__PROJECT__%\build\libzstd\lib\zstd.lib"
-copy /Y "%__PROJECT__%\build\libzstd\lib\zstd.lib" "%__PROJECT__%\build\libzstd\lib\zstd_a.lib"
-copy /Y "%__PROJECT__%\build\libzstd\lib\zstd.lib" "%__PROJECT__%\build\libzstd\lib\libzstd_a.lib"
 
-dumpbin /DIRECTIVES "%__PROJECT__%\build\libzstd\lib\zstd.lib" | findstr /i "DEFAULTLIB"
+copy /Y "%__PROJECT__%\build\libzstd\lib\zstd_static.lib" "%__PROJECT__%\build\libzstd\lib\zstd_a.lib"
+copy /Y "%__PROJECT__%\build\libzstd\lib\zstd_static.lib" "%__PROJECT__%\build\libzstd\lib\libzstd_a.lib"
+
+dumpbin /DIRECTIVES "%__PROJECT__%\build\libzstd\lib\zstd_static.lib" | findstr /i "DEFAULTLIB"
+dumpbin /SYMBOLS "%__PROJECT__%\build\libzstd\lib\zstd_static.lib" | findstr "ZSTD_" | findstr "imp"
 
 findstr /i "dllimport" "%__PROJECT__%\build\libzstd\include\zstd.h"
 
