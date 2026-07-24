@@ -41,8 +41,8 @@ nmake install_sw
 rem document
 rem openssl\Configurations\windows-makefile.tmpl
 rem fix no found file " openssl/applink.c "
-copy %__PROJECT__%\thirdparty\openssl\openssl-3.6.0\ms\applink.c  %__PROJECT__%\build\openssl\include\openssl\applink.c
-
+copy /Y %__PROJECT__%\thirdparty\openssl\openssl-3.6.0\ms\applink.c  %__PROJECT__%\build\openssl\include\openssl\applink.c
+copy /Y %__PROJECT__%\build\openssl\lib\libcrypto.lib %__PROJECT__%\build\openssl\lib\libeay32st.lib
 
 cd /d %__PROJECT__%
 endlocal
