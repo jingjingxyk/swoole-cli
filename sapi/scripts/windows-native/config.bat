@@ -25,49 +25,47 @@ if exist "configure.js" (
     nmake clean
 )
 
-set "INCLUDES="
-set "LIBS="
+set "X_INCLUDES="
+set "X_LIBS="
 
-set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\zlib\include"
-set "LIBS=%LIBS%;%__PROJECT__%\build\zlib\lib"
+set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\zlib\include"
+set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\zlib\lib"
 
-set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\openssl\include"
-set "LIBS=%LIBS%;%__PROJECT__%\build\openssl\lib"
+set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\openssl\include"
+set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\openssl\lib"
 
-rem set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\icu\include"
-rem set "LIBS=%LIBS%;%__PROJECT__%\build\icu\lib"
+rem set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\icu\include"
+rem set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\icu\lib"
 
-set "INCLUDES=%INCLUDES%;D:\a\swoole-cli\swoole-cli\var\native-build\vcpkg\packages\libiconv_x64-windows-static\include"
-set "LIBS=%LIBS%;D:\a\swoole-cli\swoole-cli\var\native-build\vcpkg\packages\libiconv_x64-windows-static\lib"
+set "X_INCLUDES=%X_INCLUDES%;D:\a\swoole-cli\swoole-cli\var\native-build\vcpkg\packages\libiconv_x64-windows-static\include"
+set "X_LIBS=%X_LIBS%;D:\a\swoole-cli\swoole-cli\var\native-build\vcpkg\packages\libiconv_x64-windows-static\lib"
 
-set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\liblz4\include"
-set "LIBS=%LIBS%;%__PROJECT__%\build\liblz4\lib"
+set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\liblz4\include"
+set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\liblz4\lib"
 
-set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\bzip2\include"
-set "LIBS=%LIBS%;%__PROJECT__%\build\bzip2\lib"
+set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\bzip2\include"
+set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\bzip2\lib"
 
-set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\liblzma\include"
-set "LIBS=%LIBS%;%__PROJECT__%\build\liblzma\lib"
+set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\liblzma\include"
+set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\liblzma\lib"
 
-set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\brotli\include"
-set "LIBS=%LIBS%;%__PROJECT__%\build\brotli\lib"
+set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\brotli\include"
+set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\brotli\lib"
 
-set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\libzstd\include"
-set "LIBS=%LIBS%;%__PROJECT__%\build\libzstd\lib"
+set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\libzstd\include"
+set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libzstd\lib"
 
 
-set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\libzip\include"
-set "LIBS=%LIBS%;%__PROJECT__%\build\libzip\lib"
+set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\libzip\include"
+set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libzip\lib"
 
-set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\include"
-set "LIBS=%LIBS%;%__PROJECT__%\build\lib"
+set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\include"
+set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\lib"
 
 
 :: set "INCLUDE=%INCLUDE%;%PHP_SRC%\ext\"
-set "INCLUDE=%INCLUDE%;%INCLUDES%"
-set "LIB=%LIB%;%LIBS%"
-dir "%LIB%" | findstr ws2_32.lib
-:: echo %LIBPATH%
+set "INCLUDE=%X_INCLUDES%;%INCLUDE%;"
+set "LIB=%X_LIBS;%LIB%%"
 
 set "PHP_PHP_BUILD=%__PROJECT__%\build"
 echo %PHP_PHP_BUILD%
@@ -91,9 +89,13 @@ rem https://learn.microsoft.com/zh-cn/cpp/c-runtime-library/crt-library-features
 
 set "LDFLAGS=/VERBOSE:LIB	/DEFAULTLIB:libvcruntime.lib /DEFAULTLIB:libucrt.lib /NODEFAULTLIB:MSVCRT"
 :: set "LDFLAGS=%LDFLAGS% kernel32.lib ole32.lib user32.lib advapi32.lib shell32.lib ws2_32.lib Dnsapi.lib psapi.lib bcrypt.lib"
- set "LDFLAGS=%LDFLAGS% libzstd_a.lib "
+set "LIBS="%LIBS% libzstd_a.lib";
+
+:: dir "%LIBS%" | findstr ws2_32.lib
+:: echo %LIBPATH%
 
 ::set "LDFLAGS=/VERBOSE:LIB 	/NODEFAULTLIB:msvcrt.lib /NODEFAULTLIB:msvcrtd.lib /NODEFAULTLIB:libcmtd.lib /DEFAULTLIB:libcmt.lib  /DEFAULTLIB:libucrt.lib /DEFAULTLIB:libcpmt.lib /DEFAULTLIB:libvcruntime.lib	/NODEFAULTLIB:libucrtd.lib  /NODEFAULTLIB:ucrt.lib /NODEFAULTLIB:ucrtd.lib	"
+
 
 rem no link vcruntime140d.dll
 rem https://github.com/php/php-src/blob/PHP-8.5.8/win32/winutil.c#L487
