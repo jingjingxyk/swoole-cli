@@ -36,8 +36,9 @@ cmake .. ^
 cmake --build . --config Release --target install
 
 copy /Y "%__PROJECT__%\build\liblzma\lib\liblzma.lib" "%__PROJECT__%\build\liblzma\lib\liblzma_a.lib"
+del "%__PROJECT__%\build\liblzma\lib\liblzma.lib"
 
-dumpbin /DIRECTIVES "%__PROJECT__%\build\liblzma\lib\liblzma.lib" |  findstr /i "DEFAULTLIB"
+dumpbin /DIRECTIVES "%__PROJECT__%\build\liblzma\lib\liblzma_a.lib" |  findstr /i "DEFAULTLIB"
 
 findstr /i "dllimport" "%__PROJECT__%\build\liblzma\include\lzma.h"
 

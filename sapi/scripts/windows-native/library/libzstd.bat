@@ -53,7 +53,6 @@ cmake --build . --config Release --target install
 del "%__PROJECT__%\build\libzstd\bin\zstd.dll"
 del "%__PROJECT__%\build\libzstd\lib\zstd.lib"
 
-copy /Y "%__PROJECT__%\build\libzstd\lib\zstd_static.lib" "%__PROJECT__%\build\libzstd\lib\zstd_a.lib"
 copy /Y "%__PROJECT__%\build\libzstd\lib\zstd_static.lib" "%__PROJECT__%\build\libzstd\lib\libzstd_a.lib"
 
 dumpbin /DIRECTIVES "%__PROJECT__%\build\libzstd\lib\zstd_static.lib" | findstr /i "DEFAULTLIB"
