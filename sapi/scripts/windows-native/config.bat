@@ -54,7 +54,7 @@ set "LIBS=%LIBS%;%__PROJECT__%\build\brotli\lib"
 
 set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\libzstd\include"
 set "LIBS=%LIBS%;%__PROJECT__%\build\libzstd\lib"
-set "LIBS=%LIBS%;libzstd_a.lib ; "
+
 
 set "INCLUDES=%INCLUDES%;%__PROJECT__%\build\libzip\include"
 set "LIBS=%LIBS%;%__PROJECT__%\build\libzip\lib"
@@ -91,7 +91,7 @@ rem https://learn.microsoft.com/zh-cn/cpp/c-runtime-library/crt-library-features
 
 set "LDFLAGS=/VERBOSE:LIB	/DEFAULTLIB:libvcruntime.lib /DEFAULTLIB:libucrt.lib /NODEFAULTLIB:MSVCRT"
 :: set "LDFLAGS=%LDFLAGS% kernel32.lib ole32.lib user32.lib advapi32.lib shell32.lib ws2_32.lib Dnsapi.lib psapi.lib bcrypt.lib"
-:: set "LDFLAGS=%LDFLAGS% zlib.lib"
+set "LDFLAGS=%LDFLAGS% libzstd_a.lib"
 
 ::set "LDFLAGS=/VERBOSE:LIB 	/NODEFAULTLIB:msvcrt.lib /NODEFAULTLIB:msvcrtd.lib /NODEFAULTLIB:libcmtd.lib /DEFAULTLIB:libcmt.lib  /DEFAULTLIB:libucrt.lib /DEFAULTLIB:libcpmt.lib /DEFAULTLIB:libvcruntime.lib	/NODEFAULTLIB:libucrtd.lib  /NODEFAULTLIB:ucrt.lib /NODEFAULTLIB:ucrtd.lib	"
 
