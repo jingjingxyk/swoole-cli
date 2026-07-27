@@ -153,7 +153,8 @@ configure.bat ^
 --with-mysqlnd ^
 --with-bz2 ^
 --enable-zip ^
---with-libxml=static
+--with-libxml=static ^
+--with-xml
 
 :: --with-xml ^
 :: --enable-xmlreader ^
