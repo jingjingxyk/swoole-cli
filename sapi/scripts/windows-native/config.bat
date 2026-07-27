@@ -154,6 +154,7 @@ configure.bat ^
 --with-bz2 ^
 --enable-zip ^
 --with-libxml=static
+
 :: --with-xml ^
 :: --enable-xmlreader ^
 :: --enable-xmlwriter ^

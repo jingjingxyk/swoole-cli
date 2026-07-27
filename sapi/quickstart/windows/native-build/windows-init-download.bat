@@ -60,6 +60,7 @@ if not exist "all-deps.zip" curl.exe -fSLo all-deps.zip https://github.com/swool
 :: curl.exe -fSLo 7z2409-x64.exe  https://download.jingjingxyk.com/7z2409-x64.exe
 :: curl.exe -fSLo nasm-2.16.03-win64.zip  https://download.jingjingxyk.com/nasm-2.16.03-win64.zip
 
+if not exist "Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" curl.exe -fSLo Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle https://github.com/microsoft/winget-cli/releases/download/v1.29.280/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
 
 if not exist "vcpkg" git clone https://github.com/microsoft/vcpkg.git
 

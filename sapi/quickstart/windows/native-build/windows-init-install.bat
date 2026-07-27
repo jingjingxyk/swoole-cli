@@ -19,6 +19,10 @@ md %__PROJECT__%\runtime\
 cd /d %__PROJECT__%\var\native-build\
 dir
 
+Add-AppxPackage -Path ".\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
+:: winget install vim.vim
+winget search Microsoft.Edit
+:: winget install Microsoft.Edit
 
 msiexec /i strawberry-perl-5.38.2.2-64bit.msi  /passive
 
