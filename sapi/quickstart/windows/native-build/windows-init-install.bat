@@ -20,7 +20,7 @@ cd /d %__PROJECT__%\var\native-build\
 dir
 
 Add-AppxPackage -Path ".\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
-:: winget install vim.vim
+winget install vim.vim
 winget search Microsoft.Edit
 :: winget install Microsoft.Edit
 
