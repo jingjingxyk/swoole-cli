@@ -169,12 +169,11 @@ configure.bat ^
 --enable-tokenizer ^
 --with-iconv=static ^
 --with-libxml ^
---with-xml
-
-:: --enable-xmlreader ^
-:: --enable-xmlwriter ^
-:: --with-dom ^
-:: --with-simplexml
+--with-xml ^
+--enable-xmlreader ^
+--enable-xmlwriter ^
+--with-dom ^
+--with-simplexml
 
 :: --enable-ctype     --enable-pdo    --enable-phar  ^
 :: --enable-sockets ^
