@@ -82,12 +82,12 @@ echo "========HELP============"
 call configure.bat --help
 
 
-sed.exe -i.".bak" '/var dir_part_to_add = "";/i  STDOUT.WriteLine(header_name);' configure.js
-sed.exe -i.".bak" '/var dir_part_to_add = "";/i  STDOUT.WriteLine(flag_name);' configure.js
-sed.exe -i.".bak" '/var dir_part_to_add = "";/i  STDOUT.WriteLine(path_to_check);' configure.js
-sed.exe -i.".bak" '/var dir_part_to_add = "";/i  STDOUT.WriteLine(use_env);' configure.js
-sed.exe -i.".bak" '/var dir_part_to_add = "";/i  STDOUT.WriteLine(add_dir_part);' configure.js
-sed.exe -i.".bak" '/var dir_part_to_add = "";/i  STDOUT.WriteLine(add_to_flag_only);' configure.js
+:: sed.exe -i.".bak" '/var dir_part_to_add = "";/i  STDOUT.WriteLine(header_name);' configure.js
+:: sed.exe -i.".bak" '/var dir_part_to_add = "";/i  STDOUT.WriteLine(flag_name);' configure.js
+:: sed.exe -i.".bak" '/var dir_part_to_add = "";/i  STDOUT.WriteLine(path_to_check);' configure.js
+:: sed.exe -i.".bak" '/var dir_part_to_add = "";/i  STDOUT.WriteLine(use_env);' configure.js
+:: sed.exe -i.".bak" '/var dir_part_to_add = "";/i  STDOUT.WriteLine(add_dir_part);' configure.js
+:: sed.exe -i.".bak" '/var dir_part_to_add = "";/i  STDOUT.WriteLine(add_to_flag_only);' configure.js
 
 
 sed.exe -i.".bak" '/dep_present = eval("PHP_" + DEP);/i  STDOUT.WriteLine(extname);' configure.js
