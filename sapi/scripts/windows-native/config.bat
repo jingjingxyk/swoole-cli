@@ -81,7 +81,7 @@ echo "========HELP============"
 
 call configure.bat --help
 
-sed.exe -i.".bak" '/var dir_part_to_add = "";/i    WScript.Echo header_name, flag_name, path_to_check, use_env, add_dir_part, add_to_flag_only' configure.js
+sed.exe -i.".bak" '/var dir_part_to_add = "";/i    WScript.Echo header_name, flag_name, path_to_check, use_env, add_dir_part, add_to_flag_only ;' configure.js
 
 sed.exe -i.".bak" '/generate_files();/i STDOUT.WriteLine("=======================");' configure.js
 sed.exe -i.".bak" '/generate_files();/i STDOUT.WriteLine(PHP_PHP_BUILD);' configure.js
