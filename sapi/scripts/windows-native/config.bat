@@ -80,7 +80,7 @@ call buildconf.bat -f
 echo "========HELP============"
 
 call configure.bat --help
-WScript.StdOut.WriteLine a & " " & b & " " & c
+
 
 sed.exe -i.".bak" '/var dir_part_to_add = "";/i  STDOUT.WriteLine(header_name);' configure.js
 sed.exe -i.".bak" '/var dir_part_to_add = "";/i  STDOUT.WriteLine(flag_name);' configure.js
