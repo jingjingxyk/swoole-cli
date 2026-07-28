@@ -94,6 +94,10 @@ sed.exe -i.".bak" '/dep_present = eval("PHP_" + DEP);/i  STDOUT.WriteLine(extnam
 sed.exe -i.".bak" '/dep_present = eval("PHP_" + DEP);/i  STDOUT.WriteLine(dependson);' configure.js
 sed.exe -i.".bak" '/dep_present = eval("PHP_" + DEP);/i  STDOUT.WriteLine(optional);' configure.js
 
+sed.exe -i.".bak" '/if (absolute_path.indexOf(PHP_PHP_BUILD) == 0) {/i  STDOUT.WriteLine(path);' configure.js
+sed.exe -i.".bak" '/if (absolute_path.indexOf(PHP_PHP_BUILD) == 0) {/i  STDOUT.WriteLine(absolute_path);' configure.js
+
+
 sed.exe -i.".bak" '/generate_files();/i STDOUT.WriteLine("=======================");' configure.js
 sed.exe -i.".bak" '/generate_files();/i STDOUT.WriteLine(PHP_PHP_BUILD);' configure.js
 
