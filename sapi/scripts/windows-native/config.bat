@@ -89,6 +89,14 @@ sed.exe -i.".bak" '/var dir_part_to_add = "";/i  STDOUT.WriteLine(use_env);' con
 sed.exe -i.".bak" '/var dir_part_to_add = "";/i  STDOUT.WriteLine(add_dir_part);' configure.js
 sed.exe -i.".bak" '/var dir_part_to_add = "";/i  STDOUT.WriteLine(add_to_flag_only);' configure.js
 
+
+sed.exe -i.".bak" '/dep_present = eval("PHP_" + DEP);/i  STDOUT.WriteLine(extname);' configure.js
+sed.exe -i.".bak" '/dep_present = eval("PHP_" + DEP);/i  STDOUT.WriteLine(dependson);' configure.js
+sed.exe -i.".bak" '/dep_present = eval("PHP_" + DEP);/i  STDOUT.WriteLine(optional);' configure.js
+
+
+sed.exe -i.".bak" '/dep_present = eval("PHP_" + DEP);/i  STDOUT.WriteLine(add_to_flag_only);' configure.js
+
 sed.exe -i.".bak" '/generate_files();/i STDOUT.WriteLine("=======================");' configure.js
 sed.exe -i.".bak" '/generate_files();/i STDOUT.WriteLine(PHP_PHP_BUILD);' configure.js
 
