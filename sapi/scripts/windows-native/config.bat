@@ -167,6 +167,7 @@ configure.bat ^
 --enable-filter ^
 --enable-session ^
 --enable-tokenizer ^
+--with-iconv=static ^
 --with-libxml ^
 --with-xml
 
@@ -181,7 +182,6 @@ configure.bat ^
 :: --enable-zlib ^
 :: --enable-phar-native-ssl ^
 :: --with-openssl=static ^
-:: --with-iconv=static ^
 :: --with-mysqlnd ^
 :: --with-bz2 ^
 :: --enable-zip ^
