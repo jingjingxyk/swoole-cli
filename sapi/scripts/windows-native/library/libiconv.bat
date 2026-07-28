@@ -25,7 +25,7 @@ if not exist "libiconv\winlibs.mak" git clone -b libiconv-1.19 https://github.co
 if  exist "%__PROJECT__%\thirdparty\libiconv" rmdir /s /q "%__PROJECT__%\thirdparty\libiconv"
 
 
-xcopy "libiconv" "%__PROJECT__%\thirdparty" /E /I /H /Y
+xcopy "libiconv" "%__PROJECT__%\thirdparty\libiconv" /E /I /H /Y
 
 cd /d %__PROJECT__%\thirdparty\libiconv\
 dir
