@@ -33,8 +33,8 @@ echo %cd%
 
 set CL=/MP
 
-set "VCPKG_ROOT=%__PROJECT__%\var\native-build\vcpkg"
-set PATH=%VCPKG_ROOT%;%PATH%
+:: set "VCPKG_ROOT=%__PROJECT__%\var\native-build\vcpkg"
+:: set PATH=%VCPKG_ROOT%;%PATH%
 
 :: vcpkg install libiconv:x64-windows-static
 rem C:/vcpkg/packages/libxml2_x64-windows-static/lib/
