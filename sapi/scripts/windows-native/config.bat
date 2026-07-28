@@ -71,9 +71,9 @@ set "X_LIBS= libzstd_a.lib "
 echo "INCLUDE=%INCLUDE%"
 echo "LIB=%LIB%"
 
-set "PHP_PHP_BUILD=%__PROJECT__%\\build"
+set "PHP_PHP_BUILD=%__PROJECT__%\build"
 echo %PHP_PHP_BUILD%
-mkdir %__PROJECT__%\build
+mkdir %PHP_PHP_BUILD%
 
 call buildconf.bat -f
 
@@ -81,6 +81,7 @@ echo "========HELP============"
 
 call configure.bat --help
 
+sed.exe '/hello/i STDOUT.WriteLine(PHP_PHP_BUILD);' configure.js
 
 echo "===================="
 
