@@ -81,7 +81,7 @@ echo "========HELP============"
 
 call configure.bat --help
 
-sed.exe -i.".bak" '/hello/i STDOUT.WriteLine(PHP_PHP_BUILD);' configure.js
+sed.exe -i.".bak" '/ARG_WITH("verbosity"/i STDOUT.WriteLine(PHP_PHP_BUILD);' configure.js
 
 echo "===================="
 
