@@ -148,7 +148,7 @@ rem _tsrm_ls_cache redefined
 sed.exe -i.".bak" 's/ZEND_TSRMLS_CACHE_DEFINE()/ /' sapi/cli/php_cli.c
 
 
-sed.exe -i.".bak" 's/#ifdef HAVE_LIBXML/#ifdef HAVE_LIBXML_X/' win32/dllmain.c
+:: sed.exe -i.".bak" 's/#ifdef HAVE_LIBXML/#ifdef HAVE_LIBXML_X/' win32/dllmain.c
 
 
 bison.exe -Wall --output=Zend/zend_language_parser.c -v -d Zend/zend_language_parser.y
@@ -198,20 +198,12 @@ configure.bat ^
 
 
 
-:: --enable-fileinfo ^
 :: --enable-cli-win32 ^
 :: --disable-zts ^
 :: --enable-apcu ^
-:: --enable-bcmath ^
-:: --enable-zlib  ^
-:: --with-openssl=static ^
-:: --with-extra-includes="%INCLUDE%" ^
-:: --with-extra-libs="%LIB%"
 :: --disable-zts
-:: --with-php-build="c:\php-cli" ^
 :: --enable-mbstring
 :: --enable-redis ^
-:: --enable-phar-native-ssl
 :: --enable-fileinfo
 :: --with-curl=static
 
