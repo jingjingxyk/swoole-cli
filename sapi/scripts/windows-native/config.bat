@@ -110,8 +110,9 @@ echo "===================="
 
 
 set "CFLAGS=/EHsc /MP /MT /UCRT"
-:: /MT
+
 :: /showIncludes
+:: /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed
 
 rem https://learn.microsoft.com/zh-cn/cpp/c-runtime-library/crt-library-features?view=msvc-170
 
@@ -148,7 +149,7 @@ rem _tsrm_ls_cache redefined
 sed.exe -i.".bak" 's/ZEND_TSRMLS_CACHE_DEFINE()/ /' sapi/cli/php_cli.c
 
 
-:: sed.exe -i.".bak" 's/#ifdef HAVE_LIBXML/#ifdef HAVE_LIBXML_X/' win32/dllmain.c
+sed.exe -i.".bak" 's/#ifdef HAVE_LIBXML/#ifdef HAVE_LIBXML_X/' win32/dllmain.c
 
 
 bison.exe -Wall --output=Zend/zend_language_parser.c -v -d Zend/zend_language_parser.y
