@@ -37,7 +37,7 @@ set CL=/MP
 
 :: vcpkg install libiconv:x64-windows-static
 rem C:/vcpkg/packages/libxml2_x64-windows-static/lib/
-
+echo "MSVC%PHP_SDK_VS_NUM%"
 cd "MSVC%PHP_SDK_VS_NUM%"
 
 msbuild libiconv.sln /t:Rebuild /p:Configuration=Release /p:Platform=x64
