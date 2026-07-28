@@ -173,17 +173,17 @@ configure.bat ^
 --enable-xmlreader ^
 --enable-xmlwriter ^
 --with-dom ^
---with-simplexml
+--with-simplexml ^
+--enable-ctype     --enable-pdo    --enable-phar  ^
+--enable-sockets ^
+--enable-bcmath ^
+--enable-zlib ^
+--enable-phar-native-ssl ^
+--with-openssl=static ^
+--with-mysqlnd ^
+--with-bz2 ^
+--enable-zip
 
-:: --enable-ctype     --enable-pdo    --enable-phar  ^
-:: --enable-sockets ^
-:: --enable-bcmath ^
-:: --enable-zlib ^
-:: --enable-phar-native-ssl ^
-:: --with-openssl=static ^
-:: --with-mysqlnd ^
-:: --with-bz2 ^
-:: --enable-zip ^
 :: --with-readline ^
 :: --enable-mbstring ^
 :: --enable-exif ^
