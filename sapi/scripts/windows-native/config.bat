@@ -164,19 +164,9 @@ configure.bat ^
 --disable-cgi  ^
 --enable-cli   ^
 --enable-zts ^
---enable-sockets      --enable-ctype     --enable-pdo    --enable-phar  ^
 --enable-filter ^
 --enable-session ^
 --enable-tokenizer ^
---enable-sockets ^
---enable-bcmath ^
---enable-zlib ^
---enable-phar-native-ssl ^
---with-openssl=static ^
---with-iconv=static ^
---with-mysqlnd ^
---with-bz2 ^
---enable-zip ^
 --with-libxml ^
 --with-xml ^
 --enable-xmlreader ^
@@ -184,6 +174,16 @@ configure.bat ^
 --with-dom ^
 --with-simplexml
 
+:: --enable-ctype     --enable-pdo    --enable-phar  ^
+:: --enable-sockets ^
+:: --enable-bcmath ^
+:: --enable-zlib ^
+:: --enable-phar-native-ssl ^
+:: --with-openssl=static ^
+:: --with-iconv=static ^
+:: --with-mysqlnd ^
+:: --with-bz2 ^
+:: --enable-zip ^
 :: --with-readline ^
 :: --enable-mbstring ^
 :: --enable-exif ^
