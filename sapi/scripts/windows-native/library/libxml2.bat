@@ -38,7 +38,7 @@ cmake -S .. -B . ^
 -DCMAKE_BUILD_TYPE=Release ^
 -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
 -DCMAKE_INSTALL_PREFIX=%__PROJECT__%\build ^
--DIconv_LIBRARY="%__PROJECT__%\build\libiconv\lib\libbz2_a.lib" ^
+-DIconv_LIBRARY="%__PROJECT__%\build\libiconv\lib\libiconv_a.lib" ^
 -DIconv_INCLUDE_DIR="%__PROJECT__%\build\libiconv\include" ^
 -DLIBXML_STATIC=ON ^
 -DLIBXML2_WITH_ZLIB=OFF ^
