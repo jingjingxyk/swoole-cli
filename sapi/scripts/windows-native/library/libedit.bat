@@ -19,7 +19,7 @@ if not exist libedit-20260512-3.1.tar.gz curl.exe -fSLo libedit-20260512-3.1.tar
 if  exist "%__PROJECT__%\thirdparty\libedit" rmdir /s /q "%__PROJECT__%\thirdparty\libedit"
 mkdir "%__PROJECT__%\thirdparty\libedit"
 
-7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libedit\libedit-20260512-3.1"  %__PROJECT__%\pool\lib\libedit-20260512-3.1.tar
+7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libedit\"  %__PROJECT__%\pool\lib\libedit-20260512-3.1.tar
 
 
 cd /d "%__PROJECT__%\thirdparty\libedit\libedit-20260512-3.1"
