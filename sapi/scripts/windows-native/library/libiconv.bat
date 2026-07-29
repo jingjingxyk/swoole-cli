@@ -40,7 +40,7 @@ rem C:/vcpkg/packages/libxml2_x64-windows-static/lib/
 echo "MSVC%PHP_SDK_VS_NUM%"
 cd "MSVC%PHP_SDK_VS_NUM%"
 :: libiconv.sln
-msbuild libiconv.sln /t:Rebuild /p:Configuration=Release /p:RuntimeLibrary=MultiThreaded /p:Platform=x64 /p:WindowsTargetPlatformVersion=%WindowsSDKLibVersion%
+msbuild libiconv.sln /t:libiconv_static /t:Rebuild /p:Configuration=Release /p:RuntimeLibrary=MultiThreaded /p:Platform=x64 /p:WindowsTargetPlatformVersion=%WindowsSDKLibVersion%
 xcopy ..\source\include\iconv.h %__PROJECT__%\build\libiconv\include\* /E /I /H /Y
 xcopy x64\lib\*.lib %__PROJECT__%\build\libiconv\lib\* /E /I /H /Y
 
