@@ -4,7 +4,7 @@
 for /f "usebackq tokens=*" %%i in (`vswhere.exe -latest -legacy -property resolvedInstallationPath`) do (
   set VSinstallDir=%%i
 )
-echo Visual Studio installDir: %VSinstallDir%
+echo Visual Studio installDir: "%VSinstallDir%"
 
 set VSCMD_ARG_HOST_ARCH=x64
 set VSCMD_ARG_TGT_ARCH=x64
