@@ -59,6 +59,9 @@ set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libzstd\lib"
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\libzip\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libzip\lib"
 
+set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\libiconv\include"
+set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libiconv\lib"
+
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\lib"
 
