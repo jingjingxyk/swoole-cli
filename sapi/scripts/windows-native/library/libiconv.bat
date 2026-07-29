@@ -46,9 +46,12 @@ sed.exe -i.".bak" "217 s/<RuntimeLibrary>MultiThreadedDLL<\/RuntimeLibrary>/<Run
 
 msbuild libiconv.sln /t:libiconv_static:Rebuild /p:Configuration=Release /p:RuntimeLibrary=MultiThreaded /p:Platform=x64 /p:WindowsTargetPlatformVersion=%WindowsSDKLibVersion%  /m
 
+ls x64\lib\
+
 xcopy ..\source\include\iconv.h %__PROJECT__%\build\libiconv\include\* /E /I /H /Y
 xcopy x64\lib\*.lib %__PROJECT__%\build\libiconv\lib\* /E /I /H /Y
 
-
 cd /d %__PROJECT__%
+
+ls D:\a\swoole-cli\swoole-cli\thirdparty\libiconv\MSVC17\x64\libiconv_static.lib
 endlocal
