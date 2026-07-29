@@ -37,6 +37,8 @@ set CL=/MP
 
 :: vcpkg install libiconv:x64-windows-static
 rem C:/vcpkg/packages/libxml2_x64-windows-static/lib/
+
+
 echo "MSVC%PHP_SDK_VS_NUM%"
 cd "MSVC%PHP_SDK_VS_NUM%"
 :: libiconv.sln
@@ -53,5 +55,4 @@ xcopy x64\lib\*.lib %__PROJECT__%\build\libiconv\lib\* /E /I /H /Y
 
 cd /d %__PROJECT__%
 
-ls D:\a\swoole-cli\swoole-cli\thirdparty\libiconv\MSVC17\x64\libiconv_static.lib
 endlocal

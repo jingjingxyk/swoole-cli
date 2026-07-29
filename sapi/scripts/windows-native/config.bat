@@ -151,9 +151,7 @@ sed.exe -i.".bak" 's/ZEND_DLIMPORT/ /' Zend\zend_stream.c
 rem _tsrm_ls_cache redefined
 sed.exe -i.".bak" 's/ZEND_TSRMLS_CACHE_DEFINE()/ /' sapi/cli/php_cli.c
 
-
 sed.exe -i.".bak" 's/#ifdef HAVE_LIBXML/#ifdef HAVE_LIBXML_X/' win32/dllmain.c
-
 
 bison.exe -Wall --output=Zend/zend_language_parser.c -v -d Zend/zend_language_parser.y
 
@@ -189,9 +187,9 @@ configure.bat ^
 --with-openssl=static ^
 --with-mysqlnd ^
 --with-bz2 ^
---enable-zip
+--enable-zip ^
+--with-readline
 
-:: --with-readline ^
 :: --enable-mbstring ^
 :: --enable-exif ^
 :: --enable-mbregex ^
@@ -199,8 +197,6 @@ configure.bat ^
 :: --enable-intl ^
 :: --enable-soap ^
 :: --with-xsl
-
-
 
 :: --enable-cli-win32 ^
 :: --disable-zts ^
