@@ -42,7 +42,7 @@ cd "MSVC%PHP_SDK_VS_NUM%"
 :: libiconv.sln
 
 
-sed.exe -i.".bak" '217 s/<RuntimeLibrary>MultiThreadedDLL<\/RuntimeLibrary>/<RuntimeLibrary>MultiThreaded<\/RuntimeLibrary>/' libiconv_static/libiconv_static.vcxproj
+sed.exe -i.".bak" '217 s/<RuntimeLibrary>MultiThreadedDLL<\/RuntimeLibrary>/<RuntimeLibrary>MultiThreaded<\/RuntimeLibrary>/' .\libiconv_static\libiconv_static.vcxproj
 
 msbuild libiconv.sln /t:libiconv_static,Rebuild /p:Configuration=Release /p:RuntimeLibrary=MultiThreaded /p:Platform=x64 /p:WindowsTargetPlatformVersion=%WindowsSDKLibVersion%
 
