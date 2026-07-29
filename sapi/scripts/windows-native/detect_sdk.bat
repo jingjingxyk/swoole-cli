@@ -11,5 +11,5 @@ set VSCMD_ARG_TGT_ARCH=x64
 
 call "%VSinstallDir%\Common7\Tools\vsdevcmd\core\winsdk.bat"
 
-echo default Windows SDK version: %WindowsSDKVersion%
-echo Windows SDK library version: %WindowsSDKLibVersion%
+echo "default Windows SDK version: %WindowsSDKVersion%"
+echo "Windows SDK library version: %WindowsSDKLibVersion%"
