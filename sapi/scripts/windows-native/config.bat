@@ -198,7 +198,15 @@ configure.bat ^
 --with-bz2 ^
 --enable-zip ^
 --with-readline ^
---with-curl
+--with-curl ^
+--with-gd ^
+--with-libwebp ^
+--with-libavif ^
+--with-heif ^
+--with-uhdr ^
+--with-jxl ^
+--with-imagequant ^
+--with-tiff
 
 :: --enable-mbstring ^
 :: --enable-exif ^
