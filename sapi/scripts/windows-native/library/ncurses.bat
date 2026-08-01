@@ -29,7 +29,7 @@ set "LDFLAGS=/VERBOSE:LIB	/DEFAULTLIB:libvcruntime.lib"
 .\configure ^
 --CC=cl ^
 --CXX=cl ^
---prefix="%__PROJECT__%^build^ncurses" ^
+--prefix="%__PROJECT__%\build\ncurses" ^
 --enable-static ^
 --disable-shared ^
 --with-normal ^

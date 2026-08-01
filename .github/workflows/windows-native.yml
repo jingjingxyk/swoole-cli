@@ -96,6 +96,9 @@ jobs:
           # cmd /c sapi\scripts\windows-native\library\libiconv.bat
           # cmd /c sapi\quickstart\windows\cygwin-build\download-cygwin.bat
           # cmd /c sapi\quickstart\windows\cygwin-build\install-cygwin.bat
+          # cmd /c sapi\quickstart\windows\msys2-build\download-msys2.bat
+          # cmd /c sapi\quickstart\windows\msys2-build\install-msys2.bat
+          # cmd /c C:\msys64\msys2_shell.cmd -msys2 -defterm -no-start -here -shell bash -c "./sapi/quickstart/windows/msys2-build/install-msys2.sh"
           # cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\icu.bat
           cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\libxml2.bat
           cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\liblzma.bat
