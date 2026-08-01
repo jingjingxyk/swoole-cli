@@ -45,7 +45,7 @@ cmake .. ^
 -DZSTD_LIBRARY=%__PROJECT__%\build\libzstd\lib\libzstd_a.lib ^
 -DZSTD_include=%__PROJECT__%\build\libzstd\include ^
 -DOPENSSL_USE_STATIC_LIBS=ON ^
--DOpenSSL_LIBRARY=%__PROJECT__%\build\openssl\lib\libssl.lib ^
+-DOpenSSL_LIBRARY=%__PROJECT__%\build\openssl\lib\libcrypto.lib ^
 -DOpenSSL_include=%__PROJECT__%\build\openssl\include ^
 -DOPENSSL_ROOT_DIR="%__PROJECT__%\build\openssl" ^
 -DLIB_EAY_RELEASE="%__PROJECT__%\build\openssl\lib\libcrypto.lib" ^
