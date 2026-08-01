@@ -26,12 +26,13 @@ set "ZLIB_PREFIX=%__PROJECT__%\build\zlib"
 set "LIBXML2_PREFIX=%__PROJECT__%\build"
 set "LIBBROTLI_PREFIX=%__PROJECT__%\build\brotli"
 set "LIBZSTD_PREFIX=%__PROJECT__%\build\libzstd"
+set "LIBIDN2_PREFIX=%__PROJECT__%\build\libidn2"
 
 dir
 mkdir  build-dir
 cd build-dir
 cmake .. ^
--DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\libnghttp2" ^
+-DCMAKE_INSTALL_PREFIX="%LIBIDN2_PREFIX%" ^
 -DCMAKE_BUILD_TYPE=Release  ^
 -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
 -DBUILD_SHARED_LIBS=OFF  ^
