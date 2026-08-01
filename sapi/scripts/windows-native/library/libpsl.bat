@@ -26,6 +26,7 @@ dir
 :: vcpkg install libpsl:x64-windows-static
 
 cd msvc
+
 nmake /f Makefile.vc CFG=release DISABLE_BUILTIN=1 DISABLE_RUNTIME=1 STATIC=1 PREFIX="%__PROJECT__%\libpsl" install
 
 
