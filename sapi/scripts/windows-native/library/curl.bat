@@ -49,6 +49,7 @@ cmake .. ^
 -DCURL_USE_MBEDTLS=OFF ^
 -DCURL_USE_LIBSSH2=ON ^
 -DUSE_NGHTTP2=ON ^
+-DNGHTTP2_USE_STATIC_LIBS=ON ^
 -DZSTD_LIBRARY=%__PROJECT__%\build\libzstd\lib\libzstd_a.lib ^
 -DCMAKE_PREFIX_PATH="%OPENSSL_PREFIX%;%__PROJECT__%\build\zlib;%__PROJECT__%\build\libssh2;%__PROJECT__%\build\brotli;%__PROJECT__%\build\libzstd;%LIBNGHTTP2_PREFIX%;%LIBPSL_PREFIX%;" ^
 -DCMAKE_C_FLAGS="/MT /O2 /W3 /DPSL_STATIC" ^
