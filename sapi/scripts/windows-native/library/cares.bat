@@ -49,6 +49,7 @@ cmake .. ^
 -DCMAKE_VERBOSE_MAKEFILE=ON
 
 
+cmake --build . --config Release
 cmake --build . --config Release --target install
 
 
