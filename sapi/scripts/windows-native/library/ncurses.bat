@@ -17,7 +17,7 @@ cd /d %__PROJECT__%\pool\lib\
 if  exist "%__PROJECT__%\thirdparty\ncurses" rmdir /s /q "%__PROJECT__%\thirdparty\ncurses"
 mkdir "%__PROJECT__%\thirdparty\ncurses"
 
-7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\openssl"  %__PROJECT__%\pool\lib\ncurses-6.3.tar
+7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\ncurses"  %__PROJECT__%\pool\lib\ncurses-6.3.tar
 
 cd /d %__PROJECT__%\thirdparty\ncurses\ncurses-6.3\
 dir
