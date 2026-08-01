@@ -37,8 +37,8 @@ cmake .. ^
 -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
 -DBUILD_SHARED_LIBS=OFF  ^
 -DBUILD_STATIC_LIBS=ON ^
+-DCURL_STATIC_CRT=ON ^
 -DCURL_USE_OPENSSL=ON ^
--DUSE_ZLIB=ON ^
 -DCURL_USE_WOLFSSL=OFF ^
 -DCURL_USE_GNUTLS=OFF ^
 -DCURL_USE_MBEDTLS=OFF ^
@@ -46,7 +46,9 @@ cmake .. ^
 -DUSE_NGHTTP2=ON ^
 -DZSTD_LIBRARY=%__PROJECT__%\build\libzstd\lib\libzstd_a.lib ^
 -DCMAKE_PREFIX_PATH="%__PROJECT__%\build\openssl;%__PROJECT__%\build\zlib;%__PROJECT__%\build\libssh2;%__PROJECT__%\build\brotli;%__PROJECT__%\build\libzstd;%LIBNGHTTP2_PREFIX%;%LIBPSL_PREFIX%;" ^
--DCMAKE_C_FLAGS="/MT /O2 /W3 /DPSL_STATIC"
+-DCMAKE_C_FLAGS="/MT /O2 /W3 /DPSL_STATIC" ^
+-DCMAKE_EXE_LINKER_FLAGS="/VERBOSE:LIB" ^
+-DCMAKE_VERBOSE_MAKEFILE=ON
 
 
 cmake --build . --config Release --target install
