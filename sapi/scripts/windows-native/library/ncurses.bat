@@ -26,7 +26,7 @@ echo %cd%
 set "CFLAGS=/EHsc /MP /MT /DNCURSES_STATIC"
 set "LDFLAGS=/VERBOSE:LIB	/DEFAULTLIB:libvcruntime.lib"
 
-./configure ^
+.\configure ^
 --CC=cl ^
 --CXX=cl ^
 --prefix="%__PROJECT__%^build^ncurses" ^
