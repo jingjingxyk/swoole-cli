@@ -31,7 +31,7 @@ dir
 mkdir  build-dir
 cd build-dir
 cmake .. ^
--DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\nghttp2" ^
+-DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\libnghttp2" ^
 -DCMAKE_BUILD_TYPE=Release  ^
 -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
 -DBUILD_SHARED_LIBS=OFF  ^
