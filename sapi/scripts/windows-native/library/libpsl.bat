@@ -32,7 +32,7 @@ sed.exe -i.".bak" '124 s/MD/MT/' detectenv-msvc.mak
 
 set "LIBPSL_PREFIX=%__PROJECT__%\build\libpsl"
 
-for /f "delims=" %%i in ('python -c "import os; print(os.path.normpath(r'%LIBPSL_PREFIX%').replace('\\', '/'))"') do set "LIBPSL_PREFIX=%%i"
+:: for /f "delims=" %%i in ('python -c "import os; print(os.path.normpath(r'%LIBPSL_PREFIX%').replace('\\', '/'))"') do set "LIBPSL_PREFIX=%%i"
 
 nmake /f Makefile.vc CFG=release DISABLE_BUILTIN=1 DISABLE_RUNTIME=1 STATIC=1 PREFIX="%LIBPSL_PREFIX%" install
 
