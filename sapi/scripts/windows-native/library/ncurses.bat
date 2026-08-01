@@ -23,8 +23,17 @@ cd /d %__PROJECT__%\thirdparty\ncurses\ncurses-6.3\
 dir
 echo %cd%
 
-set "CFLAGS=/EHsc /MP /MT /DNCURSES_STATIC"
-set "LDFLAGS=/VERBOSE:LIB	/DEFAULTLIB:libvcruntime.lib"
+set "VCPKG_ROOT=%__PROJECT__%\var\native-build\vcpkg"
+set PATH=%VCPKG_ROOT%;%PATH%
+
+vcpkg install pdcurses
+
+
+exit /b 0
+
+set CFLAGS="/EHsc /MP  /MT"
+set CXXFLAGS="/MT"
+set CPPFLAGS="-DNCURSES_STATIC"
 
 .\configure ^
 --CC=cl ^
