@@ -23,7 +23,6 @@ mkdir "%__PROJECT__%\thirdparty\curl"
 
 cd /d %__PROJECT__%\thirdparty\curl\curl-8.16.0\
 
-cd thirdparty\curl
 dir
 
 set "OPENSSL_PREFIX=%__PROJECT__%\build\openssl"
