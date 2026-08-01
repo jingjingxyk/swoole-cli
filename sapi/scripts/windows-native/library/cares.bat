@@ -60,6 +60,3 @@ cmake --build . --config Release --target install
 cd /d %__PROJECT__%
 endlocal
 
-
-
-c-ares-1.24.0.tar.gz
