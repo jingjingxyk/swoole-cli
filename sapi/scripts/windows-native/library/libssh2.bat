@@ -12,12 +12,25 @@ mkdir  build
 
 set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
 
-cd thirdparty\libssh2
+cd /d %__PROJECT__%\pool\lib\
+7z.exe x -aoa -y   %__PROJECT__%\pool\lib\libssh2-1.11.1.tar.gz
+
+if  exist "%__PROJECT__%\thirdparty\libssh2" rmdir /s /q "%__PROJECT__%\thirdparty\libssh2"
+mkdir "%__PROJECT__%\thirdparty\libssh2"
+
+7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libssh2"  %__PROJECT__%\pool\lib\libssh2-1.11.1.tar
+cd %__PROJECT__%\thirdparty\libssh2\libssh2-1.11.1\
+
 dir
+
+set "OPENSSL_PREFIX=%__PROJECT__%\build\openssl"
+set "LIBZLIB_PREFIX=%__PROJECT__%\build\zlib"
+set "LIBSSH2_PREFIX=%__PROJECT__%\build\libssh2"
+
 mkdir  build
 cd build
 cmake .. ^
--DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\libssh2" ^
+-DCMAKE_INSTALL_PREFIX="%LIBSSH2_PREFIX%" ^
 -DCMAKE_POLICY_DEFAULT_CMP0074=NEW ^
 -DCMAKE_BUILD_TYPE=Release  ^
 -DBUILD_SHARED_LIBS=OFF  ^
@@ -29,9 +42,9 @@ cmake .. ^
 -DCRYPTO_BACKEND=OpenSSL ^
 -DBUILD_TESTING=OFF ^
 -DBUILD_EXAMPLES=OFF ^
--DOPENSSL_ROOT_DIR="%__PROJECT__%\build\openssl\" ^
--DZLIB_ROOT="%__PROJECT__%\build\zlib\" ^
--DCMAKE_PREFIX_PATH="%__PROJECT__%\build\zlib\;%__PROJECT__%\build\openssl\"
+-DOPENSSL_ROOT_DIR="%OPENSSL_PREFIX%" ^
+-DZLIB_ROOT="%LIBZLIB_PREFIX%" ^
+-DCMAKE_PREFIX_PATH="%LIBZLIB_PREFIX%;%OPENSSL_PREFIX%"
 
 
 cmake --build . --config Release --target install
