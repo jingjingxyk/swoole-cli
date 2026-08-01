@@ -36,22 +36,14 @@ cmake .. ^
 -DBUILD_STATIC_LIBS=ON ^
 -DSSL_ENABLED=ON ^
 -DCURL_USE_OPENSSL=ON ^
--DUSE_ZLIB=ON ^
--DUSE_OPENSSL=ON ^
--DUSE_WOLFSSL=OFF ^
--DUSE_GNUTLS=OFF ^
--DUSE_MBEDTLS=OFF ^
+-DCURL_USE_ZLIB=ON ^
+-DCURL_USE_WOLFSSL=OFF ^
+-DCURL_USE_GNUTLS=OFF ^
+-DCURL_USE_MBEDTLS=OFF ^
 -DENABLE_WEBSOCKETS=OFF ^
 -DCURL_USE_LIBSSH2=ON ^
 -DZSTD_LIBRARY=%__PROJECT__%\build\libzstd\lib\libzstd_a.lib ^
 -DZSTD_include=%__PROJECT__%\build\libzstd\include ^
--DOPENSSL_USE_STATIC_LIBS=ON ^
--DOpenSSL_LIBRARY=%__PROJECT__%\build\openssl\lib\libcrypto.lib ^
--DOpenSSL_include=%__PROJECT__%\build\openssl\include ^
--DOPENSSL_ROOT_DIR="%__PROJECT__%\build\openssl" ^
--DLIB_EAY_RELEASE="%__PROJECT__%\build\openssl\lib\libcrypto.lib" ^
--DSSL_EAY_RELEASE="%__PROJECT__%\build\openssl\lib\libssl.lib" ^
--DCMAKE_EXE_LINKER_FLAGS="crypt32.lib ws2_32.lib" ^
 -DCMAKE_PREFIX_PATH="%__PROJECT__%\build\openssl;%__PROJECT__%\build\zlib;%__PROJECT__%\build\libssh2;%__PROJECT__%\build\brotli;%__PROJECT__%\build\libzstd;"
 
 
