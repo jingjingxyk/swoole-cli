@@ -52,7 +52,7 @@ cd %__PROJECT__%\thirdparty\icu\icu\
 :: exit /b 0
 set "CPPFLAGS=-D U_CHARSET_IS_UTF8=1  -D U_USING_ICU_NAMESPACE=1  -D U_STATIC_IMPLEMENTATION=1 "
 set "CXXFLAGS=/MT"
-set "CFLAGS=/MT"
+set "CFLAGS=/EHsc /MP /MT /UCRT"
 bash ./source/runConfigureICU Cygwin/MSVC --prefix=/cygdrive/d/a/swoole-cli/swoole-cli/build/icu/ ^
 --enable-static=yes ^
 --enable-shared=no ^
