@@ -30,7 +30,7 @@ cd msvc
 sed.exe -i.".bak" '112 s/endif/!endif/' config-msvc.mak
 sed.exe -i.".bak" '124 s/MD/MT/' detectenv-msvc.mak
 
-set "LIBPSL_PREFIX=%__PROJECT__%\libpsl"
+set "LIBPSL_PREFIX=%__PROJECT__%\build\libpsl"
 
 for /f "delims=" %%i in ('python -c "import os; print(os.path.normpath(r'%LIBPSL_PREFIX%').replace('\\', '/'))"') do set "LIBPSL_PREFIX=%%i"
 
