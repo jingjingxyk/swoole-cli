@@ -44,6 +44,7 @@ cmake .. ^
 -DCURL_USE_LIBSSH2=ON ^
 -DZSTD_LIBRARY=%__PROJECT__%\build\libzstd\lib\libzstd_a.lib ^
 -DZSTD_include=%__PROJECT__%\build\libzstd\include ^
+-DOpenSSL_ROOT="%__PROJECT__%\build\openssl" ^
 -DOpenSSL_LIBRARY=%__PROJECT__%\build\openssl\lib\libssl.lib ^
 -DOpenSSL_include=%__PROJECT__%\build\openssl\include ^
 -DCMAKE_PREFIX_PATH="%__PROJECT__%\build\openssl;%__PROJECT__%\build\zlib;%__PROJECT__%\build\libssh2;%__PROJECT__%\build\brotli;%__PROJECT__%\build\libzstd;"
