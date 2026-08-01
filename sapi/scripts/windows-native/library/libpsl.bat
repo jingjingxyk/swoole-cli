@@ -21,10 +21,11 @@ mkdir "%__PROJECT__%\thirdparty\libpsl"
 7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libpsl"  %__PROJECT__%\pool\lib\libpsl-0.21.5.tar
 cd %__PROJECT__%\thirdparty\libpsl\libpsl-0.21.5\
 
+dir
 
 :: vcpkg install libpsl:x64-windows-static
 
-
+cd msvc
 nmake /f Makefile.vc CFG=release DISABLE_BUILTIN=1 DISABLE_RUNTIME=1 STATIC=1 PREFIX="%__PROJECT__%\libpsl" install
 
 
