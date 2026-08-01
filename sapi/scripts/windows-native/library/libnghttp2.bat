@@ -11,7 +11,17 @@ cd /d %__PROJECT__%
 mkdir  build
 set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
 
-cd thirdparty\nghttp2\
+
+cd /d %__PROJECT__%\pool\lib\
+7z.exe x -aoa -y   %__PROJECT__%\pool\lib\nghttp2-1.68.0.tar.gz
+
+if  exist "%__PROJECT__%\thirdparty\nghttp2" rmdir /s /q "%__PROJECT__%\thirdparty\nghttp2"
+mkdir "%__PROJECT__%\thirdparty\nghttp2"
+
+7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\nghttp2"  %__PROJECT__%\pool\lib\nghttp2-1.68.0.tar
+cd %__PROJECT__%\thirdparty\nghttp2\nghttp2-1.68.0\
+
+
 dir
 mkdir  build-dir
 cd build-dir
