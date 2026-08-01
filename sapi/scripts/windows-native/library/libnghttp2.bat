@@ -21,7 +21,11 @@ mkdir "%__PROJECT__%\thirdparty\nghttp2"
 7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\nghttp2"  %__PROJECT__%\pool\lib\nghttp2-1.68.0.tar
 cd %__PROJECT__%\thirdparty\nghttp2\nghttp2-1.68.0\
 
-
+set "OPENSSL_PREFIX=%__PROJECT__%\build\openssl"
+set "ZLIB_PREFIX=%__PROJECT__%\build\zlib"
+set "LIBXML2_PREFIX=%__PROJECT__%\build\"
+set "LIBBROTLI_PREFIX=%__PROJECT__%\build\brotli"
+set "LIBZSTD_PREFIX=%__PROJECT__%\build\libzstd"
 dir
 mkdir  build-dir
 cd build-dir
@@ -29,7 +33,9 @@ cmake .. ^
 -DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\nghttp2" ^
 -DCMAKE_BUILD_TYPE=Release  ^
 -DBUILD_SHARED_LIBS=OFF  ^
--DBUILD_STATIC_LIBS=ON
+-DBUILD_STATIC_LIBS=ON ^
+-DCMAKE_PREFIX_PATH="%OPENSSL_PREFIX%;%ZLIB_PREFIX%;%LIBXML2_PREFIX%;%LIBBROTLI_PREFIX%;%LIBZSTD_PREFIX%;"
+
 
 cmake --build . --config Release --target install
 
