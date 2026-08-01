@@ -26,7 +26,11 @@ cd /d %__PROJECT__%\thirdparty\curl\curl-8.16.0\
 cd thirdparty\curl
 dir
 
+set "OPENSSL_PREFIX=%__PROJECT__%\build\openssl"
 set "LIBNGHTTP2_PREFIX=%__PROJECT__%\build\libnghttp2"
+set "LIBPSL_PREFIX=%__PROJECT__%\build\libpsl"
+set "LIBZLIB_PREFIX=%__PROJECT__%\build\zlib"
+set "LIBSSH2_PREFIX=%__PROJECT__%\build\libssh2"
 set "LIBPSL_PREFIX=%__PROJECT__%\build\libpsl"
 
 mkdir  build
@@ -38,18 +42,26 @@ cmake .. ^
 -DBUILD_SHARED_LIBS=OFF  ^
 -DBUILD_STATIC_LIBS=ON ^
 -DCURL_STATIC_CRT=ON ^
+-DCPPFLAG_CURL_STATICLIB="-DCURL_STATICLIB" ^
 -DCURL_USE_OPENSSL=ON ^
 -DCURL_USE_WOLFSSL=OFF ^
 -DCURL_USE_GNUTLS=OFF ^
 -DCURL_USE_MBEDTLS=OFF ^
 -DCURL_USE_LIBSSH2=ON ^
 -DUSE_NGHTTP2=ON ^
+-DWITH_NGHTTP2=static ^
+-DWITH_SSL=static ^
+-DWITH_SSH2=static ^
+-DSSH2_PATH=%LIBSSH2_PREFIX% ^
+-DSSL_PATH=%OPENSSL_PREFIX% ^
+-DZLIB_PATH=%LIBZLIB_PREFIX% ^
 -DZSTD_LIBRARY=%__PROJECT__%\build\libzstd\lib\libzstd_a.lib ^
--DCMAKE_PREFIX_PATH="%__PROJECT__%\build\openssl;%__PROJECT__%\build\zlib;%__PROJECT__%\build\libssh2;%__PROJECT__%\build\brotli;%__PROJECT__%\build\libzstd;%LIBNGHTTP2_PREFIX%;%LIBPSL_PREFIX%;" ^
+-DCMAKE_PREFIX_PATH="%OPENSSL_PREFIX%;%__PROJECT__%\build\zlib;%__PROJECT__%\build\libssh2;%__PROJECT__%\build\brotli;%__PROJECT__%\build\libzstd;%LIBNGHTTP2_PREFIX%;%LIBPSL_PREFIX%;" ^
 -DCMAKE_C_FLAGS="/MT /O2 /W3 /DPSL_STATIC" ^
 -DCMAKE_EXE_LINKER_FLAGS="/VERBOSE:LIB" ^
 -DCMAKE_VERBOSE_MAKEFILE=ON
 
+:: -DENABLE_UNICODE=ON
 
 cmake --build . --config Release --target install
 
