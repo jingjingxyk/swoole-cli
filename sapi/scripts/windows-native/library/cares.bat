@@ -27,15 +27,7 @@ cd /d "%__PROJECT__%\thirdparty\cares\c-ares-1.24.0"
 dir
 
 set "LIBCARES_PREFIX=%__PROJECT__%\build\cares"
-set "OPENSSL_PREFIX=%__PROJECT__%\build\openssl"
-set "LIBNGHTTP2_PREFIX=%__PROJECT__%\build\libnghttp2"
-set "LIBPSL_PREFIX=%__PROJECT__%\build\libpsl"
-set "LIBZLIB_PREFIX=%__PROJECT__%\build\zlib"
-set "LIBSSH2_PREFIX=%__PROJECT__%\build\libssh2"
-set "LIBPSL_PREFIX=%__PROJECT__%\build\libpsl"
-set "LIBBROTLI_PREFIX=%__PROJECT__%\build\brotli"
 
-set "LIBZSTD_PREFIX=%__PROJECT__%\build\libzstd"
 
 mkdir  build
 cd build
