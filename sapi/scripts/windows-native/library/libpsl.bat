@@ -28,6 +28,7 @@ dir
 cd msvc
 
 sed.exe -i.".bak" '112 s/endif/!endif/' config-msvc.mak
+sed.exe -i.".bak" '124 s/MD/MT/' detectenv-msvc.mak
 
 nmake /f Makefile.vc CFG=release DISABLE_BUILTIN=1 DISABLE_RUNTIME=1 STATIC=1 PREFIX="%__PROJECT__%\libpsl" install
 
