@@ -188,7 +188,8 @@ configure.bat ^
 --with-mysqlnd ^
 --with-bz2 ^
 --enable-zip ^
---with-readline
+--with-readline ^
+--with-curl
 
 :: --enable-mbstring ^
 :: --enable-exif ^
