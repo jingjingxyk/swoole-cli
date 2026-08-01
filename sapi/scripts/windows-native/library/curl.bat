@@ -43,7 +43,7 @@ cmake .. ^
 -DUSE_MBEDTLS=OFF ^
 -DENABLE_WEBSOCKETS=OFF ^
 -DCURL_USE_LIBSSH2=ON ^
--DCMAKE_PREFIX_PATH="%__PROJECT__%\openssl\;%__PROJECT__%\zlib\;%__PROJECT__%\libssh2\;%__PROJECT__%\zlib;"
+-DCMAKE_PREFIX_PATH="%__PROJECT__%\build\openssl\;%__PROJECT__%\build\zlib\;%__PROJECT__%\build\libssh2\;%__PROJECT__%\build\brotli\;%__PROJECT__%\build\libzstd;"
 
 
 cmake --build . --config Release --target install
