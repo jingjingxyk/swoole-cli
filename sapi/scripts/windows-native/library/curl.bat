@@ -61,12 +61,12 @@ cmake .. ^
 -DCMAKE_EXE_LINKER_FLAGS="/VERBOSE:LIB" ^
 -DCMAKE_VERBOSE_MAKEFILE=ON
 
-dir
+
 :: -DENABLE_UNICODE=ON
 :: -DUSE_LIBIDN2=ON ^
 
 cmake --build . --config Release --target install
-
+dir
 copy /Y %__PROJECT__%\build\curl\lib\libcurl.lib "%__PROJECT__%\build\curl\lib\libcurl_a.lib"
 
 dumpbin /DIRECTIVES "%__PROJECT__%\build\curl\lib\libcurl.lib" | findstr /i "DEFAULTLIB"
