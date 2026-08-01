@@ -27,6 +27,7 @@ set "OPENSSL_PREFIX=%__PROJECT__%\build\openssl"
 set "LIBZLIB_PREFIX=%__PROJECT__%\build\zlib"
 set "LIBSSH2_PREFIX=%__PROJECT__%\build\libssh2"
 
+
 mkdir  build
 cd build
 cmake .. ^
