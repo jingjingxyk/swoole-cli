@@ -23,7 +23,7 @@ cd %__PROJECT__%\thirdparty\nghttp2\nghttp2-1.68.0\
 
 set "OPENSSL_PREFIX=%__PROJECT__%\build\openssl"
 set "ZLIB_PREFIX=%__PROJECT__%\build\zlib"
-set "LIBXML2_PREFIX=%__PROJECT__%\build\"
+set "LIBXML2_PREFIX=%__PROJECT__%\build"
 set "LIBBROTLI_PREFIX=%__PROJECT__%\build\brotli"
 set "LIBZSTD_PREFIX=%__PROJECT__%\build\libzstd"
 dir
