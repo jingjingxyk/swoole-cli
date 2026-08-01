@@ -27,6 +27,7 @@ cd thirdparty\curl
 dir
 
 set "LIBNGHTTP2_PREFIX=%__PROJECT__%\build\libnghttp2"
+set "LIBPSL_PREFIX=%__PROJECT__%\build\libpsl"
 
 mkdir  build
 cd build
@@ -47,7 +48,7 @@ cmake .. ^
 -DCURL_USE_NGHTTP2=ON ^
 -DZSTD_LIBRARY=%__PROJECT__%\build\libzstd\lib\libzstd_a.lib ^
 -DZSTD_include=%__PROJECT__%\build\libzstd\include ^
--DCMAKE_PREFIX_PATH="%__PROJECT__%\build\openssl;%__PROJECT__%\build\zlib;%__PROJECT__%\build\libssh2;%__PROJECT__%\build\brotli;%__PROJECT__%\build\libzstd;%LIBNGHTTP2_PREFIX%;" ^
+-DCMAKE_PREFIX_PATH="%__PROJECT__%\build\openssl;%__PROJECT__%\build\zlib;%__PROJECT__%\build\libssh2;%__PROJECT__%\build\brotli;%__PROJECT__%\build\libzstd;%LIBNGHTTP2_PREFIX%;%LIBPSL_PREFIX%;" ^
 -DCMAKE_C_FLAGS="/MT /O2 /W3 /DPSL_STATIC"
 
 
