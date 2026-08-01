@@ -36,13 +36,16 @@ cmake .. ^
 -DBUILD_STATIC_LIBS=ON ^
 -DSSL_ENABLED=ON ^
 -DUSE_ZLIB=ON ^
--DZLIB_ROOT=%__PROJECT__%\zlib ^
 -DUSE_OPENSSL=ON ^
 -DUSE_WOLFSSL=OFF ^
 -DUSE_GNUTLS=OFF ^
 -DUSE_MBEDTLS=OFF ^
 -DENABLE_WEBSOCKETS=OFF ^
 -DCURL_USE_LIBSSH2=ON ^
+-DZSTD_LIBRARY=%__PROJECT__%\build\libzstd\lib\libzstd_a.lib ^
+-DZSTD_include=%__PROJECT__%\build\libzstd\include ^
+-DOpenSSL_LIBRARY=%__PROJECT__%\build\openssl\lib\libssl.lib ^
+-DOpenSSL_include=%__PROJECT__%\build\openssl\include ^
 -DCMAKE_PREFIX_PATH="%__PROJECT__%\build\openssl;%__PROJECT__%\build\zlib;%__PROJECT__%\build\libssh2;%__PROJECT__%\build\brotli;%__PROJECT__%\build\libzstd;"
 
 
