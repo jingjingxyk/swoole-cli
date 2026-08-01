@@ -207,12 +207,7 @@ configure.bat ^
 --with-curl ^
 --with-gd ^
 --with-libwebp ^
---with-libavif ^
---with-heif ^
---with-uhdr ^
---with-jxl ^
---with-imagequant ^
---with-tiff
+--with-libavif
 
 :: --enable-mbstring ^
 :: --enable-exif ^
