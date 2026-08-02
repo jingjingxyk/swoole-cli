@@ -48,7 +48,6 @@ cmake .. ^
 -DCMAKE_EXE_LINKER_FLAGS="/VERBOSE:LIB" ^
 -DCMAKE_VERBOSE_MAKEFILE=ON
 
-
 cmake --build . --config Release
 cmake --build . --config Release --target install
 

@@ -21,11 +21,6 @@ mkdir "%__PROJECT__%\thirdparty\libidn2"
 7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libidn2"  %__PROJECT__%\pool\lib\libidn2-2.3.8.tar
 cd %__PROJECT__%\thirdparty\libidn2\libidn2-2.3.8\
 
-set "OPENSSL_PREFIX=%__PROJECT__%\build\openssl"
-set "ZLIB_PREFIX=%__PROJECT__%\build\zlib"
-set "LIBXML2_PREFIX=%__PROJECT__%\build"
-set "LIBBROTLI_PREFIX=%__PROJECT__%\build\brotli"
-set "LIBZSTD_PREFIX=%__PROJECT__%\build\libzstd"
 set "LIBIDN2_PREFIX=%__PROJECT__%\build\libidn2"
 
 dir
@@ -41,7 +36,7 @@ cmake .. ^
 -DENABLE_LIB_ONLY=ON ^
 
 
-
+cmake --build . --config Release
 cmake --build . --config Release --target install
 
 
