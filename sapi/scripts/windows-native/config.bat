@@ -199,24 +199,26 @@ configure.bat ^
 --enable-filter ^
 --enable-session ^
 --enable-tokenizer ^
---enable-ctype     --enable-pdo    --enable-phar  ^
+--enable-ctype    ^
+--enable-pdo  ^
+--enable-phar  ^
+--enable-phar-native-ssl ^
 --enable-sockets ^
+--enable-bcmath ^
 --enable-zlib ^
+--with-openssl=static ^
+--with-bz2 ^
+--enable-zip ^
+--with-iconv=static ^
+--with-libxml=static ^
+--with-xml=static ^
+--enable-xmlreader ^
+--enable-xmlwriter ^
+--with-dom ^
+--with-simplexml ^
 --with-curl
 
-:: --enable-phar-native-ssl ^
-:: --with-openssl=static ^
-:: --with-mysqlnd ^
-:: --with-bz2 ^
-:: --enable-zip ^
-:: --enable-bcmath ^
-:: --with-iconv=static ^
-:: --with-libxml ^
-:: --with-xml ^
-:: --enable-xmlreader ^
-:: --enable-xmlwriter ^
-:: --with-dom ^
-:: --with-simplexml ^
+
 :: --with-readline ^
 :: --with-gd ^
 :: --with-libwebp ^
