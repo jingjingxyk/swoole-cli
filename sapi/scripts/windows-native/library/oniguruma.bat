@@ -20,11 +20,12 @@ if  exist "%__PROJECT__%\thirdparty\oniguruma" rmdir /s /q "%__PROJECT__%\thirdp
 mkdir "%__PROJECT__%\thirdparty\oniguruma"
 
 7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\oniguruma"  %__PROJECT__%\pool\lib\oniguruma-v6.9.9.tar
-cd %__PROJECT__%\thirdparty\oniguruma\oniguruma-v6.9.9\
+cd %__PROJECT__%\thirdparty\oniguruma\oniguruma-6.9.9\
 
 dir
 
 set "ONIGURUMA_PREFIX=%__PROJECT__%\build\oniguruma"
+
 mkdir  build-dir
 cd build-dir
 cmake .. ^
