@@ -88,6 +88,9 @@ set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\ngtcp2\lib"
 :: set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\curl\include"
 :: set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\curl\lib"
 
+set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\oniguruma\include"
+set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\oniguruma\lib"
+
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\lib"
 
