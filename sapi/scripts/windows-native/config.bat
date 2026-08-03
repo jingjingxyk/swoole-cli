@@ -134,7 +134,7 @@ sed.exe -i.".bak" '/var i, j, k, libname;/i STDOUT.WriteLine(common_name);' conf
 
 sed.exe -i.".bak" '/generate_files();/i STDOUT.WriteLine("=======================");' configure.js
 sed.exe -i.".bak" '/generate_files();/i STDOUT.WriteLine(PHP_PHP_BUILD);' configure.js
-sed.exe -i.".bak" '/CHECK_LIB\("wldap32.lib", "curl", PHP_CURL\)/TRUE/' ext/curl/config.w32
+sed.exe -i.".bak" 's/CHECK_LIB\("wldap32.lib", "curl", PHP_CURL\)/TRUE/' ext/curl/config.w32
 
 echo "===================="
 
