@@ -221,7 +221,7 @@ configure.bat ^
 --with-dom ^
 --with-simplexml ^
 --with-curl ^
---enable-fileinfo=static
+--enable-fileinfo
 
 
 :: --with-readline ^
