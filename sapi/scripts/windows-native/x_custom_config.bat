@@ -86,7 +86,7 @@ echo    ^@echo ASM_OBJS: $(ASM_OBJS)        >> %X_MAKEFILE%
 echo    ^@echo ==================           >> %X_MAKEFILE%
 echo    ^@echo MCFILE: $(MCFILE)            >> %X_MAKEFILE%
 echo    ^@echo ==================           >> %X_MAKEFILE%
-echo    ^@echo X_LIBS: $(X_LIBS)            >> %X_MAKEFILE%
+echo    ^@echo X_CUSTOM_LIBS: $(X_CUSTOM_LIBS)            >> %X_MAKEFILE%
 
 :x-custom-show-var-end
 
@@ -108,7 +108,7 @@ echo. >> %X_MAKEFILE%
 
 rem  Makefile
 echo x-release-static-php^: generated_files $(DEPS_CLI) $(PHP_GLOBAL_OBJS) $(CLI_GLOBAL_OBJS) $(STATIC_EXT_OBJS)  $(ASM_OBJS)  $(BUILD_DIR)\php.exe.res $(BUILD_DIR)\php.exe.manifest   >> %X_MAKEFILE%
-echo 	@"$(LINK)" /nologo  $(PHP_GLOBAL_OBJS_RESP) $(CLI_GLOBAL_OBJS_RESP) $(STATIC_EXT_OBJS_RESP) $(STATIC_EXT_LIBS) $(ASM_OBJS) $(LIBS) $(LIBS_CLI) $(BUILD_DIR)\php.exe.res /out:$(BUILD_DIR)\php.exe $(LDFLAGS) $(LDFLAGS_CLI) $(X_LIBS) >> %X_MAKEFILE%
+echo 	@"$(LINK)" /nologo  $(PHP_GLOBAL_OBJS_RESP) $(CLI_GLOBAL_OBJS_RESP) $(STATIC_EXT_OBJS_RESP) $(STATIC_EXT_LIBS) $(ASM_OBJS) $(LIBS) $(LIBS_CLI) $(BUILD_DIR)\php.exe.res /out:$(BUILD_DIR)\php.exe $(LDFLAGS) $(LDFLAGS_CLI) $(X_CUSTOM_LIBS) >> %X_MAKEFILE%
 rem echo 	-@$(_VC_MANIFEST_EMBED_EXE) >> %X_MAKEFILE%
 echo 	@if exist php.exe.manifest $(MT) -nologo -manifest php.exe.manifest -outputresource:php.exe    >> %X_MAKEFILE%
 
