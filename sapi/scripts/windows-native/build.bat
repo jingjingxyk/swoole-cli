@@ -19,7 +19,9 @@ rem nmake   mode=static debug=false
 :: nmake /E php.exe
 :: exit /b
 
-set "X_LIBS= libzstd_a.lib "
+set "X_CUSTOM_LIBS="
+set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% libzstd_a.lib"
+set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% cares.lib psl.lib ngtcp2.lib ngtcp2_crypto_ossl.lib nghttp3.lib "
 
 
 nmake /E /f Makefile  x-show-var
