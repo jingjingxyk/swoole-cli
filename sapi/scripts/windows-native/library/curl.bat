@@ -14,14 +14,17 @@ mkdir  build
 set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
 
 cd /d %__PROJECT__%\pool\lib\
-7z.exe x -aoa -y   %__PROJECT__%\pool\lib\curl-8.16.0.tar.gz
+
+if not exist "curl-8.21.0.tar.gz" -fSLo curl-8.21.0.tar.gz  https://github.com/curl/curl/releases/download/curl-8_21_0/curl-8.21.0.tar.gz
+
+7z.exe x -aoa -y   %__PROJECT__%\pool\lib\curl-8.21.0.tar.gz
 
 if  exist "%__PROJECT__%\thirdparty\curl" rmdir /s /q "%__PROJECT__%\thirdparty\curl"
 mkdir "%__PROJECT__%\thirdparty\curl"
 
-7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\curl"  %__PROJECT__%\pool\lib\curl-8.16.0.tar
+7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\curl"  %__PROJECT__%\pool\lib\curl-8.21.0.tar
 
-cd /d %__PROJECT__%\thirdparty\curl\curl-8.16.0\
+cd /d %__PROJECT__%\thirdparty\curl\curl-8.21.0\
 
 dir
 
