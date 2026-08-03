@@ -212,8 +212,8 @@ configure.bat ^
 --with-bz2 ^
 --enable-zip ^
 --with-iconv=static ^
---with-libxml=static ^
---with-xml=static ^
+--with-libxml ^
+--with-xml ^
 --enable-xmlreader ^
 --enable-xmlwriter ^
 --with-dom ^
