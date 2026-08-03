@@ -28,7 +28,7 @@ dir
 mkdir  build-dir
 cd build-dir
 cmake .. ^
--DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\brotli" ^
+-DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\oniguruma" ^
 -DCMAKE_BUILD_TYPE=Release  ^
 -DBUILD_SHARED_LIBS=OFF  ^
 -DBUILD_STATIC_LIBS=ON  ^
