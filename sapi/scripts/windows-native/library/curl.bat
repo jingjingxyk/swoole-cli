@@ -38,7 +38,7 @@ set "LIBBROTLI_PREFIX=%__PROJECT__%\build\brotli"
 set "LIBCURL_PREFIX=%__PROJECT__%\build\curl"
 set "LIBZSTD_PREFIX=%__PROJECT__%\build\libzstd"
 set "LIBCARES_PREFIX=%__PROJECT__%\build\cares"
-set "LIBNGHTTP3_PREFIX=%__PROJECT__%\build\libnghttp2"
+set "LIBNGHTTP3_PREFIX=%__PROJECT__%\build\libnghttp3"
 set "NGTCP2_PREFIX=%__PROJECT__%\build\ngtcp2"
 
 mkdir  build
