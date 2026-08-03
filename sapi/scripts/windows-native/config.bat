@@ -198,7 +198,6 @@ configure.bat ^
 --disable-cgi  ^
 --enable-cli   ^
 --enable-zts ^
---enable-static ^
 --enable-filter ^
 --enable-session ^
 --enable-tokenizer ^
@@ -220,7 +219,7 @@ configure.bat ^
 --with-dom ^
 --with-simplexml ^
 --with-curl ^
---enable-fileinfo
+--enable-fileinfo=static
 
 
 :: --with-readline ^
