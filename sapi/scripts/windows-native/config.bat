@@ -138,7 +138,6 @@ sed.exe -i.".bak" '/generate_files();/i STDOUT.WriteLine("======================
 sed.exe -i.".bak" '/generate_files();/i STDOUT.WriteLine(PHP_PHP_BUILD);' configure.js
 
 sed.exe -i.".bak" "s/php_libmagic.c', true/php_libmagic.c', null/" ext/fileinfo/config.w32
-
 sed.exe -i.".bak" '15 a\ADD_FLAG("CFLAGS_FILEINFO", "/D FILEINFO_STATIC ");' ext/fileinfo/config.w32
 
 
@@ -224,29 +223,26 @@ configure.bat ^
 --with-dom ^
 --with-simplexml ^
 --with-curl ^
---enable-fileinfo
-
+--enable-fileinfo ^
+--enable-mbstring ^
+--enable-intl
 
 :: --with-readline ^
 :: --with-gd ^
 :: --with-libwebp ^
 :: --with-libavif
-
-:: --enable-mbstring ^
 :: --enable-exif ^
+
+
 :: --enable-mbregex ^
-:: --enable-intl ^
+
 :: --enable-soap ^
 :: --with-xsl
 
 :: --enable-cli-win32 ^
 :: --disable-zts ^
 :: --enable-apcu ^
-:: --disable-zts
-:: --enable-mbstring
 :: --enable-redis ^
-:: --enable-fileinfo
-:: --with-curl=static
 
 cd /d %__PROJECT__%
 endlocal
