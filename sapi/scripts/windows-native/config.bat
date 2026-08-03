@@ -224,19 +224,16 @@ configure.bat ^
 --with-simplexml ^
 --with-curl ^
 --enable-fileinfo ^
---enable-mbstring
+--enable-mbstring ^
+--enable-mbregex
+
 
 :: --enable-intl
-
 :: --with-readline ^
 :: --with-gd ^
 :: --with-libwebp ^
 :: --with-libavif
 :: --enable-exif ^
-
-
-:: --enable-mbregex ^
-
 :: --enable-soap ^
 :: --with-xsl
 
