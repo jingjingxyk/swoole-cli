@@ -88,7 +88,7 @@ cmake --build . --config Release --target install
 
 copy /Y %__PROJECT__%\build\curl\lib\libcurl.lib "%__PROJECT__%\build\curl\lib\libcurl_a.lib"
 
-dumpbin /DIRECTIVES "%__PROJECT__%\build\curl\lib\libcurl.lib" | findstr /i "DEFAULTLIB"
+dumpbin /DIRECTIVES "%__PROJECT__%\build\lib\libcurl.lib" | findstr /i "DEFAULTLIB"
 
 cd /d %__PROJECT__%
 endlocal
