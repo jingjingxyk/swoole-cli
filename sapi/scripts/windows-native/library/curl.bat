@@ -44,7 +44,7 @@ set "NGTCP2_PREFIX=%__PROJECT__%\build\ngtcp2"
 
 mkdir  build
 cd build
-cmake .. ^
+cmake -B . -S  .. ^
 -DCMAKE_INSTALL_PREFIX="%LIBCURL_PREFIX%" ^
 -DCMAKE_BUILD_TYPE=Release  ^
 -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
