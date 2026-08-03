@@ -54,6 +54,7 @@ del "%__PROJECT__%\build\libzstd\bin\zstd.dll"
 del "%__PROJECT__%\build\libzstd\lib\zstd.lib"
 
 copy /Y "%__PROJECT__%\build\libzstd\lib\zstd_static.lib" "%__PROJECT__%\build\libzstd\lib\libzstd_a.lib"
+copy /Y "%__PROJECT__%\build\libzstd\lib\zstd_static.lib" "%__PROJECT__%\build\libzstd\lib\libzstd.lib"
 
 dumpbin /DIRECTIVES "%__PROJECT__%\build\libzstd\lib\zstd_static.lib" | findstr /i "DEFAULTLIB"
 dumpbin /SYMBOLS "%__PROJECT__%\build\libzstd\lib\zstd_static.lib" | findstr "ZSTD_" | findstr "imp"
