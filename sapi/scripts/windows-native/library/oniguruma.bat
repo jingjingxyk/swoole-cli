@@ -24,11 +24,11 @@ cd %__PROJECT__%\thirdparty\oniguruma\oniguruma-v6.9.9\
 
 dir
 
-
+set "ONIGURUMA_PREFIX=%__PROJECT__%\build\oniguruma"
 mkdir  build-dir
 cd build-dir
 cmake .. ^
--DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\oniguruma" ^
+-DCMAKE_INSTALL_PREFIX="%ONIGURUMA_PREFIX%" ^
 -DCMAKE_BUILD_TYPE=Release  ^
 -DBUILD_SHARED_LIBS=OFF  ^
 -DBUILD_STATIC_LIBS=ON  ^
