@@ -95,7 +95,9 @@ set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\lib"
 :: set "INCLUDE=%INCLUDE%;%PHP_SRC%\ext\"
 set "INCLUDE=%X_INCLUDES%;%INCLUDE%"
 set "LIB=%X_LIBS%;%LIB%"
-
+set "X_CUSTOM_LIBS="
+set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% libzstd_a.lib"
+set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% cares.lib psl.lib ngtcp2.lib ngtcp2_crypto_ossl.lib nghttp3.lib "
 
 echo "INCLUDE=%INCLUDE%"
 echo "LIB=%LIB%"
@@ -217,7 +219,7 @@ configure.bat ^
 --with-dom ^
 --with-simplexml ^
 --with-curl ^
-
+--enable-fileinfo
 
 
 :: --with-readline ^
@@ -228,7 +230,6 @@ configure.bat ^
 :: --enable-mbstring ^
 :: --enable-exif ^
 :: --enable-mbregex ^
-:: --enable-fileinfo ^
 :: --enable-intl ^
 :: --enable-soap ^
 :: --with-xsl
