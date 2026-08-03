@@ -15,7 +15,7 @@ set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
 
 cd /d %__PROJECT__%\pool\lib\
 
-if not exist "ngtcp2-1.25.0.tar.gz" -fSLo ngtcp2-1.25.0.tar.gz  https://github.com/ngtcp2/ngtcp2/releases/download/v1.25.0/ngtcp2-1.25.0.tar.gz
+if not exist "ngtcp2-1.25.0.tar.gz" curl.exe -fSLo ngtcp2-1.25.0.tar.gz  https://github.com/ngtcp2/ngtcp2/releases/download/v1.25.0/ngtcp2-1.25.0.tar.gz
 
 7z.exe x -aoa -y   %__PROJECT__%\pool\lib\ngtcp2-1.25.0.tar.gz
 

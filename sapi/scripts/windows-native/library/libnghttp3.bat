@@ -15,7 +15,7 @@ set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
 
 cd /d %__PROJECT__%\pool\lib\
 
-if not exist "nghttp3-1.18.0.tar.gz" -fSLo nghttp3-1.18.0.tar.gz  https://github.com/ngtcp2/nghttp3/releases/download/v1.18.0/nghttp3-1.18.0.tar.gz
+if not exist "nghttp3-1.18.0.tar.gz" curl.exe -fSLo nghttp3-1.18.0.tar.gz  https://github.com/ngtcp2/nghttp3/releases/download/v1.18.0/nghttp3-1.18.0.tar.gz
 
 7z.exe x -aoa -y   %__PROJECT__%\pool\lib\nghttp3-1.18.0.tar.gz
 

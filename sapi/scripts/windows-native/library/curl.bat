@@ -15,7 +15,7 @@ set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
 
 cd /d %__PROJECT__%\pool\lib\
 
-if not exist "curl-8.21.0.tar.gz" -fSLo curl-8.21.0.tar.gz  https://github.com/curl/curl/releases/download/curl-8_21_0/curl-8.21.0.tar.gz
+if not exist "curl-8.21.0.tar.gz" curl.exe -fSLo curl-8.21.0.tar.gz  https://github.com/curl/curl/releases/download/curl-8_21_0/curl-8.21.0.tar.gz
 
 7z.exe x -aoa -y   %__PROJECT__%\pool\lib\curl-8.21.0.tar.gz
 
