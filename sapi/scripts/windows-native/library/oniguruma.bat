@@ -38,7 +38,8 @@ cmake .. ^
 -DINSTALL_EXAMPLES=OFF ^
 -DBUILD_TEST=OFF ^
 -DMSVC_STATIC_RUNTIME=ON ^
--DCMAKE_C_FLAGS="/MT /O2 /W3 /DNDEBUG"
+-DCMAKE_C_FLAGS="/MT /O2 /W3 /DNDEBUG" ^
+-DCMAKE_VERBOSE_MAKEFILE=ON
 
 cmake --build . --config Release
 cmake --build . --config Release --target install
