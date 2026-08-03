@@ -53,7 +53,7 @@ cmake .. ^
 cmake --build . --config Release
 cmake --build . --config Release --target install
 
-dumpbin /DIRECTIVES "%__PROJECT__%\build\libnghttp3\lib\libnghttp3.lib" | findstr /i "DEFAULTLIB"
+dumpbin /DIRECTIVES "%__PROJECT__%\build\libnghttp3\lib\nghttp3.lib" | findstr /i "DEFAULTLIB"
 
 cd /d %__PROJECT__%
 endlocal

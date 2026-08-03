@@ -56,6 +56,7 @@ cmake --build . --config Release
 cmake --build . --config Release --target install
 
 dumpbin /DIRECTIVES "%__PROJECT__%\build\ngtcp2\lib\ngtcp2.lib" | findstr /i "DEFAULTLIB"
+dumpbin /DIRECTIVES "%__PROJECT__%\build\ngtcp2\lib\ngtcp2_crypto_ossl.lib" | findstr /i "DEFAULTLIB"
 
 cd /d %__PROJECT__%
 endlocal
