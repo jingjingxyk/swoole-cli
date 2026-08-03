@@ -94,6 +94,7 @@ jobs:
           cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\openssl.bat
           cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\libiconv.bat
           # cmd /c sapi\scripts\windows-native\library\libiconv.bat
+          # cmd /c sapi\scripts\windows-native\build-libs.bat
           # cmd /c sapi\quickstart\windows\cygwin-build\download-cygwin.bat
           # cmd /c sapi\quickstart\windows\cygwin-build\install-cygwin.bat
           # cmd /c sapi\quickstart\windows\msys2-build\download-msys2.bat
