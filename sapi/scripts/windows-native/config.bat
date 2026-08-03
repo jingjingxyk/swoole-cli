@@ -228,10 +228,10 @@ configure.bat ^
 --with-curl ^
 --enable-fileinfo ^
 --enable-mbstring ^
---enable-mbregex
+--enable-mbregex ^
+--enable-intl
 
 
-:: --enable-intl
 :: --with-readline ^
 :: --with-gd ^
 :: --with-libwebp ^
