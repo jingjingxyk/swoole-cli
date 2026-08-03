@@ -214,11 +214,12 @@ configure.bat ^
 --with-mysqlnd ^
 --with-bz2 ^
 --enable-zip ^
---with-readline ^
---with-curl ^
---with-gd ^
---with-libwebp ^
---with-libavif
+--with-curl
+
+:: --with-readline ^
+:: --with-gd ^
+:: --with-libwebp ^
+:: --with-libavif
 
 :: --enable-mbstring ^
 :: --enable-exif ^
