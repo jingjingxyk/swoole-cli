@@ -92,7 +92,7 @@ set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\lib"
 
 
-:: set "INCLUDE=%INCLUDE%;%PHP_SRC%\ext\"
+:: set "INCLUDE=%INCLUDE%;%PHP_SRC%\ext"
 set "INCLUDE=%X_INCLUDES%;%INCLUDE%"
 set "LIB=%X_LIBS%;%LIB%"
 set "X_CUSTOM_LIBS="
@@ -198,6 +198,7 @@ configure.bat ^
 --disable-cgi  ^
 --enable-cli   ^
 --enable-zts ^
+--enable-static ^
 --enable-filter ^
 --enable-session ^
 --enable-tokenizer ^
