@@ -51,15 +51,15 @@ cd %__PROJECT__%\thirdparty\icu\icu\
 
 :: set "CXXFLAGS=/MT"
 :: set "CFLAGS=/EHsc /MP /MT /UCRT"
-set "CFLAGS=/EHsc /MP /MT"
-set "CXXFLAGS=/MT"
+:: set "CFLAGS=/EHsc /MP /MT"
+:: set "CXXFLAGS=/MT"
 
 set "CPPFLAGS=-D U_CHARSET_IS_UTF8=1  -D U_USING_ICU_NAMESPACE=1  -D U_STATIC_IMPLEMENTATION=1 "
 
 sed.exe -i.".bak" "s/RELEASE_CFLAGS='-Gy -MD'/RELEASE_CFLAGS='-Gy -MT'/" .\source\runConfigureICU
 sed.exe -i.".bak" "s/RELEASE_CXXFLAGS='-Gy -MD'/RELEASE_CXXFLAGS='-Gy -MT'/" .\source\runConfigureICU
 
-bash ./source/runConfigureICU Cygwin/MSVC --prefix=/cygdrive/d/a/swoole-cli/swoole-cli/build/icu/ ^
+bash ./source/runConfigureICU Cygwin/MSVC --prefix=/cygdrive/d/a/swoole-cli/swoole-cli/build/icu ^
 --enable-static=yes ^
 --enable-shared=no ^
 --with-data-packaging=static ^
