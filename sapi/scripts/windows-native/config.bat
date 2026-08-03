@@ -224,8 +224,9 @@ configure.bat ^
 --with-simplexml ^
 --with-curl ^
 --enable-fileinfo ^
---enable-mbstring ^
---enable-intl
+--enable-mbstring
+
+:: --enable-intl
 
 :: --with-readline ^
 :: --with-gd ^
