@@ -229,6 +229,7 @@ configure.bat ^
 --enable-fileinfo ^
 --enable-mbstring ^
 --enable-mbregex ^
+--enable-exif ^
 --enable-intl
 
 
@@ -236,9 +237,16 @@ configure.bat ^
 :: --with-gd ^
 :: --with-libwebp ^
 :: --with-libavif
-:: --enable-exif ^
 :: --enable-soap ^
 :: --with-xsl
+:: --with-gettext
+:: --with-gmp
+:: --with-ldap
+:: --with-mysqli
+:: --with-pdo-mysql
+:: --with-pdo-pgsql
+:: --with-pdo-sqlite
+:: --with-sodium
 
 :: --enable-cli-win32 ^
 :: --disable-zts ^
