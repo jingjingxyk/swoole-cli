@@ -175,6 +175,9 @@ npm install  pnpm --registry=https://registry.npmmirror.com
 
 npm config  set registry https://registry.npmmirror.com
 
+corepack use pnpm@latest
+
+
 # electron 反编译
 npm install asar  --registry=https://registry.npmmirror.com
 
