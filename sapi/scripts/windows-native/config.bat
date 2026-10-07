@@ -220,7 +220,14 @@ configure.bat ^
 --enable-mbstring ^
 --enable-mbregex ^
 --enable-exif ^
---enable-intl
+--enable-intl ^
+--enable-swoole ^
+--enable-php-sockets ^
+--enable-mysqlnd ^
+--enable-swoole-curl ^
+--enable-swoole-ssh2 ^
+--enable-swoole-ftp ^
+--enable-swoole-thread-context
 
 
 :: --with-readline ^

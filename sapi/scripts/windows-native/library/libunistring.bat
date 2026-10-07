@@ -8,19 +8,24 @@ cd ..\..\..\..\
 
 set __PROJECT__=%cd%
 cd /d %__PROJECT__%
-mkdir  build
+mkdir  "%__PROJECT__%\build\libunistring"
+
+if exist "%__PROJECT__%\build\libunistring\.completed" goto :skip
+
 set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
 
 
 cd /d %__PROJECT__%\pool\lib\
-7z.exe x -aoa -y   %__PROJECT__%\pool\lib\libidn2-2.3.8.tar.gz
+7z.exe x -aoa -y   %__PROJECT__%\pool\lib\libunistring-1.1.tar.gz
 
-if  exist "%__PROJECT__%\thirdparty\libidn2" rmdir /s /q "%__PROJECT__%\thirdparty\libidn2"
-mkdir "%__PROJECT__%\thirdparty\libidn2"
+if  exist "%__PROJECT__%\thirdparty\libunistring" rmdir /s /q "%__PROJECT__%\thirdparty\libunistring"
+mkdir "%__PROJECT__%\thirdparty\libunistring"
 
-7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libidn2"  %__PROJECT__%\pool\lib\libidn2-2.3.8.tar
-cd %__PROJECT__%\thirdparty\libidn2\libidn2-2.3.8\
+7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libunistring"  %__PROJECT__%\pool\lib\libunistring-1.1.tar
+cd %__PROJECT__%\thirdparty\libunistring\libunistring-1.1
 
+
+exit 0
 set "OPENSSL_PREFIX=%__PROJECT__%\build\openssl"
 set "ZLIB_PREFIX=%__PROJECT__%\build\zlib"
 set "LIBXML2_PREFIX=%__PROJECT__%\build"
@@ -60,6 +65,12 @@ cmake .. ^
 
 cmake --build . --config Release --target install
 
+type nul > "%__PROJECT__%\build\libunistring\.completed"
 
 cd /d %__PROJECT__%
+
+:skip
+echo "skip"
+echo "libunistring build completed ! "
+
 endlocal
