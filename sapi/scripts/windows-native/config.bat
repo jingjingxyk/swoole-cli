@@ -227,11 +227,10 @@ configure.bat ^
 --enable-mysqlnd ^
 --enable-swoole-curl ^
 --with-swoole-ssh2 ^
---enable-swoole-ftp ^
 --enable-swoole-thread ^
 
 
-
+:: --enable-swoole-ftp ^
 :: --enable-thread-context
 
 :: --with-readline ^
