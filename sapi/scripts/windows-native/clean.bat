@@ -14,5 +14,5 @@ echo %cd%
 cd /d %__PROJECT__%\var\native-build\
 if exist "php-src" rmdir /s /q php-src
 dir
-git clone -b php-8.4.21 --depth=1 https://github.com/php/php-src.git php-src
+git clone -b php-8.4.26 --depth=1 https://github.com/php/php-src.git php-src
 endlocal
