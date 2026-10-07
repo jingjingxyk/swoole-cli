@@ -8,7 +8,10 @@ cd ..\..\..\..\
 
 set __PROJECT__=%cd%
 cd /d %__PROJECT__%
-mkdir  build
+mkdir  "%__PROJECT__%\build\liblzma"
+
+if exist "%__PROJECT__%\build\liblzma\.completed" goto :skip
+
 
 set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
 cd /d %__PROJECT__%\pool\lib\
@@ -16,6 +19,8 @@ cd /d %__PROJECT__%\pool\lib\
 
 if  exist "%__PROJECT__%\thirdparty\liblzma" rmdir /s /q "%__PROJECT__%\thirdparty\liblzma"
 mkdir "%__PROJECT__%\thirdparty\liblzmal"
+
+if exist "%__PROJECT__%\build\liblzma\.completed" goto :skip
 
 7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\liblzma"  %__PROJECT__%\pool\lib\xz-5.4.1.tar
 cd %__PROJECT__%\thirdparty\liblzma\xz-5.4.1\
@@ -38,9 +43,16 @@ cmake --build . --config Release --target install
 copy /Y "%__PROJECT__%\build\liblzma\lib\liblzma.lib" "%__PROJECT__%\build\liblzma\lib\liblzma_a.lib"
 del "%__PROJECT__%\build\liblzma\lib\liblzma.lib"
 
+type nul > "%__PROJECT__%\build\liblzma\.completed"
+
 dumpbin /DIRECTIVES "%__PROJECT__%\build\liblzma\lib\liblzma_a.lib" |  findstr /i "DEFAULTLIB"
 
 findstr /i "dllimport" "%__PROJECT__%\build\liblzma\include\lzma.h"
 
 cd /d %__PROJECT__%
+
+:skip
+echo "skip"
+echo "liblzma build completed ! "
+
 endlocal

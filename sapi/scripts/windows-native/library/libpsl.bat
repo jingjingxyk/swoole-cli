@@ -8,7 +8,10 @@ cd ..\..\..\..\
 
 set __PROJECT__=%cd%
 cd /d %__PROJECT__%
-mkdir  build\libpsl
+mkdir  "%__PROJECT__%\build\libpsl"
+
+if exist "%__PROJECT__%\build\libpsl\.completed" goto :skip
+
 set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
 
 
@@ -37,7 +40,12 @@ set "LIBPSL_PREFIX=%__PROJECT__%\build\libpsl"
 nmake /f Makefile.vc CFG=release DISABLE_BUILTIN=1 DISABLE_RUNTIME=1 STATIC=1 PREFIX="%LIBPSL_PREFIX%" install
 
 
-
+type nul > "%__PROJECT__%\build\libpsl\.completed"
 
 cd /d %__PROJECT__%
+
+:skip
+echo "skip"
+echo "libpsl build completed ! "
+
 endlocal

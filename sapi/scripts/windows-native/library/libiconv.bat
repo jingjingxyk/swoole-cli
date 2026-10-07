@@ -11,6 +11,7 @@ cd /d %__PROJECT__%
 mkdir  %__PROJECT__%\build\libiconv\lib\
 mkdir  %__PROJECT__%\build\libiconv\include\
 
+if exist "%__PROJECT__%\build\libiconv\.completed" goto :skip
 
 :: cd /d %__PROJECT__%\pool\lib\
 :: 7z.exe x -aoa -y   %__PROJECT__%\pool\lib\libiconv-1.17.tar.gz
@@ -53,6 +54,12 @@ ls x64\lib\
 xcopy ..\source\include\iconv.h %__PROJECT__%\build\libiconv\include\* /E /I /H /Y
 xcopy x64\lib\*.lib %__PROJECT__%\build\libiconv\lib\* /E /I /H /Y
 
+type nul > "%__PROJECT__%\build\libiconv\.completed"
+
 cd /d %__PROJECT__%
+
+:skip
+echo "skip"
+echo "libiconv build completed ! "
 
 endlocal

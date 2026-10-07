@@ -8,7 +8,9 @@ cd ..\..\..\..\
 
 set __PROJECT__=%cd%
 cd /d %__PROJECT__%
-mkdir  build
+mkdir  "%__PROJECT__%\build\brotli"
+
+if exist "%__PROJECT__%\build\brotli\.completed" goto :skip
 
 set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
 
@@ -53,5 +55,12 @@ copy /Y "%__PROJECT__%\build\brotli\lib\brotlienc-static.lib" "%__PROJECT__%\bui
 copy /Y "%__PROJECT__%\build\brotli\lib\brotlidec-static.lib" "%__PROJECT__%\build\brotli\lib\brotlidec.lib"
 copy /Y "%__PROJECT__%\build\brotli\lib\brotlicommon-static.lib" "%__PROJECT__%\build\brotli\lib\brotlicommon.lib"
 
+type nul > "%__PROJECT__%\build\brotli\.completed"
+
 cd /d %__PROJECT__%
+
+:skip
+echo "skip"
+echo "brotli build completed ! "
+
 endlocal

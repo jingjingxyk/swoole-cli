@@ -8,7 +8,10 @@ cd ..\..\..\..\
 
 set __PROJECT__=%cd%
 cd /d %__PROJECT__%
-mkdir  build
+mkdir  "%__PROJECT__%\build\libnghttp2"
+
+if exist "%__PROJECT__%\build\libnghttp2\.completed" goto :skip
+
 set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
 
 
@@ -60,6 +63,12 @@ cmake .. ^
 
 cmake --build . --config Release --target install
 
+type nul > "%__PROJECT__%\build\libnghttp2\.completed"
 
 cd /d %__PROJECT__%
+
+:skip
+echo "skip"
+echo "libnghttp2 build completed ! "
+
 endlocal

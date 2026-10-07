@@ -11,7 +11,9 @@ rem cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x
 rem
 set __PROJECT__=%cd%
 cd /d %__PROJECT__%
-mkdir  %__PROJECT__%/build/zlib/
+mkdir  "%__PROJECT__%\build\zlib"
+
+if exist "%__PROJECT__%\build\zlib\.completed" goto :skip
 
 set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
 
@@ -47,5 +49,13 @@ del "%__PROJECT__%\build\zlib\bin\zlib.dll"
 copy /Y "%__PROJECT__%\build\zlib\lib\zlibstatic.lib" "%__PROJECT__%\build\zlib\lib\zlib.lib"
 copy /Y "%__PROJECT__%\build\zlib\lib\zlibstatic.lib" "%__PROJECT__%\build\zlib\lib\zlib_a.lib"
 dir "%__PROJECT__%\build\zlib\lib\"
+
+type nul > "%__PROJECT__%\build\zlib\.completed"
+
 cd /d %__PROJECT__%
+
+:skip
+echo "skip"
+echo "zlib build completed ! "
+
 endlocal

@@ -8,7 +8,9 @@ cd ..\..\..\..\
 
 set __PROJECT__=%cd%
 cd /d %__PROJECT__%
-mkdir  build
+mkdir  "%__PROJECT__%\build\oniguruma"
+
+if exist "%__PROJECT__%\build\oniguruma\.completed" goto :skip
 
 set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
 
@@ -45,9 +47,15 @@ cmake --build . --config Release
 cmake --build . --config Release --target install
 
 
-
 copy /Y "%ONIGURUMA_PREFIX%\lib\onig.lib" "%ONIGURUMA_PREFIX%\lib\libonig_a.lib"
 copy /Y "%ONIGURUMA_PREFIX%\lib\onig.lib" "%ONIGURUMA_PREFIX%\lib\onig_a.lib"
 
+type nul > "%__PROJECT__%\build\oniguruma\.completed"
+
 cd /d %__PROJECT__%
+
+:skip
+echo "skip"
+echo "oniguruma build completed ! "
+
 endlocal

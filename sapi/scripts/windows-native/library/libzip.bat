@@ -8,7 +8,8 @@ cd ..\..\..\..\
 
 set __PROJECT__=%cd%
 cd /d %__PROJECT__%
-mkdir  build
+mkdir  "%__PROJECT__%\build\libzip"
+if exist "%__PROJECT__%\build\libzip\.completed" goto :skip
 
 set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
 cd /d %__PROJECT__%\pool\lib\
@@ -74,9 +75,16 @@ cmake --build . --config Release --target install
 copy /Y %__PROJECT__%\build\libzip\lib\zip.lib "%__PROJECT__%\build\libzip\lib\zip_a.lib"
 copy /Y %__PROJECT__%\build\libzip\lib\zip.lib "%__PROJECT__%\build\libzip\lib\libzip_a.lib"
 
+type nul > "%__PROJECT__%\build\libzip\.completed"
+
 dumpbin /DIRECTIVES "%__PROJECT__%\build\libzip\lib\libzip_a.lib" | findstr /i "DEFAULTLIB"
 dumpbin /SYMBOLS "%__PROJECT__%\build\libzip\lib\libzip_a.lib" | findstr "__imp_"
 dumpbin /SYMBOLS "%__PROJECT__%\build\libzip\lib\libzip_a.lib" | findstr "ZSTD_"
 
 cd /d %__PROJECT__%
+
+:skip
+echo "skip"
+echo "libzip build completed ! "
+
 endlocal

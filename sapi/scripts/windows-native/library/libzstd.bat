@@ -8,7 +8,8 @@ cd ..\..\..\..\
 
 set __PROJECT__=%cd%
 cd /d %__PROJECT__%
-mkdir  build
+mkdir  "%__PROJECT__%\build\libzstd"
+if exist "%__PROJECT__%\build\libzstd\.completed" goto :skip
 
 set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
 
@@ -56,10 +57,17 @@ del "%__PROJECT__%\build\libzstd\lib\zstd.lib"
 copy /Y "%__PROJECT__%\build\libzstd\lib\zstd_static.lib" "%__PROJECT__%\build\libzstd\lib\libzstd_a.lib"
 copy /Y "%__PROJECT__%\build\libzstd\lib\zstd_static.lib" "%__PROJECT__%\build\libzstd\lib\libzstd.lib"
 
+type nul > "%__PROJECT__%\build\libzstd\.completed"
+
 dumpbin /DIRECTIVES "%__PROJECT__%\build\libzstd\lib\zstd_static.lib" | findstr /i "DEFAULTLIB"
 dumpbin /SYMBOLS "%__PROJECT__%\build\libzstd\lib\zstd_static.lib" | findstr "ZSTD_" | findstr "imp"
 
 findstr /i "dllimport" "%__PROJECT__%\build\libzstd\include\zstd.h"
 
 cd /d %__PROJECT__%
+
+:skip
+echo "skip"
+echo "libzstd build completed ! "
+
 endlocal

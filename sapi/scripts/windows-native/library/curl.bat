@@ -8,8 +8,9 @@ cd ..\..\..\..\
 
 set __PROJECT__=%cd%
 cd /d %__PROJECT__%
-mkdir  build
+mkdir  "%__PROJECT__%\build"
 
+if exist "%__PROJECT__%\build\lib\libcurl.lib" goto :skip
 
 set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
 
@@ -93,4 +94,9 @@ copy /Y %__PROJECT__%\build\lib\libcurl.lib "%__PROJECT__%\build\lib\libcurl_a.l
 dumpbin /DIRECTIVES %__PROJECT__%\build\lib\libcurl.lib | findstr /i "DEFAULTLIB"
 
 cd /d %__PROJECT__%
+
+:skip
+echo "skip"
+echo "curl build completed ! "
+
 endlocal

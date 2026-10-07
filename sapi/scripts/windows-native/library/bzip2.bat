@@ -8,10 +8,10 @@ cd ..\..\..\..\
 
 set __PROJECT__=%cd%
 cd /d %__PROJECT__%
-mkdir  %__PROJECT__%\build\bzip2\
-mkdir  %__PROJECT__%\build\bzip2\include\
-mkdir  %__PROJECT__%\build\bzip2\lib\
-
+mkdir  %__PROJECT__%\build\bzip2
+mkdir  %__PROJECT__%\build\bzip2\include
+mkdir  %__PROJECT__%\build\bzip2\lib
+if exist "%__PROJECT__%\build\bzip2\.completed" goto :skip
 
 cd /d %__PROJECT__%\pool\lib\
 7z.exe x -aoa -y   %__PROJECT__%\pool\lib\bzip2-1.0.8.tar.gz
@@ -36,10 +36,16 @@ dumpbin /dependents bzip2.exe
 copy /Y *.h "%__PROJECT__%\build\bzip2\include\"
 copy /Y libbz2.lib "%__PROJECT__%\build\bzip2\lib\libbz2_a.lib"
 
+type nul > "%__PROJECT__%\build\bzip2\.completed"
 
 dumpbin /DIRECTIVES "%__PROJECT__%\build\bzip2\lib\libbz2_a.lib" |  findstr /i "DEFAULTLIB"
 
 :: vcpkg install bzip2:x64-windows-static
 
 cd /d %__PROJECT__%
+
+:skip
+echo "skip"
+echo "bzip2 build completed ! "
+
 endlocal

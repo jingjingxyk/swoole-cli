@@ -8,7 +8,9 @@ cd ..\..\..\..\
 
 set __PROJECT__=%cd%
 cd /d %__PROJECT__%
-mkdir  build
+mkdir  "%__PROJECT__%\build"
+
+if exist "%__PROJECT__%\build\lib\libxml2s.lib" goto :skip
 
 cd /d %__PROJECT__%\pool\lib\
 7z.exe x -aoa -y   %__PROJECT__%\pool\lib\libxml2-v2.9.14.tar.gz
@@ -58,4 +60,9 @@ dumpbin /DIRECTIVES %__PROJECT__%\build\lib\libxml2_a.lib | findstr /i "DEFAULTL
 
 
 cd /d %__PROJECT__%
+
+:skip
+echo "skip"
+echo "libxml2 build completed ! "
+
 endlocal

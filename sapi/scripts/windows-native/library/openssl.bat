@@ -8,8 +8,9 @@ cd ..\..\..\..\
 
 set __PROJECT__=%cd%
 cd /d %__PROJECT__%
+mkdir  "%__PROJECT__%\build\openssl"
 
-
+if exist "%__PROJECT__%\build\openssl\.completed" goto :skip
 
 set "PATH=%__PROJECT__%\runtime\nasm\;C:\Strawberry\perl\bin;%PATH%"
 
@@ -44,5 +45,12 @@ rem fix no found file " openssl/applink.c "
 copy /Y %__PROJECT__%\thirdparty\openssl\openssl-3.6.0\ms\applink.c  %__PROJECT__%\build\openssl\include\openssl\applink.c
 copy /Y %__PROJECT__%\build\openssl\lib\libcrypto.lib %__PROJECT__%\build\openssl\lib\libeay32st.lib
 
+type nul > "%__PROJECT__%\build\openssl\.completed"
+
 cd /d %__PROJECT__%
+
+:skip
+echo "skip"
+echo "openssl build completed ! "
+
 endlocal
