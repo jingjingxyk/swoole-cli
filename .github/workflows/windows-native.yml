@@ -9,7 +9,7 @@ env:
 
 jobs:
   windows-native:
-    if: 0
+    if: 1
     runs-on: windows-2022
     # runs-on: windows-2025-vs2026
     strategy:
@@ -50,6 +50,15 @@ jobs:
           # call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
           for /f "usebackq tokens=* delims=" %i in (`vswhere -products * -latest -prerelease -find **\VC\Auxiliary\Build\vcvarsall.bat`) do call "%i" x64
           cl.exe
+      - name: test php.exe
+        shell: cmd
+        run: |
+          curl.exe -fSLo php.exe https://github.com/jingjingxyk/swoole-cli/releases/download/swoole-cli-v6.2.0.0/php.exe
+          .\php.exe -m
+          .\php.exe --ri curl
+          .\php.exe --ri openssl
+          .\php.exe --ri swoole
+
       - name: download deps soft
         shell: cmd
         run: |
