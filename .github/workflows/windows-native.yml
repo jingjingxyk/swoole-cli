@@ -57,6 +57,8 @@ jobs:
           .\php.exe -m
           .\php.exe --ri curl
           .\php.exe --ri openssl
+          .\php.exe --ri zlib
+          .\php.exe --ri zip
           .\php.exe --ri swoole
 
       - name: download deps soft
