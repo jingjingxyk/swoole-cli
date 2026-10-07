@@ -48,7 +48,7 @@ jobs:
         shell: cmd
         run: |
           rem call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          for /f "usebackq tokens=* delims=" %i in (`vswhere -products * -latest -prerelease -find **\VC\Auxiliary\Build\vcvarsall.bat`) do call "%i" x64
+          for /f "usebackq tokens=* delims=" %i in (`vswhere -products * -latest -prerelease -find **\VC\Auxiliary\Build\vcvarsall.bat`) do call "%i"
           cl.exe
       - name: test php.exe
         shell: cmd
