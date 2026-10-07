@@ -228,8 +228,11 @@ configure.bat ^
 --enable-swoole-curl ^
 --with-swoole-ssh2 ^
 --enable-swoole-ftp ^
---enable-thread-context
+--enable-swoole-thread ^
 
+
+
+:: --enable-thread-context
 
 :: --with-readline ^
 :: --with-gd ^
