@@ -59,9 +59,13 @@ type nul > "%__PROJECT__%\build\libnghttp3\.completed"
 dumpbin /DIRECTIVES "%__PROJECT__%\build\libnghttp3\lib\nghttp3.lib" | findstr /i "DEFAULTLIB"
 
 cd /d %__PROJECT__%
+goto :ok
 
 :skip
-echo "skip"
+echo "skip build step"
+goto :ok
+
+:ok
 echo "libnghttp3 build completed ! "
 
 endlocal

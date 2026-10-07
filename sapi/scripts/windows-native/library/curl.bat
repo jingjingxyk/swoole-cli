@@ -94,9 +94,13 @@ copy /Y %__PROJECT__%\build\lib\libcurl.lib "%__PROJECT__%\build\lib\libcurl_a.l
 dumpbin /DIRECTIVES %__PROJECT__%\build\lib\libcurl.lib | findstr /i "DEFAULTLIB"
 
 cd /d %__PROJECT__%
+goto :ok
 
 :skip
-echo "skip"
+echo "skip build step"
+goto :ok
+
+:ok
 echo "curl build completed ! "
 
 endlocal

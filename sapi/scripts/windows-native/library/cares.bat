@@ -58,9 +58,13 @@ type nul > "%__PROJECT__%\build\cares\.completed"
 dumpbin /DIRECTIVES "%LIBCARES_PREFIX%\lib\cares.lib" | findstr /i "DEFAULTLIB"
 
 cd /d %__PROJECT__%
+goto :ok
 
 :skip
-echo "skip"
+echo "skip build step"
+goto :ok
+
+:ok
 echo "cares build completed ! "
 
 endlocal

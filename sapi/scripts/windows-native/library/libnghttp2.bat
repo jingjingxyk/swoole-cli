@@ -66,9 +66,13 @@ cmake --build . --config Release --target install
 type nul > "%__PROJECT__%\build\libnghttp2\.completed"
 
 cd /d %__PROJECT__%
+goto :ok
 
 :skip
-echo "skip"
+echo "skip build step"
+goto :ok
+
+:ok
 echo "libnghttp2 build completed ! "
 
 endlocal

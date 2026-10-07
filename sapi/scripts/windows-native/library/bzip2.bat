@@ -43,9 +43,13 @@ dumpbin /DIRECTIVES "%__PROJECT__%\build\bzip2\lib\libbz2_a.lib" |  findstr /i "
 :: vcpkg install bzip2:x64-windows-static
 
 cd /d %__PROJECT__%
+goto :ok
 
 :skip
-echo "skip"
+echo "skip build step"
+goto :ok
+
+:ok
 echo "bzip2 build completed ! "
 
 endlocal

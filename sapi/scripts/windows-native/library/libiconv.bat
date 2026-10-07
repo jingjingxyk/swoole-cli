@@ -57,9 +57,13 @@ xcopy x64\lib\*.lib %__PROJECT__%\build\libiconv\lib\* /E /I /H /Y
 type nul > "%__PROJECT__%\build\libiconv\.completed"
 
 cd /d %__PROJECT__%
+goto :ok
 
 :skip
-echo "skip"
+echo "skip build step"
+goto :ok
+
+:ok
 echo "libiconv build completed ! "
 
 endlocal

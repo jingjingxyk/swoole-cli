@@ -82,9 +82,13 @@ dumpbin /SYMBOLS "%__PROJECT__%\build\libzip\lib\libzip_a.lib" | findstr "__imp_
 dumpbin /SYMBOLS "%__PROJECT__%\build\libzip\lib\libzip_a.lib" | findstr "ZSTD_"
 
 cd /d %__PROJECT__%
+goto :ok
 
 :skip
-echo "skip"
+echo "skip build step"
+goto :ok
+
+:ok
 echo "libzip build completed ! "
 
 endlocal

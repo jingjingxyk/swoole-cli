@@ -43,9 +43,13 @@ nmake /f Makefile.vc CFG=release DISABLE_BUILTIN=1 DISABLE_RUNTIME=1 STATIC=1 PR
 type nul > "%__PROJECT__%\build\libpsl\.completed"
 
 cd /d %__PROJECT__%
+goto :ok
 
 :skip
-echo "skip"
+echo "skip build step"
+goto :ok
+
+:ok
 echo "libpsl build completed ! "
 
 endlocal

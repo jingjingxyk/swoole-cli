@@ -53,9 +53,13 @@ copy /Y "%ONIGURUMA_PREFIX%\lib\onig.lib" "%ONIGURUMA_PREFIX%\lib\onig_a.lib"
 type nul > "%__PROJECT__%\build\oniguruma\.completed"
 
 cd /d %__PROJECT__%
+goto :ok
 
 :skip
-echo "skip"
+echo "skip build step"
+goto :ok
+
+:ok
 echo "oniguruma build completed ! "
 
 endlocal

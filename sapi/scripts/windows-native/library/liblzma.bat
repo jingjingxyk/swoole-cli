@@ -50,9 +50,13 @@ dumpbin /DIRECTIVES "%__PROJECT__%\build\liblzma\lib\liblzma_a.lib" |  findstr /
 findstr /i "dllimport" "%__PROJECT__%\build\liblzma\include\lzma.h"
 
 cd /d %__PROJECT__%
+goto :ok
 
 :skip
-echo "skip"
+echo "skip build step"
+goto :ok
+
+:ok
 echo "liblzma build completed ! "
 
 endlocal

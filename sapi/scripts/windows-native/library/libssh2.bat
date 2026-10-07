@@ -60,9 +60,13 @@ cmake --build . --config Release --target install
 type nul > "%__PROJECT__%\build\libssh2\.completed"
 
 cd /d %__PROJECT__%
+goto :ok
 
 :skip
-echo "skip"
+echo "skip build step"
+goto :ok
+
+:ok
 echo "libssh2 build completed ! "
 
 endlocal

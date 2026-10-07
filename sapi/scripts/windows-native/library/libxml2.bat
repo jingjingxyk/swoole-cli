@@ -60,9 +60,13 @@ dumpbin /DIRECTIVES %__PROJECT__%\build\lib\libxml2_a.lib | findstr /i "DEFAULTL
 
 
 cd /d %__PROJECT__%
+goto :ok
 
 :skip
-echo "skip"
+echo "skip build step"
+goto :ok
+
+:ok
 echo "libxml2 build completed ! "
 
 endlocal

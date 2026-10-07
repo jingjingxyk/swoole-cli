@@ -42,9 +42,13 @@ cmake --build . --config Release --target install
 type nul > "%__PROJECT__%\build\liblz4\.completed"
 
 cd /d %__PROJECT__%
+goto :ok
 
 :skip
-echo "skip"
+echo "skip build step"
+goto :ok
+
+:ok
 echo "liblz4 build completed ! "
 
 endlocal

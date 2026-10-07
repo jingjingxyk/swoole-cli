@@ -65,9 +65,13 @@ dumpbin /SYMBOLS "%__PROJECT__%\build\libzstd\lib\zstd_static.lib" | findstr "ZS
 findstr /i "dllimport" "%__PROJECT__%\build\libzstd\include\zstd.h"
 
 cd /d %__PROJECT__%
+goto :ok
 
 :skip
-echo "skip"
+echo "skip build step"
+goto :ok
+
+:ok
 echo "libzstd build completed ! "
 
 endlocal

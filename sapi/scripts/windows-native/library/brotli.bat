@@ -58,9 +58,13 @@ copy /Y "%__PROJECT__%\build\brotli\lib\brotlicommon-static.lib" "%__PROJECT__%\
 type nul > "%__PROJECT__%\build\brotli\.completed"
 
 cd /d %__PROJECT__%
+goto :ok
 
 :skip
-echo "skip"
+echo "skip build step"
+goto :ok
+
+:ok
 echo "brotli build completed ! "
 
 endlocal

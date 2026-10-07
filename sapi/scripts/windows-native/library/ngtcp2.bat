@@ -62,9 +62,13 @@ dumpbin /DIRECTIVES "%__PROJECT__%\build\ngtcp2\lib\ngtcp2.lib" | findstr /i "DE
 dumpbin /DIRECTIVES "%__PROJECT__%\build\ngtcp2\lib\ngtcp2_crypto_ossl.lib" | findstr /i "DEFAULTLIB"
 
 cd /d %__PROJECT__%
+goto :ok
 
 :skip
-echo "skip"
+echo "skip build step"
+goto :ok
+
+:ok
 echo "ngtcp2 build completed ! "
 
 endlocal

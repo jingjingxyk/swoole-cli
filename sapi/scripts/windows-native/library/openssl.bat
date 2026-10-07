@@ -48,9 +48,13 @@ copy /Y %__PROJECT__%\build\openssl\lib\libcrypto.lib %__PROJECT__%\build\openss
 type nul > "%__PROJECT__%\build\openssl\.completed"
 
 cd /d %__PROJECT__%
+goto :ok
 
 :skip
-echo "skip"
+echo "skip build step"
+goto :ok
+
+:ok
 echo "openssl build completed ! "
 
 endlocal
