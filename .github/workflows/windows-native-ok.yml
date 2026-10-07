@@ -118,7 +118,7 @@ jobs:
         with:
           name: php.exe
           retention-days: 90
-          path: ".\var\native-build\php-src\x64\Release_TS\php.exe"
+          path: "var/native-build/php-src/x64/Release_TS/php.exe"
 
       - name: gh release
         uses: softprops/action-gh-release@v2
