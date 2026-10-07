@@ -13,7 +13,7 @@ dumpbin /DEPENDENTS ".\var\native-build\php-src\x64\Release_TS\php.exe"
 cd /d %__PROJECT__%
 endlocal
 
-
+rem for /f "usebackq tokens=* delims=" %i in (`vswhere -products * -latest -prerelease -find **\VC\Auxiliary\Build\vcvarsall.bat`) do call "%i" x64
 rem https://github.com/jingjingxyk/swoole-cli/releases/download/swoole-cli-v6.2.0.0/php.exe
 rem curl.exe -fSLo php.exe https://github.com/jingjingxyk/swoole-cli/releases/download/swoole-cli-v6.2.0.0/php.exe
 
