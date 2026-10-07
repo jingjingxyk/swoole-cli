@@ -22,7 +22,6 @@ git clone -b fix-nghttp2-build-error-fox-windows https://github.com/jingjingxyk/
 )
 
 if exist "%__PROJECT__%\var\native-build\php-src\ext\swoole" (
-    echo 文件夹存在
     rd /S /Q "%__PROJECT__%\var\native-build\php-src\ext\swoole"
 )
 
