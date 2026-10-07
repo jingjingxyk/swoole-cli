@@ -222,6 +222,7 @@ configure.bat ^
 --enable-exif ^
 --enable-intl ^
 --enable-swoole ^
+--with-nghttp2-dir="%__PROJECT__%\build\libnghttp2" ^
 --enable-php-sockets ^
 --enable-mysqlnd ^
 --enable-swoole-curl ^

@@ -14,7 +14,8 @@ set "PHP_SRC=%cd%"
 cd /d %__PROJECT__%\var\native-build\
 echo %cd%
 
-if not exist "swoole" git clone -b v6.3.0-rc1 --depth=1 https://github.com/swoole/swoole-src.git swoole
+:: if not exist "swoole" git clone -b v6.3.0-rc1 --depth=1 https://github.com/swoole/swoole-src.git swoole
+if not exist "swoole" git clone -b fix-nghttp2-build-error-fox-windows --depth=1 https://github.com/jingjingxyk/swoole-src.git swoole
 
 if exist "%__PROJECT__%\var\native-build\php-src\ext\swoole" (
     echo 文件夹存在
