@@ -14,4 +14,7 @@ cd /d %__PROJECT__%
 endlocal
 
 
+rem https://github.com/jingjingxyk/swoole-cli/releases/download/swoole-cli-v6.2.0.0/php.exe
+rem curl.exe -fSLo php.exe https://github.com/jingjingxyk/swoole-cli/releases/download/swoole-cli-v6.2.0.0/php.exe
+
 rem cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\test.bat
