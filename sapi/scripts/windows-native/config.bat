@@ -55,7 +55,6 @@ set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\brotli\lib"
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\libzstd\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libzstd\lib"
 
-
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\libzip\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libzip\lib"
 
@@ -71,9 +70,6 @@ set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\cares\lib"
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\libssh2\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libssh2\lib"
 
-:: set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\libidn2\include"
-:: set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libidn2\lib"
-
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\libnghttp2\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libnghttp2\lib"
 
@@ -85,15 +81,11 @@ set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libnghttp3\lib"
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\ngtcp2\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\ngtcp2\lib"
 
-:: set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\curl\include"
-:: set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\curl\lib"
-
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\oniguruma\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\oniguruma\lib"
 
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\lib"
-
 
 :: set "INCLUDE=%INCLUDE%;%PHP_SRC%\ext"
 set "INCLUDE=%X_INCLUDES%;%INCLUDE%"
@@ -139,10 +131,6 @@ sed.exe -i.".bak" '/var i, j, k, libname;/i STDOUT.WriteLine(common_name);' conf
 
 sed.exe -i.".bak" '/generate_files();/i STDOUT.WriteLine("=======================");' configure.js
 sed.exe -i.".bak" '/generate_files();/i STDOUT.WriteLine(PHP_PHP_BUILD);' configure.js
-
-sed.exe -i.".bak" "s/php_libmagic.c', true/php_libmagic.c', null/" ext/fileinfo/config.w32
-sed.exe -i.".bak" '15 a\ADD_FLAG("CFLAGS_FILEINFO", "/D FILEINFO_STATIC ");' ext/fileinfo/config.w32
-
 
 
 echo "===================="

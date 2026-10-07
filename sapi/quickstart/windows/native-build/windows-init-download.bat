@@ -52,7 +52,7 @@ if not exist "pie.phar" curl.exe -fSLo pie.phar "https://github.com/php/pie/rele
 if not exist "cacert.pem" curl.exe -fSLo cacert.pem "https://curl.se/ca/cacert.pem"
 
 if not exist "php-sdk-binary-tools" git clone -b master --depth=1 https://github.com/php/php-sdk-binary-tools.git
-if not exist "php-src" git clone -b php-8.4.21 --depth=1 https://github.com/php/php-src.git php-src
+if not exist "php-src" git clone -b php-8.4.26 --depth=1 https://github.com/php/php-src.git php-src
 
 if not exist "all-deps.zip" curl.exe -fSLo all-deps.zip https://github.com/swoole/swoole-cli/releases/download/v6.2.0.0/all-deps.zip
 :: with mirror
