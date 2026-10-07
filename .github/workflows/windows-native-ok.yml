@@ -1,4 +1,4 @@
-name: build-php-cli-windows-native
+name: build-php-cli-windows-native-ok
 
 on:
   push:
@@ -9,7 +9,7 @@ env:
 
 jobs:
   windows-native:
-    if: 0
+    if: 1
     runs-on: windows-2022
     # runs-on: windows-2025-vs2026
     strategy:
@@ -74,24 +74,11 @@ jobs:
         shell: cmd
         run: |
           sapi\quickstart\windows\native-build\windows-init-show-install-result.bat
+
       - name: Add folder to Windows Defender exclusion list
         shell: powershell
         run: |
           Add-MpPreference -ExclusionPath "${{ github.workspace }}"
-      - name: ZeroTier
-        if: 1
-        uses: zerotier/github-action@v1.0.1
-        with:
-          network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
-          auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
-
-      - name: windows config ssh server
-        if: 1
-        shell: powershell
-        run: |
-          Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass;
-          irm https://github.com/jingjingxyk/swoole-cli/blob/new_dev/sapi/quickstart/windows/openssh/enable-openssh.ps1?raw=true | iex
-          Start-Sleep 21600
 
       - name: show php SDK
         run: |
@@ -99,45 +86,39 @@ jobs:
           # Start-Process cmd -ArgumentList "${CURRENT_DIR}\var\windows-build-deps\php-sdk-binary-tools\phpsdk-vs17-x64.bat -a x64  " -NoNewWindow
           cmd /c ${CURRENT_DIR}\var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -h
 
-      - name: run build
+      - name: build libs
         run: |
-          cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\zlib.bat
-          cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\openssl.bat
-          # cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\libiconv.bat
-          # cmd /c sapi\scripts\windows-native\library\libiconv.bat
-          # cmd /c sapi\scripts\windows-native\build-libs.bat
+          cmd /c sapi\scripts\windows-native\build-libs.bat
           # cmd /c sapi\quickstart\windows\cygwin-build\download-cygwin.bat
           # cmd /c sapi\quickstart\windows\cygwin-build\install-cygwin.bat
           # cmd /c sapi\quickstart\windows\msys2-build\download-msys2.bat
           # cmd /c sapi\quickstart\windows\msys2-build\install-msys2.bat
+          # cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\libiconv.bat
           # cmd /c C:\msys64\msys2_shell.cmd -msys2 -defterm -no-start -here -shell bash -c "./sapi/quickstart/windows/msys2-build/install-msys2.sh"
           # cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\icu.bat
-          cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\libxml2.bat
-          cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\liblzma.bat
-          cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\liblz4.bat
-          cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\brotli.bat
-          cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\libzstd.bat
-          cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\bzip2.bat
-          cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\libzip.bat
 
-          # cmd /c sapi\scripts\windows-native\entry.bat
-          cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\main.bat
-          cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\x-show-var.bat
+      - name: run build
+        run: |
+          cmd /c sapi\scripts\windows-native\entry.bat
+          # cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\main.bat
+          # cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\x-show-var.bat
 
       - name: Show Build Result
-        if: 0
+        if: 1
         run: |
-          .\var\native-build\php-src\x64\Release\php.exe -v
           .\var\native-build\php-src\x64\Release_TS\php.exe -v
-          .\var\native-builde\php-src\x64\Release_TS\php.exe -m
+          .\var\native-build\php-src\x64\Release_TS\php.exe -m
+          .\var\native-build\php-src\x64\Release_TS\php.exe --ri openssl
+          .\var\native-build\php-src\x64\Release_TS\php.exe --ri curl
+          .\var\native-build\php-src\x64\Release_TS\php.exe --ri swoole
           dumpbin /DEPENDENTS ".\var\native-build\php-src\x64\Release_TS\php.exe"
 
       - name: production artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: php-cli-v${{ env.BUILD_PHP_VERSION }}-vs17-x64-makefile
+          name: php.exe
           retention-days: 90
-          path: "var/native-build/php-src/Makefile"
+          path: ".\var\native-build\php-src\x64\Release_TS\php.exe"
 
       - name: gh release
         uses: softprops/action-gh-release@v2
