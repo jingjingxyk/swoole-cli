@@ -99,6 +99,7 @@ jobs:
 
       - name: run build
         run: |
+          cmd /c sapi\scripts\windows-native\build-extensions.bat
           cmd /c sapi\scripts\windows-native\entry.bat
           # cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\main.bat
           # cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\x-show-var.bat
@@ -111,7 +112,7 @@ jobs:
           .\var\native-build\php-src\x64\Release_TS\php.exe --ri openssl
           .\var\native-build\php-src\x64\Release_TS\php.exe --ri curl
           .\var\native-build\php-src\x64\Release_TS\php.exe --ri swoole
-          dumpbin /DEPENDENTS ".\var\native-build\php-src\x64\Release_TS\php.exe"
+          # dumpbin /DEPENDENTS ".\var\native-build\php-src\x64\Release_TS\php.exe"
 
       - name: production artifacts
         uses: actions/upload-artifact@v4
