@@ -113,6 +113,8 @@ jobs:
           .\var\native-build\php-src\x64\Release_TS\php.exe --ri curl
           .\var\native-build\php-src\x64\Release_TS\php.exe --ri swoole
           # dumpbin /DEPENDENTS ".\var\native-build\php-src\x64\Release_TS\php.exe"
+          cmd /c .\var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\test.bat
+          dumpbin /symbols .\var\native-build\php-src\x64\Release_TS\ext\swoole\ext-src\php_swoole.obj | findstr swoole_module_entry
 
       - name: production artifacts
         uses: actions/upload-artifact@v4
