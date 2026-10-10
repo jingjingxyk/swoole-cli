@@ -8,6 +8,9 @@ cd /d ..\..\..\
 
 set "__PROJECT__=%cd%"
 cd %__PROJECT__%
+
+dumpbin /symbols .\var\native-build\php-src\x64\Release_TS\ext\swoole\ext-src\php_swoole.obj | findstr swoole_module_entry
+
 dumpbin /DEPENDENTS ".\var\native-build\php-src\x64\Release_TS\php.exe"
 
 cd /d %__PROJECT__%
