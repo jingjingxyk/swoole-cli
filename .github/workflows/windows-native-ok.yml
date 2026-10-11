@@ -86,6 +86,13 @@ jobs:
           # Start-Process cmd -ArgumentList "${CURRENT_DIR}\var\windows-build-deps\php-sdk-binary-tools\phpsdk-vs17-x64.bat -a x64  " -NoNewWindow
           cmd /c ${CURRENT_DIR}\var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -h
 
+      - name: Cache Dependency Source Code Tarball
+        uses: actions/cache@v5
+        id: windows-build-library-dir
+        with:
+          path: ${{ github.workspace }}/build/
+          key: windows-build-library-dir
+
       - name: build libs
         run: |
           cmd /c sapi\scripts\windows-native\build-libs.bat
