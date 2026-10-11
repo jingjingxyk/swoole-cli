@@ -145,7 +145,7 @@ set "CFLAGS=/EHsc /MP /MT /UCRT"
 
 rem https://learn.microsoft.com/zh-cn/cpp/c-runtime-library/crt-library-features?view=msvc-170
 
-set "LDFLAGS=/VERBOSE:LIB	/DEFAULTLIB:libvcruntime.lib /DEFAULTLIB:libucrt.lib /NODEFAULTLIB:MSVCRT"
+set "LDFLAGS=/VERBOSE:LIB	/DEFAULTLIB:libvcruntime.lib /DEFAULTLIB:libucrt.lib /DEFAULTLIB:onecore.lib /NODEFAULTLIB:MSVCRT /NODEFAULTLIB:kernel32.lib /IGNOREDEFAULTLIB:kernel32.lib"
 :: set "LDFLAGS=%LDFLAGS% kernel32.lib ole32.lib user32.lib advapi32.lib shell32.lib ws2_32.lib Dnsapi.lib psapi.lib bcrypt.lib"
 
 :: dir "%LIBS%" | findstr ws2_32.lib
