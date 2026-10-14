@@ -226,7 +226,11 @@ configure.bat ^
 --enable-php-sockets ^
 --enable-mysqlnd ^
 --enable-swoole-curl ^
---enable-swoole-thread
+--enable-swoole-thread ^
+--with-gd ^
+--with-sqlite3 ^
+
+
 
 :: --with-swoole-ssh2 ^
 :: --enable-swoole-ftp ^
