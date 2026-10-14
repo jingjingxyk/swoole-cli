@@ -9,7 +9,7 @@ env:
 
 jobs:
   windows-native:
-    if: 0
+    if: 1
     runs-on: windows-2022
     # runs-on: windows-2025-vs2026
     strategy:
@@ -70,10 +70,18 @@ jobs:
         run: |
           sapi\quickstart\windows\native-build\windows-init-install.bat
 
+      - name: Cache Dependency Source Code Tarball
+        uses: actions/cache@v5
+        id: windows-build-library-dir
+        with:
+          path: ${{ github.workspace }}/build/
+          key: windows-build-library-dir
+
       - name: show deps soft
         shell: cmd
         run: |
           sapi\quickstart\windows\native-build\windows-init-show-install-result.bat
+
       - name: Add folder to Windows Defender exclusion list
         shell: powershell
         run: |
