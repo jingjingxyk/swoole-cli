@@ -227,11 +227,11 @@ configure.bat ^
 --enable-mysqlnd ^
 --enable-swoole-curl ^
 --enable-swoole-thread ^
---with-gd ^
---with-libwebp ^
---with-libavif ^
---with-sqlite3 ^
---enable-redis ^
+:: --with-gd ^
+:: --with-libwebp ^
+:: --with-libavif ^
+:: --with-sqlite3 ^
+:: --enable-redis ^
 
 
 :: --with-swoole-ssh2 ^
