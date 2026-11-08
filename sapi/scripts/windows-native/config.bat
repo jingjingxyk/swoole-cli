@@ -228,8 +228,10 @@ configure.bat ^
 --enable-swoole-curl ^
 --enable-swoole-thread ^
 --with-gd ^
+--with-libwebp ^
+--with-libavif ^
 --with-sqlite3 ^
-
+--enable-redis ^
 
 
 :: --with-swoole-ssh2 ^
@@ -254,7 +256,7 @@ configure.bat ^
 :: --enable-cli-win32 ^
 :: --disable-zts ^
 :: --enable-apcu ^
-:: --enable-redis ^
+
 
 cd /d %__PROJECT__%
 endlocal
