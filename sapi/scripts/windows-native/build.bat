@@ -24,7 +24,7 @@ set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% libzstd_a.lib"
 set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% cares.lib psl.lib ngtcp2.lib ngtcp2_crypto_ossl.lib nghttp3.lib "
 
 
-nmake /E /f Makefile  x-show-var
+:: nmake /E /f Makefile  x-show-var
 nmake /E /f Makefile  x-release-static-php
 :: nmake /E /n /f Makefile  x-release-static-php mode=static LIBS_CLI="%LIBS_CLI%"
 
