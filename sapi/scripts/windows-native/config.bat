@@ -135,10 +135,10 @@ sed.exe -i.bak '/generate_files();/i STDOUT.WriteLine("=======================")
 sed.exe -i.bak '/generate_files();/i STDOUT.WriteLine(PHP_PHP_BUILD);' configure.js
 
 setlocal disabledelayedexpansion
-sed.exe -i.bak "s/!!PHP_ALL_SHARED && \"yes\" == PHP_ALL_SHARED/false/" configure.js
+:: sed.exe -i.bak "s/!!PHP_ALL_SHARED && \"yes\" == PHP_ALL_SHARED/false/" configure.js
 endlocal
 
-sed.exe -i.bak "s/php_libmagic.c', true/php_libmagic.c', null/" ext/fileinfo/config.w32
+sed.exe -i.bak "s/php_libmagic.c', true/php_libmagic.c', PHP_FILEINFO_SHARED/" ext/fileinfo/config.w32
 sed.exe -i.bak '15 a\ADD_FLAG("CFLAGS_FILEINFO", "/D FILEINFO_STATIC ");' ext/fileinfo/config.w32
 
 echo "===================="
