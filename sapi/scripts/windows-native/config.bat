@@ -101,12 +101,8 @@ set "PHP_PHP_BUILD=%__PROJECT__%\build"
 echo %PHP_PHP_BUILD%
 mkdir %PHP_PHP_BUILD%
 
-
+:: fileinfo static patch
 sed.exe -i "s/, true,/, false,/" ext\fileinfo\config.w32
-:: sed.exe -i.bak "s/php_libmagic.c', true/php_libmagic.c',PHP_FILEINFO_SHARED/" ext/fileinfo/config.w32
-:: sed.exe -i.bak "s/php_libmagic.c', true/php_libmagic.c',  /" ext/fileinfo/config.w32
-:: sed.exe -i.bak "s/php_libmagic.c', true/php_libmagic.c', 'null'/" ext/fileinfo/config.w32
-:: sed.exe -i.bak '15 a\ADD_FLAG("CFLAGS_FILEINFO", "/D FILEINFO_STATIC ");' ext/fileinfo/config.w32
 
 
 call buildconf.bat -f
