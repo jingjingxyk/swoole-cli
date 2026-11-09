@@ -128,6 +128,7 @@ sed.exe -i.bak '/var i, j, k, libname;/i STDOUT.WriteLine(libnames);' configure.
 sed.exe -i.bak '/var i, j, k, libname;/i STDOUT.WriteLine(target);' configure.js
 sed.exe -i.bak '/var i, j, k, libname;/i STDOUT.WriteLine(path_to_check);' configure.js
 sed.exe -i.bak '/var i, j, k, libname;/i STDOUT.WriteLine(common_name);' configure.js
+
 sed.exe -i.bak '/var objs = null;/i STDOUT.WriteLine(extname + shared);' configure.js
 sed.exe -i.bak '/var objs = null;/i STDOUT.WriteLine(force_all_shared());' configure.js
 
@@ -138,7 +139,8 @@ setlocal disabledelayedexpansion
 :: sed.exe -i.bak "s/!!PHP_ALL_SHARED && \"yes\" == PHP_ALL_SHARED/false/" configure.js
 endlocal
 
-sed.exe -i.bak "s/php_libmagic.c', true/php_libmagic.c',PHP_FILEINFO_SHARED/" ext/fileinfo/config.w32
+:: sed.exe -i.bak "s/php_libmagic.c', true/php_libmagic.c',PHP_FILEINFO_SHARED/" ext/fileinfo/config.w32
+sed.exe -i.bak "s/php_libmagic.c', true/php_libmagic.c', false/" ext/fileinfo/config.w32
 :: sed.exe -i.bak "s/php_libmagic.c', true/php_libmagic.c', 'null'/" ext/fileinfo/config.w32
 :: sed.exe -i.bak '15 a\ADD_FLAG("CFLAGS_FILEINFO", "/D FILEINFO_STATIC ");' ext/fileinfo/config.w32
 
