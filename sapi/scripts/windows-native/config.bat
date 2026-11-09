@@ -108,32 +108,33 @@ echo "========HELP============"
 call configure.bat --help
 
 
-:: sed.exe -i.".bak" '/var dir_part_to_add = "";/i  STDOUT.WriteLine(header_name);' configure.js
-:: sed.exe -i.".bak" '/var dir_part_to_add = "";/i  STDOUT.WriteLine(flag_name);' configure.js
-:: sed.exe -i.".bak" '/var dir_part_to_add = "";/i  STDOUT.WriteLine(path_to_check);' configure.js
-:: sed.exe -i.".bak" '/var dir_part_to_add = "";/i  STDOUT.WriteLine(use_env);' configure.js
-:: sed.exe -i.".bak" '/var dir_part_to_add = "";/i  STDOUT.WriteLine(add_dir_part);' configure.js
-:: sed.exe -i.".bak" '/var dir_part_to_add = "";/i  STDOUT.WriteLine(add_to_flag_only);' configure.js
+:: sed.exe -i.bak '/var dir_part_to_add = "";/i  STDOUT.WriteLine(header_name);' configure.js
+:: sed.exe -i.bak '/var dir_part_to_add = "";/i  STDOUT.WriteLine(flag_name);' configure.js
+:: sed.exe -i.bak '/var dir_part_to_add = "";/i  STDOUT.WriteLine(path_to_check);' configure.js
+:: sed.exe -i.bak '/var dir_part_to_add = "";/i  STDOUT.WriteLine(use_env);' configure.js
+:: sed.exe -i.bak '/var dir_part_to_add = "";/i  STDOUT.WriteLine(add_dir_part);' configure.js
+:: sed.exe -i.bak '/var dir_part_to_add = "";/i  STDOUT.WriteLine(add_to_flag_only);' configure.js
 
 
-:: sed.exe -i.".bak" '/dep_present = eval("PHP_" + DEP);/i  STDOUT.WriteLine(extname);' configure.js
-:: sed.exe -i.".bak" '/dep_present = eval("PHP_" + DEP);/i  STDOUT.WriteLine(dependson);' configure.js
-:: sed.exe -i.".bak" '/dep_present = eval("PHP_" + DEP);/i  STDOUT.WriteLine(optional);' configure.js
+:: sed.exe -i.bak '/dep_present = eval("PHP_" + DEP);/i  STDOUT.WriteLine(extname);' configure.js
+:: sed.exe -i.bak '/dep_present = eval("PHP_" + DEP);/i  STDOUT.WriteLine(dependson);' configure.js
+:: sed.exe -i.bak '/dep_present = eval("PHP_" + DEP);/i  STDOUT.WriteLine(optional);' configure.js
 
-:: sed.exe -i.".bak" '/if (absolute_path.indexOf(PHP_PHP_BUILD) == 0) {/i  STDOUT.WriteLine(path);' configure.js
-:: sed.exe -i.".bak" '/if (absolute_path.indexOf(PHP_PHP_BUILD) == 0) {/i  STDOUT.WriteLine(absolute_path);' configure.js
+:: sed.exe -i.bak '/if (absolute_path.indexOf(PHP_PHP_BUILD) == 0) {/i  STDOUT.WriteLine(path);' configure.js
+:: sed.exe -i.bak '/if (absolute_path.indexOf(PHP_PHP_BUILD) == 0) {/i  STDOUT.WriteLine(absolute_path);' configure.js
 
 
-sed.exe -i.".bak" '/var i, j, k, libname;/i STDOUT.WriteLine(libnames);' configure.js
-sed.exe -i.".bak" '/var i, j, k, libname;/i STDOUT.WriteLine(target);' configure.js
-sed.exe -i.".bak" '/var i, j, k, libname;/i STDOUT.WriteLine(path_to_check);' configure.js
-sed.exe -i.".bak" '/var i, j, k, libname;/i STDOUT.WriteLine(common_name);' configure.js
+sed.exe -i.bak '/var i, j, k, libname;/i STDOUT.WriteLine(libnames);' configure.js
+sed.exe -i.bak '/var i, j, k, libname;/i STDOUT.WriteLine(target);' configure.js
+sed.exe -i.bak '/var i, j, k, libname;/i STDOUT.WriteLine(path_to_check);' configure.js
+sed.exe -i.bak '/var i, j, k, libname;/i STDOUT.WriteLine(common_name);' configure.js
 
-sed.exe -i.".bak" '/generate_files();/i STDOUT.WriteLine("=======================");' configure.js
-sed.exe -i.".bak" '/generate_files();/i STDOUT.WriteLine(PHP_PHP_BUILD);' configure.js
+sed.exe -i.bak '/generate_files();/i STDOUT.WriteLine("=======================");' configure.js
+sed.exe -i.bak '/generate_files();/i STDOUT.WriteLine(PHP_PHP_BUILD);' configure.js
+sed.exe -i.bak "s/!!PHP_ALL_SHARED && \"yes\" == PHP_ALL_SHARED/false/" configure.js
 
-sed.exe -i.".bak" "s/php_libmagic.c', true/php_libmagic.c', PHP_FILEINFO_SHARED/" ext/fileinfo/config.w32
-sed.exe -i.".bak" '15 a\ADD_FLAG("CFLAGS_FILEINFO", "/D FILEINFO_STATIC ");' ext/fileinfo/config.w32
+sed.exe -i.bak "s/php_libmagic.c', true/php_libmagic.c', null/" ext/fileinfo/config.w32
+sed.exe -i.bak '15 a\ADD_FLAG("CFLAGS_FILEINFO", "/D FILEINFO_STATIC ");' ext/fileinfo/config.w32
 
 echo "===================="
 
@@ -163,11 +164,11 @@ if not exist "win32\winutil.c.bak" (
 
 set "CFLAGS=%CFLAGS% -D isatty=_isatty"
 
-sed.exe -i.".bak" 's/ZEND_DLIMPORT/ /' Zend\zend_stream.c
+sed.exe -i.bak 's/ZEND_DLIMPORT/ /' Zend\zend_stream.c
 
-sed.exe -i.".bak" 's/ZEND_TSRMLS_CACHE_DEFINE()/ /' sapi/cli/php_cli.c
+sed.exe -i.bak 's/ZEND_TSRMLS_CACHE_DEFINE()/ /' sapi/cli/php_cli.c
 
-sed.exe -i.".bak" 's/#ifdef HAVE_LIBXML/#ifdef HAVE_LIBXML_X/' win32/dllmain.c
+sed.exe -i.bak 's/#ifdef HAVE_LIBXML/#ifdef HAVE_LIBXML_X/' win32/dllmain.c
 
 bison.exe -Wall --output=Zend/zend_language_parser.c -v -d Zend/zend_language_parser.y
 
@@ -192,7 +193,7 @@ configure.bat ^
 --enable-pdo  ^
 --enable-phar  ^
 --enable-phar-native-ssl ^
---enable-fileinfo=static
+--enable-fileinfo
 
 :: --enable-sockets ^
 :: --enable-bcmath ^
