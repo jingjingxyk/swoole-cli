@@ -226,7 +226,8 @@ configure.bat ^
 --enable-php-sockets ^
 --enable-mysqlnd ^
 --enable-swoole-curl ^
---enable-swoole-thread ^
+--enable-swoole-thread
+
 :: --with-gd ^
 :: --with-libwebp ^
 :: --with-libavif ^
