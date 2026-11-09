@@ -201,7 +201,7 @@ configure.bat ^
 --enable-pdo  ^
 --enable-phar  ^
 --enable-phar-native-ssl ^
---enable-fileinfo=static
+--enable-fileinfo=yes
 
 :: --enable-sockets ^
 :: --enable-bcmath ^
