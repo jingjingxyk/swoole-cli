@@ -103,6 +103,7 @@ mkdir %PHP_PHP_BUILD%
 
 :: fileinfo static patch
 sed.exe -i "s/, true,/, false,/" ext\fileinfo\config.w32
+sed.exe -i "s/!!PHP_ALL_SHARED && \"yes\" == PHP_ALL_SHARED/False/" win32\build\confutils.js
 
 
 call buildconf.bat -f
