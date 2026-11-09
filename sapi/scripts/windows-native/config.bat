@@ -6,7 +6,7 @@ echo %~dp0
 cd /d %~dp0
 cd /d ..\..\..\
 
-rem cd d:\a\swoole-cli\swoole-cli\
+
 vswhere -products * -latest -prerelease -find **\VC\Auxiliary\Build\vcvarsall.bat
 rem call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
 env
@@ -102,8 +102,8 @@ echo %PHP_PHP_BUILD%
 mkdir %PHP_PHP_BUILD%
 
 :: fileinfo static patch
-sed.exe -i "s/, true,/, false,/" ext\fileinfo\config.w32
-sed.exe -i "s/!!PHP_ALL_SHARED && \"yes\" == PHP_ALL_SHARED/false/" win32\build\confutils.js
+sed.exe -i.bak "s/, true,/, false,/" ext\fileinfo\config.w32
+sed.exe -i.bak "s/[!][!]PHP_ALL_SHARED && \"yes\" == PHP_ALL_SHARED/false/" win32\build\confutils.js
 
 
 call buildconf.bat -f
@@ -162,7 +162,7 @@ rem https://github.com/php/php-src/blob/PHP-8.5.8/win32/winutil.c#L487
 
 if not exist "win32\winutil.c.bak" (
     echo "win32\winutil.c.bak no found , now creating it ..."
-    sed.exe -i".bak" "s/#if PHP_LINKER_MAJOR == 14/#if 0/" win32\winutil.c
+    sed.exe -i.bak "s/#if PHP_LINKER_MAJOR == 14/#if 0/" win32\winutil.c
 )
 
 
@@ -203,7 +203,7 @@ configure.bat ^
 --enable-zlib ^
 --with-openssl=static ^
 --with-bz2 ^
-=--enable-zip ^
+--enable-zip ^
 --with-iconv=static ^
 --with-libxml ^
 --with-xml ^
@@ -214,17 +214,14 @@ configure.bat ^
 --with-curl ^
 --enable-mbstring ^
 --enable-mbregex ^
---enable-exif
-
+--enable-exif ^
+--enable-swoole ^
+--with-nghttp2-dir="%__PROJECT__%\build\libnghttp2" ^
+--enable-php-sockets ^
+--enable-mysqlnd ^
+--enable-swoole-curl ^
+--enable-swoole-thread
 :: --enable-intl
-
-:: --enable-swoole ^
-:: --with-nghttp2-dir="%__PROJECT__%\build\libnghttp2" ^
-:: --enable-php-sockets ^
-:: --enable-mysqlnd ^
-:: --enable-swoole-curl ^
-:: --enable-swoole-thread
-
 :: --with-gd ^
 :: --with-libwebp ^
 :: --with-libavif ^

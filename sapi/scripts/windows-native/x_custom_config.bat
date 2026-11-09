@@ -20,11 +20,11 @@ rem https://learn.microsoft.com/zh-cn/cpp/build/reference/md-mt-ld-use-run-time-
 
 rem -lucrt
 
-sed.exe -i 's/DLL_LDFLAGS=\/dll /DLL_LDFLAGS=/' %X_MAKEFILE%
-sed.exe -i 's/PHP_LDFLAGS=\$(DLL_LDFLAGS) \/nodefaultlib:libcmt \/def:\$(PHPDEF) /PHP_LDFLAGS=/' %X_MAKEFILE%
+sed.exe -i "s/DLL_LDFLAGS=\/dll /DLL_LDFLAGS=/" %X_MAKEFILE%
+sed.exe -i "s/PHP_LDFLAGS=\$(DLL_LDFLAGS) \/nodefaultlib:libcmt \/def:\$(PHPDEF) /PHP_LDFLAGS=/" %X_MAKEFILE%
 
-sed.exe -i 's/\/LD \/MD/\/MT/' %X_MAKEFILE%
-sed.exe -i 's/\/D _USRDLL/ /' %X_MAKEFILE%
+sed.exe -i "s/\/LD \/MD/\/MT/" %X_MAKEFILE%
+sed.exe -i "s/\/D _USRDLL/ /" %X_MAKEFILE%
 
 
 findstr /C:"x-show-var: " %X_MAKEFILE%
