@@ -136,7 +136,7 @@ setlocal disabledelayedexpansion
 sed.exe -i.bak "s/!!PHP_ALL_SHARED && \"yes\" == PHP_ALL_SHARED/false/" configure.js
 endlocal
 
-sed.exe -i.bak "s/php_libmagic.c', true/php_libmagic.c', null/" ext/fileinfo/config.w32
+sed.exe -i.bak "s/php_libmagic.c', true/php_libmagic.c', false/" ext/fileinfo/config.w32
 sed.exe -i.bak '15 a\ADD_FLAG("CFLAGS_FILEINFO", "/D FILEINFO_STATIC ");' ext/fileinfo/config.w32
 
 echo "===================="
