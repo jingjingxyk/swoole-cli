@@ -94,8 +94,9 @@ jobs:
           key: windows-build-library-dir
 
       - name: build libs
+        if: 0
         run: |
-          cmd /c sapi\scripts\windows-native\build-libs.bat
+          # cmd /c sapi\scripts\windows-native\build-libs.bat
           # cmd /c sapi\quickstart\windows\cygwin-build\download-cygwin.bat
           # cmd /c sapi\quickstart\windows\cygwin-build\install-cygwin.bat
           # cmd /c sapi\quickstart\windows\msys2-build\download-msys2.bat
@@ -106,7 +107,7 @@ jobs:
 
       - name: run build
         run: |
-          cmd /c sapi\scripts\windows-native\build-extensions.bat
+          # cmd /c sapi\scripts\windows-native\build-extensions.bat
           cmd /c sapi\scripts\windows-native\entry.bat
           # cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\main.bat
           # cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\x-show-var.bat
