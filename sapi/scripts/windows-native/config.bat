@@ -209,8 +209,9 @@ configure.bat ^
 --enable-fileinfo ^
 --enable-mbstring ^
 --enable-mbregex ^
---enable-exif ^
---enable-intl
+--enable-exif
+
+:: --enable-intl
 
 :: --enable-swoole ^
 :: --with-nghttp2-dir="%__PROJECT__%\build\libnghttp2" ^
