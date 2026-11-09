@@ -209,14 +209,15 @@ configure.bat ^
 --enable-fileinfo ^
 --enable-mbstring ^
 --enable-mbregex ^
---enable-exif ^
---enable-intl ^
---enable-swoole ^
---with-nghttp2-dir="%__PROJECT__%\build\libnghttp2" ^
---enable-php-sockets ^
---enable-mysqlnd ^
---enable-swoole-curl ^
---enable-swoole-thread
+--enable-exif
+
+:: --enable-intl ^
+:: --enable-swoole ^
+:: --with-nghttp2-dir="%__PROJECT__%\build\libnghttp2" ^
+:: --enable-php-sockets ^
+:: --enable-mysqlnd ^
+:: --enable-swoole-curl ^
+:: --enable-swoole-thread
 
 :: --with-gd ^
 :: --with-libwebp ^
