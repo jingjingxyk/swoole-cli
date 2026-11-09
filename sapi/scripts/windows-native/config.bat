@@ -192,24 +192,25 @@ configure.bat ^
 --enable-pdo  ^
 --enable-phar  ^
 --enable-phar-native-ssl ^
---enable-sockets ^
---enable-bcmath ^
---enable-zlib ^
---with-openssl=static ^
---with-bz2 ^
---enable-zip ^
---with-iconv=static ^
---with-libxml ^
---with-xml ^
---enable-xmlreader ^
---enable-xmlwriter ^
---with-dom ^
---with-simplexml ^
---with-curl ^
---enable-fileinfo ^
---enable-mbstring ^
---enable-mbregex ^
---enable-exif
+--enable-fileinfo
+
+:: --enable-sockets ^
+:: --enable-bcmath ^
+:: --enable-zlib ^
+:: --with-openssl=static ^
+:: --with-bz2 ^
+:: --enable-zip ^
+:: --with-iconv=static ^
+:: --with-libxml ^
+:: --with-xml ^
+:: --enable-xmlreader ^
+:: --enable-xmlwriter ^
+:: --with-dom ^
+:: --with-simplexml ^
+:: --with-curl ^
+:: --enable-mbstring ^
+:: --enable-mbregex ^
+:: --enable-exif
 
 :: --enable-intl
 
