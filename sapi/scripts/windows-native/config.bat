@@ -144,9 +144,14 @@ sed.exe -i.bak '/generate_files();/i STDOUT.WriteLine(PHP_PHP_BUILD);' configure
 echo "===================="
 
 
-set "CFLAGS=/EHsc /MP /MT /UCRT"
+set "X_CFLAGS=%X_CFLAGS% /EHsc /MP /MT /UCRT"
 :: for icu static link
-set "CFLAGS=%X_CFLAGS% -DU_STATIC_IMPLEMENTATION"
+set "X_CFLAGS=%X_CFLAGS% -DU_STATIC_IMPLEMENTATION"
+
+set "X_CFLAGS=%X_CFLAGS% -DCARES_STATICLIB"
+set "X_CFLAGS=%X_CFLAGS% -DSODIUM_STATIC"
+
+set "CFLAGS=%X_CFLAGS%"
 
 
 :: /showIncludes
@@ -250,6 +255,7 @@ configure.bat ^
 :: --with-readline ^
 :: --enable-swoole-sqlite ^
 :: --enable-swoole-pgsql ^
+:: --with-swoole-odbc ^
 :: --with-gd ^
 :: --with-libwebp ^
 :: --with-libavif ^
