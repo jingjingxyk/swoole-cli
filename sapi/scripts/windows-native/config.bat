@@ -116,7 +116,7 @@ sed.exe -i.bak "s/[!][!]PHP_ALL_SHARED && \"yes\" == PHP_ALL_SHARED/false/" win3
 :: intl path
 sed.exe -i.bak "s/, true,/, false,/" ext\intl\config.w32
 
-
+exit /b 0
 
 
 call buildconf.bat -f
