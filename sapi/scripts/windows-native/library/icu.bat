@@ -34,9 +34,6 @@ xcopy "%__PROJECT__%\var\native-build\vcpkg\packages\icu_x64-windows-static\incl
 xcopy "%__PROJECT__%\var\native-build\vcpkg\packages\icu_x64-windows-static\lib" "%__PROJECT__%\build\icu\lib" /E /I /H /Y
 xcopy "%__PROJECT__%\var\native-build\vcpkg\packages\icu_x64-windows-static\tools" "%__PROJECT__%\build\icu\tools" /E /I /H /Y
 
-copy /Y "%__PROJECT__%\var\native-build\vcpkg\packages\icu_x64-windows-static\BUILD_INFO" "%__PROJECT__%\build\icu\BUILD_INFO"
-copy /Y "%__PROJECT__%\var\native-build\vcpkg\packages\icu_x64-windows-static\CONTROL" "%__PROJECT__%\build\icu\CONTROL"
-
 type nul > "%__PROJECT__%\build\icu\.completed"
 
 cd /d %__PROJECT__%

@@ -16,13 +16,9 @@ set "VCPKG_ROOT=%__PROJECT__%\var\native-build\vcpkg"
 set PATH=%VCPKG_ROOT%;%PATH%
 
 vcpkg install libsodium:x64-windows-static
-:: vcpkg integrate install
 
-:: xcopy "%__PROJECT__%\var\native-build\vcpkg\packages\libsodium_x64-windows-static\include" "%__PROJECT__%\build\libsodium\include" /E /I /H /Y
-:: xcopy "%__PROJECT__%\var\native-build\vcpkg\packages\libsodium_x64-windows-static\lib" "%__PROJECT__%\build\libsodium\lib" /E /I /H /Y
-
-:: copy /Y "%LIBSODIUM_PREFIX%\lib\onig.lib" "%ONIGURUMA_PREFIX%\lib\libonig_a.lib"
-:: copy /Y "%LIBSODIUM_PREFIX%\lib\onig.lib" "%ONIGURUMA_PREFIX%\lib\onig_a.lib"
+xcopy "%__PROJECT__%\var\native-build\vcpkg\packages\libsodium_x64-windows-static\include" "%__PROJECT__%\build\libsodium\include" /E /I /H /Y
+xcopy "%__PROJECT__%\var\native-build\vcpkg\packages\libsodium_x64-windows-static\lib" "%__PROJECT__%\build\libsodium\lib" /E /I /H /Y
 
 type nul > "%__PROJECT__%\build\libsodium\.completed"
 
