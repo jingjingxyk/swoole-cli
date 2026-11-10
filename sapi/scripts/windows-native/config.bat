@@ -89,6 +89,9 @@ set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\oniguruma\lib"
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\icu\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\icu\lib"
 
+set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\gettext\include"
+set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\gettext\lib"
+
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\lib"
 
@@ -154,16 +157,18 @@ echo "===================="
 
 
 set "CFLAGS=/EHsc /MP /MT /UCRT"
+:: for icu static link
 set "CFLAGS=%X_CFLAGS% -DU_STATIC_IMPLEMENTATION"
+
 
 :: /showIncludes
 :: /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed
 
 rem https://learn.microsoft.com/zh-cn/cpp/c-runtime-library/crt-library-features?view=msvc-170
 
-
-:: set "LDFLAGS=/VERBOSE"
-set "LDFLAGS=/VERBOSE:LIB"
+set "LDFLAGS="
+:: set "LDFLAGS=%LDFLAGS% /VERBOSE"
+set "LDFLAGS=%LDFLAGS% /VERBOSE:LIB"
 set "LDFLAGS=%LDFLAGS% /MAP:php.map"
 set "LDFLAGS=%LDFLAGS% /LTCG"
 set "LDFLAGS=%LDFLAGS% /DEFAULTLIB:libvcruntime.lib"
@@ -241,7 +246,8 @@ configure.bat ^
 --enable-swoole-curl ^
 --enable-swoole-thread ^
 --enable-intl ^
---enable-redis
+--enable-redis ^
+--with-gettext
 
 :: --with-gd ^
 :: --with-libwebp ^
@@ -255,7 +261,7 @@ configure.bat ^
 :: --with-readline ^
 :: --enable-soap ^
 :: --with-xsl
-:: --with-gettext
+
 :: --with-gmp
 :: --with-ldap
 :: --with-mysqli
