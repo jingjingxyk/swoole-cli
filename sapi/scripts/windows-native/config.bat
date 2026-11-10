@@ -112,11 +112,9 @@ mkdir %PHP_PHP_BUILD%
 :: fileinfo  patch for static build
 sed.exe -i.bak "s/, true,/, false,/" ext\fileinfo\config.w32
 sed.exe -i.bak "s/!!PHP_ALL_SHARED && \"yes\" == PHP_ALL_SHARED/false/" win32\build\confutils.js
-exit /b 0
+
 :: intl path
 sed.exe -i.bak "s/, true,/, false,/" ext\intl\config.w32
-
-exit /b 0
 
 
 call buildconf.bat -f
@@ -127,19 +125,9 @@ call configure.bat --help
 
 
 :: sed.exe -i.bak '/var dir_part_to_add = "";/i  STDOUT.WriteLine(header_name);' configure.js
-:: sed.exe -i.bak '/var dir_part_to_add = "";/i  STDOUT.WriteLine(flag_name);' configure.js
-:: sed.exe -i.bak '/var dir_part_to_add = "";/i  STDOUT.WriteLine(path_to_check);' configure.js
-:: sed.exe -i.bak '/var dir_part_to_add = "";/i  STDOUT.WriteLine(use_env);' configure.js
-:: sed.exe -i.bak '/var dir_part_to_add = "";/i  STDOUT.WriteLine(add_dir_part);' configure.js
-:: sed.exe -i.bak '/var dir_part_to_add = "";/i  STDOUT.WriteLine(add_to_flag_only);' configure.js
-
-
 :: sed.exe -i.bak '/dep_present = eval("PHP_" + DEP);/i  STDOUT.WriteLine(extname);' configure.js
-:: sed.exe -i.bak '/dep_present = eval("PHP_" + DEP);/i  STDOUT.WriteLine(dependson);' configure.js
-:: sed.exe -i.bak '/dep_present = eval("PHP_" + DEP);/i  STDOUT.WriteLine(optional);' configure.js
 
 :: sed.exe -i.bak '/if (absolute_path.indexOf(PHP_PHP_BUILD) == 0) {/i  STDOUT.WriteLine(path);' configure.js
-:: sed.exe -i.bak '/if (absolute_path.indexOf(PHP_PHP_BUILD) == 0) {/i  STDOUT.WriteLine(absolute_path);' configure.js
 
 
 sed.exe -i.bak '/var i, j, k, libname;/i STDOUT.WriteLine(libnames);' configure.js
