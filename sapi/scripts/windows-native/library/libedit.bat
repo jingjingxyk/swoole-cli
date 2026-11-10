@@ -40,13 +40,11 @@ if exist "build_static" (
 mkdir  build_static
 cmake -B build_static -S . ^
   -DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\libedit" ^
-  -DCMAKE_BUILD_TYPE=RelWithDebInfo  ^
+  -DCMAKE_BUILD_TYPE=Release  ^
   -DBUILD_SHARED_LIBS=OFF  ^
   -DBUILD_STATIC_LIBS=ON  ^
   -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
   -DCMAKE_VERBOSE_MAKEFILE=ON
-
-::   -DCMAKE_BUILD_TYPE=Release
 
 cmake --build build_static --config Release --target install
 
