@@ -236,7 +236,7 @@ configure.bat ^
 --enable-brotli ^
 --with-brotli-dir="%__PROJECT__%\build\brotli" ^
 --with-cares-dir="%__PROJECT__%\build\cares" ^
---with-cares-dir="%__PROJECT__%\build\cares" ^
+--with-pgsql-dir="%__PROJECT__%\build\pgsql" ^
 --enable-zstd ^
 --enable-swoole-thread ^
 --enable-intl ^
@@ -248,7 +248,8 @@ configure.bat ^
 --enable-soap
 
 :: --with-readline ^
-
+:: --enable-swoole-sqlite ^
+:: --enable-swoole-pgsql ^
 :: --with-gd ^
 :: --with-libwebp ^
 :: --with-libavif ^
