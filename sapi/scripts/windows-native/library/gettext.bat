@@ -6,43 +6,39 @@ echo %~dp0
 cd %~dp0
 cd ..\..\..\..\
 
+
 set __PROJECT__=%cd%
 cd /d %__PROJECT__%
-mkdir  build
+mkdir  %__PROJECT__%\build\gettext\
 
+if exist "%__PROJECT__%\build\gettext\.completed" goto :skip
 
-set "PATH=%__PROJECT__%\runtime\nasm\;C:\Strawberry\perl\bin;%PATH%"
+set "VCPKG_ROOT=%__PROJECT__%\var\native-build\vcpkg"
+set PATH=%VCPKG_ROOT%;%PATH%
 
+vcpkg install gettext:x64-windows-static
 
-cd /d %__PROJECT__%\pool\lib\
-7z.exe x -aoa -y   %__PROJECT__%\pool\lib\gettext-0.22.5.tar.gz
+xcopy "%__PROJECT__%\var\native-build\vcpkg\packages\gettext_x64-windows-static\include" "%__PROJECT__%\build\gettext\include" /E /I /H /Y
+xcopy "%__PROJECT__%\var\native-build\vcpkg\packages\gettext_x64-windows-static\lib" "%__PROJECT__%\build\gettext\lib" /E /I /H /Y
+xcopy "%__PROJECT__%\var\native-build\vcpkg\packages\gettext_x64-windows-static\tools" "%__PROJECT__%\build\gettext\tools" /E /I /H /Y
 
-if  exist "%__PROJECT__%\thirdparty\gettext" rmdir /s /q "%__PROJECT__%\thirdparty\gettext"
-mkdir "%__PROJECT__%\thirdparty\gettext"
+:: copy /Y "%__PROJECT__%\var\native-build\vcpkg\packages\icu_x64-windows-static\BUILD_INFO" "%__PROJECT__%\build\icu\BUILD_INFO"
+:: copy /Y "%__PROJECT__%\var\native-build\vcpkg\packages\icu_x64-windows-static\CONTROL" "%__PROJECT__%\build\icu\CONTROL"
 
-7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\gettext"  %__PROJECT__%\pool\lib\gettext-0.22.5.tar
+type nul > "%__PROJECT__%\build\gettext\.completed"
 
-cd /d %__PROJECT__%\thirdparty\gettext\gettext-0.22.5
-dir
-echo %cd%
-perl -v
+cd /d %__PROJECT__%
+goto :ok
+
+:skip
+echo "skip build step"
+goto :ok
+
+:ok
+echo "gettext build completed ! "
 
 exit /b 0
-set "INCLUDE=%cd%\include\;%cd%\apps\include\;%INCLUDE%"
-set CL=/MP
-:: perl apps/progs.pl -H apps/openssl > apps/progs.h
-perl Configure VC-WIN64A threads no-shared  no-legacy  no-tests  --release --prefix="%__PROJECT__%\build\openssl"  --openssldir="%__PROJECT__%\build\openssl\ssl"
-
-nmake
-nmake install_sw
-
-
-
-rem document
-rem openssl\Configurations\windows-makefile.tmpl
-rem fix no found file " openssl/applink.c "
-copy %__PROJECT__%\thirdparty\openssl\openssl-3.6.0\ms\applink.c  %__PROJECT__%\build\openssl\include\openssl\applink.c
-
 
 cd /d %__PROJECT__%
 endlocal
+

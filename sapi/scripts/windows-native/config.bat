@@ -248,16 +248,11 @@ configure.bat ^
 :: --with-libavif ^
 :: --with-sqlite3 ^
 
-
-
 :: --with-swoole-ssh2 ^
 :: --enable-swoole-ftp ^
 :: --enable-thread-context
 
 :: --with-readline ^
-:: --with-gd ^
-:: --with-libwebp ^
-:: --with-libavif
 :: --enable-soap ^
 :: --with-xsl
 :: --with-gettext
