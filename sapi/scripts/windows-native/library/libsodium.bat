@@ -45,8 +45,8 @@ cmake --build . --config Release
 cmake --build . --config Release --target install
 
 
-copy /Y "%ONIGURUMA_PREFIX%\lib\onig.lib" "%ONIGURUMA_PREFIX%\lib\libonig_a.lib"
-copy /Y "%ONIGURUMA_PREFIX%\lib\onig.lib" "%ONIGURUMA_PREFIX%\lib\onig_a.lib"
+:: copy /Y "%LIBSODIUM_PREFIX%\lib\onig.lib" "%ONIGURUMA_PREFIX%\lib\libonig_a.lib"
+:: copy /Y "%LIBSODIUM_PREFIX%\lib\onig.lib" "%ONIGURUMA_PREFIX%\lib\onig_a.lib"
 
 type nul > "%__PROJECT__%\build\libsodium\.completed"
 
