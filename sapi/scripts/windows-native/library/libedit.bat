@@ -30,6 +30,10 @@ xcopy libedit %__PROJECT__%\thirdparty\libedit /E /I /H /Y
 
 cd "%__PROJECT__%\thirdparty\libedit"
 
+echo CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION=%CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION%
+echo WindowsSDKVersion=%WindowsSDKVersion%
+where cl
+
 if exist "build_static" (
     rmdir /S /Q build_static
 )
