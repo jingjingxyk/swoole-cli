@@ -235,6 +235,7 @@ configure.bat ^
 --enable-cares ^
 --enable-brotli ^
 --with-brotli-dir="%__PROJECT__%\build\brotli" ^
+--with-cares-dir="%__PROJECT__%\build\cares" ^
 --enable-zstd ^
 --enable-swoole-thread ^
 --enable-intl ^
