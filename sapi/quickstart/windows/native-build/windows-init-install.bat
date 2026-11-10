@@ -70,7 +70,8 @@ call bootstrap-vcpkg.bat
 
 cd /d %__PROJECT__%\var\native-build\
 7z.exe x -onasm nasm-2.16.03-win64.zip
-rem 7z.exe x -ophp-nts-Win32-x64 php-nts-Win32-x64.zip
+7z.exe x -oDependencies Dependencies_x64_Release.zip
+7z.exe x -ophp-nts-Win32-x64 php-nts-Win32-x64.zip
 
 rem 7z.exe x -olibarchive libarchive-3.8.1.tar.gz
 rem choco install archive
@@ -91,7 +92,7 @@ md %__PROJECT__%\pool\
 
 move nasm\nasm-2.16.03 %__PROJECT__%\runtime\nasm
 move libarchive\libarchive %__PROJECT__%\runtime\libarchive
-:: move php-nts-Win32-x64 %__PROJECT__%\runtime\php
+xcopy php-nts-Win32-x64 %__PROJECT__%\runtime\php /E /I /Y
 move cacert.pem %__PROJECT__%\runtime\cacert.pem
 
 (

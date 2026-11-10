@@ -46,7 +46,11 @@ if not exist "Procdump.zip" curl.exe -fSLo Procdump.zip "https://download.sysint
 :: set /p PHP_RUNIME_FILE=<TEMP_PHP_RUNTIME_FILE
 :: echo %PHP_RUNIME_FILE%
 
+:: https://downloads.php.net/~windows/releases/archives/php-8.4.27-1-nts-Win32-vs17-x64.zip
+
 :: if not exist "php-nts-Win32-x64.zip" curl.exe -fSLo php-nts-Win32-x64.zip "https://windows.php.net/downloads/releases/%PHP_RUNIME_FILE%"
+if not exist "php-nts-Win32-x64.zip" curl.exe -fSLo php-nts-Win32-x64.zip "https://downloads.php.net/~windows/releases/archives/php-8.4.27-1-nts-Win32-vs17-x64.zip"
+
 if not exist "composer.phar" curl.exe -fSLo composer.phar "https://getcomposer.org/download/latest-stable/composer.phar"
 if not exist "pie.phar" curl.exe -fSLo pie.phar "https://github.com/php/pie/releases/latest/download/pie.phar"
 if not exist "cacert.pem" curl.exe -fSLo cacert.pem "https://curl.se/ca/cacert.pem"
