@@ -232,6 +232,10 @@ configure.bat ^
 --enable-php-sockets ^
 --enable-mysqlnd ^
 --enable-swoole-curl ^
+--enable-cares ^
+--enable-brotli ^
+--with-brotli-dir="%__PROJECT__%\build\brotli" ^
+--enable-zstd ^
 --enable-swoole-thread ^
 --enable-intl ^
 --enable-redis ^
