@@ -31,8 +31,7 @@ xcopy libedit %__PROJECT__%\thirdparty\libedit /E /I /H /Y
 cd "%__PROJECT__%\thirdparty\libedit"
 
 mkdir  build
-cd build
-cmake -B . ^
+cmake -B build -S .. ^
   -DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\libedit" ^
   -DCMAKE_BUILD_TYPE=Release  ^
   -DBUILD_SHARED_LIBS=OFF  ^
@@ -41,7 +40,7 @@ cmake -B . ^
   -DCMAKE_VERBOSE_MAKEFILE=ON
 
 
-cmake --build . --config Release --target install
+cmake --build build --config Release --target install
 
 
 type nul > "%__PROJECT__%\build\libedit\.completed"
