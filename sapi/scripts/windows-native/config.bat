@@ -148,7 +148,7 @@ set "X_CFLAGS=%X_CFLAGS% /EHsc /MP /MT /UCRT"
 :: for icu static link
 set "X_CFLAGS=%X_CFLAGS% -DU_STATIC_IMPLEMENTATION"
 
-set "X_CFLAGS=%X_CFLAGS% -DCARES_STATICLIB"
+:: set "X_CFLAGS=%X_CFLAGS% -DCARES_STATICLIB"
 set "X_CFLAGS=%X_CFLAGS% -DSODIUM_STATIC"
 
 set "CFLAGS=%X_CFLAGS%"
@@ -237,7 +237,6 @@ configure.bat ^
 --enable-php-sockets ^
 --enable-mysqlnd ^
 --enable-swoole-curl ^
---enable-cares ^
 --enable-brotli ^
 --with-brotli-dir="%__PROJECT__%\build\brotli" ^
 --with-cares-dir="%__PROJECT__%\build\cares" ^
@@ -253,6 +252,7 @@ configure.bat ^
 --enable-soap
 
 :: --with-readline ^
+:: --enable-cares ^
 :: --enable-swoole-sqlite ^
 :: --enable-swoole-pgsql ^
 :: --with-swoole-odbc ^
