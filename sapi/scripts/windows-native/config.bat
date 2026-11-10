@@ -114,7 +114,7 @@ sed.exe -i.bak "s/, true,/, false,/" ext\fileinfo\config.w32
 sed.exe -i.bak "s/[!][!]PHP_ALL_SHARED && \"yes\" == PHP_ALL_SHARED/false/" win32\build\confutils.js
 
 :: intl path
-sed.exe -i.bak "s/, true,/, false,/" ext/intl/config.w32
+sed.exe -i.bak "s/, true,/, false,/" ext\intl\config.w32
 
 
 
