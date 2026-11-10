@@ -25,6 +25,8 @@ if exist "configure.js" (
     nmake clean
 )
 
+
+set "X_CFLAGS="
 set "X_INCLUDES="
 set "X_LIBS="
 
@@ -83,6 +85,9 @@ set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\ngtcp2\lib"
 
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\oniguruma\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\oniguruma\lib"
+
+set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\icu\include"
+set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\icu\lib"
 
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\lib"
@@ -144,6 +149,7 @@ echo "===================="
 
 
 set "CFLAGS=/EHsc /MP /MT /UCRT"
+set "CFLAGS=%X_CFLAGS% -DU_STATIC_IMPLEMENTATION"
 
 :: /showIncludes
 :: /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed

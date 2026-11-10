@@ -11,6 +11,8 @@ set __PROJECT__=%cd%
 cd /d %__PROJECT__%
 mkdir  %__PROJECT__%\build\icu\
 
+if exist "%__PROJECT__%\build\icu\.completed" goto :skip
+
 :: method 1
 rem  Cygwin + MSVC
 rem  baash runConfigureICU Cygwin/MSVC --enable-static
@@ -26,11 +28,39 @@ rem vcpkg install icu:x64-windows-static
 
 set "VCPKG_ROOT=%__PROJECT__%\var\native-build\vcpkg"
 set PATH=%VCPKG_ROOT%;%PATH%
-vcpkg install icu:x64-windows-static
+:: vcpkg install icu:x64-windows-static
+
+xcopy "%__PROJECT__%\var\native-build\vcpkg\packages\icu_x64-windows-static\include" "%__PROJECT__%\build\icu\" /E /I /H /Y
+xcopy "%__PROJECT__%\var\native-build\vcpkg\packages\icu_x64-windows-static\lib" "%__PROJECT__%\build\icu\" /E /I /H /Y
+xcopy "%__PROJECT__%\var\native-build\vcpkg\packages\icu_x64-windows-static\tools" "%__PROJECT__%\build\icu\" /E /I /H /Y
+
+copy /Y "%__PROJECT__%\var\native-build\vcpkg\packages\icu_x64-windows-static\BUILD_INFO" "%__PROJECT__%\build\icu\BUILD_INFO"
+copy /Y "%__PROJECT__%\var\native-build\vcpkg\packages\icu_x64-windows-static\CONTROL" "%__PROJECT__%\build\icu\CONTROL"
 
 
+
+cd /d %__PROJECT__%
+goto :ok
+
+:skip
+echo "skip build step"
+goto :ok
+
+:ok
+echo "icu build completed ! "
 
 exit /b 0
+
+
+
+
+
+
+
+
+
+
+
 
 
 :: set "ORIGIN_PATH=%PATH%"
