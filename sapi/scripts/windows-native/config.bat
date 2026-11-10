@@ -236,7 +236,11 @@ configure.bat ^
 --enable-intl ^
 --enable-redis ^
 --with-gettext ^
---with-mysqli
+--with-mysqlnd ^
+--with-mysqli ^
+--with-pdo-mysql=mysqlnd ^
+--enable-soap
+
 :: --with-readline ^
 
 :: --with-gd ^
