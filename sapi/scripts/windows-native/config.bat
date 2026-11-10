@@ -228,8 +228,8 @@ configure.bat ^
 --enable-php-sockets ^
 --enable-mysqlnd ^
 --enable-swoole-curl ^
---enable-swoole-thread
-:: --enable-intl
+--enable-swoole-thread ^
+--enable-intl
 :: --with-gd ^
 :: --with-libwebp ^
 :: --with-libavif ^

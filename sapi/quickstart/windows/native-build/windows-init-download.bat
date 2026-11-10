@@ -67,4 +67,7 @@ if not exist "vcpkg" git clone https://github.com/microsoft/vcpkg.git
 :: Dependency Walker
 if not exist "Dependencies_x64_Release.zip" curl.exe -fSLo Dependencies_x64_Release.zip "https://github.com/lucasg/Dependencies/releases/download/v1.11.1/Dependencies_x64_Release.zip"
 
+:: .\Dependencies.exe -knowndll  ..\..\php.exe
+:: dumpbin /DEPENDENTS ..\..\php.exe
+
 endlocal
