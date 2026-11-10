@@ -10,55 +10,53 @@ set __PROJECT__=%cd%
 cd /d %__PROJECT__%
 mkdir  %__PROJECT__%\build\libedit
 
+if exist "%__PROJECT__%\build\libedit\.completed" goto :skip
 
-cd /d %__PROJECT__%\pool\lib\
-if not exist libedit-20260512-3.1.tar.gz curl.exe -fSLo libedit-20260512-3.1.tar.gz https://thrysoee.dk/editline/libedit-20260512-3.1.tar.gz
-
-7z.exe x -aoa -y   %__PROJECT__%\pool\lib\libedit-20260512-3.1.tar.gz
-
-if  exist "%__PROJECT__%\thirdparty\libedit" rmdir /s /q "%__PROJECT__%\thirdparty\libedit"
-mkdir "%__PROJECT__%\thirdparty\libedit"
-
-7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libedit\"  %__PROJECT__%\pool\lib\libedit-20260512-3.1.tar
-
-
-cd /d "%__PROJECT__%\thirdparty\libedit\libedit-20260512-3.1"
-ls .
 
 mkdir %__PROJECT__%\var\native-build\
 cd /d %__PROJECT__%\var\native-build\
 
+
+:: https://github.com/larkmjc/libedit.git
+if not exist "libedit" (
+:: php.exe -c %__PROJECT__%\runtime\php\php.ini  pie.phar download phpredis/phpredis:^6.3
+   git clone https://github.com/larkmjc/libedit.git
+)
+
+if  exist "%__PROJECT__%\thirdparty\libedit" rmdir /s /q "%__PROJECT__%\thirdparty\libedit"
+mkdir "%__PROJECT__%\thirdparty\libedit"
+
+xcopy libedit %__PROJECT__%\thirdparty\libedit /E /I /H /Y
+
+cd "%__PROJECT__%\thirdparty\libedit"
+
+mkdir  build
+cd build
+cmake -B . ^
+  -DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\libedit" ^
+  -DCMAKE_BUILD_TYPE=Release  ^
+  -DBUILD_SHARED_LIBS=OFF  ^
+  -DBUILD_STATIC_LIBS=ON  ^
+  -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
+  -DCMAKE_VERBOSE_MAKEFILE=ON
+
+
+cmake --build . --config Release --target install
+
+
+type nul > "%__PROJECT__%\build\libedit\.completed"
+
+cd /d %__PROJECT__%
+goto :ok
+
+:skip
+echo "skip build step"
+goto :ok
+
+:ok
+echo "libedit build completed ! "
+
 exit /b 0
-
-
-xcopy "libiconv" "%__PROJECT__%\thirdparty\libiconv" /E /I /H /Y
-
-cd /d %__PROJECT__%\thirdparty\libiconv\
-dir
-echo %cd%
-
-set CL=/MP
-
-:: set "VCPKG_ROOT=%__PROJECT__%\var\native-build\vcpkg"
-:: set PATH=%VCPKG_ROOT%;%PATH%
-
-:: vcpkg install libiconv:x64-windows-static
-rem C:/vcpkg/packages/libxml2_x64-windows-static/lib/
-
-
-echo "MSVC%PHP_SDK_VS_NUM%"
-cd "MSVC%PHP_SDK_VS_NUM%"
-:: libiconv.sln
-
-
-sed.exe -i.".bak" "217 s/<RuntimeLibrary>MultiThreadedDLL<\/RuntimeLibrary>/<RuntimeLibrary>MultiThreaded<\/RuntimeLibrary>/" .\libiconv_static\libiconv_static.vcxproj
-
-msbuild libiconv.sln /t:libiconv_static:Rebuild /p:Configuration=Release /p:RuntimeLibrary=MultiThreaded /p:Platform=x64 /p:WindowsTargetPlatformVersion=%WindowsSDKLibVersion%  /m
-
-ls x64\lib\
-
-xcopy ..\source\include\iconv.h %__PROJECT__%\build\libiconv\include\* /E /I /H /Y
-xcopy x64\lib\*.lib %__PROJECT__%\build\libiconv\lib\* /E /I /H /Y
 
 cd /d %__PROJECT__%
 

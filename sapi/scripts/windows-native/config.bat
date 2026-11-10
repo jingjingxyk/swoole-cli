@@ -267,7 +267,6 @@ configure.bat ^
 :: --enable-thread-context
 
 :: --with-readline ^
-:: --enable-soap ^
 :: --with-xsl
 
 :: --with-gmp
