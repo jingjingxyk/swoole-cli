@@ -22,7 +22,7 @@ php.exe  -c %__PROJECT__%\runtime\php\php.ini --ri openssl
 
 :: https://packagist.org/packages/phpredis/phpredis
 if not exist "redis" (
-   php.exe -c %__PROJECT__%\runtime\php\php.ini  pie.phar install phpredis/phpredis:^6.3
+   php.exe -c %__PROJECT__%\runtime\php\php.ini  pie.phar download phpredis/phpredis:^6.3
 
 )
 

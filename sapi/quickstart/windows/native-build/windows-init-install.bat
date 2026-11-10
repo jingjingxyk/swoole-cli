@@ -19,16 +19,30 @@ md %__PROJECT__%\runtime\
 cd /d %__PROJECT__%\var\native-build\
 dir
 
-Add-AppxPackage -Path ".\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
-winget install vim.vim
-winget search Microsoft.Edit
+:: Add-AppxPackage -Path ".\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
+:: install winget with script
+Install-Script winget-install -Force
+winget-install -Force
+winget --version
+winget source update
+
+winget install vim.vim  --silent --accept-package-agreements --accept-source-agreements
+
+:: winget search Microsoft.Edit
 :: winget install Microsoft.Edit
+
+:: winget source reset --force
+:: winget source update
+
 
 msiexec /i strawberry-perl-5.38.2.2-64bit.msi  /passive
 
 :: .\vc_redist.x64.exe /install /passive /norestart
 
 .\7z2409-x64.exe /S
+
+:: silent install
+.\gvim_9.2.1316_x64_signed.exe /S
 
 
 set "PATH=%ProgramFiles%\7-Zip;%PATH%;"

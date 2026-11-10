@@ -54,6 +54,7 @@ if not exist "php-nts-Win32-x64.zip" curl.exe -fSLo php-nts-Win32-x64.zip "https
 if not exist "composer.phar" curl.exe -fSLo composer.phar "https://getcomposer.org/download/latest-stable/composer.phar"
 if not exist "pie.phar" curl.exe -fSLo pie.phar "https://github.com/php/pie/releases/latest/download/pie.phar"
 if not exist "cacert.pem" curl.exe -fSLo cacert.pem "https://curl.se/ca/cacert.pem"
+if not exist "gvim_9.2.1316_x64_signed.exe" curl.exe -fSLo gvim_9.2.1316_x64_signed.exe "https://github.com/vim/vim-win32-installer/releases/download/v9.2.1316/gvim_9.2.1316_x64_signed.exe"
 
 if not exist "php-sdk-binary-tools" git clone -b master --depth=1 https://github.com/php/php-sdk-binary-tools.git
 if not exist "php-src" git clone -b php-8.4.26 --depth=1 https://github.com/php/php-src.git php-src
@@ -64,7 +65,7 @@ if not exist "all-deps.zip" curl.exe -fSLo all-deps.zip https://github.com/swool
 :: curl.exe -fSLo 7z2409-x64.exe  https://download.jingjingxyk.com/7z2409-x64.exe
 :: curl.exe -fSLo nasm-2.16.03-win64.zip  https://download.jingjingxyk.com/nasm-2.16.03-win64.zip
 
-if not exist "Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" curl.exe -fSLo Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle https://github.com/microsoft/winget-cli/releases/download/v1.29.280/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+:: if not exist "Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" curl.exe -fSLo Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle https://github.com/microsoft/winget-cli/releases/download/v1.29.280/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
 
 if not exist "vcpkg" git clone https://github.com/microsoft/vcpkg.git
 
