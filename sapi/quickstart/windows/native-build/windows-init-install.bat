@@ -93,7 +93,7 @@ md %__PROJECT__%\pool\
 move nasm\nasm-2.16.03 %__PROJECT__%\runtime\nasm
 move libarchive\libarchive %__PROJECT__%\runtime\libarchive
 xcopy php-nts-Win32-x64 %__PROJECT__%\runtime\php /E /I /Y
-move cacert.pem %__PROJECT__%\runtime\cacert.pem
+xcopy cacert.pem %__PROJECT__%\runtime\php\cacert.pem
 
 (
 echo extension_dir="%__PROJECT__%\runtime\php\ext\"
@@ -115,8 +115,8 @@ echo extension=php_sodium.dll
 echo extension=php_xsl.dll
 echo extension=php_zip.dll
 
-echo curl.cainfo="%__PROJECT__%\runtime\cacert.pem"
-echo openssl.cafile="%__PROJECT__%\runtime\cacert.pem"
+echo curl.cainfo="%__PROJECT__%\runtime\php\cacert.pem"
+echo openssl.cafile="%__PROJECT__%\runtime\php\cacert.pem"
 echo display_errors = On
 echo error_reporting = E_ALL
 
@@ -132,7 +132,7 @@ echo opcache.jit_buffer_size=480M
 echo expose_php=Off
 echo apc.enable_cli=1
 
-) > %__PROJECT__%\runtime\php.ini
+) > %__PROJECT__%\runtime\php\php.ini
 
 call %__PROJECT__%\sapi\quickstart\windows\native-build\windows-init-show-install-result.bat
 
