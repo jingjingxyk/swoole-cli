@@ -10,6 +10,7 @@ set "__PROJECT__=%cd%"
 cd %__PROJECT__%
 
 cmd /c sapi\scripts\windows-native\extension\swoole.bat
+cmd /c sapi\scripts\windows-native\extension\redis.bat
 
 
 cd /d %__PROJECT__%
