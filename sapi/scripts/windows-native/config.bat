@@ -101,7 +101,7 @@ set "PHP_PHP_BUILD=%__PROJECT__%\build"
 echo %PHP_PHP_BUILD%
 mkdir %PHP_PHP_BUILD%
 
-:: fileinfo static patch
+:: fileinfo  patch for static build
 sed.exe -i.bak "s/, true,/, false,/" ext\fileinfo\config.w32
 sed.exe -i.bak "s/[!][!]PHP_ALL_SHARED && \"yes\" == PHP_ALL_SHARED/false/" win32\build\confutils.js
 
@@ -135,7 +135,7 @@ sed.exe -i.bak '/var i, j, k, libname;/i STDOUT.WriteLine(path_to_check);' confi
 sed.exe -i.bak '/var i, j, k, libname;/i STDOUT.WriteLine(common_name);' configure.js
 
 sed.exe -i.bak "/var objs = null;/i STDOUT.WriteLine(extname + \" \" + shared);" configure.js
-sed.exe -i.bak '/var objs = null;/i STDOUT.WriteLine(force_all_shared());' configure.js
+sed.exe -i.bak "/var objs = null;/i STDOUT.WriteLine(force_all_shared());" configure.js
 
 sed.exe -i.bak '/generate_files();/i STDOUT.WriteLine("=======================");' configure.js
 sed.exe -i.bak '/generate_files();/i STDOUT.WriteLine(PHP_PHP_BUILD);' configure.js
@@ -162,7 +162,6 @@ set "LDFLAGS=/VERBOSE:LIB	^
 
 
 :: set "LDFLAGS=%LDFLAGS% kernel32.lib ole32.lib user32.lib advapi32.lib shell32.lib ws2_32.lib Dnsapi.lib psapi.lib bcrypt.lib"
-:: synchronization.lib
 :: dir "%LIBS%" | findstr ws2_32.lib
 :: echo %LIBPATH%
 
