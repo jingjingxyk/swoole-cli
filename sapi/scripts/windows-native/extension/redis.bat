@@ -22,8 +22,8 @@ php.exe  -c %__PROJECT__%\runtime\php\php.ini --ri openssl
 
 :: https://packagist.org/packages/phpredis/phpredis
 if not exist "redis" (
-   php.exe -c %__PROJECT__%\runtime\php\php.ini  pie.phar download phpredis/phpredis:^6.3
-
+:: php.exe -c %__PROJECT__%\runtime\php\php.ini  pie.phar download phpredis/phpredis:^6.3
+   git clone -b 6.3.0 https://github.com/phpredis/phpredis.git redis
 )
 
 if exist "%__PROJECT__%\var\native-build\php-src\ext\redis" (
