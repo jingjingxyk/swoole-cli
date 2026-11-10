@@ -92,6 +92,9 @@ set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\icu\lib"
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\gettext\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\gettext\lib"
 
+set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\libedit\include"
+set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libedit\lib"
+
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\lib"
 
@@ -250,9 +253,9 @@ configure.bat ^
 --with-mysqli ^
 --with-pdo-mysql=mysqlnd ^
 --enable-soap ^
---with-sodium
+--with-sodium ^
+--with-readline
 
-:: --with-readline ^
 :: --enable-cares ^
 :: --enable-swoole-sqlite ^
 :: --enable-swoole-pgsql ^
@@ -266,7 +269,6 @@ configure.bat ^
 :: --enable-swoole-ftp ^
 :: --enable-thread-context
 
-:: --with-readline ^
 :: --with-xsl
 
 :: --with-gmp
