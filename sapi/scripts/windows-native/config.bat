@@ -150,13 +150,14 @@ set "CFLAGS=/EHsc /MP /MT /UCRT"
 
 rem https://learn.microsoft.com/zh-cn/cpp/c-runtime-library/crt-library-features?view=msvc-170
 
-set "LDFLAGS=/VERBOSE /VERBOSE:LIB	^
+rem /VERBOSE
+
+set "LDFLAGS=/VERBOSE:LIB	^
 			/MAP:php.map ^
 			/LTCG ^
 			/DEFAULTLIB:libvcruntime.lib ^
 			/DEFAULTLIB:libucrt.lib ^
 			/NODEFAULTLIB:MSVCRT ^
-			/NODEFAULTLIB:kernel32.lib ^
             /DELAYLOAD:api-ms-win-core-synch-l1-2-0.dll ^
             "
 
