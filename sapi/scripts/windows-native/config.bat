@@ -249,7 +249,8 @@ configure.bat ^
 --with-mysqlnd ^
 --with-mysqli ^
 --with-pdo-mysql=mysqlnd ^
---enable-soap
+--enable-soap ^
+--with-sodium
 
 :: --with-readline ^
 :: --enable-cares ^
@@ -275,7 +276,7 @@ configure.bat ^
 :: --with-pdo-mysql
 :: --with-pdo-pgsql
 :: --with-pdo-sqlite
-:: --with-sodium
+
 
 :: --enable-cli-win32 ^
 :: --disable-zts ^
