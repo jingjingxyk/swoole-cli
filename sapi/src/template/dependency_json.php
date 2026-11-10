@@ -36,7 +36,7 @@ $licenseTypeNames = [
  * 从源码包文件名解析版本号
  *
  * 实际文件名形态很杂，需覆盖：
- *   openssl-3.6.0.tar.gz        -> 3.6.0
+ *   openssl-3.6.5.tar.gz        -> 3.6.5
  *   aom-v3.10.0.tar.gz          -> 3.10.0
  *   libxml2-v2.9.14.tar.gz      -> 2.9.14
  *   c-ares-1.24.0.tar.gz        -> 1.24.0

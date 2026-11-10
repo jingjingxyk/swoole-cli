@@ -129,7 +129,7 @@ PHP 8.4.14 / swoole v6.2.0 / linux / release
 
 | 节点类型 | 版本来源 | 示例 |
 |---|---|---|
-| 第三方库 | 源码包文件名解析 | `openssl-3.6.0.tar.gz` → `3.6.0` |
+| 第三方库 | 源码包文件名解析 | `openssl-3.6.5.tar.gz` → `3.6.5` |
 | PECL 扩展 | `peclVersion` 配置 | `mongodb` → `2.3.1` |
 | swoole 扩展 | `sapi/SWOOLE-VERSION.conf` | `v6.2.0` |
 | php-src 内置扩展 | `sapi/PHP-VERSION.conf` | `curl` → `8.4.14` |
