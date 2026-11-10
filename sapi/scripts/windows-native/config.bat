@@ -235,7 +235,9 @@ configure.bat ^
 --enable-swoole-thread ^
 --enable-intl ^
 --enable-redis ^
---with-gettext
+--with-gettext ^
+--with-mysqli
+:: --with-readline ^
 
 :: --with-gd ^
 :: --with-libwebp ^

@@ -16,8 +16,7 @@ if exist "%__PROJECT__%\build\gettext\.completed" goto :skip
 set "VCPKG_ROOT=%__PROJECT__%\var\native-build\vcpkg"
 set PATH=%VCPKG_ROOT%;%PATH%
 
-:: https://github.com/winlibs/gettext/blob/master/INSTALL.windows
-
+:: doc: https://github.com/winlibs/gettext/blob/master/INSTALL.windows
 
 :: vcpkg install gettext:x64-windows-static
 vcpkg install gettext-libintl:x64-windows-static
