@@ -24,7 +24,8 @@ rem vcpkg
 rem vcpkg install icu:x64-windows-static
 
 
-
+set "VCPKG_ROOT=%__PROJECT__%\var\native-build\vcpkg"
+set PATH=%VCPKG_ROOT%;%PATH%
 vcpkg install icu:x64-windows-static
 
 
