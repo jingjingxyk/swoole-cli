@@ -19,7 +19,7 @@ set "PATH=%__PROJECT__%\runtime\php;%PATH%;"
 
 :: https://packagist.org/packages/phpredis/phpredis
 if not exist "redis" (
-   php pie.phar install phpredis/phpredis:^6.3
+   php -c %__PROJECT__%\runtime\php\php.ini pie.phar install phpredis/phpredis:^6.3
 
 )
 
