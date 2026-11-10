@@ -25,6 +25,7 @@ xcopy "%__PROJECT__%\var\native-build\vcpkg\packages\gettext-libintl_x64-windows
 xcopy "%__PROJECT__%\var\native-build\vcpkg\packages\gettext-libintl_x64-windows-static\lib" "%__PROJECT__%\build\gettext\lib" /E /I /H /Y
 
 copy /Y "%__PROJECT__%\build\gettext\lib\intl.lib" "%__PROJECT__%\build\gettext\lib\libintl_a.lib"
+copy /Y "%__PROJECT__%\build\gettext\lib\intl.lib" "%__PROJECT__%\build\gettext\lib\libintl.lib"
 
 type nul > "%__PROJECT__%\build\gettext\.completed"
 
