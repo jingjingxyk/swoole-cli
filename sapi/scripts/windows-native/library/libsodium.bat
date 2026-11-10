@@ -15,7 +15,7 @@ if exist "%__PROJECT__%\build\libsodium\.completed" goto :skip
 set "VCPKG_ROOT=%__PROJECT__%\var\native-build\vcpkg"
 set PATH=%VCPKG_ROOT%;%PATH%
 
-vcpkg install libsodium
+vcpkg install libsodium:x64-windows-static
 vcpkg integrate install
 :: copy /Y "%LIBSODIUM_PREFIX%\lib\onig.lib" "%ONIGURUMA_PREFIX%\lib\libonig_a.lib"
 :: copy /Y "%LIBSODIUM_PREFIX%\lib\onig.lib" "%ONIGURUMA_PREFIX%\lib\onig_a.lib"
