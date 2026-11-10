@@ -26,6 +26,9 @@ xcopy "%__PROJECT__%\var\native-build\vcpkg\packages\gettext-libintl_x64-windows
 xcopy "%__PROJECT__%\var\native-build\vcpkg\packages\gettext-libintl_x64-windows-static\lib" "%__PROJECT__%\build\gettext\lib" /E /I /H /Y
 xcopy "%__PROJECT__%\var\native-build\vcpkg\packages\gettext-libintl_x64-windows-static\tools" "%__PROJECT__%\build\gettext\tools" /E /I /H /Y
 
+xcopy "%__PROJECT__%\build\gettext\lib\intl.lib" "%__PROJECT__%\build\gettext\lib\libintl_a.lib" /E /I /H /Y
+
+
 copy /Y "%__PROJECT__%\var\native-build\vcpkg\packages\gettext-libintl_x64-windows-static\BUILD_INFO" "%__PROJECT__%\build\gettext\BUILD_INFO"
 copy /Y "%__PROJECT__%\var\native-build\vcpkg\packages\gettext-libintl_x64-windows-static\CONTROL" "%__PROJECT__%\build\gettext\CONTROL"
 
