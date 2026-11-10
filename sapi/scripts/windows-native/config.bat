@@ -130,13 +130,13 @@ call configure.bat --help
 :: sed.exe -i.bak '/if (absolute_path.indexOf(PHP_PHP_BUILD) == 0) {/i  STDOUT.WriteLine(path);' configure.js
 
 
-sed.exe -i.bak '/var i, j, k, libname;/i STDOUT.WriteLine(libnames);' configure.js
-sed.exe -i.bak '/var i, j, k, libname;/i STDOUT.WriteLine(target);' configure.js
-sed.exe -i.bak '/var i, j, k, libname;/i STDOUT.WriteLine(path_to_check);' configure.js
-sed.exe -i.bak '/var i, j, k, libname;/i STDOUT.WriteLine(common_name);' configure.js
+:: sed.exe -i.bak '/var i, j, k, libname;/i STDOUT.WriteLine(libnames);' configure.js
+:: sed.exe -i.bak '/var i, j, k, libname;/i STDOUT.WriteLine(target);' configure.js
+:: sed.exe -i.bak '/var i, j, k, libname;/i STDOUT.WriteLine(path_to_check);' configure.js
+:: sed.exe -i.bak '/var i, j, k, libname;/i STDOUT.WriteLine(common_name);' configure.js
 
-sed.exe -i.bak "/var objs = null;/i STDOUT.WriteLine(extname + \" \" + shared);" configure.js
-sed.exe -i.bak "/var objs = null;/i STDOUT.WriteLine(force_all_shared());" configure.js
+:: sed.exe -i.bak "/var objs = null;/i STDOUT.WriteLine(extname + \" \" + shared);" configure.js
+:: sed.exe -i.bak "/var objs = null;/i STDOUT.WriteLine(force_all_shared());" configure.js
 
 sed.exe -i.bak '/generate_files();/i STDOUT.WriteLine("=======================");' configure.js
 sed.exe -i.bak '/generate_files();/i STDOUT.WriteLine(PHP_PHP_BUILD);' configure.js
