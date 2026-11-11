@@ -24,7 +24,7 @@ rem nmake   mode=static debug=false
 set "X_CUSTOM_LIBS="
 set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% libzstd_a.lib"
 set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% cares.lib psl.lib ngtcp2.lib ngtcp2_crypto_ossl.lib nghttp3.lib "
-set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% pgport.lib pgcommon.lib ecpg.lib  ecpg_compat.lib    pgfeutils.lib  pgtypes.lib libpq.lib"
+set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% pgport.lib pgcommon.lib ecpg.lib  ecpg_compat.lib    pgfeutils.lib  pgtypes.lib Secur32.lib libpq.lib "
 
 
 
