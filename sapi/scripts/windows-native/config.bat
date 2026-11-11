@@ -158,6 +158,7 @@ echo "===================="
 
 
 set "X_CFLAGS=%X_CFLAGS% /EHsc /MP /MT /UCRT"
+set "X_CFLAGS=%X_CFLAGS% /FS"
 :: for icu static link
 set "X_CFLAGS=%X_CFLAGS% -DU_STATIC_IMPLEMENTATION"
 
