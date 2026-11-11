@@ -8,7 +8,9 @@ cd /d ..\..\..\
 
 set "__PROJECT__=%cd%"
 echo %cd%
-cd %__PROJECT__%\var\native-build\php-src\
+cd "%__PROJECT__%\var\native-build\php-src"
+
+set "PATH=%__PROJECT__%\runtime\jom;%PATH%"
 
 set CL=/MP
 
@@ -25,7 +27,7 @@ set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% cares.lib psl.lib ngtcp2.lib ngtcp2_crypto_o
 
 
 :: nmake /E /f Makefile  x-show-var
-nmake /E /f Makefile  x-release-static-php
+jom.exe /E /f Makefile  x-release-static-php
 :: nmake /E /n /f Makefile  x-release-static-php mode=static LIBS_CLI="%LIBS_CLI%"
 
 rem debug

@@ -92,6 +92,8 @@ rem choco install archive
 
 7z.exe x -aoa -y -oProcdump Procdump.zip
 
+rem Using jom instead of nmake on Windows for multi-core acceleration
+7z.exe x -aoa -y -ojom jom_1_1_7.zip
 
 md %__PROJECT__%\pool\
 7z.exe x -aoa -y -o"%__PROJECT__%\pool\" all-deps.zip
@@ -106,8 +108,10 @@ md %__PROJECT__%\pool\
 
 move nasm\nasm-2.16.03 %__PROJECT__%\runtime\nasm
 move libarchive\libarchive %__PROJECT__%\runtime\libarchive
+xcopy jom\jom.exe %__PROJECT__%\runtime\jom\jom.exe
 xcopy php-nts-Win32-x64 %__PROJECT__%\runtime\php /E /I /Y
 xcopy cacert.pem %__PROJECT__%\runtime\php\cacert.pem
+
 
 (
 echo extension_dir="%__PROJECT__%\runtime\php\ext\"
