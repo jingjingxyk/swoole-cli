@@ -50,7 +50,7 @@ cmake -B build_static -S . ^
 cmake --build build_static --config Release --target install
 
 
-type nul > "%__PROJECT__%\build\libxslt\.completed"
+:: type nul > "%__PROJECT__%\build\libxslt\.completed"
 
 cd /d %__PROJECT__%
 goto :ok
