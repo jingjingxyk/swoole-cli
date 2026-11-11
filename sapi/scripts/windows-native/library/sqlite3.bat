@@ -12,6 +12,8 @@ mkdir  "%__PROJECT__%\build\sqlite3"
 
 if exist "%__PROJECT__%\build\sqlite3\.completed" goto :skip
 
+:: https://sqlite.org/2026/sqlite-autoconf-3540100.tar.gz
+
 set "VCPKG_ROOT=%__PROJECT__%\var\native-build\vcpkg"
 set PATH=%VCPKG_ROOT%;%PATH%
 
