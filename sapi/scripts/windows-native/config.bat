@@ -92,6 +92,9 @@ set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\icu\lib"
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\gettext\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\gettext\lib"
 
+set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\libsodium\include"
+set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libsodium\lib"
+
 :: set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\libedit\include"
 :: set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libedit\lib"
 

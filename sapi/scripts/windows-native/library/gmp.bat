@@ -9,9 +9,9 @@ cd ..\..\..\..\
 
 set __PROJECT__=%cd%
 cd /d %__PROJECT__%
-mkdir  %__PROJECT__%\build\icu\
+mkdir  %__PROJECT__%\build\gmp\
 
-if exist "%__PROJECT__%\build\icu\.completed" goto :skip
+if exist "%__PROJECT__%\build\gmp\.completed" goto :skip
 
 :: method 1
 rem  Cygwin + MSVC
