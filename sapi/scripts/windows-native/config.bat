@@ -114,6 +114,7 @@ set "LIB=%X_LIBS%;%LIB%"
 set "X_CUSTOM_LIBS="
 set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% libzstd_a.lib"
 set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% cares.lib psl.lib ngtcp2.lib ngtcp2_crypto_ossl.lib nghttp3.lib "
+set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% ecpg.lib  ecpg_compat.lib   pgcommon.lib  pgfeutils.lib  pgport.lib  pgtypes.lib"
 
 echo "INCLUDE=%INCLUDE%"
 echo "LIB=%LIB%"
