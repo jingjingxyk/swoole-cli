@@ -99,6 +99,9 @@ set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libsodium\lib"
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\wineditline\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\wineditline\lib"
 
+:: set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\sqlite3\include"
+:: set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\sqlite3\lib"
+
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\lib"
 
@@ -258,29 +261,28 @@ configure.bat ^
 --with-pdo-mysql=mysqlnd ^
 --enable-soap ^
 --with-sodium ^
---with-readline
+--with-readline ^
+--with-pdo-sqlite ^
+--with-sqlite3 ^
+--enable-swoole-sqlite
 
 :: --enable-cares ^
-:: --enable-swoole-sqlite ^
 :: --enable-swoole-pgsql ^
 :: --with-swoole-odbc ^
 :: --with-gd ^
 :: --with-libwebp ^
 :: --with-libavif ^
-:: --with-sqlite3 ^
 
 :: --with-swoole-ssh2 ^
 :: --enable-swoole-ftp ^
 :: --enable-thread-context
 
 :: --with-xsl
-
 :: --with-gmp
 :: --with-ldap
-:: --with-mysqli
 :: --with-pdo-mysql
 :: --with-pdo-pgsql
-:: --with-pdo-sqlite
+
 
 
 :: --enable-cli-win32 ^
