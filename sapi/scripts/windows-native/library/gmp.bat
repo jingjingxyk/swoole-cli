@@ -9,7 +9,7 @@ cd ..\..\..\..\
 
 set __PROJECT__=%cd%
 cd /d %__PROJECT__%
-mkdir  %__PROJECT__%\build\gmp\
+mkdir  %__PROJECT__%\build\gmp
 
 if exist "%__PROJECT__%\build\gmp\.completed" goto :skip
 
@@ -23,7 +23,6 @@ xcopy "%__PROJECT__%\var\native-build\vcpkg\packages\gmp_x64-windows-static\incl
 xcopy "%__PROJECT__%\var\native-build\vcpkg\packages\gmp_x64-windows-static\lib" "%__PROJECT__%\build\gmp\lib" /E /I /H /Y
 
 :: copy /Y "%__PROJECT__%\var\native-build\vcpkg\packages\icu_x64-windows-static\BUILD_INFO" "%__PROJECT__%\build\icu\BUILD_INFO"
-:: copy /Y "%__PROJECT__%\var\native-build\vcpkg\packages\icu_x64-windows-static\CONTROL" "%__PROJECT__%\build\icu\CONTROL"
 
 :: type nul > "%__PROJECT__%\build\icu\.completed"
 
