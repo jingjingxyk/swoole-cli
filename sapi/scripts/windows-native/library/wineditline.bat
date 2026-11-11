@@ -9,6 +9,7 @@ cd ..\..\..\..\
 set __PROJECT__=%cd%
 cd /d %__PROJECT__%
 mkdir  %__PROJECT__%\build\wineditline
+mkdir  %__PROJECT__%\build\wineditline\lib
 
 if exist "%__PROJECT__%\build\wineditline\.completed" goto :skip
 
@@ -46,6 +47,11 @@ cmake -B build_static -S . ^
   -DCMAKE_VERBOSE_MAKEFILE=ON
 
 cmake --build build_static --config Release --target install
+
+xcopy "%__PROJECT__%\thirdparty\wineditline\include" "%__PROJECT__%\build\wineditline\include" /E /I /H /Y
+
+copy /Y "%__PROJECT__%\thirdparty\wineditline\lib64\edit_static.lib" "%__PROJECT__%\build\wineditline\lib\edit_a.lib"
+copy /Y "%__PROJECT__%\thirdparty\wineditline\lib64\edit_static.lib" "%__PROJECT__%\build\wineditline\lib\edit.lib"
 
 
 :: type nul > "%__PROJECT__%\build\wineditline\.completed"
