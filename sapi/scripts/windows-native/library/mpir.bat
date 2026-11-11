@@ -16,6 +16,7 @@ if exist "%__PROJECT__%\build\mpir\.completed" goto :skip
 
 set "VCPKG_ROOT=%__PROJECT__%\var\native-build\vcpkg"
 set PATH=%VCPKG_ROOT%;%PATH%
+vcpkg remove gmp:x64-windows-static
 vcpkg install mpir:x64-windows-static
 
 
