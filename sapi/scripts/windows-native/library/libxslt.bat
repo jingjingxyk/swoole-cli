@@ -46,7 +46,8 @@ cmake -B build_static -S . ^
   -DLIBXSLT_WITH_PYTHON=OFF ^
   -DLIBXSLT_WITH_TESTS=OFF ^
   -DCMAKE_PREFIX_PATH="%__PROJECT__%\build;%__PROJECT__%\build\libiconv"^
-  -DIconv_LIBRARY="%__PROJECT__%\build\libiconv\lib" ^
+  -DIconv_LIBRARY="%__PROJECT__%\build\libiconv\lib\libiconv_a.lib" ^
+  -DIconv_INCLUDE_DIR="%__PROJECT__%\build\libiconv\include" ^
   -DCMAKE_VERBOSE_MAKEFILE=ON
 
 :: Iconv_LIBRARY Iconv_INCLUDE_DIR
