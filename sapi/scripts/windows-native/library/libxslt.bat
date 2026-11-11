@@ -10,8 +10,6 @@ set __PROJECT__=%cd%
 cd /d %__PROJECT__%
 mkdir  %__PROJECT__%\build\libxslt
 
-exit /b 0
-
 if exist "%__PROJECT__%\build\libxslt\.completed" goto :skip
 
 
