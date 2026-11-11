@@ -268,11 +268,9 @@ configure.bat ^
 --with-sodium ^
 --with-readline ^
 --with-pdo-sqlite ^
---with-sqlite3
-
-
-:: --with-pdo-pgsql ^
-:: --with-pgsql
+--with-sqlite3 ^
+--with-pdo-pgsql ^
+--with-pgsql
 
 :: --enable-cares ^
 :: --enable-swoole-pgsql ^
