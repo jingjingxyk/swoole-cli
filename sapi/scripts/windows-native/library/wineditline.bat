@@ -37,7 +37,6 @@ if exist "build_static" (
 
 mkdir  build_static
 cmake -B build_static -S . ^
-  -G"MSYS Makefiles" ^
   -DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\wineditline" ^
   -DCMAKE_BUILD_TYPE=Release  ^
   -DBUILD_SHARED_LIBS=OFF  ^
