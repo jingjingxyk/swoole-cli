@@ -13,6 +13,32 @@ dumpbin /symbols .\var\native-build\php-src\x64\Release_TS\ext\swoole\ext-src\ph
 
 dumpbin /DEPENDENTS ".\var\native-build\php-src\x64\Release_TS\php.exe"
 
+:: .\var\native-build\php-src\x64\Release_TS\php.exe -a
+
+.\var\native-build\php-src\x64\Release_TS\php.exe -r "var_dump(class_exists('Swoole\Coroutine'));"
+
+.\var\native-build\php-src\x64\Release_TS\php.exe -r "var_dump(extension_loaded('intl'));"
+.\var\native-build\php-src\x64\Release_TS\php.exe -r "echo \Collator::create('zh_CN')->compare('a','b');"
+
+.\var\native-build\php-src\x64\Release_TS\php.exe -r "var_dump(MessageFormatter::formatMessage('en', '{0,number}', [1234.5]));"
+
+.\var\native-build\php-src\x64\Release_TS\php.exe -r "echo (new NumberFormatter('en_US', NumberFormatter::DECIMAL))->format(1234567.89);"
+
+.\var\native-build\php-src\x64\Release_TS\php.exe -r "echo (new IntlDateFormatter('zh_CN', IntlDateFormatter::FULL, IntlDateFormatter::FULL))->format(new DateTime('2026-11-11 12:00:00'));"
+
+.\var\native-build\php-src\x64\Release_TS\php.exe -r "echo MessageFormatter::formatMessage('en', '{0,number,currency}', [1234.5]);"
+
+.\var\native-build\php-src\x64\Release_TS\php.exe -r "echo transliterator_transliterate('Any-Latin', '中文');"
+
+.\var\native-build\php-src\x64\Release_TS\php.exe --ri swoole
+
+
+.\var\native-build\php-src\x64\Release_TS\php.exe -r "Swoole\Coroutine\run(function() { $cid = Swoole\Coroutine::getCid(); var_dump($cid); });"
+
+.\var\native-build\php-src\x64\Release_TS\php.exe -r "var_dump(method_exists('Swoole\Coroutine', 'gethostbyname'));"
+.\var\native-build\php-src\x64\Release_TS\php.exe -r "var_dump(function_exists('Swoole\Coroutine\gethostbyname'));"
+.\var\native-build\php-src\x64\Release_TS\php.exe -r "Swoole\Coroutine\run(function() { var_dump(Swoole\Coroutine\gethostbyname('www.baidu.com')); });"
+
 cd /d %__PROJECT__%
 endlocal
 

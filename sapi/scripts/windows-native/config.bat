@@ -75,10 +75,8 @@ set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libssh2\lib"
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\libnghttp2\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libnghttp2\lib"
 
-
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\libnghttp3\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libnghttp3\lib"
-
 
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\ngtcp2\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\ngtcp2\lib"
@@ -157,8 +155,8 @@ set "X_CFLAGS=%X_CFLAGS% /EHsc /MP /MT /UCRT"
 :: for icu static link
 set "X_CFLAGS=%X_CFLAGS% -DU_STATIC_IMPLEMENTATION"
 
-:: set "X_CFLAGS=%X_CFLAGS% -DCARES_STATICLIB"
 set "X_CFLAGS=%X_CFLAGS% -DSODIUM_STATIC=1"
+set "X_CFLAGS=%X_CFLAGS% -DCARES_STATICLIB"
 
 set "CFLAGS=%X_CFLAGS%"
 
