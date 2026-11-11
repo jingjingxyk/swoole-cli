@@ -19,7 +19,7 @@ cd /d %__PROJECT__%\var\native-build\
 
 :: https://github.com/winlibs/libxslt.git
 if not exist "libxslt" (
-   git clone https://github.com/winlibs/libxslt.git
+   git clone -b libxslt-1.1.43 https://github.com/winlibs/libxslt.git
 )
 
 if  exist "%__PROJECT__%\thirdparty\libxslt" rmdir /s /q "%__PROJECT__%\thirdparty\libxslt"
@@ -41,6 +41,10 @@ cmake -B build_static -S . ^
   -DBUILD_SHARED_LIBS=OFF  ^
   -DBUILD_STATIC_LIBS=ON  ^
   -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
+  -DLIBXSLT_WITH_PROFILER=OFF ^
+  -DLIBXSLT_WITH_PROGRAMS=OFF ^
+  -DLIBXSLT_WITH_PYTHON=OFF ^
+  -DLIBXSLT_WITH_TESTS=OFF ^
   -DCMAKE_VERBOSE_MAKEFILE=ON
 
 cmake --build build_static --config Release --target install
