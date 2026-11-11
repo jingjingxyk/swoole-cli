@@ -267,7 +267,8 @@ configure.bat ^
 --with-pdo-sqlite ^
 --with-sqlite3 ^
 --with-pdo-pgsql ^
---with-pgsql
+--with-pgsql ^
+--with-gmp
 
 :: --enable-cares ^
 :: --enable-swoole-pgsql ^
@@ -282,7 +283,6 @@ configure.bat ^
 :: --enable-thread-context
 
 :: --with-xsl
-:: --with-gmp
 :: --with-ldap
 
 
