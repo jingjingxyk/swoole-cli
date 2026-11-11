@@ -45,6 +45,7 @@ cmake -B build_static -S . ^
   -DLIBXSLT_WITH_PROGRAMS=OFF ^
   -DLIBXSLT_WITH_PYTHON=OFF ^
   -DLIBXSLT_WITH_TESTS=OFF ^
+  -DCMAKE_PREFIX_PATH="%__PROJECT__%\build"
   -DCMAKE_VERBOSE_MAKEFILE=ON
 
 cmake --build build_static --config Release --target install
