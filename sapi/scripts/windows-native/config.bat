@@ -272,7 +272,11 @@ configure.bat ^
 --with-sqlite3 ^
 --with-pdo-pgsql ^
 --with-pgsql ^
---with-gmp
+--with-gmp ^
+--with-xsl ^
+--enable-odbc ^
+--with-odbcver ^
+--enable-pdo_odbc
 
 :: --enable-cares ^
 :: --enable-swoole-pgsql ^
@@ -286,9 +290,7 @@ configure.bat ^
 :: --enable-swoole-ftp ^
 :: --enable-thread-context
 
-:: --with-xsl
 :: --with-ldap
-
 
 :: --enable-cli-win32 ^
 :: --disable-zts ^
