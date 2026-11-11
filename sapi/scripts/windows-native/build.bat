@@ -27,7 +27,8 @@ set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% cares.lib psl.lib ngtcp2.lib ngtcp2_crypto_o
 
 
 :: nmake /E /f Makefile  x-show-var
-jom.exe /E /f Makefile  x-release-static-php
+nmake  /E /f Makefile  x-release-static-php
+:: jom.exe /E /f Makefile  x-release-static-php
 :: nmake /E /n /f Makefile  x-release-static-php mode=static LIBS_CLI="%LIBS_CLI%"
 
 rem debug
