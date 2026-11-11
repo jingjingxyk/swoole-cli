@@ -54,7 +54,7 @@ copy /Y "%__PROJECT__%\thirdparty\wineditline\lib64\edit_static.lib" "%__PROJECT
 copy /Y "%__PROJECT__%\thirdparty\wineditline\lib64\edit_static.lib" "%__PROJECT__%\build\wineditline\lib\edit.lib"
 
 
-:: type nul > "%__PROJECT__%\build\wineditline\.completed"
+type nul > "%__PROJECT__%\build\wineditline\.completed"
 
 cd /d %__PROJECT__%
 goto :ok
