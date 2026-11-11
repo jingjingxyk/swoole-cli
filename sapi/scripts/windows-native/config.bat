@@ -269,7 +269,7 @@ configure.bat ^
 --with-pdo-sqlite ^
 --with-sqlite3 ^
 --with-pdo-pgsql ^
---pgsql-pgsql
+--with-pgsql
 
 :: --enable-cares ^
 :: --enable-swoole-pgsql ^
