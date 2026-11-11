@@ -160,6 +160,7 @@ set "X_CFLAGS=%X_CFLAGS% -DU_STATIC_IMPLEMENTATION"
 
 set "X_CFLAGS=%X_CFLAGS% -DSODIUM_STATIC=1"
 set "X_CFLAGS=%X_CFLAGS% -DCARES_STATICLIB"
+set "X_CFLAGS=%X_CFLAGS% -DLIBPQ_STATIC"
 
 set "CFLAGS=%X_CFLAGS%"
 
@@ -264,10 +265,12 @@ configure.bat ^
 --with-readline ^
 --with-pdo-sqlite ^
 --with-sqlite3 ^
---enable-swoole-sqlite
+--with-pdo-pgsql ^
+--pgsql-pgsql
 
 :: --enable-cares ^
 :: --enable-swoole-pgsql ^
+:: --enable-swoole-sqlite ^
 :: --with-swoole-odbc ^
 :: --with-gd ^
 :: --with-libwebp ^
@@ -280,8 +283,6 @@ configure.bat ^
 :: --with-xsl
 :: --with-gmp
 :: --with-ldap
-:: --with-pdo-mysql
-:: --with-pdo-pgsql
 
 
 
