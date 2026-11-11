@@ -10,6 +10,8 @@ set __PROJECT__=%cd%
 cd /d %__PROJECT__%
 mkdir  %__PROJECT__%\build\libedit
 
+exit /b 0
+
 if exist "%__PROJECT__%\build\libedit\.completed" goto :skip
 
 
