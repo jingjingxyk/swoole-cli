@@ -109,6 +109,9 @@ rem with mpir replace gmp on windows
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\mpir\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\mpir\lib"
 
+set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\libxslt\include"
+set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libxslt\lib"
+
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\lib"
 
