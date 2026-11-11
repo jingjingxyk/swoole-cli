@@ -276,7 +276,7 @@ configure.bat ^
 --with-xsl ^
 --enable-odbc ^
 --with-odbcver ^
---enable-pdo-odbc
+--with-pdo-odbc
 
 :: --enable-cares ^
 :: --enable-swoole-pgsql ^
