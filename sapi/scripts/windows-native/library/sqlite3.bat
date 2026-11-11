@@ -23,6 +23,9 @@ vcpkg install sqlite3:x64-windows-static
 xcopy "%__PROJECT__%\var\native-build\vcpkg\packages\sqlite3_x64-windows-static\include" "%__PROJECT__%\build\sqlite3\include" /E /I /H /Y
 xcopy "%__PROJECT__%\var\native-build\vcpkg\packages\sqlite3_x64-windows-static\lib" "%__PROJECT__%\build\sqlite3\lib" /E /I /H /Y
 
+copy /Y "%__PROJECT__%\build\sqlite3\lib\sqlite3.lib" "%__PROJECT__%\build\sqlite3\lib\libsqlite3_a.lib"
+copy /Y "%__PROJECT__%\build\sqlite3\lib\sqlite3.lib" "%__PROJECT__%\build\sqlite3\lib\libsqlite3.lib"
+
 type nul > "%__PROJECT__%\build\sqlite3\.completed"
 
 cd /d %__PROJECT__%
