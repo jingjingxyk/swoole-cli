@@ -42,6 +42,7 @@ cmake -B build_static -S . ^
   -DBUILD_SHARED_LIBS=OFF  ^
   -DBUILD_STATIC_LIBS=ON  ^
   -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
+  -DMSVC_USE_STATIC_RUNTIME=ON ^
   -DCMAKE_VERBOSE_MAKEFILE=ON
 
 cmake --build build_static --config Release --target install
