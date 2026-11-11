@@ -29,6 +29,7 @@ xcopy wineditline %__PROJECT__%\thirdparty\wineditline /E /I /H /Y
 
 cd "%__PROJECT__%\thirdparty\wineditline"
 
+dir
 
 if exist "build_static" (
     rmdir /S /Q build_static
