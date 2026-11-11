@@ -105,8 +105,11 @@ set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\sqlite3\lib"
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\pgsql\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\pgsql\lib"
 
-set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\gmp\include"
-set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\gmp\lib"
+:: set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\gmp\include"
+:: set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\gmp\lib"
+
+set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\mpir\include"
+set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\mpir\lib"
 
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\lib"
