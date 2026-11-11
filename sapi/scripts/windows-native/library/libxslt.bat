@@ -54,8 +54,8 @@ cmake -B build_static -S . ^
 
 cmake --build build_static --config Release --target install
 
-copy /Y "%__PROJECT__%\build\libxslt\lib\libexslts.lib" "%__PROJECT__%\build\libxslt\lib\libexslts_a.lib"
-copy /Y "%__PROJECT__%\build\libxslt\lib\libxslts.lib" "%__PROJECT__%\build\libxslt\lib\libxslts_a.lib"
+copy /Y "%__PROJECT__%\build\libxslt\lib\libexslts.lib" "%__PROJECT__%\build\libxslt\lib\libexslt_a.lib"
+copy /Y "%__PROJECT__%\build\libxslt\lib\libxslts.lib" "%__PROJECT__%\build\libxslt\lib\libxslt_a.lib"
 
 type nul > "%__PROJECT__%\build\libxslt\.completed"
 
