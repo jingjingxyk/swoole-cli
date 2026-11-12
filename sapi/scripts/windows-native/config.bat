@@ -294,6 +294,22 @@ configure.bat ^
 --with-pgsql-dir="%__PROJECT__%\build\pgsql" ^
 --enable-zstd ^
 --enable-swoole-thread ^
+--enable-swoole-pgsql ^
+--enable-swoole-sqlite ^
+--with-swoole-odbc ^
+
+
+:: --with-swoole-ssh2 ^
+:: --enable-swoole-ftp ^
+:: --enable-thread-context
+
+:: --with-ldap
+:: --enable-cli-win32 ^
+:: --disable-zts ^
+:: --enable-apcu ^
+
+goto :skip_code
+
 --enable-intl ^
 --enable-redis ^
 --with-gettext ^
@@ -315,20 +331,6 @@ configure.bat ^
 --with-pdo-sqlite ^
 --with-pdo-pgsql  ^
 --with-pdo-odbc
-
-
-
-
-:: --with-swoole-ssh2 ^
-:: --enable-swoole-ftp ^
-:: --enable-thread-context
-
-:: --with-ldap
-:: --enable-cli-win32 ^
-:: --disable-zts ^
-:: --enable-apcu ^
-
-goto :skip_code
 
 
 :skip_code
