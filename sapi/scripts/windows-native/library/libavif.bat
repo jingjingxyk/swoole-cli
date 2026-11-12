@@ -65,16 +65,13 @@ cmake -B build_static -S . ^
 	-DAVIF_BUILD_EXAMPLES=OFF
 
 
-
-
 cmake --build build_static --config Release --target install
 
-:: copy /Y "%__PROJECT__%\build\libavif\lib\libwebp.lib" "%__PROJECT__%\build\libavif\lib\libwebp_a.lib"
+copy /Y "%__PROJECT__%\build\libavif\lib\avif.lib" "%__PROJECT__%\build\libavif\lib\avif_a.lib"
 rem  Compatible with PHP build detection
-:: xcopy "%__PROJECT__%\build\libavif\include" "%__PROJECT__%\build\include" /E /I /H /Y
+xcopy "%__PROJECT__%\build\libavif\include" "%__PROJECT__%\build\include" /E /I /H /Y
 
-
-:: type nul > "%__PROJECT__%\build\libavif\.completed"
+type nul > "%__PROJECT__%\build\libavif\.completed"
 
 cd /d %__PROJECT__%
 goto :ok
