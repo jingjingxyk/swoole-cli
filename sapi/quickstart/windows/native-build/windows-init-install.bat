@@ -137,7 +137,7 @@ rem Using jom instead of nmake on Windows for multi-core acceleration
 md %__PROJECT__%\pool\
 7z.exe x -aoa -y -o"%__PROJECT__%\pool\" all-deps.zip
 
-:: set CMAKE_BUILD_TYPE=Release
+
 :: vcpkg install libarchive
 :: vcpkg install libarchive:x64-linux-release
 :: powershell -command "irm asheroto.com/winget | iex "
