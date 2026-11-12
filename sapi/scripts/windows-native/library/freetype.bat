@@ -51,7 +51,7 @@ cmake -B build_static -S . ^
   -DFT_REQUIRE_PNG=TRUE  ^
   -DFT_DISABLE_HARFBUZZ=TRUE  ^
   -DCMAKE_PREFIX_PATH="%__PROJECT__%\build\zlib;%__PROJECT__%\build\bzip2;%__PROJECT__%\build\libpng;%__PROJECT__%\build\brotli" ^
-  -DBZIP2_ROOT="%__PROJECT__%\build\bzip2" ^
+  -DBZIP2_LIBRARIES="%__PROJECT__%\build\bzip2\lib\libbz2_a.lib" ^
   -DCMAKE_VERBOSE_MAKEFILE=ON
 
 
