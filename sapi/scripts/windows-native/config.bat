@@ -288,15 +288,12 @@ configure.bat ^
 --enable-php-sockets ^
 --enable-mysqlnd ^
 --enable-swoole-curl ^
---enable-brotli ^
---with-brotli-dir="%__PROJECT__%\build\brotli" ^
 --with-cares-dir="%__PROJECT__%\build\cares" ^
 --with-pgsql-dir="%__PROJECT__%\build\pgsql" ^
---enable-zstd ^
 --enable-swoole-thread ^
 --enable-swoole-pgsql ^
 --enable-swoole-sqlite ^
---with-swoole-odbc ^
+--enable-swoole-odbc ^
 
 
 :: --with-swoole-ssh2 ^
