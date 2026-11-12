@@ -27,9 +27,10 @@ dir
 powershell -NoProfile -ExecutionPolicy Bypass -Command "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted"
 powershell -NoProfile -ExecutionPolicy Bypass -Command "Install-PackageProvider -Name NuGet -Force"
 powershell -NoProfile -ExecutionPolicy Bypass -Command "Install-Script winget-install -Force"
+set "PATH=%PATH%;C:\Program Files\WindowsPowerShell\Scripts"
 powershell -NoProfile -ExecutionPolicy Bypass -Command "winget-install -Force"
 
-set "PATH=%PATH%;C:\Program Files\WindowsPowerShell\Scripts"
+
 
 winget --version
 winget source update
