@@ -9,7 +9,7 @@ env:
 
 jobs:
   windows-native-ok:
-    if: 0
+    if: 1
     runs-on: windows-2022
     # runs-on: windows-2025-vs2026
     strategy:
@@ -94,9 +94,8 @@ jobs:
           key: windows-build-library-dir
 
       - name: build libs
-        if: 0
         run: |
-          # cmd /c sapi\scripts\windows-native\build-libs.bat
+          cmd /c sapi\scripts\windows-native\build-libs.bat
           # cmd /c sapi\quickstart\windows\cygwin-build\download-cygwin.bat
           # cmd /c sapi\quickstart\windows\cygwin-build\install-cygwin.bat
           # cmd /c sapi\quickstart\windows\msys2-build\download-msys2.bat
@@ -106,6 +105,7 @@ jobs:
           # cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\icu.bat
 
       - name: run build
+        if: 0
         run: |
           # cmd /c sapi\scripts\windows-native\build-extensions.bat
           cmd /c sapi\scripts\windows-native\entry.bat
@@ -113,18 +113,19 @@ jobs:
           # cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\x-show-var.bat
 
       - name: Show Build Result
-        if: 1
+        if: 0
         run: |
           .\var\native-build\php-src\x64\Release_TS\php.exe -v
           .\var\native-build\php-src\x64\Release_TS\php.exe -m
-          .\var\native-build\php-src\x64\Release_TS\php.exe --ri openssl
-          .\var\native-build\php-src\x64\Release_TS\php.exe --ri curl
-          .\var\native-build\php-src\x64\Release_TS\php.exe --ri swoole
+          # .\var\native-build\php-src\x64\Release_TS\php.exe --ri openssl
+          # .\var\native-build\php-src\x64\Release_TS\php.exe --ri curl
+          # .\var\native-build\php-src\x64\Release_TS\php.exe --ri swoole
           # dumpbin /DEPENDENTS ".\var\native-build\php-src\x64\Release_TS\php.exe"
-          cmd /c .\var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\test.bat
+          # cmd /c .\var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\test.bat
 
       - name: production artifacts
         uses: actions/upload-artifact@v4
+        if: 0
         with:
           name: php.exe
           retention-days: 90
