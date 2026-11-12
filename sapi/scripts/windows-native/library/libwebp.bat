@@ -22,13 +22,13 @@ set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
 
 
 cd /d %__PROJECT__%\pool\lib\
-7z.exe x -aoa -y   %__PROJECT__%\pool\lib\libjpeg-turbo-2.1.2.tar.gz
+7z.exe x -aoa -y   %__PROJECT__%\pool\lib\libwebp-v1.3.2.tar.gz
 
-if  exist "%__PROJECT__%\thirdparty\libjpeg" rmdir /s /q "%__PROJECT__%\thirdparty\libjpeg"
-mkdir "%__PROJECT__%\thirdparty\libjpeg"
+if  exist "%__PROJECT__%\thirdparty\libwebp" rmdir /s /q "%__PROJECT__%\thirdparty\libwebp"
+mkdir "%__PROJECT__%\thirdparty\libwebp"
 
-7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libjpeg"  %__PROJECT__%\pool\lib\libjpeg-turbo-2.1.2.tar
-cd %__PROJECT__%\thirdparty\libjpeg\libjpeg-turbo-2.1.2
+7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libwebp"  %__PROJECT__%\pool\lib\libwebp-v1.3.2.tar
+cd %__PROJECT__%\thirdparty\libwebp\libwebp-v1.3.2
 
 dir
 
@@ -40,14 +40,10 @@ if exist "build_static" (
 
 mkdir  build_static
 cmake -B build_static -S . ^
-	-DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\libjpeg" ^
-	-DCMAKE_INSTALL_LIBDIR="%__PROJECT__%\build\libjpeg\lib" ^
-	-DCMAKE_INSTALL_INCLUDEDIR="%__PROJECT__%\build\libjpeg\include" ^
+	-DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\libwebp" ^
 	-DCMAKE_BUILD_TYPE=Release  ^
 	-DBUILD_SHARED_LIBS=OFF  ^
 	-DBUILD_STATIC_LIBS=ON  ^
-	-DENABLE_SHARED=OFF  ^
-	-DENABLE_STATIC=ON ^
 	-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
 	-DCMAKE_C_FLAGS="/MT /O2 /W3 /DNDEBUG" ^
 	-DCMAKE_C_FLAGS_RELEASE="/MT /O2 /W3 /DNDEBUG" ^
