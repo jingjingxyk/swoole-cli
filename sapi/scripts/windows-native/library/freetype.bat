@@ -62,6 +62,8 @@ cmake --build build_static --config Release --target install
 
 copy /Y "%__PROJECT__%\build\freetype\lib\freetype.lib" "%__PROJECT__%\build\freetype\lib\freetype_a.lib"
 
+rem  Compatible with PHP build system detection
+xcopy "%__PROJECT__%\build\freetype\include" "%__PROJECT__%\build\include" /E /I /H /Y
 
 type nul > "%__PROJECT__%\build\freetype\.completed"
 
