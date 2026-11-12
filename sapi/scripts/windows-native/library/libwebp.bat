@@ -59,7 +59,7 @@ rem  Compatible with PHP build detection
 xcopy "%__PROJECT__%\build\libwebp\include" "%__PROJECT__%\build\include" /E /I /H /Y
 
 
-:: type nul > "%__PROJECT__%\build\libwebp\.completed"
+type nul > "%__PROJECT__%\build\libwebp\.completed"
 
 cd /d %__PROJECT__%
 goto :ok
