@@ -112,6 +112,15 @@ set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\mpir\lib"
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\libxslt\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libxslt\lib"
 
+set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\libpng\include"
+set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libpng\lib"
+
+set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\freetype\include"
+set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\freetype\lib"
+
+set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\libjpeg\include"
+set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libjpeg\lib"
+
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\lib"
 
