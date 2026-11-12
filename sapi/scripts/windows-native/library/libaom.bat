@@ -8,10 +8,10 @@ cd ..\..\..\..\
 
 set __PROJECT__=%cd%
 cd /d %__PROJECT__%
-mkdir  %__PROJECT__%\build\libwebp
+mkdir  %__PROJECT__%\build\libaom
 
 
-if exist "%__PROJECT__%\build\libwebp\.completed" goto :skip
+if exist "%__PROJECT__%\build\libaom\.completed" goto :skip
 
 
 mkdir %__PROJECT__%\var\native-build
@@ -22,13 +22,13 @@ set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
 
 
 cd /d %__PROJECT__%\pool\lib\
-7z.exe x -aoa -y   %__PROJECT__%\pool\lib\libwebp-v1.3.2.tar.gz
+7z.exe x -aoa -y   %__PROJECT__%\pool\lib\aom-v3.10.0.tar.gz
 
-if  exist "%__PROJECT__%\thirdparty\libwebp" rmdir /s /q "%__PROJECT__%\thirdparty\libwebp"
-mkdir "%__PROJECT__%\thirdparty\libwebp"
+if  exist "%__PROJECT__%\thirdparty\libaom" rmdir /s /q "%__PROJECT__%\thirdparty\libaom"
+mkdir "%__PROJECT__%\thirdparty\libaom"
 
-7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libwebp"  %__PROJECT__%\pool\lib\libwebp-v1.3.2.tar
-cd %__PROJECT__%\thirdparty\libwebp\libwebp-1.3.2
+7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libaom"  %__PROJECT__%\pool\lib\aom-v3.10.0.tar.gz
+cd %__PROJECT__%\thirdparty\libaom\aom-v3.10.0
 
 dir
 
@@ -40,26 +40,28 @@ if exist "build_static" (
 
 mkdir  build_static
 cmake -B build_static -S . ^
-	-DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\libwebp" ^
+	-DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\libaom" ^
 	-DCMAKE_BUILD_TYPE=Release  ^
 	-DBUILD_SHARED_LIBS=OFF  ^
 	-DBUILD_STATIC_LIBS=ON  ^
 	-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
 	-DCMAKE_C_FLAGS="/MT /O2 /W3 /DNDEBUG" ^
 	-DCMAKE_C_FLAGS_RELEASE="/MT /O2 /W3 /DNDEBUG" ^
-	-DCMAKE_PREFIX_PATH="%__PROJECT__%\build\zlib;%__PROJECT__%\build\libjpeg;%__PROJECT__%\build\libpng;%__PROJECT__%\build\libgif" ^
+	-DCMAKE_C_STANDARD=11 ^
+    -DENABLE_DOCS=OFF ^
+    -DENABLE_EXAMPLES=OFF ^
+    -DENABLE_TESTS=OFF ^
+    -DENABLE_TOOLS=OFF ^
 	-DCMAKE_VERBOSE_MAKEFILE=ON
-
-
 
 cmake --build build_static --config Release --target install
 
-copy /Y "%__PROJECT__%\build\libwebp\lib\libwebp.lib" "%__PROJECT__%\build\libwebp\lib\libwebp_a.lib"
+:: copy /Y "%__PROJECT__%\build\libaom\lib\aom.lib" "%__PROJECT__%\build\libaom\lib\aom_a.lib"
 rem  Compatible with PHP build detection
-xcopy "%__PROJECT__%\build\libwebp\include" "%__PROJECT__%\build\include" /E /I /H /Y
+:: xcopy "%__PROJECT__%\build\libaom\include" "%__PROJECT__%\build\include" /E /I /H /Y
 
 
-type nul > "%__PROJECT__%\build\libwebp\.completed"
+:: type nul > "%__PROJECT__%\build\libaom\.completed"
 
 cd /d %__PROJECT__%
 goto :ok
@@ -69,7 +71,7 @@ echo "skip build step"
 goto :ok
 
 :ok
-echo "libwebp build completed ! "
+echo "libaom build completed ! "
 
 exit /b 0
 
