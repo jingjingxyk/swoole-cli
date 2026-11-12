@@ -35,7 +35,7 @@ for /f "delims=" %%i in ('powershell -NoProfile -Command "(Get-AppxPackage Micro
 echo %WINGET_EXE%
 
 del ""%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe""
-mklink "%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe" "%WINGET_PATH%\winget.exe"
+mklink "%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe" "%WINGET_EXE%"
 
 %LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe --version
 set "PATH=%PATH%;%LOCALAPPDATA%\Microsoft\WindowsApps"
