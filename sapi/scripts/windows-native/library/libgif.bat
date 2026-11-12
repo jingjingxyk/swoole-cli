@@ -26,30 +26,7 @@ cd %__PROJECT__%\thirdparty\libgif\giflib-5.2.1
 
 dir
 
-:: create CMakeLists.txt
-(
-cmake_minimum_required(VERSION 3.10)
-project(giflib VERSION 5.2.2)
-
-set(GIF_SRC
-    dgif_lib.c egif_lib.c gifalloc.c gif_err.c
-    gif_font.c gif_hash.c openbsd-reallocarray.c
-)
-
-add_library(giflib STATIC ${GIF_SRC})
-
-if (MSVC)
-    add_compile_options(/utf-8 /wd4996)
-endif()
-
-install(FILES gif_lib.h DESTINATION include)
-install(TARGETS giflib ARCHIVE DESTINATION lib)
-
-) > CMakeLists.txt
-
-
-
-
+copy /Y "%__PROJECT__%\sapi\scripts\windows-native\library\patches\libgif-CMakeLists.txt CMakeLists.txt
 
 mkdir  build-dir
 cd build-dir
