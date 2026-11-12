@@ -55,6 +55,8 @@ cmake -B build_static -S . ^
 cmake --build build_static --config Release --target install
 
 copy /Y "%__PROJECT__%\build\libwebp\lib\libwebp.lib" "%__PROJECT__%\build\libwebp\lib\libwebp_a.lib"
+rem  Compatible with PHP build detection
+xcopy "%__PROJECT__%\build\libwebp\include" "%__PROJECT__%\build\include" /E /I /H /Y
 
 
 :: type nul > "%__PROJECT__%\build\libwebp\.completed"
