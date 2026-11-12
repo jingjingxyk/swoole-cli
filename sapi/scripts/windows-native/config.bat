@@ -127,6 +127,18 @@ set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libgif\lib"
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\libwebp\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libwebp\lib"
 
+set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\dav1d\include"
+set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\dav1d\lib"
+
+set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\svt_av1\include"
+set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\svt_av1\lib"
+
+set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\libyuv\include"
+set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libyuv\lib"
+
+set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\libavif\include"
+set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libavif\lib"
+
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\lib"
 

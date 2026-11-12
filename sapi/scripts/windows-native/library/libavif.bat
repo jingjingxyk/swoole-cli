@@ -22,13 +22,13 @@ set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
 
 
 cd /d %__PROJECT__%\pool\lib\
-7z.exe x -aoa -y   %__PROJECT__%\pool\lib\libwebp-v1.3.2.tar.gz
+7z.exe x -aoa -y   %__PROJECT__%\pool\lib\libavif-v1.3.0.tar.gz
 
 if  exist "%__PROJECT__%\thirdparty\libavif" rmdir /s /q "%__PROJECT__%\thirdparty\libavif"
 mkdir "%__PROJECT__%\thirdparty\libavif"
 
-7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libavif"  %__PROJECT__%\pool\lib\libwebp-v1.3.2.tar
-cd %__PROJECT__%\thirdparty\libavif\libwebp-1.3.2
+7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libavif"  %__PROJECT__%\pool\lib\libavif-v1.3.0.tar
+cd %__PROJECT__%\thirdparty\libavif\libavif-v1.3.0
 
 dir
 

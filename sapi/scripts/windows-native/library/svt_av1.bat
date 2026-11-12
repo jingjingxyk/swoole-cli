@@ -53,12 +53,7 @@ cmake -B build_static -S . ^
 
 cmake --build build_static --config Release --target install
 
-:: copy /Y "%__PROJECT__%\build\libaom\lib\aom.lib" "%__PROJECT__%\build\libaom\lib\aom_a.lib"
-rem  Compatible with PHP build detection
-:: xcopy "%__PROJECT__%\build\libaom\include" "%__PROJECT__%\build\include" /E /I /H /Y
-
-
-:: type nul > "%__PROJECT__%\build\svt_av1\.completed"
+type nul > "%__PROJECT__%\build\svt_av1\.completed"
 
 cd /d %__PROJECT__%
 goto :ok

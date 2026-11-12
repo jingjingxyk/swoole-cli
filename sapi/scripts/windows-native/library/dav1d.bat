@@ -60,12 +60,6 @@ meson setup  build  ^
 	ninja -C build
 	ninja -C build install
 
-
-:: copy /Y "%__PROJECT__%\build\dav1d\lib\aom.lib" "%__PROJECT__%\build\dav1d\lib\aom_a.lib"
-rem  Compatible with PHP build detection
-:: xcopy "%__PROJECT__%\build\dav1d\include" "%__PROJECT__%\build\include" /E /I /H /Y
-
-
 type nul > "%__PROJECT__%\build\dav1d\.completed"
 
 cd /d %__PROJECT__%
