@@ -135,13 +135,13 @@ set "PHP_PHP_BUILD=%__PROJECT__%\build"
 echo %PHP_PHP_BUILD%
 mkdir %PHP_PHP_BUILD%
 
-:: fileinfo  patch for static build
+:: fileinfo extension patch
 sed.exe -i.bak "s/, true,/, false,/" ext\fileinfo\config.w32
 sed.exe -i.bak "s/!!PHP_ALL_SHARED && \"yes\" == PHP_ALL_SHARED/false/" win32\build\confutils.js
 
-:: intl patch
+:: intl  extension patch
 sed.exe -i.bak "s/, true,/, false,/" ext\intl\config.w32
-:: gd patch
+:: gd  extension patch
 sed.exe -i.bak "s/gd2copypal.c //" ext/gd/config.w32
 
 call buildconf.bat -f
