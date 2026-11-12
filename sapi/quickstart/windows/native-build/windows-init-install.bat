@@ -64,6 +64,10 @@ msiexec /i strawberry-perl-5.38.2.2-64bit.msi  /passive
 :: meson --version
 :: ninja --version
 
+:: dotnet tool install --global Nefarius.Tools.WDKWhere
+:: wdkwhere
+
+
 set "PATH=%ProgramFiles%\7-Zip;%PATH%;"
 set "PATH=%__PROJECT__%\var\native-build\php-sdk-binary-tools\bin\;%__PROJECT__%\var\native-build\php-sdk-binary-tools\msys2\bin;%PATH%;"
 echo "%PATH%"

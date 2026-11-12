@@ -15,6 +15,18 @@ where bison
 bison --version
 re2c --version
 
+set "SDK_UM="
+for /f "delims=" %%i in ('powershell -NoProfile -Command "$r=(Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Microsoft SDKs\Windows\v10.0' -Name InstallationFolder -ErrorAction SilentlyContinue).InstallationFolder; if(-not $r){$r=(Get-ItemProperty 'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Microsoft SDKs\Windows\v10.0' -Name InstallationFolder -ErrorAction SilentlyContinue).InstallationFolder}; $v=(Get-ChildItem (Join-Path $r 'Include') -Directory | Sort-Object Name -Descending | Select-Object -First 1).Name; [Console]::Write((Join-Path $r ('Include\' + $v + '\um')))"') do set "SDK_UM=%%i"
+
+if not defined SDK_UM (
+    echo [ERROR] Failed to locate Windows SDK Include\um
+    exit /b 1
+)
+
+echo %SDK_UM%
+
+
+
 set "__PROJECT__=%cd%"
 echo %cd%
 cd /d %__PROJECT__%\var\native-build\php-src\
@@ -289,10 +301,12 @@ configure.bat ^
 --enable-mysqlnd ^
 --enable-swoole-curl ^
 --enable-swoole-thread ^
---enable-swoole-pgsql ^
---enable-swoole-sqlite ^
 --enable-swoole-odbc ^
---with-swoole-ssh2 ^
+
+
+:: --enable-swoole-pgsql ^
+:: --enable-swoole-sqlite ^
+:: --with-swoole-ssh2 ^
 
 :: --with-gd ^
 :: --with-libwebp ^
