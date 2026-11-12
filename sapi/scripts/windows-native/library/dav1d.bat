@@ -11,7 +11,7 @@ cd /d %__PROJECT__%
 mkdir  %__PROJECT__%\build\dav1d
 
 
-if exist "%__PROJECT__%\build\libaom\.completed" goto :skip
+if exist "%__PROJECT__%\build\dav1d\.completed" goto :skip
 
 
 mkdir %__PROJECT__%\var\native-build
