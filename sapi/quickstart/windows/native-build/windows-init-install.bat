@@ -36,7 +36,7 @@ echo %WINGET_EXE%
 
 if exist "%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe" del /f /q "%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe"
 mklink "%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe" "%WINGET_EXE%"
-
+dir %LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe
 %LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe --version
 set "PATH=%PATH%;%LOCALAPPDATA%\Microsoft\WindowsApps"
 winget --version
