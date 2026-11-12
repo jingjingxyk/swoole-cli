@@ -53,19 +53,14 @@ cmake -B build_static -S . ^
   -DCMAKE_C_FLAGS_RELEASE="/MT /O2 /W3 /DNDEBUG" ^
   -DCMAKE_VERBOSE_MAKEFILE=ON
 
-:: -DCMAKE_POLICY_DEFAULT_CMP0074=NEW
-
-
-
 cmake --build build_static --config Release --target install
 
-::xcopy "%__PROJECT__%\thirdparty\libpng\include" "%__PROJECT__%\build\freetype\include" /E /I /H /Y
 
-:: copy /Y "%__PROJECT__%\thirdparty\freetype\lib64\edit_static.lib" "%__PROJECT__%\build\freetype\lib\edit_a.lib"
-:: copy /Y "%__PROJECT__%\thirdparty\freetype\lib64\edit_static.lib" "%__PROJECT__%\build\freetype\lib\edit.lib"
+copy /Y "%__PROJECT__%\build\libpng\lib\libpng16_static.lib" "%__PROJECT__%\build\libpng\lib\libpng.lib"
+copy /Y "%__PROJECT__%\build\libpng\lib\libpng16_static.lib" "%__PROJECT__%\build\libpng\lib\libpng_a.lib"
 
 
-:: type nul > "%__PROJECT__%\build\libpng\.completed"
+type nul > "%__PROJECT__%\build\libpng\.completed"
 
 cd /d %__PROJECT__%
 goto :ok
