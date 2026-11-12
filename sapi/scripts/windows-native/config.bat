@@ -280,12 +280,13 @@ configure.bat ^
 --with-xsl ^
 --enable-odbc ^
 --with-odbcver ^
---with-pdo-odbc
+--with-pdo-odbc ^
+--with-gd
 
 :: --enable-swoole-pgsql ^
 :: --enable-swoole-sqlite ^
 :: --with-swoole-odbc ^
-:: --with-gd ^
+
 :: --with-libwebp ^
 :: --with-libavif ^
 
