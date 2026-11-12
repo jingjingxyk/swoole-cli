@@ -55,6 +55,7 @@ cmake -B build_static -S . ^
 	-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
 	-DCMAKE_C_FLAGS="/MT /O2 /W3 /DNDEBUG" ^
 	-DCMAKE_C_FLAGS_RELEASE="/MT /O2 /W3 /DNDEBUG" ^
+    -DCMAKE_PREFIX_PATH="%__PROJECT__%\build\libjpeg;" ^
 	-DCMAKE_VERBOSE_MAKEFILE=ON
 
 cmake --build build_static --config Release --target install
