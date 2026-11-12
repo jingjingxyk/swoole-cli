@@ -47,6 +47,7 @@ cmake -B build_static -S . ^
 	-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
 	-DCMAKE_C_FLAGS="/MT /O2 /W3 /DNDEBUG" ^
 	-DCMAKE_C_FLAGS_RELEASE="/MT /O2 /W3 /DNDEBUG" ^
+	-DCMAKE_PREFIX_PATH="%__PROJECT__%\build\zlib;%__PROJECT__%\build\libjpeg;%__PROJECT__%\build\libpng;%__PROJECT__%\build\libgif" ^
 	-DCMAKE_VERBOSE_MAKEFILE=ON
 
 

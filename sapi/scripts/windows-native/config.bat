@@ -139,9 +139,10 @@ mkdir %PHP_PHP_BUILD%
 sed.exe -i.bak "s/, true,/, false,/" ext\fileinfo\config.w32
 sed.exe -i.bak "s/!!PHP_ALL_SHARED && \"yes\" == PHP_ALL_SHARED/false/" win32\build\confutils.js
 
-:: intl path
+:: intl patch
 sed.exe -i.bak "s/, true,/, false,/" ext\intl\config.w32
-
+:: gd patch
+sed.exe -i.bak "s/gd2copypal.c //" ext/gd/config.w32
 
 call buildconf.bat -f
 
