@@ -31,12 +31,10 @@ set "PATH=%PATH%;C:\Program Files\WindowsPowerShell\Scripts"
 powershell -NoProfile -ExecutionPolicy Bypass -Command "winget-install -Force -Wait"
 
 
-
 for /f "delims=" %i in ('where.exe winget 2^>nul') do set "WINGET_PATH=%i"
 echo %WINGET_PATH%
 mklink "%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe" "%WINGET_PATH%\winget.exe"
 dir "%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe"
-"%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe" --version
 set "PATH=%PATH%;%LOCALAPPDATA%\Microsoft\WindowsApps"
 winget --version
 winget source update
