@@ -35,8 +35,6 @@ for /f "delims=" %%i in ('powershell -NoProfile -Command "(Get-AppxPackage Micro
 echo %WINGET_EXE%
 
 dir "%WINGET_EXE%"
-"%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe" --version
-
 "%WINGET_EXE%" --version
 "%WINGET_EXE%" source reset --force
 "%WINGET_EXE%" source update
