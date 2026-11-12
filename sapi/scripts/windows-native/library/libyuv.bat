@@ -28,7 +28,7 @@ if  exist "%__PROJECT__%\thirdparty\libyuv" rmdir /s /q "%__PROJECT__%\thirdpart
 mkdir "%__PROJECT__%\thirdparty\libyuv"
 
 7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libyuv"  %__PROJECT__%\pool\lib\libyuv-b0f72309c6c0b952d0198be5a5b5106f089fe1c5.tar
-cd %__PROJECT__%\thirdparty\libyuv\libyuv-b0f72309c6c0b952d0198be5a5b5106f089fe1c5
+cd %__PROJECT__%\thirdparty\libyuv
 
 dir
 
