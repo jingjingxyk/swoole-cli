@@ -161,6 +161,9 @@ sed.exe -i.bak "s/!!PHP_ALL_SHARED && \"yes\" == PHP_ALL_SHARED/false/" win32\bu
 sed.exe -i.bak "s/, true,/, false,/" ext\intl\config.w32
 :: gd  extension patch
 sed.exe -i.bak "s/gd2copypal\.c //" ext/gd/config.w32
+:: swoole extension patch
+sed.exe -i.bak "s/PHP_CARES_DIR/null/" ext/swoole/config.w32
+sed.exe -i.bak "s/PHP_PGSQL_DIR/null/" ext/swoole/config.w32
 
 call buildconf.bat -f
 
@@ -288,15 +291,13 @@ configure.bat ^
 --enable-php-sockets ^
 --enable-mysqlnd ^
 --enable-swoole-curl ^
---with-cares-dir="%__PROJECT__%\build\cares" ^
---with-pgsql-dir="%__PROJECT__%\build\pgsql" ^
 --enable-swoole-thread ^
 --enable-swoole-pgsql ^
 --enable-swoole-sqlite ^
 --enable-swoole-odbc ^
+--with-swoole-ssh2 ^
 
 
-:: --with-swoole-ssh2 ^
 :: --enable-swoole-ftp ^
 :: --enable-thread-context
 
