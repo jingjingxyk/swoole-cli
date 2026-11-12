@@ -28,7 +28,7 @@ if  exist "%__PROJECT__%\thirdparty\libwebp" rmdir /s /q "%__PROJECT__%\thirdpar
 mkdir "%__PROJECT__%\thirdparty\libwebp"
 
 7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libwebp"  %__PROJECT__%\pool\lib\libwebp-v1.3.2.tar
-cd %__PROJECT__%\thirdparty\libwebp\libwebp-v1.3.2
+cd %__PROJECT__%\thirdparty\libwebp\libwebp-1.3.2
 
 dir
 
