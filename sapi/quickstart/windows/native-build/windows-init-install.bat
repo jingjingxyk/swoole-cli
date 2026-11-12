@@ -36,25 +36,25 @@ echo %WINGET_EXE%
 
 if exist "%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe" del /f /q "%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe"
 mklink "%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe" "%WINGET_EXE%"
-dir %WINGET_EXE%
-dir %LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe
-%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe --version
+dir "%WINGET_EXE%"
+dir "%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe"
+"%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe" --version
 set "PATH=%PATH%;%LOCALAPPDATA%\Microsoft\WindowsApps"
 set "WINGET=%WINGET_EXE%"
 winget --version
-%WINGET_EXE% --version
+"%WINGET_EXE%" --version
 winget source reset --force
-%WINGET_EXE% source reset --force
+"%WINGET_EXE%" source reset --force
 winget source update
-%WINGET_EXE% source update
+"%WINGET_EXE%" source update
 
-%WINGET_EXE% install vim.vim  --silent --accept-package-agreements --accept-source-agreements
+"%WINGET_EXE%" install vim.vim  --silent --accept-package-agreements --accept-source-agreements
 :: winget install --id mesonbuild.meson --exact --silent --accept-package-agreements --accept-source-agreements
 
-%WINGET_EXE% search Python
+"%WINGET_EXE%" search Python
 :: python -m pip install --upgrade pip
 :: python -m ensurepip --upgrade
-%WINGET_EXE% install -e --id Python.Python.3.12 --exact --silent --accept-package-agreements --accept-source-agreements
+"%WINGET_EXE%" install -e --id Python.Python.3.12 --exact --silent --accept-package-agreements --accept-source-agreements
 pip3 -V
 pip3 install meson ninja
 :: pip3 install uv
