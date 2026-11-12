@@ -24,7 +24,7 @@ mkdir "%__PROJECT__%\thirdparty\libgif"
 7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libgif"  %__PROJECT__%\pool\lib\giflib-5.2.1.tar
 cd %__PROJECT__%\thirdparty\libgif\giflib-5.2.1
 
-copy /Y "%__PROJECT__%\sapi\scripts\windows-native\library\patches\libgif-CMakeLists.txt CMakeLists.txt
+copy /Y "%__PROJECT__%\sapi\scripts\windows-native\library\patches\libgif-CMakeLists.txt" CMakeLists.txt
 
 dir
 
