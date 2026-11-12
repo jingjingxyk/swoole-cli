@@ -21,8 +21,16 @@ dir
 
 :: Add-AppxPackage -Path ".\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
 :: install winget with script
-Install-Script winget-install -Force
-winget-install -Force
+:: Install-Script winget-install -Force
+:: winget-install -Force
+
+powershell -NoProfile -ExecutionPolicy Bypass -Command "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "Install-PackageProvider -Name NuGet -Force"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "Install-Script winget-install -Force"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "winget-install -Force"
+
+set "PATH=%PATH%;C:\Program Files\WindowsPowerShell\Scripts"
+
 winget --version
 winget source update
 
