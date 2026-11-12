@@ -54,7 +54,7 @@ cmake -B build_static -S . ^
 
 cmake --build build_static --config Release --target install
 
-:: copy /Y "%__PROJECT__%\build\libwebp\lib\jpeg-static.lib" "%__PROJECT__%\build\libwebp\lib\libjpeg.lib"
+copy /Y "%__PROJECT__%\build\libwebp\lib\libwebp.lib" "%__PROJECT__%\build\libwebp\lib\libwebp_a.lib"
 
 
 :: type nul > "%__PROJECT__%\build\libwebp\.completed"

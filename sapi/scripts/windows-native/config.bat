@@ -121,6 +121,12 @@ set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\freetype\lib"
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\libjpeg\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libjpeg\lib"
 
+set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\libgif\include"
+set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libgif\lib"
+
+set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\libwebp\include"
+set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libwebp\lib"
+
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\lib"
 
@@ -257,13 +263,14 @@ configure.bat ^
 --enable-xmlwriter ^
 --with-dom ^
 --with-simplexml ^
---with-gd
+--with-gd ^
+--with-libwebp
 
 :: --enable-swoole-pgsql ^
 :: --enable-swoole-sqlite ^
 :: --with-swoole-odbc ^
 
-:: --with-libwebp ^
+
 :: --with-libavif ^
 
 :: --with-swoole-ssh2 ^
