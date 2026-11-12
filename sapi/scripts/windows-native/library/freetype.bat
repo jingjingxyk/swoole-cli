@@ -22,24 +22,17 @@ set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
 
 
 cd /d %__PROJECT__%\pool\lib\
-7z.exe x -aoa -y   %__PROJECT__%\pool\lib\libpsl-0.21.5.tar.gz
+7z.exe x -aoa -y   %__PROJECT__%\pool\lib\freetype-2.13.2.tar.gz
 
-if  exist "%__PROJECT__%\thirdparty\libpsl" rmdir /s /q "%__PROJECT__%\thirdparty\libpsl"
-mkdir "%__PROJECT__%\thirdparty\libpsl"
+if  exist "%__PROJECT__%\thirdparty\freetype" rmdir /s /q "%__PROJECT__%\thirdparty\freetype"
+mkdir "%__PROJECT__%\thirdparty\freetype"
 
-7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libpsl"  %__PROJECT__%\pool\lib\freetype-2.13.2.tar.gz
-cd %__PROJECT__%\thirdparty\libpsl\libpsl-0.21.5\
-
-dir
-
-if  exist "%__PROJECT__%\thirdparty\wineditline" rmdir /s /q "%__PROJECT__%\thirdparty\wineditline"
-mkdir "%__PROJECT__%\thirdparty\wineditline"
-
-xcopy wineditline %__PROJECT__%\thirdparty\wineditline /E /I /H /Y
-
-cd "%__PROJECT__%\thirdparty\wineditline"
+7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\freetype"  %__PROJECT__%\pool\lib\freetype-2.13.2.tar.gz
+cd %__PROJECT__%\thirdparty\freetype\freetype-2.13.2
 
 dir
+
+
 
 if exist "build_static" (
     rmdir /S /Q build_static
@@ -47,13 +40,20 @@ if exist "build_static" (
 
 mkdir  build_static
 cmake -B build_static -S . ^
-  -DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\wineditline" ^
+  -DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\freetype" ^
   -DCMAKE_BUILD_TYPE=Release  ^
   -DBUILD_SHARED_LIBS=OFF  ^
   -DBUILD_STATIC_LIBS=ON  ^
   -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
-  -DMSVC_USE_STATIC_RUNTIME=ON ^
+  -DFT_REQUIRE_ZLIB=TRUE  ^
+  -DFT_REQUIRE_BZIP2=TRUE  ^
+  -DFT_REQUIRE_BROTLI=TRUE  ^
+  -DFT_REQUIRE_PNG=TRUE  ^
+  -DFT_DISABLE_HARFBUZZ=TRUE  ^
+  -DCMAKE_PREFIX_PATH="%__PROJECT__%\build\zlib;%__PROJECT__%\build\bzip2;%__PROJECT__%\build\libpng;%__PROJECT__%\build\brotli"
   -DCMAKE_VERBOSE_MAKEFILE=ON
+
+
 
 cmake --build build_static --config Release --target install
 
