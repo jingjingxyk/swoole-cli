@@ -14,6 +14,8 @@ env
 where bison
 bison --version
 re2c --version
+set "SDK_UM=%WindowsSdkDir%Include\%WindowsSDKVersion%um"
+echo "%SDK_UM%"
 
 set "__PROJECT__=%cd%"
 echo %cd%
@@ -140,8 +142,6 @@ set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\libavif\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libavif\lib"
 
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\include"
-
-set "SDK_UM=%WindowsSdkDir%Include\%WindowsSDKVersion%um"
 set "X_INCLUDES=%X_INCLUDES%;%SDK_UM%"
 
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\lib"
