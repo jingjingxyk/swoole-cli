@@ -24,13 +24,13 @@ mkdir "%__PROJECT__%\thirdparty\libgif"
 7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libgif"  %__PROJECT__%\pool\lib\giflib-5.2.1.tar
 cd %__PROJECT__%\thirdparty\libgif\giflib-5.2.1
 
-dir
-
 copy /Y "%__PROJECT__%\sapi\scripts\windows-native\library\patches\libgif-CMakeLists.txt CMakeLists.txt
 
-mkdir  build-dir
-cd build-dir
-cmake .. ^
+dir
+
+
+mkdir  build_static
+cmake -B build_static -S . ^
 -DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\libgif" ^
 -DCMAKE_BUILD_TYPE=Release  ^
 -DBUILD_SHARED_LIBS=OFF  ^
