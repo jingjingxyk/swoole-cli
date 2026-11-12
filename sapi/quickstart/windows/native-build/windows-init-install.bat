@@ -64,7 +64,7 @@ ninja --version
 
 :: winget source reset --force
 :: winget source update
-
+where.exe winget
 winget list
 echo "======================================================"
 msiexec /i strawberry-perl-5.38.2.2-64bit.msi  /passive
