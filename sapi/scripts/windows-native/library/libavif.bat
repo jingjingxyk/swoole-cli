@@ -28,7 +28,7 @@ if  exist "%__PROJECT__%\thirdparty\libavif" rmdir /s /q "%__PROJECT__%\thirdpar
 mkdir "%__PROJECT__%\thirdparty\libavif"
 
 7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libavif"  %__PROJECT__%\pool\lib\libavif-v1.3.0.tar
-cd %__PROJECT__%\thirdparty\libavif\libavif-v1.3.0
+cd %__PROJECT__%\thirdparty\libavif\libavif-1.3.0
 
 dir
 
