@@ -40,6 +40,7 @@ dir %LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe
 %LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe --version
 set "PATH=%PATH%;%LOCALAPPDATA%\Microsoft\WindowsApps"
 winget --version
+winget source reset --force
 winget source update
 
 winget install vim.vim  --silent --accept-package-agreements --accept-source-agreements
