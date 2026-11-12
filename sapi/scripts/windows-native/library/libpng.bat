@@ -73,8 +73,6 @@ goto :ok
 :ok
 echo "libpng build completed ! "
 
-exit /b 0
-
 cd /d %__PROJECT__%
 
 endlocal
