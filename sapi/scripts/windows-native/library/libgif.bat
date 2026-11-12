@@ -39,7 +39,7 @@ cmake -B build_static -S . ^
 -DCMAKE_C_FLAGS="/MT /O2 /W3 /DNDEBUG -D_CRT_SECURE_NO_WARNINGS " ^
 -DCMAKE_C_FLAGS_RELEASE="/MT /O2 /W3 /DNDEBUG"
 
-cmake --build . --config Release --target install
+cmake --build build_static --config Release --target install
 
 :: copy /Y "%__PROJECT__%\build\brotli\lib\brotlienc-static.lib" "%__PROJECT__%\build\brotli\lib\brotlienc.lib"
 
