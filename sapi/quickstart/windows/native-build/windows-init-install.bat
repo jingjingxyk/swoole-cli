@@ -29,7 +29,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "Install-PackageProvider 
 powershell -NoProfile -ExecutionPolicy Bypass -Command "Install-Script winget-install -Force"
 set "PATH=%PATH%;C:\Program Files\WindowsPowerShell\Scripts"
 powershell -NoProfile -ExecutionPolicy Bypass -Command "winget-install -Force -Wait"
-
+where.exe winget
 
 for /f "delims=" %i in ('where.exe winget 2^>nul') do set "WINGET_PATH=%i"
 echo %WINGET_PATH%
