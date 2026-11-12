@@ -44,6 +44,13 @@ dumpbin /DEPENDENTS ".\var\native-build\php-src\x64\Release_TS\php.exe"
 
 .\var\native-build\php-src\x64\Release_TS\php.exe -r "var_dump(gmp_add('12345678901234567890', '98765432109876543210'));"
 
+.\var\native-build\php-src\x64\Release_TS\php.exe --ri gd
+
+.\var\native-build\php-src\x64\Release_TS\php.exe -r "$im = imagecreatetruecolor(100, 50); $c = imagecolorallocate($im, 255, 0, 0); imagefilledrectangle($im, 0, 0, 99, 49, $c); imagepng($im, 'test.png'); imagedestroy($im); echo filesize('test.png');"
+
+.\var\native-build\php-src\x64\Release_TS\php.exe -r "$im = imagecreatetruecolor(200, 50); $w = imagecolorallocate($im, 255, 255, 255); imagettftext($im, 12, 0, 10, 30, $w, 'C:\Windows\Fonts\arial.ttf', 'Test'); imagepng($im, 'test_ttf.png'); imagedestroy($im); echo filesize('test_ttf.png');"
+
+.\var\native-build\php-src\x64\Release_TS\php.exe -r "$im = imagecreatefrompng('test.png'); imagejpeg($im, 'test.jpg', 90); imagedestroy($im); echo filesize('test.jpg');"
 
 cd /d %__PROJECT__%
 endlocal

@@ -142,7 +142,7 @@ sed.exe -i.bak "s/!!PHP_ALL_SHARED && \"yes\" == PHP_ALL_SHARED/false/" win32\bu
 :: intl  extension patch
 sed.exe -i.bak "s/, true,/, false,/" ext\intl\config.w32
 :: gd  extension patch
-sed.exe -i.bak "s/gd2copypal.c //" ext/gd/config.w32
+sed.exe -i.bak "s/gd2copypal\.c //" ext/gd/config.w32
 
 call buildconf.bat -f
 
