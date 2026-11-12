@@ -15,18 +15,6 @@ where bison
 bison --version
 re2c --version
 
-set "SDK_UM="
-for /f "delims=" %%i in ('powershell -NoProfile -Command "$r=(Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Microsoft SDKs\Windows\v10.0' -Name InstallationFolder -ErrorAction SilentlyContinue).InstallationFolder; if(-not $r){$r=(Get-ItemProperty 'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Microsoft SDKs\Windows\v10.0' -Name InstallationFolder -ErrorAction SilentlyContinue).InstallationFolder}; $v=(Get-ChildItem (Join-Path $r 'Include') -Directory | Sort-Object Name -Descending | Select-Object -First 1).Name; [Console]::Write((Join-Path $r ('Include\' + $v + '\um')))"') do set "SDK_UM=%%i"
-
-if not defined SDK_UM (
-    echo [ERROR] Failed to locate Windows SDK Include\um
-    exit /b 1
-)
-
-echo %SDK_UM%
-
-
-
 set "__PROJECT__=%cd%"
 echo %cd%
 cd /d %__PROJECT__%\var\native-build\php-src\
@@ -152,6 +140,10 @@ set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\libavif\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libavif\lib"
 
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\include"
+
+set "SDK_UM=%WindowsSdkDir%Include\%WindowsSDKVersion%um"
+set "X_INCLUDES=%X_INCLUDES%;%SDK_UM%"
+
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\lib"
 
 :: set "INCLUDE=%INCLUDE%;%PHP_SRC%\ext"
