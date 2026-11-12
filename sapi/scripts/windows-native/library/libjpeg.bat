@@ -28,7 +28,7 @@ if  exist "%__PROJECT__%\thirdparty\libjpeg" rmdir /s /q "%__PROJECT__%\thirdpar
 mkdir "%__PROJECT__%\thirdparty\libjpeg"
 
 7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libjpeg"  %__PROJECT__%\pool\lib\libjpeg-turbo-2.1.2.tar
-cd %__PROJECT__%\thirdparty\libjpeg\freetype-2.13.2
+cd %__PROJECT__%\thirdparty\libjpeg\libjpeg-turbo-2.1.2
 
 dir
 
