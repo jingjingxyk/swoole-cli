@@ -34,7 +34,7 @@ set "WINGET_EXE="
 for /f "delims=" %%i in ('powershell -NoProfile -Command "(Get-AppxPackage Microsoft.DesktopAppInstaller).InstallLocation + '\winget.exe'"') do set "WINGET_EXE=%%i"
 echo %WINGET_EXE%
 
-del ""%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe""
+if exist "%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe" del /f /q "%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe"
 mklink "%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe" "%WINGET_EXE%"
 
 %LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe --version
