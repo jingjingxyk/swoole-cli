@@ -28,7 +28,7 @@ if  exist "%__PROJECT__%\thirdparty\freetype" rmdir /s /q "%__PROJECT__%\thirdpa
 mkdir "%__PROJECT__%\thirdparty\freetype"
 
 7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\freetype"  %__PROJECT__%\pool\lib\freetype-2.13.2.tar
-cd /d %__PROJECT__%\thirdparty\freetype\freetype-2.13.2
+cd /d %__PROJECT__%\thirdparty\freetype\freetype-VER-2-13-2
 
 dir
 
