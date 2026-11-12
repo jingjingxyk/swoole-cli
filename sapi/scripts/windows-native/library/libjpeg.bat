@@ -32,7 +32,7 @@ cd %__PROJECT__%\thirdparty\libjpeg\libjpeg-turbo-2.1.2
 
 dir
 
-
+set "PATH=%__PROJECT__%\runtime\nasm;%PATH%;"
 
 if exist "build_static" (
     rmdir /S /Q build_static
