@@ -247,6 +247,27 @@ configure.bat ^
 --enable-xmlwriter ^
 --with-dom ^
 --with-simplexml ^
+--with-gd
+
+:: --enable-swoole-pgsql ^
+:: --enable-swoole-sqlite ^
+:: --with-swoole-odbc ^
+
+:: --with-libwebp ^
+:: --with-libavif ^
+
+:: --with-swoole-ssh2 ^
+:: --enable-swoole-ftp ^
+:: --enable-thread-context
+
+:: --with-ldap
+
+:: --enable-cli-win32 ^
+:: --disable-zts ^
+:: --enable-apcu ^
+
+goto :skip_code
+configure.bat ^
 --with-curl ^
 --enable-mbstring ^
 --enable-mbregex ^
@@ -281,25 +302,9 @@ configure.bat ^
 --enable-odbc ^
 --with-odbcver ^
 --with-pdo-odbc ^
---with-gd
 
-:: --enable-swoole-pgsql ^
-:: --enable-swoole-sqlite ^
-:: --with-swoole-odbc ^
-
-:: --with-libwebp ^
-:: --with-libavif ^
-
-:: --with-swoole-ssh2 ^
-:: --enable-swoole-ftp ^
-:: --enable-thread-context
-
-:: --with-ldap
-
-:: --enable-cli-win32 ^
-:: --disable-zts ^
-:: --enable-apcu ^
-
+:skip_code
+echo 继续执行
 
 cd /d %__PROJECT__%
 endlocal
