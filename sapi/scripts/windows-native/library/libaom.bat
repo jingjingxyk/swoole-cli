@@ -27,7 +27,7 @@ cd /d %__PROJECT__%\pool\lib\
 if  exist "%__PROJECT__%\thirdparty\libaom" rmdir /s /q "%__PROJECT__%\thirdparty\libaom"
 mkdir "%__PROJECT__%\thirdparty\libaom"
 
-7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libaom"  %__PROJECT__%\pool\lib\aom-v3.10.0.tar.gz
+7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libaom"  %__PROJECT__%\pool\lib\aom-v3.10.0.tar
 cd %__PROJECT__%\thirdparty\libaom\aom-v3.10.0
 
 dir
