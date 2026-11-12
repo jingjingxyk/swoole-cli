@@ -37,6 +37,7 @@ echo %WINGET_EXE%
 del ""%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe""
 mklink "%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe" "%WINGET_PATH%\winget.exe"
 
+%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe --version
 set "PATH=%PATH%;%LOCALAPPDATA%\Microsoft\WindowsApps"
 winget --version
 winget source update
