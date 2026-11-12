@@ -252,6 +252,7 @@ configure.bat ^
 --enable-mbregex ^
 --enable-exif ^
 --enable-swoole ^
+--enable-cares ^
 --with-nghttp2-dir="%__PROJECT__%\build\libnghttp2" ^
 --enable-php-sockets ^
 --enable-mysqlnd ^
@@ -281,7 +282,6 @@ configure.bat ^
 --with-odbcver ^
 --with-pdo-odbc
 
-:: --enable-cares ^
 :: --enable-swoole-pgsql ^
 :: --enable-swoole-sqlite ^
 :: --with-swoole-odbc ^
