@@ -12,36 +12,13 @@ mkdir  "%__PROJECT__%\build\libgif"
 
 if exist "%__PROJECT__%\build\libgif\.completed" goto :skip
 
-set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
 
+set "VCPKG_ROOT=%__PROJECT__%\var\native-build\vcpkg"
+set PATH=%VCPKG_ROOT%;%PATH%
+vcpkg install giflib:x64-windows-static
 
-cd /d %__PROJECT__%\pool\lib\
-7z.exe x -aoa -y   %__PROJECT__%\pool\lib\giflib-5.2.1.tar.gz
-
-if  exist "%__PROJECT__%\thirdparty\libgif" rmdir /s /q "%__PROJECT__%\thirdparty\libgif"
-mkdir "%__PROJECT__%\thirdparty\libgif"
-
-7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libgif"  %__PROJECT__%\pool\lib\giflib-5.2.1.tar
-cd %__PROJECT__%\thirdparty\libgif\giflib-5.2.1
-
-copy /Y "%__PROJECT__%\sapi\scripts\windows-native\library\patches\libgif-CMakeLists.txt" CMakeLists.txt
-
-dir
-
-
-mkdir  build_static
-cmake -B build_static -S . ^
--DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\libgif" ^
--DCMAKE_BUILD_TYPE=Release  ^
--DBUILD_SHARED_LIBS=OFF  ^
--DBUILD_STATIC_LIBS=ON  ^
--DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
--DCMAKE_C_FLAGS="/MT /O2 /W3 /DNDEBUG -D_CRT_SECURE_NO_WARNINGS " ^
--DCMAKE_C_FLAGS_RELEASE="/MT /O2 /W3 /DNDEBUG"
-
-cmake --build build_static --config Release --target install
-
-:: copy /Y "%__PROJECT__%\build\brotli\lib\brotlienc-static.lib" "%__PROJECT__%\build\brotli\lib\brotlienc.lib"
+:: xcopy "%__PROJECT__%\var\native-build\vcpkg\packages\icu_x64-windows-static\include" "%__PROJECT__%\build\icu\include" /E /I /H /Y
+:: xcopy "%__PROJECT__%\var\native-build\vcpkg\packages\icu_x64-windows-static\lib" "%__PROJECT__%\build\icu\lib" /E /I /H /Y
 
 :: type nul > "%__PROJECT__%\build\libgif\.completed"
 
