@@ -264,14 +264,15 @@ configure.bat ^
 --with-dom ^
 --with-simplexml ^
 --with-gd ^
---with-libwebp
+--with-libwebp ^
+--with-libavif ^
 
 :: --enable-swoole-pgsql ^
 :: --enable-swoole-sqlite ^
 :: --with-swoole-odbc ^
 
 
-:: --with-libavif ^
+
 
 :: --with-swoole-ssh2 ^
 :: --enable-swoole-ftp ^
