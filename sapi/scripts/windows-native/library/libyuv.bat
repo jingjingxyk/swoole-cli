@@ -43,8 +43,8 @@ rem docs: https://chromium.googlesource.com/libyuv/libyuv
 sed.exe -i.backup "s/^\(add_library( \${ly_lib_shared} SHARED \${ly_lib_parts})\)/# \1/" CMakeLists.txt
 sed.exe -i.backup "s/^\(  target_link_libraries( \${ly_lib_shared} \${JPEG_LIBRARY} )\)/# \1/" CMakeLists.txt
 sed.exe -i.backup "s/^\(set_target_properties( \${ly_lib_shared} PROPERTIES\)/# \1/" CMakeLists.txt
-sed.exe -i.backup "s/^\(  set_target_properties( ${ly_lib_shared} PROPERTIES\)/# \1/" CMakeLists.txt
-sed.exe -i.backup "s/^\(install ( TARGETS ${ly_lib_shared} LIBRARY\)/# \1/" CMakeLists.txt
+sed.exe -i.backup "s/^\(  set_target_properties( \${ly_lib_shared} PROPERTIES\)/# \1/" CMakeLists.txt
+sed.exe -i.backup "s/^\(install ( TARGETS \${ly_lib_shared} LIBRARY\)/# \1/" CMakeLists.txt
 
 mkdir  build_static
 cmake -B build_static -S . ^
