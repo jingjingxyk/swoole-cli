@@ -31,7 +31,7 @@ set "PATH=%PATH%;C:\Program Files\WindowsPowerShell\Scripts"
 powershell -NoProfile -ExecutionPolicy Bypass -Command "winget-install -Force"
 
 set "PATH=%PATH%;%LOCALAPPDATA%\Microsoft\WindowsApps"
-
+"%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe" --version
 winget --version
 winget source update
 
