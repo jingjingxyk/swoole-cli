@@ -278,9 +278,6 @@ configure.bat ^
 --enable-xmlwriter ^
 --with-dom ^
 --with-simplexml ^
---with-gd ^
---with-libwebp ^
---with-libavif ^
 --with-curl ^
 --enable-mbstring ^
 --enable-mbregex ^
@@ -297,7 +294,9 @@ configure.bat ^
 --enable-swoole-odbc ^
 --with-swoole-ssh2 ^
 
-
+:: --with-gd ^
+:: --with-libwebp ^
+:: --with-libavif ^
 :: --enable-swoole-ftp ^
 :: --enable-thread-context
 
