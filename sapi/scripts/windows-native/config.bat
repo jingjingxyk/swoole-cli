@@ -278,26 +278,6 @@ configure.bat ^
 --with-gd ^
 --with-libwebp ^
 --with-libavif ^
-
-:: --enable-swoole-pgsql ^
-:: --enable-swoole-sqlite ^
-:: --with-swoole-odbc ^
-
-
-
-
-:: --with-swoole-ssh2 ^
-:: --enable-swoole-ftp ^
-:: --enable-thread-context
-
-:: --with-ldap
-
-:: --enable-cli-win32 ^
-:: --disable-zts ^
-:: --enable-apcu ^
-
-goto :skip_code
-configure.bat ^
 --with-curl ^
 --enable-mbstring ^
 --enable-mbregex ^
@@ -323,18 +303,36 @@ configure.bat ^
 --enable-soap ^
 --with-sodium ^
 --with-readline ^
---with-pdo-sqlite ^
 --with-sqlite3 ^
---with-pdo-pgsql ^
 --with-pgsql ^
 --with-gmp ^
 --with-xsl ^
 --enable-odbc ^
 --with-odbcver ^
---with-pdo-odbc ^
+--enable-swoole-pgsql ^
+--enable-swoole-sqlite ^
+--with-swoole-odbc ^
+
+
+:: --with-pdo-sqlite ^
+:: --with-pdo-pgsql ^
+:: --with-pdo-odbc ^
+
+
+:: --with-swoole-ssh2 ^
+:: --enable-swoole-ftp ^
+:: --enable-thread-context
+
+:: --with-ldap
+:: --enable-cli-win32 ^
+:: --disable-zts ^
+:: --enable-apcu ^
+
+goto :skip_code
+
 
 :skip_code
-echo 继续执行
+echo 'continue'
 
 cd /d %__PROJECT__%
 endlocal
