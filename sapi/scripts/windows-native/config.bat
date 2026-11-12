@@ -312,8 +312,8 @@ configure.bat ^
 --enable-swoole-pgsql ^
 --enable-swoole-sqlite ^
 --with-swoole-odbc ^
---with-pdo-sqlite
---with-pdo-pgsql
+--with-pdo-sqlite ^
+--with-pdo-pgsql  ^
 --with-pdo-odbc
 
 
