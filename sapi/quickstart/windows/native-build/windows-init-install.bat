@@ -28,7 +28,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "Set-PSRepository -Name P
 powershell -NoProfile -ExecutionPolicy Bypass -Command "Install-PackageProvider -Name NuGet -Force"
 powershell -NoProfile -ExecutionPolicy Bypass -Command "Install-Script winget-install -Force"
 set "PATH=%PATH%;C:\Program Files\WindowsPowerShell\Scripts"
-powershell -NoProfile -ExecutionPolicy Bypass -Command "winget-install -Force"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "winget-install -Force -Wait"
 
 set "PATH=%PATH%;%LOCALAPPDATA%\Microsoft\WindowsApps"
 "%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe" --version
