@@ -36,8 +36,10 @@ dumpbin /DEPENDENTS ".\var\native-build\php-src\x64\Release_TS\php.exe"
 .\var\native-build\php-src\x64\Release_TS\php.exe -r "Swoole\Coroutine\run(function() { $cid = Swoole\Coroutine::getCid(); var_dump($cid); });"
 
 .\var\native-build\php-src\x64\Release_TS\php.exe -r "var_dump(method_exists('Swoole\Coroutine', 'gethostbyname'));"
+
 .\var\native-build\php-src\x64\Release_TS\php.exe -r "var_dump(function_exists('Swoole\Coroutine\gethostbyname'));"
-.\var\native-build\php-src\x64\Release_TS\php.exe -r "Swoole\Coroutine\run(function() { var_dump(Swoole\Coroutine\gethostbyname('www.baidu.com')); });"
+
+.\var\native-build\php-src\x64\Release_TS\php.exe -r "Swoole\Coroutine\run(function() { var_dump(Swoole\Coroutine::gethostbyname('www.baidu.com')); });"
 
 .\var\native-build\php-src\x64\Release_TS\php.exe -r "var_dump(gmp_add('12345678901234567890', '98765432109876543210'));"
 
