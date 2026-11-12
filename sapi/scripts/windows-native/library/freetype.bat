@@ -40,19 +40,21 @@ if exist "build_static" (
 
 mkdir  build_static
 cmake -B build_static -S . ^
-  -DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\freetype" ^
-  -DCMAKE_BUILD_TYPE=Release  ^
-  -DBUILD_SHARED_LIBS=OFF  ^
-  -DBUILD_STATIC_LIBS=ON  ^
-  -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
-  -DFT_REQUIRE_ZLIB=TRUE  ^
-  -DFT_REQUIRE_BZIP2=TRUE  ^
-  -DFT_REQUIRE_BROTLI=TRUE  ^
-  -DFT_REQUIRE_PNG=TRUE  ^
-  -DFT_DISABLE_HARFBUZZ=TRUE  ^
-  -DCMAKE_PREFIX_PATH="%__PROJECT__%\build\zlib;%__PROJECT__%\build\bzip2;%__PROJECT__%\build\libpng;%__PROJECT__%\build\brotli" ^
-  -DBZIP2_LIBRARIES="%__PROJECT__%\build\bzip2\lib\libbz2_a.lib" ^
-  -DCMAKE_VERBOSE_MAKEFILE=ON
+	-DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\freetype" ^
+	-DCMAKE_BUILD_TYPE=Release  ^
+	-DBUILD_SHARED_LIBS=OFF  ^
+	-DBUILD_STATIC_LIBS=ON  ^
+	-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
+	-DFT_REQUIRE_ZLIB=TRUE  ^
+	-DFT_REQUIRE_BZIP2=TRUE  ^
+	-DFT_REQUIRE_BROTLI=TRUE  ^
+	-DFT_REQUIRE_PNG=TRUE  ^
+	-DFT_DISABLE_HARFBUZZ=TRUE  ^
+	-DCMAKE_PREFIX_PATH="%__PROJECT__%\build\zlib;%__PROJECT__%\build\bzip2;%__PROJECT__%\build\libpng;%__PROJECT__%\build\brotli" ^
+	-DBZIP2_LIBRARIES="%__PROJECT__%\build\bzip2\lib\libbz2_a.lib" ^
+	-DCMAKE_C_FLAGS="/MT /O2 /W3 /DNDEBUG" ^
+	-DCMAKE_C_FLAGS_RELEASE="/MT /O2 /W3 /DNDEBUG" ^
+	-DCMAKE_VERBOSE_MAKEFILE=ON
 
 
 
