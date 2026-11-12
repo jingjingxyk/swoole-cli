@@ -28,6 +28,7 @@ set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% pgport.lib pgcommon.lib ecpg.lib  ecpg_compa
 set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% Secur32.lib Ws2_32.lib Crypt32.lib  libpq.lib "
 set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% brotlicommon.lib brotlidec.lib brotlienc.lib"
 set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% libsharpyuv.lib libwebpdecoder.lib libwebpdemux.lib libwebpmux.lib"
+set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% libdav1d.a SvtAv1Enc.lib "
 
 
 :: nmake /E /f Makefile  x-show-var
