@@ -50,6 +50,18 @@ cmake -B build_static -S . ^
 	-DCMAKE_PREFIX_PATH="%__PROJECT__%\build\zlib;%__PROJECT__%\build\libjpeg;%__PROJECT__%\build\libpng;%__PROJECT__%\build\libgif" ^
 	-DCMAKE_VERBOSE_MAKEFILE=ON
 
+         -DAVIF_BUILD_EXAMPLES=OFF \
+            -Dsvt_ROOT={$svt_av1_prefix} \
+            -Daom_ROOT={$aom_prefix} \
+            -Dlibgav1_ROOT={$libgav1_prefix} \
+            -Ddav1d_ROOT={$dav1d_prefix} \
+            -Dlibyuv_ROOT={$libyuv_prefix} \
+            -DAVIF_CODEC_AOM=SYSTEM \
+            -DAVIF_CODEC_DAV1D=SYSTEM \
+            -DAVIF_CODEC_LIBGAV1=SYSTEM \
+            -DAVIF_CODEC_RAV1E=OFF \
+            -DAVIF_CODEC_SVT=SYSTEM
+
 
 
 cmake --build build_static --config Release --target install

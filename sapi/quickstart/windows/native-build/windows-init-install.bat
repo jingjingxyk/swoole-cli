@@ -27,6 +27,7 @@ winget --version
 winget source update
 
 winget install vim.vim  --silent --accept-package-agreements --accept-source-agreements
+winget install --id mesonbuild.meson --exact --silent --accept-package-agreements --accept-source-agreements
 
 :: winget search Microsoft.Edit
 :: winget install Microsoft.Edit
@@ -44,6 +45,11 @@ msiexec /i strawberry-perl-5.38.2.2-64bit.msi  /passive
 :: silent install
 .\gvim_9.2.1316_x64_signed.exe /S
 
+:: msiexec.exe /i meson-1.12.1-64.msi /quiet /norestart
+:: msiexec.exe /i meson-1.12.1-64.msi /quiet /norestart ALLUSERS=1
+
+meson --version
+ninja --version
 
 set "PATH=%ProgramFiles%\7-Zip;%PATH%;"
 set "PATH=%__PROJECT__%\var\native-build\php-sdk-binary-tools\bin\;%__PROJECT__%\var\native-build\php-sdk-binary-tools\msys2\bin;%PATH%;"
