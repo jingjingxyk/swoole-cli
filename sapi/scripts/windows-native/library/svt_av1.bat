@@ -28,7 +28,7 @@ if  exist "%__PROJECT__%\thirdparty\svt_av1" rmdir /s /q "%__PROJECT__%\thirdpar
 mkdir "%__PROJECT__%\thirdparty\svt_av1"
 
 7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\svt_av1"  %__PROJECT__%\pool\lib\SVT-AV1-v2.2.1.tar
-cd %__PROJECT__%\thirdparty\svt_av1
+cd %__PROJECT__%\thirdparty\svt_av1\SVT-AV1-v2.2.1
 
 dir
 
