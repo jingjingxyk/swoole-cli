@@ -52,6 +52,12 @@ dumpbin /DEPENDENTS ".\var\native-build\php-src\x64\Release_TS\php.exe"
 
 .\var\native-build\php-src\x64\Release_TS\php.exe -r "$im = imagecreatefrompng('test.png'); imagejpeg($im, 'test.jpg', 90); imagedestroy($im); echo filesize('test.jpg');"
 
+
+
+.\var\native-build\php-src\x64\Release_TS\php.exe -r "$im = imagecreatetruecolor(100, 100); imageavif($im, 'out.avif'); var_dump(file_exists('out.avif'));"
+
+.\var\native-build\php-src\x64\Release_TS\php.exe -r "$im = imagecreatefromavif('out.avif'); var_dump($im !== false);"
+
 cd /d %__PROJECT__%
 endlocal
 
