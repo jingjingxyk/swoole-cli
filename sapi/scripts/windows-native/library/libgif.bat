@@ -20,7 +20,7 @@ vcpkg install giflib:x64-windows-static
 xcopy "%__PROJECT__%\var\native-build\vcpkg\packages\giflib_x64-windows-static\include" "%__PROJECT__%\build\libgif\include" /E /I /H /Y
 xcopy "%__PROJECT__%\var\native-build\vcpkg\packages\giflib_x64-windows-static\lib" "%__PROJECT__%\build\libgif\lib" /E /I /H /Y
 
-:: type nul > "%__PROJECT__%\build\libgif\.completed"
+type nul > "%__PROJECT__%\build\libgif\.completed"
 
 cd /d %__PROJECT__%
 goto :ok
