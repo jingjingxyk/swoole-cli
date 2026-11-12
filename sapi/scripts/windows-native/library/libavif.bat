@@ -38,6 +38,8 @@ if exist "build_static" (
     rmdir /S /Q build_static
 )
 
+rem docs: https://github.com/AOMediaCodec/libavif/
+
 mkdir  build_static
 cmake -B build_static -S . ^
 	-DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\libavif" ^
@@ -47,31 +49,32 @@ cmake -B build_static -S . ^
 	-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
 	-DCMAKE_C_FLAGS="/MT /O2 /W3 /DNDEBUG" ^
 	-DCMAKE_C_FLAGS_RELEASE="/MT /O2 /W3 /DNDEBUG" ^
-	-DCMAKE_PREFIX_PATH="%__PROJECT__%\build\zlib;%__PROJECT__%\build\libjpeg;%__PROJECT__%\build\libpng;%__PROJECT__%\build\libgif" ^
-	-DCMAKE_VERBOSE_MAKEFILE=ON
+	-DCMAKE_PREFIX_PATH="%__PROJECT__%\build\dav1d;%__PROJECT__%\build\svt_av1;%__PROJECT__%\build\libwebp;%__PROJECT__%\build\libyuv;%__PROJECT__%\build\libwebp;%__PROJECT__%\build\libpng;%__PROJECT__%\build\libjpeg" ^
+	-DCMAKE_VERBOSE_MAKEFILE=ON ^
+	-DAVIF_CODEC_AOM=OFF ^
+	-DAVIF_CODEC_DAV1D=SYSTEM ^
+	-DAVIF_CODEC_LIBGAV1=OFF ^
+	-DAVIF_CODEC_RAV1E=OFF ^
+	-DAVIF_CODEC_SVT=SYSTEM ^
+	-DAVIF_LIBYUV=ON ^
+	-DAVIF_LIBSHARPYUV=ON ^
+	-DAVIF_JPEG=ON ^
+	-DAVIF_ZLIBPNG=ON ^
+	-DAVIF_BUILD_APPS=OFF ^
+	-DAVIF_BUILD_TESTS=OFF ^
+	-DAVIF_BUILD_EXAMPLES=OFF
 
-         -DAVIF_BUILD_EXAMPLES=OFF \
-            -Dsvt_ROOT={$svt_av1_prefix} \
-            -Daom_ROOT={$aom_prefix} \
-            -Dlibgav1_ROOT={$libgav1_prefix} \
-            -Ddav1d_ROOT={$dav1d_prefix} \
-            -Dlibyuv_ROOT={$libyuv_prefix} \
-            -DAVIF_CODEC_AOM=SYSTEM \
-            -DAVIF_CODEC_DAV1D=SYSTEM \
-            -DAVIF_CODEC_LIBGAV1=SYSTEM \
-            -DAVIF_CODEC_RAV1E=OFF \
-            -DAVIF_CODEC_SVT=SYSTEM
 
 
 
 cmake --build build_static --config Release --target install
 
-copy /Y "%__PROJECT__%\build\libavif\lib\libwebp.lib" "%__PROJECT__%\build\libavif\lib\libwebp_a.lib"
+:: copy /Y "%__PROJECT__%\build\libavif\lib\libwebp.lib" "%__PROJECT__%\build\libavif\lib\libwebp_a.lib"
 rem  Compatible with PHP build detection
-xcopy "%__PROJECT__%\build\libavif\include" "%__PROJECT__%\build\include" /E /I /H /Y
+:: xcopy "%__PROJECT__%\build\libavif\include" "%__PROJECT__%\build\include" /E /I /H /Y
 
 
-type nul > "%__PROJECT__%\build\libavif\.completed"
+:: type nul > "%__PROJECT__%\build\libavif\.completed"
 
 cd /d %__PROJECT__%
 goto :ok
