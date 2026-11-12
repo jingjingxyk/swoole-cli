@@ -105,7 +105,6 @@ jobs:
           # cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\icu.bat
 
       - name: run build
-        if: 0
         run: |
           # cmd /c sapi\scripts\windows-native\build-extensions.bat
           cmd /c sapi\scripts\windows-native\entry.bat
