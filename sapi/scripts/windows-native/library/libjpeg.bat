@@ -57,13 +57,11 @@ cmake -B build_static -S . ^
 
 cmake --build build_static --config Release --target install
 
-::xcopy "%__PROJECT__%\thirdparty\libpng\include" "%__PROJECT__%\build\freetype\include" /E /I /H /Y
-
-:: copy /Y "%__PROJECT__%\thirdparty\freetype\lib64\edit_static.lib" "%__PROJECT__%\build\freetype\lib\edit_a.lib"
-:: copy /Y "%__PROJECT__%\thirdparty\freetype\lib64\edit_static.lib" "%__PROJECT__%\build\freetype\lib\edit.lib"
+copy /Y "%__PROJECT__%\build\libjpeg\lib\jpeg-static.lib" "%__PROJECT__%\build\libjpeg\lib\libjpeg.lib"
+copy /Y "%__PROJECT__%\build\libjpeg\lib\jpeg-static.lib" "%__PROJECT__%\build\libjpeg\lib\libjpeg_a.lib"
 
 
-:: type nul > "%__PROJECT__%\build\libjpeg\.completed"
+type nul > "%__PROJECT__%\build\libjpeg\.completed"
 
 cd /d %__PROJECT__%
 goto :ok
