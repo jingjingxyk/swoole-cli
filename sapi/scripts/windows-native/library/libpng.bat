@@ -22,13 +22,13 @@ set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
 
 
 cd /d %__PROJECT__%\pool\lib\
-7z.exe x -aoa -y   %__PROJECT__%\pool\lib\freetype-2.13.2.tar.gz
+7z.exe x -aoa -y   %__PROJECT__%\pool\lib\libpng-1.6.43.tar.gz
 
 if  exist "%__PROJECT__%\thirdparty\libpng" rmdir /s /q "%__PROJECT__%\thirdparty\libpng"
 mkdir "%__PROJECT__%\thirdparty\libpng"
 
-7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libpng"  %__PROJECT__%\pool\lib\freetype-2.13.2.tar.gz
-cd %__PROJECT__%\thirdparty\libpng\freetype-2.13.2
+7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libpng"  %__PROJECT__%\pool\lib\libpng-1.6.43.tar
+cd %__PROJECT__%\thirdparty\libpng\libpng-1.6.43
 
 dir
 

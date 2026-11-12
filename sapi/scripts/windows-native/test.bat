@@ -13,9 +13,9 @@ dumpbin /symbols .\var\native-build\php-src\x64\Release_TS\ext\swoole\ext-src\ph
 
 dumpbin /DEPENDENTS ".\var\native-build\php-src\x64\Release_TS\php.exe"
 
-:: .\var\native-build\php-src\x64\Release_TS\php.exe -a
+.\var\native-build\php-src\x64\Release_TS\php.exe -m
 
-.\var\native-build\php-src\x64\Release_TS\php.exe -r "var_dump(class_exists('Swoole\Coroutine'));"
+:: .\var\native-build\php-src\x64\Release_TS\php.exe -a
 
 .\var\native-build\php-src\x64\Release_TS\php.exe -r "var_dump(extension_loaded('intl'));"
 .\var\native-build\php-src\x64\Release_TS\php.exe -r "echo \Collator::create('zh_CN')->compare('a','b');"
@@ -32,6 +32,7 @@ dumpbin /DEPENDENTS ".\var\native-build\php-src\x64\Release_TS\php.exe"
 
 .\var\native-build\php-src\x64\Release_TS\php.exe --ri swoole
 
+.\var\native-build\php-src\x64\Release_TS\php.exe -r "var_dump(class_exists('Swoole\Coroutine'));"
 
 .\var\native-build\php-src\x64\Release_TS\php.exe -r "Swoole\Coroutine\run(function() { $cid = Swoole\Coroutine::getCid(); var_dump($cid); });"
 

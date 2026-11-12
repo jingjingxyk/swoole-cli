@@ -27,7 +27,7 @@ cd /d %__PROJECT__%\pool\lib\
 if  exist "%__PROJECT__%\thirdparty\freetype" rmdir /s /q "%__PROJECT__%\thirdparty\freetype"
 mkdir "%__PROJECT__%\thirdparty\freetype"
 
-7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\freetype"  %__PROJECT__%\pool\lib\freetype-2.13.2.tar.gz
+7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\freetype"  %__PROJECT__%\pool\lib\freetype-2.13.2.tar
 cd %__PROJECT__%\thirdparty\freetype\freetype-2.13.2
 
 dir
