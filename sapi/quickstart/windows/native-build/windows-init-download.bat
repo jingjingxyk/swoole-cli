@@ -55,13 +55,13 @@ if not exist "composer.phar" curl.exe -fSLo composer.phar "https://getcomposer.o
 if not exist "pie.phar" curl.exe -fSLo pie.phar "https://github.com/php/pie/releases/latest/download/pie.phar"
 if not exist "cacert.pem" curl.exe -fSLo cacert.pem "https://curl.se/ca/cacert.pem"
 if not exist "gvim_9.2.1316_x64_signed.exe" curl.exe -fSLo gvim_9.2.1316_x64_signed.exe "https://github.com/vim/vim-win32-installer/releases/download/v9.2.1316/gvim_9.2.1316_x64_signed.exe"
-if not exist "meson-1.12.1-64.msi" curl.exe -fSLo meson-1.12.1-64.msi "https://github.com/mesonbuild/meson/releases/download/1.12.1/meson-1.12.1-64.msi"
+:: if not exist "meson-1.12.1-64.msi" curl.exe -fSLo meson-1.12.1-64.msi "https://github.com/mesonbuild/meson/releases/download/1.12.1/meson-1.12.1-64.msi"
 
 :: Using jom instead of nmake on Windows for multi-core acceleration
 if not exist "jom_1_1_7.zip" curl.exe -fSLo jom_1_1_7.zip "https://download.qt.io/official_releases/jom/jom_1_1_7.zip"
 
 if not exist "php-sdk-binary-tools" git clone -b master --depth=1 https://github.com/php/php-sdk-binary-tools.git
-if not exist "php-src" git clone -b php-8.4.26 --depth=1 https://github.com/php/php-src.git php-src
+:: if not exist "php-src" git clone -b php-8.4.26 --depth=1 https://github.com/php/php-src.git php-src
 
 if not exist "all-deps.zip" curl.exe -fSLo all-deps.zip https://github.com/swoole/swoole-cli/releases/download/v6.2.0.0/all-deps.zip
 :: with mirror

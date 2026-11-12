@@ -8,10 +8,10 @@ cd ..\..\..\..\
 
 set __PROJECT__=%cd%
 cd /d %__PROJECT__%
-mkdir  %__PROJECT__%\build\libaom
+mkdir  %__PROJECT__%\build\svt_av1
 
 
-if exist "%__PROJECT__%\build\libaom\.completed" goto :skip
+if exist "%__PROJECT__%\build\svt_av1\.completed" goto :skip
 
 
 mkdir %__PROJECT__%\var\native-build
@@ -22,13 +22,13 @@ set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
 
 
 cd /d %__PROJECT__%\pool\lib\
-7z.exe x -aoa -y   %__PROJECT__%\pool\lib\aom-v3.10.0.tar.gz
+7z.exe x -aoa -y   %__PROJECT__%\pool\lib\SVT-AV1-v2.2.1.tar.gz
 
-if  exist "%__PROJECT__%\thirdparty\libaom" rmdir /s /q "%__PROJECT__%\thirdparty\libaom"
-mkdir "%__PROJECT__%\thirdparty\libaom"
+if  exist "%__PROJECT__%\thirdparty\svt_av1" rmdir /s /q "%__PROJECT__%\thirdparty\svt_av1"
+mkdir "%__PROJECT__%\thirdparty\svt_av1"
 
-7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libaom"  %__PROJECT__%\pool\lib\aom-v3.10.0.tar
-cd %__PROJECT__%\thirdparty\libaom
+7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\svt_av1"  %__PROJECT__%\pool\lib\SVT-AV1-v2.2.1.tar
+cd %__PROJECT__%\thirdparty\svt_av1
 
 dir
 
@@ -38,20 +38,17 @@ if exist "build_static" (
     rmdir /S /Q build_static
 )
 
+rem docs: https://github.com/AOMediaCodec/SVT-AV1
+
 mkdir  build_static
 cmake -B build_static -S . ^
-	-DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\libaom" ^
+	-DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\svt_av1" ^
 	-DCMAKE_BUILD_TYPE=Release  ^
 	-DBUILD_SHARED_LIBS=OFF  ^
 	-DBUILD_STATIC_LIBS=ON  ^
 	-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
 	-DCMAKE_C_FLAGS="/MT /O2 /W3 /DNDEBUG" ^
 	-DCMAKE_C_FLAGS_RELEASE="/MT /O2 /W3 /DNDEBUG" ^
-	-DCMAKE_C_STANDARD=11 ^
-    -DENABLE_DOCS=OFF ^
-    -DENABLE_EXAMPLES=OFF ^
-    -DENABLE_TESTS=OFF ^
-    -DENABLE_TOOLS=OFF ^
 	-DCMAKE_VERBOSE_MAKEFILE=ON
 
 cmake --build build_static --config Release --target install
@@ -61,7 +58,7 @@ rem  Compatible with PHP build detection
 :: xcopy "%__PROJECT__%\build\libaom\include" "%__PROJECT__%\build\include" /E /I /H /Y
 
 
-:: type nul > "%__PROJECT__%\build\libaom\.completed"
+:: type nul > "%__PROJECT__%\build\svt_av1\.completed"
 
 cd /d %__PROJECT__%
 goto :ok
@@ -71,7 +68,7 @@ echo "skip build step"
 goto :ok
 
 :ok
-echo "libaom build completed ! "
+echo "svt_av1 build completed ! "
 
 exit /b 0
 

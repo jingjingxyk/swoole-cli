@@ -66,7 +66,7 @@ rem  Compatible with PHP build detection
 :: xcopy "%__PROJECT__%\build\dav1d\include" "%__PROJECT__%\build\include" /E /I /H /Y
 
 
-:: type nul > "%__PROJECT__%\build\dav1d\.completed"
+type nul > "%__PROJECT__%\build\dav1d\.completed"
 
 cd /d %__PROJECT__%
 goto :ok

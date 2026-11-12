@@ -27,7 +27,21 @@ winget --version
 winget source update
 
 winget install vim.vim  --silent --accept-package-agreements --accept-source-agreements
-winget install --id mesonbuild.meson --exact --silent --accept-package-agreements --accept-source-agreements
+:: winget install --id mesonbuild.meson --exact --silent --accept-package-agreements --accept-source-agreements
+
+winget search Python
+:: python -m pip install --upgrade pip
+:: python -m ensurepip --upgrade
+winget install -e --id Python.Python.3.12 --exact --silent --accept-package-agreements --accept-source-agreements
+pip3 -V
+pip3 install meson ninja
+:: pip3 install uv
+:: uv pip install meson ninja
+:: uv venv --system
+meson --version
+ninja --version
+
+
 
 :: winget search Microsoft.Edit
 :: winget install Microsoft.Edit
@@ -47,9 +61,8 @@ msiexec /i strawberry-perl-5.38.2.2-64bit.msi  /passive
 
 :: msiexec.exe /i meson-1.12.1-64.msi /quiet /norestart
 :: msiexec.exe /i meson-1.12.1-64.msi /quiet /norestart ALLUSERS=1
-
-meson --version
-ninja --version
+:: meson --version
+:: ninja --version
 
 set "PATH=%ProgramFiles%\7-Zip;%PATH%;"
 set "PATH=%__PROJECT__%\var\native-build\php-sdk-binary-tools\bin\;%__PROJECT__%\var\native-build\php-sdk-binary-tools\msys2\bin;%PATH%;"
