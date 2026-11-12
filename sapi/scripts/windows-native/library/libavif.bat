@@ -8,10 +8,10 @@ cd ..\..\..\..\
 
 set __PROJECT__=%cd%
 cd /d %__PROJECT__%
-mkdir  %__PROJECT__%\build\libwebp
+mkdir  %__PROJECT__%\build\libavif
 
 
-if exist "%__PROJECT__%\build\libwebp\.completed" goto :skip
+if exist "%__PROJECT__%\build\libavif\.completed" goto :skip
 
 
 mkdir %__PROJECT__%\var\native-build
@@ -24,11 +24,11 @@ set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
 cd /d %__PROJECT__%\pool\lib\
 7z.exe x -aoa -y   %__PROJECT__%\pool\lib\libwebp-v1.3.2.tar.gz
 
-if  exist "%__PROJECT__%\thirdparty\libwebp" rmdir /s /q "%__PROJECT__%\thirdparty\libwebp"
-mkdir "%__PROJECT__%\thirdparty\libwebp"
+if  exist "%__PROJECT__%\thirdparty\libavif" rmdir /s /q "%__PROJECT__%\thirdparty\libavif"
+mkdir "%__PROJECT__%\thirdparty\libavif"
 
-7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libwebp"  %__PROJECT__%\pool\lib\libwebp-v1.3.2.tar
-cd %__PROJECT__%\thirdparty\libwebp\libwebp-1.3.2
+7z.exe x -aoa -y  -o"%__PROJECT__%\thirdparty\libavif"  %__PROJECT__%\pool\lib\libwebp-v1.3.2.tar
+cd %__PROJECT__%\thirdparty\libavif\libwebp-1.3.2
 
 dir
 
@@ -40,7 +40,7 @@ if exist "build_static" (
 
 mkdir  build_static
 cmake -B build_static -S . ^
-	-DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\libwebp" ^
+	-DCMAKE_INSTALL_PREFIX="%__PROJECT__%\build\libavif" ^
 	-DCMAKE_BUILD_TYPE=Release  ^
 	-DBUILD_SHARED_LIBS=OFF  ^
 	-DBUILD_STATIC_LIBS=ON  ^
@@ -54,12 +54,12 @@ cmake -B build_static -S . ^
 
 cmake --build build_static --config Release --target install
 
-copy /Y "%__PROJECT__%\build\libwebp\lib\libwebp.lib" "%__PROJECT__%\build\libwebp\lib\libwebp_a.lib"
+copy /Y "%__PROJECT__%\build\libavif\lib\libwebp.lib" "%__PROJECT__%\build\libavif\lib\libwebp_a.lib"
 rem  Compatible with PHP build detection
-xcopy "%__PROJECT__%\build\libwebp\include" "%__PROJECT__%\build\include" /E /I /H /Y
+xcopy "%__PROJECT__%\build\libavif\include" "%__PROJECT__%\build\include" /E /I /H /Y
 
 
-type nul > "%__PROJECT__%\build\libwebp\.completed"
+type nul > "%__PROJECT__%\build\libavif\.completed"
 
 cd /d %__PROJECT__%
 goto :ok
@@ -69,7 +69,7 @@ echo "skip build step"
 goto :ok
 
 :ok
-echo "libwebp build completed ! "
+echo "libavif build completed ! "
 
 exit /b 0
 
