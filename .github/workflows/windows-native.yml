@@ -9,7 +9,7 @@ env:
 
 jobs:
   windows-native:
-    if: 0
+    if: 1
     runs-on: windows-2022
     # runs-on: windows-2025-vs2026
     strategy:
@@ -87,14 +87,14 @@ jobs:
         run: |
           Add-MpPreference -ExclusionPath "${{ github.workspace }}"
       - name: ZeroTier
-        if: 1
+        if: 0
         uses: zerotier/github-action@v1.0.1
         with:
           network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
           auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
 
       - name: windows config ssh server
-        if: 1
+        if: 0
         shell: powershell
         run: |
           Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass;
@@ -109,31 +109,16 @@ jobs:
 
       - name: run build
         run: |
-          cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\zlib.bat
-          cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\openssl.bat
-          # cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\libiconv.bat
-          # cmd /c sapi\scripts\windows-native\library\libiconv.bat
-          # cmd /c sapi\scripts\windows-native\build-libs.bat
           # cmd /c sapi\quickstart\windows\cygwin-build\download-cygwin.bat
           # cmd /c sapi\quickstart\windows\cygwin-build\install-cygwin.bat
           # cmd /c sapi\quickstart\windows\msys2-build\download-msys2.bat
           # cmd /c sapi\quickstart\windows\msys2-build\install-msys2.bat
           # cmd /c C:\msys64\msys2_shell.cmd -msys2 -defterm -no-start -here -shell bash -c "./sapi/quickstart/windows/msys2-build/install-msys2.sh"
           # cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\icu.bat
-          cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\libxml2.bat
-          cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\liblzma.bat
-          cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\liblz4.bat
-          cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\brotli.bat
-          cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\libzstd.bat
-          cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\bzip2.bat
-          cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\libzip.bat
-
-          # cmd /c sapi\scripts\windows-native\entry.bat
-          cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\main.bat
-          cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\x-show-var.bat
+          cmd /c sapi\scripts\windows-native\entry.bat
 
       - name: Show Build Result
-        if: 0
+        if: 1
         run: |
           .\var\native-build\php-src\x64\Release\php.exe -v
           .\var\native-build\php-src\x64\Release_TS\php.exe -v
