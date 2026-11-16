@@ -87,14 +87,14 @@ jobs:
         run: |
           Add-MpPreference -ExclusionPath "${{ github.workspace }}"
       - name: ZeroTier
-        if: 0
+        if: 1
         uses: zerotier/github-action@v1.0.1
         with:
           network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
           auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
 
       - name: windows config ssh server
-        if: 0
+        if: 1
         shell: powershell
         run: |
           Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass;
