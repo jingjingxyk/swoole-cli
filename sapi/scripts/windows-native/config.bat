@@ -312,7 +312,7 @@ configure.bat ^
 --with-xsl ^
 --enable-odbc ^
 --with-odbcver ^
---enable-swoole-sqlite ^
+
 
 
 
@@ -326,7 +326,7 @@ goto :skip_code
 :: --enable-cli-win32 ^
 :: --disable-zts ^
 :: --enable-apcu ^
-
+--enable-swoole-sqlite ^
 --enable-swoole-pgsql ^
 --enable-swoole-ftp ^
 --with-swoole-ssh2 ^
