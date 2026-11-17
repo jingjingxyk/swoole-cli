@@ -26,10 +26,12 @@ set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% libzstd_a.lib"
 set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% cares.lib psl.lib ngtcp2.lib ngtcp2_crypto_ossl.lib nghttp3.lib "
 set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% pgport.lib pgcommon.lib ecpg.lib  ecpg_compat.lib    pgfeutils.lib  pgtypes.lib  "
 set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% Secur32.lib Ws2_32.lib Crypt32.lib  libpq.lib "
+set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% Secur32.lib Ws2_32.lib Crypt32.lib  libpq.lib "
 set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% brotlicommon.lib brotlidec.lib brotlienc.lib"
 set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% libsharpyuv.lib libwebpdecoder.lib libwebpdemux.lib libwebpmux.lib"
-set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% libdav1d.a SvtAv1Enc.lib "
+set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% avif_a.lib SvtAv1Enc.lib "
 set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% odbc32.lib "
+set "X_CUSTOM_LIBS= %X_CUSTOM_LIBS% libsqlite3_a.lib "
 
 
 :: nmake /E /f Makefile  x-show-var

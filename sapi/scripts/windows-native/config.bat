@@ -312,14 +312,14 @@ configure.bat ^
 --with-xsl ^
 --enable-odbc ^
 --with-odbcver ^
---enable-swoole-pgsql ^
 --enable-swoole-sqlite ^
 
 
-:: --with-swoole-ssh2 ^
-:: --enable-swoole-odbc ^
 
-:: --enable-swoole-ftp ^
+goto :skip_code
+
+
+
 :: --enable-thread-context
 
 :: --with-ldap
@@ -327,8 +327,9 @@ configure.bat ^
 :: --disable-zts ^
 :: --enable-apcu ^
 
-goto :skip_code
-
+--enable-swoole-pgsql ^
+--enable-swoole-ftp ^
+--with-swoole-ssh2 ^
 --with-swoole-odbc ^
 --with-pdo-sqlite ^
 --with-pdo-pgsql  ^
