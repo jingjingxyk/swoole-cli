@@ -326,6 +326,9 @@ goto :skip_code
 :: --enable-cli-win32 ^
 :: --disable-zts ^
 :: --enable-apcu ^
+
+:: need fix swoole config.w32
+
 --enable-swoole-sqlite ^
 --enable-swoole-pgsql ^
 --enable-swoole-ftp ^
