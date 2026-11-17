@@ -78,8 +78,6 @@ if exist "%__PROJECT__%\build\libavif\lib\avif.lib" (
     type nul > "%__PROJECT__%\build\libavif\.completed"
 )
 
-
-
 cd /d %__PROJECT__%
 goto :ok
 

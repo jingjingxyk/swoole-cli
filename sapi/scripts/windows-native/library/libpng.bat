@@ -61,8 +61,10 @@ copy /Y "%__PROJECT__%\build\libpng\lib\libpng16_static.lib" "%__PROJECT__%\buil
 rem  Compatible with PHP build detection
 xcopy "%__PROJECT__%\build\libpng\include" "%__PROJECT__%\build\include" /E /I /H /Y
 
-type nul > "%__PROJECT__%\build\libpng\.completed"
 
+if exist "%__PROJECT__%\build\libpng\lib\libpng_a.lib" (
+    type nul > "%__PROJECT__%\build\libpng\.completed"
+)
 cd /d %__PROJECT__%
 goto :ok
 
