@@ -63,11 +63,7 @@ if not exist "jom_1_1_7.zip" curl.exe -fSLo jom_1_1_7.zip "https://download.qt.i
 if not exist "php-sdk-binary-tools" git clone -b master --depth=1 https://github.com/php/php-sdk-binary-tools.git
 :: if not exist "php-src" git clone -b php-8.4.26 --depth=1 https://github.com/php/php-src.git php-src
 
-if not exist "all-deps.zip" curl.exe -fSLo all-deps.zip https://github.com/swoole/swoole-cli/releases/download/v6.2.0.0/all-deps.zip
-:: with mirror
-:: curl.exe -fSLo Git-2.50.0-64-bit.exe  https://download.jingjingxyk.com/Git-2.50.0-64-bit.exe
-:: curl.exe -fSLo 7z2409-x64.exe  https://download.jingjingxyk.com/7z2409-x64.exe
-:: curl.exe -fSLo nasm-2.16.03-win64.zip  https://download.jingjingxyk.com/nasm-2.16.03-win64.zip
+if not exist "all-deps.zip" curl.exe -fSLo all-deps.zip https://github.com/swoole/swoole-cli/releases/download/v6.2.5.0/all-deps.zip
 
 :: if not exist "Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" curl.exe -fSLo Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle https://github.com/microsoft/winget-cli/releases/download/v1.29.280/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
 
