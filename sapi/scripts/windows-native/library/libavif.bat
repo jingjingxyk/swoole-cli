@@ -73,7 +73,12 @@ copy /Y "%__PROJECT__%\build\libavif\lib\avif.lib" "%__PROJECT__%\build\libavif\
 rem  Compatible with PHP build detection
 xcopy "%__PROJECT__%\build\libavif\include" "%__PROJECT__%\build\include" /E /I /H /Y
 
-type nul > "%__PROJECT__%\build\libavif\.completed"
+
+if exist "%__PROJECT__%\build\libavif\lib\avif.lib" (
+    type nul > "%__PROJECT__%\build\libavif\.completed"
+)
+
+
 
 cd /d %__PROJECT__%
 goto :ok
