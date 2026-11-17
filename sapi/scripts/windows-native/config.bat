@@ -294,26 +294,9 @@ configure.bat ^
 --enable-mysqlnd ^
 --enable-swoole-curl ^
 --enable-swoole-thread ^
---enable-swoole-odbc ^
-
-
-:: --enable-swoole-pgsql ^
-:: --enable-swoole-sqlite ^
-:: --with-swoole-ssh2 ^
-
-:: --with-gd ^
-:: --with-libwebp ^
-:: --with-libavif ^
-:: --enable-swoole-ftp ^
-:: --enable-thread-context
-
-:: --with-ldap
-:: --enable-cli-win32 ^
-:: --disable-zts ^
-:: --enable-apcu ^
-
-goto :skip_code
-
+--with-gd ^
+--with-libwebp ^
+--with-libavif ^
 --enable-intl ^
 --enable-redis ^
 --with-gettext ^
@@ -331,6 +314,21 @@ goto :skip_code
 --with-odbcver ^
 --enable-swoole-pgsql ^
 --enable-swoole-sqlite ^
+
+
+:: --with-swoole-ssh2 ^
+:: --enable-swoole-odbc ^
+
+:: --enable-swoole-ftp ^
+:: --enable-thread-context
+
+:: --with-ldap
+:: --enable-cli-win32 ^
+:: --disable-zts ^
+:: --enable-apcu ^
+
+goto :skip_code
+
 --with-swoole-odbc ^
 --with-pdo-sqlite ^
 --with-pdo-pgsql  ^
