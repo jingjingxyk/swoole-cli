@@ -62,7 +62,9 @@ cmake -B build_static -S . ^
 	-DAVIF_ZLIBPNG=ON ^
 	-DAVIF_BUILD_APPS=OFF ^
 	-DAVIF_BUILD_TESTS=OFF ^
-	-DAVIF_BUILD_EXAMPLES=OFF
+	-DAVIF_BUILD_EXAMPLES=OFF ^
+	-DDAV1D_LIBRARIES="%__PROJECT__%\build\dav1d\lib\libbz2_a.lib" ^
+
 
 
 cmake --build build_static --config Release --target install

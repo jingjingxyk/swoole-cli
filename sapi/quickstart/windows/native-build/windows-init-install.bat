@@ -46,8 +46,8 @@ dir "%WINGET_EXE%"
 :: python -m pip install --upgrade pip
 :: python -m ensurepip --upgrade
 "%WINGET_EXE%" install -e --id Python.Python.3.12 --exact --silent --accept-package-agreements --accept-source-agreements
-pip3 -V
-pip3 install meson ninja
+python -m pip --version
+python -m pip  install meson ninja
 :: pip3 install uv
 :: uv pip install meson ninja
 :: uv venv --system

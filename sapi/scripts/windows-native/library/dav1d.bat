@@ -60,7 +60,10 @@ meson setup  build  ^
 	ninja -C build
 	ninja -C build install
 
-type nul > "%__PROJECT__%\build\dav1d\.completed"
+if exist "%__PROJECT__%\build\dav1d\include\dav1d\dav1d.h" (
+    type nul > "%__PROJECT__%\build\dav1d\.completed"
+)
+
 
 cd /d %__PROJECT__%
 goto :ok
