@@ -142,6 +142,7 @@ set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\libavif\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libavif\lib"
 
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\include"
+
 set "X_INCLUDES=%X_INCLUDES%;%SDK_UM%"
 
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\lib"
