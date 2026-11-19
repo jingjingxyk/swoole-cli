@@ -29,7 +29,10 @@ cd %__PROJECT__%\thirdparty\dav1d\dav1d-1.5.0
 
 dir
 
-set "PATH=%__PROJECT__%\runtime\nasm;C:\Program Files\Meson;%PATH%;"
+for /f "delims=" %%i in ('python -c "import sysconfig; print(sysconfig.get_path('scripts'))" 2^>nul') do set "PYTHON_SCRIPTS=%%i"
+
+echo %PYTHON_SCRIPTS%
+set "PATH=%__PROJECT__%\runtime\nasm;%PYTHON_SCRIPTS%;%PATH%;"
 meson --version
 
 if exist "build_static" (
