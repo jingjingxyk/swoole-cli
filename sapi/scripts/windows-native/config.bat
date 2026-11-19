@@ -38,12 +38,6 @@ set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\zlib\lib"
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\openssl\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\openssl\lib"
 
-rem set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\icu\include"
-rem set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\icu\lib"
-
-rem set "X_INCLUDES=%X_INCLUDES%;D:\a\swoole-cli\swoole-cli\var\native-build\vcpkg\packages\libiconv_x64-windows-static\include"
-rem set "X_LIBS=%X_LIBS%;D:\a\swoole-cli\swoole-cli\var\native-build\vcpkg\packages\libiconv_x64-windows-static\lib"
-
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\liblz4\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\liblz4\lib"
 
@@ -65,6 +59,9 @@ set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libzip\lib"
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\libiconv\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libiconv\lib"
 
+set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\libxml2\include"
+set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libxml2\lib"
+
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\libpsl\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libpsl\lib"
 
@@ -82,6 +79,9 @@ set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\libnghttp3\lib"
 
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\ngtcp2\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\ngtcp2\lib"
+
+set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\curl\include"
+set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\curl\lib"
 
 set "X_INCLUDES=%X_INCLUDES%;%__PROJECT__%\build\oniguruma\include"
 set "X_LIBS=%X_LIBS%;%__PROJECT__%\build\oniguruma\lib"
