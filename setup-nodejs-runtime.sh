@@ -52,9 +52,9 @@ case $ARCH in
   ;;
 esac
 
-APP_VERSION='v24.16.0'
+APP_VERSION='v26.13.1'
 APP_NAME='node'
-VERSION='v24.16.0'
+VERSION='v26.13.1'
 
 cd ${__PROJECT__}
 mkdir -p runtime/
@@ -152,6 +152,25 @@ npm config get prefix
 npm list -g --depth=0
 npm -v
 npx -v
+
+: <<'EOF-NPMRC'
+
+registry=https://registry.npmmirror.com
+electron_mirror=https://npmmirror.com/mirrors/electron/
+sass_binary_site=https://npmmirror.com/mirrors/node-sass/
+SASS_BINARY_SITE=https://npmmirror.com/mirrors/node-sass
+puppeteer_download_host=https://npmmirror.com/mirrors/
+puppeteer_download_host=https://npmmirror.com/mirrors/chromium-browser-snapshots/
+chromedriver_cdnurl=https://npmmirror.com/mirrors/chromedriver
+PYTHON_MIRROR=https://npmmirror.com/mirrors/python
+profiler_binary_host_mirror=https://npmmirror.com/mirrors/node-inspector/
+SQLITE3_BINARY_SITE=https://npmmirror.com/mirrors/sqlite3
+NVM_NODEJS_ORG_MIRROR=https://npmmirror.com/mirrors/node
+NVMW_NPM_MIRROR=https://npmmirror.com/mirrors/npm
+phantomjs_cdnurl=https://npmmirror.com/mirrors/phantomjs
+
+
+EOF-NPMRC
 
 # shellcheck disable=SC2217
 : <<'EOF'
