@@ -53,8 +53,10 @@ case $ARCH in
 esac
 
 APP_VERSION='v26.13.1'
+APP_VERSION='v24.16.0'
 APP_NAME='node'
 VERSION='v26.13.1'
+VERSION='v24.16.0'
 
 cd ${__PROJECT__}
 mkdir -p runtime/
