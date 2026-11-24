@@ -34,6 +34,7 @@ if exist "configure.js" (
 
 
 set "X_CFLAGS="
+set "X_CXXFLAGS="
 set "X_INCLUDES="
 set "X_LIBS="
 
@@ -174,7 +175,6 @@ sed.exe -i.bak "s/gd2copypal\.c //" ext/gd/config.w32
 :: swoole extension patch
 sed.exe -i.bak "s/PHP_CARES_DIR/null/" ext/swoole/config.w32
 sed.exe -i.bak "s/PHP_PGSQL_DIR/null/" ext/swoole/config.w32
-sed.exe -i.bak "s/CMAKE_CXX_STANDARD 14/CMAKE_CXX_STANDARD 20/" ext/swoole/CMakeLists.txt
 
 call buildconf.bat -f
 
@@ -211,9 +211,10 @@ set "X_CFLAGS=%X_CFLAGS% -DU_STATIC_IMPLEMENTATION"
 set "X_CFLAGS=%X_CFLAGS% -DSODIUM_STATIC=1"
 set "X_CFLAGS=%X_CFLAGS% -DCARES_STATICLIB"
 set "X_CFLAGS=%X_CFLAGS% -DLIBPQ_STATIC"
-
 set "CFLAGS=%X_CFLAGS%"
 
+set "CXXFLAGS=%CXXFLAGS% /std:c++20"
+set "CXXFLAGS=%CXXFLAGS%"
 
 :: /showIncludes
 :: /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed
