@@ -23,6 +23,7 @@ echo %cd%
 mkdir  %__PROJECT__%\var\native-build
 
 cd /d %__PROJECT__%\var\native-build\php-src\
+dir
 set "PHP_SRC=%cd%"
 echo %cd%
 

@@ -11,6 +11,7 @@ set "PATH=%__PROJECT__%\var\native-build\php-sdk-binary-tools\bin\;%__PROJECT__%
 set "__PROJECT__=%cd%"
 echo %cd%
 mkdir  %__PROJECT__%\var\native-build
+cd %__PROJECT__%\var\native-build
 
 :: $env:PHP_VERSION = "8.4.28"
 :: set "PHP_VERSION=8.4.28"
