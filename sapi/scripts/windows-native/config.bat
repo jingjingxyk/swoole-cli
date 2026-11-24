@@ -6,6 +6,7 @@ echo %~dp0
 cd /d %~dp0
 cd /d ..\..\..\
 
+set "PATH=%__PROJECT__%\var\native-build\php-sdk-binary-tools\bin\;%__PROJECT__%\var\native-build\php-sdk-binary-tools\msys2\bin;%PATH%;"
 
 vswhere -products * -latest -prerelease -find **\VC\Auxiliary\Build\vcvarsall.bat
 rem call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
@@ -25,6 +26,7 @@ echo %cd%
 
 if exist "configure.js" (
     nmake clean
+    del /Q "configure.js"
 )
 
 
@@ -246,7 +248,11 @@ sed.exe -i.bak 's/ZEND_TSRMLS_CACHE_DEFINE()/ /' sapi/cli/php_cli.c
 
 sed.exe -i.bak 's/#ifdef HAVE_LIBXML/#ifdef HAVE_LIBXML_X/' win32/dllmain.c
 
+<<<<<<< HEAD
 bison.exe -Wall --output=Zend/zend_language_parser.c -v -d Zend/zend_language_parser.y
+=======
+:: bison.exe -Wall --output=Zend/zend_language_parser.c -v -d Zend/zend_language_parser.y
+>>>>>>> build_native_php
 
 
 set CL=/MP
@@ -259,6 +265,7 @@ configure.bat ^
 --with-toolset=vs ^
 --with-mp=auto ^
 --disable-all  ^
+--disable-phpdbg ^
 --disable-cgi  ^
 --enable-cli   ^
 --enable-zts ^

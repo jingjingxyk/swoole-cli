@@ -48,4 +48,3 @@ echo "mpir build completed ! "
 cd /d %__PROJECT__%
 exit /b 0
 endlocal
-

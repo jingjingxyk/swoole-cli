@@ -69,7 +69,6 @@ if exist "%__PROJECT__%\build\freetype\lib\freetype_a.lib" (
    type nul > "%__PROJECT__%\build\freetype\.completed"
 )
 
-
 cd /d %__PROJECT__%
 goto :ok
 

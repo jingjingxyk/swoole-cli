@@ -66,11 +66,9 @@ meson setup  build  ^
 copy /Y "%__PROJECT__%\build\dav1d\lib\libdav1d.a" "%__PROJECT__%\build\dav1d\lib\avif_a.lib"
 copy /Y "%__PROJECT__%\build\dav1d\lib\libdav1d.a" "%__PROJECT__%\build\dav1d\lib\aviflib"
 
-
-if exist "%__PROJECT__%\build\dav1d\include\dav1d\dav1d.h" (
+if exist "%__PROJECT__%\build\dav1d\lib\avif_a.lib" (
     type nul > "%__PROJECT__%\build\dav1d\.completed"
 )
-
 
 cd /d %__PROJECT__%
 goto :ok

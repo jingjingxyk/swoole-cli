@@ -9,9 +9,9 @@ cd ..\..\..\..\
 set __PROJECT__=%cd%
 cd /d %__PROJECT__%
 
-cd /d %__PROJECT__%\var\native-build\php-src\
+cd /d %__PROJECT__%\var\native-build\php-src
 set "PHP_SRC=%cd%"
-cd /d %__PROJECT__%\var\native-build\
+cd /d %__PROJECT__%\var\native-build
 echo %cd%
 
 
@@ -31,6 +31,7 @@ if exist "%__PROJECT__%\var\native-build\php-src\ext\redis" (
 )
 
 xcopy "redis" "%__PROJECT__%\var\native-build\php-src\ext\redis" /E /I /Y
+
 
 
 cd %__PROJECT__%

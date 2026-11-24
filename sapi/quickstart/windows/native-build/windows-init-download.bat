@@ -56,8 +56,10 @@ if not exist "pie.phar" curl.exe -fSLo pie.phar "https://github.com/php/pie/rele
 if not exist "cacert.pem" curl.exe -fSLo cacert.pem "https://curl.se/ca/cacert.pem"
 if not exist "gvim_9.2.1316_x64_signed.exe" curl.exe -fSLo gvim_9.2.1316_x64_signed.exe "https://github.com/vim/vim-win32-installer/releases/download/v9.2.1316/gvim_9.2.1316_x64_signed.exe"
 :: if not exist "meson-1.12.1-64.msi" curl.exe -fSLo meson-1.12.1-64.msi "https://github.com/mesonbuild/meson/releases/download/1.12.1/meson-1.12.1-64.msi"
-:: if not exist "meson-1.12.1-64.msi" curl.exe -fSLo windows-build-library-dir.zip "https://github.com/jingjingxyk/swoole-cli/releases/download/swoole-cli-v6.2.0.0/windows-build-library-dir.zip"
+
+:: if not exist "windows-build-library-dir.zip" curl.exe -fSLo windows-build-library-dir.zip "https://github.com/jingjingxyk/swoole-cli/releases/download/swoole-cli-v6.2.0.0/windows-build-library-dir.zip"
 rem 7z.exe x -aoa -y -owindows-build-library-dir  windows-build-library-dir.zip
+
 
 :: Using jom instead of nmake on Windows for multi-core acceleration
 if not exist "jom_1_1_7.zip" curl.exe -fSLo jom_1_1_7.zip "https://download.qt.io/official_releases/jom/jom_1_1_7.zip"
