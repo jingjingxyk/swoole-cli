@@ -9,18 +9,18 @@ env:
 
 jobs:
   windows-native:
-    if: 0
+    if: 1
     runs-on: windows-2022
     # runs-on: windows-2025-vs2026
     strategy:
       matrix:
         php-version:
-          # - "8.2.32"
-          # - "8.1.34"
-          # - "8.3.32"
-          # - "8.4.23"
-          - "8.5.8"
-
+          #  - "8.2.36"
+          #  - "8.1.34"
+          #  - "8.3.37"
+          - "8.4.28"
+          - "8.5.13"
+          - "8.6.0"
     steps:
       - uses: actions/checkout@v4
       - name: show environment info
