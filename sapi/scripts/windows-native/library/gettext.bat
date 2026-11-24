@@ -45,4 +45,3 @@ exit /b 0
 
 cd /d %__PROJECT__%
 endlocal
-

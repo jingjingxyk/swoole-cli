@@ -52,4 +52,3 @@ dumpbin /DEPENDENTS ".\x64\Release_TS\php.exe"
 
 cd %__PROJECT__%
 endlocal
-
