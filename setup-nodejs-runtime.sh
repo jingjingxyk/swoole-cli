@@ -153,10 +153,32 @@ npm list -g --depth=0
 npm -v
 npx -v
 
+:<<'EOF-NPMRC-ENV'
+
+pnpm install --registry=https://registry.npmmirror.com
+
+pnpm store status
+pnpm store path
+pnpm store prune
+pnpm store prune --force
+
+export ELECTRON_MIRROR="https://npmmirror.com/mirrors/electron/"
+export ELECTRON_BUILDER_BINARIES_MIRROR="https://npmmirror.com"
+export SASS_BINARY_SITE="https://npmmirror.com"
+export PUPPETEER_DOWNLOAD_HOST="https://npmmirror.com"
+export CHROMEDRIVER_CDNURL="https://npmmirror.com/chromedriver"
+export PYTHON_MIRROR="https://npmmirror.com/python"
+export PROFILER_BINARY_HOST_MIRROR="https://npmmirror.com/node-inspector/"
+export SQLITE3_BINARY_SITE="https://npmmirror.com/sqlite3"
+
+EOF-NPMRC-ENV
+
 : <<'EOF-NPMRC'
 
 registry=https://registry.npmmirror.com
 electron_mirror=https://npmmirror.com/mirrors/electron/
+electron_mirror=https://npmmirror.com/mirrors/electron/
+electron_builder_binaries_mirror=https://npmmirror.com/mirrors/electron-builder-binaries/
 sass_binary_site=https://npmmirror.com/mirrors/node-sass/
 SASS_BINARY_SITE=https://npmmirror.com/mirrors/node-sass
 puppeteer_download_host=https://npmmirror.com/mirrors/
