@@ -157,7 +157,7 @@ npx -v
 npm install pnpm --registry=https://registry.npmmirror.com
 pnpm -v
 which pnpm
-
+# pnpm install --config.allowUnusedPatches=true --registry=https://registry.npmmirror.com
 pnpm install --registry=https://registry.npmmirror.com
 
 pnpm store status
