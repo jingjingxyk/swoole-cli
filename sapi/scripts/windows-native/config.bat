@@ -20,6 +20,23 @@ echo "%SDK_UM%"
 
 set "__PROJECT__=%cd%"
 echo %cd%
+
+set "PHP_VERSION=8.4.28"
+
+:parsed
+if "%~1"=="" goto :parsed
+if /i "%~1"=="--with-php-version" (
+    set "PHP_VERSION=%~2"
+    shift & shift
+    goto :parse
+)
+echo [WARN] unknown: %~1
+shift
+goto :parse
+
+:parsed
+
+
 cd /d %__PROJECT__%\var\native-build\php-src\
 set "PHP_SRC=%cd%"
 echo %cd%
