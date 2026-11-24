@@ -234,4 +234,7 @@ npx asar extract app.asar app.asar.unpacked
 
 ls -lha app.asar.unpacked
 
+
+node --input-type=module -e "import { randomBytes } from 'node:crypto'; console.log(randomBytes(16).toString('hex'))"
+
 EOF
