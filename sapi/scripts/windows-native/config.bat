@@ -213,8 +213,8 @@ set "X_CFLAGS=%X_CFLAGS% -DCARES_STATICLIB"
 set "X_CFLAGS=%X_CFLAGS% -DLIBPQ_STATIC"
 set "CFLAGS=%X_CFLAGS%"
 
-set "CXXFLAGS=%CXXFLAGS% /std:c++20"
-set "CXXFLAGS=%CXXFLAGS%"
+set "X_CXXFLAGS=%X_CXXFLAGS% /std:c++20"
+set "CXXFLAGS=%X_CXXFLAGS%"
 
 :: /showIncludes
 :: /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed
