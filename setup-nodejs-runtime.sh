@@ -154,6 +154,9 @@ npm -v
 npx -v
 
 :<<'EOF-NPMRC-ENV'
+
+curl -fSL https://gitee.com/jingjingxyk/swoole-cli/raw/new_dev/setup-nodejs-runtime.sh?raw=ture | bash -s -- --mirror china
+
 npm install pnpm --registry=https://registry.npmmirror.com
 pnpm -v
 which pnpm
