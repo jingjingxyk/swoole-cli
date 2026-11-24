@@ -154,6 +154,9 @@ npm -v
 npx -v
 
 :<<'EOF-NPMRC-ENV'
+npm install pnpm --registry=https://registry.npmmirror.com
+pnpm -v
+which pnpm
 
 pnpm install --registry=https://registry.npmmirror.com
 
