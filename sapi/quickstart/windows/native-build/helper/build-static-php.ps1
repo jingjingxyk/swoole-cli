@@ -1,4 +1,3 @@
-
 $__DIR__ = $PSScriptRoot
 
 $__DIR__ = Split-Path -Parent $MyInvocation.MyCommand.Definition
@@ -47,8 +46,7 @@ dir .\var\windows-build-deps\php-sdk-binary-tools\msys2\usr\bin\
 exit
 
 
-Invoke-Expression "cmd /c $__PROJECT__\var\windows-build-deps\php-sdk-binary-tools\phpsdk-vs17-x64.bat"
-Invoke-Expression "cmd /c $__PROJECT__\sapi\quickstart\windows\native-build\native-build-php-config.bat"
+Invoke-Expression "cmd /c $__PROJECT__\sapi\scripts\windows-native\entry.bat"
 
 
 cd $__PROJECT__

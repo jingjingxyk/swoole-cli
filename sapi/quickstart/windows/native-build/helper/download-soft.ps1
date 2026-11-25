@@ -31,8 +31,6 @@ irm https://github.com/asheroto/winget-install/releases/latest/download/winget-i
 
 irm winget.pro | iex
 
-Get-Content ./winget-install.ps1 | Invoke-Expression
-
 winget install notepad++
 
 winget install --id Git.Git -e --source winget

@@ -1,0 +1,147 @@
+name: build-php-cli-windows-native
+
+on:
+  push:
+  pull_request:
+
+env:
+  BUILD_PHP_VERSION: 8.4.18
+
+jobs:
+  windows-native:
+    if: 0
+    runs-on: windows-2022
+    # runs-on: windows-2025-vs2026
+    strategy:
+      matrix:
+        php-version:
+          #  - "8.2.36"
+          #  - "8.1.34"
+          #  - "8.3.37"
+          - "8.4.28"
+          # - "8.5.13"
+          # - "8.6.0"
+    steps:
+      - uses: actions/checkout@v4
+      - name: show environment info
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+          git config --global core.ignorecase false
+          env
+          ipconfig
+          uname -a
+          pwd
+          ipconfig /all
+          # SET PATH=C:\Windows\System32\wbem;%PATH%
+          # $env:PATH="C:\Windows\System32\wbem;$env:PATH"
+          # $env:PATH +=";C:\Windows\System32\wbem;"
+          # 显示逻辑cpu 个数
+          # wmic cpu get NumberOfLogicalProcessors /value
+          Write-Output (Get-WmiObject Win32_Processor).NumberOfLogicalProcessors
+          # echo %NUMBER_OF_PROCESSORS%
+          Write-Output $env:NUMBER_OF_PROCESSORS
+          Write-Output $env:USERPROFILE
+          systeminfo
+          echo "BUILD_PHP_VERSION=${{ matrix.php-version }}" >> $Env:GITHUB_ENV
+
+
+      - name: Display VS Version
+        shell: cmd
+        run: |
+          call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+          cl.exe
+      - name: test php.exe
+        shell: cmd
+        run: |
+          curl.exe -fSLo php.exe https://github.com/jingjingxyk/swoole-cli/releases/download/swoole-cli-v6.2.0.0/php.exe
+          .\php.exe -m
+          .\php.exe --ri curl
+          .\php.exe --ri openssl
+          .\php.exe --ri zlib
+          .\php.exe --ri zip
+          .\php.exe --ri swoole
+
+      - name: download deps soft
+        shell: cmd
+        run: |
+          sapi\quickstart\windows\native-build\windows-init-download.bat
+
+      - name: install  deps soft
+        shell: cmd
+        run: |
+          sapi\quickstart\windows\native-build\windows-init-install.bat
+
+      - name: Cache Dependency Source Code Tarball
+        uses: actions/cache@v5
+        id: windows-build-library-dir
+        with:
+          path: ${{ github.workspace }}/build/
+          key: windows-build-library-dir
+
+      - name: show deps soft
+        shell: cmd
+        run: |
+          sapi\quickstart\windows\native-build\windows-init-show-install-result.bat
+
+      - name: Add folder to Windows Defender exclusion list
+        shell: powershell
+        run: |
+          Add-MpPreference -ExclusionPath "${{ github.workspace }}"
+      - name: ZeroTier
+        if: 1
+        uses: zerotier/github-action@v1.0.1
+        with:
+          network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
+          auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
+
+      - name: windows config ssh server
+        if: 1
+        shell: powershell
+        run: |
+          Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass;
+          irm https://github.com/jingjingxyk/swoole-cli/blob/new_dev/sapi/quickstart/windows/openssh/enable-openssh.ps1?raw=true | iex
+          Start-Sleep 21600
+
+      - name: show php SDK
+        run: |
+          $CURRENT_DIR = Get-Location
+          # Start-Process cmd -ArgumentList "${CURRENT_DIR}\var\windows-build-deps\php-sdk-binary-tools\phpsdk-vs17-x64.bat -a x64  " -NoNewWindow
+          $env:Path +=  "${CURRENT_DIR}\var\windows-build-deps\php-sdk-binary-tools\bin;${CURRENT_DIR}\var\windows-build-deps\php-sdk-binary-tools\msys2\usr\bin;${CURRENT_DIR}\bin\runtime\nasm\;"
+
+          cmd /c ${CURRENT_DIR}\var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -h
+          where perl
+          php -v
+          perl -v
+          nasm -v
+          where bison.exe
+          where  re2c.exe
+          vswhere.exe
+          vswhere.exe -legacy -prerelease -format json
+
+      - name: run build
+        run: |
+          # cmd /c C:\msys64\msys2_shell.cmd -msys2 -defterm -no-start -here -shell bash -c "./sapi/quickstart/windows/msys2-build/install-msys2.sh"
+          # cmd /c var\native-build\php-sdk-binary-tools\phpsdk-starter.bat -c vs17 -a x64  -t sapi\scripts\windows-native\library\icu.bat
+          cmd /c sapi\scripts\windows-native\entry.bat
+
+      - name: Show Build Result
+        if: 1
+        run: |
+          .\var\native-build\php-src\x64\Release\php.exe -v
+          .\var\native-build\php-src\x64\Release_TS\php.exe -v
+          .\var\native-builde\php-src\x64\Release_TS\php.exe -m
+          dumpbin /DEPENDENTS ".\var\native-build\php-src\x64\Release_TS\php.exe"
+
+      - name: production artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: php-cli-v${{ env.BUILD_PHP_VERSION }}-vs17-x64-makefile
+          retention-days: 90
+          path: "var/native-build/php-src/Makefile"
+
+      - name: gh release
+        uses: softprops/action-gh-release@v2
+        if: ${{ 0 && startsWith(github.ref, 'refs/tags/') }}
+        with:
+          files: "var/native-build/php-src/x64/Release_TS/php.exe"
