@@ -177,6 +177,7 @@ sed.exe -i.bak "s/gd2copypal\.c //" ext/gd/config.w32
 :: swoole extension patch
 sed.exe -i.bak "s/PHP_CARES_DIR/null/" ext/swoole/config.w32
 sed.exe -i.bak "s/PHP_PGSQL_DIR/null/" ext/swoole/config.w32
+sed.exe -i.bak "s/set(CMAKE_CXX_STANDARD 14)/set(CMAKE_CXX_STANDARD 20)/" ext/swoole/config.w32
 
 call buildconf.bat -f
 
