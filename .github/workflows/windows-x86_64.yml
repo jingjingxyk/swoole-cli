@@ -52,7 +52,7 @@ jobs:
           curl.exe -fSLo php.exe https://github.com/jingjingxyk/swoole-cli/releases/download/swoole-cli-v6.2.0.0/php.exe
           .\php.exe -v
           set "RELEASE_PHP_VERSION="
-          for /f "tokens=1,2" %%A in ('.\php.exe -v 2^>nul ^| findstr /b "PHP "') do (
+          for /f "tokens=2" %%A in ('.\php.exe -v 2^>nul ^| findstr /b "PHP "') do (
           if not defined RELEASE_PHP_VERSION set "RELEASE_PHP_VERSION=%%A"
           )
 
