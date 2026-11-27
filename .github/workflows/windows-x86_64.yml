@@ -56,7 +56,7 @@ jobs:
           if not defined RELEASE_PHP_VERSION set "RELEASE_PHP_VERSION=%%V"
           )
 
-          echo PHP_VERSION=!RELEASE_PHP_VERSION!
+          echo PHP_VERSION=%RELEASE_PHP_VERSION%
 
       - name: Display VS Version
         shell: cmd
