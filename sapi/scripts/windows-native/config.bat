@@ -318,6 +318,10 @@ configure.bat ^
 --enable-odbc ^
 --with-odbcver ^
 --enable-swoole-sqlite ^
+--enable-swoole-pgsql ^
+--enable-swoole-ftp ^
+--with-swoole-ssh2 ^
+--with-swoole-odbc ^
 
 
 
