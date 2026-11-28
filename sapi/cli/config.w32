@@ -7,7 +7,6 @@ ARG_ENABLE('cli-win32', 'Build console-less CLI version of PHP', 'no');
                       ' sfx\hook_cli.c sfx\hook_phar.c sfx\sfx.c ';
 if (PHP_CLI == "yes") {
 	SAPI('cli', cli_sources, 'php.exe', '/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1');
-	ADD_INCLUDE_PATH("sfx");
 	ADD_FLAG("LIBS_CLI", "ws2_32.lib");
 	ADD_FLAG("LIBS_CLI", "shell32.lib");
 	ADD_FLAG("LDFLAGS_CLI", "/stack:67108864");
