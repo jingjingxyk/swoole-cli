@@ -178,8 +178,6 @@ sed.exe -i.bak "s/gd2copypal\.c //" ext/gd/config.w32
 sed.exe -i.bak "s/PHP_CARES_DIR/null/" ext/swoole/config.w32
 sed.exe -i.bak "s/PHP_PGSQL_DIR/null/" ext/swoole/config.w32
 
-sed.exe -i.bak "s|SW_USE_POLL=1|&\nCXXFLAGS=\x22/std:c++20 $CXXFLAGS\x22|" ext/swoole/config.w32
-
 
 call buildconf.bat -f
 
@@ -216,6 +214,7 @@ set "X_CFLAGS=%X_CFLAGS% -DU_STATIC_IMPLEMENTATION"
 set "X_CFLAGS=%X_CFLAGS% -DSODIUM_STATIC=1"
 set "X_CFLAGS=%X_CFLAGS% -DCARES_STATICLIB"
 set "X_CFLAGS=%X_CFLAGS% -DLIBPQ_STATIC"
+set "X_CFLAGS=%X_CFLAGS% /std:c++20"
 set "CFLAGS=%X_CFLAGS%"
 
 
