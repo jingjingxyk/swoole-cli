@@ -180,8 +180,7 @@ sed.exe -i.bak "s/PHP_PGSQL_DIR/null/" ext/swoole/config.w32
 ::for /f "tokens=1 delims=:" %%i in ('findstr /N /C:"SW_USE_POLL=1" ext/swoole/config.w32) do set "LINE=%%i"
 :: echo %LINE%
 :: sed.exe -i.bak "%LINE%a ADD_FLAG('CXXFLAGS_SWOOLE', '/std:c++20');" ext\swoole\config.w32
-sed.exe -i.bak "23a ADD_FLAG('CXXFLAGS_SWOOLE', '/std:c++20');" ext\swoole\config.w32
-
+sed.exe -i.bak "23a ADD_FLAG(\x22CXXFLAGS_SWOOLE\x22, \x22/std:c++20\x22);" ext\swoole\config.w32
 
 call buildconf.bat -f
 
