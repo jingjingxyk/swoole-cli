@@ -174,8 +174,8 @@ sed.exe -i.bak "s/, true,/, false,/" ext\intl\config.w32
 :: gd  extension patch
 sed.exe -i.bak "s/gd2copypal\.c //" ext/gd/config.w32
 :: swoole extension patch
-sed.exe -i.bak "s/PHP_CARES_DIR/null/" ext/swoole/config.w32
-sed.exe -i.bak "s/PHP_PGSQL_DIR/null/" ext/swoole/config.w32
+:: sed.exe -i.bak "s/PHP_CARES_DIR/null/" ext/swoole/config.w32
+:: sed.exe -i.bak "s/PHP_PGSQL_DIR/null/" ext/swoole/config.w32
 
 call buildconf.bat -f
 
