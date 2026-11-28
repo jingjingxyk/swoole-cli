@@ -1449,12 +1449,3 @@ out:
 }
 /* }}} */
 
-#if defined(PHP_WIN32)
-int fpm_main(int argc, char *argv[])
-{
-	(void)argc;
-	(void)argv;
-	fprintf(stderr,"FPM is not supported on Windows . Use the standard CLI SAPI instead.\n");
-	return 1;
-}
-#endif
