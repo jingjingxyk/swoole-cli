@@ -319,7 +319,6 @@ configure.bat ^
 --enable-swoole-sqlite ^
 --enable-swoole-pgsql ^
 --enable-swoole-ftp ^
---with-swoole-ssh2 ^
 --with-swoole-odbc ^
 --with-swoole-nghttp2-dir="%__PROJECT__%\build\libnghttp2" ^
 --with-swoole-cares-dir="%__PROJECT__%\build\cares" ^
