@@ -294,7 +294,6 @@ configure.bat ^
 --enable-exif ^
 --enable-swoole ^
 --enable-cares ^
---with-nghttp2-dir="%__PROJECT__%\build\libnghttp2" ^
 --enable-php-sockets ^
 --enable-mysqlnd ^
 --enable-swoole-curl ^
@@ -322,7 +321,11 @@ configure.bat ^
 --enable-swoole-ftp ^
 --with-swoole-ssh2 ^
 --with-swoole-odbc ^
-
+--with-swoole-nghttp2-dir="%__PROJECT__%\build\libnghttp2" ^
+--with-swoole-cares-dir="%__PROJECT__%\build\cares" ^
+--with-swoole-pgsql-dir="%__PROJECT__%\build\pgsql" ^
+--with-swoole-sqlite-dir="%__PROJECT__%\build\sqlite3" ^
+--with-swoole-ssh2="%__PROJECT__%\build\libssh2"
 
 
 goto :skip_code
