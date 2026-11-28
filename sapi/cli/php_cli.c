@@ -1227,6 +1227,13 @@ int main(int argc, char *argv[])
 	wchar_t **argv_wide;
 	char **argv_save = argv;
 	BOOL using_wide_argv = 0;
+	int fpm_main(int argc, char *argv[])
+	{
+    	fprintf(stderr,
+            "FPM is not supported on Windows. "
+            "Use the standard CLI SAPI instead.\n");
+    	return 1;
+	}
 #endif
 
 	int c;
